@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L25 - The Radar Equation, Path Loss, and RCS &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=8125a6e0df">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 4 overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l25-the-radar-equation-path-loss-and-rcs">
+<h1>L25 - The Radar Equation, Path Loss, and RCS<a class="headerlink" href="#l25-the-radar-equation-path-loss-and-rcs" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">The Radar Equation, Path Loss, and RCS</h1>
+<div class="title-rule"></div>
+<p>A 10 cm corner reflector 3 m from the PHASER returns an echo 31 dB above the noise.</p>
+<p>Lesson 25 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame here-25 docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 0">
+  <li>I can apply the radar equation to calculate received power for a given geometry, and account for path loss and radar cross section (RCS).</li>
+</ol>
+<!-- The Module 4 "you are here" strip. Included into a lesson's Learning
+     Objectives frame, which carries `:class: here-NN` to light up its own
+     chip (frames.css). L25-L27 are taught in class; L28-L31 are the final
+     project, each one page with its lesson and then its lab. -->
+<div class="lane-strip" role="navigation" aria-label="Module 4 lessons, by whether they are taught in class or worked as the final project">
+  <span class="ls-label">Module 4</span>
+  <a class="ls-chip" data-n="25" href="../L25-radar-equation/index.html" title="L25 Radar Equation: in class">25</a>
+  <a class="ls-chip" data-n="26" href="../L26-range-resolution-doppler/index.html" title="L26 Range, Resolution, and Doppler: in class">26</a>
+  <a class="ls-chip" data-n="27" href="../L27-radar-detection/index.html" title="L27 Radar Detection: in class">27</a>
+  <a class="ls-chip ls-proj" data-n="28" href="../L28-fmcw/index.html" title="L28 FMCW and its lab: final project">28</a>
+  <a class="ls-chip ls-proj" data-n="29" href="../L29-range-doppler-mti/index.html" title="L29 Range-Doppler and MTI and its lab: final project">29</a>
+  <a class="ls-chip ls-proj" data-n="30" href="../L30-cfar/index.html" title="L30 CFAR and its lab: final project">30</a>
+  <a class="ls-chip ls-proj" data-n="31" href="../L31-classification-tracking/index.html" title="L31 Classification and Tracking and its lab: final project">31</a>
+  <a class="ls-chip ls-proj ls-report" href="../final-project/index.html" title="Final Project: Radar Systems Report">Report</a>
+  <span class="ls-key"><i></i>in class <i class="ls-proj"></i>final project</span>
+</div>
+<div class="depth docutils container">
+<p>Module 3 pointed the PHASER’s beam at a source that transmitted on its own, the HB100. From here on the PHASER supplies its own signal: a separate transmit antenna illuminates the scene, and the eight-element array listens for what comes back. Before we can process an echo for range (Lesson 26) or decide whether it is there at all (Lesson 27), we need to know how strong it is. That is the job of the radar equation, and it is the Friis equation of <a href="../../module01/L02-antenna-properties/index.html#frame-the-friis-transmission-equation">Lesson 2</a> applied twice.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-friis-one-way">
+<div class="wrap docutils container">
+<p class="rubric">Friis, One Way</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+P_r &amp;= P_t G_t G_r \left(\frac{\lambda}{4\pi R}\right)^2 \\
+L_\text{fs} &amp;= \left(\frac{4\pi R}{\lambda}\right)^2
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>Received power falls as <span class="math notranslate nohighlight">\(1/R^2\)</span> on a one-way link.</p></li>
+<li><p>At 10 GHz and 3 m, the free-space path loss is 62.0 dB.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><a href="../../module01/L02-antenna-properties/index.html#frame-the-friis-transmission-equation">Lesson 2</a> built the one-way link from two pieces. The transmitter’s power spreads over a sphere, so at range <span class="math notranslate nohighlight">\(R\)</span> the power density in the direction of the main beam is <span class="math notranslate nohighlight">\(P_tG_t/4\pi R^2\)</span>. The receive antenna collects that density over its effective aperture <span class="math notranslate nohighlight">\(A_e = G_r\lambda^2/4\pi\)</span>. The product is the <strong>Friis transmission equation</strong>,</p>
+<div class="math notranslate nohighlight">
+\[
+P_r = P_t G_t G_r \left(\frac{\lambda}{4\pi R}\right)^2 ,
+\]</div>
+<p>and the factor <span class="math notranslate nohighlight">\((4\pi R/\lambda)^2\)</span> is the <strong>free-space path loss</strong>. It is not a loss in the sense of power turned to heat. It measures how thinly the transmitted power has spread by the time it reaches an aperture of size <span class="math notranslate nohighlight">\(\lambda^2/4\pi\)</span>. The course runs the radar at a 10 GHz carrier, the value in ADI’s radar scripts, so <span class="math notranslate nohighlight">\(\lambda = 3.0\ \text{cm}\)</span> and at <span class="math notranslate nohighlight">\(R = 3\ \text{m}\)</span></p>
+<div class="math notranslate nohighlight">
+\[
+L_\text{fs} = 20\log_{10}\frac{4\pi (3)}{0.030} = 62.0\ \text{dB}.
+\]</div>
+<p>The power falls as <span class="math notranslate nohighlight">\(1/R^2\)</span>: double the distance and the received power drops 6 dB.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-two-trips">
+<div class="wrap docutils container">
+<p class="rubric">Two Trips</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L25-two-trips.svg" alt="A radar with a transmit antenna and a receive array at the left, a corner reflector at range R at the right. The outgoing wave spreads over 4 pi R squared on the way out, and the echo spreads over 4 pi R squared again on the way back" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The target intercepts power from the first trip and re-radiates it.</p></li>
+<li><p>The echo spreads over a second sphere on the way back.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A radar runs the link twice. On the first trip the transmitter illuminates the target, and the target intercepts some of the incident power. The target then acts as a transmitter of its own and re-radiates that power, and on the second trip the echo spreads over a sphere centered on the target before the receive array collects a small piece of it. Each trip carries its own <span class="math notranslate nohighlight">\(1/R^2\)</span> spreading, which is where the radar equation’s <span class="math notranslate nohighlight">\(1/R^4\)</span> comes from.</p>
+<p>The PHASER uses a separate transmit antenna placed beside the receive array, at the same height, as the ADI <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-setup/" target="_blank" rel="noopener">radar setup page</a> describes. A continuous-wave radar transmits and receives at the same time, so it needs two antennas. They sit centimeters apart and the target sits meters away, so both trips cover the same range <span class="math notranslate nohighlight">\(R\)</span> and the geometry is <strong>monostatic</strong> for the purpose of the radar equation. A radar whose transmitter and receiver are far apart is <strong>bistatic</strong>, and its two trips have different ranges <span class="math notranslate nohighlight">\(R_t\)</span> and <span class="math notranslate nohighlight">\(R_r\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-radar-equation">
+<div class="wrap docutils container">
+<p class="rubric">The Radar Equation</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+P_r &amp;= \underbrace{\frac{P_t G_t}{4\pi R^2}}_{\text{at target}}\ \sigma\ \underbrace{\frac{1}{4\pi R^2}}_{\text{return}}\ \underbrace{\frac{G_r\lambda^2}{4\pi}}_{A_e} \\
+&amp;= \frac{P_t G_t G_r \lambda^2 \sigma}{(4\pi)^3 R^4}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>Doubling the range lowers the echo by 12 dB.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Follow the power through the two trips. The density at the target is <span class="math notranslate nohighlight">\(P_tG_t/4\pi R^2\)</span>, the same as in Friis. The target intercepts that density and re-radiates it as if it were an isotropic source of power <span class="math notranslate nohighlight">\(\sigma P_tG_t/4\pi R^2\)</span>, where <span class="math notranslate nohighlight">\(\sigma\)</span>, in square meters, is the target’s <strong>radar cross section</strong>. That re-radiated power spreads over a second sphere of area <span class="math notranslate nohighlight">\(4\pi R^2\)</span> on its way back, and the receive array collects it over <span class="math notranslate nohighlight">\(A_e = G_r\lambda^2/4\pi\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+P_r &amp;= \frac{P_t G_t}{4\pi R^2}\ \sigma\ \frac{1}{4\pi R^2}\ \frac{G_r\lambda^2}{4\pi} \\
+&amp;= \frac{P_t G_t G_r \lambda^2 \sigma}{(4\pi)^3 R^4} .
+\end{aligned}
+\end{split}\]</div>
+<p>This is the <strong>radar equation</strong>. Every factor except <span class="math notranslate nohighlight">\(\sigma\)</span> and <span class="math notranslate nohighlight">\(R^4\)</span> is already familiar from Friis. The fourth power of range is what makes radar hard: doubling the range lowers the echo by a factor of 16, or 12 dB, where a one-way link loses only 6 dB. A fielded radar also multiplies the right side by <span class="math notranslate nohighlight">\(1/L_s\)</span>, a <strong>system loss</strong> that collects cable, radome, and processing losses. We leave it at 0 dB for the PHASER on a bench, and at a few meters the atmosphere adds nothing measurable at X-band.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-two-way-path-loss-in-decibels">
+<div class="wrap docutils container">
+<p class="rubric">Two-Way Path Loss in Decibels</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+P_r\ [\text{dBm}] = {} &amp; P_t + G_t + G_r + 10\log_{10}\lambda^2 \\
+&amp;+ \sigma\ [\text{dBsm}] - 33.0 - 40\log_{10} R
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>The echo falls 40 dB per decade of range.</p></li>
+<li><p>A one-way link falls 20 dB per decade.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Link budgets run in decibels, because the products become sums and each term can be read on its own. Take <span class="math notranslate nohighlight">\(10\log_{10}\)</span> of every factor. Power is in dBm, gains in dBi, <span class="math notranslate nohighlight">\(\lambda\)</span> in meters, <span class="math notranslate nohighlight">\(R\)</span> in meters, and the radar cross section in <strong>dBsm</strong>, decibels relative to one square meter. The constant is <span class="math notranslate nohighlight">\(10\log_{10}(4\pi)^3 = 33.0\)</span> dB. The range term, <span class="math notranslate nohighlight">\(40\log_{10} R\)</span>, is the <strong>two-way path loss</strong> that sets the slope: every factor of 10 in range takes 40 dB off the echo.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-radar-cross-section">
+<div class="wrap docutils container">
+<p class="rubric">Radar Cross Section</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\sigma = \lim_{R\to\infty} 4\pi R^2\ \frac{\vert E_s\vert^2}{\vert E_i\vert^2}
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\sigma\)</span> is the area of an isotropic scatterer that would return the same echo.</p></li>
+<li><p>Size, shape, and the viewing angle set it.</p></li>
+<li><p>We quote it in dBsm, relative to 1 m².</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The radar equation treats the target as a fictitious area: it intercepts the incident power density over <span class="math notranslate nohighlight">\(\sigma\)</span> square meters and re-radiates all of it equally in every direction. A real target does neither. It intercepts power over its physical shadow and re-radiates it in a pattern of its own, often concentrated in a few directions. The radar cross section folds both effects into one number, defined by what the radar measures: the ratio of the scattered field <span class="math notranslate nohighlight">\(E_s\)</span> at the radar to the incident field <span class="math notranslate nohighlight">\(E_i\)</span> at the target, scaled to the sphere of radius <span class="math notranslate nohighlight">\(R\)</span> that the echo spreads over. The limit removes the dependence on range, so <span class="math notranslate nohighlight">\(\sigma\)</span> belongs to the target and the viewing direction, not to the geometry of the measurement.</p>
+<p>Because <span class="math notranslate nohighlight">\(\sigma\)</span> includes the target’s own re-radiation pattern, it can be much larger or much smaller than the target’s physical cross section. A target that sends its echo straight back toward the radar has a large <span class="math notranslate nohighlight">\(\sigma\)</span>; one that sends it elsewhere has a small one, which is the whole principle of stealth shaping.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-sphere-plate-and-corner">
+<div class="wrap docutils container">
+<p class="rubric">Sphere, Plate, and Corner</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L25-rcs-shapes.svg" alt="Three scatterers with parallel incident rays. The sphere reflects each ray off its curved surface in a different direction. The flat plate at normal incidence reflects the rays straight back. The corner reflector bounces each ray off two faces and sends it back parallel to the way it came, even though the rays arrive at an angle" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Shape, 10 cm</p></th>
+<th class="head text-left"><p>Peak <span class="math notranslate nohighlight">\(\sigma\)</span></p></th>
+<th class="head text-right"><p>dBsm</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>sphere</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\pi a^2\)</span></p></td>
+<td class="text-right"><p><span class="qty">−21.0</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>flat plate</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(4\pi A^2/\lambda^2\)</span></p></td>
+<td class="text-right"><p><span class="qty">+1.4</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>corner</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(4\pi a^4/3\lambda^2\)</span></p></td>
+<td class="text-right"><p><span class="qty">−3.3</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Three simple shapes show the range of behavior, all at 10 GHz and all 10 cm across: a sphere 10 cm in diameter, a square plate 10 cm on a side, and a triangular <strong>trihedral corner reflector</strong> with 10 cm edges. The sphere spreads its echo in every direction, the plate returns a narrow beam only when it faces the radar, and the corner returns its echo toward the radar over a wide range of angles. The next three frames take each in turn.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-sphere">
+<div class="wrap docutils container">
+<p class="rubric">The Sphere</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\sigma_\text{sphere} = \pi a^2 \qquad (2\pi a \gg \lambda)
+\]</div>
+<ul class="simple">
+<li><p>A large sphere returns its own shadow area, from any direction.</p></li>
+<li><p>10 cm across: <span class="math notranslate nohighlight">\(\sigma = 0.0079\)</span> m², or <span class="qty">−21.0</span> dBsm.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A sphere much larger than a wavelength scatters the power it intercepts nearly equally in every direction, so it is the one shape whose radar cross section equals its physical shadow, <span class="math notranslate nohighlight">\(\pi a^2\)</span>. It is also the only shape whose <span class="math notranslate nohighlight">\(\sigma\)</span> does not depend on the viewing angle, which is why calibration spheres hang from balloons over radar test ranges. For the 10 cm sphere, <span class="math notranslate nohighlight">\(a = 0.05\ \text{m}\)</span> and the circumference is <span class="math notranslate nohighlight">\(10.5\lambda\)</span>, just inside this <strong>optical region</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+\sigma = \pi (0.05)^2 = 0.0079\ \text{m}^2 = -21.0\ \text{dBsm}.
+\]</div>
+<p>A sphere much smaller than a wavelength is in the <strong>Rayleigh region</strong>, where <span class="math notranslate nohighlight">\(\sigma\)</span> grows as <span class="math notranslate nohighlight">\(a^6/\lambda^4\)</span>. That steep dependence on frequency is why a weather radar sees raindrops at X-band and not at L-band. Between the two regions, near <span class="math notranslate nohighlight">\(2\pi a \approx \lambda\)</span>, the <strong>resonance region</strong> oscillates as surface waves around the sphere add and cancel.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-flat-plate">
+<div class="wrap docutils container">
+<p class="rubric">The Flat Plate</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\sigma_\text{plate} &amp;= A\ \cdot\ \frac{4\pi A}{\lambda^2} = \frac{4\pi A^2}{\lambda^2} \\
+&amp;= 1.40\ \text{m}^2 = +1.4\ \text{dBsm}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>The plate intercepts power over <span class="math notranslate nohighlight">\(A\)</span> and re-radiates it as a uniform aperture.</p></li>
+<li><p>Its echo is 22.5 dB above the sphere’s, but only within <span class="qty">±3.8°</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A flat plate facing the radar intercepts the incident density over its area <span class="math notranslate nohighlight">\(A\)</span>, and the induced currents on its surface are uniform in amplitude and phase. That is the uniform aperture of <a href="../../module03/L15-aperture-distributions/index.html#frame-key-point-gain-from-area">Lesson 15</a>, and it re-radiates with that aperture’s gain, <span class="math notranslate nohighlight">\(4\pi A/\lambda^2\)</span>, aimed straight back at the radar. The radar cross section is the product of the area that collects and the gain that returns:</p>
+<div class="math notranslate nohighlight">
+\[
+\sigma = A\ \frac{4\pi A}{\lambda^2} = \frac{4\pi (0.10)^4}{(0.030)^2} = 1.40\ \text{m}^2 = +1.4\ \text{dBsm}.
+\]</div>
+<p>That is 22.5 dB above the sphere of the same size, because the plate concentrates its echo into one narrow beam where the sphere spreads it over all directions. The gain that makes the plate bright also makes it narrow, and the next frame shows how narrow.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-rcs-versus-aspect">
+<div class="wrap docutils container">
+<p class="rubric">RCS Versus Aspect</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L25-rcs-aspect.svg" alt="RCS in dBsm versus aspect angle from minus 45 to plus 45 degrees at 10 GHz. The 10 cm flat plate peaks at plus 1.4 dBsm with a narrow main lobe and a train of sidelobes. The corner reflector with 10 cm edges peaks at minus 3.3 dBsm and stays within 3 dB out to about plus and minus 19 degrees. The 10 cm sphere is flat at minus 21.0 dBsm" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The plate falls 3 dB by <span class="qty">±3.8°</span>.</p></li>
+<li><p>The corner holds within 3 dB out to <span class="qty">±19°</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Turn the plate away from the radar by an angle <span class="math notranslate nohighlight">\(\theta\)</span> and its re-radiated beam turns by <span class="math notranslate nohighlight">\(2\theta\)</span>, because a mirror reflects at the angle of incidence. The echo falls off along the plate’s own aperture pattern, a <span class="math notranslate nohighlight">\(\text{sinc}^2\)</span> with sidelobes, and the first null arrives at <span class="math notranslate nohighlight">\(\sin\theta = \lambda/2a\)</span>, or <span class="qty">8.6°</span> for the 10 cm plate. The argument carries a factor of two over the one-way pattern of Lesson 15 because the wave crosses the path difference across the plate twice. A plate is a strong target only when we know exactly where it faces.</p>
+<p>The corner reflector trades 4.8 dB of peak RCS for a wide angular response: it stays within 3 dB of its peak out to <span class="qty">±19°</span>, and within 6 dB out to <span class="qty">±26°</span>. The sphere is flat at every angle. The plate curve is the physical-optics result, and the corner curve is a geometric-optics estimate computed from the area that returns a triple bounce, which is why it drops abruptly near <span class="qty">±38°</span> where a real corner rolls off more gradually.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-corner-reflector">
+<div class="wrap docutils container">
+<p class="rubric">The Corner Reflector</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+A_\text{eff} &amp;= \frac{a^2}{\sqrt{3}} \\
+\sigma_\text{corner} &amp;= \frac{4\pi A_\text{eff}^2}{\lambda^2} = \frac{4\pi a^4}{3\lambda^2}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>Three perpendicular faces send every ray back the way it came.</p></li>
+<li><p>With 10 cm edges: <span class="qty">0.47</span> m², or <span class="qty">−3.3</span> dBsm.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A trihedral corner reflector is three flat plates joined at right angles, like the inside corner of a box. Each bounce off one face reverses one component of the ray’s direction, so a ray that strikes all three faces leaves with all three components reversed and travels back exactly antiparallel to the way it came. That holds for any arrival direction inside the corner’s opening, which is why the corner reflector is the standard radar target, the lab target here, and the reason bicycle reflectors work.</p>
+<p>The corner behaves like a flat plate that always faces the radar. The plate’s area is the part of the opening that returns a triple bounce. Looking straight down the symmetry axis, that region is a hexagon of area <span class="math notranslate nohighlight">\(a^2/\sqrt{3}\)</span>, and the plate formula gives</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\sigma &amp;= \frac{4\pi a^4}{3\lambda^2} = \frac{4\pi (0.10)^4}{3\ (0.030)^2} \\
+&amp;= 0.47\ \text{m}^2 = -3.3\ \text{dBsm}.
+\end{aligned}
+\end{split}\]</div>
+<p>Off the axis the hexagon shrinks, and that shrinking produced the corner curve on the previous frame. The <span class="math notranslate nohighlight">\(a^4\)</span> dependence is steep: a corner with 20 cm edges is 12 dB brighter.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-typical-targets-at-x-band">
+<div class="wrap docutils container">
+<p class="rubric">Typical Targets at X-Band</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Target</p></th>
+<th class="head text-right"><p><span class="math notranslate nohighlight">\(\sigma\)</span> (m²)</p></th>
+<th class="head text-right"><p>dBsm</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>car</p></td>
+<td class="text-right"><p>100</p></td>
+<td class="text-right"><p><span class="qty">+20</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>person</p></td>
+<td class="text-right"><p>1</p></td>
+<td class="text-right"><p><span class="qty">0</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>10 cm corner</p></td>
+<td class="text-right"><p>0.47</p></td>
+<td class="text-right"><p><span class="qty">−3</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>small drone</p></td>
+<td class="text-right"><p>0.01</p></td>
+<td class="text-right"><p><span class="qty">−20</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>Real targets swing <span class="qty">±10</span> dB as they turn.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The table lists typical X-band values for targets the final project might see, alongside the lab corner. Treat the three real targets as order-of-magnitude numbers: a car is a collection of flat panels and corners, so its <span class="math notranslate nohighlight">\(\sigma\)</span> swings by tens of decibels as it turns, and a walking person’s echo fluctuates as the arms and legs move. That fluctuation is a nuisance for detection, which Lesson 27 takes up, and a signature for classification, which Lesson 31 uses. The corner reflector’s echo is steady over a wide range of angles, which is why we calibrate a radar against it. A person at 3 m returns 3.3 dB more than the 10 cm lab corner, so the corner is the steadier target, not the stronger one.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-thermal-noise">
+<div class="wrap docutils container">
+<p class="rubric">Thermal Noise</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+N &amp;= kTB \\
+kT_0 &amp;= -174\ \text{dBm/Hz} \\
+N\ (B = 1\ \text{MHz}) &amp;= -114\ \text{dBm}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>Every resistor at temperature <span class="math notranslate nohighlight">\(T\)</span> delivers this power.</p></li>
+<li><p>Noise grows with bandwidth, 10 dB per decade.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>An echo is only useful if it stands above the noise, so the second half of the budget is the noise power. Any resistive source at absolute temperature <span class="math notranslate nohighlight">\(T\)</span> delivers an available <strong>thermal noise power</strong></p>
+<div class="math notranslate nohighlight">
+\[
+N = kTB
+\]</div>
+<p>into a matched load, where <span class="math notranslate nohighlight">\(k = 1.38\times10^{-23}\ \text{J/K}\)</span> is Boltzmann’s constant and <span class="math notranslate nohighlight">\(B\)</span> is the receiver’s bandwidth in hertz. At the reference temperature <span class="math notranslate nohighlight">\(T_0 = 290\ \text{K}\)</span>, <span class="math notranslate nohighlight">\(kT_0 = 4.0\times10^{-21}\ \text{W/Hz}\)</span>, or <span class="qty">−174</span> dBm/Hz, a number worth remembering. In a 1 MHz bandwidth the noise is <span class="math notranslate nohighlight">\(-174 + 60 = -114\)</span> dBm. Noise power is proportional to bandwidth, so a receiver that keeps only the bandwidth the echo occupies keeps less noise. That is the reason for every filter in a radar’s processing chain.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-noise-figure-and-g-t">
+<div class="wrap docutils container">
+<p class="rubric">Noise Figure and G/T</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+T_e &amp;= T_0(F - 1) \\
+T_\text{sys} &amp;= T_A + T_e \\
+G/T &amp;= G_r - 10\log_{10} T_\text{sys}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>PHASER, <span class="math notranslate nohighlight">\(F\)</span> = 2 dB, <span class="math notranslate nohighlight">\(T_A\)</span> = 290 K: <span class="math notranslate nohighlight">\(T_\text{sys} = 460\)</span> K.</p></li>
+<li><p><span class="math notranslate nohighlight">\(G/T = 15.0 - 26.6 = -11.6\)</span> dB/K.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The receiver adds noise of its own. Its <strong>noise factor</strong> <span class="math notranslate nohighlight">\(F\)</span> is the ratio of the output noise to the noise a noiseless receiver would deliver from a 290 K source, and in decibels it is the <strong>noise figure</strong>. The same receiver can be described by an <strong>equivalent noise temperature</strong> <span class="math notranslate nohighlight">\(T_e = T_0(F-1)\)</span>, the temperature a resistor at the input would need to produce the added noise. The antenna contributes its own <strong>antenna temperature</strong> <span class="math notranslate nohighlight">\(T_A\)</span>, set by what its beam sees. Indoors the beam sees walls, people, and furniture at about 290 K, so <span class="math notranslate nohighlight">\(T_A \approx T_0\)</span>. The <strong>system noise temperature</strong> is the sum, <span class="math notranslate nohighlight">\(T_\text{sys} = T_A + T_e\)</span>.</p>
+<p>Every PHASER channel starts with an ADL8107 low-noise amplifier with a 1.3 dB noise figure and 24 dB of gain, per the ADI <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/hardware/" target="_blank" rel="noopener">hardware page</a>. That gain makes the stages behind it contribute little, so we use <span class="math notranslate nohighlight">\(F = 2\)</span> dB for the whole receiver. Then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+T_e &amp;= 290\ (10^{0.2} - 1) = 170\ \text{K} \\
+T_\text{sys} &amp;= 290 + 170 = 460\ \text{K} = 26.6\ \text{dBK}.
+\end{aligned}
+\end{split}\]</div>
+<p>The ratio of the receive gain to the system temperature, <strong>G/T</strong> in dB/K, is the receiver’s figure of merit. It is the receive-side counterpart of the transmitter’s EIRP: gain raises the signal and temperature raises the noise, so only their ratio matters for the SNR. For the PHASER at broadside, <span class="math notranslate nohighlight">\(G/T = 15.0 - 26.6 = -11.6\)</span> dB/K. Satellite ground stations quote G/T on their datasheets for the same reason.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-signal-to-noise-ratio">
+<div class="wrap docutils container">
+<p class="rubric">Signal-to-Noise Ratio</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\text{SNR} = \frac{P_r}{kT_\text{sys}B} = \frac{P_t G_t G_r \lambda^2 \sigma}{(4\pi)^3 R^4\ kT_\text{sys}B}
+\]</div>
+<ul class="simple">
+<li><p>With <span class="math notranslate nohighlight">\(T_A = T_0\)</span>, the noise is <span class="math notranslate nohighlight">\(kT_0BF\)</span>.</p></li>
+<li><p>PHASER: <span class="math notranslate nohighlight">\(N = -174 + 60 + 2 = -112\)</span> dBm in 1 MHz.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The <strong>signal-to-noise ratio</strong> is the echo power divided by the noise power in the same bandwidth. Substitute the radar equation for <span class="math notranslate nohighlight">\(P_r\)</span> and the noise for <span class="math notranslate nohighlight">\(N\)</span> and every quantity in the lesson appears in one expression. With the antenna at <span class="math notranslate nohighlight">\(T_0\)</span>, <span class="math notranslate nohighlight">\(kT_\text{sys}B = kT_0BF\)</span>, so in decibels the noise is <span class="math notranslate nohighlight">\(-174 + 10\log_{10}B + F\)</span>. For the PHASER in a 1 MHz bandwidth that is <span class="qty">−112</span> dBm.</p>
+<p>Two things move the SNR that do not appear in the received power. A lower noise figure helps decibel for decibel, which is why the LNA sits directly behind each antenna element. A narrower bandwidth helps 10 dB per decade, and Lesson 28 shows that the FFT of an FMCW radar narrows the effective bandwidth far below 1 MHz.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-phaser-link-budget">
+<div class="wrap docutils container">
+<p class="rubric">The PHASER Link Budget</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Term</p></th>
+<th class="head text-left"><p>Value</p></th>
+<th class="head text-right"><p>dB</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(P_t\)</span></p></td>
+<td class="text-left"><p>25 µW</p></td>
+<td class="text-right"><p><span class="qty">−16.0</span> dBm</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(G_t + G_r\)</span></p></td>
+<td class="text-left"><p>6 + 15 dBi</p></td>
+<td class="text-right"><p><span class="qty">+21.0</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\lambda^2\)</span></p></td>
+<td class="text-left"><p>3.0 cm</p></td>
+<td class="text-right"><p><span class="qty">−30.5</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\sigma\)</span></p></td>
+<td class="text-left"><p>10 cm corner</p></td>
+<td class="text-right"><p><span class="qty">−3.3</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\((4\pi)^3\)</span></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-right"><p><span class="qty">−33.0</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(R^4\)</span></p></td>
+<td class="text-left"><p>3 m</p></td>
+<td class="text-right"><p><span class="qty">−19.1</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(P_r\)</span></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-right"><p><span class="qty">−80.8</span> dBm</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(N\)</span>, 1 MHz</p></td>
+<td class="text-left"><p></p></td>
+<td class="text-right"><p><span class="qty">−112.0</span> dBm</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>SNR</p></td>
+<td class="text-left"><p></p></td>
+<td class="text-right"><p><span class="qty">31.1</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Here is the whole budget for the lab setup: a corner reflector with 10 cm edges at 3 m, in front of the PHASER at 10 GHz. The transmit power, the transmit antenna’s gain, and the target size are provisional until the course confirms them on a kit, so treat this budget as the method with representative numbers. Each line has a source.</p>
+<ul class="simple">
+<li><p><strong><span class="math notranslate nohighlight">\(P_t = -16\)</span> dBm</strong>, or 25 µW, is the transmit tone ADI measured at the transmit output on its <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/hardware/" target="_blank" rel="noopener">hardware page</a>.</p></li>
+<li><p><strong><span class="math notranslate nohighlight">\(G_t = 6\)</span> dBi</strong> is an assumed small printed transmit antenna. Substitute the gain of the antenna on your bench.</p></li>
+<li><p><strong><span class="math notranslate nohighlight">\(G_r = 15.0\)</span> dBi</strong> is the course array at broadside from <a href="../../module03/L21-antenna-pattern/index.html#frame-gain-bookkeeping">Lesson 21</a>: 6.0 dBi per element plus <span class="math notranslate nohighlight">\(10\log_{10}8 = 9.0\)</span> dB. Each element on the board is a column of patches with more gain than the course model’s ideal element, so this term errs low.</p></li>
+<li><p><strong><span class="math notranslate nohighlight">\(\sigma = -3.3\)</span> dBsm</strong> is the corner of the previous frames, facing the radar within <span class="qty">±19°</span>. The 10 cm edge is a provisional size; the lab has one or two commercial corner reflectors, and a larger one scales as <span class="math notranslate nohighlight">\(a^4\)</span>.</p></li>
+</ul>
+<p>Summing,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+P_r &amp;= -16.00 + 21.00 - 30.46 - 3.32 - 32.98 - 19.08 \\
+&amp;= -80.8\ \text{dBm}.
+\end{aligned}
+\end{split}\]</div>
+<p>The chain carries two decimals so the rounding of the table does not accumulate. Against the <span class="qty">−112.0</span> dBm noise in 1 MHz, the echo stands 31.1 dB above the noise. A transmitter of 25 µW is enough because the target is close: at 3 m the two-way path loss is only 19.1 dB beyond the 1 m reference, where a radar at 30 km would lose another 160 dB.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-radar-equation-explorer">
+<div class="wrap docutils container">
+<p class="rubric">Radar Equation Explorer</p>
+<div class="depth docutils container">
+<p>The widget plots the radar equation in decibels against range on a logarithmic axis, so the echo is a straight line falling 40 dB per decade. The red dashed line is the noise in the chosen bandwidth and the dotted line is a threshold 13 dB above it. The green bar at the chosen range is the SNR, and the dot where the echo meets the threshold is the maximum range. It starts on the link budget of the previous frame. Switch the target to a person and to a small drone, then move the bandwidth from 1 MHz to 1 kHz and watch the noise floor drop 30 dB while the echo stays put.</p>
+</div>
+<iframe src="../../viz/radar-equation.html"
+        width="100%" height="501"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Radar equation explorer: received power, noise floor, SNR, and maximum range versus range for the PHASER">
+</iframe>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-maximum-range">
+<div class="wrap docutils container">
+<p class="rubric">Maximum Range</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+R_\text{max} = \left[\frac{P_t G_t G_r \lambda^2 \sigma}{(4\pi)^3\ kT_\text{sys}B\ \text{SNR}_\text{min}}\right]^{1/4}
+\]</div>
+<ul class="simple">
+<li><p>PHASER, 10 cm corner, 13 dB threshold: <span class="math notranslate nohighlight">\(R_\text{max} = 8.5\)</span> m.</p></li>
+<li><p>Doubling the range takes 16 times the transmit power.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Set the SNR equal to the smallest value the detector accepts, <span class="math notranslate nohighlight">\(\text{SNR}_\text{min}\)</span>, and solve for range. The result is the <strong>maximum detection range</strong>. Lesson 27 derives <span class="math notranslate nohighlight">\(\text{SNR}_\text{min}\)</span> from the probabilities of detection and false alarm; for now we use 13 dB, a typical value. For the PHASER budget, the echo is 31.1 dB above the noise at 3 m and has 18.1 dB to spare above the threshold, so</p>
+<div class="math notranslate nohighlight">
+\[
+R_\text{max} = 3\ \text{m} \times 10^{18.1/40} = 8.5\ \text{m}
+\]</div>
+<p>in a 1 MHz bandwidth. The fourth root is the most important feature of the formula. Every term inside the brackets enters at one quarter of its decibel value, so 16 times the transmit power, or 12 dB, only doubles the range. Raising the antenna gains, lowering the noise, and narrowing the bandwidth are all worth the same quarter-power, and a radar designer usually finds the gain and the bandwidth easier to change than the transmitter.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary">
+<div class="wrap docutils container">
+<p class="rubric">Summary</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(L_\text{fs} = (4\pi R/\lambda)^2\)</span></p></td>
+<td class="text-left"><p>one-way free-space path loss</p></td>
+<td class="text-left"><p>62.0 dB at 3 m, 10 GHz</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(P_r = P_tG_tG_r\lambda^2\sigma/(4\pi)^3R^4\)</span></p></td>
+<td class="text-left"><p>radar equation, Friis applied twice</p></td>
+<td class="text-left"><p><span class="qty">−12</span> dB per doubling of range</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(10\log_{10}(4\pi)^3\)</span></p></td>
+<td class="text-left"><p>the constant in the dB form</p></td>
+<td class="text-left"><p>33.0 dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\sigma\)</span></p></td>
+<td class="text-left"><p>radar cross section, in dBsm</p></td>
+<td class="text-left"><p>area of the equivalent isotropic scatterer</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\pi a^2\)</span>, <span class="math notranslate nohighlight">\(4\pi A^2/\lambda^2\)</span>, <span class="math notranslate nohighlight">\(4\pi a^4/3\lambda^2\)</span></p></td>
+<td class="text-left"><p>sphere, plate, corner</p></td>
+<td class="text-left"><p>10 cm: <span class="qty">−21.0</span>, <span class="qty">+1.4</span>, <span class="qty">−3.3</span> dBsm</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Corner beamwidth</p></td>
+<td class="text-left"><p>within 3 dB of peak</p></td>
+<td class="text-left"><p><span class="qty">±19°</span> (plate <span class="qty">±3.8°</span>)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(kT_0\)</span></p></td>
+<td class="text-left"><p>thermal noise density</p></td>
+<td class="text-left"><p><span class="qty">−174</span> dBm/Hz</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(G/T\)</span></p></td>
+<td class="text-left"><p>receive figure of merit</p></td>
+<td class="text-left"><p>PHASER <span class="qty">−11.6</span> dB/K</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>PHASER link budget</p></td>
+<td class="text-left"><p>10 cm corner at 3 m (provisional)</p></td>
+<td class="text-left"><p><span class="qty">−80.8</span> dBm, SNR 31.1 dB in 1 MHz</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(R_\text{max}\)</span></p></td>
+<td class="text-left"><p>range at the SNR threshold</p></td>
+<td class="text-left"><p>8.5 m at 13 dB; 16× power for 2× range</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../practice/ECE444_L25_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a class="doc-link doc-key" href="../../practice/ECE444_L25_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Lesson 26</strong> reads range and velocity from the echo’s delay and Doppler shift.</p></li>
+<li><p><strong>Lesson 27</strong> sets the SNR threshold from the detection and false-alarm probabilities.</p></li>
+<li><p>The <strong>L28 Lab</strong> measures a target’s echo and checks this budget.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This lesson answered whether the PHASER can hear a target at all. The next two lessons ask what the echo tells us. <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> reads the target’s range from the echo’s delay and its velocity from the Doppler shift, and <a href="../L27-radar-detection/index.html">Lesson 27</a> replaces our 13 dB threshold with one derived from the probabilities of detection and false alarm.</p>
+<p>In the <a href="../L28-fmcw/index.html">L28 Lab</a> you will put a flat metal plate (or, if one is free, one of the lab’s corner reflectors) in front of your kit and find its echo in the range profile. Keep this lesson’s budget: the echo level and the noise floor you measure there are the two numbers it predicts, and comparing them is part of the radar report you write at the end of the module. The range-Doppler, CFAR, and spectrogram labs that follow all start from an echo that stands well above the noise, and this budget is the reason it does. <a href="../L31-classification-tracking/index.html">Lesson 31</a> brings back the <a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">monopulse tracking</a> of the L24 Lab and points it at a radar echo instead of the HB100.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module04/L25-radar-equation"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

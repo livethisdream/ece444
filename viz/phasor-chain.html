@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The array factor is a chain of phasors</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --ph1:#8db8e0; --ph2:#3a82c4; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* Side by side above 600px; stacked (with a shorter design box) below. */
+  .cv2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:600px) { .cv2 { grid-template-columns:1fr; } }
+  .controls { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:6px 12px;
+              padding:7px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:6px; min-width:0; }
+  .ctl label { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:0; font-weight:600; font-size:12px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:36px; width:0; accent-color:var(--mid); }
+  .play { flex:0 0 auto; font:700 10.5px 'Inter',system-ui,-apple-system,sans-serif; text-transform:uppercase;
+          letter-spacing:0.05em; color:var(--navy); background:#fff; border:1px solid var(--edge2);
+          border-radius:4px; padding:2px 6px; cursor:pointer; line-height:14px; }
+  .play.on { background:var(--navy); color:#fff; border-color:var(--navy); }
+  .play:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  @media (max-width:430px) {
+    canvas { max-width:100%; }
+    .controls { grid-template-columns:1fr; }
+    .ctl { flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl .play { order:2; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+  }
+  /* Three instruments, always one row: the values are short by design. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(3, minmax(0,1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 6px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; color:var(--navy); max-width:100%; overflow:hidden; }
+  @media (max-width:430px) { .ro .v { font-size:13.5px; } }
+  .ro.nl { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.nl .v { color:var(--red); }
+  .ro.al { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.al .v { color:var(--grn); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="cv2">
+    <canvas id="chain" aria-label="The N element phasors drawn tip to tail, with their sum from the origin to the end of the chain"></canvas>
+    <canvas id="plot" aria-label="Normalized array factor in decibels versus scan angle, with a marker at the current angle"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Angle \(\theta\)</label>
+      <input type="range" id="th" min="-90" max="90" step="0.1" value="10">
+      <span class="val" id="th-val">10.0°</span>
+      <button type="button" class="play" id="play" aria-label="Sweep the scan angle">play</button>
+    </div>
+    <div class="ctl">
+      <label>Elements \(N\)</label>
+      <input type="range" id="n" min="2" max="16" step="1" value="8">
+      <span class="val" id="n-val">8</span>
+    </div>
+    <div class="ctl">
+      <label>Spacing \(d/\lambda\)</label>
+      <input type="range" id="dl" min="0.25" max="1" step="0.001" value="0.481">
+      <span class="val" id="dl-val">0.481</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">step \(\psi\)</span><span class="v" id="r-psi">&#8212;</span></div>
+    <div class="ro"><span class="k">\(|\mathrm{AF}|/N\)</span><span class="v" id="r-af">&#8212;</span></div>
+    <div class="ro" id="ro-st"><span class="k">chain</span><span class="v" id="r-st">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS = "Inter, system-ui, -apple-system, sans-serif";
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const el = id => document.getElementById(id);
+
+const FLOOR = -40;                               // dB floor of the plot
+const NULL_TOL = 0.5;                            // within this of the floor = a null
+const state = { th: 10, N: 8, dl: 0.481 };
+
+// ---- the physics -----------------------------------------------------------
+// psi = k d sin(theta), broadside and unsteered. AF = sum_{n=0}^{N-1} e^{j n psi}.
+const rad = d => d * Math.PI / 180;
+const psiOf = (thDeg, dl) => 2 * Math.PI * dl * Math.sin(rad(thDeg));
+function afNorm(psi, N) {                        // |sin(N psi/2) / (N sin(psi/2))|
+  const s = Math.sin(psi / 2);
+  if (Math.abs(s) < 1e-12) return 1;
+  return Math.abs(Math.sin(N * psi / 2) / (N * s));
+}
+const dB = x => 20 * Math.log10(Math.max(x, 1e-9));
+// The chain itself: partial sums of the unit phasors, starting at the origin.
+// The chain is drawn with its phase referenced to the array center: rotated by
+// -(N-1)psi/2, which puts the sum on the real axis (AF real, sign and all) and
+// halves the height the chain can need. psi is folded to (-180, 180] first --
+// the chain depends only on psi mod 360 -- so a grating lobe points along +x.
+const wrapPi = a => Math.atan2(Math.sin(a), Math.cos(a));
+const rotOf = (wrap, N) => -(N - 1) * wrap / 2;
+function chainPts(psi, N, rot) {
+  const p = [[0, 0]];
+  let x = 0, y = 0;
+  for (let n = 0; n < N; n++) { x += Math.cos(n * psi + rot); y += Math.sin(n * psi + rot); p.push([x, y]); }
+  return p;
+}
+// Fixed scale per N: the extents of every chain this N can make, so the
+// picture never rescales while theta moves. The aligned chain sets x = N.
+const extCache = new Map();
+function extents(N) {
+  if (extCache.has(N)) return extCache.get(N);
+  let xmin = 0, xmax = N, ymax = 0;
+  for (let i = 0; i <= 1440; i++) {
+    const wv = -Math.PI + 2 * Math.PI * i / 1440;
+    const pts = chainPts(wv, N, rotOf(wv, N));
+    for (const [x, y] of pts) {
+      xmin = Math.min(xmin, x); xmax = Math.max(xmax, x); ymax = Math.max(ymax, Math.abs(y));
+    }
+  }
+  const e = { xmin, xmax, ymax };
+  extCache.set(N, e);
+  return e;
+}
+
+// ---- controls ---------------------------------------------------------------
+let anim = null;
+function stopPlay() {
+  if (anim) { cancelAnimationFrame(anim.id); anim = null; }
+  el('play').classList.remove('on'); el('play').textContent = 'play';
+}
+function setTheta(v) {
+  state.th = v; el('th').value = v;
+  el('th-val').textContent = v.toFixed(1) + '°';
+}
+el('th').addEventListener('input', e => { stopPlay(); setTheta(+e.target.value); drawAll(); });
+el('n').addEventListener('input', e => {
+  stopPlay(); state.N = +e.target.value; el('n-val').textContent = state.N; drawAll();
+});
+el('dl').addEventListener('input', e => {
+  stopPlay(); state.dl = +e.target.value; el('dl-val').textContent = state.dl.toFixed(3); drawAll();
+});
+el('play').addEventListener('click', () => {
+  if (anim) { stopPlay(); return; }
+  if (state.th >= 89.9) setTheta(-90);
+  el('play').classList.add('on'); el('play').textContent = 'stop';
+  anim = { id: 0, t: performance.now() };
+  const step = now => {
+    if (!anim) return;
+    const dt = Math.min(0.1, (now - anim.t) / 1000); anim.t = now;
+    const v = Math.min(90, state.th + 9 * dt);   // 9 degrees a second: 20 s end to end
+    setTheta(Math.round(v * 1000) / 1000); drawAll();
+    if (v >= 90) { stopPlay(); return; }
+    anim.id = requestAnimationFrame(step);
+  };
+  anim.id = requestAnimationFrame(step);
+});
+
+// ---- canvases ---------------------------------------------------------------
+const chain = el('chain'), cctx = chain.getContext('2d');
+const plot = el('plot'), pctx = plot.getContext('2d');
+const DESIGN_W = 300;
+const STACK = window.matchMedia ? window.matchMedia('(max-width:600px)') : null;
+const stacked = () => !!(STACK && STACK.matches);
+/* Size the bitmap to the CSS box (clientWidth, border handed back), and below
+   DESIGN_W scale the whole drawing down rather than clamping it, so labels
+   shrink together. When the canvases stack on a phone the design HEIGHT is
+   shortened -- it feeds both the bitmap and the drawing -- so the two panels
+   add up to a widget that still fits its frame. */
+function fitOne(cv, ratio, lo, hi) {
+  const dpr = window.devicePixelRatio || 1;
+  const wCss = Math.max(200, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
+  const s = Math.min(1, wCss / DESIGN_W);
+  const w = wCss / s;
+  const h = Math.max(lo, Math.min(w * ratio, hi));
+  cv.width = Math.round(wCss * dpr); cv.height = Math.round(h * s * dpr);
+  cv.style.height = (h * s) + 'px';
+  const bh = cv.offsetHeight - cv.clientHeight;
+  if (bh) cv.style.height = (h * s + bh) + 'px';
+  cv.getContext('2d').setTransform(dpr * s, 0, 0, dpr * s, 0, 0);
+  return { w, h };
+}
+function boxFor() {
+  // [ratio, lo, hi] -- same box for both panels side by side so the row is even.
+  return stacked() ? { c: [0.56, 180, 205], p: [0.48, 160, 180] }
+                   : { c: [0.82, 240, 300], p: [0.82, 240, 300] };
+}
+window.addEventListener('resize', () => drawAll());
+
+function drawAll() { const b = boxFor(); drawChain(b.c); drawPlot(b.p); updateReadouts(); }
+
+function arrow(ctx, x0, y0, x1, y1, col, lw, head) {
+  const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy);
+  if (L < 0.5) return;
+  const ux = dx / L, uy = dy / L, hl = Math.min(head, L * 0.45), hw = hl * 0.5;
+  const bx = x1 - ux * hl, by = y1 - uy * hl;
+  ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = lw; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(bx, by); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x1, y1);
+  ctx.lineTo(bx - uy * hw, by + ux * hw); ctx.lineTo(bx + uy * hw, by - ux * hw);
+  ctx.closePath(); ctx.fill();
+}
+
+// ---------------------------------------------------------------- chain ----
+function drawChain(box) {
+  const { w, h } = fitOne(chain, box[0], box[1], box[2]);
+  const ctx = cctx;
+  ctx.clearRect(0, 0, w, h);
+  const N = state.N, psi = psiOf(state.th, state.dl);
+  const wrap = wrapPi(psi);
+  const E = extents(N);
+  const m = 14;                                    // margin, px
+  const spanX = E.xmax - E.xmin, spanY = 2 * E.ymax;
+  const sc = Math.min((w - 2 * m) / spanX, (h - 2 * m - 20) / Math.max(spanY, 1));
+  const ox = (w - spanX * sc) / 2 - E.xmin * sc;   // origin, centered in the box
+  const oy = h / 2;
+  const X = x => ox + x * sc, Y = y => oy - y * sc;
+
+  // real axis, and the aligned length N as a tick
+  ctx.strokeStyle = '#e3eaf1'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(6, oy); ctx.lineTo(w - 6, oy); ctx.stroke();
+  ctx.strokeStyle = '#c4ccd6'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(X(N), oy - 5); ctx.lineTo(X(N), oy + 5); ctx.stroke();
+
+  const rot = rotOf(wrap, N);
+  const pts = chainPts(wrap, N, rot);
+  const end = pts[N];
+  const lvl = dB(Math.hypot(end[0], end[1]) / N);
+  const isNull = lvl <= FLOOR + NULL_TOL;
+  const sgn = wrap >= 0 ? 1 : -1;                  // +1: the chain turns counterclockwise
+
+  // the resultant first, so the element phasors stay visible on top of it
+  if (isNull) {
+    ctx.strokeStyle = cssVar('--red'); ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(X(0), Y(0), 7, 0, 7); ctx.stroke();
+  } else {
+    arrow(ctx, X(0), Y(0), X(end[0]), Y(end[1]), cssVar('--navy'), 4.2, 13);
+  }
+
+  // the element phasors, tip to tail, two alternating blues
+  const head = Math.max(4, Math.min(9, sc * 0.32));
+  const lw = sc > 30 ? 2.2 : 1.7;
+  for (let n = 0; n < N; n++) {
+    const [x0, y0] = pts[n], [x1, y1] = pts[n + 1];
+    arrow(ctx, X(x0), Y(y0), X(x1), Y(y1), n % 2 ? cssVar('--ph1') : cssVar('--ph2'), lw, head);
+  }
+  ctx.fillStyle = cssVar('--navy');
+  ctx.beginPath(); ctx.arc(X(0), Y(0), 2.6, 0, 7); ctx.fill();
+
+  // the step psi: an arc at the tip of phasor 0, from its direction to phasor 1's
+  const tx = X(pts[1][0]), ty = Y(pts[1][1]);
+  // radius limited by the room around the tip, so the arc is never clipped
+  const room = Math.min(tx, w - tx, ty, h - ty) - 9;
+  const r = Math.max(8, Math.min(28, sc * 0.6, room));
+  ctx.strokeStyle = '#9aa6b2'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(tx, ty);
+  ctx.lineTo(tx + (r + 6) * Math.cos(rot), ty - (r + 6) * Math.sin(rot)); ctx.stroke();
+  ctx.setLineDash([]);
+  if (Math.abs(wrap) > 1e-3) {
+    ctx.strokeStyle = cssVar('--amber'); ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.arc(tx, ty, r, -rot, -(rot + wrap), wrap > 0); ctx.stroke();
+  }
+  // Label: try spots around the arc, outside the turn first (the arc and the
+  // rest of the chain are inside it), and take the first whose box clears every
+  // phasor, the resultant, the arc, and the canvas edge. Nowhere clear: the
+  // top-left corner if that is clear, else no label -- never an overprint.
+  const sMinus = psi < 0 ? '−' : '';
+  const txt = ' = ' + sMinus + Math.abs(psi * 180 / Math.PI).toFixed(1) + '°';
+  ctx.font = '700 12px ' + SANS;
+  const tw = ctx.measureText(txt).width;
+  const sw = MJ.width('\\psi', cssVar('--amber'), 14) || 9;
+  const lwid = sw + tw, lht = 16;
+  // everything drawn so far, as screen-space segments
+  const segs = [];
+  for (let n = 0; n < N; n++) segs.push([X(pts[n][0]), Y(pts[n][1]), X(pts[n + 1][0]), Y(pts[n + 1][1])]);
+  segs.push([X(0), Y(0), X(end[0]), Y(end[1])]);
+  for (let i = 0; i < 12; i++) {                   // the arc, as a polyline
+    const a0 = rot + wrap * i / 12, a1 = rot + wrap * (i + 1) / 12;
+    segs.push([tx + r * Math.cos(a0), ty - r * Math.sin(a0), tx + r * Math.cos(a1), ty - r * Math.sin(a1)]);
+  }
+  const boxClear = (bx, by, bw, bh) => {          // bx,by = top-left
+    if (bx < 3 || by < 3 || bx + bw > w - 3 || by + bh > h - 3) return false;
+    const pad = 3;
+    for (const [x0, y0, x1, y1] of segs) {
+      const L = Math.hypot(x1 - x0, y1 - y0), k = Math.max(1, Math.ceil(L / 2));
+      for (let j = 0; j <= k; j++) {
+        const x = x0 + (x1 - x0) * j / k, y = y0 + (y1 - y0) * j / k;
+        if (x > bx - pad && x < bx + bw + pad && y > by - pad && y < by + bh + pad) return false;
+      }
+    }
+    return true;
+  };
+  const na = rot - sgn * Math.PI / 2;              // outward normal, math angle
+  let spot = null;
+  const das = [0];
+  for (let k = 1; k <= 6; k++) das.push(k * Math.PI / 6, -k * Math.PI / 6);
+  for (const extra of [0, 10, 22, 38]) {
+    for (const da of das) {
+      const ux = Math.cos(na + da), uy = -Math.sin(na + da);
+      const dist = 8 + extra + Math.abs(ux) * lwid / 2 + Math.abs(uy) * lht / 2;
+      const cx = tx + ux * dist, cy = ty + uy * dist;
+      if (boxClear(cx - lwid / 2, cy - lht / 2, lwid, lht)) { spot = [cx, cy]; break; }
+    }
+    if (spot) break;
+  }
+  if (!spot && boxClear(6, 6, lwid, lht)) spot = [6 + lwid / 2, 6 + lht / 2];
+  if (spot) {
+    MJ.draw(ctx, '\\psi', spot[0] - lwid / 2, spot[1], 14, cssVar('--amber'), 'left');
+    ctx.fillStyle = cssVar('--amber'); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(txt, spot[0] - lwid / 2 + sw, spot[1] + 1);
+    segs.push([spot[0] - lwid / 2, spot[1], spot[0] + lwid / 2, spot[1]]);
+    segs.push([spot[0] - lwid / 2, spot[1] - lht / 2, spot[0] + lwid / 2, spot[1] + lht / 2]);
+  }
+
+  // N at its tick, below or above, wherever nothing else is
+  for (const dy of [15, -15]) {
+    if (boxClear(X(N) - 7, oy + dy - 8, 14, 16)) { MJ.draw(ctx, 'N', X(N), oy + dy, 13, '#8d97a3', 'center'); break; }
+  }
+}
+
+// ----------------------------------------------------------------- plot ----
+function drawPlot(box) {
+  const { w, h } = fitOne(plot, box[0], box[1], box[2]);
+  const ctx = pctx;
+  ctx.clearRect(0, 0, w, h);
+  const mL = 47, mR = 12, mT = 12, mB = 40;
+  const pW = w - mL - mR, pH = h - mT - mB;
+  const X = t => mL + pW * (t + 90) / 180;
+  const Y = d => mT + pH * (Math.max(FLOOR, Math.min(0, d)) / FLOOR);
+
+  ctx.strokeStyle = '#eef3f8'; ctx.lineWidth = 1;
+  for (let t = -90; t <= 90; t += 30) { ctx.beginPath(); ctx.moveTo(X(t), mT); ctx.lineTo(X(t), mT + pH); ctx.stroke(); }
+  for (let d = 0; d >= FLOOR; d -= 10) { ctx.beginPath(); ctx.moveTo(mL, Y(d)); ctx.lineTo(mL + pW, Y(d)); ctx.stroke(); }
+  ctx.strokeStyle = cssVar('--edge'); ctx.strokeRect(mL, mT, pW, pH);
+
+  // |AF_N| in dB
+  ctx.save();
+  ctx.beginPath(); ctx.rect(mL, mT - 2, pW, pH + 4); ctx.clip();
+  ctx.strokeStyle = cssVar('--navy'); ctx.lineWidth = 2; ctx.lineJoin = 'round';
+  ctx.beginPath();
+  const S = 1440;
+  for (let i = 0; i <= S; i++) {
+    const t = -90 + 180 * i / S;
+    const v = dB(afNorm(psiOf(t, state.dl), state.N));
+    i ? ctx.lineTo(X(t), Y(v)) : ctx.moveTo(X(t), Y(v));
+  }
+  ctx.stroke();
+  ctx.restore();
+
+  // marker at the current angle
+  const lvl = dB(afNorm(psiOf(state.th, state.dl), state.N));
+  const isNull = lvl <= FLOOR + NULL_TOL;
+  ctx.strokeStyle = 'rgba(138,90,0,0.75)'; ctx.lineWidth = 1.3; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(X(state.th), mT); ctx.lineTo(X(state.th), mT + pH); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = isNull ? cssVar('--red') : cssVar('--navy');
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(X(state.th), Y(lvl), 5, 0, 7); ctx.fill(); ctx.stroke();
+
+  // axes
+  ctx.font = '10.5px ' + SANS; ctx.fillStyle = cssVar('--ink3');
+  ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  for (let d = 0; d >= FLOOR; d -= 10) ctx.fillText(String(d).replace('-', '−'), mL - 5, Y(d));
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  const step = pW < 200 ? 45 : 30;
+  for (let t = -90; t <= 90; t += step) ctx.fillText(String(t).replace('-', '−') + '°', X(t), mT + pH + 4);
+
+  ctx.fillStyle = '#3b4651'; ctx.font = '600 11.5px ' + SANS;
+  const cx = mL + pW / 2, ttl = 'scan angle ';
+  const tw = ctx.measureText(ttl).width;
+  const sw = MJ.width('\\theta', '#3b4651', 14) || 8;
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  const yT = mT + pH + 27;
+  ctx.fillText(ttl, cx - (tw + sw) / 2, yT);
+  MJ.draw(ctx, '\\theta', cx - (tw + sw) / 2 + tw, yT - 1, 14, '#3b4651', 'left');
+
+  ctx.save(); ctx.translate(12, mT + pH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = cssVar('--navy');
+  ctx.fillText('array factor (dB)', 0, 0); ctx.restore();
+}
+
+// ------------------------------------------------------------- readouts ---
+function updateReadouts() {
+  const N = state.N, psi = psiOf(state.th, state.dl);
+  const a = afNorm(psi, N), lvl = dB(a);
+  el('r-psi').textContent = (psi * 180 / Math.PI).toFixed(1).replace('-', '−') + '°';
+  el('r-af').textContent = a.toFixed(3);
+  const ro = el('ro-st'); ro.classList.remove('nl', 'al');
+  const narrow = window.innerWidth < 520;
+  if (lvl <= FLOOR + NULL_TOL) {
+    const mm = Math.round(N * psi / (2 * Math.PI));
+    const ms = String(mm).replace('-', '−');
+    el('r-st').textContent = narrow ? 'null m = ' + ms : 'closed: null m = ' + ms;
+    ro.classList.add('nl');
+  } else if (a >= 0.9995) {
+    el('r-st').textContent = 'aligned';
+    ro.classList.add('al');
+  } else {
+    el('r-st').textContent = lvl.toFixed(1).replace('-', '−') + ' dB';
+  }
+}
+
+MJ.setRedraw(drawAll);
+MJ.onReady(() => { MJ.typeset(document.querySelector('.app')).then(drawAll); });
+drawAll();
+</script>
+</body>
+</html>

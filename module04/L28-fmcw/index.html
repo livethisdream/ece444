@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L28 - FMCW on the Phaser &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=8125a6e0df">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l28-fmcw-on-the-phaser">
+<h1>L28 - FMCW on the Phaser<a class="headerlink" href="#l28-fmcw-on-the-phaser" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">FMCW on the Phaser</h1>
+<div class="title-rule"></div>
+<p>A 500 MHz chirp turns each meter of range into 6.67 kHz of beat frequency.</p>
+<p>Lesson 28 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson and lab.</p>
+</div>
+</div>
+<div class="frame here-28 docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 1">
+  <li>I can calculate range resolution, unambiguous range, and Doppler shift for a given radar waveform.</li>
+</ol>
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 3">
+  <li>I can describe FMCW radar operation and configure an FMCW waveform on the ADALM-PHASER.</li>
+  <li>I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.</li>
+</ol>
+<!-- The Module 4 "you are here" strip. Included into a lesson's Learning
+     Objectives frame, which carries `:class: here-NN` to light up its own
+     chip (frames.css). L25-L27 are taught in class; L28-L31 are the final
+     project, each one page with its lesson and then its lab. -->
+<div class="lane-strip" role="navigation" aria-label="Module 4 lessons, by whether they are taught in class or worked as the final project">
+  <span class="ls-label">Module 4</span>
+  <a class="ls-chip" data-n="25" href="../L25-radar-equation/index.html" title="L25 Radar Equation: in class">25</a>
+  <a class="ls-chip" data-n="26" href="../L26-range-resolution-doppler/index.html" title="L26 Range, Resolution, and Doppler: in class">26</a>
+  <a class="ls-chip" data-n="27" href="../L27-radar-detection/index.html" title="L27 Radar Detection: in class">27</a>
+  <a class="ls-chip ls-proj" data-n="28" href="../L28-fmcw/index.html" title="L28 FMCW and its lab: final project">28</a>
+  <a class="ls-chip ls-proj" data-n="29" href="../L29-range-doppler-mti/index.html" title="L29 Range-Doppler and MTI and its lab: final project">29</a>
+  <a class="ls-chip ls-proj" data-n="30" href="../L30-cfar/index.html" title="L30 CFAR and its lab: final project">30</a>
+  <a class="ls-chip ls-proj" data-n="31" href="../L31-classification-tracking/index.html" title="L31 Classification and Tracking and its lab: final project">31</a>
+  <a class="ls-chip ls-proj ls-report" href="../final-project/index.html" title="Final Project: Radar Systems Report">Report</a>
+  <span class="ls-key"><i></i>in class <i class="ls-proj"></i>final project</span>
+</div>
+<div class="depth docutils container">
+<p><a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> measured range as a round-trip delay and showed that a chirp gives a long transmission the resolution of a short pulse, <span class="math notranslate nohighlight">\(\Delta R = c/2B\)</span>. It left one problem open: a target 3 m away returns its echo after 20 ns, far too short for the PHASER’s 0.6 MSPS receiver to time. This lesson shows how a frequency-modulated continuous-wave (FMCW) radar converts that delay into a frequency of a few kilohertz, how one FFT turns the frequency back into range, and what sets the resolution and the farthest range the kit can report. The L28 Lab follows on this page. You work it on your own kit, outside class, and it is the first stage of the radar your final report describes, so this page carries the whole theory the lab needs.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-a-chirp-and-its-echo">
+<div class="wrap docutils container">
+<p class="rubric">A Chirp and Its Echo</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L28-chirp.svg" alt="Frequency against time. The transmitted chirp is a straight ramp repeated twice. The echo is the same ramp shifted right by the delay. At any instant the two differ by a fixed frequency, the beat. The ramp spans the bandwidth vertically and the chirp length horizontally" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The transmitter sweeps <span class="math notranslate nohighlight">\(B\)</span> in <span class="math notranslate nohighlight">\(T_s\)</span>, then starts again.</p></li>
+<li><p>The echo is the same ramp, late by the round trip.</p></li>
+<li><p>The gap between them, the <strong>beat</strong>, is constant.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>An FMCW radar transmits continuously, and its frequency climbs linearly across a bandwidth <span class="math notranslate nohighlight">\(B\)</span> during each <strong>chirp</strong> of length <span class="math notranslate nohighlight">\(T_s\)</span>. On the PHASER the chirp starts near 10 GHz and sweeps <span class="math notranslate nohighlight">\(B = 500\)</span> MHz in <span class="math notranslate nohighlight">\(T_s = 0.5\)</span> ms. The echo from a target at range <span class="math notranslate nohighlight">\(R\)</span> is a copy of the transmitted chirp delayed by the round trip,</p>
+<div class="math notranslate nohighlight">
+\[
+\tau = \frac{2R}{c},
+\]</div>
+<p>which is 6.7 ns for every meter. The receiver compares the echo with the chirp that is still going out. Because both ramps climb at the same rate, the echo is always below the transmitted chirp by the same frequency, and that difference is the <strong>beat frequency</strong> <span class="math notranslate nohighlight">\(f_b\)</span>. The figure exaggerates the delay so that it is visible: on the PHASER, a target at 3 m delays the echo by 20 ns, 0.004% of a 0.5 ms chirp.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-beat-frequency">
+<div class="wrap docutils container">
+<p class="rubric">The Beat Frequency</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+f_b &amp;= \frac{B}{T_s}\ \tau = \frac{2RB}{cT_s} \\
+&amp;= \frac{2\ (1\ \text{m})(500\ \text{MHz})}{(3.00\times 10^8\ \text{m/s})(0.5\ \text{ms})} \\
+&amp;= 6.67\ \text{kHz per meter}
+\end{aligned}
+\end{split}\]</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The transmitted frequency rises at the <strong>chirp slope</strong> <span class="math notranslate nohighlight">\(B/T_s\)</span>, which for the PHASER is <span class="math notranslate nohighlight">\(500\ \text{MHz}/0.5\ \text{ms} = 1\ \text{MHz}\)</span> per microsecond. In the delay <span class="math notranslate nohighlight">\(\tau\)</span> the chirp climbs <span class="math notranslate nohighlight">\(\tau B/T_s\)</span>, so the beat frequency is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+f_b &amp;= \frac{B}{T_s}\ \tau \\
+&amp;= \frac{2RB}{cT_s} .
+\end{aligned}
+\end{split}\]</div>
+<p>The beat is proportional to range, so the radar reads range by measuring a frequency. A target at 1 m gives 6.67 kHz, and one at 3 m gives 20.0 kHz. These frequencies are low enough for the Pluto to sample directly, even though the chirp itself spans 500 MHz: comparing the echo with the outgoing chirp removes the sweep and leaves only the small difference that carries the range. <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-fmcw/" target="_blank" rel="noopener">ADI’s FMCW lab</a> calls this stretch processing.</p>
+<p>The kHz per meter depends on both waveform settings. Halving the bandwidth to 250 MHz halves it, to 3.33 kHz per meter, and so does doubling the chirp length to 1 ms. The two changes give the same beat for the same target, but as the next frames show, only one of them changes the resolution.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-fmcw-explorer">
+<div class="wrap docutils container">
+<p class="rubric">FMCW Explorer</p>
+<div class="depth docutils container">
+<p>The left panel is the beat signal over one chirp, with the 0 m frequency removed, and the right panel is its range spectrum, the FFT of those samples with the frequency axis converted to range. Move the target and count the cycles: every meter adds <span class="math notranslate nohighlight">\(2B/c = 3.33\)</span> cycles a chirp at 500 MHz. Halve the bandwidth or double the chirp length and watch the beat per meter halve. Turn on the second target and bring it in toward the first until the two peaks merge; the green bar is <span class="math notranslate nohighlight">\(c/2B\)</span>. Then set the second target 20 to 40 dB weaker and switch between the rectangular and Hann windows.</p>
+</div>
+<iframe src="../../viz/fmcw-beat.html"
+        width="100%" height="435"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="FMCW explorer: the beat signal over one chirp and its range spectrum, for chosen range, bandwidth, chirp length, second target, and window">
+</iframe>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-range-resolution">
+<div class="wrap docutils container">
+<p class="rubric">Range Resolution</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\Delta f_b &amp;= \frac{1}{T_s} \\
+\Delta R &amp;= \frac{cT_s}{2B}\ \Delta f_b = \frac{c}{2B} = 0.30\ \text{m}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>Two targets separate when their beats differ by one cycle a chirp.</p></li>
+<li><p>The chirp length cancels: only <span class="math notranslate nohighlight">\(B\)</span> sets the resolution.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The radar sees each target’s beat for one chirp, <span class="math notranslate nohighlight">\(T_s\)</span>, and an FFT over a record of length <span class="math notranslate nohighlight">\(T_s\)</span> separates two tones only if they differ by at least <span class="math notranslate nohighlight">\(1/T_s\)</span>. Over one chirp, that is a difference of one cycle. Converting that frequency step to range with the beat per meter,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\Delta R &amp;= \frac{cT_s}{2B}\ \Delta f_b \\
+&amp;= \frac{cT_s}{2B}\cdot\frac{1}{T_s} \\
+&amp;= \frac{c}{2B} ,
+\end{aligned}
+\end{split}\]</div>
+<p>the result of <a href="../L26-range-resolution-doppler/index.html#frame-resolution-is-set-by-bandwidth">Lesson 26</a>. At 500 MHz it is 0.30 m. A longer chirp makes the beat per meter smaller but lets the FFT resolve finer frequency steps in the same proportion, so <span class="math notranslate nohighlight">\(T_s\)</span> cancels. Halving the bandwidth to 250 MHz doubles the resolution cell to 0.60 m; doubling the chirp length to 1 ms leaves it at 0.30 m.</p>
+<p>The number of beat cycles in one chirp is <span class="math notranslate nohighlight">\(f_bT_s = 2RB/c\)</span>, which does not depend on <span class="math notranslate nohighlight">\(T_s\)</span> either. Two plates 0.30 m apart differ by exactly one cycle a chirp at 500 MHz; closer than that, their beats stay in step for the whole chirp and the FFT returns one peak.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-range-fft">
+<div class="wrap docutils container">
+<p class="rubric">The Range FFT</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+R = \frac{cT_s}{2B}\left(f - f_0\right)
+\]</div>
+<ul class="simple">
+<li><p>One chirp: 300 samples at 0.6 MSPS, one FFT.</p></li>
+<li><p>Each FFT bin is 2 kHz, one 0.30 m range cell.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<img src="../../viz/img/L28-range-profile.svg" alt="Power in dBFS against range from minus 0.3 to 8 m, with a top axis of beat frequency above the 0 m frequency from 0 to 53 kHz. Three peaks: leakage at 0 m near minus 20 dBFS, a corner reflector at 2.0 m near minus 20 dBFS, and the far wall at 5.5 m near minus 31 dBFS, over a floor near minus 84 dBFS" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The PHASER’s Pluto samples the beat at <span class="math notranslate nohighlight">\(f_s = 0.6\)</span> MSPS, so one 0.5 ms chirp is <span class="math notranslate nohighlight">\(N = 300\)</span> complex samples. The FFT of those samples is the <strong>range profile</strong>: each bin is a frequency, and the beat-per-meter relation converts it to a range,</p>
+<div class="math notranslate nohighlight">
+\[
+R = \frac{cT_s}{2B}\left(f - f_0\right),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(f_0\)</span> is the 0 m frequency of the next frame. The bins are <span class="math notranslate nohighlight">\(f_s/N = 2\)</span> kHz apart, which is 0.30 m, one resolution cell. Padding the record with zeros before the FFT, to 1024 or 4096 points, draws the same spectrum on a finer grid and makes the peaks easier to read, but it does not resolve anything new.</p>
+<p>The figure is one chirp from the lab’s recorded data: a 10 cm corner reflector at 2.0 m, the transmit antenna’s direct path into the array at 0 m, and the far wall at 5.5 m. The top axis shows the same profile as beat frequency above <span class="math notranslate nohighlight">\(f_0\)</span>, at 6.67 kHz per meter.</p>
+<p>The FFT also integrates. The 300 samples of a steady tone add in phase while the noise adds in power, so the tone rises <span class="math notranslate nohighlight">\(10\log_{10}300 = 24.8\)</span> dB above the noise per sample, as <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a> described. Seen another way, each bin listens to only 2 kHz of noise. That is the narrowing <a href="../L25-radar-equation/index.html#frame-signal-to-noise-ratio">Lesson 25</a> promised: the corner at 3 m, 31.1 dB above the noise in 1 MHz, stands <span class="math notranslate nohighlight">\(31.1 + 10\log_{10}(1\ \text{MHz}/2\ \text{kHz}) = 58.1\)</span> dB above it in one bin.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-0-m-frequency">
+<div class="wrap docutils container">
+<p class="rubric">The 0 m Frequency</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The kit offsets the outgoing chirp by about 100 kHz, so a 0 m echo lands at <span class="math notranslate nohighlight">\(f_0 \approx 100\)</span> kHz.</p></li>
+<li><p>Each kit’s <span class="math notranslate nohighlight">\(f_0\)</span> differs slightly; calibrate it with a plate held against the array.</p></li>
+<li><p>The leakage spike always sits at <span class="math notranslate nohighlight">\(f_0\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The PHASER does not put a 0 m echo at zero frequency. The Pluto transmits its tone offset by <code class="docutils literal notranslate"><span class="pre">signal_freq</span></code> in ADI’s scripts, about 100 kHz, from the frequency the receiver compares the echo with, so every beat lands about 100 kHz above zero. That keeps the targets clear of zero frequency, where the receiver’s own offset and low-frequency noise sit. The offset is not exactly 100 kHz on every kit, and the cables and the board add a little delay of their own, so each kit has its own <strong>0 m frequency</strong> <span class="math notranslate nohighlight">\(f_0\)</span>, and the range equation measures beats from it.</p>
+<p>The calibration is simple. Hold a flat metal plate against the array face, read the frequency of the peak, and record it as <span class="math notranslate nohighlight">\(f_0\)</span>; ADI’s lab expects a value such as 99 or 103 kHz. With the plate gone, a peak stays at <span class="math notranslate nohighlight">\(f_0\)</span>: it is the transmit antenna’s direct path into the array, the <strong>leakage</strong>, and it marks 0 m on every capture you take. A kit whose <span class="math notranslate nohighlight">\(f_0\)</span> is off by 1 kHz reports every range 0.15 m long or short.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-range-the-sample-rate-allows">
+<div class="wrap docutils container">
+<p class="rubric">Range the Sample Rate Allows</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+R_\text{max} &amp;= \frac{cT_s}{2B}\left(\frac{f_s}{2} - f_0\right) \\
+&amp;= \frac{300\ \text{kHz} - 100\ \text{kHz}}{6.67\ \text{kHz/m}} = 30\ \text{m}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>250 MHz or 1 ms doubles it to 60 m.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The Pluto samples complex data at <span class="math notranslate nohighlight">\(f_s\)</span>, so it can represent beat frequencies up to <span class="math notranslate nohighlight">\(f_s/2 = 300\)</span> kHz. A target far enough away to put its beat above that limit aliases: it reappears at a wrong frequency, and the range profile shows it at a wrong range. With the 0 m frequency at 100 kHz, the beats above it have 200 kHz of room, so the farthest range the profile reports is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+R_\text{max} &amp;= \frac{cT_s}{2B}\left(\frac{f_s}{2} - f_0\right) \\
+&amp;= 30\ \text{m}.
+\end{aligned}
+\end{split}\]</div>
+<p>This limit comes from the sample rate, not from the transmit power; <a href="../L25-radar-equation/index.html#frame-maximum-range">Lesson 25</a> put the detection range of a 10 cm corner near 8.5 m in a 1 MHz bandwidth, and further out in the 2 kHz of one bin. A slower slope reaches further: halving <span class="math notranslate nohighlight">\(B\)</span> or doubling <span class="math notranslate nohighlight">\(T_s\)</span> halves the beat per meter and doubles <span class="math notranslate nohighlight">\(R_\text{max}\)</span> to 60 m. Halving <span class="math notranslate nohighlight">\(B\)</span> also doubles the resolution cell, so the two settings trade reach against resolution in different ways, which the lab measures.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-windowing-the-chirp">
+<div class="wrap docutils container">
+<p class="rubric">Windowing the Chirp</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L28-windows.svg" alt="Range profiles from 0.5 to 4 m of a strong target at 2.0 m and a target 40 dB weaker at 2.9 m. With a rectangular window the sidelobes of the strong target sit 20 to 35 dB down and hide the weak one. With a Hann window the main lobe is wider, the sidelobes fall below minus 50 dB, and the weak target shows" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Rectangular: sidelobes at <span class="qty">−13</span> dB hide weak targets.</p></li>
+<li><p>Hann: sidelobes at <span class="qty">−31</span> dB, a main lobe 1.6 times wider, 1.8 dB less SNR.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>An FFT of one chirp treats the record as if it started and stopped abruptly, which gives each tone a <span class="math notranslate nohighlight">\(\sin x/x\)</span> response with sidelobes <span class="qty">13</span> dB below the peak, falling slowly. A strong target’s sidelobes then cover the bins around it, and a weak target nearby disappears under them. In the figure the second target, 40 dB weaker and 0.9 m beyond the first, is invisible with the rectangular window.</p>
+<p>Multiplying the samples by a <strong>window</strong> that tapers smoothly to zero at both ends of the chirp lowers the sidelobes. The Hann window, <span class="math notranslate nohighlight">\(w[n] = \tfrac{1}{2}\left(1 - \cos(2\pi n/N)\right)\)</span>, puts the first sidelobe at <span class="qty">−31</span> dB and the rest falling fast, and the weak target appears. This is the amplitude taper of <a href="../../module03/L22-sidelobes-tapering/index.html">Lesson 22</a> applied in time instead of across the array, with the same consequences: the main lobe widens, from a 3 dB width of 0.89 bins to 1.44 bins, so two equal targets one cell apart may merge, and the window discards some signal energy, a 1.8 dB loss in SNR. The course uses Hann by default; the rectangular window is the choice only when two equal targets must be split at the edge of the resolution.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-range-waterfall">
+<div class="wrap docutils container">
+<p class="rubric">The Range Waterfall</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L28-waterfall.svg" alt="Range profiles from 0 to 6 m stacked in time over 10 s, darker for stronger echoes. A dark vertical band at 0 m is the leakage and one at 5.5 m is the wall. A zigzag trace runs from 1 m out to 4 m and back twice: a person walking" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Each row is one range profile; time runs up.</p></li>
+<li><p>Fixed objects draw vertical lines; a walker draws a zigzag.</p></li>
+<li><p>The slope of the trace is the walker’s speed.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>One range profile is a snapshot. Stacking the profiles of successive chirps, one row per chirp and darker for a stronger echo, gives the <strong>range waterfall</strong>: range across, time up. A fixed object, the leakage at 0 m or the wall at 5.5 m, keeps the same range in every row and draws a vertical line. A person walking from 1 m out to 4 m and back draws a zigzag, and the slope of each leg is the walking speed: 3 m in 3 s is 1 m/s.</p>
+<p>The waterfall records range against time and nothing else. Its rows here are 50 ms apart, one profile each time the display updates, and over 50 ms a walker’s carrier phase changes by many cycles, so successive rows say nothing about the walker’s velocity except through the range they show. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> takes chirps a fixed 0.5 ms apart and reads the velocity from that phase.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-provided-range-fft">
+<div class="wrap docutils container">
+<p class="rubric">The Provided Range FFT</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">range_fft</span><span class="p">(</span><span class="n">cap</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s2">"hann"</span><span class="p">,</span>
+              <span class="n">n_fft</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">iq</span> <span class="o">=</span> <span class="n">cap</span><span class="p">[</span><span class="s2">"iq"</span><span class="p">]</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">_window</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">iq</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">iq</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span> <span class="n">n_fft</span> <span class="ow">or</span>
+                   <span class="n">iq</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X</span> <span class="o">/</span> <span class="n">w</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The course provides <code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code>, complete.</p></li>
+<li><p>Each lab’s notebook changes a line or two of it.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The four labs that follow share one Python module, <a href="../../notebooks/radar_lab.py"><code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code></a>, and one capture format. The course provides the module complete: you run it from a notebook, one for each lab, and each lab’s tasks change a parameter or a line or two, never a whole function. The excerpt is the function this lesson describes: it windows every chirp, takes the FFT along each one, and divides by the sum of the window, so that a tone of amplitude 1 reads 0 dBFS whatever the window. <code class="docutils literal notranslate"><span class="pre">n_fft</span></code> larger than the samples in a chirp zero-pads it. The result has one row per chirp and one column per range bin.</p>
+<p>A capture is an <code class="docutils literal notranslate"><span class="pre">.npz</span></code> file holding <code class="docutils literal notranslate"><span class="pre">iq</span></code>, the complex beat samples of the summed array with one chirp a row, shape <code class="docutils literal notranslate"><span class="pre">n_chirps</span> <span class="pre">×</span> <span class="pre">n_samples</span></code>; optionally <code class="docutils literal notranslate"><span class="pre">iq_ch</span></code>, the same samples from the array’s two halves, shape <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">×</span> <span class="pre">n_chirps</span> <span class="pre">×</span> <span class="pre">n_samples</span></code>, which <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses to measure angle; the sample rate <code class="docutils literal notranslate"><span class="pre">fs</span></code>; the carrier <code class="docutils literal notranslate"><span class="pre">fc</span></code>; the bandwidth <code class="docutils literal notranslate"><span class="pre">B</span></code>; the chirp length <code class="docutils literal notranslate"><span class="pre">T_ramp</span></code>, the lesson’s <span class="math notranslate nohighlight">\(T_s\)</span>; the time <code class="docutils literal notranslate"><span class="pre">PRI</span></code> from one chirp to the next; and <code class="docutils literal notranslate"><span class="pre">f0</span></code>, the 0 m frequency from your calibration. The number of chirps is not fixed: 32 in an L28 range capture, 256 in the L29 burst, and thousands in a record of several seconds. The range of each bin comes from <code class="docutils literal notranslate"><span class="pre">range_axis</span></code>, the range equation of the range FFT frame with <code class="docutils literal notranslate"><span class="pre">k</span></code> the meters per hertz of beat:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">range_axis</span><span class="p">(</span><span class="n">cap</span><span class="p">,</span> <span class="n">n_fft</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">n_fft</span> <span class="ow">or</span> <span class="n">cap</span><span class="p">[</span><span class="s2">"iq"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">cap</span><span class="p">[</span><span class="s2">"fs"</span><span class="p">])</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">C</span> <span class="o">*</span> <span class="n">cap</span><span class="p">[</span><span class="s2">"T_ramp"</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">cap</span><span class="p">[</span><span class="s2">"B"</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">f</span> <span class="o">-</span> <span class="n">cap</span><span class="p">[</span><span class="s2">"f0"</span><span class="p">])</span> <span class="o">*</span> <span class="n">k</span>
+</pre></div>
+</div>
+<p>The bins come out in the order <code class="docutils literal notranslate"><span class="pre">np.fft.fft</span></code> returns them, and the bins below <span class="math notranslate nohighlight">\(f_0\)</span> as negative ranges. Two more L28 functions build on <code class="docutils literal notranslate"><span class="pre">range_fft</span></code>: <code class="docutils literal notranslate"><span class="pre">range_profile(cap,</span> <span class="pre">chirp=0,</span> <span class="pre">window=&quot;hann&quot;)</span></code> returns one chirp’s ranges at or beyond 0 m and its power in dB, <code class="docutils literal notranslate"><span class="pre">(r,</span> <span class="pre">p_db)</span></code>, and <code class="docutils literal notranslate"><span class="pre">waterfall(cap)</span></code> returns <code class="docutils literal notranslate"><span class="pre">(r,</span> <span class="pre">t,</span> <span class="pre">w_db)</span></code>, one row per chirp. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> uses <code class="docutils literal notranslate"><span class="pre">range_doppler</span></code> and <code class="docutils literal notranslate"><span class="pre">mti</span></code>, <a href="../L30-cfar/index.html">Lesson 30</a> uses <code class="docutils literal notranslate"><span class="pre">cfar_2d</span></code>, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses the spectrogram, a classifier, and a tracker, all in the same module. The L28 notebook is <a href="../../notebooks/L28_range.ipynb"><code class="docutils literal notranslate"><span class="pre">L28_range.ipynb</span></code></a>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-l28-lab-fmcw-range">
+<div class="wrap docutils container">
+<p class="rubric">L28 Lab: FMCW Range</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Calibrate <span class="math notranslate nohighlight">\(f_0\)</span>, then place a plate at 1, 2, and 3 m: measure the kHz per meter.</p></li>
+<li><p>Predict, then measure, 250 MHz and 1 ms.</p></li>
+<li><p>Read the waterfall; run the notebook’s three tasks.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The L28 Lab measures everything this lesson derived, on your own kit: the 0 m frequency, the beat per meter, how the bandwidth and the chirp length change it, and the range waterfall. The Phaser app does all of the live work: the calibration, the range spectrum, the waterfall, and saving captures. The lab ends in the course’s notebook, where you run the provided range FFT on the captures you saved and change one line for each of three tasks. You work the lab on your own, outside class, and turn in one packet in three parts: <strong>Part 1, Pre-Lab</strong>, the predictions, before you go to the bench; <strong>Part 2, Measurements</strong>, from your own kit; and <strong>Part 3, Writeup</strong>, after it. The packet is checked and returned with feedback. It is the first piece of scaffolding for your final report, and it is not the report.</p>
+<p>The procedure is <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-fmcw/" target="_blank" rel="noopener">ADI’s FMCW lab</a> with the course’s numbers: a 10 GHz carrier, 500 MHz in 0.5 ms, and <span class="math notranslate nohighlight">\(c = 3.00\times 10^8\)</span> m/s. The <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-setup/" target="_blank" rel="noopener">radar setup page</a> describes the transmit path.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-predict-before-you-measure">
+<div class="wrap docutils container">
+<p class="rubric">Predict Before You Measure</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(B\)</span></p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(T_s\)</span></p></th>
+<th class="head text-right"><p>kHz per meter</p></th>
+<th class="head text-right"><p><span class="math notranslate nohighlight">\(\Delta R\)</span></p></th>
+<th class="head text-right"><p><span class="math notranslate nohighlight">\(R_\text{max}\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>500 MHz</p></td>
+<td class="text-left"><p>0.5 ms</p></td>
+<td class="text-right"><p>6.67</p></td>
+<td class="text-right"><p>0.30 m</p></td>
+<td class="text-right"><p>30 m</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>250 MHz</p></td>
+<td class="text-left"><p>0.5 ms</p></td>
+<td class="text-right"><p>3.33</p></td>
+<td class="text-right"><p>0.60 m</p></td>
+<td class="text-right"><p>60 m</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>500 MHz</p></td>
+<td class="text-left"><p>1 ms</p></td>
+<td class="text-right"><p>3.33</p></td>
+<td class="text-right"><p>0.30 m</p></td>
+<td class="text-right"><p>60 m</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The table is the core of Part 1. Every number in it follows from the beat-frequency and resolution frames, with <span class="math notranslate nohighlight">\(f_s = 0.6\)</span> MSPS and <span class="math notranslate nohighlight">\(f_0 = 100\)</span> kHz, and the bench checks each column. The beat per meter is the slope of the line through your 1, 2, and 3 m readings. The resolution shows as the width of the peak: at 250 MHz the peak from the same plate is twice as wide in range. The reach is not something the lab can walk out to, but the range axis shows where it ends. Doubling the chirp length also doubles the samples in each chirp, so the noise floor of the range profile should drop by 3 dB while the target stays where it was.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-bench-rules">
+<div class="wrap docutils container">
+<p class="rubric">Bench Rules</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Transmit antenna on <strong>OUT2</strong>, before you power the kit.</p></li>
+<li><p>Stand clear of the beam while you measure a static target.</p></li>
+<li><p>Use a flat metal plate, square to the array, at array height.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A static target is only static if nothing else moves. Your own body is a larger reflector than a small plate, so step behind the kit or well to one side while you read a static range; otherwise your echo adds a moving peak near the target’s and the profile you save is not the one you meant to save. Keep the beam’s path clear of walls and furniture for at least 4 m if you can, and expect the far wall to show up as a peak of its own.</p>
+<p>Any flat metal plate about 20 cm on a side works, and so does aluminum foil glued smoothly to cardboard. A plate reflects strongly only when it faces the array squarely, so turn it slowly until its peak is highest before you read the frequency. A trihedral folded from three foil-covered cardboard squares is more forgiving of its angle. The course has only one or two commercial corner reflectors; no step needs one, and if one is free, Part 2 has an optional reading for it. Measure range from the array face to the plate’s front with a tape measure.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-you-keep">
+<div class="wrap docutils container">
+<p class="rubric">What You Keep</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Your captures: the 2 m plate and the walk.</p></li>
+<li><p>Your <span class="math notranslate nohighlight">\(f_0\)</span> and your measured kHz per meter.</p></li>
+<li><p>Your notebook, with its edits and plots.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The L29 Lab starts from your own L28 captures and notebook, so keep them together with <code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code>, with the capture file names written in your packet. For the final report, keep three results from this lab: the beat per meter you measured against the 6.67 kHz the lesson predicts, the resolution you saw at 500 and 250 MHz, and a waterfall you can explain line by line. The report asks you to explain how a chirp becomes a range measurement and what resolution you actually reached, in your own words; the packet’s tables are the evidence for it, not the explanation.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-equipment-and-setup">
+<div class="wrap docutils container">
+<p class="rubric">Equipment and Setup</p>
+<p>You need:</p>
+<ul class="simple">
+<li><p>the ADALM-PHASER kit with its Raspberry Pi and Pluto attached, and its transmit antenna;</p></li>
+<li><p>a flat metal plate about 20 cm on a side, or foil glued to cardboard;</p></li>
+<li><p>a tape measure and about 4 m of clear floor in front of the kit;</p></li>
+<li><p>your laptop, on the kit’s network for the Phaser app, and set up for the notebook as the Notebook Setup frame describes.</p></li>
+</ul>
+<p>The course’s Phaser app runs the radar in its FMCW mode. That mode is still being finished, so its control names and layout are not yet known; this page names each setting by the quantity it sets, and where the app’s label differs, use the app’s. ADI’s <a href="https://github.com/analogdevicesinc/system-level/blob/main/docs/solutions/platforms/phaser/labs/resources/python/FMCW_RADAR_Waterfall.py" target="_blank" rel="noopener"><code class="docutils literal notranslate"><span class="pre">FMCW_RADAR_Waterfall.py</span></code></a> makes the same measurements from a script, with a bandwidth slider, a range toggle, and a chirp length set in its <code class="docutils literal notranslate"><span class="pre">ramp_time</span></code> variable; its 12.145 GHz carrier does not change the beat per meter.</p>
+<ol class="arabic simple">
+<li><p>With the kit powered off, connect the transmit antenna to <strong>OUT2</strong>.</p></li>
+<li><p>Power the kit, wait for the Pi to boot, open the Phaser app, and select its FMCW mode.</p></li>
+<li><p>Set the chirp bandwidth to <strong>500 MHz</strong> and the chirp length to <strong>0.5 ms</strong>. Show the FFT against <strong>frequency</strong>, not range, for Procedures A to C.</p></li>
+<li><p>Find the app’s control that saves a capture, and check that it writes an <code class="docutils literal notranslate"><span class="pre">.npz</span></code> file with the keys of the capture format. Write each file name in the packet as you save it.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-no-hardware">
+<div class="wrap docutils container">
+<p class="rubric">No Hardware?</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If your kit will not produce a clean capture, use the course’s recorded data
+instead: read each procedure’s numbers from it with the notebook’s range-profile
+cell, and run Procedure E on it as written. The files are in the
+lab’s capture format, from a simulation of the PHASER at the course’s settings
+with a kit whose 0 m frequency is 101.4 kHz; a 10 cm corner reflector stands in
+for the plate. Say in your packet which captures are recorded rather than your own.</p>
+<ul class="simple">
+<li><p><a href="../../radar-data/L28_cal_0m.npz">L28_cal_0m.npz</a>: a plate against the array, for Procedure A</p></li>
+<li><p><a href="../../radar-data/L28_corner_1m.npz">L28_corner_1m.npz</a>, <a href="../../radar-data/L28_corner_2m.npz">L28_corner_2m.npz</a>, <a href="../../radar-data/L28_corner_3m.npz">L28_corner_3m.npz</a>: Procedure B</p></li>
+<li><p><a href="../../radar-data/L28_corner_2m_B250.npz">L28_corner_2m_B250.npz</a>, <a href="../../radar-data/L28_corner_2m_T1ms.npz">L28_corner_2m_T1ms.npz</a>: Procedure C</p></li>
+<li><p><a href="../../radar-data/L28_walker.npz">L28_walker.npz</a>: a person walking from 1 m to 4 m and back, Procedure D</p></li>
+<li><p><a href="../../radar-data/L28_two_corners.npz">L28_two_corners.npz</a>: two corners 0.20 m apart, for the notebook’s task (b)</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-procedure-a-calibrate-the-0-m-frequency">
+<div class="wrap docutils container">
+<p class="rubric">Procedure A: Calibrate the 0 m Frequency</p>
+<ol class="arabic simple">
+<li><p>Clear the bench in front of the kit and start the radar. One peak stands near 100 kHz: the leakage from the transmit antenna into the array. Record its frequency in Table A.</p></li>
+<li><p>Hold the plate flat against the array face, covering the patches. Read the frequency of the strongest peak and record it as <span class="math notranslate nohighlight">\(f_0\)</span> in Table A. ADI’s lab expects a value near 100 kHz, such as 99 or 103 kHz.</p></li>
+<li><p>If the app has a 0 m calibration setting, enter <span class="math notranslate nohighlight">\(f_0\)</span> there, so that its range axis reads 0 m at your kit’s 0 m frequency; the captures you save should then carry it in their <code class="docutils literal notranslate"><span class="pre">f0</span></code> field. Either way, keep your <span class="math notranslate nohighlight">\(f_0\)</span>: the notebook’s task (c) uses it.</p></li>
+<li><p>Save a capture with the plate against the array.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-procedure-b-static-ranges">
+<div class="wrap docutils container">
+<p class="rubric">Procedure B: Static Ranges</p>
+<ol class="arabic simple">
+<li><p>Stand the plate at <strong>1.00 m</strong> from the array face, at array height, facing the array squarely. Step out of the beam.</p></li>
+<li><p>Turn the plate slowly until its peak is highest. Read the peak’s frequency and record it in Table B with the tape-measure range.</p></li>
+<li><p>Save a capture.</p></li>
+<li><p>Repeat at <strong>2.00 m</strong> and <strong>3.00 m</strong>. At each range, check that the peak moved by about 6.7 kHz a meter before you record it; a peak that did not move is the leakage or the wall.</p></li>
+<li><p>If one of the course’s corner reflectors is free, put it at 3.00 m instead of the plate and record its peak level and the noise floor near 10 m, in dBFS, in the optional row of Table B.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-procedure-c-bandwidth-and-chirp-length">
+<div class="wrap docutils container">
+<p class="rubric">Procedure C: Bandwidth and Chirp Length</p>
+<p>Write your Part 1 predictions in Table C before you change anything.</p>
+<ol class="arabic simple">
+<li><p>Put the plate back at <strong>2.00 m</strong>, step clear, and record its frequency at 500 MHz and 0.5 ms as the reference row.</p></li>
+<li><p>Set the bandwidth to <strong>250 MHz</strong>. Record the peak’s frequency, and save a capture.</p></li>
+<li><p>Set the bandwidth back to 500 MHz and the chirp length to <strong>1 ms</strong>. Record the peak’s frequency, and save a capture.</p></li>
+<li><p>Return the chirp length to <strong>0.5 ms</strong>.</p></li>
+</ol>
+<p>In ADI’s script the bandwidth takes effect when you press <strong>Set RF Bandwidth</strong>, and the chirp length is the <code class="docutils literal notranslate"><span class="pre">ramp_time</span></code> variable in microseconds, set before you run it. Whether the Phaser app changes the chirp length from its panel is not yet known.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-procedure-d-read-the-waterfall">
+<div class="wrap docutils container">
+<p class="rubric">Procedure D: Read the Waterfall</p>
+<ol class="arabic simple">
+<li><p>Switch the FFT’s axis from frequency to <strong>range</strong>, and open the waterfall.</p></li>
+<li><p>Stand 1 m in front of the kit, facing it. Walk slowly straight out to about 4 m and back, about one step a second, twice. Then hold a hand 0.5 m from the array and move it toward and away from the array.</p></li>
+<li><p>If clutter fills the waterfall, raise its low intensity limit until the fixed lines are faint and your trace is still dark; ADI’s script calls these the LOW and HIGH levels.</p></li>
+<li><p>Save a capture of the walk covering at least 5 s. Record in Table D the nearest and farthest ranges your trace reached and the time of one leg.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-notebook-setup">
+<div class="wrap docutils container">
+<p class="rubric">Notebook Setup</p>
+<p>The notebooks run on your own laptop, with Python 3 and four packages: numpy, scipy, matplotlib, and Jupyter. Nothing else is needed, and once they are installed the notebook runs without a network connection.</p>
+<ol class="arabic">
+<li><p>Install Python 3.10 or newer from <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org</a> if your laptop does not have it. Then, in a terminal, install the four packages in one line:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>scipy<span class="w"> </span>matplotlib<span class="w"> </span>jupyterlab
+</pre></div>
+</div>
+</li>
+<li><p>Make a folder for the Module 4 labs, such as <code class="docutils literal notranslate"><span class="pre">ece444-radar</span></code>, and save these into it from the site: <a href="../../notebooks/radar_lab.py" download><code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code></a>, <a href="../../notebooks/L28_range.ipynb" download><code class="docutils literal notranslate"><span class="pre">L28_range.ipynb</span></code></a>, and the recorded captures task (b) and the waterfall cell use, <a href="../../radar-data/L28_two_corners.npz" download><code class="docutils literal notranslate"><span class="pre">L28_two_corners.npz</span></code></a> and <a href="../../radar-data/L28_walker.npz" download><code class="docutils literal notranslate"><span class="pre">L28_walker.npz</span></code></a>, with any others from the No Hardware? frame you need.</p></li>
+<li><p>Save your own captures into the same folder. The Phaser app’s FMCW mode is expected to offer each capture as a download from the browser; that is not confirmed until the mode lands. If your capture cannot reach the laptop, use the recorded data and say so in the packet.</p></li>
+<li><p>In a terminal, change to the folder and start Jupyter with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">lab</span></code>. Open <code class="docutils literal notranslate"><span class="pre">L28_range.ipynb</span></code> and run its first cell: it prints the capture’s chirps, samples, bandwidth, chirp length, and <span class="math notranslate nohighlight">\(f_0\)</span>. If it reports that <code class="docutils literal notranslate"><span class="pre">radar_lab</span></code> is missing, the module is not in the same folder as the notebook.</p></li>
+</ol>
+<p>Keep this folder for the whole module. Each later lab adds its notebook and captures to it, and they all use the same <code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code>.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-procedure-e-run-the-notebook">
+<div class="wrap docutils container">
+<p class="rubric">Procedure E: Run the Notebook</p>
+<p>Do this part after the bench, from your saved captures, in about 30 to 45 minutes.</p>
+<ol class="arabic simple">
+<li><p>With the folder set up as the Notebook Setup frame describes, open <code class="docutils literal notranslate"><span class="pre">L28_range.ipynb</span></code>, set <code class="docutils literal notranslate"><span class="pre">CAPTURE</span></code> in the first cell to your 2 m capture, and run the cells from the top.</p></li>
+<li><p><strong>Task (a):</strong> run the range-profile cell with <code class="docutils literal notranslate"><span class="pre">WINDOW</span> <span class="pre">=</span> <span class="pre">&quot;hann&quot;</span></code>, then change that one line to <code class="docutils literal notranslate"><span class="pre">WINDOW</span> <span class="pre">=</span> <span class="pre">None</span></code> and run it again. Record the peak, the strongest sidelobe, and the floor near 10 m for each window in Table E.</p></li>
+<li><p><strong>Task (b):</strong> run the two-corner cell with <code class="docutils literal notranslate"><span class="pre">N_FFT</span> <span class="pre">=</span> <span class="pre">None</span></code>, then change it to <code class="docutils literal notranslate"><span class="pre">N_FFT</span> <span class="pre">=</span> <span class="pre">4096</span></code>. Record how many peaks it finds and the width 3 dB down.</p></li>
+<li><p><strong>Task (c):</strong> set <code class="docutils literal notranslate"><span class="pre">F0</span></code> to your Table A value and replace <code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">=</span> <span class="pre">None</span></code> with the range of the peak, from <code class="docutils literal notranslate"><span class="pre">f_peak</span></code>, <code class="docutils literal notranslate"><span class="pre">F0</span></code>, and the capture’s <code class="docutils literal notranslate"><span class="pre">B</span></code> and <code class="docutils literal notranslate"><span class="pre">T_ramp</span></code>. Record <code class="docutils literal notranslate"><span class="pre">R</span></code> in Table E and compare it with the tape.</p></li>
+<li><p>Run the last cell on your walk capture for the waterfall plot.</p></li>
+<li><p>Save the notebook with its edits and plots and turn it in with the packet. Keep it, <code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code>, and your captures together; the L29 Lab starts from them.</p></li>
+</ol>
+<p>Each task’s markdown cell states the result to check against. Anything you do beyond the three tasks belongs in your report’s Extra Effort.</p>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-lab-packet">
+<div class="wrap docutils container">
+<p class="rubric">Lab Packet</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../labs/ECE444_Lab_L28_FMCWRange_blank.pdf" target="_blank" rel="noopener">L28 Lab packet (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary">
+<div class="wrap docutils container">
+<p class="rubric">Summary</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Beat frequency</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(f_b = 2RB/(cT_s)\)</span>, the echo compared with the chirp still going out</p></td>
+<td class="text-left"><p>6.67 kHz per meter at 500 MHz, 0.5 ms</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Beat cycles a chirp</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(f_bT_s = 2RB/c\)</span></p></td>
+<td class="text-left"><p>3.33 cycles per meter at 500 MHz</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Range resolution</p></td>
+<td class="text-left"><p>one FFT bin, <span class="math notranslate nohighlight">\(1/T_s\)</span>, is <span class="math notranslate nohighlight">\(c/2B\)</span> in range</p></td>
+<td class="text-left"><p>0.30 m at 500 MHz, 0.60 m at 250 MHz</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Range from frequency</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(R = cT_s(f - f_0)/2B\)</span></p></td>
+<td class="text-left"><p>bins 2 kHz apart at 0.6 MSPS, 0.5 ms</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>0 m frequency</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(f_0\)</span>, calibrated per kit; the leakage sits there</p></td>
+<td class="text-left"><p>about 100 kHz</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Reach</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(R_\text{max} = cT_s(f_s/2 - f_0)/2B\)</span></p></td>
+<td class="text-left"><p>30 m at 0.6 MSPS</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>FFT integration</p></td>
+<td class="text-left"><p>300 samples add in phase</p></td>
+<td class="text-left"><p>24.8 dB, a 2 kHz noise bandwidth</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Hann window</p></td>
+<td class="text-left"><p>sidelobes <span class="qty">−31</span> dB instead of <span class="qty">−13</span> dB</p></td>
+<td class="text-left"><p>main lobe 1.6 times wider, 1.8 dB SNR loss</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Waterfall</p></td>
+<td class="text-left"><p>range profiles stacked in time</p></td>
+<td class="text-left"><p>slope of a trace is the speed</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>L29</strong> stacks 256 chirps, 0.5 ms apart, and reads velocity from their phase.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">range_fft</span></code> you ran here is the first FFT of its range-Doppler map.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This lesson used one chirp at a time and threw away its phase. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> keeps it. A burst of 256 chirps, each 300 µs long and repeated every 0.5 ms, gives each target a phase that advances from chirp to chirp at its Doppler frequency, and a second FFT across the chirps reads that frequency as a velocity, with the resolution <span class="math notranslate nohighlight">\(\lambda/(2MT_\text{PRI}) = 0.12\)</span> m/s of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>. The first FFT of that map is the range FFT you ran here, applied to every chirp of the burst. Moving target indication, in the same lesson, removes the fixed lines of the waterfall, the leakage and the wall, so that only what moves remains.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module04/L28-fmcw"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

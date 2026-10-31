@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detection threshold against noise and target distributions</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  *, *::before, *::after { box-sizing:border-box; }
+  .app { max-width:820px; margin:0 auto; padding:10px 10px 14px; }
+  .card { border:1px solid var(--edge); border-radius:6px; background:#fff; padding:6px 8px 2px; }
+  canvas { display:block; width:100%; }
+  .canvases { display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:10px; }
+  @media (min-width:660px) { .canvases { grid-template-columns:3fr 2fr; align-items:start; } }
+  .controls { display:grid; grid-template-columns:1fr; gap:8px 18px;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px;
+              padding:9px 12px; margin-bottom:10px; }
+  @media (min-width:560px) { .controls { grid-template-columns:1fr 1fr; } }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; }
+  .ctl label { font-size:13.5px; color:var(--ink); white-space:nowrap; min-width:92px; }
+  .ctl input[type=range] { flex:1 1 80px; min-width:70px; accent-color:var(--navy); }
+  .val { font-variant-numeric:tabular-nums; font-size:13.5px; color:var(--navy);
+         font-weight:600; min-width:58px; text-align:right; }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(110px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center; height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; text-align:center; color:var(--navy); }
+  .ro.dgr { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.dgr .v { color:var(--red); }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <div class="canvases">
+    <div class="card"><canvas id="pdf"></canvas></div>
+    <div class="card"><canvas id="roc"></canvas></div>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label for="snr">Target SNR</label>
+      <input id="snr" type="range" min="-5" max="20" step="0.5" value="13">
+      <span class="val" id="snrv"></span>
+    </div>
+    <div class="ctl">
+      <label for="np">Pulses, coherent</label>
+      <input id="np" type="range" min="0" max="8" step="1" value="0">
+      <span class="val" id="npv"></span>
+    </div>
+    <div class="ctl">
+      <label for="thr">Threshold</label>
+      <input id="thr" type="range" min="0" max="30" step="0.1" value="11.4">
+      <span class="val" id="thrv"></span>
+    </div>
+    <div class="ctl">
+      <label for="dn">Noise change</label>
+      <input id="dn" type="range" min="-3" max="6" step="0.5" value="0">
+      <span class="val" id="dnv"></span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro dgr"><span class="k">false-alarm prob.</span><span class="v" id="rPfa"></span></div>
+    <div class="ro"><span class="k">detection prob.</span><span class="v" id="rPd"></span></div>
+    <div class="ro"><span class="k">SNR after N pulses</span><span class="v" id="rSnr"></span></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // Square-law detection of a steady target in complex Gaussian noise.
+  // All powers are relative to the nominal noise power after integration.
+  // Threshold T and integrated signal s are fixed in those units; the noise
+  // change g scales the noise only, so a fixed threshold sits T/g above it.
+  const LN10 = Math.log(10);
+  const pdfEl = document.getElementById('pdf'), rocEl = document.getElementById('roc');
+  const px = pdfEl.getContext('2d'), rx = rocEl.getContext('2d');
+  const $ = id => document.getElementById(id);
+  const snrEl = $('snr'), npEl = $('np'), thrEl = $('thr'), dnEl = $('dn');
+
+  function i0e(x) {                          // exp(-x) I0(x), Abramowitz and Stegun 9.8.1-2
+    const ax = Math.abs(x);
+    if (ax <= 3.75) {
+      const t = (ax / 3.75) ** 2;
+      return Math.exp(-ax) * (1 + t * (3.5156229 + t * (3.0899424 + t * (1.2067492
+             + t * (0.2659732 + t * (0.0360768 + t * 0.0045813))))));
+    }
+    const t = 3.75 / ax;
+    return (0.39894228 + t * (0.01328592 + t * (0.00225319 + t * (-0.00157565 + t * (0.00916281
+           + t * (-0.02057706 + t * (0.02635537 + t * (-0.01647633 + t * 0.00392377)))))))) / Math.sqrt(ax);
+  }
+
+  // Density of u = |x|/sqrt(Pn) for a target of normalized power S: Rician.
+  const ricU = (u, a) => 2 * u * Math.exp(-(u - a) * (u - a)) * i0e(2 * a * u);
+
+  function simpson(f, lo, hi, n) {
+    if (hi <= lo) return 0;
+    const h = (hi - lo) / n; let s = f(lo) + f(hi);
+    for (let i = 1; i < n; i++) s += f(lo + i * h) * (i % 2 ? 4 : 2);
+    return s * h / 3;
+  }
+
+  function pd(S, t) {                        // P(|x|^2/Pn > t), steady target of SNR S
+    if (S <= 0) return Math.exp(-t);
+    const a = Math.sqrt(S), b = Math.sqrt(t), f = u => ricU(u, a);
+    if (b < a) return Math.max(0, 1 - simpson(f, 0, b, 600));
+    return simpson(f, b, b + 9, 900);
+  }
+
+  const st = {};
+  function compute() {
+    const snr1 = +snrEl.value, N = 2 ** (+npEl.value), T = +thrEl.value, dn = +dnEl.value;
+    const g = 10 ** (dn / 10);
+    const s = N * 10 ** (snr1 / 10);
+    st.N = N; st.Tdb = T; st.g = g; st.s = s;
+    st.S = s / g;                             // SNR against the noise now present
+    st.t = 10 ** (T / 10) / g;                // threshold over the noise now present
+    st.pfa = Math.exp(-st.t);
+    st.pd = pd(st.S, st.t);
+
+    $('snrv').textContent = snr1.toFixed(1) + ' dB';
+    $('npv').textContent = 'N = ' + N;
+    $('thrv').textContent = T.toFixed(1) + ' dB';
+    $('dnv').textContent = (dn > 0 ? '+' : dn < 0 ? '−' : '') + Math.abs(dn).toFixed(1) + ' dB';
+    $('rPfa').textContent = fmtP(st.pfa);
+    $('rPd').textContent = st.pd >= 0.9995 ? '>0.999' : st.pd < 1e-3 ? fmtP(st.pd) : st.pd.toFixed(3);
+    $('rSnr').textContent = (10 * Math.log10(st.S)).toFixed(1) + ' dB';
+  }
+
+  function fmtP(p) {
+    if (p >= 0.01) return p.toFixed(3);
+    const e = Math.floor(Math.log10(p)), m = p / 10 ** e;
+    return m.toFixed(1) + '×10' + sup(e);
+  }
+  function sup(n) {
+    const d = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+    return (n < 0 ? '⁻' : '') + String(Math.abs(n)).split('').map(c => d[+c]).join('');
+  }
+
+  // ---- canvas plumbing (see null-steering.html for SQ) ----
+  var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:659px)') : null;
+  function SQ(h) { return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.66) : h; }
+  function fit(cv, ctx, h) {
+    h = SQ(h);
+    const dpr = window.devicePixelRatio || 1;
+    const w = cv.parentNode.clientWidth - 16;
+    cv.style.height = h + 'px';
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    return { w: w, h: h };
+  }
+  const F = (s, w) => (w || '') + ' ' + s + 'px Inter, system-ui, sans-serif';
+
+  const X0 = -20, X1 = 50;                   // dB relative to nominal noise
+
+  function drawPdf() {
+    const g = fit(pdfEl, px, 250);
+    const L = 10, R = 10, T = 22, B = 30;
+    const x = d => L + (d - X0) / (X1 - X0) * (g.w - L - R);
+    const ys = [], noiseC = [], sigC = [];
+    const a = Math.sqrt(st.S);
+    for (let d = X0; d <= X1 + 1e-9; d += 0.1) {
+      // density of the cell power in dB, for the noise now present:
+      // noise is exponential, target + noise is Rician (in u = sqrt(z))
+      const z = 10 ** (d / 10) / st.g, jac = LN10 / 10 * z, u = Math.sqrt(z);
+      ys.push(d);
+      noiseC.push(jac * Math.exp(-z));
+      sigC.push(jac * Math.exp(-(u - a) * (u - a)) * i0e(2 * a * u));
+    }
+    let top = 0.3;                           // rescale only when a density outgrows the box
+    for (let i = 0; i < ys.length; i++) top = Math.max(top, 1.08 * sigC[i], 1.08 * noiseC[i]);
+    const y = v => g.h - B - Math.min(v, top) / top * (g.h - T - B);
+
+    px.strokeStyle = '#e6eef6'; px.lineWidth = 1;
+    px.fillStyle = '#8792a2'; px.font = F(11); px.textAlign = 'center';
+    for (let d = -20; d <= 50; d += 10) {
+      px.beginPath(); px.moveTo(x(d), T); px.lineTo(x(d), g.h - B); px.stroke();
+      px.fillText(d, x(d), g.h - B + 15);
+    }
+    px.fillStyle = '#5b6573'; px.font = F(11.5);
+    px.fillText('power in the cell (dB above nominal noise)', (L + g.w - R) / 2, g.h - 3);
+
+    const xt = x(st.Tdb);
+    const shade = (arr, color) => {
+      px.beginPath(); px.moveTo(xt, y(0));
+      for (let i = 0; i < ys.length; i++) if (ys[i] >= st.Tdb) px.lineTo(x(ys[i]), y(arr[i]));
+      px.lineTo(x(X1), y(0)); px.closePath(); px.fillStyle = color; px.fill();
+    };
+    shade(sigC, 'rgba(0,74,133,0.18)');
+    shade(noiseC, 'rgba(176,30,36,0.35)');
+    const trace = (arr, color, lw) => {
+      px.beginPath();
+      for (let i = 0; i < ys.length; i++) { const P = [x(ys[i]), y(arr[i])]; i ? px.lineTo(...P) : px.moveTo(...P); }
+      px.strokeStyle = color; px.lineWidth = lw; px.lineJoin = 'round'; px.stroke();
+    };
+    trace(noiseC, '#5b6573', 1.8);
+    trace(sigC, '#004a85', 2.2);
+    px.beginPath(); px.moveTo(L, y(0)); px.lineTo(g.w - R, y(0));
+    px.strokeStyle = '#8a929c'; px.lineWidth = 1; px.stroke();
+
+    px.save(); px.setLineDash([5, 4]); px.strokeStyle = '#b01e24'; px.lineWidth = 1.6;
+    px.beginPath(); px.moveTo(xt, T - 8); px.lineTo(xt, g.h - B); px.stroke(); px.restore();
+    px.fillStyle = '#b01e24'; px.font = F(12, '600');
+    const right = xt < g.w * 0.6;
+    px.textAlign = right ? 'left' : 'right';
+    px.fillText('threshold', xt + (right ? 6 : -6), T + 2);
+
+    // curve labels, placed at each density's peak and kept inside the box
+    const lab = (arr, text, color, side) => {
+      let k = 0; for (let i = 1; i < arr.length; i++) if (arr[i] > arr[k]) k = i;
+      const yy = Math.max(T + 18, y(arr[k]) + (side ? 14 : -7));
+      px.fillStyle = color; px.font = F(11.5, '600');
+      if (!side) { px.textAlign = 'center'; px.fillText(text, x(ys[k]), yy); return; }
+      const w = px.measureText(text).width, xr = x(ys[k]) + 9;
+      const fitsRight = xr + w < g.w - R;          // else to the left of the peak
+      px.textAlign = fitsRight ? 'left' : 'right';
+      px.fillText(text, fitsRight ? xr : x(ys[k]) - 9, yy);
+    };
+    lab(noiseC, 'noise', '#5b6573', false);
+    if (Math.abs(10 * Math.log10(st.s) - 10 * Math.log10(st.g)) > 4) lab(sigC, 'target + noise', '#004a85', true);
+  }
+
+  function drawRoc() {
+    const g = fit(rocEl, rx, 250);
+    const L = 34, R = 10, T = 22, B = 30;
+    const E0 = -10, E1 = 0;                  // log10 Pfa range
+    const x = e => L + (e - E0) / (E1 - E0) * (g.w - L - R);
+    const y = p => g.h - B - p * (g.h - T - B);
+    rx.strokeStyle = '#e6eef6'; rx.lineWidth = 1;
+    rx.fillStyle = '#8792a2'; rx.font = F(11); rx.textAlign = 'center';
+    for (let e = E0; e <= E1; e += 2) {
+      rx.beginPath(); rx.moveTo(x(e), T); rx.lineTo(x(e), g.h - B); rx.stroke();
+      rx.fillText(e === 0 ? '1' : '10' + sup(e), x(e), g.h - B + 15);
+    }
+    rx.textAlign = 'right';
+    for (let p = 0; p <= 1.0001; p += 0.5) {
+      rx.beginPath(); rx.moveTo(L, y(p)); rx.lineTo(g.w - R, y(p)); rx.stroke();
+      rx.fillText(p.toFixed(1), L - 5, y(p) + 4);
+    }
+    rx.fillStyle = '#5b6573'; rx.font = F(11.5); rx.textAlign = 'center';
+    rx.fillText('probability of false alarm', (L + g.w - R) / 2, g.h - 3);
+    rx.textAlign = 'left';
+    rx.fillText('probability of detection', L, T - 8);
+
+    rx.beginPath();
+    for (let e = E0, i = 0; e <= E1 + 1e-9; e += 0.1, i++) {
+      const t = -Math.log(10 ** e), p = pd(st.S, t);
+      i ? rx.lineTo(x(e), y(p)) : rx.moveTo(x(e), y(p));
+    }
+    rx.strokeStyle = '#004a85'; rx.lineWidth = 2.2; rx.stroke();
+
+    const e = Math.max(E0, Math.min(E1, Math.log10(st.pfa)));
+    rx.fillStyle = '#b01e24';
+    rx.beginPath(); rx.arc(x(e), y(st.pd), 5, 0, 2 * Math.PI); rx.fill();
+  }
+
+  function drawAll() { drawPdf(); drawRoc(); }
+  function update() { compute(); drawAll(); }
+  [snrEl, npEl, thrEl, dnEl].forEach(el => el.addEventListener('input', update));
+  window.addEventListener('resize', drawAll);
+  update();
+  if (window.MJ) { MJ.setRedraw(drawAll); MJ.onReady(function () { drawAll(); }); }
+})();
+</script>
+</body>
+</html>

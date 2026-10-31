@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final Project — Radar Systems Report &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="../../_static/pygments.css"><link rel="stylesheet" href="../../_static/custom.css?v=8125a6e0df">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/page.css?v=2851a8bc0a">
+<script src="../../_static/viz-autosize.js"></script>
+</head>
+<body data-search="../../search.html">
+
+<div class="rail"><span id="railfill"></span></div>
+
+
+<div class="index" id="index" role="dialog" aria-label="Contents and search">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <form class="index-search" id="searchform" role="search" onsubmit="return false">
+      <input type="search" id="q" autocomplete="off" spellcheck="false"
+             placeholder="Search the course&hellip;" aria-label="Search the course">
+    </form>
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This page</h2>
+        <div class="index-pagetoc" id="pagetoc"><ul>
+<li><a class="reference internal" href="#">Final Project — Radar Systems Report</a><ul>
+<li><a class="reference internal" href="#the-labs-are-the-scaffolding">The labs are the scaffolding</a></li>
+<li><a class="reference internal" href="#the-lab-packets-are-not-the-report">The lab packets are not the report</a></li>
+<li><a class="reference internal" href="#when-things-are-due">When things are due</a></li>
+<li><a class="reference internal" href="#what-is-graded">What is graded</a></li>
+<li><a class="reference internal" href="#extra-credit">Extra credit</a></li>
+<li><a class="reference internal" href="#individual-work">Individual work</a></li>
+</ul>
+</li>
+</ul>
+</div>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div><div class="hud-group hud-mid"></div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents and search (G)"><span id="pct">0%</span></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">42%</span></dt>
+      <dd>How far down the page you are. Tap it for this page&rsquo;s sections, the whole course, and search<span class="help-keys"> <kbd>G</kbd> <kbd>/</kbd></span>.</dd>
+    </dl>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="page bd-article" id="page">
+<section class="tex2jax_ignore mathjax_ignore" id="final-project-radar-systems-report">
+<h1>Final Project — Radar Systems Report<a class="headerlink" href="#final-project-radar-systems-report" title="Permalink to this heading">#</a></h1>
+<p>The final project is <strong>one report, in your own words</strong>, on the radar you built
+in Module 4: what the ADALM-PHASER hardware does, what each processing stage
+does to the signal, and what your own measurements show. It is an exploration
+of radar hardware and processing, written by someone who has run every stage
+of it on a real kit.</p>
+<section id="the-labs-are-the-scaffolding">
+<h2>The labs are the scaffolding<a class="headerlink" href="#the-labs-are-the-scaffolding" title="Permalink to this heading">#</a></h2>
+<p>The L28–L31 Labs are the steps toward the report. Each one sits on its
+lesson’s own page, after the lesson. Each one is a stage of a
+single radar processing chain on your own kit, and each one hands you the
+results, plots, and code that a section of the report is built on.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Lab</p></th>
+<th class="head text-left"><p>Stage of the chain</p></th>
+<th class="head text-left"><p>What it gives your report</p></th>
+<th class="head text-center"><p>Objectives</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><a class="reference internal" href="../L28-fmcw/index.html"><span class="doc std std-doc">L28 Lab — FMCW Range</span></a></p></td>
+<td class="text-left"><p>range, and the range waterfall, from one FMCW capture</p></td>
+<td class="text-left"><p>how a chirp becomes a range measurement, and the resolution you actually got</p></td>
+<td class="text-center"><p>4.2, 4.4, 4.5</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><a class="reference internal" href="../L29-range-doppler-mti/index.html"><span class="doc std std-doc">L29 Lab — Range-Doppler and MTI</span></a></p></td>
+<td class="text-left"><p>the range-Doppler map, then MTI</p></td>
+<td class="text-left"><p>how velocity is measured, and what MTI removes and why</p></td>
+<td class="text-center"><p>4.5, 4.6</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><a class="reference internal" href="../L30-cfar/index.html"><span class="doc std std-doc">L30 Lab — CFAR Processing</span></a></p></td>
+<td class="text-left"><p>CFAR detections on your range-Doppler maps</p></td>
+<td class="text-left"><p>how a detection is declared, and what set your false alarms</p></td>
+<td class="text-center"><p>4.7</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><a class="reference internal" href="../L31-classification-tracking/index.html"><span class="doc std std-doc">L31 Lab — Micro-Doppler Spectrogram</span></a></p></td>
+<td class="text-left"><p>classifying a detected target from its spectrogram, then tracking a walker in range and angle</p></td>
+<td class="text-left"><p>what told your targets apart, how often it was right, and how well the radar held a moving person</p></td>
+<td class="text-center"><p>4.8, 4.9</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Each lab starts from the one before it: your L29 processing begins with your
+own L28 range code, the L30 Lab runs CFAR on your L29 maps, and the L31 Lab
+classifies and tracks what your L30 detector found. Keep your code, data, and plots from
+every lab.</p>
+</section>
+<section id="the-lab-packets-are-not-the-report">
+<h2>The lab packets are not the report<a class="headerlink" href="#the-lab-packets-are-not-the-report" title="Permalink to this heading">#</a></h2>
+<p>Turn in each lab packet as you finish the lab; it is checked and returned with
+feedback so that problems surface while there is time to fix them. But a
+stack of completed packets is <strong>not</strong> a final project. The packets answer the
+questions the packet asks; the report explains the radar. Text and answers
+lifted from your packets earn nothing in the report. What earns credit is
+your explanation of why the results came out as they did, tied together into
+one account of the system.</p>
+</section>
+<section id="when-things-are-due">
+<h2>When things are due<a class="headerlink" href="#when-things-are-due" title="Permalink to this heading">#</a></h2>
+<p>Everything is submitted on <strong>Gradescope</strong>. The lab packets come due one
+at a time in November, in the order you run the labs; each packet and its
+Gradescope assignment give its date. <strong>The report is due 11 December.</strong></p>
+</section>
+<section id="what-is-graded">
+<h2>What is graded<a class="headerlink" href="#what-is-graded" title="Permalink to this heading">#</a></h2>
+<p>The report is <strong>30% of your course grade</strong>, graded on a <strong>rubric with a
+sliding scale</strong>: each of four areas is scored from 0 to 5, where 5 is
+outstanding. Read it before you start, not after you finish. It rewards
+understanding over results: a range resolution you can explain earns more
+than one you merely report.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Area</p></th>
+<th class="head text-center"><p>Score</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Labs Completed</p></td>
+<td class="text-center"><p>0–5</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Engineering Analysis</p></td>
+<td class="text-center"><p>0–5</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Report Quality</p></td>
+<td class="text-center"><p>0–5</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Extra Effort</p></td>
+<td class="text-center"><p>0–5</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="extra-credit">
+<h2>Extra credit<a class="headerlink" href="#extra-credit" title="Permalink to this heading">#</a></h2>
+<p>Do something with the radar that the labs did not ask for, and do it well:
+a new kind of target, a processing stage of your own in Python, a second
+moving target, a measurement the labs left out. Propose it to me in one
+paragraph and get it approved <strong>before</strong> you start. Extra credit is earned by
+the quality of the work, written up as its own section of the report.</p>
+</section>
+<section id="individual-work">
+<h2>Individual work<a class="headerlink" href="#individual-work" title="Permalink to this heading">#</a></h2>
+<p>The final project is individual: your own kit, your own code, and your own
+report. Collaboration follows the <a class="reference internal" href="../../syllabus.html"><span class="doc std std-doc">syllabus policy</span></a>:
+discuss freely, but you must be able to explain every step you submit.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module04/final-project"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/page.js?v=f53c045f7d"></script>
+</body>
+</html>

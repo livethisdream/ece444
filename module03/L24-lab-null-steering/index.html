@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L24 Lab — Null Steering &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=8125a6e0df">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l24-lab-null-steering">
+<h1>L24 Lab — Null Steering<a class="headerlink" href="#l24-lab-null-steering" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Null Steering</h1>
+<div class="title-rule"></div>
+<p>A computed notch, a structural null, an adaptive null, and the monopulse pair, measured on your own kit.</p>
+<p>L24 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 8">
+  <li>I can calculate null-steering weights and implement pattern nulls on the ADALM-PHASER.</li>
+</ol>
+<div class="depth docutils container">
+<p>Lesson 24 ended with a weight vector on paper: eight complex numbers that hold
+the beam on the target and put a pattern null on the interferer. Today we load
+those numbers into the array and measure what the hardware gives back. The lab
+runs four procedures, in increasing order of how much the array does for
+itself: a static notch you compute yourself (A), a boresight null that comes
+from subtracting the two digital channels (B), an adaptive beamformer that
+finds its own null from the received data (C), and the same difference beam put
+to a different use, measuring a target’s angle from a single look (D). That last
+one is where Module 4 begins.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-lesson-24-predicts">
+<div class="wrap docutils container">
+<p class="rubric">What Lesson 24 Predicts</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Element</p></th>
+<th class="head text-right"><p>Gain (%)</p></th>
+<th class="head text-right"><p>Phase (deg)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>1</p></td>
+<td class="text-right"><p>74</p></td>
+<td class="text-right"><p><span class="qty">−12.0</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>2</p></td>
+<td class="text-right"><p>65</p></td>
+<td class="text-right"><p><span class="qty">+3.5</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>3</p></td>
+<td class="text-right"><p>82</p></td>
+<td class="text-right"><p><span class="qty">+13.0</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>4</p></td>
+<td class="text-right"><p>100</p></td>
+<td class="text-right"><p><span class="qty">+6.0</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>5</p></td>
+<td class="text-right"><p>100</p></td>
+<td class="text-right"><p><span class="qty">−6.0</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>6</p></td>
+<td class="text-right"><p>82</p></td>
+<td class="text-right"><p><span class="qty">−13.0</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>7</p></td>
+<td class="text-right"><p>65</p></td>
+<td class="text-right"><p><span class="qty">−3.5</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>8</p></td>
+<td class="text-right"><p>74</p></td>
+<td class="text-right"><p><span class="qty">+12.0</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The main lobe drops about <span class="qty">2</span> dB.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The weight-subtraction rule of
+<a href="../L24-null-steering/index.html#frame-the-weight-subtraction-rule">Lesson 24</a>
+holds the beam at broadside and nulls an interferer at <span class="math notranslate nohighlight">\(\theta_1 = +22.5^\circ\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\ \mathbf{w}_\text{n}, \qquad
+r_\text{n} = \frac{\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d}}{\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}} .
+\]</div>
+<p>The table converts the weights to what the GUI accepts: element gain as a
+percentage of the largest, <span class="math notranslate nohighlight">\(100\vert w_n\vert/\max\vert w\vert\)</span>, and phase
+offset as <span class="math notranslate nohighlight">\(\angle w_n\)</span>, entered with its sign. It is worked at <span class="qty">10.443</span> GHz,
+the frequency <strong>Find HB100</strong> reported for phaser-00, one of the course kits.
+Part 1 of the packet has you compute the same table at your own kit’s
+frequency; at the nominal <span class="qty">10.525</span> GHz the outer gains read 75 % and the
+phases of elements 2 and 7 read <span class="qty">±3.1°</span>, so the table moves only
+slightly from kit to kit.</p>
+<p>The predictions assume the Element Gains slider is linear in voltage, which it
+is on current Phaser software. On phaser-00 the main lobe dropped 2.5 dB
+against the predicted 2.0.</p>
+<p><img src="../../viz/img/L24-element-settings.svg"
+     alt="The eight element gains and phase offsets for a null at +22.5 degrees: gains symmetric about the array center, phases antisymmetric"
+     style="max-width: 640px; width: 100%; display: block; margin: 1em auto;"></p>
+<p>The gains are symmetric about the array center and the phases are
+antisymmetric, the conjugate mirror pairs of
+<a href="../L24-null-steering/index.html#frame-weights-on-a-circle">Lesson 24’s weight circle</a>.
+Neither column nulls anything on its own; only the eight weights together do.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-why-the-notch-goes-deep">
+<div class="wrap docutils container">
+<p class="rubric">Why the Notch Goes Deep</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>One-step channel errors allow a notch about <span class="qty">48</span> dB below the uniform peak.</p></li>
+<li><p>phaser-00: <span class="qty">46</span> to <span class="qty">50</span> dB open, <span class="qty">22</span> to <span class="qty">24</span> dB cramped.</p></li>
+<li><p>A shallow notch points to the bench first: reflections, calibration, or a sign.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><a href="../L24-null-steering/index.html#frame-quantization-and-null-depth">Lesson 24</a>
+estimated the depth that small, independent channel errors allow, about
+<span class="qty">48</span> dB below the uniform peak, and the 2026-10-23 dry run on phaser-00 reached
+<span class="qty">46</span> to <span class="qty">50</span> dB. Rounding the weights to the ADAR1000’s <span class="qty">2.8125°</span> and 1 %
+steps does not set that limit: the rounded table keeps its mirror symmetry, so
+its null survives and moves only a fraction of a degree. On a freshly
+calibrated kit the notch landed at <span class="qty">+21.7°</span>. In a cramped space on
+2026-10-25 the same table bottomed out <span class="qty">22</span> to <span class="qty">24</span> dB down, and so did the
+difference null of the next frame: the HB100’s own tone was still there in the
+null, so a reflection arriving from another direction, about 22 dB below the
+direct path, was filling both.</p>
+<p>When a notch reads much shallower than <span class="qty">40</span> dB, look at the bench before the
+arithmetic. A wall or a person beside the kit fills it, a stale calibration
+fills it, and a sign error on the phase column moves it to <span class="qty">−22.5°</span>, where
+it is easy to miss.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-difference-beam">
+<div class="wrap docutils container">
+<p class="rubric">The Difference Beam</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Beam 1 Phase</strong> <span class="math notranslate nohighlight">\(= 180^\circ\)</span> subtracts the two subarray channels.</p></li>
+<li><p>Boresight becomes a null, with peaks near <span class="qty">±11°</span>.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p>A computed null sits where we solved for it; a structural null sits where the two subarrays cancel.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>There is a second null on this board that needs no computation at all. Each
+ADAR1000 sums its four elements into one RF channel, so the PHASER hands the
+Pluto two <strong>digital subarray channels</strong>, one for elements 1–4 and one for
+elements 5–8. Adding them is the ordinary sum beam. Subtracting them, by
+setting Beam 1 Phase to <span class="qty">180°</span>, cancels the two halves wherever they
+arrive in phase, which is boresight. The result is a null there with twin
+peaks near <span class="qty">±11°</span>: the <strong>monopulse difference beam</strong>, which Procedure D
+and Module 4 use for angle measurement. On phaser-00 it measured <span class="qty">−41.5</span> dB on
+an open bench and <span class="qty">−22</span> dB in a cramped one, centered on boresight, with the
+peaks at <span class="qty">±12.0°</span>. It needs no arithmetic, so its depth is a direct
+reading of what the room lets through.</p>
+<p>The <span class="qty">+22.5°</span> notch exists because we solved for eight weights, and it moves
+only when we solve again. The boresight null exists because the two subarrays
+are identical, and it stays at boresight no matter what the signal does.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-mvdr">
+<div class="wrap docutils container">
+<p class="rubric">MVDR</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\mathbf{w}_\text{mvdr} = \frac{\mathbf{R}^{-1}\mathbf{s}}{\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s}}
+\]</div>
+<ul class="simple">
+<li><p>Minimum output power, with unit gain in the look direction <span class="math notranslate nohighlight">\(\mathbf{s}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{R}\)</span> is estimated from the data, so nobody supplies the interferer’s angle.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Procedures A and B both needed something known in advance: the interferer’s
+angle in A, the array’s symmetry in B. The <strong>MVDR</strong> (minimum-variance
+distortionless-response) beamformer needs neither. It estimates the covariance
+of what the two channels receive over <span class="math notranslate nohighlight">\(K\)</span> snapshots,</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\mathbf{R}} = \frac{1}{K}\ \mathbf{X}\mathbf{X}^{H},
+\]</div>
+<p>and solves for the weights that minimize total output power while holding unit
+gain in the look direction <span class="math notranslate nohighlight">\(\mathbf{s}\)</span>. Whatever is loud and is not in the look
+direction is suppressed, and the beamformer never has to be told where it is.</p>
+<p>Unit gain means the two MVDR weights sum to 1 in the look direction, where
+Manual’s two weights of 1 sum to 2. The Phaser multiplies the MVDR output by 2,
+the number of channels, so a target in the look direction reads the same level
+under either mode and the two are compared on one scale.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-two-limits-of-two-channels">
+<div class="wrap docutils container">
+<p class="rubric">Two Limits of Two Channels</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Near <span class="qty">±30°</span> the subarray pattern already puts the interferer 20 dB down.</p></li>
+<li><p>There the two channels cannot tell it from boresight, so MVDR’s one null hits the target.</p></li>
+<li><p>Diagonal loading limits that loss; Procedure C runs at <span class="qty">+20°</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Both limits belong to the architecture rather than to the algorithm. A
+four-element subarray at <span class="math notranslate nohighlight">\(d = 14\)</span> mm has its first null where
+<span class="math notranslate nohighlight">\(\sin\theta = \lambda/4d\)</span>, about <span class="qty">31°</span>, so an interferer there barely reaches
+either channel and there is little left for the digital layer to remove. The
+two channels sit four elements apart, so their phase difference,
+<span class="math notranslate nohighlight">\(4kd\sin\theta\)</span>, runs through a full cycle across the subarray beam: a source
+near <span class="qty">+30°</span> presents very nearly the same channel phase difference as one on
+boresight, and the two channels cannot tell them apart. The digital layer can
+only work on what the analog layer passes it, and only on directions the two
+channels can distinguish.</p>
+<p>At <span class="qty">+30°</span> both limits act at once, and the bench shows what follows. MVDR
+still spends its one null on the interferer, but to the two channels the
+interferer looks like the look direction, and the HB100 sits a fraction of a
+degree off it, so the null lands on the target too. On phaser-00 the target
+dropped about 10 dB, and MVDR did worse against the interferer than Manual.
+<strong>Diagonal loading</strong> is the guard: the Phaser adds
+<span class="math notranslate nohighlight">\(\delta\ \text{tr}(\hat{\mathbf{R}})/2\)</span> to the diagonal of <span class="math notranslate nohighlight">\(\hat{\mathbf{R}}\)</span>
+before inverting it, which caps how far the weights can move from Manual’s. At
+<span class="math notranslate nohighlight">\(\delta = 0.1\)</span> the target loss at <span class="qty">+30°</span> fell to about 2 dB, and at
+<span class="qty">+20°</span> MVDR still suppressed the interferer by about 17 dB, so Procedure C
+uses <span class="math notranslate nohighlight">\(\delta = 0.1\)</span>. At <span class="math notranslate nohighlight">\(\delta = 1\)</span> the weights stay so close to Manual’s that
+the suppression falls to about 5 dB.</p>
+<p>Procedure C also uses <span class="math notranslate nohighlight">\(K = 1024\)</span> snapshots rather than 128. At the kit’s
+3 MSPS, 128 samples span only four cycles of the 100 kHz offset between target
+and interferer, so the two are partly correlated in each estimate of
+<span class="math notranslate nohighlight">\(\hat{\mathbf{R}}\)</span> and the null wanders from one update to the next. 1024
+samples span 34 cycles; on phaser-00 the spread of ten suppression readings
+fell from about 25 dB to under 10.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-what-mvdr-chooses">
+<div class="wrap docutils container">
+<p class="rubric">What MVDR Chooses</p>
+<div class="depth docutils container">
+<p>The widget is the two-channel digital layer on its own, with the analog
+subarrays parked at boresight. Move the interferer to about <span class="qty">+20°</span> and
+watch MVDR place a null on it. Then move it out toward <span class="qty">±30°</span> and watch
+the suppression fall away, for the two reasons on the previous frame. On the
+bench you hold the beam on the target in Signal vs Time and read the
+suppression from the two readout tiles under the plot. A beam-sweep trace is
+the total power at each angle, interferer and target together, so it shows the
+null but does not measure it.</p>
+</div>
+<iframe src="../../viz/mvdr-interferer.html"
+        width="100%" height="489"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Two-channel MVDR beamformer against an interferer">
+</iframe>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-manual-versus-adaptive">
+<div class="wrap docutils container">
+<p class="rubric">Manual Versus Adaptive</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-left"><p>Manual null</p></th>
+<th class="head text-left"><p>MVDR</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Needs first</p></td>
+<td class="text-left"><p>the interferer’s angle</p></td>
+<td class="text-left"><p>nothing</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Interferer moves</p></td>
+<td class="text-left"><p>recompute eight weights</p></td>
+<td class="text-left"><p>follows it</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Nulls on this board</p></td>
+<td class="text-left"><p>up to seven</p></td>
+<td class="text-left"><p>one</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Manual null steering has eight degrees of freedom and can place several nulls
+at once, but every one of them is our arithmetic, computed for a geometry we
+assumed. MVDR has two degrees of freedom on this board, one constraint and one
+null, and it finds that null itself, from data, several times a second. On an
+array with a digitizer behind every element, adaptive beamforming has both
+advantages at once. On the PHASER we can see what the hybrid architecture
+costs: the analog sums discard the per-element information before the
+algorithm sees it.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-sum-and-delta">
+<div class="wrap docutils container">
+<p class="rubric">Sum and Delta</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L24-monopulse.svg"
+     alt="Left: sum and delta channel levels from minus 20 to plus 20 degrees; the sum is flat at its peak while the delta passes through an exact zero on boresight. Right: the error function, zero on boresight and straight within about plus or minus 5 degrees with a slope of 0.11 per degree"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The sum is flat at boresight; the delta climbs out of a zero.</p></li>
+<li><p>Their ratio turns one look into a signed angle.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Every measurement so far has come from a sweep: the array steps its commanded
+angle across the field of view and records power at each step. A sweep takes
+time, and a tracking radar does not have it. <strong>Monopulse</strong> forms both beams at
+once from the two subarray channels, adding them for <span class="math notranslate nohighlight">\(\Sigma\)</span> and subtracting
+them for <span class="math notranslate nohighlight">\(\Delta\)</span>. The sum beam is flat at its peak, so its level barely changes
+as the target drifts a degree off axis. The delta beam is zero on boresight and
+climbs steeply out of that zero, so its level changes a great deal over the same
+degree. Dividing one by the other turns that small angle into a large, readable
+number.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-error-function">
+<div class="wrap docutils container">
+<p class="rubric">The Error Function</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\varepsilon(\theta) = -\ \frac{\text{Im}\lbrace \Delta\ \Sigma^{*} \rbrace}{\vert \Sigma \vert^{2}}
+\]</div>
+<ul class="simple">
+<li><p>Zero on boresight, with opposite signs on the two sides.</p></li>
+<li><p>Slope <span class="qty">0.11</span> per degree, straight within about <span class="qty">±5°</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The two subarrays sit four elements apart, so <span class="math notranslate nohighlight">\(\Delta\)</span> arrives in quadrature
+with <span class="math notranslate nohighlight">\(\Sigma\)</span>, and the useful quantity is the imaginary part of their product.
+The error function is zero on boresight, positive on one side and negative on
+the other, and straight within about <span class="qty">±5°</span>, well inside the array’s
+<span class="qty">13°</span> beamwidth. A target one degree off axis reads about <span class="qty">0.11</span>, and a
+tracker that drives that reading back to zero holds the beam on the target far
+more finely than the beamwidth alone would allow, from one look and with no
+sweep.</p>
+<p>The GUI plots a normalized form of the same comparison, taking its sign from
+the phase difference between the two channels and its magnitude from the two
+channel levels in dB,</p>
+<div class="math notranslate nohighlight">
+\[
+\text{sign}(\Delta\phi)\ \frac{\Sigma_{\text{dB}} - \Delta_{\text{dB}}}{\Sigma_{\text{dB}} + \Delta_{\text{dB}}},
+\]</div>
+<p>so the trace stays bounded and on screen however strong the target is.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-bench-rules">
+<div class="wrap docutils container">
+<p class="rubric">Bench Rules</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Open <strong>Lab Presets</strong> before you press one; <strong>Calibrate</strong>, then <strong>Find HB100</strong>.</p></li>
+<li><p>Set <strong>Rx Gain</strong> for an FFT peak of <span class="math notranslate nohighlight">\(-10 \pm 3\)</span> dBFS.</p></li>
+<li><p>Source <span class="qty">1.2</span> m out, at patch height; facing the patches, E1 is on the right.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The rules come from the Module 3 dry runs. A peak near <span class="qty">−10</span> dBFS keeps the
+receiver linear with room above the floor; at Rx Gain 10 dB the FFT peak read
+<span class="qty">+2</span> to <span class="qty">+3</span> dBFS at these distances and the receiver clipped. Every prediction
+uses the frequency <strong>Find HB100</strong> reports for your kit, not the nominal
+<span class="qty">10.525</span> GHz; the kits sit anywhere from <span class="qty">10.41</span> to <span class="qty">10.46</span> GHz. Level
+comparisons need the source at <span class="qty">1.2</span> m or more, because closer in the residual
+curvature across the aperture puts errors of a few tenths of a decibel on every
+peak.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-before-every-sweep">
+<div class="wrap docutils container">
+<p class="rubric">Before Every Sweep</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<ul class="simple">
+<li><p>Keep <span class="qty">±40°</span> of the bench clear of walls and people.</p></li>
+<li><p>Recalibrate if the uniform trace is lopsided.</p></li>
+<li><p><strong>Signal BW</strong> resets after Calibrate, Find HB100, or a preset: check it.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>In the phaser-00 dry run, a wall beside the kit produced a lobe at <span class="qty">−37°</span>
+to <span class="qty">−41°</span> only <span class="qty">9</span> dB below the peak, and a person seated beside the kit
+left a <span class="qty">−17</span> dBc shelf on that side. Either one fills a notch. A stale
+calibration made the uniform trace’s two first sidelobes read unequal, and
+recalibrating fixed it. Signal BW returned to zero after each of Calibrate,
+Find HB100, and the Rectangular preset, so check it before every sweep you
+record.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-equipment-and-setup">
+<div class="wrap docutils container">
+<p class="rubric">Equipment and Setup</p>
+<p>You need the ADALM-PHASER kit with its Raspberry Pi and Pluto attached, the
+HB100 source and its battery, a laptop on the same network, and a <span class="qty">1.2</span> m arc
+taped on the bench with marks every <span class="qty">15°</span>.</p>
+<ol class="arabic simple">
+<li><p>Place the HB100 at boresight, <span class="qty">1.2</span> m from the array face, at patch-row
+height and aimed at the center of the patch row. Keep <span class="qty">±40°</span> of the
+bench clear of walls and people.</p></li>
+<li><p>Power the PHASER, wait for the Pi to boot, and open
+<code class="docutils literal notranslate"><span class="pre">http://phaser.local:8080</span></code> in a browser.</p></li>
+<li><p>Press <strong>Calibrate</strong> under Configuration and let it finish. Then press
+<strong>Find HB100</strong> and record the Signal Freq it reports; Part 1 of the packet
+uses it.</p></li>
+<li><p>Set <strong>Rx Gain</strong> so the FFT peak, beam at <span class="qty">0°</span> and source at boresight,
+reads <span class="math notranslate nohighlight">\(-10 \pm 3\)</span> dBFS. Leave it there for the whole lab.</p></li>
+<li><p>Check <strong>Signal BW</strong>, which Calibrate and Find HB100 reset.</p></li>
+<li><p>Open the <strong>Lab Presets</strong> section before pressing any preset in it.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-no-hardware">
+<div class="wrap docutils container">
+<p class="rubric">No Hardware?</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Run the backend in simulation mode with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">phaser_headless.py</span> <span class="pre">--sim</span></code>, or
+use the hosted simulator, and open the same URL. The simulator places a target
+at boresight, so procedures A, B, and D run as written: the weights, the notch,
+the difference null, and the error function are all in its physics model. It
+also carries a simulated interferer, so procedure C runs there too.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-procedure-a-the-static-notch">
+<div class="wrap docutils container">
+<p class="rubric">Procedure A: The Static Notch</p>
+<ol class="arabic simple">
+<li><p>With the array uniform (Element Gains at 100 %, Phase Control reset), press
+<strong>Start</strong>. Read <strong>Peak Gain</strong> and <strong>Angle</strong> (set to <strong>Peak</strong>), then press
+<strong>Freeze</strong> to hold the trace as your reference. Record the level of the
+sidelobe nearest <span class="qty">+22.5°</span>; expect about <span class="qty">−13</span> dBc. If the two first
+sidelobes differ by more than about 2 dB, recalibrate and repeat this step.</p></li>
+<li><p>Enter your Part 1 gains into <strong>Element Gains</strong> (Rx1 through Rx8). The set is
+symmetric, so <strong>Enforce Symmetric Taper</strong> makes no difference to it; leave the
+switch off so that a later edit to one slider is not mirrored onto its
+partner.</p></li>
+<li><p>Enter your Part 1 phases into <strong>Phase Control</strong>, each with its sign.</p></li>
+<li><p>Press <strong>Start</strong> and read the new trace against the frozen one: the new
+<strong>Peak Gain</strong>, the notch’s depth below the frozen peak, and the notch’s angle.
+Fill in Table A of the packet.</p></li>
+<li><p>Press <strong>Reset</strong> in Phase Control and return Element Gains to Uniform.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-procedure-b-the-difference-null">
+<div class="wrap docutils container">
+<p class="rubric">Procedure B: The Difference Null</p>
+<ol class="arabic simple">
+<li><p>Open <strong>Digital Beam Forming</strong> and set Mode to <strong>Manual</strong>.</p></li>
+<li><p>Leave Beam 0 Gain and Phase alone. Set <strong>Beam 1 Phase</strong> to <span class="qty">180°</span>.</p></li>
+<li><p>Press <strong>Start</strong>. Nothing in the analog beamformers changed; only one digital
+channel’s sign did.</p></li>
+<li><p>Record the null’s depth and angle, and the angles of the two peaks that
+replace the main lobe, in Table B. The peaks fall on the sweep’s
+<span class="qty">2.8125°</span> grid, so one grid step is the reading tolerance.</p></li>
+<li><p>Set <strong>Beam 1 Phase</strong> back to <span class="qty">0°</span>.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-procedure-c-mvdr-against-an-interferer">
+<div class="wrap docutils container">
+<p class="rubric">Procedure C: MVDR Against an Interferer</p>
+<p>The interferer in this procedure is simulated: the Phaser software adds a second
+source, at an angle and level you choose, to the real samples the kit receives,
+before the digital beamformer sees them. The target stays your HB100 at
+boresight. Every number in this procedure comes from the two readout tiles
+under the plot, <strong>Interferer vs Target</strong> and <strong>MVDR Suppression</strong>, and from
+<strong>Peak Gain</strong>, with the beam held on the target.</p>
+<ol class="arabic simple">
+<li><p>Set <strong>Mode</strong> to <strong>Signal vs Time</strong> with <strong>Steer Angle</strong> at <span class="qty">0°</span>. This
+holds the beam on the target, and the readout tiles fill in only while it is
+held.</p></li>
+<li><p>Open the <strong>Interferer</strong> pane, below Digital Beam Forming, and press
+<strong>Inject Interferer</strong>; it changes to <em>Interferer ON · click to stop</em>. Set
+<strong>Angle (deg)</strong> to <span class="qty">+20</span> and <strong>Power (dBFS)</strong> to <span class="qty">0</span>, its maximum, which puts
+it about 10 dB above a target read at <span class="qty">−10</span> dBFS. Leave <strong>Offset from
+target (kHz)</strong> at <span class="qty">100</span> and <strong>Coherent with target</strong> off.</p></li>
+<li><p>In <strong>Digital Beam Forming</strong>, set Mode to <strong>Manual</strong>. Watch ten updates of
+<strong>Interferer vs Target</strong> and <strong>Peak Gain</strong> and record the median of each,
+the middle value once sorted. The readings jump between updates, and the
+median ignores the odd wild one where an average would not.</p></li>
+<li><p>Set Mode to <strong>MVDR</strong>, Snapshots to <span class="qty">1024</span>, and Diagonal Load to <span class="qty">0.1</span>. Leave
+Steer Angle at <span class="qty">0°</span>: it is MVDR’s look direction. Record the medians of
+<strong>Interferer vs Target</strong>, <strong>Peak Gain</strong>, and <strong>MVDR Suppression</strong>. The
+suppression tile needs a Manual and an MVDR reading at the same Steer Angle;
+if it shows “–”, repeat step 3, then this step.</p></li>
+<li><p>Open the <strong>Adaptive</strong> tab, which appears with MVDR in Signal vs Time. Record
+the angle and depth of the null near <span class="qty">+20°</span>, and the conventional
+pattern’s level at the same angle.</p></li>
+<li><p>Move the interferer to <span class="qty">+30°</span>. Record Peak Gain in Manual, then in MVDR
+at Diagonal Load <span class="qty">0.001</span> and at <span class="qty">0.1</span>.</p></li>
+<li><p>Press the interferer button to turn it off, and set Mode back to
+<strong>Manual</strong> and <strong>Beam Sweep</strong>.</p></li>
+</ol>
+<p>On phaser-00, with the interferer at <span class="qty">+20°</span>: Interferer vs Target read
+about <span class="qty">−2</span> dB in Manual and <span class="qty">−18</span> dB under MVDR, a suppression near 17 dB
+(single readings from 11 to 20 dB), and the Adaptive tab put the null at
+<span class="qty">19°</span> to <span class="qty">20°</span>, well below the conventional pattern’s <span class="qty">−13</span> dB.
+Peak Gain under MVDR reads about 2 dB below Manual, because with the
+interferer on Peak Gain is the in-band level, and in Manual it includes an
+interferer only 2 dB below the target. At <span class="qty">+30°</span>, loading <span class="qty">0.001</span> let
+MVDR cut the target by about 10 dB and <span class="qty">0.1</span> held the loss near 2 dB; MVDR
+Suppression read negative at every loading there, MVDR doing worse than
+Manual.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-procedure-d-watch-it-track">
+<div class="wrap docutils container">
+<p class="rubric">Procedure D: Watch It Track</p>
+<ol class="arabic simple">
+<li><p>Open <strong>Lab Presets</strong> and load <strong>8 Tracking</strong>. It sets the digital layer up
+to form both beams at once.</p></li>
+<li><p>Set the taper to <strong>Uniform</strong> under Element Gains, and check that <strong>Beam 1
+Phase</strong> reads <span class="qty">0°</span> in Digital Beam Forming. The preset resets the phase
+but not yet the taper, and a leftover taper changes every reading below.</p></li>
+<li><p>In <strong>Plot Options</strong>, turn on <strong>Show Monopulse Delta Beam</strong> and <strong>Show
+Monopulse Error Function</strong>.</p></li>
+<li><p>On the <strong>Rectangular</strong> tab, press <strong>Start</strong>. The sum trace peaks on
+boresight and the delta trace nulls there. Record the delta null’s depth and
+angle, and the angle where the error trace crosses zero, in Table D.</p></li>
+<li><p>Open the <strong>Tracking</strong> tab and press <strong>Start</strong>. Its y-axis is the steering
+angle, plotted against sweep count. Move the HB100 slowly across the front
+of the array along the <span class="qty">1.2</span> m arc. The tracker reads the error function,
+drives it back toward zero, and follows the source without sweeping. Note in
+Table D how far it follows and how it fails when it loses the source.</p></li>
+</ol>
+<p>On phaser-00 the tracker followed smoothly to about <span class="qty">±45°</span>. Near
+<span class="qty">±48°</span> it lost the source and snapped to the <span class="qty">±90°</span> limits, or to
+a sidelobe near <span class="qty">+60°</span> to <span class="qty">+70°</span>, rather than drifting; once the source
+came back inside about <span class="qty">±45°</span> it locked on again within one sweep.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-lab-packet">
+<div class="wrap docutils container">
+<p class="rubric">Lab Packet</p>
+<p>The packet is the turn-in document for the whole lab: Part 1 before the period,
+Part 2 at the bench, Part 3 after. <a href="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">L24 Lab packet (PDF)</a>.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary">
+<div class="wrap docutils container">
+<p class="rubric">Summary</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Weight subtraction</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\mathbf{w}_\text{n}\)</span>, as gain % and phase</p></td>
+<td class="text-left"><p>main lobe drops about <span class="qty">2</span> dB for a null at <span class="qty">+22.5°</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Notch depth</p></td>
+<td class="text-left"><p>set by one-step channel errors, not by rounding, until the room limits it</p></td>
+<td class="text-left"><p>about <span class="qty">−48</span> dB; phaser-00 <span class="qty">−46</span> to <span class="qty">−50</span> dB open, <span class="qty">−22</span> to <span class="qty">−24</span> dB cramped</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Difference beam</p></td>
+<td class="text-left"><p>Beam 1 Phase <span class="math notranslate nohighlight">\(= 180^\circ\)</span> subtracts the two channels</p></td>
+<td class="text-left"><p>boresight null, peaks near <span class="qty">±11°</span>; phaser-00 <span class="qty">−41.5</span> dB open, <span class="qty">−22</span> dB cramped</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>MVDR</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\mathbf{w} = \mathbf{R}^{-1}\mathbf{s} / (\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s})\)</span> from <span class="math notranslate nohighlight">\(K\)</span> snapshots</p></td>
+<td class="text-left"><p>one null from two channels; phaser-00 about <span class="qty">17</span> dB at <span class="qty">+20°</span>, <span class="math notranslate nohighlight">\(K = 1024\)</span>, loading <span class="qty">0.1</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Monopulse error</p></td>
+<td class="text-left"><p>signed ratio of delta to sum, from one look</p></td>
+<td class="text-left"><p>zero on boresight, slope <span class="qty">0.11</span> per degree</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Turn in the packet, all three parts, before Lesson 25.</p></li>
+<li><p>Module 4 begins radar: the range equation puts a power budget behind this angle measurement.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lesson 25 derives the radar range equation and asks the question this module
+never had to: how much power comes back from a target that transmits nothing of
+its own. Everything Module 3 built, beamwidth, sidelobes, scan loss, and
+steering, becomes the antenna terms in that equation, and the array you have
+been sweeping becomes the front end of a radar. The monopulse pair of Part D
+measures a target’s angle from a single look, which is what a radar needs to
+track something that moves; the range equation supplies the signal that feeds
+it. Keep your Table D numbers: the slope of the error function near boresight
+sets how finely a tracking radar can measure angle, and Module 4 returns to it.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L24-lab-null-steering"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

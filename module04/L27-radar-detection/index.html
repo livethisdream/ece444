@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L27 - Radar Detection &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=8125a6e0df">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l27-radar-detection">
+<h1>L27 - Radar Detection<a class="headerlink" href="#l27-radar-detection" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Radar Detection</h1>
+<div class="title-rule"></div>
+<p>A steady target needs 13.1 dB of SNR for a 90% chance of detection at one false alarm in a million.</p>
+<p>Lesson 27 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame here-27 docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 2">
+  <li>I can apply radar detection theory (PD, FAR, dwell time) to determine detection performance under noise.</li>
+</ol>
+<!-- The Module 4 "you are here" strip. Included into a lesson's Learning
+     Objectives frame, which carries `:class: here-NN` to light up its own
+     chip (frames.css). L25-L27 are taught in class; L28-L31 are the final
+     project, each one page with its lesson and then its lab. -->
+<div class="lane-strip" role="navigation" aria-label="Module 4 lessons, by whether they are taught in class or worked as the final project">
+  <span class="ls-label">Module 4</span>
+  <a class="ls-chip" data-n="25" href="../L25-radar-equation/index.html" title="L25 Radar Equation: in class">25</a>
+  <a class="ls-chip" data-n="26" href="../L26-range-resolution-doppler/index.html" title="L26 Range, Resolution, and Doppler: in class">26</a>
+  <a class="ls-chip" data-n="27" href="../L27-radar-detection/index.html" title="L27 Radar Detection: in class">27</a>
+  <a class="ls-chip ls-proj" data-n="28" href="../L28-fmcw/index.html" title="L28 FMCW and its lab: final project">28</a>
+  <a class="ls-chip ls-proj" data-n="29" href="../L29-range-doppler-mti/index.html" title="L29 Range-Doppler and MTI and its lab: final project">29</a>
+  <a class="ls-chip ls-proj" data-n="30" href="../L30-cfar/index.html" title="L30 CFAR and its lab: final project">30</a>
+  <a class="ls-chip ls-proj" data-n="31" href="../L31-classification-tracking/index.html" title="L31 Classification and Tracking and its lab: final project">31</a>
+  <a class="ls-chip ls-proj ls-report" href="../final-project/index.html" title="Final Project: Radar Systems Report">Report</a>
+  <span class="ls-key"><i></i>in class <i class="ls-proj"></i>final project</span>
+</div>
+<div class="depth docutils container">
+<p><a href="../L25-radar-equation/index.html">Lesson 25</a> gave us the received power from a target and the noise power it competes with, and <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> divided the return into range and Doppler cells. Neither one tells us whether the radar reports a target. That is a decision the processor makes in every cell, many thousands of times a second, and every one of those decisions is made against noise. Today we work out how often it decides correctly, how often it reports a target that is not there, and how much signal-to-noise ratio (SNR) a given performance requires.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-a-detection-is-a-decision">
+<div class="wrap docutils container">
+<p class="rubric">A Detection Is a Decision</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Every range cell holds noise, and some also hold a target.</p></li>
+<li><p>The processor compares the power in each cell with a <strong>threshold</strong>.</p></li>
+<li><p>Above the threshold it reports a target; below, nothing.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<img src="../../viz/img/L27-range-profile.svg" alt="One range profile of 200 cells: noise power scattered from about minus 20 to plus 7 dB about the mean, one target cell at 13 dB, and a dashed threshold at 11.4 dB that only the target crosses" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The figure is one range profile, the power in each of 200 range cells after the range FFT, plotted in dB above the mean noise power. Most cells hold only receiver noise, and the noise is random: from cell to cell it spreads over more than 25 dB. One cell also holds a target 13 dB above the mean noise.</p>
+<p>The processor does not know which cell holds the target. It applies one rule to every cell: if the power exceeds a <strong>threshold</strong> <span class="math notranslate nohighlight">\(T\)</span>, report a target; otherwise report nothing. The threshold here sits 11.4 dB above the mean noise, and the target is the only cell that crosses it.</p>
+<p>Two errors are possible. A cell holding only noise can cross the threshold, which is a <strong>false alarm</strong>. A cell holding a target can fall below it, which is a <strong>missed detection</strong>. Raising the threshold makes the first error rarer and the second more common, and no threshold removes both. Detection theory puts numbers on both errors so that we can choose the threshold on purpose.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-noise-power-in-one-cell">
+<div class="wrap docutils container">
+<p class="rubric">Noise Power in One Cell</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+p(z) &amp;= \frac{1}{P_n}\ e^{-z/P_n} \\
+P_n &amp;= kT_\text{sys}B
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(z\)</span> is the power in one cell; <span class="math notranslate nohighlight">\(P_n\)</span> is its mean.</p></li>
+<li><p>Small values are common; large values are rare but never impossible.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Receiver noise at the ADC is a complex Gaussian voltage: its in-phase and quadrature parts are independent, zero-mean Gaussian random variables. A square-law detector forms the power <span class="math notranslate nohighlight">\(z = \vert x\vert^2\)</span>, and the sum of the squares of two independent Gaussians is <strong>exponentially distributed</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+p(z) = \frac{1}{P_n}\ e^{-z/P_n}, \qquad z \ge 0 .
+\]</div>
+<p>The one parameter is the mean noise power <span class="math notranslate nohighlight">\(P_n\)</span>, which <a href="../L25-radar-equation/index.html">Lesson 25</a> wrote as <span class="math notranslate nohighlight">\(kT_\text{sys}B\)</span> for a receiver of system noise temperature <span class="math notranslate nohighlight">\(T_\text{sys}\)</span> and bandwidth <span class="math notranslate nohighlight">\(B\)</span>. The amplitude <span class="math notranslate nohighlight">\(\vert x\vert\)</span> has the Rayleigh distribution, and engineers often say the same thing as “the noise envelope is Rayleigh.”</p>
+<p>The exponential density is largest at <span class="math notranslate nohighlight">\(z = 0\)</span> and falls off steadily. That is why the profile on the previous frame has many cells far below the mean and a few well above it: a cell 7 dB above the mean, five times <span class="math notranslate nohighlight">\(P_n\)</span>, occurs with probability <span class="math notranslate nohighlight">\(e^{-5} = 0.7\%\)</span>, so in 200 cells we expect one or two of them.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-probability-of-false-alarm">
+<div class="wrap docutils container">
+<p class="rubric">Probability of False Alarm</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+P_{fa} &amp;= \int_T^{\infty} \frac{1}{P_n}\ e^{-z/P_n}\ dz = e^{-T/P_n} \\
+\frac{T}{P_n} &amp;= \ln\frac{1}{P_{fa}}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> puts the threshold <span class="math notranslate nohighlight">\(13.8 P_n\)</span>, or 11.4 dB, above the mean noise.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The <strong>probability of false alarm</strong> <span class="math notranslate nohighlight">\(P_{fa}\)</span> is the probability that a cell holding only noise crosses the threshold. It is the area of the noise density above <span class="math notranslate nohighlight">\(T\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+P_{fa} &amp;= \int_T^{\infty} \frac{1}{P_n}\ e^{-z/P_n}\ dz \\
+&amp;= e^{-T/P_n} .
+\end{aligned}
+\end{split}\]</div>
+<p>Inverting it gives the threshold for a chosen <span class="math notranslate nohighlight">\(P_{fa}\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{T}{P_n} = \ln\frac{1}{P_{fa}} .
+\]</div>
+<p>For <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>, <span class="math notranslate nohighlight">\(T/P_n = \ln 10^{6} = 13.8\)</span>, which is <span class="math notranslate nohighlight">\(10\log_{10} 13.8 = 11.4\)</span> dB above the mean noise. That is the dashed line in the range profile. The logarithm makes the threshold insensitive to the choice: <span class="math notranslate nohighlight">\(P_{fa} = 10^{-3}\)</span> needs 8.4 dB and <span class="math notranslate nohighlight">\(P_{fa} = 10^{-8}\)</span> needs 12.7 dB. A thousandfold change in false alarms moves the threshold by only a few dB, which matters later in the lesson, because the reverse is also true: a few dB of error in the threshold changes the false alarms a thousandfold.</p>
+<p>Two assumptions are built in. The threshold is set relative to <span class="math notranslate nohighlight">\(P_n\)</span>, so the processor must know the noise power. And the cells are independent, so the probabilities for many cells multiply and add in the simple ways used below.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-target-plus-noise">
+<div class="wrap docutils container">
+<p class="rubric">Target Plus Noise</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L27-pdfs.svg" alt="Two probability densities on a dB axis. Noise only, a broad hump centered at 0 dB. Target plus noise at 13 dB SNR, a narrow peak at 13 dB. A dashed threshold at 11.4 dB; the target density above the threshold is shaded, Pd = 0.87; the noise tail above it is 10 to the minus 6 and too small to see" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(P_d\)</span> is the area of the target-plus-noise density above <span class="math notranslate nohighlight">\(T\)</span>.</p></li>
+<li><p>At 13 dB SNR and <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>, <span class="math notranslate nohighlight">\(P_d = 0.87\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>When the cell also holds a steady target of power <span class="math notranslate nohighlight">\(P_s\)</span>, the target adds a fixed phasor to the noise voltage. The power then follows a <strong>Rician</strong> distribution, centered near <span class="math notranslate nohighlight">\(P_s + P_n\)</span>, and the <strong>probability of detection</strong> <span class="math notranslate nohighlight">\(P_d\)</span> is its area above the threshold. With the SNR written <span class="math notranslate nohighlight">\(\text{SNR} = P_s/P_n\)</span>, that area is</p>
+<div class="math notranslate nohighlight">
+\[
+P_d = Q_1\!\left(\sqrt{2\ \text{SNR}},\ \sqrt{2T/P_n}\right),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(Q_1\)</span> is the Marcum Q-function. It has no closed form, but scipy evaluates it as the survival function of a noncentral chi-square: <code class="docutils literal notranslate"><span class="pre">scipy.stats.ncx2.sf(2*T/Pn,</span> <span class="pre">2,</span> <span class="pre">2*SNR)</span></code>.</p>
+<p>The figure draws both densities against the power in the cell in dB, which is how the range profile showed them. The noise density is the broad hump at 0 dB. The target-plus-noise density for 13 dB SNR is the narrow peak near 13 dB, narrower because the steady target dominates the random part. With the threshold at 11.4 dB, 87% of the target density lies above it, so <span class="math notranslate nohighlight">\(P_d = 0.87\)</span>. The noise tail above the threshold is <span class="math notranslate nohighlight">\(10^{-6}\)</span> of its area, far too small to draw, and that is the point of choosing it there.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-threshold-explorer">
+<div class="wrap docutils container">
+<p class="rubric">Threshold Explorer</p>
+<div class="depth docutils container">
+<p>The widget draws the two densities and the threshold, and beside them the probability of detection against the probability of false alarm, with the present operating point marked. Move the threshold and watch the two shaded areas trade. Raise the target SNR and the target density moves away from the noise. The pulse and noise controls belong to the second half of the lesson: integrating <span class="math notranslate nohighlight">\(N\)</span> pulses coherently moves the target density up by <span class="math notranslate nohighlight">\(10\log_{10}N\)</span> dB, and the noise control raises the noise while the threshold stays where it was set.</p>
+</div>
+<iframe src="../../viz/detection-threshold.html"
+        width="100%" height="437"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Detection threshold against the noise and target probability densities, with the operating point on the Pd versus Pfa curve">
+</iframe>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-pd-against-pfa">
+<div class="wrap docutils container">
+<p class="rubric">Pd Against Pfa</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L27-roc.svg" alt="Probability of detection against probability of false alarm on a log axis from 10 to the minus 10 to 0.1, for SNRs of 8, 10, 12 and 14 dB. At Pfa = 10 to the minus 6 the 12 dB curve reads 0.68" style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A lower threshold raises <span class="math notranslate nohighlight">\(P_d\)</span> and <span class="math notranslate nohighlight">\(P_{fa}\)</span> together.</p></li>
+<li><p>At <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>, 12 dB gives <span class="math notranslate nohighlight">\(P_d = 0.68\)</span>; 14 dB gives 0.97.</p></li>
+<li><p>Only more SNR raises <span class="math notranslate nohighlight">\(P_d\)</span> without raising <span class="math notranslate nohighlight">\(P_{fa}\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Each curve fixes the SNR and sweeps the threshold. Moving the threshold down moves the operating point up and to the right along its curve: more detections and more false alarms, always together. This curve is the <strong>receiver operating characteristic</strong>, and it is the complete statement of what a detector can do at one SNR.</p>
+<p>The curves also show how steeply detection depends on SNR. At <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>, 8 dB of SNR gives <span class="math notranslate nohighlight">\(P_d = 0.06\)</span>, 12 dB gives 0.68, and 14 dB gives 0.97. Between 10 and 14 dB, each decibel moves <span class="math notranslate nohighlight">\(P_d\)</span> by 0.1 to 0.2. The threshold sets which error we accept; only the SNR decides how small both can be at once.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-false-alarm-rate">
+<div class="wrap docutils container">
+<p class="rubric">False-Alarm Rate</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\text{FAR} = P_{fa} \times \frac{\text{cells tested}}{\text{second}}
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(512 \times 256\)</span> cells every 128 ms is <span class="math notranslate nohighlight">\(1.0 \times 10^{6}\)</span> decisions a second.</p></li>
+<li><p>At <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>, <span class="math notranslate nohighlight">\(\text{FAR} = 1.0\)</span> a second: one false target every second.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><span class="math notranslate nohighlight">\(P_{fa}\)</span> is a probability per decision. What an operator sees, and what a tracker downstream must cope with, is the <strong>false-alarm rate</strong>: false reports per second. Every cell tested is one decision, so</p>
+<div class="math notranslate nohighlight">
+\[
+\text{FAR} = P_{fa} \times \frac{\text{cells tested}}{\text{second}} .
+\]</div>
+<p>Consider the range-Doppler burst the L29–L31 Labs use: 256 chirps at a pulse repetition interval (PRI) of 0.5 ms, so a new map every 128 ms, and say 512 range cells in each map. That is <span class="math notranslate nohighlight">\(512 \times 256 = 131\,072\)</span> decisions per map and <span class="math notranslate nohighlight">\(131\,072/0.128\ \text{s} = 1.0 \times 10^{6}\)</span> decisions per second. At <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> the radar reports about one false target every second, which is too many for a display and far too many for a tracker.</p>
+<p>Working backward is the usual design step. A specification of one false alarm per minute requires</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+P_{fa} &amp;= \frac{1/60\ \text{s}^{-1}}{1.0 \times 10^{6}\ \text{s}^{-1}} \\
+&amp;= 1.6 \times 10^{-8},
+\end{aligned}
+\end{split}\]</div>
+<p>which puts the threshold at <span class="math notranslate nohighlight">\(\ln(6.1 \times 10^{7}) = 17.9\)</span>, or 12.5 dB above the mean noise. The faster a radar tests cells, the smaller <span class="math notranslate nohighlight">\(P_{fa}\)</span> must be for the same false-alarm rate. We specify a rate and set the threshold from the probability.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-albersheim-s-equation">
+<div class="wrap docutils container">
+<p class="rubric">Albersheim’s Equation</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+A &amp;= \ln\frac{0.62}{P_{fa}}, \qquad B = \ln\frac{P_d}{1 - P_d} \\
+\text{SNR}_\text{dB} &amp;= 10\log_{10}\left(A + 0.12AB + 1.7B\right)
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(P_d = 0.9\)</span>, <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>: <span class="math notranslate nohighlight">\(\text{SNR} = 13.1\)</span> dB.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The Marcum Q-function answers the forward question: given an SNR and a threshold, what is <span class="math notranslate nohighlight">\(P_d\)</span>? The design question runs the other way: given the <span class="math notranslate nohighlight">\(P_d\)</span> and <span class="math notranslate nohighlight">\(P_{fa}\)</span> a mission requires, what SNR must the radar equation deliver? <strong>Albersheim’s equation</strong> is an empirical fit that answers it directly for a steady target:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+A &amp;= \ln\frac{0.62}{P_{fa}} \\
+B &amp;= \ln\frac{P_d}{1 - P_d} \\
+\text{SNR}_\text{dB} &amp;= 10\log_{10}\left(A + 0.12AB + 1.7B\right).
+\end{aligned}
+\end{split}\]</div>
+<p>For <span class="math notranslate nohighlight">\(P_d = 0.9\)</span> and <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>, <span class="math notranslate nohighlight">\(A = \ln(6.2 \times 10^{5}) = 13.34\)</span> and <span class="math notranslate nohighlight">\(B = \ln 9 = 2.20\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\text{SNR}_\text{dB} &amp;= 10\log_{10}\left(13.34 + 3.52 + 3.74\right) \\
+&amp;= 10\log_{10} 20.6 = 13.1\ \text{dB}.
+\end{aligned}
+\end{split}\]</div>
+<p>The fit holds to within about 0.2 dB for <span class="math notranslate nohighlight">\(10^{-7} \le P_{fa} \le 10^{-3}\)</span> and <span class="math notranslate nohighlight">\(0.1 \le P_d \le 0.9\)</span>, and it stays close a little beyond. The table shows how the requirement moves. Asking for <span class="math notranslate nohighlight">\(P_d = 0.99\)</span> instead of 0.9 costs about 1.5 dB; asking for a hundred times fewer false alarms costs about 1 dB.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(P_d\)</span></p></th>
+<th class="head text-right"><p><span class="math notranslate nohighlight">\(P_{fa} = 10^{-4}\)</span></p></th>
+<th class="head text-right"><p><span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span></p></th>
+<th class="head text-right"><p><span class="math notranslate nohighlight">\(P_{fa} = 10^{-8}\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>0.5</p></td>
+<td class="text-right"><p>9.4 dB</p></td>
+<td class="text-right"><p>11.2 dB</p></td>
+<td class="text-right"><p>12.5 dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>0.9</p></td>
+<td class="text-right"><p>11.7 dB</p></td>
+<td class="text-right"><p>13.1 dB</p></td>
+<td class="text-right"><p>14.2 dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>0.99</p></td>
+<td class="text-right"><p>13.3 dB</p></td>
+<td class="text-right"><p>14.5 dB</p></td>
+<td class="text-right"><p>15.5 dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These numbers are for a <strong>steady</strong> target, one whose echo has the same amplitude on every look. Most real targets fluctuate as they turn, because their scatterers add with changing phases (the radar cross section of <a href="../L25-radar-equation/index.html">Lesson 25</a> is an average). For a target that fluctuates from one look to the next with an exponential power distribution, Swerling’s first case, <span class="math notranslate nohighlight">\(P_d = P_{fa}^{1/(1 + \text{SNR})}\)</span>, and <span class="math notranslate nohighlight">\(P_d = 0.9\)</span> at <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> needs 21.1 dB, 8 dB more than the steady target. The fades are what cost the extra SNR.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-required-snr-sets-the-range">
+<div class="wrap docutils container">
+<p class="rubric">Required SNR Sets the Range</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\frac{R_\text{max}}{R_0} = \left(\frac{\text{SNR}_0}{\text{SNR}_\text{req}}\right)^{1/4}
+\]</div>
+<ul class="simple">
+<li><p>SNR falls as <span class="math notranslate nohighlight">\(R^{-4}\)</span>, so 12 dB of extra SNR doubles the range.</p></li>
+<li><p>A target at 20 dB SNR at 100 m meets <span class="math notranslate nohighlight">\(P_d = 0.9\)</span> out to 149 m.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The radar equation of <a href="../L25-radar-equation/index.html">Lesson 25</a> gives the received power as <span class="math notranslate nohighlight">\(1/R^4\)</span>: the <a href="../../module01/L02-antenna-properties/index.html#frame-the-friis-transmission-equation">Friis</a> spreading loss of Lesson 2, once out to the target and once back. The noise does not depend on range, so the SNR falls as <span class="math notranslate nohighlight">\(R^{-4}\)</span> too. If a target gives <span class="math notranslate nohighlight">\(\text{SNR}_0\)</span> at range <span class="math notranslate nohighlight">\(R_0\)</span>, the range at which it just meets the requirement is</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{R_\text{max}}{R_0} = \left(\frac{\text{SNR}_0}{\text{SNR}_\text{req}}\right)^{1/4} .
+\]</div>
+<p>A target measured at 20 dB SNR at 100 m has <span class="math notranslate nohighlight">\(20 - 13.1 = 6.9\)</span> dB to spare against <span class="math notranslate nohighlight">\(P_d = 0.9\)</span>, <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>, so <span class="math notranslate nohighlight">\(R_\text{max} = 100\ \text{m} \times 10^{6.9/40} = 149\)</span> m. The fourth root is a hard limit: doubling the range requires 16 times the SNR, 12 dB. That makes every decibel of SNR the processor can recover without a bigger transmitter or antenna valuable, which is the subject of the rest of the lesson.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-integrating-pulses">
+<div class="wrap docutils container">
+<p class="rubric">Integrating Pulses</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\text{SNR}_N &amp;= N\ \text{SNR}_1 \\
+T_\text{d} &amp;= N\ T_c
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N = 256\)</span> chirps give 24.1 dB, so each chirp needs only <span class="math notranslate nohighlight">\(13.1 - 24.1 = -11.0\)</span> dB.</p></li>
+<li><p>The cost is the <strong>dwell time</strong> <span class="math notranslate nohighlight">\(T_\text{d}\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A radar does not have to decide on one pulse. If it keeps looking at the same cell for <span class="math notranslate nohighlight">\(N\)</span> pulses (chirps, on the PHASER) and adds the returns before thresholding, the target’s echoes add in phase while the noise samples, independent from pulse to pulse, add in power. The signal voltage grows as <span class="math notranslate nohighlight">\(N\)</span>, so its power grows as <span class="math notranslate nohighlight">\(N^2\)</span>; the noise power grows as <span class="math notranslate nohighlight">\(N\)</span>; and the SNR grows as <span class="math notranslate nohighlight">\(N\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{SNR}_N = N\ \text{SNR}_1 .
+\]</div>
+<p>That is <strong>coherent integration</strong>. With the <span class="math notranslate nohighlight">\(N = 256\)</span> chirps of the L29–L31 burst the gain is <span class="math notranslate nohighlight">\(10\log_{10}256 = 24.1\)</span> dB, so a single chirp at <span class="qty">−11.0</span> dB SNR, invisible on its own, integrates to the 13.1 dB a 90% detection needs. By the fourth-root rule of the last frame, the same gain extends the detection range by <span class="math notranslate nohighlight">\(256^{1/4} = 4.0\)</span> times.</p>
+<p>The price is time. The radar must stay on the cell for the <strong>dwell time</strong></p>
+<div class="math notranslate nohighlight">
+\[
+T_\text{d} = N\ T_c,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(T_c\)</span> is the time between chirps, the PRI. With a chirp every 0.5 ms, 256 chirps take 128 ms. The FFT is already doing this work: the range FFT adds the samples within one chirp coherently, and the Doppler FFT of <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> adds the chirps coherently, each Doppler bin compensating the phase that a target of that velocity advances from chirp to chirp.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-coherent-versus-noncoherent">
+<div class="wrap docutils container">
+<p class="rubric">Coherent Versus Noncoherent</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L27-integration-gain.svg" alt="Integration gain in dB against N on a log axis. Coherent is a straight line, 10 log N. Noncoherent, from Albersheim's equation, falls below it: 2.5 dB short at N = 16 and 4.8 dB short at N = 64" style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Coherent adds the phasors; noncoherent adds the powers.</p></li>
+<li><p>Noncoherent integration loses 2.5 dB at <span class="math notranslate nohighlight">\(N = 16\)</span> and 4.8 dB at <span class="math notranslate nohighlight">\(N = 64\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Coherent integration requires that the radar know how the target’s phase changes from pulse to pulse, which a Doppler FFT supplies. When the phase is unknown or unstable, the radar can still add the <em>powers</em> <span class="math notranslate nohighlight">\(\vert x\vert^2\)</span> from <span class="math notranslate nohighlight">\(N\)</span> pulses and threshold the sum. That is <strong>noncoherent integration</strong>. It discards the phase, and squaring each return before adding creates cross terms between the target and the noise, so the gain falls short of <span class="math notranslate nohighlight">\(N\)</span>.</p>
+<p>Albersheim’s equation covers it. For <span class="math notranslate nohighlight">\(N\)</span> pulses integrated noncoherently, the required SNR per pulse is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\text{SNR}_\text{dB} = &amp;-5\log_{10}N \\
+&amp;+ \left(6.2 + \frac{4.54}{\sqrt{N + 0.44}}\right)\log_{10}\left(A + 0.12AB + 1.7B\right),
+\end{aligned}
+\end{split}\]</div>
+<p>which reduces to the single-pulse form at <span class="math notranslate nohighlight">\(N = 1\)</span>. For <span class="math notranslate nohighlight">\(P_d = 0.9\)</span> and <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>, 16 pulses need 3.6 dB each, a gain of 9.5 dB where coherent integration gives 12.0 dB; 64 pulses need <span class="qty">−0.1</span> dB each, a gain of 13.3 dB against 18.1 dB. The gap grows with <span class="math notranslate nohighlight">\(N\)</span>, so a radar integrates coherently whenever it can and adds powers only across looks it cannot phase-align, such as two different dwells.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-limits-the-dwell">
+<div class="wrap docutils container">
+<p class="rubric">What Limits the Dwell</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The target must stay in one range cell: <span class="math notranslate nohighlight">\(T_\text{d} &lt; \Delta R / v\)</span>.</p></li>
+<li><p>At 0.30 m and 1.5 m/s, that is 0.2 s.</p></li>
+<li><p>A longer dwell also refreshes the map, and the track, less often.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>More pulses always give more SNR, so something else must cap the dwell. Three things do.</p>
+<p>The first is the target’s motion. Integration assumes the target stays in one range cell for the whole dwell. A walking person at <span class="math notranslate nohighlight">\(v = 1.5\)</span> m/s, seen with the <span class="math notranslate nohighlight">\(\Delta R = c/2B = 0.30\)</span> m resolution of a 500 MHz chirp, crosses a cell in</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\Delta R}{v} = \frac{0.30\ \text{m}}{1.5\ \text{m/s}} = 0.2\ \text{s},
+\]</div>
+<p>so at a PRI of 0.5 ms the useful dwell is at most about 400 chirps. The burst’s 128 ms dwell fits: the person moves 0.19 m during it. A longer dwell smears the target across cells, and the energy that should add in one cell spreads among several.</p>
+<p>The second is the update rate. A radar that dwells 0.2 s on each of 20 beam positions revisits each one every 4 s. A tracker needs fresh detections often enough to follow a maneuver, and the scan has to finish.</p>
+<p>The third works in our favor. The dwell also sets the Doppler resolution, <span class="math notranslate nohighlight">\(\Delta f_D = 1/T_\text{d}\)</span>, as <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> showed: 128 ms gives 7.8 Hz, which is 0.12 m/s at the 3.0 cm wavelength of a 10 GHz carrier. Choosing <span class="math notranslate nohighlight">\(N\)</span> is therefore one decision with three consequences: the SNR gain, the velocity resolution, and how stale the picture is.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-detection-on-the-phaser">
+<div class="wrap docutils container">
+<p class="rubric">Detection on the PHASER</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The range FFT integrates the samples within each chirp.</p></li>
+<li><p>The Doppler FFT integrates the chirps in a dwell.</p></li>
+<li><p>The threshold then tests each cell of the range-Doppler map.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The PHASER’s FMCW mode follows the chain of this lesson in order. Each chirp sweeps 500 MHz at a 10 GHz carrier, 0.5 ms long for the range work of the L28 Lab and 300 µs, repeated every 0.5 ms, in the 256-chirp burst of the L29–L31 Labs; the board returns the beat signal for each chirp as a block of samples. The <strong>range FFT</strong> of those samples is coherent integration over one chirp: a target at a fixed range is a fixed beat frequency, and the FFT adds its samples in phase. Stacking the range profiles of <span class="math notranslate nohighlight">\(N\)</span> chirps and taking a second FFT across them, the <strong>Doppler FFT</strong>, is coherent integration over the dwell. The result is the range-Doppler map, and the detector tests every cell of it against a threshold.</p>
+<p>The L28 Lab builds the first stage and the L29 Lab the second. The numbers this lesson uses, <span class="math notranslate nohighlight">\(P_{fa}\)</span>, the threshold above the noise, the integration gain, and the dwell, are the quantities to report when you explain what your own maps can detect. The <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-fmcw/" target="_blank" rel="noopener">ADI FMCW lab</a> describes the waveform and the example settings.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-a-fixed-threshold-fails">
+<div class="wrap docutils container">
+<p class="rubric">A Fixed Threshold Fails</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L27-fixed-threshold.svg" alt="A 600-cell range profile whose noise rises 6 dB beyond cell 330. A fixed threshold at 11.4 dB is crossed by noise at eight cells in the noisy region. A local-average threshold steps up with the noise and is not crossed" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>3 dB more noise turns <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> into <span class="math notranslate nohighlight">\(10^{-3}\)</span>.</p></li>
+<li><p>Raising <span class="math notranslate nohighlight">\(T\)</span> for the worst case drops <span class="math notranslate nohighlight">\(P_d\)</span> in quiet noise from 0.89 to 0.17.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Every number so far assumed that the processor knows <span class="math notranslate nohighlight">\(P_n\)</span>. A real noise floor moves: the receiver warms up, another emitter shares the band, rain or ground clutter fills some cells and not others. We set the threshold as <span class="math notranslate nohighlight">\(T = P_n\ln(1/P_{fa})\)</span>, and if the noise rises by a factor <span class="math notranslate nohighlight">\(g\)</span> while <span class="math notranslate nohighlight">\(T\)</span> stays put,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+P_{fa}' &amp;= e^{-T/(gP_n)} \\
+&amp;= P_{fa}^{1/g} .
+\end{aligned}
+\end{split}\]</div>
+<p>A 3 dB rise, <span class="math notranslate nohighlight">\(g = 2\)</span>, turns <span class="math notranslate nohighlight">\(10^{-6}\)</span> into <span class="math notranslate nohighlight">\(10^{-3}\)</span>. At the <span class="math notranslate nohighlight">\(1.0 \times 10^{6}\)</span> decisions per second of the false-alarm frame, the display goes from one false target a second to about 1000 a second. The figure shows the effect with a 6 dB rise, <span class="math notranslate nohighlight">\(P_{fa}' = 0.03\)</span>: noise never crosses the fixed threshold in the first 330 cells and crosses it eight times beyond them.</p>
+<p>Setting the threshold for the worst noise does not help either. A threshold 3 dB higher keeps the false alarms in check when the noise is high, but when the noise is at its normal level that threshold corresponds to <span class="math notranslate nohighlight">\(P_{fa} = 10^{-12}\)</span>, and a target at 13.1 dB SNR, which the original threshold detected with <span class="math notranslate nohighlight">\(P_d = 0.89\)</span>, now has <span class="math notranslate nohighlight">\(P_d = 0.17\)</span>. A fixed threshold trades false alarms in noisy cells against missed targets in quiet ones, and the widget’s noise control shows both.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-measure-the-noise-where-you-test">
+<div class="wrap docutils container">
+<p class="rubric">Measure the Noise Where You Test</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+T = \alpha\ \hat{P}_n
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\hat{P}_n\)</span> is the average of the cells around the cell under test.</p></li>
+<li><p>The threshold follows the local noise, and <span class="math notranslate nohighlight">\(P_{fa}\)</span> stays fixed.</p></li>
+<li><p>This is <strong>CFAR</strong>, the subject of Lesson 30.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The remedy is to stop assuming <span class="math notranslate nohighlight">\(P_n\)</span> and measure it. For each cell under test, the processor averages the power in a set of reference cells around it, skips a few guard cells next to it so the target’s own energy does not leak into the estimate, and sets the threshold as a multiple of that local average:</p>
+<div class="math notranslate nohighlight">
+\[
+T = \alpha\ \hat{P}_n .
+\]</div>
+<p>Where the noise is 6 dB higher, <span class="math notranslate nohighlight">\(\hat{P}_n\)</span> is 6 dB higher and so is the threshold, so the probability of false alarm stays at its design value everywhere. That property gives the method its name, <strong>constant false-alarm rate</strong> (CFAR) detection, and it is the green line in the previous figure. Because <span class="math notranslate nohighlight">\(\hat{P}_n\)</span> is itself an estimate from a finite number of cells, <span class="math notranslate nohighlight">\(\alpha\)</span> is somewhat larger than <span class="math notranslate nohighlight">\(\ln(1/P_{fa})\)</span>, and the radar needs a fraction of a decibel to a decibel or so more SNR than with a known noise power. <a href="../L30-cfar/index.html">Lesson 30</a> derives <span class="math notranslate nohighlight">\(\alpha\)</span> and the L30 Lab runs CFAR on your own range-Doppler maps; ADI’s <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-cfar/" target="_blank" rel="noopener">CFAR lab</a> uses the same guard cells, reference cells, and bias.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary">
+<div class="wrap docutils container">
+<p class="rubric">Summary</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(p(z) = e^{-z/P_n}/P_n\)</span></p></td>
+<td class="text-left"><p>noise power in one cell, exponential</p></td>
+<td class="text-left"><p>mean <span class="math notranslate nohighlight">\(P_n = kT_\text{sys}B\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(P_{fa} = e^{-T/P_n}\)</span></p></td>
+<td class="text-left"><p>probability of false alarm</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(10^{-6}\)</span> at <span class="math notranslate nohighlight">\(T = 13.8P_n\)</span>, 11.4 dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(P_d\)</span></p></td>
+<td class="text-left"><p>target-plus-noise area above <span class="math notranslate nohighlight">\(T\)</span> (Marcum Q)</p></td>
+<td class="text-left"><p>0.87 at 13 dB, <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>FAR</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(P_{fa} \times\)</span> decisions per second</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(10^{-6}\)</span> at <span class="math notranslate nohighlight">\(1.0 \times 10^{6}\)</span>/s is 1.0/s</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Albersheim</p></td>
+<td class="text-left"><p>required SNR from <span class="math notranslate nohighlight">\(P_d\)</span>, <span class="math notranslate nohighlight">\(P_{fa}\)</span>, <span class="math notranslate nohighlight">\(N\)</span></p></td>
+<td class="text-left"><p>13.1 dB for 0.9 and <span class="math notranslate nohighlight">\(10^{-6}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Fluctuating target</p></td>
+<td class="text-left"><p>Swerling 1, <span class="math notranslate nohighlight">\(P_d = P_{fa}^{1/(1+\text{SNR})}\)</span></p></td>
+<td class="text-left"><p>21.1 dB for 0.9 and <span class="math notranslate nohighlight">\(10^{-6}\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Range from SNR</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(R_\text{max} \propto \text{SNR}^{1/4}\)</span></p></td>
+<td class="text-left"><p>12 dB doubles the range</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Coherent integration</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\text{SNR}_N = N\ \text{SNR}_1\)</span></p></td>
+<td class="text-left"><p>256 chirps, 24.1 dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Noncoherent integration</p></td>
+<td class="text-left"><p>adds powers, loses to coherent</p></td>
+<td class="text-left"><p>4.8 dB short at <span class="math notranslate nohighlight">\(N = 64\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Dwell time</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(T_\text{d} = NT_c\)</span>, capped by <span class="math notranslate nohighlight">\(\Delta R/v\)</span></p></td>
+<td class="text-left"><p>128 ms for the L29 burst; 0.2 s cap at 0.30 m and 1.5 m/s</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Fixed threshold, noise up by <span class="math notranslate nohighlight">\(g\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(P_{fa}' = P_{fa}^{1/g}\)</span></p></td>
+<td class="text-left"><p>3 dB: <span class="math notranslate nohighlight">\(10^{-6} \to 10^{-3}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>CFAR</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(T = \alpha\hat{P}_n\)</span> from the neighbors</p></td>
+<td class="text-left"><p>Lesson 30</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../practice/ECE444_L27_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a class="doc-link doc-key" href="../../practice/ECE444_L27_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>L28</strong> builds the FMCW range profile, the first integration stage.</p></li>
+<li><p><strong>L29</strong> adds the Doppler FFT, the second, and MTI.</p></li>
+<li><p><strong>L30</strong> sets the threshold from the data, with CFAR.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The rest of Module 4 builds the chain this lesson analyzed, one stage at a time. <a href="../L28-fmcw/index.html">Lesson 28</a> and the L28 Lab produce the range profile from the beat signal, and the range FFT is the first integration. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> adds the Doppler FFT across chirps, the second integration, and MTI to remove the stationary clutter that would otherwise raise the noise floor in the near range cells. <a href="../L30-cfar/index.html">Lesson 30</a> then places the threshold, measuring the noise in the map rather than assuming it.</p>
+<p>A detection is also where angle measurement begins: the monopulse ratio of the <a href="../../module03/L24-lab-null-steering/index.html#frame-sum-and-delta">L24 Lab</a> is formed in the cells the detector has already declared, and its accuracy improves with the same SNR this lesson computes. For your final report, keep the threshold you choose, the <span class="math notranslate nohighlight">\(P_{fa}\)</span> it implies, and the integration gain of your dwell; those three numbers say what your radar can and cannot see.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module04/L27-radar-detection"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

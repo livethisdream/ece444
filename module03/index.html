@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3 — Arrays and ADALM-PHASER Beamforming &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../_static/custom.css?v=8125a6e0df">
+<link rel="stylesheet" href="../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../_static/frames.css?v=d09c9794f3">
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="module-3-arrays-and-adalm-phaser-beamforming">
+<h1>Module 3 — Arrays and ADALM-PHASER Beamforming<a class="headerlink" href="#module-3-arrays-and-adalm-phaser-beamforming" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Module 03</div>
+<h1 class="frame-title">Arrays and ADALM-PHASER Beamforming</h1>
+<div class="title-rule"></div>
+<p>Point the beam without moving the antenna.</p>
+<p>Lessons 15–24 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-this-module-goes">
+<div class="wrap docutils container">
+<p class="rubric">Where This Module Goes</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p><strong>Amplitude shapes the beam: its sidelobes and beamwidth. Phase steers it.</strong></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>An array is many small antennas behaving as one large one. Feed the elements
+with the right phases and the beam points where you choose; feed them with the
+right amplitudes and you decide how wide the beam is and how much energy leaks
+into the sidelobes.</p>
+<p>This is the longest module in the course, and the most hands-on. <strong>Almost
+every lesson has its own lab on the ADALM-PHASER</strong>, done right after it, so you
+never take the array factor on faith.</p>
+</div>
+<div class="depth docutils container">
+<p>The through-line is one equation — the array factor — met four times: derived,
+steered, tapered, and nulled. Each time it is the same sum over elements with
+different weights. If you leave this module able to write that sum from memory
+and say what each term does, the rest is arithmetic.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-module-3-roadmap">
+<div class="wrap docutils container">
+<p class="rubric">The Module 3 Roadmap</p>
+<div class="lane-map" role="list" aria-label="Lessons 15 to 24 by what they teach: amplitude, phase, or both">
+  <span class="lm-lane lm-amp" style="--lane: 1">Amplitude<small>shapes the beam</small></span>
+  <span class="lm-lane lm-phase" style="--lane: 2">Phase<small>steers it</small></span>
+  <span class="lm-lane lm-both" style="--lane: 3">Both<small>the full weight</small></span>
+  <a class="lm-chip lm-amp" style="--lane: 1; --n: 1" href="L15-aperture-distributions/index.html"><b>L15</b> Apertures</a>
+  <a class="lm-chip lm-amp" style="--lane: 1; --n: 2" href="L16-array-factor/index.html"><b>L16</b> Array Factor</a>
+  <a class="lm-chip lm-both" style="--lane: 3; --n: 3" href="L17-phased-array-hardware/index.html"><b>L17</b> Hardware and Calibration<span class="lm-lab">Lab</span></a>
+  <a class="lm-chip lm-phase" style="--lane: 2; --n: 4" href="L18-beam-steering/index.html"><b>L18</b> Beam Steering<span class="lm-lab">Lab</span></a>
+  <a class="lm-chip lm-phase" style="--lane: 2; --n: 5" href="L19-direction-finding/index.html"><b>L19</b> Direction Finding<span class="lm-lab">Lab</span></a>
+  <a class="lm-chip lm-amp" style="--lane: 1; --n: 6" href="L20-array-factor-beamwidth/index.html"><b>L20</b> Beamwidth<span class="lm-lab">Lab</span></a>
+  <a class="lm-chip lm-both" style="--lane: 3; --n: 7" href="L21-antenna-pattern/index.html"><b>L21</b> Antenna Pattern<span class="lm-lab">Lab</span></a>
+  <a class="lm-chip lm-amp" style="--lane: 1; --n: 8" href="L22-sidelobes-tapering/index.html"><b>L22</b> Tapering</a>
+  <a class="lm-chip lm-phase" style="--lane: 2; --n: 9" href="L23-beam-squint-quantization/index.html"><b>L23</b> Squint and Quantization<span class="lm-lab">L22–L23 Lab</span></a>
+  <a class="lm-chip lm-both" style="--lane: 3; --n: 10" href="L24-null-steering/index.html"><b>L24</b> Nulling<span class="lm-lab">Lab</span></a>
+</div>
+<div class="depth docutils container">
+<p>Every lesson in this module turns one of two knobs on each element. Lessons 15,
+16, 20, and 22 work the amplitude: how the illumination across the aperture
+sets the beamwidth and the sidelobe level, and what a taper trades for lower
+sidelobes. Lessons 18, 19, and 23 work the phase: the progressive phase that
+points the beam, the bearing it lets you measure, and what goes wrong when the
+phase is only right at one frequency or comes in coarse steps. Lessons 17, 21,
+and 24 need both. Calibration corrects each channel’s gain and phase, the
+measured pattern carries the element’s own pattern on top of the array
+factor, and a null is placed with complex weights.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives-3-1-3-3">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives 3.1-3.3</p>
+<ol class="lo-list" style="--module: '3'">
+  <li>I can describe aperture distributions and calculate aperture efficiency for a given illumination.</li>
+  <li>I can derive the array factor for an arbitrary linear array and apply pattern multiplication.</li>
+  <li>I can identify the hardware architecture of the ADALM-PHASER and control it via SDR software.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives-3-4-3-6">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives 3.4-3.6</p>
+<ol class="lo-list" start="4" style="--module: '3'">
+  <li>I can calculate the phase weights required to steer a beam to a given angle and predict the resulting array pattern.</li>
+  <li>I can implement beam steering on the ADALM-PHASER and verify the steered pattern against theory.</li>
+  <li>I can distinguish between array factor and true antenna pattern and account for element pattern effects.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives-3-7-3-9">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives 3.7-3.9</p>
+<ol class="lo-list" start="7" style="--module: '3'">
+  <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
+  <li>I can identify grating lobes, beam squint, and quantization effects in a phased array and describe their impact on system performance.</li>
+  <li>I can calculate null-steering weights and implement pattern nulls on the ADALM-PHASER.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-15-17-from-aperture-to-array-and-the-hardware">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 15-17: From Aperture to Array, and the Hardware</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L15-aperture-distributions/index.html">
+    <span class="mt-kind">Lesson 15</span>
+    <h4>Aperture Distributions and Efficiency</h4>
+    <p>Aperture distributions and aperture efficiency for a given illumination. Objective 3.1.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L16-array-factor/index.html">
+    <span class="mt-kind">Lesson 16</span>
+    <h4>The Array Factor and Pattern Multiplication</h4>
+    <p>Array factor for a linear array and pattern multiplication. Objective 3.2.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L17-phased-array-hardware/index.html">
+    <span class="mt-kind">Lesson 17</span>
+    <h4>Introduction to Phased Array Hardware</h4>
+    <p>ADALM-PHASER architecture and SDR control. Objective 3.3.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L17-lab-bring-up/index.html">
+    <span class="mt-kind">L17 Lab</span>
+    <h4>Phased Array Bring-Up</h4>
+    <p>Bring your own kit up from a blank card, then prove it works.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-18-19-steering-the-beam-and-using-it">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 18-19: Steering the Beam, and Using It</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L18-beam-steering/index.html">
+    <span class="mt-kind">Lesson 18</span>
+    <h4>Beam Steering</h4>
+    <p>Phase weights to steer a beam and the resulting array pattern. Objective 3.4.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L18-lab-beam-steering/index.html">
+    <span class="mt-kind">L18 Lab</span>
+    <h4>Beam Steering</h4>
+    <p>Steer the peak two ways on the PHASER and check it against theory. Objective 3.5.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L19-direction-finding/index.html">
+    <span class="mt-kind">Lesson 19</span>
+    <h4>Direction Finding</h4>
+    <p>Bearings from the beam sweep, crossed from known positions. Objective 3.5.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L19-lab-fox-hunt/index.html">
+    <span class="mt-kind">L19 Lab</span>
+    <h4>Fox Hunt</h4>
+    <p>Find the one live HB100 among numbered boxes from your own bearings.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-20-21-the-beam-and-the-real-pattern">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 20-21: The Beam, and the Real Pattern</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L20-array-factor-beamwidth/index.html">
+    <span class="mt-kind">Lesson 20</span>
+    <h4>Array Factor and Beamwidth</h4>
+    <p>Array factor and beamwidth in depth. Objective 3.2.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L20-lab-array-factor/index.html">
+    <span class="mt-kind">L20 Lab</span>
+    <h4>Array Factor</h4>
+    <p>Measure the array factor at 8, 4, and 2 active elements.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L21-antenna-pattern/index.html">
+    <span class="mt-kind">Lesson 21</span>
+    <h4>Antenna Pattern</h4>
+    <p>True antenna pattern vs. array factor; element-pattern effects. Objective 3.6.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L21-lab-antenna-pattern/index.html">
+    <span class="mt-kind">L21 Lab</span>
+    <h4>Antenna Pattern</h4>
+    <p>Walk the source around a fixed beam to see the element pattern.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-22-23-shaping-the-pattern-and-where-it-misbehaves">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 22-23: Shaping the Pattern, and Where It Misbehaves</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L22-sidelobes-tapering/index.html">
+    <span class="mt-kind">Lesson 22</span>
+    <h4>Sidelobes and Tapering</h4>
+    <p>Amplitude tapering (uniform, cosine, Chebyshev, Taylor) and the sidelobe trade-off. Objective 3.7.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L23-beam-squint-quantization/index.html">
+    <span class="mt-kind">Lesson 23</span>
+    <h4>Beam Squint and Quantization</h4>
+    <p>Grating lobes, beam squint, and phase quantization. Objective 3.8.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L22-L23-lab-tapering-squint/index.html">
+    <span class="mt-kind">L22–L23 Lab</span>
+    <h4>Tapering, Squint, and Quantization</h4>
+    <p>Measure the taper trade-off, then the three departures no taper can fix.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lesson-24-nulling">
+<div class="wrap docutils container">
+<p class="rubric">Lesson 24: Nulling</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L24-null-steering/index.html">
+    <span class="mt-kind">Lesson 24</span>
+    <h4>Null Steering</h4>
+    <p>Null-steering weights and pattern nulls. Objective 3.9.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L24-lab-null-steering/index.html">
+    <span class="mt-kind">L24 Lab</span>
+    <h4>Null Steering</h4>
+    <p>Implement pattern nulls on the PHASER.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where This Is Going</p>
+<p><strong>Module 4</strong> gives the array something to look for. The same hardware becomes
+a radar: send a chirp, listen for the echo, and work out how far away the
+target is and how fast it is moving.</p>
+<p>The steering and tapering you learn in this module point and shape the
+radar’s beam.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../_static/shell.js?v=8b044fba17"></script>
+<script src="../_static/frames.js?v=c768e3788c"></script><script src="../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

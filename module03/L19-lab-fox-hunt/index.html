@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L19 Lab — Fox Hunt &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=8125a6e0df">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l19-lab-fox-hunt">
+<h1>L19 Lab — Fox Hunt<a class="headerlink" href="#l19-lab-fox-hunt" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Fox Hunt</h1>
+<div class="title-rule"></div>
+<p>One HB100 is on. Find its box from bearings taken along a firing line.</p>
+<p>L19 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 4">
+  <li>I can implement beam steering on the ADALM-PHASER and verify the steered pattern against theory.</li>
+</ol>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-fox-hunt">
+<div class="wrap docutils container">
+<p class="rubric">The Fox Hunt</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>One HB100 is on, hidden in one of several numbered boxes.</p></li>
+<li><p>Take measurements at different points on the table and determine which box contains the HB100.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The L19 Lab puts Lesson 19 on the bench as a fox hunt. A taped firing line runs
+along the table, and numbered boxes sit downrange of it at positions I
+measured and posted. Every box holds an HB100, powered or not, so
+weight gives nothing away; one of them is live.</p>
+<p>Your team moves its kit along the firing line, stopping at the station marks
+taped every <span class="qty">0.75 m</span>. At each station the kit faces straight downrange,
+square to the tape, so every station shares one heading and the only thing that
+changes is where along the line you stand. At each station you read the beam
+sweep’s <strong>Angle</strong> readout (set to Peak) and <strong>Peak Gain</strong>. Each angle is a line from that
+station toward the fox; the lines cross at the fox, and the box nearest the
+crossing is your call. Peak Gain plays a smaller part: when two boxes sit
+close to the crossing, the pattern of levels along the line says which one fits.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-hunt-in-five-steps">
+<div class="wrap docutils container">
+<p class="rubric">The Hunt in Five Steps</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<picture>
+<source media="(max-width: 600px)" srcset="../../viz/img/L19-lab-sequence-narrow.svg">
+<img src="../../viz/img/L19-lab-sequence.svg" alt="The L19 Lab in five steps, each a top view of the firing range. 1, bring up: your own HB100 at boresight, then Find HB100 and Calibrate. 2, reference shot: a source toward the plus-x end sets the sign s of Angle. 3, walk the line: with the fox on, read Angle and Peak Gain at each station mark. 4, fix: the bearings cross at a box, which is your call. 5, reveal: I name the live box, and the Part 3 writeup compares it with your fix." style="max-width: 100%; display: block; margin: 0 auto;">
+</picture>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Steps 1 and 2 happen before the fox goes on: the bring-up on your own HB100,
+then the reference shot that fixes which end of the tape positive Angle points
+to. Steps 3 and 4 are the hunt: the same measurement at every station mark,
+then the fix. Step 5 is mine, and the Part 3 writeup starts
+from it.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-range">
+<div class="wrap docutils container">
+<p class="rubric">The Range</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Element</p></th>
+<th class="head text-left"><p>Size</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Firing line</p></td>
+<td class="text-left"><p><span class="qty">3.0 m</span> of tape, stations every <span class="qty">0.75 m</span> (5)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Box field</p></td>
+<td class="text-left"><p><span class="qty">2.0 m</span> wide, <span class="qty">1.0</span> to <span class="qty">2.0 m</span> downrange</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Box spacing</p></td>
+<td class="text-left"><p>at least <span class="qty">0.75 m</span> center to center</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Footprint</p></td>
+<td class="text-left"><p>about <span class="math notranslate nohighlight">\(3\ \text{m} \times 2.5\ \text{m}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The range fits a classroom. The firing line runs <span class="qty">0.5 m</span> past the box
+field at each end, so a box near the edge still sits within about
+<span class="qty">±45°</span> of several stations, the edge of what the PHASER can track. The nearest boxes are <span class="qty">1.0 m</span> out,
+past the <span class="qty">0.88 m</span> far-field distance of Lesson 17, and the farthest are
+<span class="qty">2.0 m</span> out, where the tone is still well above the floor.</p>
+<p>These sizes come from a simulation of the hunt with a bearing error of
+<span class="qty">2.5°</span>, a bearing off by <span class="qty">10°</span> one time in seven, and an HB100 aimed
+only roughly at the line: the call names the right box about <span class="qty">86%</span> of the
+time, and the median fix lands <span class="qty">0.15 m</span> from the fox. A wider room helps less than
+you might expect; a deeper field hurts more, because depth is the direction a
+single firing line measures worst.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-pre-lab">
+<div class="wrap docutils container">
+<p class="rubric">Pre-Lab</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Bring your fox-hunt script, tested, on your laptop.</p></li>
+<li><p>It finds where the bearings cross, flags a bad one, and ranks the boxes.</p></li>
+<li><p>Part 1 of the packet, at the end of Lesson 19, walks you through it.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The Pre-Lab is Part 1 of the packet, done before the lab period and listed at
+the end of
+<a href="../L19-direction-finding/index.html">Lesson 19</a>. What you need at
+the bench is the script: start from the
+<a href="../../labs/foxhunt_starter.py" download>starter file</a>, which reads
+the station and box files and prints the results, write its four functions,
+and test it on the supplied set of bearings with one bad station in it. The
+error budget and station plan in Part 1 tell you what to expect: use the
+stations farthest apart that still detect the fox, because the distance
+between them sets how well the fix is pinned down in depth.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-range-coordinates">
+<div class="wrap docutils container">
+<p class="rubric">Range Coordinates</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Origin is at the center of the table, on the middle station.</p></li>
+<li><p><span class="math notranslate nohighlight">\(x\)</span> runs along the tape, <span class="math notranslate nohighlight">\(y\)</span> straight downrange.</p></li>
+<li><p>Each Angle draws a line from its station toward the fox.</p></li>
+<li><p>The reference shot sets which end is positive.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>I tape the firing line and mark station 0 at its middle, with
+stations at <span class="math notranslate nohighlight">\(x = -1.5, -0.75, 0, +0.75, +1.5\ \text{m}\)</span>, and post the measured
+center of every box in the same frame. Place the middle of the array, between E4
+and E5, on the station mark, and square the board’s patch face to the tape with
+a straightedge or a square, so broadside points straight downrange.</p>
+<p>Because every station faces the same way, there is no heading to work out. Est.
+Angle <span class="math notranslate nohighlight">\(\theta_i\)</span> at station <span class="math notranslate nohighlight">\(x_i\)</span> says the fox lies on the line
+<span class="math notranslate nohighlight">\(x = x_i + y\tan\theta_i\)</span>, with <span class="math notranslate nohighlight">\(\theta_i\)</span> positive toward the <span class="math notranslate nohighlight">\(+x\)</span> end of the
+tape. Whether positive Angle points to <span class="math notranslate nohighlight">\(+x\)</span> depends on which way round the
+board sits on its stand, which is what the reference shot checks.</p>
+<p>The sweep jitters a little from one pass to the next, so read Angle on ten
+consecutive sweeps from the <strong>Tracking</strong> tab and use their mean. The spread of
+those ten, largest minus smallest, should be a degree or two.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-to-expect">
+<div class="wrap docutils container">
+<p class="rubric">What to Expect</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Most stations detect the fox, but the far ends may not.</p></li>
+<li><p>Ten readings at one station agree within a degree or two.</p></li>
+<li><p>The bearing lines cross within a hand’s width of the live box.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>An HB100 radiates mainly forward, so expect two to four of the stations to
+detect it; a station far off its axis may see a weak tone or none, and one that
+reads beyond <span class="qty">±45°</span> is past what the PHASER tracks. Skip those and keep
+going. A good bearing passes within about <span class="qty">0.15 m</span> of the fix; one that
+misses by far more than the rest is a bad bearing, usually a reflection or a
+person in the path: retake it, or let your script drop it. The fix should land
+<span class="qty">0.15</span> to <span class="qty">0.2 m</span> from the live box, and the boxes are at least
+<span class="qty">0.75 m</span> apart, so that is close enough to name the right one.</p>
+<p>Peak Gain is useful only when <strong>Rx Gain (dB)</strong> is the same at every
+station. Your script compares the levels along the line with the shape a source
+in each candidate box would produce, free-space spreading plus the element
+roll-off you measured in the L18 Lab, with the overall level fitted out. It
+cannot give a range on its own: the fox’s aim and the room’s reflections move
+the level by several dB.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-bring-up-the-kit">
+<div class="wrap docutils container">
+<p class="rubric">Bring Up the Kit</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple">
+<li><p>Browse to your kit’s address and wait for the pill to read <strong>Connected</strong>.</p></li>
+<li><p>Place your own powered HB100 <span class="qty">1 m</span> out at boresight, facing the array.</p></li>
+<li><p>Press <strong>Find HB100</strong> and record the Signal Freq in the packet.</p></li>
+<li><p>Press <strong>Calibrate</strong> and wait for it to finish.</p></li>
+<li><p>Open <strong>Lab Presets</strong>, press <strong>1 Steering Angle</strong>, and set <strong>Rx Gain (dB)</strong> for an FFT peak of <span class="math notranslate nohighlight">\(-10 \pm 3\)</span> dBFS.</p></li>
+<li><p>Press <strong>Start</strong>, and check the <strong>FFT</strong> tab for one tone near <span class="qty">0 MHz</span>, at least <span class="qty">20 dB</span> above the floor.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This is the L18 Lab’s bring-up. Calibrate needs your own HB100 at boresight
+while it runs; it is the only time today a source sits there on purpose. The
+kit stays on its stand for every reading, pointed at the boxes with its element
+row level: raising one end of the row tilts the cone of directions and pulls
+every bearing toward broadside (Lesson 19, “The Cone Angle”), and a kit held by
+hand reads it wrong by far more than the budget.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-reference-shot">
+<div class="wrap docutils container">
+<p class="rubric">Reference Shot</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="7">
+<li><p>Put the kit on station 0, squared to the tape.</p></li>
+<li><p>Place your HB100 <span class="qty">1 m</span> downrange and <span class="qty">0.5 m</span> toward the <span class="math notranslate nohighlight">\(+x\)</span> end, facing the kit.</p></li>
+<li><p>Read <strong>Angle</strong>: about <span class="qty">27°</span>. Record <span class="math notranslate nohighlight">\(s = +1\)</span> if it is positive, <span class="qty">−1</span> if negative.</p></li>
+<li><p>Switch your HB100 off and disconnect its power for the rest of the period.</p></li>
+<li><p>When the hunt starts, press <strong>Find HB100</strong> again and record the fox’s Signal Freq. Do not press <strong>Calibrate</strong>.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The reference shot checks two things. The sign gives <span class="math notranslate nohighlight">\(s\)</span>, which you apply to
+every reading so that <span class="math notranslate nohighlight">\(s\,\theta\)</span> is positive toward <span class="math notranslate nohighlight">\(+x\)</span>; the size checks the
+setup, since <span class="math notranslate nohighlight">\(\tan^{-1}(0.5/1.0) = 26.6^\circ\)</span>. A reading far from that means
+the kit is not square to the tape or the source is not where you think.</p>
+<p>Step 11 matters. Every HB100 runs at a slightly different frequency, often tens
+of megahertz apart, and the receiver sees only a few megahertz around the
+frequency Find HB100 stored. Pressing Find HB100 with only the fox on tunes the
+kit to it. Keep the calibration from bring-up.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-the-hunt">
+<div class="wrap docutils container">
+<p class="rubric">The Hunt</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="12">
+<li><p>Set <strong>Rx Gain (dB)</strong> for a clear tone from the fox at station 0 and record it. Leave it there.</p></li>
+<li><p>Put the kit on a station mark, squared to the tape, broadside downrange.</p></li>
+<li><p>On the <strong>Tracking</strong> tab, record ten consecutive Angle readings and <strong>Peak Gain</strong>.</p></li>
+<li><p>Repeat at every station that detects the fox, ends first.</p></li>
+<li><p>Write each row as <span class="math notranslate nohighlight">\(x_i\)</span>, <span class="math notranslate nohighlight">\(s\,\bar\theta_i\)</span>, Peak Gain into <code class="docutils literal notranslate"><span class="pre">stations.csv</span></code>.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Take the end stations first: they set the baseline, and the baseline sets the
+depth error. Stay out of the line of sight while the kit is reading; a person
+near the path reflects enough to move the peak. If a station shows no clear tone
+or reads beyond <span class="qty">±45°</span>, record that and move on rather than turning the
+kit toward the fox, because a turned kit no longer shares the heading of the
+others.</p>
+<p>Do not change Rx Gain once the hunt starts. The bearings do not care, but the
+amplitude ranking compares levels across stations and assumes one gain for all
+of them.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-the-call-and-the-reveal">
+<div class="wrap docutils container">
+<p class="rubric">The Call and the Reveal</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="17">
+<li><p>Run your Pre-Lab script on <code class="docutils literal notranslate"><span class="pre">stations.csv</span></code> and <code class="docutils literal notranslate"><span class="pre">boxes.csv</span></code>, and record the fix, the residuals, and the ranking.</p></li>
+<li><p>If one residual is far larger than the rest, retake that station or accept your script’s drop.</p></li>
+<li><p>Name the box and tell me before the boxes are opened.</p></li>
+<li><p>Record the live box after the reveal, then press <strong>Stop</strong>.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><code class="docutils literal notranslate"><span class="pre">boxes.csv</span></code> holds the posted box centers. Your script fixes the source from the
+bearings alone, ranks the boxes by distance from the fix, and, when the two
+nearest are within <span class="qty">0.15 m</span> of each other in distance, uses the amplitude
+pattern to choose between them. The call is your team’s, made in class from your
+own data. The Part 3 writeup compares your fix with the live box and asks what
+changes with the baseline and the depth.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-lab-packet">
+<div class="wrap docutils container">
+<p class="rubric">Lab Packet</p>
+<p>The L19 Lab packet is one submission per team for the whole lab, turned in complete before Lesson 20. It has three parts:</p>
+<ol class="arabic simple">
+<li><p><strong>Part 1, Pre-Lab</strong> (before the lab period): the bearing budget with a fixed heading, the across-range and depth errors for this range, a station plan, and the script tested on a supplied set of bearings.</p></li>
+<li><p><strong>Part 2, Measurements</strong> (your team, in class): the reference shot, the bearings and levels from every station, and the call.</p></li>
+<li><p><strong>Part 3, Writeup</strong> (after the lab): the fix against the live box, the error of each bearing, and what the baseline and the depth did to the fix.</p></li>
+</ol>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">L19 Lab packet (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Keep your bearings, levels, and script: the Part 3 writeup reuses all three.</p></li>
+<li><p>L20 returns to shaping and steering the beam.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Part 3 is the writeup, done as a team after the lab: how far your fix landed
+from the live box, the error of each bearing, and what the baseline and the
+depth did to the fix.</p>
+<p>Lesson 20 returns to shaping and steering the beam, starting from the
+closed-form array factor: where the nulls fall, why the first sidelobe sits
+<span class="qty">12.8 dB</span> down, and how the beamwidth depends on the number of elements.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L19-lab-fox-hunt"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

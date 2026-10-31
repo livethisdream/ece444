@@ -1,0 +1,1285 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L19 - Direction Finding &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=8125a6e0df">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l19-direction-finding">
+<h1>L19 - Direction Finding<a class="headerlink" href="#l19-direction-finding" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Direction Finding</h1>
+<div class="title-rule"></div>
+<p>An array measures the direction a signal comes from, and bearings from known places locate the transmitter.</p>
+<p>Lesson 19 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 4">
+  <li>I can implement beam steering on the ADALM-PHASER and verify the steered pattern against theory.</li>
+</ol>
+<div class="depth docutils container">
+<p>L18 worked out the phase each element needs to point the beam at a commanded
+angle, and the L18 Lab checked the steered pattern against that prediction.
+This lesson runs the same physics in the other direction. The transmitter is
+somewhere we do not know, and the array has to tell us which way it is. We
+start from the phase ramp an arriving wave puts across the array, show why
+sweeping the beam finds that ramp, work out how accurately the peak of the
+sweep gives the direction, and then combine directions measured from two or
+more known places into a position. The L19 Lab uses all of it to find one live
+HB100 among several boxes.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-finding-a-transmitter">
+<div class="wrap docutils container">
+<p class="rubric">Finding a Transmitter</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Direction finding</strong> locates a transmitter from its own signal.</p></li>
+<li><p>One array measures a <strong>bearing</strong>: the direction the wave arrives from.</p></li>
+<li><p>A passive receiver has no echo delay to give range.</p></li>
+<li><p>Bearings from two known positions cross at the transmitter.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Direction finding is the problem of locating a transmitter from the signal it
+emits: a radio beacon, a jammer, a lost aircraft’s emergency locator, or, in
+the L19 Lab, an HB100 hidden in a box. We do not control the transmitter, and
+we do not know its power or its antenna pattern. The one thing we can measure
+reliably is the direction its wave comes from, because that direction sets the
+times at which the wave reaches each element of an array.</p>
+<p>A direction measured from one place is a <strong>bearing</strong>. A bearing alone says
+which way to look but not how far. A radar gets range from the delay of its own
+echo, but a direction finder only listens, so there is no delay to measure.
+The received power does not give range either, since it depends on the
+transmitter’s power and pattern, which are unknown. Distance comes instead from
+geometry: two bearings taken from two known positions cross at the
+transmitter. The first half of this lesson measures a bearing; the second half
+turns bearings into a position.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-arrival-ramp">
+<div class="wrap docutils container">
+<p class="rubric">The Arrival Ramp</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Delta\phi_s &amp;= kd\sin\theta_s \\
+\phi_n &amp;= n\ kd\sin\theta_s
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>A wave from <span class="math notranslate nohighlight">\(\theta_s\)</span> reaches element <span class="math notranslate nohighlight">\(n\)</span> with phase <span class="math notranslate nohighlight">\(n\ kd\sin\theta_s\)</span> relative to element 0.</p></li>
+<li><p>The bearing is in that ramp: <span class="math notranslate nohighlight">\(\sin\theta_s = \Delta\phi_s/kd\)</span>.</p></li>
+<li><p>The PHASER sums the eight elements, so we cannot read the ramp directly.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-path-difference.svg"
+     alt="A plane wave arriving 30 degrees off broadside reaches element 2 first; the extra path to element 1 is half the spacing d"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>L18 started from this picture. A plane wave arriving from <span class="math notranslate nohighlight">\(\theta_s\)</span>, measured
+from broadside, travels an extra <span class="math notranslate nohighlight">\(d\sin\theta_s\)</span> to reach each successive
+element, so neighboring elements see the wave with a phase difference of
+<span class="math notranslate nohighlight">\(kd\sin\theta_s\)</span>, and element <span class="math notranslate nohighlight">\(n\)</span> sees it <span class="math notranslate nohighlight">\(n\ kd\sin\theta_s\)</span> ahead of element 0.
+In L18 we chose the steer angle and computed the ramp to command. Here the
+source chooses the ramp, and the source’s direction is the unknown.</p>
+<p>If we could measure the phase on each element, the bearing would follow from
+L18’s inverse problem: difference neighboring phases, unwrap, and take</p>
+<div class="math notranslate nohighlight">
+\[\sin\theta_s = \frac{\Delta\phi_s}{kd}.\]</div>
+<p>Some direction finders work this way. They are <strong>interferometers</strong>: two or
+more antennas, each with its own receiver, and a direct phase comparison
+between them. The PHASER cannot do it with eight elements, because the two
+ADAR1000s add their four elements each into one channel before anything is
+digitized (L17, “The Hybrid Beamformer”). The individual element phases never
+reach the computer. What reaches it is a sum, and the sum depends on the phase
+we command.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-steered-sum">
+<div class="wrap docutils container">
+<p class="rubric">The Steered Sum</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\psi &amp;= kd\sin\theta_s - kd\sin\theta_0 \\
+&amp;= kd\left(\sin\theta_s - \sin\theta_0\right)
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Steer to <span class="math notranslate nohighlight">\(\theta_0\)</span>: each delay takes away <span class="math notranslate nohighlight">\(n\ kd\sin\theta_0\)</span>.</p></li>
+<li><p>The sum is L16’s <span class="math notranslate nohighlight">\(\vert AF_N(\psi)\vert\)</span>, largest at <span class="math notranslate nohighlight">\(\psi = 0\)</span>.</p></li>
+<li><p>So the sum peaks when <span class="math notranslate nohighlight">\(\theta_0 = \theta_s\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L19-sweep.svg"
+     alt="The sum of the eight elements against steer angle for a source at 30 degrees: a main lobe peaking at 30 degrees, sidelobes about 13 dB down, dots at every steer angle the sweep sets"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Steer the array to <span class="math notranslate nohighlight">\(\theta_0\)</span> and each element’s phase shifter delays its
+signal by <span class="math notranslate nohighlight">\(n\ kd\sin\theta_0\)</span>. The arriving wave put a lead of
+<span class="math notranslate nohighlight">\(n\ kd\sin\theta_s\)</span> on element <span class="math notranslate nohighlight">\(n\)</span>, so what is left on element <span class="math notranslate nohighlight">\(n\)</span> after the
+delay is <span class="math notranslate nohighlight">\(n\psi\)</span>, with</p>
+<div class="math notranslate nohighlight">
+\[\psi = kd\left(\sin\theta_s - \sin\theta_0\right).\]</div>
+<p>The eight signals then add to <span class="math notranslate nohighlight">\(\vert AF_N(\psi)\vert\)</span>, the array factor from L16
+with <span class="math notranslate nohighlight">\(\psi\)</span> in place of its argument. It is largest, <span class="qty">1</span> after normalizing, at
+<span class="math notranslate nohighlight">\(\psi = 0\)</span>, where the commanded delays exactly cancel the arrival lead and all
+eight signals add in phase. Any other steer angle leaves a residual ramp, and
+the sum falls off along the main lobe, through its nulls, and over the
+sidelobes.</p>
+<p>The <strong>beam sweep</strong> steps <span class="math notranslate nohighlight">\(\theta_0\)</span> across the field of view and records the
+sum at each step. The figure shows what it records for a source at <span class="qty">30°</span>:
+the curve is the array pattern, centered on the source. This is the same
+function the L18 Lab measured, read the other way, and the curve L16 drew with
+the grid and the noise floor in “The Measured Sweep”. There the source sat still
+and the curve showed where the beam pointed; here the beam moves and the peak
+shows where the source is.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-key-point">
+<div class="wrap docutils container">
+<p class="rubric">Key Point</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p>The sweep tries every phase ramp the hardware can set. The ramp that cancels
+the arrival ramp gives the largest sum, so the steer angle at the peak is the
+bearing: the GUI’s <strong>Angle</strong> readout, set to <strong>Peak</strong>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-accuracy-and-resolution">
+<div class="wrap docutils container">
+<p class="rubric">Accuracy and Resolution</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The main lobe is <span class="qty">12.9°</span> wide, but the sweep locates its peak far more finely.</p></li>
+<li><p>Noise moves the peak about <span class="qty">0.3°</span> at <span class="qty">30 dB</span> SNR.</p></li>
+<li><p>Two sources closer than about <span class="qty">15°</span> merge into one lobe.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L19-resolution.svg"
+     alt="The sweep for two equal sources: 20 degrees apart it shows two peaks with a dip between them; 8 degrees apart the two lobes merge into one peak midway between the sources"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>At <span class="qty">10.525 GHz</span>, <span class="math notranslate nohighlight">\(\lambda = 28.5\ \text{mm}\)</span> and the array’s half-power
+beamwidth at broadside is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\theta_\text{HP} &amp;= 0.886\ \frac{\lambda}{Nd} = 0.886\ \frac{28.5}{112} \\
+&amp;= 0.225\ \text{rad} = 12.9^\circ.
+\end{aligned}\end{split}\]</div>
+<p>It is tempting to conclude that a bearing is only good to about <span class="qty">13°</span>, but
+the beamwidth limits something else. Finding the peak of one smooth lobe is a
+location estimate, and how much noise jitters the curve sets its precision, not
+how wide the curve is. The standard estimate for a beam that scans across a source is</p>
+<div class="math notranslate nohighlight">
+\[\sigma_\text{noise} \approx \frac{\theta_\text{HP}}{k\sqrt{2\ \text{SNR}}}.\]</div>
+<p>The lobe’s slope sets it. Noise adds a random voltage to every sample of the
+sweep, about <span class="math notranslate nohighlight">\(1/\sqrt{2\ \text{SNR}}\)</span> of the peak voltage, and the slope of the
+lobe turns that voltage error into an angle error:</p>
+<div class="math notranslate nohighlight">
+\[\delta\theta = \frac{\delta v}{dv/d\theta}.\]</div>
+<p>The constant <span class="math notranslate nohighlight">\(k\)</span> is that slope in units of <span class="math notranslate nohighlight">\(1/\theta_\text{HP}\)</span>. Textbook
+trackers quote <span class="math notranslate nohighlight">\(k \approx 1.6\)</span>; the course array’s lobe, normalized to 1 at its
+peak, has a slope of <span class="math notranslate nohighlight">\(1.05/\theta_\text{HP}\)</span> at its half-power points. With the
+array’s own slope, an SNR of <span class="qty">30 dB</span> (a factor of 1000) gives</p>
+<div class="math notranslate nohighlight">
+\[\sigma_\text{noise} \approx \frac{12.9^\circ}{1.05\sqrt{2000}} = 0.3^\circ,\]</div>
+<p>and the textbook constant gives <span class="qty">0.2°</span>. Either way the noise term is a
+fraction of the <span class="qty">1.05°</span> grid step at <span class="qty">30°</span> (next frame). An HB100
+two meters away is tens of decibels above the noise, so noise is not what
+limits the bearing.</p>
+<p>The beamwidth sets <strong>resolution</strong>: the ability to tell two sources apart. Two
+sources closer than about one beamwidth produce lobes that overlap into a
+single peak somewhere between them, and the sweep reports one wrong bearing
+instead of two right ones. The figure shows both cases for two equal sources:
+<span class="qty">20°</span> apart the sweep has two peaks with a dip between them, and
+<span class="qty">8°</span> apart it has one peak midway between the sources. For the course array the first null sits
+<span class="math notranslate nohighlight">\(\lambda/Nd = 0.254\)</span> away in <span class="math notranslate nohighlight">\(\sin\theta\)</span>, <span class="qty">14.7°</span> at broadside, which is
+the usual measure of the separation two sources need. Only one HB100 is on
+during the fox hunt, so the sweep sees one source.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-sweep-grid">
+<div class="wrap docutils container">
+<p class="rubric">The Sweep Grid</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\delta(\sin\theta) &amp;= \frac{2.8125^\circ}{176.8^\circ} = 0.0159 \\
+\delta\theta &amp;= \frac{0.0159}{\cos\theta}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>One step is <span class="qty">0.91°</span> at broadside, <span class="qty">1.05°</span> at <span class="qty">30°</span>, <span class="qty">1.29°</span> at <span class="qty">45°</span>.</p></li>
+<li><p>The Angle readout is off by up to half a step: <span class="qty">0.53°</span> at <span class="qty">30°</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L19-sweep-grid.svg"
+     alt="The sweep near its peak for a source at 30 degrees: the dots, one grid step of 1.05 degrees apart, peak at 29.5 degrees, the nearest steer angle to the source"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The sweep cannot set any steer angle it likes. The ADAR1000’s phase shifters
+have 7 bits, so the progressive phase moves in whole steps of
+<span class="math notranslate nohighlight">\(360^\circ/128 = 2.8125^\circ\)</span> (L18, “Phase-Shifter Resolution”). At the HB100’s
+frequency, <span class="math notranslate nohighlight">\(kd = 176.8^\circ\)</span>, so one step of progressive phase moves the beam
+by a fixed <span class="qty">0.0159</span> in <span class="math notranslate nohighlight">\(\sin\theta\)</span>. The same step in <span class="math notranslate nohighlight">\(\sin\theta\)</span> is a larger step
+in angle away from broadside, by the factor <span class="math notranslate nohighlight">\(1/\cos\theta\)</span> in the slide’s
+second line, the same stretching that broadens the steered beam in L18.</p>
+<p>The Angle readout is the steer angle of the largest sample, so it can only land on
+the grid. Unless the source happens to sit on a grid point, the reported angle
+is the nearest one, off by up to half a step. In the figure the source is at
+<span class="qty">30.0°</span> and Angle reads <span class="qty">29.5°</span>. This is one reason to prefer a source within about <span class="qty">±30°</span> of
+broadside: the grid step and the beamwidth grow as <span class="math notranslate nohighlight">\(1/\cos\theta\)</span>, and the gain
+falls as <span class="math notranslate nohighlight">\(\cos\theta\)</span> (L18, “Scan Loss”). At <span class="qty">45°</span> the step is
+<span class="qty">1.29°</span> and the beam is about <span class="qty">18°</span> wide, and <span class="qty">45°</span> is where the
+PHASER starts to lose tracking.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-cone-angle">
+<div class="wrap docutils container">
+<p class="rubric">The Cone Angle</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\sin\theta_\text{meas} = \hat{\mathbf u}\cdot\hat{\mathbf x} = \sin(\text{az})\cos(\text{el})\]</div>
+<ul class="simple">
+<li><p>The ramp sees only the part of the arrival direction <span class="math notranslate nohighlight">\(\hat{\mathbf u}\)</span> along the element row <span class="math notranslate nohighlight">\(\hat{\mathbf x}\)</span>.</p></li>
+<li><p>A source below the array shortens that part by <span class="math notranslate nohighlight">\(\cos(\text{el})\)</span>.</p></li>
+<li><p><span class="qty">30°</span> azimuth, <span class="qty">14.0°</span> down, reads <span class="qty">29.0°</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L19-cone.svg"
+     alt="The cone of directions around the array's axis that all read 29.0 degrees; the floor-plan direction at 30 degrees lies off the cone, and the source 14 degrees below it lies on it"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The phase ramp depends only on the extra path between neighboring elements,
+and that path is <span class="math notranslate nohighlight">\(d\)</span> times the component of the arrival direction along the
+line of elements. Put <span class="math notranslate nohighlight">\(\hat{\mathbf x}\)</span> along the element row, <span class="math notranslate nohighlight">\(\hat{\mathbf y}\)</span>
+along broadside, and <span class="math notranslate nohighlight">\(\hat{\mathbf z}\)</span> up. A unit vector <span class="math notranslate nohighlight">\(\hat{\mathbf u}\)</span>
+toward a source at azimuth az, measured from broadside in the horizontal plane,
+and elevation el has a horizontal part of length <span class="math notranslate nohighlight">\(\cos(\text{el})\)</span>, the
+adjacent side of the elevation angle, and a vertical part <span class="math notranslate nohighlight">\(\sin(\text{el})\)</span>.
+The horizontal part splits into <span class="math notranslate nohighlight">\(\cos(\text{el})\sin(\text{az})\)</span> along the row
+and <span class="math notranslate nohighlight">\(\cos(\text{el})\cos(\text{az})\)</span> along broadside. In L18 the source was in
+the horizontal plane and the component along the row was <span class="math notranslate nohighlight">\(\sin\theta_s\)</span>; here
+it is</p>
+<div class="math notranslate nohighlight">
+\[\sin\theta_\text{meas} = \hat{\mathbf u}\cdot\hat{\mathbf x} = \sin(\text{az})\cos(\text{el}).\]</div>
+<p>That is where the cosine comes from: tipping the arrival direction out of the
+horizontal plane shortens its projection onto the row. Every direction on a
+cone around the row has the same projection, and so the same reading, which is
+why a line array measures a cone angle and not a floor-plan azimuth.</p>
+<p>When the source is at the array’s height, el is zero and the two angles agree.
+A box on the floor <span class="qty">0.75 m</span> below a tabletop kit at <span class="qty">3 m</span> is
+<span class="qty">14.0°</span> down, and a source at <span class="qty">30°</span> azimuth reads <span class="qty">29.0°</span>; at
+<span class="qty">45°</span> it reads <span class="qty">43.3°</span>. The error always pulls the bearing toward
+broadside. The L19 Lab’s range is set up with the kits and the boxes at one
+height, so el is near zero there. What the kit’s position on its stand does
+change is the row itself: tipping the board up or down to aim it at the boxes
+turns it about the row and leaves the reading alone, but raising one end of
+the row tilts the cone and adds the same kind of error. Keep the row level.</p>
+<p>The cone has a back half as well, a source behind the array at the mirror
+angle, but the PHASER’s patches sit over a ground plane and receive almost
+nothing from behind, so a bearing is always in front of the array.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-reflections">
+<div class="wrap docutils container">
+<p class="rubric">Reflections</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A reflection adds a second, weaker lobe.</p></li>
+<li><p>Within <span class="qty">15°</span> of the source it pulls the peak: <span class="qty">0.6°</span> at <span class="qty">−20 dB</span>, <span class="qty">2.0°</span> at <span class="qty">−10 dB</span>, <span class="qty">3.2°</span> at <span class="qty">−6 dB</span>.</p></li>
+<li><p>A bearing far off the rest is usually a reflection: clear the path.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L19-reflection.svg"
+     alt="The direct lobe at broadside, a reflection lobe 10 dB down near 12 degrees, and their sum, whose peak has moved 2.0 degrees toward the reflection"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A whiteboard, a metal cabinet, or a person near the line of sight sends a
+second copy of the signal toward the array from a different direction. The
+array adds both, so the sweep is the sum of two patterns, one centered on the
+source and a weaker one centered on the reflector, with a relative phase set by
+the extra path the reflection travels. When the two directions are within
+about a beamwidth of each other, the lobes merge and the peak moves toward the
+reflection. The worst case over every phase, for a reflection <span class="qty">5°</span> to
+<span class="qty">15°</span> from the direct path, is a shift of <span class="qty">0.6°</span> for a reflection
+<span class="qty">20 dB</span> down, <span class="qty">2.0°</span> at <span class="qty">10 dB</span> down, and <span class="qty">3.2°</span> at
+<span class="qty">6 dB</span> down. The figure shows the <span class="qty">−10 dB</span> case at its worst,
+a reflection about <span class="qty">12°</span> from the direct path.</p>
+<p>A reflection more than about <span class="qty">20°</span> away forms its own lobe and moves the
+main peak much less. It takes over the bearing if someone stands between the kit
+and the source: the direct lobe drops, the reflection’s lobe is now the
+largest, and Angle reports the direction of the whiteboard. A bearing several
+degrees off from the others most often comes from a reflection that has taken
+over the peak.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-from-array-angle-to-room-bearing">
+<div class="wrap docutils container">
+<p class="rubric">From Array Angle to Room Bearing</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\beta = h + \theta_\text{est}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\theta_\text{est}\)</span>: Angle, from the kit’s broadside.</p></li>
+<li><p><span class="math notranslate nohighlight">\(h\)</span>: the heading of broadside from a fixed room axis.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta\)</span>: the room bearing. All three counterclockwise, seen from above.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L19-room-bearing.svg"
+     alt="Top view: a kit whose broadside points at heading h from the room axis; the bearing to the source is theta_est further counterclockwise, so the room bearing beta is h plus theta_est"
+     style="max-width: 380px; width: 75%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The Angle readout measures the angle from the array’s broadside, which is wherever
+the kit happens to face. To draw the bearing on a floor plan we need it in the room’s
+frame. Measure angles counterclockwise from a fixed room axis, seen from above.
+If broadside points along heading <span class="math notranslate nohighlight">\(h\)</span> and positive Angle is the
+counterclockwise side, the room bearing is</p>
+<div class="math notranslate nohighlight">
+\[\beta = h + \theta_\text{est}.\]</div>
+<p>Which physical side of the kit is positive depends on which way the kit faces; the
+L18 Lab found it by moving the source toward element E8. Get it wrong and a
+source at <span class="qty">30°</span> lands on the plan at <span class="qty">−30°</span>, a <span class="qty">60°</span> error, so
+check it with one shot at a known position before trusting any bearing.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-bearing-error-budget">
+<div class="wrap docutils container">
+<p class="rubric">The Bearing Error Budget</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\sigma_\beta &amp;= \sqrt{\sigma_h^2 + \sigma_\theta^2} \\
+&amp;= \sqrt{1.0^2 + 0.53^2 + 1.0^2 + 0.3^2} = 1.5^\circ
+\end{aligned}\end{split}\]</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Error</p></th>
+<th class="head text-left"><p>Enters through</p></th>
+<th class="head text-left"><p>Source</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\sigma\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>heading</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(h\)</span></p></td>
+<td class="text-left"><p>array edge on a taped line</p></td>
+<td class="text-left"><p><span class="qty">1.0°</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>grid</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_\text{est}\)</span></p></td>
+<td class="text-left"><p>half a step at <span class="qty">30°</span></p></td>
+<td class="text-left"><p><span class="qty">0.53°</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>multipath</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_\text{est}\)</span></p></td>
+<td class="text-left"><p>a weak reflection</p></td>
+<td class="text-left"><p><span class="qty">1.0°</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>noise</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_\text{est}\)</span></p></td>
+<td class="text-left"><p><span class="qty">30 dB</span> SNR</p></td>
+<td class="text-left"><p><span class="qty">0.3°</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Each term of <span class="math notranslate nohighlight">\(\beta = h + \theta_\text{est}\)</span> carries an error, and the error in
+<span class="math notranslate nohighlight">\(\beta\)</span> is the two combined. The table is the budget for one bearing: one row
+per independent error, the term of the equation it enters through, where it
+comes from, and its one-sigma size. The heading error adds directly to the bearing error, and in the room it is the
+largest term. Laying the array’s edge along a taped line holds <span class="math notranslate nohighlight">\(h\)</span> to about
+<span class="qty">1°</span>. The grid term is the worst case, half a step, rather than the
+<span class="qty">0.30°</span> standard deviation of an error spread evenly over a <span class="qty">1.05°</span>
+step, which keeps the budget conservative. The grid, multipath, and noise
+terms make up <span class="math notranslate nohighlight">\(\sigma_\theta\)</span>, the error in the Angle readout itself, and all
+four are independent, so they add as a root sum of squares, the chain on the
+slide. Setting the heading by eye, about <span class="qty">3°</span>, raises the total to <span class="qty">3.2°</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-bearing-line">
+<div class="wrap docutils container">
+<p class="rubric">The Bearing Line</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\hat{\mathbf u} &amp;= (\cos\beta,\ \sin\beta) \\
+\hat{\mathbf n} &amp;= (-\sin\beta,\ \cos\beta) \\
+\hat{\mathbf n}\cdot\mathbf x &amp;= \hat{\mathbf n}\cdot\mathbf p
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathbf p\)</span>: kit position. <span class="math notranslate nohighlight">\(\hat{\mathbf u}\)</span>: unit vector toward the source.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{\mathbf n}\)</span>: <span class="math notranslate nohighlight">\(\hat{\mathbf u}\)</span> turned <span class="qty">90°</span> counterclockwise.</p></li>
+<li><p>Every <span class="math notranslate nohighlight">\(\mathbf x\)</span> on the line lies <span class="math notranslate nohighlight">\(\hat{\mathbf n}\cdot\mathbf p\)</span> from the origin along <span class="math notranslate nohighlight">\(\hat{\mathbf n}\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L19-bearing-line.svg"
+     alt="A kit at position p with its bearing line; the unit vector u points along the line toward the source and n is perpendicular to it; position vectors p and x both reach the line, and the line's distance from the origin along n is n dot p"
+     style="max-width: 420px; width: 80%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Positions are vectors from an origin, any fixed point of the room, with the
+room axis as <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> counterclockwise from it. A bearing <span class="math notranslate nohighlight">\(\beta\)</span> measured
+from a kit at a known position <span class="math notranslate nohighlight">\(\mathbf p\)</span> says the source lies somewhere along
+the ray <span class="math notranslate nohighlight">\(\mathbf p + r\hat{\mathbf u}\)</span>, with <span class="math notranslate nohighlight">\(r\)</span> unknown and positive. The unit
+vector <span class="math notranslate nohighlight">\(\hat{\mathbf u} = (\cos\beta,\ \sin\beta)\)</span> points along the bearing,
+and <span class="math notranslate nohighlight">\(\hat{\mathbf n} = (-\sin\beta,\ \cos\beta)\)</span> is the same vector turned
+<span class="qty">90°</span> counterclockwise. For computing a crossing it is easier to describe the
+line by its normal. Moving along the line moves only along <span class="math notranslate nohighlight">\(\hat{\mathbf u}\)</span>,
+which never changes the component of position along <span class="math notranslate nohighlight">\(\hat{\mathbf n}\)</span>. In the
+figure, that component is the length of the green segment, the line’s
+distance from the origin, and every point <span class="math notranslate nohighlight">\(\mathbf x\)</span> on the line satisfies one
+linear equation,</p>
+<div class="math notranslate nohighlight">
+\[\hat{\mathbf n}\cdot\mathbf x = \hat{\mathbf n}\cdot\mathbf p.\]</div>
+<p>One equation in two unknowns, the source’s <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, leaves a line of
+solutions, which is the statement that one bearing gives no range. A second
+bearing from a different position supplies a second equation, and two
+independent linear equations in two unknowns have one solution: the crossing.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-a-two-bearing-fix">
+<div class="wrap docutils container">
+<p class="rubric">A Two-Bearing Fix</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Origin at the middle of the tape: <span class="math notranslate nohighlight">\(x\)</span> along it, <span class="math notranslate nohighlight">\(y\)</span> downrange.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta_i\)</span> is positive toward <span class="math notranslate nohighlight">\(+x\)</span>.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\tan\theta_i &amp;= \frac{x - x_i}{y} \\
+x &amp;= x_i + y\tan\theta_i \\
+y &amp;= \frac{x_B - x_A}{\tan\theta_A - \tan\theta_B} = 1.73\ \text{m}
+\end{aligned}\end{split}\]</div>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L19-two-bearings.svg"
+     alt="A firing line with station marks every half meter; stations A at x = -1 m and B at x = +1 m face straight downrange, and their bearing lines at +36.6 and -22.4 degrees cross at the fix, inside the box at (0.25, 1.75) m"
+     style="max-width: 300px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>On the L19 Lab’s firing range every station faces straight downrange, so all
+the stations share one heading and the bearing line takes a simpler form. Put the
+origin at the middle of the tape, the station 0 mark, with <span class="math notranslate nohighlight">\(x\)</span> along the tape
+and <span class="math notranslate nohighlight">\(y\)</span> downrange, and take Angle <span class="math notranslate nohighlight">\(\theta\)</span> positive toward the <span class="math notranslate nohighlight">\(+x\)</span> end of the
+tape. A station at <span class="math notranslate nohighlight">\(x_i\)</span> sits at <span class="math notranslate nohighlight">\((x_i,\ 0)\)</span> and faces <span class="math notranslate nohighlight">\(+y\)</span>. A source at
+<span class="math notranslate nohighlight">\((x,\ y)\)</span> is <span class="math notranslate nohighlight">\(y\)</span> downrange of it and <span class="math notranslate nohighlight">\(x - x_i\)</span> across, the two legs of the
+dotted right triangle in the figure, and <span class="math notranslate nohighlight">\(\theta_i\)</span> is the angle at the
+station between downrange and the source, so</p>
+<div class="math notranslate nohighlight">
+\[\tan\theta_i = \frac{x - x_i}{y}.\]</div>
+<p>Solving for <span class="math notranslate nohighlight">\(x\)</span>, a reading <span class="math notranslate nohighlight">\(\theta_i\)</span> at station <span class="math notranslate nohighlight">\(x_i\)</span> puts the source on the
+line</p>
+<div class="math notranslate nohighlight">
+\[x = x_i + y\tan\theta_i.\]</div>
+<p>This is the bearing line of the previous frame with <span class="math notranslate nohighlight">\(h = 90^\circ\)</span> and
+<span class="math notranslate nohighlight">\(\beta = 90^\circ - \theta_i\)</span>; the sign flips because positive Angle turns
+clockwise, toward <span class="math notranslate nohighlight">\(+x\)</span>, seen from above.</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — the crossing of two bearings</p>
+<p>Station A at <span class="math notranslate nohighlight">\(x_A = -1.0\ \text{m}\)</span> reads Angle <span class="qty">36.6°</span>, and station B at
+<span class="math notranslate nohighlight">\(x_B = +1.0\ \text{m}\)</span> reads <span class="qty">−22.4°</span>. Both lines pass through the
+source, so setting their <span class="math notranslate nohighlight">\(x\)</span> equal, <span class="math notranslate nohighlight">\(x_A + y\tan\theta_A = x_B + y\tan\theta_B\)</span>,
+and solving for <span class="math notranslate nohighlight">\(y\)</span> gives</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+y &amp;= \frac{x_B - x_A}{\tan\theta_A - \tan\theta_B} \\
+&amp;= \frac{2.0}{0.743 + 0.412} = 1.73\ \text{m},
+\end{aligned}\end{split}\]</div>
+<p>and either line gives <span class="math notranslate nohighlight">\(x\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+x &amp;= x_A + y\tan\theta_A \\
+&amp;= -1.0 + 1.73 \times 0.743 \\
+&amp;= 0.29\ \text{m}.
+\end{aligned}\end{split}\]</div>
+<p>The box was at <span class="math notranslate nohighlight">\((0.25,\ 1.75)\ \text{m}\)</span>, where the true angles are
+<span class="qty">35.5°</span> and <span class="qty">−23.2°</span>. The readings were <span class="qty">1.1°</span> and <span class="qty">0.8°</span>
+toward <span class="math notranslate nohighlight">\(+x\)</span>, inside the <span class="qty">1.5°</span> budget, and the fix lands <span class="qty">0.04 m</span>
+from the box. The two lines cross at <span class="math notranslate nohighlight">\(\gamma = \theta_A - \theta_B = 59.0^\circ\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-many-bearings-least-squares">
+<div class="wrap docutils container">
+<p class="rubric">Many Bearings: Least Squares</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\left(\sum_i \hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}\right)\mathbf x = \sum_i \hat{\mathbf n}_i\left(\hat{\mathbf n}_i\cdot\mathbf p_i\right)\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathbf p_i\)</span>: station <span class="math notranslate nohighlight">\(i\)</span>’s position. <span class="math notranslate nohighlight">\(\hat{\mathbf n}_i = (-\sin\beta_i,\ \cos\beta_i)\)</span>: the unit normal to its bearing line.</p></li>
+<li><p>On the firing line, <span class="math notranslate nohighlight">\(\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)\)</span>.</p></li>
+<li><p>The fix <span class="math notranslate nohighlight">\(\mathbf x\)</span> is closest to every line: one <span class="math notranslate nohighlight">\(2\times 2\)</span> solve.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>With two bearings the crossing is exact. A third bearing adds a third line,
+and because every bearing carries some error, the three lines form a small
+triangle rather than meeting at a point. The usual fix is the point closest
+to all of them. The perpendicular distance from a point <span class="math notranslate nohighlight">\(\mathbf x\)</span> to line <span class="math notranslate nohighlight">\(i\)</span>
+is</p>
+<div class="math notranslate nohighlight">
+\[e_i = \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i),\]</div>
+<p>and minimizing <span class="math notranslate nohighlight">\(\sum_i e_i^2\)</span> means setting its gradient with respect to
+<span class="math notranslate nohighlight">\(\mathbf x\)</span> to zero. Each <span class="math notranslate nohighlight">\(e_i\)</span> grows at unit rate along <span class="math notranslate nohighlight">\(\hat{\mathbf n}_i\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\nabla_{\mathbf x}\sum_i e_i^2 &amp;= 2\sum_i \hat{\mathbf n}_i e_i \\
+&amp;= 2\sum_i \hat{\mathbf n}_i\left(\hat{\mathbf n}_i\cdot\mathbf x - \hat{\mathbf n}_i\cdot\mathbf p_i\right) \\
+&amp;= 0.
+\end{aligned}\end{split}\]</div>
+<p>Because <span class="math notranslate nohighlight">\(\hat{\mathbf n}_i(\hat{\mathbf n}_i\cdot\mathbf x)\)</span> is
+<span class="math notranslate nohighlight">\(\hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}\mathbf x\)</span>, this rearranges to the
+<strong>normal equations</strong> on the slide: a <span class="math notranslate nohighlight">\(2\times 2\)</span> matrix built from the normals,
+times <span class="math notranslate nohighlight">\(\mathbf x\)</span>, equals a 2-vector built from the normals and the kit
+positions. One call to <code class="docutils literal notranslate"><span class="pre">numpy.linalg.solve</span></code> returns the fix. For two bearings it
+reproduces the crossing of the worked example exactly; for more, it is the least-squares
+compromise. The L19 Lab’s pre-lab has you write this as a short Python
+function and test it on a supplied set of bearings.</p>
+<p>Each <span class="math notranslate nohighlight">\(\hat{\mathbf n}_i\)</span> is the normal of “The Bearing Line”, one per station:
+<span class="math notranslate nohighlight">\(\hat{\mathbf n}_i = (-\sin\beta_i,\ \cos\beta_i)\)</span> for room bearing <span class="math notranslate nohighlight">\(\beta_i\)</span>.
+On the firing line every kit faces <span class="math notranslate nohighlight">\(+y\)</span> and <span class="math notranslate nohighlight">\(\beta_i = 90^\circ - \theta_i\)</span>, so
+<span class="math notranslate nohighlight">\(\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)\)</span>, and with
+<span class="math notranslate nohighlight">\(\mathbf p_i = (x_i,\ 0)\)</span> the right-hand side’s scalar is
+<span class="math notranslate nohighlight">\(\hat{\mathbf n}_i\cdot\mathbf p_i = -x_i\cos\theta_i\)</span>.</p>
+<p>Unweighted least squares treats every line as equally reliable. A bearing from
+a kit far from the source is less reliable in meters, as the next frame shows,
+so if the ranges differ a lot, weighting each term by <span class="math notranslate nohighlight">\(1/r_i^2\)</span> gives the
+better fix. In the fox hunt every bearing that counts is within about
+<span class="qty">±45°</span> of broadside, so the ranges from the stations to one box differ
+by at most a factor of <span class="math notranslate nohighlight">\(\sqrt{2}\)</span>, the weights by a factor of 2, and the
+unweighted form is close enough.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-a-three-bearing-fix">
+<div class="wrap docutils container">
+<p class="rubric">A Three-Bearing Fix</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(i\)</span></p></th>
+<th class="head text-left"><p>1</p></th>
+<th class="head text-left"><p>2</p></th>
+<th class="head text-left"><p>3</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(x_i\)</span> (m)</p></td>
+<td class="text-left"><p><span class="qty">−0.75</span></p></td>
+<td class="text-left"><p><span class="qty">0</span></p></td>
+<td class="text-left"><p><span class="qty">+0.75</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_i\)</span></p></td>
+<td class="text-left"><p><span class="qty">34.6°</span></p></td>
+<td class="text-left"><p><span class="qty">8.8°</span></p></td>
+<td class="text-left"><p><span class="qty">−17.7°</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\hat n_{i,x}\)</span></p></td>
+<td class="text-left"><p><span class="qty">−0.823</span></p></td>
+<td class="text-left"><p><span class="qty">−0.988</span></p></td>
+<td class="text-left"><p><span class="qty">−0.953</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\hat n_{i,y}\)</span></p></td>
+<td class="text-left"><p><span class="qty">0.568</span></p></td>
+<td class="text-left"><p><span class="qty">0.153</span></p></td>
+<td class="text-left"><p><span class="qty">−0.304</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\hat{\mathbf n}_i\cdot\mathbf p_i\)</span></p></td>
+<td class="text-left"><p><span class="qty">0.617</span></p></td>
+<td class="text-left"><p><span class="qty">0</span></p></td>
+<td class="text-left"><p><span class="qty">−0.714</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\mathbf M &amp;= \begin{bmatrix} 2.562 &amp; -0.329 \\ -0.329 &amp; 0.438 \end{bmatrix} \\
+\mathbf b &amp;= \begin{bmatrix} 0.173 \\ 0.568 \end{bmatrix} \\
+\mathbf x &amp;= \mathbf M^{-1}\mathbf b = (0.26,\ 1.49)\ \text{m}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>The box is at <span class="math notranslate nohighlight">\((0.25,\ 1.50)\ \text{m}\)</span>: <span class="qty">0.01 m</span> away.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Stations at <span class="math notranslate nohighlight">\(x_i = -0.75\)</span>, <span class="qty">0</span>, and <span class="qty">+0.75 m</span> read Angle <span class="qty">34.6°</span>,
+<span class="qty">8.8°</span>, and <span class="qty">−17.7°</span>. Each column of the table is one station: its
+normal <span class="math notranslate nohighlight">\(\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)\)</span>, as its <span class="math notranslate nohighlight">\(x\)</span>
+and <span class="math notranslate nohighlight">\(y\)</span> components, and the scalar
+<span class="math notranslate nohighlight">\(\hat{\mathbf n}_i\cdot\mathbf p_i = -x_i\cos\theta_i\)</span>.</p>
+<p>Summing <span class="math notranslate nohighlight">\(\hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}\)</span> over the rows, and
+<span class="math notranslate nohighlight">\(\hat{\mathbf n}_i\)</span> times its scalar, gives the normal equations <span class="math notranslate nohighlight">\(\mathbf M\mathbf x = \mathbf b\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{bmatrix} 2.562 &amp; -0.329 \\ -0.329 &amp; 0.438 \end{bmatrix}
+\begin{bmatrix} x \\ y \end{bmatrix} =
+\begin{bmatrix} 0.173 \\ 0.568 \end{bmatrix}.\end{split}\]</div>
+<p>The determinant is <span class="math notranslate nohighlight">\(2.562 \times 0.438 - 0.329^2 = 1.014\)</span>, and the
+<span class="math notranslate nohighlight">\(2\times 2\)</span> inverse gives</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+x &amp;= \frac{0.438 \times 0.173 + 0.329 \times 0.568}{1.014} = 0.26\ \text{m} \\
+y &amp;= \frac{2.562 \times 0.568 + 0.329 \times 0.173}{1.014} = 1.49\ \text{m}.
+\end{aligned}\end{split}\]</div>
+<p>The box was at <span class="math notranslate nohighlight">\((0.25,\ 1.50)\ \text{m}\)</span>, so the fix lands <span class="qty">0.01 m</span>
+from it. The residuals, <span class="math notranslate nohighlight">\(\hat{\mathbf n}_i\cdot\mathbf x - \hat{\mathbf n}_i\cdot\mathbf p_i\)</span>,
+are <span class="qty">0.016</span>, <span class="qty">−0.028</span>, and <span class="qty">0.015 m</span>, all under each station’s own
+<span class="math notranslate nohighlight">\(R_i\tan\sigma_\beta\)</span> of about <span class="qty">0.04 m</span> at <span class="qty">1.5°</span>: three good
+bearings (the check in “Residuals and Outliers” below). <code class="docutils literal notranslate"><span class="pre">numpy.linalg.solve</span></code> does the same
+arithmetic in one line.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-cross-range-error">
+<div class="wrap docutils container">
+<p class="rubric">Cross-Range Error</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\delta_\perp = R\tan\sigma_\beta\]</div>
+<ul class="simple">
+<li><p>At <span class="math notranslate nohighlight">\(\sigma_\beta = 2^\circ\)</span> the line moves <span class="qty">0.03 m</span> at <span class="qty">1 m</span>, <span class="qty">0.07 m</span> at <span class="qty">2 m</span>, <span class="qty">0.14 m</span> at <span class="qty">4 m</span>.</p></li>
+<li><p>A bearing constrains the source across its line, not along it.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A bearing error is an angle, but the fix is a position, so what matters is how
+far the error moves the line where the source is. A line rotated by
+<span class="math notranslate nohighlight">\(\sigma_\beta\)</span> about the kit moves sideways, at range <span class="math notranslate nohighlight">\(R\)</span>, by</p>
+<div class="math notranslate nohighlight">
+\[\delta_\perp = R\tan\sigma_\beta.\]</div>
+<p>At <span class="math notranslate nohighlight">\(\sigma_\beta = 2^\circ\)</span>, a little worse than the taped-heading budget,
+that is <span class="qty">0.03 m</span> at <span class="qty">1 m</span>, <span class="qty">0.07 m</span> at <span class="qty">2 m</span>,
+and <span class="qty">0.14 m</span> at <span class="qty">4 m</span>. The error grows in proportion to range,
+which is why a closer station gives a tighter line.</p>
+<p>The error is all in one direction. A bearing says nothing about how far along
+the line the source is, so its uncertainty is a narrow strip, <span class="math notranslate nohighlight">\(2\delta_\perp\)</span>
+wide at one standard deviation and unbounded along its length. The second
+bearing’s strip is what limits the fix along the first one, and how well it does
+that depends on the angle between them.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-the-crossing-angle">
+<div class="wrap docutils container">
+<p class="rubric">The Crossing Angle</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/df-fix.html"
+        width="100%" height="464"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="A direction-finding fix: drag two to four kits around a keep-out circle, or along a firing line, with a hidden source, and watch the least-squares fix, its error ellipse, and each bearing's residual">
+</iframe>
+<ul class="simple">
+<li><p>A shallow crossing stretches the error region as <span class="math notranslate nohighlight">\(1/\sin\gamma\)</span>: <span class="qty">0.20 m</span> at <span class="qty">90°</span>, <span class="qty">0.76 m</span> at <span class="qty">15°</span>.</p></li>
+<li><p>A reflection moves the fix, and only a third bearing shows it.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Where the two strips overlap is where the source can be. When the lines cross
+at <span class="qty">90°</span>, each strip limits the other’s long direction, and the overlap is
+a small square; its error ellipse is a circle of radius <span class="math notranslate nohighlight">\(\delta_\perp\)</span> in both
+directions. When they cross at a shallow angle <span class="math notranslate nohighlight">\(\gamma\)</span>, the strips run almost
+parallel, and the overlap stretches into a long diamond along the bisector of
+the two lines.</p>
+<p>The least-squares fix puts a number on this. Weight each bearing’s term in the
+normal equations by <span class="math notranslate nohighlight">\(1/\delta_\perp^2\)</span>, and the matrix</p>
+<div class="math notranslate nohighlight">
+\[\mathbf M = \sum_i \frac{\hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}}{\delta_{\perp,i}^2}\]</div>
+<p>describes the error region. The eigenvectors of <span class="math notranslate nohighlight">\(\mathbf M^{-1}\)</span> point along
+the axes of the one-sigma error ellipse, its eigenvalues are the squared
+semi-axes, and the RMS error of the fix is the square root of their sum. Two
+unit normals at an angle <span class="math notranslate nohighlight">\(\gamma\)</span> give
+<span class="math notranslate nohighlight">\(\sum\hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}\)</span> a trace of 2 and a
+determinant of <span class="math notranslate nohighlight">\(\sin^2\gamma\)</span>, so its eigenvalues are <span class="math notranslate nohighlight">\(1 + \cos\gamma\)</span> and
+<span class="math notranslate nohighlight">\(1 - \cos\gamma\)</span>. For two bearings with the same <span class="math notranslate nohighlight">\(\delta_\perp\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\sigma_\text{fix} &amp;= \delta_\perp\sqrt{\frac{1}{1 + \cos\gamma} + \frac{1}{1 - \cos\gamma}} \\
+&amp;= \frac{\sqrt{2}\ \delta_\perp}{\sin\gamma},
+\end{aligned}\end{split}\]</div>
+<p>so a <span class="qty">15°</span> crossing is almost four times worse than a <span class="qty">90°</span> one with
+the same bearings.</p>
+<p><img src="../../viz/img/L19-crossing.svg"
+     alt="Two bearing lines with their plus and minus one sigma strips and the one-sigma error ellipse: crossing at 90 degrees the ellipse is a circle, RMS 0.20 meters; crossing at 30 degrees it stretches along the bisector, RMS 0.40 meters"
+     style="max-width: 480px; width: 100%; display: block; margin: 0 auto;"></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Kits <span class="qty">4 m</span> out, <span class="math notranslate nohighlight">\(\sigma_\beta = 2^\circ\)</span></p></th>
+<th class="head text-left"><p>RMS fix error</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>2 kits, <span class="qty">90°</span> crossing</p></td>
+<td class="text-left"><p><span class="qty">0.20 m</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>2 kits, <span class="qty">30°</span></p></td>
+<td class="text-left"><p><span class="qty">0.40 m</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>2 kits, <span class="qty">15°</span></p></td>
+<td class="text-left"><p><span class="qty">0.76 m</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>3 kits over <span class="qty">120°</span></p></td>
+<td class="text-left"><p><span class="qty">0.16 m</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The table’s rows come from the same <span class="math notranslate nohighlight">\(\mathbf M\)</span>, summed over two or three
+kits. A third kit helps less by adding
+a measurement than by guaranteeing that at least two of the three lines cross
+steeply: three kits spread over <span class="qty">120°</span> do better than the best pair.</p>
+<p>The widget is a room seen from above, with the keep-out circle and a source
+hidden somewhere inside it. Each kit draws its measured bearing, the true
+bearing plus an error drawn with the <span class="math notranslate nohighlight">\(\sigma_\beta\)</span> you set, and a shaded
+wedge of <span class="math notranslate nohighlight">\(\pm\sigma_\beta\)</span>. The cross is the least-squares fix and the
+ellipse around it is its one-sigma error region. Drag the kits and watch the
+ellipse: it stays round while the crossing angle <span class="math notranslate nohighlight">\(\gamma\)</span> is near <span class="qty">90°</span>
+and stretches along the bisector as <span class="math notranslate nohighlight">\(\gamma\)</span> closes. To reproduce a row of the
+table, tick <strong>reveal</strong>, set <span class="math notranslate nohighlight">\(\sigma_\beta\)</span> to <span class="qty">2°</span>, and drag the kits
+onto the <span class="qty">4 m</span> ring, where they snap at <span class="qty">5°</span> steps around the
+source. The RMS beside the fix error is the table’s number. The fix error
+itself is one draw of the bearing errors; press <strong>new bearings</strong> a few times
+and it scatters about the RMS. With the source hidden, the crossing angles and
+the RMS come from the measured bearings, as they would in the room.</p>
+<p>Tick <strong>reflection</strong> to bend kit A’s bearing by <span class="qty">10°</span>, the size of error
+a reflection makes when it takes over the peak. With two kits the fix moves
+about <span class="qty">0.7 m</span> and both residuals stay at zero, because two lines
+always meet. With three, A and C both miss the fix by about twice their own
+<span class="math notranslate nohighlight">\(R_i\tan\sigma_\beta\)</span> and turn red: the residuals show that a bearing is bad,
+but with three lines they rise and fall together and cannot say which. A
+fourth kit separates them, and only A’s residual stands out. That is the check
+in “Residuals and Outliers” below.</p>
+<p>Set <strong>Layout</strong> to <strong>firing line</strong> to see the L19 Lab’s range: a <span class="qty">3 m</span>
+tape with five station marks <span class="qty">0.75 m</span> apart, every kit facing straight
+downrange, and the source hidden in the box field <span class="qty">1</span> to <span class="qty">2 m</span> out.
+Kits snap to the marks. The fix-error readout now splits into depth and
+cross-range. Put two kits on the inner marks, then move them to the ends: the
+ellipse shortens downrange and the depth error falls as <span class="math notranslate nohighlight">\(1/B\)</span>, the result
+derived in “Choosing Where to Measure” below.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-choosing-where-to-measure">
+<div class="wrap docutils container">
+<p class="rubric">Choosing Where to Measure</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Use the end stations that hear the fox: depth error falls as <span class="math notranslate nohighlight">\(1/B\)</span>.</p></li>
+<li><p>Best within <span class="qty">±30°</span> of broadside; tracking starts to fail at <span class="qty">±45°</span>.</p></li>
+<li><p>Point each array at the boxes, path clear.</p></li>
+<li><p>Take a third bearing as a check.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L19-depth.svg"
+     alt="Two pairs of stations on a firing line and a box 2 meters downrange: neighboring stations 0.75 meters apart give an error ellipse plus or minus 0.20 meters long in depth; the end stations, 3 meters apart, plus or minus 0.08 meters"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Choosing where to stand is part of the measurement, because the geometry sets
+the error as much as the instrument does. On a firing line every bearing looks
+downrange, so the lines cross steeply only when the stations are far apart
+compared with the depth, and depth is the direction the fix measures worst.</p>
+<p>Take two stations a baseline <span class="math notranslate nohighlight">\(B\)</span> apart and a box midway between them at depth
+<span class="math notranslate nohighlight">\(y\)</span>, a range <span class="math notranslate nohighlight">\(R\)</span> from each. Each line moves sideways by
+<span class="math notranslate nohighlight">\(\delta_\perp = R\sigma_\beta\)</span>, with <span class="math notranslate nohighlight">\(\sigma_\beta\)</span> in radians, and the two
+lines cross at <span class="math notranslate nohighlight">\(\gamma\)</span>, with</p>
+<div class="math notranslate nohighlight">
+\[\sin\frac{\gamma}{2} = \frac{B/2}{R}.\]</div>
+<p>The two lines sit symmetrically about the downrange direction, so the axes of
+the error ellipse point across and down range. The eigenvalues of <span class="math notranslate nohighlight">\(\mathbf M\)</span>
+are <span class="math notranslate nohighlight">\(2\cos^2(\gamma/2)/\delta_\perp^2\)</span> across range and
+<span class="math notranslate nohighlight">\(2\sin^2(\gamma/2)/\delta_\perp^2\)</span> in depth, and the depth error is the inverse
+square root of the second:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\sigma_y &amp;= \frac{\delta_\perp}{\sqrt{2}\ \sin(\gamma/2)} \\
+&amp;= \frac{\sqrt{2}\ R^2\sigma_\beta}{B}.
+\end{aligned}\end{split}\]</div>
+<p>With the taped-heading budget, <span class="math notranslate nohighlight">\(\sigma_\beta = 1.5^\circ\)</span>, and the L19 Lab’s
+station marks <span class="qty">0.75 m</span> apart, the end stations, <span class="qty">3 m</span> apart,
+fix a box <span class="qty">2 m</span> downrange to <span class="qty">0.08 m</span> in depth, stations
+<span class="qty">1.5 m</span> apart to <span class="qty">0.11 m</span>, and neighboring stations,
+<span class="qty">0.75 m</span> apart, to <span class="qty">0.20 m</span>. Across range the same pairs fix
+it to <span class="qty">0.04</span> to <span class="qty">0.06 m</span>. The depth error grows as <span class="math notranslate nohighlight">\(R^2\)</span> and
+falls as <span class="math notranslate nohighlight">\(1/B\)</span>, so the stations farthest apart that still hear the fox give the
+best fix.</p>
+<p>Spreading the stations has a limit: a station far to one side sees the box well
+off broadside. Within <span class="qty">±30°</span> the grid step and the beamwidth stay near
+their broadside values. At <span class="qty">±45°</span> the step is <span class="qty">1.29°</span>, the beam is
+about <span class="qty">18°</span> wide, the gain is <span class="qty">1.5 dB</span> down (L18, “Scan
+Loss”), and the PHASER starts to lose tracking. A station that sees a box
+farther out than that gives no bearing worth using, and the HB100’s own beam,
+aimed only roughly at the line, may leave it too weak a tone to read anyway.</p>
+<p>Two systematic errors from earlier in the lesson remain. The cone-angle error
+pulls every bearing toward broadside when the source is above or below the
+array; the range is set up with kits and boxes at one height to remove it, and
+pointing each array at the boxes with its element row level keeps it removed. A
+reflector near the line of sight shifts the peak or replaces it, so keep the
+path from each kit to the box field clear, people included. Finally, two bearings always cross somewhere,
+right or wrong. A third bearing is the only check that the first two are
+consistent.</p>
+<p>The geometry also sets how close two boxes can be and still be told apart. A
+simulation of a row of boxes, with the fix assigned to the nearest box, names
+the right one 99% of the time at <span class="qty">0.75 m</span> spacing with two kits
+<span class="qty">4 m</span> out crossing at <span class="qty">90°</span> and <span class="math notranslate nohighlight">\(\sigma_\beta = 2^\circ\)</span>, and 93%
+of the time at <span class="qty">0.5 m</span>. The L19 Lab’s boxes sit at least
+<span class="qty">0.75 m</span> apart for the same reason.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-residuals-and-outliers">
+<div class="wrap docutils container">
+<p class="rubric">Residuals and Outliers</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+R_i &amp;= \lvert\mathbf x - \mathbf p_i\rvert \\
+e_i &amp;= \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i) \\
+&amp;= y\sin\theta_i - (x - x_i)\cos\theta_i
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>At the fix <span class="math notranslate nohighlight">\((x,\ y)\)</span>: <span class="math notranslate nohighlight">\(R_i\)</span> is station <span class="math notranslate nohighlight">\(i\)</span>’s range, <span class="math notranslate nohighlight">\(e_i\)</span> how far the fix sits off line <span class="math notranslate nohighlight">\(i\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lvert e_i\rvert &gt; 3R_i\tan\sigma_\beta\)</span> flags a bad bearing: retake it, or drop it and solve again.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L19-residuals.svg"
+     alt="Five stations on the firing line; the middle bearing, bent 10 degrees, misses the least-squares fix by 19 centimeters, the others by 4 to 7 centimeters"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Once the least-squares fix <span class="math notranslate nohighlight">\(\mathbf x = (x,\ y)\)</span> is in hand, the
+perpendicular distance from the fix to each line is that line’s <strong>residual</strong>,
+<span class="math notranslate nohighlight">\(e_i\)</span>. It is the same <span class="math notranslate nohighlight">\(\hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i)\)</span> the
+least-squares frame minimized, now evaluated at the answer. On the firing line
+station <span class="math notranslate nohighlight">\(i\)</span> sits at <span class="math notranslate nohighlight">\(\mathbf p_i = (x_i,\ 0)\)</span> and its normal is
+<span class="math notranslate nohighlight">\(\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)\)</span>, which gives the second
+form on the slide, one line of Python per station. On the line itself
+<span class="math notranslate nohighlight">\(x - x_i = y\tan\theta_i\)</span> and <span class="math notranslate nohighlight">\(e_i\)</span> is zero.</p>
+<p>To judge a residual, compare it with what that bearing’s own error would
+produce. <span class="math notranslate nohighlight">\(R_i\)</span> is the distance from station <span class="math notranslate nohighlight">\(i\)</span> to the fix, and a bearing
+error of <span class="math notranslate nohighlight">\(\sigma_\beta\)</span> moves line <span class="math notranslate nohighlight">\(i\)</span> sideways at the fix by
+<span class="math notranslate nohighlight">\(R_i\tan\sigma_\beta\)</span>, the cross-range error of “Cross-Range Error” above:
+about <span class="qty">0.05 m</span> for a station <span class="qty">1.5 m</span> from the fox at
+<span class="math notranslate nohighlight">\(\sigma_\beta = 2^\circ\)</span>. A good bearing’s residual is about that size. One
+more than three times that size says the bearing disagrees with the rest.</p>
+<p>What to do with it is the procedure on the slide: solve the fix from every
+bearing, compute <span class="math notranslate nohighlight">\(R_i\)</span> and <span class="math notranslate nohighlight">\(e_i\)</span> for each station, and flag any station whose
+<span class="math notranslate nohighlight">\(\lvert e_i\rvert\)</span> is more than <span class="math notranslate nohighlight">\(3R_i\tan\sigma_\beta\)</span>.</p>
+<p>The usual causes are the two errors that the budget does not cover because they
+are blunders rather than noise: a reflection that took over the peak, and a
+heading or sign mistake that put the line on the wrong side of broadside.
+Check that kit’s setup and retake the bearing; if it still disagrees, drop it
+and solve again with the others. Drop one at a time, the worst first, because
+one bad line pulls the fix and raises every other residual a little. In the
+figure the middle station’s bearing is <span class="qty">10°</span> off: its
+residual <span class="math notranslate nohighlight">\(e\)</span> is <span class="qty">19 cm</span> against its own <span class="math notranslate nohighlight">\(R_i\tan\sigma_\beta\)</span> of
+<span class="qty">5 cm</span>, almost four times, and the bad line pulls the other residuals
+up to 4 to <span class="qty">7 cm</span>, each under one and a half times its own. With only two bearings the residuals are always zero, because two lines
+always meet exactly, so two bearings cannot check each other.</p>
+<p>The L19 Lab adds one more check, the <strong>Peak Gain</strong> readout. Received power
+cannot give range on its own, because the transmitter’s power is unknown, but
+every station hears the same transmitter, so comparing levels between stations
+removes that unknown. Free-space spreading then sets the difference: a station
+at range <span class="math notranslate nohighlight">\(R_2\)</span> reads <span class="math notranslate nohighlight">\(20\log_{10}(R_2/R_1)\)</span> dB below one at <span class="math notranslate nohighlight">\(R_1\)</span>, which is
+<span class="qty">2.5 dB</span> for <span class="qty">2.0 m</span> against <span class="qty">1.5 m</span>, and a source off
+broadside reads lower by the scan loss of L18. The HB100’s own pattern does not
+cancel: the fox points only roughly at the line, and two stations at the same
+range can differ by several decibels. Levels therefore rank the two or three
+boxes the bearings already put near the fix; they do not locate the fox by
+themselves.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-measuring-a-bearing">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Measuring a Bearing</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\psi = kd(\sin\theta_s - \sin\theta_0)\)</span></p></td>
+<td class="text-left"><p>residual phase step after steering to <span class="math notranslate nohighlight">\(\theta_0\)</span></p></td>
+<td class="text-left"><p>sum peaks where <span class="math notranslate nohighlight">\(\theta_0 = \theta_s\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Angle</p></td>
+<td class="text-left"><p>steer angle of the largest sample in the sweep</p></td>
+<td class="text-left"><p>on a grid <span class="qty">0.0159</span> apart in <span class="math notranslate nohighlight">\(\sin\theta\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_\text{HP}\)</span></p></td>
+<td class="text-left"><p>sets resolution of two sources, not accuracy for one</p></td>
+<td class="text-left"><p><span class="qty">12.9°</span> at broadside</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\sin\theta_\text{meas} = \sin(\text{az})\cos(\text{el})\)</span></p></td>
+<td class="text-left"><p>the cone angle a line array measures</p></td>
+<td class="text-left"><p><span class="qty">29.0°</span> for <span class="qty">30°</span> at <span class="qty">14°</span> down</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\beta = h + \theta_\text{est}\)</span></p></td>
+<td class="text-left"><p>room bearing from heading and Angle</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\sigma_\beta \approx 1.5^\circ\)</span> with a taped heading</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-locating-the-source">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Locating the Source</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\hat{\mathbf n}\cdot\mathbf x = \hat{\mathbf n}\cdot\mathbf p\)</span></p></td>
+<td class="text-left"><p>one bearing line</p></td>
+<td class="text-left"><p>one equation, two unknowns</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\left(\sum \hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}\right)\mathbf x = \sum \hat{\mathbf n}_i(\hat{\mathbf n}_i\cdot\mathbf p_i)\)</span></p></td>
+<td class="text-left"><p>least-squares fix</p></td>
+<td class="text-left"><p>a <span class="math notranslate nohighlight">\(2\times 2\)</span> solve</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\delta_\perp = R\tan\sigma_\beta\)</span></p></td>
+<td class="text-left"><p>cross-range error of one line</p></td>
+<td class="text-left"><p><span class="qty">0.14 m</span> at <span class="qty">4 m</span>, <span class="qty">2°</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\sigma_\text{fix} = \sqrt{2}\ \delta_\perp/\sin\gamma\)</span></p></td>
+<td class="text-left"><p>RMS error of a two-bearing fix crossing at <span class="math notranslate nohighlight">\(\gamma\)</span></p></td>
+<td class="text-left"><p><span class="qty">0.20 m</span> at <span class="qty">90°</span>, <span class="qty">0.76 m</span> at <span class="qty">15°</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\sigma_y = \sqrt{2}\ R^2\sigma_\beta/B\)</span></p></td>
+<td class="text-left"><p>depth error from two stations <span class="math notranslate nohighlight">\(B\)</span> apart on a firing line</p></td>
+<td class="text-left"><p><span class="qty">0.08 m</span> at <span class="qty">2 m</span> deep, <span class="math notranslate nohighlight">\(B = 3\ \text{m}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>residual <span class="math notranslate nohighlight">\(e_i\)</span></p></td>
+<td class="text-left"><p>the fix’s perpendicular distance from line <span class="math notranslate nohighlight">\(i\)</span></p></td>
+<td class="text-left"><p>flags an outlier above <span class="math notranslate nohighlight">\(3R_i\tan\sigma_\beta\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-the-l19-lab">
+<div class="wrap docutils container">
+<p class="rubric">The L19 Lab</p>
+<p>The bench half of this lesson is the L19 Lab, the fox hunt: find the one live
+HB100 among numbered boxes from bearings your team takes at stations along a
+firing line.</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-pre-lab">
+<div class="wrap docutils container">
+<p class="rubric">Pre-Lab</p>
+<p>The L19 Lab’s pre-lab is Part 1 of its packet, one per team, done before the
+lab period. It works this lesson’s error budget for the range and has you
+write the fox-hunt script: start from the starter file, write its four
+functions, and test it on the supplied bearings. Bring the tested script to
+the lab on your laptop.</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">L19 Lab packet, Part 1 (PDF)</a></p></li>
+<li><p><a class="doc-link" href="../../labs/foxhunt_starter.py" download>Fox-hunt starter script</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>In the L19 Lab, one kit takes a bearing from each station on a taped firing line.</p></li>
+<li><p>Bring your tested script from the Pre-Lab.</p></li>
+<li><p>L20 returns to shaping and steering the beam.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>In the L19 Lab you and a partner find the one live HB100 among the numbered
+boxes. You move one kit along a taped firing line, square to the tape at every
+station, read Angle off the beam sweep at each station mark, convert it to a
+room bearing, and solve for the fix. Come with the Pre-Lab script, tested.</p>
+</div>
+<div class="depth docutils container">
+<p>The rest of Module 3 returns to the pattern the sweep traces. L20 measures
+beamwidth against element count, L21 separates the array factor from the
+element pattern, L22 trades sidelobe level for beamwidth with a taper, L23
+covers beam squint and phase quantization, of which this lesson’s sweep grid is
+one consequence, and L24 steers nulls, which is how a direction finder or a
+radar rejects a second source that would otherwise pull its peak.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L19-direction-finding"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

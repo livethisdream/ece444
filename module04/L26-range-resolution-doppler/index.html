@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L26 - Range, Resolution, and Doppler &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=8125a6e0df">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l26-range-resolution-and-doppler">
+<h1>L26 - Range, Resolution, and Doppler<a class="headerlink" href="#l26-range-resolution-and-doppler" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Range, Resolution, and Doppler</h1>
+<div class="title-rule"></div>
+<p>What an echo’s delay, bandwidth, and frequency shift say about a target’s range and speed.</p>
+<p>Lesson 26 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame here-26 docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 1">
+  <li>I can calculate range resolution, unambiguous range, and Doppler shift for a given radar waveform.</li>
+</ol>
+<!-- The Module 4 "you are here" strip. Included into a lesson's Learning
+     Objectives frame, which carries `:class: here-NN` to light up its own
+     chip (frames.css). L25-L27 are taught in class; L28-L31 are the final
+     project, each one page with its lesson and then its lab. -->
+<div class="lane-strip" role="navigation" aria-label="Module 4 lessons, by whether they are taught in class or worked as the final project">
+  <span class="ls-label">Module 4</span>
+  <a class="ls-chip" data-n="25" href="../L25-radar-equation/index.html" title="L25 Radar Equation: in class">25</a>
+  <a class="ls-chip" data-n="26" href="../L26-range-resolution-doppler/index.html" title="L26 Range, Resolution, and Doppler: in class">26</a>
+  <a class="ls-chip" data-n="27" href="../L27-radar-detection/index.html" title="L27 Radar Detection: in class">27</a>
+  <a class="ls-chip ls-proj" data-n="28" href="../L28-fmcw/index.html" title="L28 FMCW and its lab: final project">28</a>
+  <a class="ls-chip ls-proj" data-n="29" href="../L29-range-doppler-mti/index.html" title="L29 Range-Doppler and MTI and its lab: final project">29</a>
+  <a class="ls-chip ls-proj" data-n="30" href="../L30-cfar/index.html" title="L30 CFAR and its lab: final project">30</a>
+  <a class="ls-chip ls-proj" data-n="31" href="../L31-classification-tracking/index.html" title="L31 Classification and Tracking and its lab: final project">31</a>
+  <a class="ls-chip ls-proj ls-report" href="../final-project/index.html" title="Final Project: Radar Systems Report">Report</a>
+  <span class="ls-key"><i></i>in class <i class="ls-proj"></i>final project</span>
+</div>
+<div class="depth docutils container">
+<p>L25 answered how much power comes back from a target: the radar equation is
+the Friis equation of L2 applied twice, once on the way out and once on the
+way back, with the target’s radar cross section in the middle. This lesson
+asks what else the echo carries. Its delay gives the range, its bandwidth sets
+how close two targets can be and still be told apart, and its frequency shift
+gives the target’s speed along the line of sight. Each of these depends on the
+waveform the radar sends, and the choices that improve one usually limit
+another. The L28 through L31 Labs measure every quantity defined here on your
+own kit, so the numbers in this lesson are the ones you will check there.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-an-echo-carries">
+<div class="wrap docutils container">
+<p class="rubric">What an Echo Carries</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Range</strong> from the round-trip delay.</p></li>
+<li><p><strong>Radial velocity</strong> from the Doppler shift.</p></li>
+<li><p><strong>Angle</strong> from the array: the beam sweep of L19, monopulse in the L24 Lab.</p></li>
+<li><p><strong>Size</strong> from the received power: L25’s radar equation and RCS.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A radar sends a known signal and listens for the copy a target reflects. The
+copy differs from what was sent in four ways, and each difference is a
+measurement. It arrives late, by the time the wave needs to reach the target
+and come back, which gives range. It arrives shifted in frequency if the
+target is moving toward or away from the radar, which gives radial velocity.
+It arrives with a phase ramp across the array that depends on its direction,
+which Module 3 turned into an angle: the beam sweep of L19 reads it with one
+channel, and the monopulse comparison of the two subarray channels in the
+L24 Lab reads it in a single snapshot. And it arrives weaker by an amount the
+radar equation of L25 predicts, so the received power says something about
+the target’s cross section.</p>
+<p>This lesson covers the first two. Angle and power are already in hand, and
+L27 combines them with noise to decide whether an echo is there at all.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-range-from-round-trip-delay">
+<div class="wrap docutils container">
+<p class="rubric">Range From Round-Trip Delay</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\tau &amp;= \frac{2R}{c} \\
+R &amp;= \frac{c\tau}{2}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>The wave travels to the target and back: <span class="math notranslate nohighlight">\(2R\)</span> in all.</p></li>
+<li><p><span class="qty">6.67 ns</span> of delay per meter of range.</p></li>
+<li><p>A target <span class="qty">3 m</span> from the kit returns after <span class="qty">20 ns</span>; one <span class="qty">6 km</span> out, after <span class="math notranslate nohighlight">\(40\ \mu\text{s}\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The transmitted wave travels at <span class="math notranslate nohighlight">\(c\)</span> out to the target, reflects, and travels
+the same distance back, so the echo arrives a time <span class="math notranslate nohighlight">\(\tau = 2R/c\)</span> after the
+transmission. Turned around, a measured delay gives the range,</p>
+<div class="math notranslate nohighlight">
+\[R = \frac{c\tau}{2}.\]</div>
+<p>The factor of 2 is the one detail of this relation that is easy to lose:
+range is half the distance the wave covered. With <span class="math notranslate nohighlight">\(c = 3.00\times 10^8\ \text{m/s}\)</span>,
+every meter of range adds <span class="math notranslate nohighlight">\(2/c = 6.67\ \text{ns}\)</span> of delay. A target across
+the lab, <span class="qty">3 m</span> from the kit, returns its echo after <span class="qty">20 ns</span>,
+which is far too short to time directly with the Pluto’s sample clock; L28
+shows how the FMCW waveform converts that delay into a frequency the Pluto
+can measure. An aircraft <span class="qty">6 km</span> out returns its echo after
+<span class="math notranslate nohighlight">\(40\ \mu\text{s}\)</span>, which a pulsed radar times directly.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-unambiguous-range">
+<div class="wrap docutils container">
+<p class="rubric">Unambiguous Range</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[R_\text{ua} = \frac{c\ T_\text{PRI}}{2} = \frac{c}{2\ \text{PRF}}\]</div>
+<ul class="simple">
+<li><p>An echo must return before the next pulse leaves.</p></li>
+<li><p>PRF <span class="qty">1 kHz</span>: <span class="math notranslate nohighlight">\(R_\text{ua} = 150\ \text{km}\)</span>.</p></li>
+<li><p>A target at <span class="qty">170 km</span> appears at <span class="qty">20 km</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L26-pulse-train.svg"
+     alt="Three transmitted pulses 1 ms apart; a near echo 0.4 ms after each pulse, and a far echo that arrives after the next pulse and reads as 20 km"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A pulsed radar does not send one pulse; it sends a train of them, one every
+<strong>pulse repetition interval</strong> <span class="math notranslate nohighlight">\(T_\text{PRI}\)</span>, at a <strong>pulse repetition frequency</strong>
+<span class="math notranslate nohighlight">\(\text{PRF} = 1/T_\text{PRI}\)</span>. The receiver times each echo from the most recent
+pulse, because it has no way to tell which pulse an echo belongs to. That
+works as long as every echo comes back before the next pulse leaves, which
+holds for every target closer than</p>
+<div class="math notranslate nohighlight">
+\[R_\text{ua} = \frac{c\ T_\text{PRI}}{2} = \frac{c}{2\ \text{PRF}},\]</div>
+<p>the <strong>unambiguous range</strong>. At a PRF of <span class="qty">1 kHz</span> it is <span class="qty">150 km</span>.
+A target farther out still reflects, but its echo arrives after the next
+pulse has gone out, and the receiver times it from that pulse. In the figure
+a target at <span class="qty">170 km</span> returns its echo <span class="qty">1.133 ms</span> after its
+pulse, which is <span class="qty">0.133 ms</span> after the next one, so the radar reports it at
+<span class="math notranslate nohighlight">\(170 - 150 = 20\ \text{km}\)</span>. Radars resolve this by changing the PRF from one
+burst to the next: a true range stays put, and a folded one moves.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-range-resolution-of-a-pulse">
+<div class="wrap docutils container">
+<p class="rubric">Range Resolution of a Pulse</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\Delta R = \frac{c\ \tau_p}{2}\]</div>
+<ul class="simple">
+<li><p>Echoes closer than one pulse length in time merge.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\tau_p = 1\ \mu\text{s}\)</span>: <span class="math notranslate nohighlight">\(\Delta R = 150\ \text{m}\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L26-resolution.svg"
+     alt="Echoes of a 1 microsecond pulse from two targets: 225 m apart they are two separate echoes; 75 m apart they overlap into one"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Resolution is the ability to report two targets as two. Suppose two targets
+sit <span class="math notranslate nohighlight">\(\Delta R\)</span> apart in range, and the radar sends a pulse of length <span class="math notranslate nohighlight">\(\tau_p\)</span>.
+Their echoes are each <span class="math notranslate nohighlight">\(\tau_p\)</span> long and start <span class="math notranslate nohighlight">\(2\Delta R/c\)</span> apart. When that
+gap is longer than the pulse, the receiver sees two echoes with a quiet
+interval between them; when it is shorter, the echoes overlap, and the
+receiver sees a single longer echo it cannot split. The boundary is
+<span class="math notranslate nohighlight">\(2\Delta R/c = \tau_p\)</span>, so the <strong>range resolution</strong> is</p>
+<div class="math notranslate nohighlight">
+\[\Delta R = \frac{c\ \tau_p}{2}.\]</div>
+<p>A <span class="math notranslate nohighlight">\(1\ \mu\text{s}\)</span> pulse resolves targets <span class="qty">150 m</span> apart. In the figure
+the targets <span class="qty">225 m</span> apart give two echoes, and the targets
+<span class="qty">75 m</span> apart give one, a little taller where they overlap.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-resolution-is-set-by-bandwidth">
+<div class="wrap docutils container">
+<p class="rubric">Resolution Is Set by Bandwidth</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Delta R &amp;= \frac{c\ \tau_p}{2} \approx \frac{c}{2B} \\
+&amp;= \frac{3\times 10^8}{2\ (500\ \text{MHz})} = 0.30\ \text{m}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>A short pulse has bandwidth <span class="math notranslate nohighlight">\(B \approx 1/\tau_p\)</span>.</p></li>
+<li><p>A chirp sweeps <span class="math notranslate nohighlight">\(B\)</span> in a long pulse: resolution and energy together.</p></li>
+<li><p>The PHASER chirp sweeps <span class="qty">500 MHz</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A short pulse resolves well but carries little energy, since energy is power
+times duration, and every transmitter has a peak-power limit. Detection,
+L27’s subject, wants energy; resolution wants a short pulse. The way out is
+to notice what a short pulse provides. A pulse of length <span class="math notranslate nohighlight">\(\tau_p\)</span>
+occupies a bandwidth of about <span class="math notranslate nohighlight">\(B \approx 1/\tau_p\)</span>, so the resolution can be
+written</p>
+<div class="math notranslate nohighlight">
+\[\Delta R = \frac{c}{2B}.\]</div>
+<p>This form is the general one. What separates two echoes is the bandwidth of
+the waveform, not its length. A <strong>chirp</strong>, a pulse whose frequency sweeps
+across <span class="math notranslate nohighlight">\(B\)</span> during a long transmission, has the bandwidth of a short pulse and
+the energy of a long one, and processing that undoes the sweep (pulse
+compression, in a pulsed radar) recovers the resolution <span class="math notranslate nohighlight">\(c/2B\)</span>. ADI’s FMCW
+lab sweeps the PHASER’s transmitter across <span class="qty">500 MHz</span>, which gives
+<span class="math notranslate nohighlight">\(\Delta R = 0.30\ \text{m}\)</span>: two corner reflectors on the bench must be more
+than <span class="qty">30 cm</span> apart in range to appear as two. L28 derives the FMCW
+version of this result.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-key-point">
+<div class="wrap docutils container">
+<p class="rubric">Key Point</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p>The PRF sets how far the radar can see without ambiguity. The bandwidth sets
+how finely it resolves in range. Neither depends on the other, or on the
+transmit power.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-doppler-shift">
+<div class="wrap docutils container">
+<p class="rubric">The Doppler Shift</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\phi(t) &amp;= -\frac{4\pi R(t)}{\lambda} \\
+f_D &amp;= \frac{1}{2\pi}\frac{d\phi}{dt} = -\frac{2}{\lambda}\frac{dR}{dt} \\
+&amp;= \frac{2v_r}{\lambda}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(v_r = -dR/dt\)</span>, the closing speed.</p></li>
+<li><p>At <span class="qty">10 GHz</span>, <span class="math notranslate nohighlight">\(\lambda = 3.0\ \text{cm}\)</span>: <span class="qty">66.7 Hz</span> per <span class="math notranslate nohighlight">\(\text{m/s}\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The echo’s phase records the round trip. A wave that travels <span class="math notranslate nohighlight">\(2R\)</span> picks up a
+phase of <span class="math notranslate nohighlight">\(-k(2R) = -4\pi R/\lambda\)</span> relative to the transmitted signal. If the
+target moves, <span class="math notranslate nohighlight">\(R\)</span> changes with time and so does that phase, and a phase that
+changes steadily with time is a frequency. Differentiating gives the
+<strong>Doppler shift</strong></p>
+<div class="math notranslate nohighlight">
+\[f_D = \frac{2v_r}{\lambda},\]</div>
+<p>where <span class="math notranslate nohighlight">\(v_r = -dR/dt\)</span> is the rate at which the range is closing. The 2 is the
+same factor as in <span class="math notranslate nohighlight">\(R = c\tau/2\)</span>: the path changes twice as fast as the range.
+At a <span class="qty">10 GHz</span> carrier, <span class="math notranslate nohighlight">\(\lambda = 3.0\ \text{cm}\)</span> and each meter per
+second of closing speed shifts the echo by <span class="qty">66.7 Hz</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-which-direction-is-positive">
+<div class="wrap docutils container">
+<p class="rubric">Which Direction Is Positive</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Closing</strong>: the path shortens, the echo rises in frequency, <span class="math notranslate nohighlight">\(f_D &gt; 0\)</span>.</p></li>
+<li><p><strong>Opening</strong>: the echo falls, <span class="math notranslate nohighlight">\(f_D &lt; 0\)</span>.</p></li>
+<li><p>Only the radial component counts: <span class="math notranslate nohighlight">\(v_r = v\cos\alpha\)</span>.</p></li>
+<li><p>A target crossing the line of sight has <span class="math notranslate nohighlight">\(f_D = 0\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L26-radial.svg"
+     alt="A target moving at speed v at angle alpha to the line of sight; only the component v cos alpha along the line of sight shifts the echo"
+     style="max-width: 480px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The course convention is the usual one: a target moving toward the radar has
+positive <span class="math notranslate nohighlight">\(v_r\)</span> and a positive Doppler shift. As the range shrinks, each wave
+crest has a shorter trip than the one before, so the crests arrive closer
+together and the echo’s frequency is higher than the transmitted one. A target
+moving away stretches the crest spacing and shifts the echo down.</p>
+<p>Only motion along the line of sight changes the range. A target moving at
+speed <span class="math notranslate nohighlight">\(v\)</span> in a direction <span class="math notranslate nohighlight">\(\alpha\)</span> off the line of sight has</p>
+<div class="math notranslate nohighlight">
+\[v_r = v\cos\alpha.\]</div>
+<p>An aircraft at <span class="qty">200 m/s</span> flying <span class="qty">60°</span> off the line of sight
+closes at <span class="qty">100 m/s</span> and shifts a <span class="qty">10 GHz</span> echo by
+<span class="qty">6.67 kHz</span>. One crossing the line of sight at <span class="math notranslate nohighlight">\(\alpha = 90^\circ\)</span>
+has no Doppler shift at all, which is why a Doppler radar can lose a target
+that is moving fast but tangentially.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-shift-is-small">
+<div class="wrap docutils container">
+<p class="rubric">The Shift Is Small</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(100\ \text{mph} = 44.7\ \text{m/s}\)</span></p></th>
+<th class="head text-right"><p><span class="math notranslate nohighlight">\(\lambda\)</span></p></th>
+<th class="head text-right"><p><span class="math notranslate nohighlight">\(f_D\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="qty">2.4 GHz</span></p></td>
+<td class="text-right"><p><span class="qty">12.5 cm</span></p></td>
+<td class="text-right"><p><span class="qty">715 Hz</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="qty">10 GHz</span></p></td>
+<td class="text-right"><p><span class="qty">3.0 cm</span></p></td>
+<td class="text-right"><p><span class="qty">2980 Hz</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p><span class="qty">2980 Hz</span> is <span class="math notranslate nohighlight">\(3\times 10^{-7}\)</span> of the carrier.</p></li>
+<li><p>The radar measures the difference from what it sent.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>ADI’s CW radar lab
+(<a class="reference external" href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-cw/">Analog Devices, “CW Radar with Phaser”</a>)
+takes a car at <span class="qty">100 mph</span> as its example. In meters per second that is
+<span class="qty">44.7 m/s</span>, and</p>
+<div class="math notranslate nohighlight">
+\[f_D = \frac{2(44.7)}{0.125} = 715\ \text{Hz} \qquad \text{and} \qquad f_D = \frac{2(44.7)}{0.030} = 2980\ \text{Hz}\]</div>
+<p>at <span class="qty">2.4</span> and <span class="qty">10 GHz</span>. ADI quotes <span class="qty">716</span> and <span class="qty">2982 Hz</span>; the
+difference is only the value of <span class="math notranslate nohighlight">\(c\)</span>, which they take as <span class="math notranslate nohighlight">\(2.998\times 10^8\)</span>
+rather than the course’s <span class="math notranslate nohighlight">\(3.00\times 10^8\ \text{m/s}\)</span>. A higher carrier
+gives a larger shift for the same speed, since <span class="math notranslate nohighlight">\(f_D\)</span> scales as <span class="math notranslate nohighlight">\(1/\lambda\)</span>.</p>
+<p>Both shifts are tiny next to the carrier. No receiver could measure a
+<span class="qty">10.000003 GHz</span> echo directly against a <span class="qty">10 GHz</span> reference
+with any accuracy, so a Doppler radar compares the echo with its own
+transmitted signal and keeps only the difference, which comes out at a few
+hundred or thousand hertz, where the Pluto digitizes it easily.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-doppler-resolution-and-ambiguity">
+<div class="wrap docutils container">
+<p class="rubric">Doppler Resolution and Ambiguity</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Delta v &amp;= \frac{\lambda}{2T} \\
+v_\text{ua} &amp;= \pm\frac{\lambda}{4\ T_\text{PRI}}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Listening for <span class="math notranslate nohighlight">\(T\)</span> resolves <span class="math notranslate nohighlight">\(1/T\)</span> in frequency.</p></li>
+<li><p>Pulses sample the Doppler at the PRF: <span class="math notranslate nohighlight">\(\pm\text{PRF}/2\)</span> is unambiguous.</p></li>
+<li><p><span class="qty">256</span> pulses, <span class="qty">0.5 ms</span> apart: <span class="qty">0.12 m/s</span>, <span class="qty">±15 m/s</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Range and Doppler have the same two limits. To tell two frequencies apart, the
+radar has to watch the echo long enough for them to drift a full cycle apart,
+so an observation of length <span class="math notranslate nohighlight">\(T\)</span> resolves frequencies <span class="math notranslate nohighlight">\(1/T\)</span> apart. Divided
+through by <span class="math notranslate nohighlight">\(2/\lambda\)</span>, that is a velocity resolution</p>
+<div class="math notranslate nohighlight">
+\[\Delta v = \frac{\lambda}{2T}.\]</div>
+<p>A pulsed radar sees the target only once per pulse, so it samples the Doppler
+phase at the PRF, and by the sampling theorem it can only tell apart Doppler
+shifts within <span class="math notranslate nohighlight">\(\pm\text{PRF}/2\)</span>. A faster target aliases into that window and
+reports the wrong speed, possibly the wrong sign. The unambiguous velocity is</p>
+<div class="math notranslate nohighlight">
+\[v_\text{ua} = \pm\frac{\lambda\ \text{PRF}}{4} = \pm\frac{\lambda}{4\ T_\text{PRI}}.\]</div>
+<p>ADI’s range-Doppler lab
+(<a class="reference external" href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-doppler/">Analog Devices, “Range Doppler Radar Processing”</a>)
+sends a burst of 256 chirps, <span class="qty">0.5 ms</span> apart, near <span class="qty">10 GHz</span>. The
+burst lasts <span class="math notranslate nohighlight">\(T = 128\ \text{ms}\)</span>, so it resolves <span class="qty">7.8 Hz</span>, or
+<span class="qty">0.12 m/s</span>, and its unambiguous velocity is <span class="qty">±15 m/s</span>.
+A person walking is well inside that window; a car on a highway is not. L29
+builds the range-Doppler map from exactly this kind of burst.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-one-prf-two-limits">
+<div class="wrap docutils container">
+<p class="rubric">One PRF, Two Limits</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[R_\text{ua}\ v_\text{ua} = \frac{c}{2\ \text{PRF}}\cdot\frac{\lambda\ \text{PRF}}{4} = \frac{c\lambda}{8}\]</div>
+<ul class="simple">
+<li><p>Raising the PRF extends velocity and shortens range.</p></li>
+<li><p>At <span class="qty">10 GHz</span> the product is <span class="math notranslate nohighlight">\(1.1\times 10^6\ \text{m}^2/\text{s}\)</span>.</p></li>
+<li><p>PRF <span class="qty">1 kHz</span>: <span class="qty">150 km</span> and <span class="qty">±7.5 m/s</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The PRF appears in both unambiguous limits, on opposite sides. A low PRF
+leaves a long listening time between pulses, so the unambiguous range is long,
+but it samples the Doppler slowly, so the unambiguous velocity is small. A
+high PRF does the reverse. The product of the two does not depend on the PRF
+at all:</p>
+<div class="math notranslate nohighlight">
+\[R_\text{ua}\ v_\text{ua} = \frac{c\lambda}{8}.\]</div>
+<p>At <span class="qty">10 GHz</span> that is <span class="math notranslate nohighlight">\(1.1\times 10^6\ \text{m}^2/\text{s}\)</span>. A
+<span class="qty">1 kHz</span> PRF gives <span class="qty">150 km</span> of unambiguous range and only
+<span class="qty">±7.5 m/s</span> of unambiguous velocity, slower than a bicycle. An
+airborne radar that must report both range and closing speed for fast
+aircraft cannot satisfy both limits with one PRF, so it switches among
+several and works out the true range and velocity from how the readings move,
+the same idea used against a folded range above.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-folded-range-and-aliased-speed">
+<div class="wrap docutils container">
+<p class="rubric">Folded Range and Aliased Speed</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/prf-ambiguity.html"
+        width="100%" height="403"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="One PRF, two limits: the unambiguous range and velocity windows a PRF sets, a target's true range and closing speed, and what the radar reports">
+</iframe>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The widget is a pulsed radar at <span class="qty">10 GHz</span>. Set the PRF, then place a
+target with the range and closing-speed sliders. The shaded band on each axis
+is the unambiguous window the PRF allows, <span class="qty">0</span> to <span class="math notranslate nohighlight">\(R_\text{ua}\)</span> in range and
+<span class="math notranslate nohighlight">\(\pm v_\text{ua}\)</span> in speed. The open circle is the target’s true value and the
+solid one is what the radar reports; when the target lies outside a window,
+the report folds back into it and turns red. It opens on the case from the
+previous frames: at <span class="qty">1 kHz</span> a target at <span class="qty">170 km</span> reads
+<span class="qty">20 km</span>, and one closing at <span class="qty">20 m/s</span> reads <span class="qty">+5 m/s</span>.
+Raise the PRF until the speed reads correctly and watch the range window
+shrink below the target: no PRF reports both this target’s range and its speed
+correctly.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-pulsed-and-continuous-wave-radar">
+<div class="wrap docutils container">
+<p class="rubric">Pulsed and Continuous-Wave Radar</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-left"><p>Pulsed</p></th>
+<th class="head text-left"><p>Continuous wave</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Transmit</p></td>
+<td class="text-left"><p>then listen</p></td>
+<td class="text-left"><p>while listening</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Antennas</p></td>
+<td class="text-left"><p>one, shared</p></td>
+<td class="text-left"><p>separate Tx and Rx</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Power</p></td>
+<td class="text-left"><p>high peak</p></td>
+<td class="text-left"><p>low, steady</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Best at</p></td>
+<td class="text-left"><p>long range</p></td>
+<td class="text-left"><p>short range</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>ADI’s radar setup page
+(<a class="reference external" href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-setup/">Analog Devices, “Setup the Phaser for Radar”</a>)
+divides radars into two families. A <strong>pulsed</strong> radar transmits a short,
+powerful pulse, switches its one antenna over to the receiver, and listens
+until the next pulse. It times echoes directly, reaches long ranges because
+its peak power is high, and cannot hear anything while it transmits: a target
+closer than <span class="math notranslate nohighlight">\(c\tau_p/2\)</span> returns its echo while the pulse is still going out.</p>
+<p>A <strong>continuous-wave</strong> (CW) radar transmits and receives at the same time.
+Its transmitter never switches off, so it needs a separate transmit antenna,
+far enough from the receive antenna that the leakage between them does not
+swamp the echo. Its average power is modest, which suits short ranges, and it
+has no blind zone near the radar. That makes it the right choice for a radar
+on a lab bench. The PHASER is set up this way: the transmit antenna on
+OUT2 sits beside the eight-element receive array, at the same height.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-cw-radar-speed-but-no-range">
+<div class="wrap docutils container">
+<p class="rubric">CW Radar: Speed but No Range</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A pure tone has no time mark, so no delay to measure.</p></li>
+<li><p>The echo differs from the transmission only by <span class="math notranslate nohighlight">\(f_D\)</span>.</p></li>
+<li><p>Every mover in the beam shares one spectrum.</p></li>
+<li><p>FMCW (L28) sweeps the frequency to add a time mark.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The simplest CW radar sends a single unmodulated tone. Its echo is the same
+tone, delayed and shifted by <span class="math notranslate nohighlight">\(f_D\)</span>. The shift is easy to measure: compare the
+echo with the transmitted tone and the difference is a sine wave at <span class="math notranslate nohighlight">\(f_D\)</span>,
+whose frequency an FFT reads directly. The delay is not measurable at all.
+Every cycle of a pure tone looks like every other cycle, so there is no
+feature in the echo to time against the transmission. A CW radar therefore
+measures speed but not range, which is what a police speed radar needs and no
+more.</p>
+<p>The FFT of the CW echo is one spectrum for the whole beam. A car and a fence
+behind it both reflect; the fence sits at <span class="qty">0 Hz</span> and the car at its
+<span class="math notranslate nohighlight">\(f_D\)</span>, and two cars at the same speed fall in the same bin regardless of
+range. L28’s FMCW waveform restores the time mark: it sweeps the transmitted
+frequency in a ramp, so the frequency of the echo says when it was sent, and
+the delay becomes a measurable frequency difference.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-fan-demo">
+<div class="wrap docutils container">
+<p class="rubric">The Fan Demo</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Edge-on, each point of a blade swings along the line of sight.</p></li>
+<li><p><span class="qty">0.3 m</span> fan at <span class="qty">1200 rpm</span>: tips at <span class="qty">18.8 m/s</span>, <span class="qty">±1.26 kHz</span>.</p></li>
+<li><p>The hub and stand sit at <span class="qty">0 Hz</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L26-fan-spectrum.svg"
+     alt="Simulated CW Doppler spectrum of a three-blade fan seen edge-on: a strong line at 0 Hz from the hub, and blade returns spread between minus and plus 1.26 kHz, set by the tip speed"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>ADI’s CW lab points the PHASER at a variable-speed fan and shows its Doppler
+spectrum as a running waterfall. ADI’s script takes 65,536 samples at
+<span class="qty">0.6 MHz</span> for each spectrum, <span class="qty">109 ms</span> of echo, so by
+<span class="math notranslate nohighlight">\(\Delta f = 1/T\)</span> its bins are <span class="qty">9.2 Hz</span> wide, or <span class="qty">0.14 m/s</span> at
+<span class="qty">10 GHz</span>.</p>
+<p>A fan is a useful target because it holds still and moves at the same time.
+Seen edge-on, a point on a blade at radius <span class="math notranslate nohighlight">\(\rho\)</span> swings toward and away from
+the radar at up to <span class="math notranslate nohighlight">\(\Omega\rho\)</span>, where <span class="math notranslate nohighlight">\(\Omega\)</span> is the rotation rate in
+radians per second. The tips move fastest: a <span class="qty">0.3 m</span> fan at
+<span class="qty">1200 rpm</span> has a tip speed</p>
+<div class="math notranslate nohighlight">
+\[v_\text{tip} = \pi D\ \frac{\text{rpm}}{60} = \pi(0.30)(20) = 18.8\ \text{m/s},\]</div>
+<p>and so a Doppler shift of up to <span class="math notranslate nohighlight">\(\pm 2(18.8)/0.030 = \pm 1.26\ \text{kHz}\)</span>. The
+spectrum fills the band between, one return for each part of each blade,
+while the hub and the stand stay at <span class="qty">0 Hz</span>. Speed the fan up and the
+band widens in proportion; the edge of the band measures the tip speed. Face
+the fan head-on and the blades move across the line of sight instead of along
+it, and the band collapses toward <span class="qty">0 Hz</span>. The line spacing in the
+figure comes from the three blades passing 20 times a second, <span class="qty">60 Hz</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-a-first-look-at-micro-doppler">
+<div class="wrap docutils container">
+<p class="rubric">A First Look at Micro-Doppler</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Moving parts add their own Doppler around the body’s.</p></li>
+<li><p>A walker’s torso at <span class="qty">1.3 m/s</span> is <span class="qty">87 Hz</span>; limbs swing to <span class="qty">4.0 m/s</span>, <span class="qty">267 Hz</span>.</p></li>
+<li><p>The pattern identifies the target (L31).</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L26-micro-doppler.svg"
+     alt="Simulated Doppler spectrogram of a walker over three seconds: a steady line at 87 Hz from the torso and two sinusoidal traces from the limbs swinging between about minus 93 and plus 267 Hz once a second"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The fan shows the general idea. A target is rarely one rigid body moving at
+one speed. A walker’s torso approaches at a steady speed, while the arms and
+legs swing forward and back about it; a helicopter’s rotor spins on top of a
+fuselage; a drone’s propellers spin on a hovering frame. Each moving part
+adds a Doppler shift of its own on top of the body’s, and the extra shifts,
+called <strong>micro-Doppler</strong>, change in time with the motion.</p>
+<p>A single spectrum blurs those changes together. A <strong>spectrogram</strong>, a run of
+short spectra plotted against time, shows them. The figure is a simulation of
+a walker approaching at <span class="qty">1.3 m/s</span> at <span class="qty">10 GHz</span>: the torso is
+the steady line at <span class="qty">87 Hz</span>, and two limbs swinging in opposite phase,
+once a second, trace sinusoids that reach <span class="qty">267 Hz</span> (<span class="qty">4.0 m/s</span>)
+going forward and about <span class="qty">−93 Hz</span> going back. The spectrogram trades
+resolution for time: each column uses <span class="qty">64 ms</span> of echo, so it resolves
+only about <span class="qty">16 Hz</span>, by the same <span class="math notranslate nohighlight">\(\Delta f = 1/T\)</span>.</p>
+<p>A walker, a fan, and a swinging pendulum produce three distinct patterns.
+L31 turns those patterns into features, and the L31 Lab classifies targets
+from spectrograms recorded on your own kit.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-range">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Range</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(R = c\tau/2\)</span></p></td>
+<td class="text-left"><p>range from round-trip delay</p></td>
+<td class="text-left"><p><span class="qty">6.67 ns</span> per meter</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(R_\text{ua} = c/(2\ \text{PRF})\)</span></p></td>
+<td class="text-left"><p>unambiguous range</p></td>
+<td class="text-left"><p><span class="qty">150 km</span> at <span class="qty">1 kHz</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta R = c\tau_p/2 = c/2B\)</span></p></td>
+<td class="text-left"><p>range resolution</p></td>
+<td class="text-left"><p><span class="qty">150 m</span> at <span class="math notranslate nohighlight">\(1\ \mu\text{s}\)</span>; <span class="qty">0.30 m</span> at <span class="qty">500 MHz</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>pulsed vs CW</p></td>
+<td class="text-left"><p>transmit then listen, or both at once</p></td>
+<td class="text-left"><p>CW needs separate antennas</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-doppler">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Doppler</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(f_D = 2v_r/\lambda\)</span></p></td>
+<td class="text-left"><p>Doppler shift, positive when closing</p></td>
+<td class="text-left"><p><span class="qty">66.7 Hz</span> per <span class="math notranslate nohighlight">\(\text{m/s}\)</span> at <span class="qty">10 GHz</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(v_r = v\cos\alpha\)</span></p></td>
+<td class="text-left"><p>only the radial component counts</p></td>
+<td class="text-left"><p><span class="qty">0</span> for a crossing target</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta v = \lambda/2T\)</span></p></td>
+<td class="text-left"><p>velocity resolution</p></td>
+<td class="text-left"><p><span class="qty">0.12 m/s</span> for <span class="qty">128 ms</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(v_\text{ua} = \pm\lambda\ \text{PRF}/4\)</span></p></td>
+<td class="text-left"><p>unambiguous velocity</p></td>
+<td class="text-left"><p><span class="qty">±15 m/s</span> at <span class="qty">2 kHz</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(R_\text{ua}v_\text{ua} = c\lambda/8\)</span></p></td>
+<td class="text-left"><p>one PRF sets both limits</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(1.1\times 10^6\ \text{m}^2/\text{s}\)</span> at <span class="qty">10 GHz</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>micro-Doppler</p></td>
+<td class="text-left"><p>moving parts’ own Doppler</p></td>
+<td class="text-left"><p>walker limbs to <span class="qty">267 Hz</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../practice/ECE444_L26_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a class="doc-link doc-key" href="../../practice/ECE444_L26_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>L27: is an echo there at all, against the noise?</p></li>
+<li><p>L28: FMCW turns delay into a beat frequency, with <span class="math notranslate nohighlight">\(\Delta R = c/2B\)</span>.</p></li>
+<li><p>L29: range and Doppler together, from a burst of chirps.</p></li>
+<li><p>L31: micro-Doppler spectrograms for classification.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Every quantity in this lesson comes back in the labs. L27 adds noise and asks
+how reliably a radar decides that an echo is present. L28 sets up the
+PHASER’s FMCW mode, where the chirp’s <span class="qty">500 MHz</span> sets the
+<span class="qty">0.30 m</span> range resolution and the delay of each echo appears as a beat
+frequency; the L28 Lab measures it on corner reflectors. L29 sends a burst of
+chirps and forms the range-Doppler map, with the velocity resolution and the
+unambiguous velocity defined here as its axes. L31 returns to micro-Doppler
+and classifies targets from their spectrograms. Bring this lesson’s numbers to
+each of those labs: every pre-lab starts from a prediction made with them.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module04/L26-range-resolution-doppler"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

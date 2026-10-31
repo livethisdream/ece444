@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L30 - CFAR Processing &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=8125a6e0df">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l30-cfar-processing">
+<h1>L30 - CFAR Processing<a class="headerlink" href="#l30-cfar-processing" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">CFAR Processing</h1>
+<div class="title-rule"></div>
+<p>A threshold set from 32 neighboring cells holds one false alarm in a million wherever the noise goes, for 1 dB more SNR.</p>
+<p>Lesson 30 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame here-30 docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 6">
+  <li>I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance.</li>
+</ol>
+<!-- The Module 4 "you are here" strip. Included into a lesson's Learning
+     Objectives frame, which carries `:class: here-NN` to light up its own
+     chip (frames.css). L25-L27 are taught in class; L28-L31 are the final
+     project, each one page with its lesson and then its lab. -->
+<div class="lane-strip" role="navigation" aria-label="Module 4 lessons, by whether they are taught in class or worked as the final project">
+  <span class="ls-label">Module 4</span>
+  <a class="ls-chip" data-n="25" href="../L25-radar-equation/index.html" title="L25 Radar Equation: in class">25</a>
+  <a class="ls-chip" data-n="26" href="../L26-range-resolution-doppler/index.html" title="L26 Range, Resolution, and Doppler: in class">26</a>
+  <a class="ls-chip" data-n="27" href="../L27-radar-detection/index.html" title="L27 Radar Detection: in class">27</a>
+  <a class="ls-chip ls-proj" data-n="28" href="../L28-fmcw/index.html" title="L28 FMCW and its lab: final project">28</a>
+  <a class="ls-chip ls-proj" data-n="29" href="../L29-range-doppler-mti/index.html" title="L29 Range-Doppler and MTI and its lab: final project">29</a>
+  <a class="ls-chip ls-proj" data-n="30" href="../L30-cfar/index.html" title="L30 CFAR and its lab: final project">30</a>
+  <a class="ls-chip ls-proj" data-n="31" href="../L31-classification-tracking/index.html" title="L31 Classification and Tracking and its lab: final project">31</a>
+  <a class="ls-chip ls-proj ls-report" href="../final-project/index.html" title="Final Project: Radar Systems Report">Report</a>
+  <span class="ls-key"><i></i>in class <i class="ls-proj"></i>final project</span>
+</div>
+<div class="depth docutils container">
+<p><a href="../L27-radar-detection/index.html">Lesson 27</a> set a detection threshold from the probability of false alarm, assuming the processor knows the noise power, and ended by showing what happens when it does not. This lesson replaces the assumed noise power with one measured from the data around each cell. That is constant false-alarm rate (CFAR) processing, and it is the detector you will run on your own range-Doppler maps from <a href="../L29-range-doppler-mti/index.html">Lesson 29</a>.</p>
+<p>The L28–L31 Labs are worked outside class, so this page carries the whole argument in read mode. The lesson comes first; the L30 Lab follows it on this page.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-noise-floor-moves">
+<div class="wrap docutils container">
+<p class="rubric">The Noise Floor Moves</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A fixed threshold assumes the noise power <span class="math notranslate nohighlight">\(P_n\)</span> is known.</p></li>
+<li><p>3 dB more noise turns <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> into <span class="math notranslate nohighlight">\(10^{-3}\)</span>.</p></li>
+<li><p>CFAR measures <span class="math notranslate nohighlight">\(P_n\)</span> around each cell it tests.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><a href="../L27-radar-detection/index.html#frame-probability-of-false-alarm">Lesson 27</a> found that noise power in one cell is exponentially distributed with mean <span class="math notranslate nohighlight">\(P_n\)</span>, so a threshold <span class="math notranslate nohighlight">\(T\)</span> is crossed by noise alone with probability</p>
+<div class="math notranslate nohighlight">
+\[
+P_{fa} = e^{-T/P_n} .
+\]</div>
+<p>The threshold for <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> is <span class="math notranslate nohighlight">\(T = 13.8\ P_n\)</span>, 11.4 dB above the mean noise. If the noise rises by a factor <span class="math notranslate nohighlight">\(g\)</span> while <span class="math notranslate nohighlight">\(T\)</span> stays put, the probability becomes <span class="math notranslate nohighlight">\(P_{fa}^{1/g}\)</span>, and a 3 dB rise turns <span class="math notranslate nohighlight">\(10^{-6}\)</span> into <span class="math notranslate nohighlight">\(10^{-3}\)</span>. At the million decisions a second of the L29 burst, that is a thousand false targets a second.</p>
+<p>The noise on a real map does move. Stationary clutter fills the cells near zero velocity, strong reflections fill the cells nearest the radar, and the receiver gain sets the level of everything. A fixed threshold high enough for the worst of these misses targets everywhere else. <a href="../L27-radar-detection/index.html#frame-a-fixed-threshold-fails">Lesson 27’s last figure</a> showed the alternative: estimate the noise power from the cells around the one being tested, and set the threshold from that estimate.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-cell-under-test-guard-and-reference">
+<div class="wrap docutils container">
+<p class="rubric">Cell Under Test, Guard, and Reference</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L30-window.svg" alt="A row of range cells. The cell under test in the center is red. Two gray guard cells sit on each side of it, then four blue reference cells on each side. A bracket joins the reference cells: their average times the bias is the threshold the cell under test must cross" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<ul class="simple">
+<li><p><strong>Reference</strong> cells estimate the local noise.</p></li>
+<li><p><strong>Guard</strong> cells keep the target’s own energy out of the estimate.</p></li>
+<li><p>The window slides, so every cell gets its own threshold.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The detector tests one cell at a time, the <strong>cell under test</strong>. On each side of it, it skips a few <strong>guard cells</strong> and then averages a block of <strong>reference cells</strong>. The average is the estimate of the noise power at this cell, and the threshold is that estimate multiplied by a <strong>bias</strong>. If the cell under test exceeds the threshold, the detector declares a target there. Then the window moves one cell and the detector repeats the test, so the threshold is recomputed at every cell from that cell’s own neighbors.</p>
+<p>The figure draws 2 guard and 4 reference cells a side so that the cells are readable. The running example in this lesson uses 2 guard and 16 reference cells a side, <span class="math notranslate nohighlight">\(N = 32\)</span> reference cells in all, which is the local-average threshold in Lesson 27’s last figure. ADI’s <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-cfar/" target="_blank" rel="noopener">CFAR lab</a> lists the same steps for the PHASER: pick the cell, skip the guard cells, average the reference cells, multiply by the bias, and compare.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-cell-averaging-cfar">
+<div class="wrap docutils container">
+<p class="rubric">Cell-Averaging CFAR</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\hat{P}_n &amp;= \frac{1}{N}\sum_{i=1}^{N} z_i \\
+T &amp;= \alpha\ \hat{P}_n \\
+P_{fa} &amp;= \left(1 + \frac{\alpha}{N}\right)^{-N}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(P_{fa}\)</span> depends on <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(N\)</span>, and not on <span class="math notranslate nohighlight">\(P_n\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>With <span class="math notranslate nohighlight">\(z_i\)</span> the power in reference cell <span class="math notranslate nohighlight">\(i\)</span>, the <strong>cell-averaging</strong> (CA) CFAR estimate of the noise power is the sample mean <span class="math notranslate nohighlight">\(\hat{P}_n\)</span>, and the threshold is <span class="math notranslate nohighlight">\(T = \alpha\hat{P}_n\)</span>. The bias <span class="math notranslate nohighlight">\(\alpha\)</span> is the number we choose.</p>
+<p>For a given estimate, the cell under test crosses the threshold with probability <span class="math notranslate nohighlight">\(e^{-T/P_n}\)</span>, the Lesson 27 result. The estimate is itself random, so the probability of false alarm is the average of that over the reference cells. Each <span class="math notranslate nohighlight">\(z_i\)</span> is independent and exponential with mean <span class="math notranslate nohighlight">\(P_n\)</span>, and for one such cell the average of <span class="math notranslate nohighlight">\(e^{-cz_i/P_n}\)</span> is <span class="math notranslate nohighlight">\(1/(1 + c)\)</span>. The exponential of a sum is a product, so</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+P_{fa} &amp;= \left\langle e^{-\alpha\hat{P}_n/P_n} \right\rangle
+= \prod_{i=1}^{N}\left\langle e^{-\alpha z_i/(NP_n)} \right\rangle \\
+&amp;= \left(1 + \frac{\alpha}{N}\right)^{-N} ,
+\end{aligned}
+\end{split}\]</div>
+<p>where the angle brackets mean the average over the noise. <span class="math notranslate nohighlight">\(P_n\)</span> has dropped out. Wherever the noise sits, whether 0 dB or 15 dB, the probability that noise alone crosses the threshold is the same, which is what <em>constant false-alarm rate</em> means. Two assumptions came with it: the reference cells hold only noise, and their noise has the same mean as the noise in the cell under test. The rest of the lesson is about what happens when either one fails.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-bias-from-the-false-alarm-probability">
+<div class="wrap docutils container">
+<p class="rubric">The Bias From the False-Alarm Probability</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\alpha &amp;= N\left(P_{fa}^{-1/N} - 1\right) \\
+&amp;= 32\left(10^{6/32} - 1\right) = 17.3 \\
+&amp;= 12.4\ \text{dB}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>A known <span class="math notranslate nohighlight">\(P_n\)</span> needs 11.4 dB; 32 reference cells need 12.4 dB.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Inverting the false-alarm expression gives the bias for a chosen <span class="math notranslate nohighlight">\(P_{fa}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\alpha = N\left(P_{fa}^{-1/N} - 1\right) .
+\]</div>
+<p>For <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> and <span class="math notranslate nohighlight">\(N = 32\)</span>, <span class="math notranslate nohighlight">\(\alpha = 32(10^{6/32} - 1) = 17.3\)</span>, or 12.4 dB. With 16 reference cells it is 21.9, 13.4 dB; with 144 it is 14.5, 11.6 dB. As <span class="math notranslate nohighlight">\(N\)</span> grows, <span class="math notranslate nohighlight">\(P_{fa}^{-1/N} = e^{\ln(1/P_{fa})/N} \approx 1 + \ln(1/P_{fa})/N\)</span>, so <span class="math notranslate nohighlight">\(\alpha \to \ln(1/P_{fa}) = 13.8\)</span>, the 11.4 dB threshold of Lesson 27. An average of infinitely many cells is the noise power itself.</p>
+<p>The bias is larger with fewer cells because the estimate scatters. Sometimes it comes out low, the threshold drops with it, and noise crosses more often than it would with the true <span class="math notranslate nohighlight">\(P_n\)</span>. Raising <span class="math notranslate nohighlight">\(\alpha\)</span> pays for those low estimates. In the code later in this lesson, <code class="docutils literal notranslate"><span class="pre">bias_db</span></code> is <span class="math notranslate nohighlight">\(10\log_{10}\alpha\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>ADI’s <code class="docutils literal notranslate"><span class="pre">target_detection_dbfs.py</span></code> averages the reference cells <strong>in dB</strong> and adds the bias in dB. That is a different estimator: the average of <span class="math notranslate nohighlight">\(10\log_{10}z\)</span> over exponential noise sits 2.5 dB below <span class="math notranslate nohighlight">\(10\log_{10}P_n\)</span>, so a bias in ADI’s code is not the <span class="math notranslate nohighlight">\(\alpha\)</span> of this lesson. Its threshold still follows the noise, so it is still a CFAR, but this lesson’s numbers do not apply to it. Read ADI’s code beside the provided <code class="docutils literal notranslate"><span class="pre">cfar_2d</span></code>, which averages power.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-cfar-loss">
+<div class="wrap docutils container">
+<p class="rubric">CFAR Loss</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L30-cfar-loss.svg" alt="Extra SNR needed for Pd = 0.9 at Pfa = 10 to the minus 6, against the number of reference cells on a log axis from 4 to 256. It falls from about 8 dB at 5 cells to 2.1 dB at 16, 1.0 dB at 32 and 0.2 dB at 144" style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A higher bias needs more SNR for the same <span class="math notranslate nohighlight">\(P_d\)</span>.</p></li>
+<li><p>32 cells cost 1.0 dB; 16 cost 2.1 dB.</p></li>
+<li><p>More cells cost less, until the window reaches noise of a different level.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The higher threshold is not free. A target that a known-noise detector finds with <span class="math notranslate nohighlight">\(P_d = 0.9\)</span> at <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> needs 13.2 dB of SNR (Albersheim’s fit in <a href="../L27-radar-detection/index.html#frame-albersheims-equation">Lesson 27</a> gave 13.1 dB). The CA-CFAR detector needs more, because its threshold is higher on average and scatters with the estimate. The difference is the <strong>CFAR loss</strong>. The figure computes it by averaging the Lesson 27 detection probability over the scatter of <span class="math notranslate nohighlight">\(\hat{P}_n\)</span>: 2.1 dB with 16 reference cells, 1.0 dB with 32, and 0.2 dB with 144.</p>
+<p>The figure argues for many reference cells, and the noise argues against it. Every reference cell is assumed to have the same mean noise as the cell under test. A window 32 cells wide in range spans 9.6 m at the 0.30 m cells of the L29 burst, and the clutter near the radar does not stay level over 9.6 m. The number of reference cells trades the CFAR loss against how local the estimate is.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-choosing-the-guard-cells">
+<div class="wrap docutils container">
+<p class="rubric">Choosing the Guard Cells</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A Hann window puts −6 dB of the target in each neighboring cell.</p></li>
+<li><p>No guard cells: the target raises its own threshold.</p></li>
+<li><p>Guard cells cover the target’s extent, in range and in Doppler.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A target does not occupy exactly one cell. The window applied before the FFT, Hann in ADI’s scripts and in the <a href="../L29-range-doppler-mti/index.html">L29</a> range-Doppler map, widens the target’s peak so that each neighboring cell holds a quarter of its power, 6 dB down. A person is also larger than one 0.30 m range cell, and moving arms and legs spread the echo over several Doppler cells.</p>
+<p>Without guard cells, that spill lands in the reference cells. Take a 20 dB target with no guard cells and 32 reference cells. Its two neighbors hold 14 dB each, 25 times the noise power, and they raise the estimate from <span class="math notranslate nohighlight">\(P_n\)</span> to about <span class="math notranslate nohighlight">\((30 + 2 \times 26)/32 = 2.6\ P_n\)</span>, which lifts the threshold by 4.1 dB. The target still crosses, but its margin shrinks from 7.6 dB to 3.5 dB, and a weaker target would not. One or two guard cells a side remove the problem. More guard cells than the target’s extent do no harm to the target, but they push the reference cells farther out, where the noise is less likely to match.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-cfar-explorer">
+<div class="wrap docutils container">
+<p class="rubric">CFAR Explorer</p>
+<div class="depth docutils container">
+<p>The widget draws one range profile of 240 cells, in dB, with the CFAR threshold over it in green. Cells from 168 on hold clutter 15 dB above the quiet noise. Five targets, each with the Hann window’s −6 dB neighbors, are marked by triangles along the top, dark when found and pale when missed: a pair eight cells apart near cell 56, one alone near 104, one in the clear just short of the clutter at 160, and one inside the clutter. Found targets are ringed; noise crossings are red dots and are counted as false alarms. The readout gives the design <span class="math notranslate nohighlight">\(P_{fa}\)</span> for the method, bias, and number of reference cells.</p>
+<p>Start at 2 guard and 16 reference cells a side with a 12.4 dB bias, the lesson’s running example. Set the guard cells to 0 and watch each target lift its own threshold. Lower the bias until false alarms appear, and compare where they appear with the design <span class="math notranslate nohighlight">\(P_{fa}\)</span>. Then switch the method to greatest-of and smallest-of, the subject of the next frames, and press New noise for another draw of the same scene.</p>
+</div>
+<iframe src="../../viz/cfar-explorer.html"
+        width="100%" height="468"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="CFAR threshold over a range profile with clutter and five targets, with guard, reference, bias and method controls">
+</iframe>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-cell-averaging-fails">
+<div class="wrap docutils container">
+<p class="rubric">Where Cell Averaging Fails</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L30-failures.svg" alt="Two range profiles. Left: an 18 dB target eight cells from a 24 dB target; the cell-averaging threshold rises to about 23 dB over both, above the weaker target, while the smallest-of threshold stays near 13 dB. Right: noise that rises 15 dB at cell 60; the cell-averaging threshold ramps up across the edge, and the greatest-of threshold rises earlier and stays at the clutter level" style="max-width: 760px; width: 100%; display: block; margin: 0 auto;">
+<ul class="simple">
+<li><p>A second target in the window hides the weaker one: <strong>masking</strong>.</p></li>
+<li><p>At a clutter edge, one average mixes two noise levels.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Cell averaging assumes that every reference cell holds noise of the same mean as the cell under test. The figure shows the two common ways that fails.</p>
+<p>On the left, an 18 dB target sits eight cells from a 24 dB target. When the weaker target is the cell under test, the stronger one and its two neighbors are in its reference window, and they hold about <span class="math notranslate nohighlight">\(251 + 2 \times 63\)</span> times the noise power. Spread over 32 cells, that raises the estimate by a factor of about 12.7, 11 dB, so the threshold rises to 23.5 dB and the 18 dB target is missed. This is <strong>masking</strong>, and it happens wherever targets are close together: two people walking side by side, or a hand in front of a body.</p>
+<p>On the right, the noise rises 15 dB at cell 60, the edge of a clutter region. Two things go wrong. A cell in the clear just before the edge has half its reference cells in the clutter, so its threshold rises by about 12 dB and a target there is masked. A cell in the clutter just past the edge has half its reference cells in the clear, so its estimate is half what it should be, the threshold sits 3 dB low, and its <span class="math notranslate nohighlight">\(P_{fa}\)</span> rises from <span class="math notranslate nohighlight">\(10^{-6}\)</span> to <span class="math notranslate nohighlight">\((1 + \alpha/32)^{-16} = 10^{-3}\)</span>. The clutter edge produces false alarms on one side and misses on the other.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-greatest-of-and-smallest-of">
+<div class="wrap docutils container">
+<p class="rubric">Greatest-Of and Smallest-Of</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\hat{P}_\text{GO} &amp;= \max\left(\hat{P}_\text{near},\ \hat{P}_\text{far}\right) \\
+\hat{P}_\text{SO} &amp;= \min\left(\hat{P}_\text{near},\ \hat{P}_\text{far}\right)
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>Greatest-of holds <span class="math notranslate nohighlight">\(P_{fa}\)</span> at a clutter edge.</p></li>
+<li><p>Smallest-of finds a target beside another.</p></li>
+<li><p>Each needs its own bias, and costs 0.2 or 0.7 dB more than cell averaging.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Both variants average the two sides of the window separately, <span class="math notranslate nohighlight">\(\hat{P}_\text{near}\)</span> over the reference cells nearer the radar and <span class="math notranslate nohighlight">\(\hat{P}_\text{far}\)</span> over those farther away, and then keep one of the two.</p>
+<p><strong>Greatest-of</strong> (GO) keeps the larger. At a clutter edge, the side in the clutter wins, so a cell just inside the clutter is compared with the clutter level and its false alarms stay near the design value; the dashed red line in the right panel of the last figure does that. The cost is in the clear cells just before the edge, which are also compared with the clutter, and in masking, which GO makes worse.</p>
+<p><strong>Smallest-of</strong> (SO) keeps the smaller. When a second target sits on one side, the clean side wins and the weaker target is found, as the dashed orange line in the left panel shows. SO pays for it at clutter edges, where it takes the quiet side and lets the clutter through.</p>
+<p>Neither max nor min of two averages is an average, so each has its own relation between <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(P_{fa}\)</span>. With 16 cells a side and <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>, GO needs a bias of 12.0 dB on its larger half and SO 13.7 dB on its smaller half, against 12.4 dB for CA. For <span class="math notranslate nohighlight">\(P_d = 0.9\)</span>, GO needs 0.2 dB more SNR than CA and SO 0.7 dB more. ADI’s <code class="docutils literal notranslate"><span class="pre">cfar()</span></code> takes the three methods as <code class="docutils literal notranslate"><span class="pre">'average'</span></code>, <code class="docutils literal notranslate"><span class="pre">'greatest'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'smallest'</span></code>; the widget switches among them.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-ends-of-the-map">
+<div class="wrap docutils container">
+<p class="rubric">The Ends of the Map</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The first and last range cells have reference cells on one side only.</p></li>
+<li><p>One-sided with the same bias, <span class="math notranslate nohighlight">\(P_{fa}\)</span> rises from <span class="math notranslate nohighlight">\(10^{-6}\)</span> to <span class="math notranslate nohighlight">\(8 \times 10^{-6}\)</span>.</p></li>
+<li><p>Doppler wraps: the cell past <span class="qty">+15</span> m/s is <span class="qty">−15</span> m/s.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The window runs out at the ends of the data. In range, a cell within <span class="math notranslate nohighlight">\(g + n\)</span> of the first or last cell has fewer reference cells on one side, or none. There are three choices. Skip those cells and never declare a detection there. Average whatever reference cells exist, which is what this lesson’s code does; with 16 cells instead of 32 and the bias left at 12.4 dB, <span class="math notranslate nohighlight">\(P_{fa}\)</span> rises to <span class="math notranslate nohighlight">\((1 + 17.3/16)^{-16} = 8 \times 10^{-6}\)</span>, which is a small price for keeping the cells. Or raise the bias for the cells with fewer neighbors. The one choice to avoid is padding with zeros and counting them, which drags the estimate down and the false alarms up. ADI’s <code class="docutils literal notranslate"><span class="pre">cfar()</span></code> does not test the end cells against their own neighbors: it gives them the lowest threshold found anywhere in the profile, so a strong return near either end is reported whatever the noise around it. The cells nearest 0 m on the PHASER hold the kit’s own transmit-to-receive leakage, so they are usually excluded in any case.</p>
+<p>Doppler is different. The Doppler FFT is periodic: the cell above the highest velocity, <span class="qty">+15</span> m/s for the L29 burst, is the lowest, <span class="qty">−15</span> m/s. A reference window that runs off one end of the Doppler axis continues at the other, so it never runs out, and the Doppler edge needs no special case.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-2d-cfar-on-the-range-doppler-map">
+<div class="wrap docutils container">
+<p class="rubric">2D CFAR on the Range-Doppler Map</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L30-window-2d.svg" alt="A grid of range cells by Doppler cells. The red cell under test is in the center of a gray five by five block of guard cells, inside a blue thirteen by thirteen block whose 144 cells outside the guard block are the reference cells" style="max-width: 300px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The guard and reference cells become nested boxes.</p></li>
+<li><p>2 guard and 4 reference cells each way give 144 cells: 11.6 dB, 0.2 dB loss.</p></li>
+<li><p>The zero-velocity clutter ridge is an edge: run MTI first.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The <a href="../L29-range-doppler-mti/index.html">range-Doppler map</a> has two axes, so the window does too. The guard cells become a box around the cell under test, and the reference cells are the ring between that box and a larger one. With 2 guard and 4 reference cells each way from the cell under test, in both range and Doppler, the outer box is 13 by 13 cells and the guard box 5 by 5, so <span class="math notranslate nohighlight">\(N = 169 - 25 = 144\)</span>. The bias for <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> is 11.6 dB and the CFAR loss is 0.2 dB, far better than any one-dimensional window can do while staying within a few cells of the cell under test.</p>
+<p>The two directions need not match. At the L29 burst’s 0.30 m range cells and 0.12 m/s velocity cells, a walking person spans a cell or two in range but many cells in Doppler, because the arms and legs move at different speeds from the body. A wider guard band in Doppler than in range keeps that spread out of the estimate.</p>
+<p>Without MTI, every stationary object puts its echo at zero velocity, so the map has a ridge of clutter along the zero-Doppler column. To a CFAR window, that ridge is a clutter edge in the Doppler direction: cells on the ridge are compared with an average that is mostly noise, and they are declared targets. MTI from Lesson 29 removes most of the ridge before CFAR runs.</p>
+<p>A map of <span class="math notranslate nohighlight">\(512 \times 256\)</span> cells with 144 reference cells each is 19 million additions. A Python loop over every cell is slow. A convolution of the map with the window does the same sums in a fraction of a second, and the next frame’s code works that way.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-detections-from-the-map">
+<div class="wrap docutils container">
+<p class="rubric">Detections From the Map</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L30-rd-detections.svg" alt="A range-Doppler map from 0 to 9 m and minus 3 to plus 3 meters per second after MTI. Red squares mark the CFAR detections: a cluster of nine cells on a walker at 6 m and plus 1.2 meters per second, a cluster of five on a hand at 2.1 m and minus 0.6 meters per second, and one cell of leftover clutter at 0 m and zero velocity" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The provided <code class="docutils literal notranslate"><span class="pre">cfar_2d</span></code> returns a detection map and a list of (range, velocity, SNR).</p></li>
+<li><p>One target lights a cluster of cells.</p></li>
+<li><p>Clutter left after MTI is detected too.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The map is synthetic, built with the L29 burst’s cells: a walker at 6.0 m and <span class="qty">+1.2</span> m/s, a hand at 2.1 m and <span class="qty">−0.6</span> m/s, and the clutter a 2-pulse canceller leaves at zero velocity near the radar. CFAR with 2 guard and 4 reference cells each way and an 11.6 dB bias declares both targets and the strongest clutter cell. Each target lights a cluster of cells, because its peak spreads into its neighbors and those neighbors are well above the noise too. A detection list that feeds a classifier or a tracker needs one entry per object, so a cluster is reduced to its strongest cell.</p>
+<p>The excerpt is the cell-averaging path of the provided <code class="docutils literal notranslate"><span class="pre">cfar_2d</span></code> in <code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code>, which the L30 Lab notebook calls; the provided version also takes <code class="docutils literal notranslate"><span class="pre">method=&quot;ca&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;go&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;so&quot;</span></code> for the variants above. It takes the map in dB, as Lesson 29 plots it, and converts it back to power, because the CFAR statistics of this lesson are for power. <code class="docutils literal notranslate"><span class="pre">guard</span></code> and <code class="docutils literal notranslate"><span class="pre">ref</span></code> are (range, Doppler) pairs of half-widths. The two convolutions sum each cell’s reference window and count how many cells it held, so an end cell in range averages only the cells that exist; the Doppler axis is padded by wrapping. Pass the map’s axes, and the detection list comes back in meters and meters per second.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cfar_2d</span><span class="p">(</span><span class="n">rd_map</span><span class="p">,</span> <span class="n">guard</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">bias_db</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">rd_map</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>                                  <span class="c1"># dB back to power</span>
+    <span class="p">(</span><span class="n">gr</span><span class="p">,</span> <span class="n">gv</span><span class="p">),</span> <span class="p">(</span><span class="n">rr</span><span class="p">,</span> <span class="n">rv</span><span class="p">)</span> <span class="o">=</span> <span class="n">guard</span><span class="p">,</span> <span class="n">ref</span>                          <span class="c1"># (range, Doppler) half-widths</span>
+    <span class="n">win</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">gr</span> <span class="o">+</span> <span class="n">rr</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">gv</span> <span class="o">+</span> <span class="n">rv</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">win</span><span class="p">[</span><span class="n">rr</span><span class="p">:</span><span class="n">rr</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">gr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rv</span><span class="p">:</span><span class="n">rv</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">gv</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>          <span class="c1"># guard cells and the cell under test</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pad</span><span class="p">(</span><span class="n">A</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">gv</span> <span class="o">+</span> <span class="n">rv</span><span class="p">,)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">"wrap"</span><span class="p">),</span> <span class="p">((</span><span class="n">gr</span> <span class="o">+</span> <span class="n">rr</span><span class="p">,)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">fftconvolve</span><span class="p">(</span><span class="n">pad</span><span class="p">(</span><span class="n">P</span><span class="p">),</span> <span class="n">win</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"valid"</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">fftconvolve</span><span class="p">(</span><span class="n">pad</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">P</span><span class="p">)),</span> <span class="n">win</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"valid"</span><span class="p">)</span>
+    <span class="n">snr_db</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">P</span> <span class="o">/</span> <span class="p">(</span><span class="n">total</span> <span class="o">/</span> <span class="n">count</span><span class="p">))</span>              <span class="c1"># each cell over its local noise</span>
+    <span class="n">det</span> <span class="o">=</span> <span class="n">snr_db</span> <span class="o">&gt;</span> <span class="n">bias_db</span>
+    <span class="n">r_ax</span><span class="p">,</span> <span class="n">v_ax</span> <span class="o">=</span> <span class="n">axes</span> <span class="ow">or</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">hits</span> <span class="o">=</span> <span class="p">[(</span><span class="n">r_ax</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">v_ax</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">snr_db</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">det</span><span class="p">))]</span>
+    <span class="k">return</span> <span class="n">det</span><span class="p">,</span> <span class="n">hits</span>
+</pre></div>
+</div>
+<p>The SNR in each entry is the cell’s power over its own local noise estimate, the same quantity the threshold tests, so it is the number to compare with Lesson 27.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-measuring-the-false-alarm-rate">
+<div class="wrap docutils container">
+<p class="rubric">Measuring the False-Alarm Rate</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\hat{P}_{fa} = \frac{\text{false detections}}{\text{cells tested}}
+\]</div>
+<ul class="simple">
+<li><p>At <span class="math notranslate nohighlight">\(10^{-6}\)</span>, a <span class="math notranslate nohighlight">\(512 \times 256\)</span> map averages one false alarm every 7.6 maps.</p></li>
+<li><p>Check the design at a lower bias, where false alarms are common.</p></li>
+<li><p><span class="math notranslate nohighlight">\(P_d\)</span> is the fraction of maps that find the target.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The bias is set from a design <span class="math notranslate nohighlight">\(P_{fa}\)</span>, and the way to check it is to count. On maps with no target, or in the cells far from any target, every detection is a false alarm, and the measured probability is the number of false detections over the number of cells tested.</p>
+<p>The trouble is the size of the number. A <span class="math notranslate nohighlight">\(512 \times 256\)</span> map is 131 072 decisions, so at <span class="math notranslate nohighlight">\(10^{-6}\)</span> it averages 0.13 false alarms, one every 7.6 maps. Counting ten of them to get the rate within about a third takes 76 maps. Instead, lower the bias to a design <span class="math notranslate nohighlight">\(P_{fa}\)</span> of <span class="math notranslate nohighlight">\(10^{-3}\)</span> or <span class="math notranslate nohighlight">\(10^{-4}\)</span>, where a single map has 13 to 130 false alarms, and check the measured rate against <span class="math notranslate nohighlight">\((1 + \alpha/N)^{-N}\)</span> at a few biases. If the counts follow the curve, the extrapolation to <span class="math notranslate nohighlight">\(10^{-6}\)</span> is sound; if they come out high, the noise in your reference cells is not the noise in your cells under test.</p>
+<p>The probability of detection is measured the same way, against a target you placed: the fraction of maps in which CFAR declares it. Compare it with <a href="../L27-radar-detection/index.html#frame-pd-against-pfa">Lesson 27’s curves</a> at the SNR the detection list reports, with the CFAR loss added. For a hand or a person, which fluctuate from map to map, expect the Swerling numbers of Lesson 27 rather than the steady ones.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary">
+<div class="wrap docutils container">
+<p class="rubric">Summary</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Fixed threshold, noise up by <span class="math notranslate nohighlight">\(g\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(P_{fa}' = P_{fa}^{1/g}\)</span></p></td>
+<td class="text-left"><p>3 dB: <span class="math notranslate nohighlight">\(10^{-6} \to 10^{-3}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Cell under test, guard, reference</p></td>
+<td class="text-left"><p>test one cell; skip its neighbors; average the next ones</p></td>
+<td class="text-left"><p>2 guard and 16 reference cells a side</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>CA-CFAR</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(T = \alpha\hat{P}_n\)</span>, <span class="math notranslate nohighlight">\(P_{fa} = (1 + \alpha/N)^{-N}\)</span></p></td>
+<td class="text-left"><p>independent of <span class="math notranslate nohighlight">\(P_n\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Bias</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\alpha = N(P_{fa}^{-1/N} - 1)\)</span></p></td>
+<td class="text-left"><p>12.4 dB for 32 cells at <span class="math notranslate nohighlight">\(10^{-6}\)</span>; 11.4 dB as <span class="math notranslate nohighlight">\(N \to \infty\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>CFAR loss</p></td>
+<td class="text-left"><p>extra SNR for the same <span class="math notranslate nohighlight">\(P_d\)</span></p></td>
+<td class="text-left"><p>2.1 dB at 16 cells, 1.0 dB at 32, 0.2 dB at 144</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Guard cells</p></td>
+<td class="text-left"><p>keep the target’s spread out of the estimate</p></td>
+<td class="text-left"><p>Hann: −6 dB one cell away</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Masking</p></td>
+<td class="text-left"><p>a second target raises the threshold</p></td>
+<td class="text-left"><p>24 dB eight cells away hides 18 dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Clutter edge</p></td>
+<td class="text-left"><p>one average over two noise levels</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(P_{fa}\)</span> to <span class="math notranslate nohighlight">\(10^{-3}\)</span> just inside the clutter</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Greatest-of, smallest-of</p></td>
+<td class="text-left"><p>keep the larger or smaller half</p></td>
+<td class="text-left"><p>GO for edges, SO for close targets; 0.2 and 0.7 dB more loss</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Ends of the map</p></td>
+<td class="text-left"><p>range: one-sided; Doppler: wraps</p></td>
+<td class="text-left"><p>one-sided at the same bias: <span class="math notranslate nohighlight">\(8 \times 10^{-6}\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>2D CFAR</p></td>
+<td class="text-left"><p>nested boxes on the range-Doppler map</p></td>
+<td class="text-left"><p>144 cells: 11.6 dB, 0.2 dB loss</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Measured <span class="math notranslate nohighlight">\(P_{fa}\)</span></p></td>
+<td class="text-left"><p>false detections over cells tested</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(10^{-6}\)</span> on <span class="math notranslate nohighlight">\(512 \times 256\)</span>: one every 7.6 maps</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-l30-lab">
+<div class="wrap docutils container">
+<p class="rubric">L30 Lab</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Turn on the GUI’s CFAR overlay first.</p></li>
+<li><p>In the notebook, tune guard, reference, and bias to a target false-alarm rate.</p></li>
+<li><p>Switch cell averaging to greatest-of and compare.</p></li>
+<li><p>Keep the detection lists for the L31 Lab.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The L30 Lab starts in the GUI: turn on its CFAR overlay over the live range-Doppler map and watch the threshold rise and fall with the noise around your targets. The rest runs in the lab’s notebook, which calls the provided <code class="docutils literal notranslate"><span class="pre">cfar_2d</span></code> from <code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code> on the range-Doppler maps you saved in the L29 Lab. You tune the guard and reference cells for your own targets and set the bias to reach a target false-alarm rate, switch from cell averaging to greatest-of at the clutter near zero velocity, and measure the false-alarm rate and the probability of detection against the predictions of Lesson 27 and this lesson. Changes of your own to the provided code, beyond the required tasks, count as Extra Effort. The detection lists it produces, one entry per target with its range, velocity, and SNR, are what the L31 Lab classifies. For the final report, keep the settings you chose, the false-alarm rate you measured, and why the two differ if they do.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The L30 Lab is under construction. Its procedure and packet follow the L29 Lab.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module04/L30-cfar"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>
