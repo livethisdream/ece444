@@ -9,9 +9,11 @@
   - L19-reflection   : a direct lobe, a -10 dB reflection lobe, and their sum
   - L19-cone         : the cone of directions a line array cannot tell apart
   - L19-resolution   : two sources 20 deg apart and 8 deg apart
-  - L19-residuals    : four bearings, one bent by a reflection, and their residuals
+  - L19-residuals    : five bearings, one bent by a reflection, and their residuals
+  - L19-room-bearing : heading, Angle, and the room bearing they add to
+  - L19-bearing-line : one bearing line, its unit vectors, and n.x = n.p
 
-The lesson page shows all nine from book/extras/viz/img/. None carries an
+The lesson page shows all eleven from book/extras/viz/img/. None carries an
 equation: symbols, numbers, and short words only.
 
 Each figure sits in a present block beside text, about 477 px wide on a 1280
@@ -256,6 +258,34 @@ def worked_example() -> dict:
     return out
 
 
+def three_bearing_example() -> None:
+    """The page's least-squares worked example: three stations, every number
+    it prints, asserted. Nothing is drawn."""
+    xs = np.array([-0.75, 0.0, 0.75])
+    th = np.array([34.6, 8.8, -17.7])
+    c, s = np.cos(np.radians(th)), np.sin(np.radians(th))
+    n = np.stack([-c, s], axis=1)
+    P = np.stack([xs, np.zeros_like(xs)], axis=1)
+    d = np.sum(n * P, axis=1)
+    M, b = n.T @ n, n.T @ d
+    fix = np.linalg.solve(M, b)
+    f3 = lambda a: [f"{v:.3f}" for v in np.ravel(a)]
+    assert f3(c) == ["0.823", "0.988", "0.953"] and f3(s) == ["0.568", "0.153", "-0.304"]
+    assert f3(d) == ["0.617", "0.000", "-0.714"]
+    assert f3(M) == ["2.562", "-0.329", "-0.329", "0.438"] and f3(b) == ["0.173", "0.568"]
+    # the page works the inverse from the rounded entries it prints
+    assert f"{2.562 * 0.438 - 0.329 ** 2:.3f}" == "1.014"
+    assert f"{(0.438 * 0.173 + 0.329 * 0.568) / 1.014:.2f}" == "0.26"
+    assert f"{(2.562 * 0.568 + 0.329 * 0.173) / 1.014:.2f}" == "1.49"
+    assert [f"{v:.2f}" for v in fix] == ["0.26", "1.49"]
+    assert f"{np.linalg.norm(fix - np.array([0.25, 1.5])):.2f}" == "0.01"
+    e = n @ fix - d
+    assert f3(e) == ["0.016", "-0.028", "0.015"], e
+    own = np.linalg.norm(fix - P, axis=1) * np.tan(np.radians(1.5))
+    assert np.all(np.abs(e) < own) and np.allclose(own, 0.04, atol=0.008), own
+    print(f"   three-bearing example: fix {fix.round(3)}, residuals {e.round(3)}")
+
+
 def fig_two_bearings(w: dict) -> None:
     fig, ax = plt.subplots(figsize=(4.4, 3.5))
     ax.plot([-1.5, 1.5], [0, 0], color=LIGHT, lw=2.0, solid_capstyle="butt")
@@ -273,16 +303,30 @@ def fig_two_bearings(w: dict) -> None:
         yl = 0.42 * top
         ax.text(xi + yl * t + side * 0.07, yl, f"{th:+.1f}°".replace("-", "−"),
                 color=BLUE, fontsize=13, ha="left" if side > 0 else "right", va="center")
+    # the origin at the middle of the tape, x along it, y downrange
+    ax.plot(0, 0, "o", ms=4, color=GRAY)
+    ax.text(0, -0.12, "0", color=GRAY, fontsize=13, ha="center", va="top")
+    ax.annotate("", xy=(1.62, 0), xytext=(1.5, 0),
+                arrowprops=dict(arrowstyle="-|>", color=GRAY, lw=1.0, mutation_scale=10,
+                                shrinkA=0, shrinkB=0))
+    ax.text(1.66, 0, "x", color=GRAY, fontsize=13, ha="left", va="center", style="italic")
+    # A's right triangle: y up, then x - x_A across to the fix
+    f = w["fix"]
+    ax.plot([w["xA"], w["xA"]], [0.55, f[1]], color=GRAY, lw=0.9, ls=":")
+    ax.plot([w["xA"], f[0]], [f[1], f[1]], color=GRAY, lw=0.9, ls=":")
+    ax.text((w["xA"] + f[0]) / 2 - 0.15, f[1] + 0.06, r"$x - x_A$", color=GRAY, fontsize=14,
+            ha="center", va="bottom")
+    ax.text(w["xA"] - 0.06, 0.7 * f[1], r"$y$", color=GRAY, fontsize=14, ha="right", va="center")
     bx = w["box"]
     ax.add_patch(Rectangle((bx[0] - 0.11, bx[1] - 0.11), 0.22, 0.22, fill=False, ec=GRAY, lw=1.2))
     ax.plot(*w["fix"], "o", ms=5, color=RED)
-    ax.text(bx[0] - 0.2, bx[1], "fix", color=RED, fontsize=13, ha="right", va="center")
-    ax.text(bx[0] + 0.2, bx[1], "box", color=GRAY, fontsize=13, ha="left", va="center")
-    ax.annotate("", xy=(w["xB"], -0.55), xytext=(w["xA"], -0.55),
+    ax.text(bx[0] + 0.17, bx[1] - 0.05, "fix", color=RED, fontsize=13, ha="left", va="top")
+    ax.text(bx[0] + 0.17, bx[1] + 0.03, "box", color=GRAY, fontsize=13, ha="left", va="bottom")
+    ax.annotate("", xy=(w["xB"], -0.6), xytext=(w["xA"], -0.6),
                 arrowprops=dict(arrowstyle="<->", color=GRAY, lw=1.0, shrinkA=0, shrinkB=0))
-    ax.text(0.0, -0.5, "2 m", color=GRAY, fontsize=13, ha="center", va="bottom")
+    ax.text(0.5, -0.56, "2 m", color=GRAY, fontsize=13, ha="center", va="bottom")
     ax.set_xlim(-1.65, 1.65)
-    ax.set_ylim(-0.7, 2.1)
+    ax.set_ylim(-0.75, 2.1)
     ax.set_aspect("equal")
     ax.axis("off")
     finalize(fig, "L19-two-bearings")
@@ -536,7 +580,7 @@ def residual_case():
     meas[2] -= 10.0
     fix, n = ls_fix(P, meas)
     e = np.sum(n * (fix - P), axis=1)
-    R = np.linalg.norm(src - P, axis=1)
+    R = np.linalg.norm(fix - P, axis=1)          # each station's range to the fix
     return xs, P, src, meas, fix, n, e, R
 
 
@@ -547,6 +591,8 @@ def fig_residuals() -> None:
     # the bad bearing has the largest residual, about 2.5 times the next and
     # over 3 times its own R tan(2 deg); one bad line pulls the others up too
     assert np.argmax(ok) == 2 and ok[2] > 2.5 * np.delete(ok, 2).max() and ok[2] > 3 * own[2], ok
+    # the page's test: only the bad bearing misses by more than 3 R_i tan(sigma)
+    assert list(np.flatnonzero(ok > 3 * own)) == [2], (ok, own)
     fig, ax = plt.subplots(figsize=(4.4, 3.2))
     ax.plot([-1.6, 1.6], [0, 0], color=LIGHT, lw=2.0, solid_capstyle="butt")
     for i, (p, a) in enumerate(zip(P, meas)):
@@ -558,6 +604,13 @@ def fig_residuals() -> None:
         ax.text(p[0], -0.1, f"{ok[i]:.0f} cm", color=RED if bad else INK, fontsize=13,
                 ha="center", va="top")
     ax.plot(*fix, "+", ms=11, mew=2, color=INK)
+    # the bad station's R (to the fix) and e (the fix's perpendicular miss)
+    ax.plot([P[2][0], fix[0]], [0, fix[1]], color=GRAY, lw=1.0, ls="--")
+    mid = (P[2] + fix) / 2
+    ax.text(mid[0] + 0.06, mid[1], r"$R$", color=GRAY, fontsize=15, ha="left", va="center")
+    foot = fix - e[2] * n[2]
+    ax.plot([fix[0], foot[0]], [fix[1], foot[1]], color=RED, lw=2.0)
+    ax.text(foot[0] - 0.06, foot[1] + 0.02, r"$e$", color=RED, fontsize=15, ha="right", va="center")
     ax.add_patch(Rectangle((src[0] - 0.1, src[1] - 0.1), 0.2, 0.2, fill=False, ec=GRAY, lw=1.2))
     ax.set_xlim(-1.65, 1.65)
     ax.set_ylim(-0.4, 1.8)
@@ -567,6 +620,103 @@ def fig_residuals() -> None:
     finalize(fig, "L19-residuals")
 
 
+def arc(ax, c, r, a0, a1, color=INK, lw=1.1):
+    """An arc of radius r about c from angle a0 to a1, in degrees CCW from +x."""
+    t = np.radians(np.linspace(a0, a1, 60))
+    ax.plot(c[0] + r * np.cos(t), c[1] + r * np.sin(t), color=color, lw=lw)
+
+
+def fig_room_bearing() -> None:
+    """Room axis, the kit's broadside at heading h, Angle from broadside, and the
+    room bearing beta = h + theta_est, all CCW seen from above."""
+    h, th = 30.0, 35.0
+    b = h + th
+    fig, ax = plt.subplots(figsize=(4.4, 2.9))
+    p = np.array([0.0, 0.0])
+    u = lambda a: np.array([np.cos(np.radians(a)), np.sin(np.radians(a))])
+    # room axis, beta = 0
+    ax.plot([0, 2.25], [0, 0], color=GRAY, lw=1.1, ls="--")
+    ax.text(2.25, -0.08, "room axis", color=GRAY, fontsize=13, ha="right", va="top")
+    # the array, perpendicular to broadside, and broadside itself
+    v = u(h + 90)
+    ax.plot(*np.stack([p - 0.3 * v, p + 0.3 * v]).T, color=NAVY, lw=5, solid_capstyle="butt")
+    ax.plot(*np.stack([p, p + 1.55 * u(h)]).T, color=GRAY, lw=1.1, ls=":")
+    ax.text(*(p + 1.6 * u(h)), "broadside", color=GRAY, fontsize=13, ha="left", va="bottom")
+    # the bearing toward the source
+    ax.annotate("", xy=p + 1.6 * u(b), xytext=p,
+                arrowprops=dict(arrowstyle="-|>", color=BLUE, lw=1.6, mutation_scale=12))
+    ax.plot(*(p + 1.7 * u(b)), "o", ms=7, color=RED)
+    ax.text(*(p + 1.7 * u(b) + np.array([-0.1, 0.0])), "source", color=RED, fontsize=13,
+            ha="right", va="center")
+    ax.text(*(p + np.array([0.05, -0.3])), "kit", color=NAVY, fontsize=13, ha="left", va="top")
+    # the three angles
+    arc(ax, p, 0.5, 0, h, color=GRAY)
+    ax.text(*(p + 0.66 * u(h / 2)), r"$h$", color=GRAY, fontsize=16, ha="center", va="center")
+    arc(ax, p, 0.9, h, b, color=INK)
+    ax.text(*(p + 1.12 * u(h + th / 2)), r"$\theta_\mathrm{est}$", color=INK, fontsize=16,
+            ha="center", va="center")
+    arc(ax, p, 1.3, 0, b, color=BLUE)
+    ax.text(*(p + 1.45 * u(22)), r"$\beta$", color=BLUE, fontsize=17, ha="center", va="center")
+    ax.set_xlim(-0.45, 2.3)
+    ax.set_ylim(-0.4, 1.75)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    finalize(fig, "L19-room-bearing")
+
+
+def fig_bearing_line() -> None:
+    """One bearing from a kit at p: the ray along u, the normal n, and why every
+    point x on the line has the same n.x: its distance from the origin along n.
+
+    The hats are combining circumflexes in plain text; mathtext's \\hat comes
+    apart under svg.fonttype none."""
+    beta = 35.0
+    u = np.array([np.cos(np.radians(beta)), np.sin(np.radians(beta))])
+    n = np.array([-u[1], u[0]])
+    p = np.array([0.4, 0.9])
+    x = p + 1.3 * u
+    foot = n * (n @ p)
+    fig, ax = plt.subplots(figsize=(4.4, 3.3))
+    # room axes from the origin
+    for d, lab in (((1, 0), "x"), ((0, 1), "y")):
+        ax.annotate("", xy=(0.4 * d[0], 0.4 * d[1]), xytext=(0, 0),
+                    arrowprops=dict(arrowstyle="-|>", color=GRAY, lw=1.0, mutation_scale=10,
+                                    shrinkA=0, shrinkB=0))
+        ax.text(0.47 * d[0], 0.47 * d[1], lab, color=GRAY, fontsize=13,
+                ha="center", va="center", style="italic")
+    ax.plot(0, 0, "o", ms=4, color=GRAY)
+    ax.text(0.04, -0.06, "0", color=GRAY, fontsize=13, ha="left", va="top")
+    # the bearing line: dashed behind the kit, solid ahead
+    ax.plot(*np.stack([foot - 0.25 * u, p]).T, color=BLUE, lw=1.0, ls="--")
+    ax.plot(*np.stack([p, p + 1.7 * u]).T, color=BLUE, lw=1.6)
+    # position vectors from the origin
+    for q, lab, off in ((p, "p", (0.12, -0.02)), (x, "x", (0.1, -0.1))):
+        ax.annotate("", xy=q, xytext=(0, 0),
+                    arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.0, mutation_scale=10,
+                                    shrinkA=0, shrinkB=4))
+        ax.text(q[0] + off[0], q[1] + off[1], lab, color=INK, fontsize=15, ha="left",
+                va="center", weight="bold")
+    ax.plot(*x, "o", ms=5, color=INK)
+    ax.plot(*p, "s", ms=8, color=NAVY, zorder=3)
+    ax.text(p[0] - 0.1, p[1] + 0.06, "kit", color=NAVY, fontsize=13, ha="right", va="bottom")
+    # the unit vectors at the kit
+    for vec, lab, off in ((u, "u\u0302", (0.06, -0.14)), (n, "n\u0302", (-0.12, 0.02))):
+        ax.annotate("", xy=p + 0.45 * vec, xytext=p,
+                    arrowprops=dict(arrowstyle="-|>", color=RED, lw=1.6, mutation_scale=12,
+                                    shrinkA=0, shrinkB=0))
+        ax.text(*(p + 0.5 * vec + np.array(off)), lab, color=RED, fontsize=15,
+                ha="center", va="center", weight="bold")
+    # n.p: the distance from the origin to the line, the same for every point on it
+    ax.plot(*np.stack([(0, 0), foot]).T, color=GREEN, lw=1.6)
+    m = 0.55 * foot
+    ax.text(m[0] - 0.08, m[1], "n\u0302\u00b7p", color=GREEN, fontsize=15, ha="right",
+            va="center", weight="bold")
+    ax.set_xlim(-0.85, 2.35)
+    ax.set_ylim(-0.25, 1.95)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    finalize(fig, "L19-bearing-line")
+
 def main() -> None:
     v = numbers()
     for k, x in v.items():
@@ -575,12 +725,15 @@ def main() -> None:
     fig_sweep()
     fig_sweep_grid()
     fig_two_bearings(worked_example())
+    three_bearing_example()
     fig_crossing()
     fig_depth()
     fig_reflection()
     fig_cone()
     fig_resolution()
     fig_residuals()
+    fig_room_bearing()
+    fig_bearing_line()
 
 
 if __name__ == "__main__":

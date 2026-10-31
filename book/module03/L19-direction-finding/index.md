@@ -242,16 +242,17 @@ is the nearest one, off by up to half a step. In the figure the source is at
 $30.0^\circ$ and Angle reads $29.5^\circ$. This is one reason to prefer a source within about $\pm 30^\circ$ of
 broadside: the grid step and the beamwidth grow as $1/\cos\theta$, and the gain
 falls as $\cos\theta$ (L18, "Scan Loss"). At $45^\circ$ the step is
-$1.29^\circ$ and the beam is about $18^\circ$ wide, which is still usable.
+$1.29^\circ$ and the beam is about $18^\circ$ wide, and $45^\circ$ is where the
+PHASER starts to lose tracking.
 ::::
 
 ::::{frame} The Cone Angle
 :::{present}
-$$\sin\theta_\text{meas} = \sin(\text{az})\cos(\text{el})$$
+$$\sin\theta_\text{meas} = \hat{\mathbf u}\cdot\hat{\mathbf x} = \sin(\text{az})\cos(\text{el})$$
 
-- A line array measures a cone angle from broadside, not a floor-plan azimuth.
-- A source $0.75\ \text{m}$ low at $3\ \text{m}$ ($14.0^\circ$ down) at $30^\circ$ reads $29.0^\circ$.
-- Keep every array and every box at the same height.
+- The ramp sees only the part of the arrival direction $\hat{\mathbf u}$ along the element row $\hat{\mathbf x}$.
+- A source below the array shortens that part by $\cos(\text{el})$.
+- $30^\circ$ azimuth, $14.0^\circ$ down, reads $29.0^\circ$.
 :::
 :::{present}
 <img src="../../viz/img/L19-cone.svg"
@@ -259,19 +260,34 @@ $$\sin\theta_\text{meas} = \sin(\text{az})\cos(\text{el})$$
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-The phase ramp depends only on the extra path $d\sin\theta$ along the line of
-elements, and every direction on a cone around the array's axis gives the same
-extra path. A horizontal line array therefore measures the angle between the
-arriving wave and the plane perpendicular to the array, not the azimuth on a
-floor plan. For a source at azimuth az and elevation el, the measured angle is
+The phase ramp depends only on the extra path between neighboring elements,
+and that path is $d$ times the component of the arrival direction along the
+line of elements. Put $\hat{\mathbf x}$ along the element row, $\hat{\mathbf y}$
+along broadside, and $\hat{\mathbf z}$ up. A unit vector $\hat{\mathbf u}$
+toward a source at azimuth az, measured from broadside in the horizontal plane,
+and elevation el has a horizontal part of length $\cos(\text{el})$, the
+adjacent side of the elevation angle, and a vertical part $\sin(\text{el})$.
+The horizontal part splits into $\cos(\text{el})\sin(\text{az})$ along the row
+and $\cos(\text{el})\cos(\text{az})$ along broadside. In L18 the source was in
+the horizontal plane and the component along the row was $\sin\theta_s$; here
+it is
 
-$$\sin\theta_\text{meas} = \sin(\text{az})\cos(\text{el}).$$
+$$\sin\theta_\text{meas} = \hat{\mathbf u}\cdot\hat{\mathbf x} = \sin(\text{az})\cos(\text{el}).$$
+
+That is where the cosine comes from: tipping the arrival direction out of the
+horizontal plane shortens its projection onto the row. Every direction on a
+cone around the row has the same projection, and so the same reading, which is
+why a line array measures a cone angle and not a floor-plan azimuth.
 
 When the source is at the array's height, el is zero and the two angles agree.
 A box on the floor $0.75\ \text{m}$ below a tabletop kit at $3\ \text{m}$ is
 $14.0^\circ$ down, and a source at $30^\circ$ azimuth reads $29.0^\circ$; at
 $45^\circ$ it reads $43.3^\circ$. The error always pulls the bearing toward
-broadside. Setting boxes and kits at the same height removes it.
+broadside. The L19 Lab's range is set up with the kits and the boxes at one
+height, so el is near zero there. What the kit's position on its stand does
+change is the row itself: tipping the board up or down to aim it at the boxes
+turns it about the row and leaves the reading alone, but raising one end of
+the row tilts the cone and adds the same kind of error. Keep the row level.
 
 The cone has a back half as well, a source behind the array at the mirror
 angle, but the PHASER's patches sit over a ground plane and receive almost
@@ -280,9 +296,9 @@ nothing from behind, so a bearing is always in front of the array.
 
 ::::{frame} Reflections
 :::{present}
-- A reflection adds a second, weaker lobe to the sweep.
+- A reflection adds a second, weaker lobe.
 - Within $15^\circ$ of the source it pulls the peak: $0.6^\circ$ at $-20\ \text{dB}$, $2.0^\circ$ at $-10\ \text{dB}$, $3.2^\circ$ at $-6\ \text{dB}$.
-- Block the direct path and the reflection becomes the peak.
+- A bearing far off the rest is usually a reflection: clear the path.
 :::
 :::{present}
 <img src="../../viz/img/L19-reflection.svg"
@@ -314,13 +330,14 @@ over the peak.
 :::{present}
 $$\beta = h + \theta_\text{est}$$
 
-| Term | Source | $\sigma$ |
-| :-- | :-- | :-- |
-| grid | half a step at $30^\circ$ | $0.53^\circ$ |
-| heading | array edge on a taped line | $1.0^\circ$ |
-| multipath | a weak reflection | $1.0^\circ$ |
-| noise | $30\ \text{dB}$ SNR | $0.3^\circ$ |
-| **total** | root sum of squares | $1.5^\circ$ |
+- $\theta_\text{est}$: Angle, from the kit's broadside.
+- $h$: the heading of broadside from a fixed room axis.
+- $\beta$: the room bearing. All three counterclockwise, seen from above.
+:::
+:::{present}
+<img src="../../viz/img/L19-room-bearing.svg"
+     alt="Top view: a kit whose broadside points at heading h from the room axis; the bearing to the source is theta_est further counterclockwise, so the room bearing beta is h plus theta_est"
+     style="max-width: 380px; width: 75%; display: block; margin: 0 auto;">
 :::
 
 The Angle readout measures the angle from the array's broadside, which is wherever
@@ -335,20 +352,34 @@ Which physical side of the kit is positive depends on which way the kit faces; t
 L18 Lab found it by moving the source toward element E8. Get it wrong and a
 source at $30^\circ$ lands on the plan at $-30^\circ$, a $60^\circ$ error, so
 check it with one shot at a known position before trusting any bearing.
+::::
 
-The heading error adds directly to the bearing error, and in the room it is the
+::::{frame} The Bearing Error Budget
+:::{present}
+$$\begin{aligned}
+\sigma_\beta &= \sqrt{\sigma_h^2 + \sigma_\theta^2} \\
+&= \sqrt{1.0^2 + 0.53^2 + 1.0^2 + 0.3^2} = 1.5^\circ
+\end{aligned}$$
+
+| Error | Enters through | Source | $\sigma$ |
+| :-- | :-- | :-- | :-- |
+| heading | $h$ | array edge on a taped line | $1.0^\circ$ |
+| grid | $\theta_\text{est}$ | half a step at $30^\circ$ | $0.53^\circ$ |
+| multipath | $\theta_\text{est}$ | a weak reflection | $1.0^\circ$ |
+| noise | $\theta_\text{est}$ | $30\ \text{dB}$ SNR | $0.3^\circ$ |
+:::
+
+Each term of $\beta = h + \theta_\text{est}$ carries an error, and the error in
+$\beta$ is the two combined. The table is the budget for one bearing: one row
+per independent error, the term of the equation it enters through, where it
+comes from, and its one-sigma size. The heading error adds directly to the bearing error, and in the room it is the
 largest term. Laying the array's edge along a taped line holds $h$ to about
 $1^\circ$. The grid term is the worst case, half a step, rather than the
 $0.30^\circ$ standard deviation of an error spread evenly over a $1.05^\circ$
-step, which keeps the budget conservative. The independent terms add as a root
-sum of squares:
-
-$$\begin{aligned}
-\sigma_\beta &= \sqrt{0.53^2 + 1.0^2 + 1.0^2 + 0.3^2} \\
-&= 1.5^\circ.
-\end{aligned}$$
-
-Setting the heading by eye, about $3^\circ$, raises the total to $3.2^\circ$.
+step, which keeps the budget conservative. The grid, multipath, and noise
+terms make up $\sigma_\theta$, the error in the Angle readout itself, and all
+four are independent, so they add as a root sum of squares, the chain on the
+slide. Setting the heading by eye, about $3^\circ$, raises the total to $3.2^\circ$.
 ::::
 
 ::::{frame} The Bearing Line
@@ -359,16 +390,27 @@ $$\begin{aligned}
 \hat{\mathbf n}\cdot\mathbf x &= \hat{\mathbf n}\cdot\mathbf p
 \end{aligned}$$
 
-- The source lies somewhere along $\hat{\mathbf u}$ from the kit at $\mathbf p$.
-- Every point on that line has the same $\hat{\mathbf n}\cdot\mathbf x$.
+- $\mathbf p$: kit position. $\hat{\mathbf u}$: unit vector toward the source.
+- $\hat{\mathbf n}$: $\hat{\mathbf u}$ turned $90^\circ$ counterclockwise.
+- Every $\mathbf x$ on the line lies $\hat{\mathbf n}\cdot\mathbf p$ from the origin along $\hat{\mathbf n}$.
+:::
+:::{present}
+<img src="../../viz/img/L19-bearing-line.svg"
+     alt="A kit at position p with its bearing line; the unit vector u points along the line toward the source and n is perpendicular to it; position vectors p and x both reach the line, and the line's distance from the origin along n is n dot p"
+     style="max-width: 420px; width: 80%; display: block; margin: 0 auto;">
 :::
 
-A bearing $\beta$ measured from a kit at a known position $\mathbf p$ says the
-source lies somewhere along the ray $\mathbf p + r\hat{\mathbf u}$, with $r$
-unknown and positive. For computing a crossing it is easier to describe the
-line by its normal. The unit vector $\hat{\mathbf n}$ is perpendicular to the
-bearing, and moving along the line never changes the component of position
-along $\hat{\mathbf n}$, so every point $\mathbf x$ on the line satisfies one
+Positions are vectors from an origin, any fixed point of the room, with the
+room axis as $x$ and $y$ counterclockwise from it. A bearing $\beta$ measured
+from a kit at a known position $\mathbf p$ says the source lies somewhere along
+the ray $\mathbf p + r\hat{\mathbf u}$, with $r$ unknown and positive. The unit
+vector $\hat{\mathbf u} = (\cos\beta,\ \sin\beta)$ points along the bearing,
+and $\hat{\mathbf n} = (-\sin\beta,\ \cos\beta)$ is the same vector turned
+$90^\circ$ counterclockwise. For computing a crossing it is easier to describe the
+line by its normal. Moving along the line moves only along $\hat{\mathbf u}$,
+which never changes the component of position along $\hat{\mathbf n}$. In the
+figure, that component is the length of the green segment, the line's
+distance from the origin, and every point $\mathbf x$ on the line satisfies one
 linear equation,
 
 $$\hat{\mathbf n}\cdot\mathbf x = \hat{\mathbf n}\cdot\mathbf p.$$
@@ -381,13 +423,14 @@ independent linear equations in two unknowns have one solution: the crossing.
 
 ::::{frame} A Two-Bearing Fix
 :::{present}
-$$\begin{aligned}
-y &= \frac{x_B - x_A}{\tan\theta_A - \tan\theta_B} \\
-&= \frac{2.0}{0.743 + 0.412} = 1.73\ \text{m} \\
-x &= x_A + y\tan\theta_A = 0.29\ \text{m}
-\end{aligned}$$
+- Origin at the middle of the tape: $x$ along it, $y$ downrange.
+- $\theta_i$ is positive toward $+x$.
 
-- The stations are $2\ \text{m}$ apart; the box is at $(0.25,\ 1.75)\ \text{m}$.
+$$\begin{aligned}
+\tan\theta_i &= \frac{x - x_i}{y} \\
+x &= x_i + y\tan\theta_i \\
+y &= \frac{x_B - x_A}{\tan\theta_A - \tan\theta_B} = 1.73\ \text{m}
+\end{aligned}$$
 :::
 :::{present}
 <img src="../../viz/img/L19-two-bearings.svg"
@@ -396,10 +439,18 @@ x &= x_A + y\tan\theta_A = 0.29\ \text{m}
 :::
 
 On the L19 Lab's firing range every station faces straight downrange, so all
-the stations share one heading and the bearing line takes a simpler form. Put
-$x$ along the tape and $y$ downrange, and take Angle $\theta$ positive toward
-the $+x$ end of the tape. A reading $\theta_i$ at station $x_i$ puts the source
-on the line
+the stations share one heading and the bearing line takes a simpler form. Put the
+origin at the middle of the tape, the station 0 mark, with $x$ along the tape
+and $y$ downrange, and take Angle $\theta$ positive toward the $+x$ end of the
+tape. A station at $x_i$ sits at $(x_i,\ 0)$ and faces $+y$. A source at
+$(x,\ y)$ is $y$ downrange of it and $x - x_i$ across, the two legs of the
+dotted right triangle in the figure, and $\theta_i$ is the angle at the
+station between downrange and the source, so
+
+$$\tan\theta_i = \frac{x - x_i}{y}.$$
+
+Solving for $x$, a reading $\theta_i$ at station $x_i$ puts the source on the
+line
 
 $$x = x_i + y\tan\theta_i.$$
 
@@ -411,7 +462,8 @@ clockwise, toward $+x$, seen from above.
 :class: tip
 Station A at $x_A = -1.0\ \text{m}$ reads Angle $36.6^\circ$, and station B at
 $x_B = +1.0\ \text{m}$ reads $-22.4^\circ$. Both lines pass through the
-source, so setting their $x$ equal and solving for $y$ gives
+source, so setting their $x$ equal, $x_A + y\tan\theta_A = x_B + y\tan\theta_B$,
+and solving for $y$ gives
 
 $$\begin{aligned}
 y &= \frac{x_B - x_A}{\tan\theta_A - \tan\theta_B} \\
@@ -437,9 +489,9 @@ from the box. The two lines cross at $\gamma = \theta_A - \theta_B = 59.0^\circ$
 :::{present}
 $$\left(\sum_i \hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}\right)\mathbf x = \sum_i \hat{\mathbf n}_i\left(\hat{\mathbf n}_i\cdot\mathbf p_i\right)$$
 
-- With three or more bearings the lines do not meet at one point.
-- The fix is the point with the smallest sum of squared distances to the lines.
-- numpy solves one $2\times 2$ system for two kits or ten.
+- $\mathbf p_i$: station $i$'s position. $\hat{\mathbf n}_i = (-\sin\beta_i,\ \cos\beta_i)$: the unit normal to its bearing line.
+- On the firing line, $\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)$.
+- The fix $\mathbf x$ is closest to every line: one $2\times 2$ solve.
 :::
 
 With two bearings the crossing is exact. A third bearing adds a third line,
@@ -468,6 +520,13 @@ reproduces the crossing of the worked example exactly; for more, it is the least
 compromise. The L19 Lab's pre-lab has you write this as a short Python
 function and test it on a supplied set of bearings.
 
+Each $\hat{\mathbf n}_i$ is the normal of "The Bearing Line", one per station:
+$\hat{\mathbf n}_i = (-\sin\beta_i,\ \cos\beta_i)$ for room bearing $\beta_i$.
+On the firing line every kit faces $+y$ and $\beta_i = 90^\circ - \theta_i$, so
+$\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)$, and with
+$\mathbf p_i = (x_i,\ 0)$ the right-hand side's scalar is
+$\hat{\mathbf n}_i\cdot\mathbf p_i = -x_i\cos\theta_i$.
+
 Unweighted least squares treats every line as equally reliable. A bearing from
 a kit far from the source is less reliable in meters, as the next frame shows,
 so if the ranges differ a lot, weighting each term by $1/r_i^2$ gives the
@@ -475,6 +534,55 @@ better fix. In the fox hunt every bearing that counts is within about
 $\pm 45^\circ$ of broadside, so the ranges from the stations to one box differ
 by at most a factor of $\sqrt{2}$, the weights by a factor of 2, and the
 unweighted form is close enough.
+::::
+
+::::{frame} A Three-Bearing Fix
+:::{present}
+| $i$ | 1 | 2 | 3 |
+| :-- | :-- | :-- | :-- |
+| $x_i$ (m) | $-0.75$ | $0$ | $+0.75$ |
+| $\theta_i$ | $34.6^\circ$ | $8.8^\circ$ | $-17.7^\circ$ |
+| $\hat n_{i,x}$ | $-0.823$ | $-0.988$ | $-0.953$ |
+| $\hat n_{i,y}$ | $0.568$ | $0.153$ | $-0.304$ |
+| $\hat{\mathbf n}_i\cdot\mathbf p_i$ | $0.617$ | $0$ | $-0.714$ |
+:::
+:::{present}
+$$\begin{aligned}
+\mathbf M &= \begin{bmatrix} 2.562 & -0.329 \\ -0.329 & 0.438 \end{bmatrix} \\
+\mathbf b &= \begin{bmatrix} 0.173 \\ 0.568 \end{bmatrix} \\
+\mathbf x &= \mathbf M^{-1}\mathbf b = (0.26,\ 1.49)\ \text{m}
+\end{aligned}$$
+
+- The box is at $(0.25,\ 1.50)\ \text{m}$: $0.01\ \text{m}$ away.
+:::
+
+Stations at $x_i = -0.75$, $0$, and $+0.75\ \text{m}$ read Angle $34.6^\circ$,
+$8.8^\circ$, and $-17.7^\circ$. Each column of the table is one station: its
+normal $\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)$, as its $x$
+and $y$ components, and the scalar
+$\hat{\mathbf n}_i\cdot\mathbf p_i = -x_i\cos\theta_i$.
+
+Summing $\hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}$ over the rows, and
+$\hat{\mathbf n}_i$ times its scalar, gives the normal equations $\mathbf M\mathbf x = \mathbf b$,
+
+$$\begin{bmatrix} 2.562 & -0.329 \\ -0.329 & 0.438 \end{bmatrix}
+\begin{bmatrix} x \\ y \end{bmatrix} =
+\begin{bmatrix} 0.173 \\ 0.568 \end{bmatrix}.$$
+
+The determinant is $2.562 \times 0.438 - 0.329^2 = 1.014$, and the
+$2\times 2$ inverse gives
+
+$$\begin{aligned}
+x &= \frac{0.438 \times 0.173 + 0.329 \times 0.568}{1.014} = 0.26\ \text{m} \\
+y &= \frac{2.562 \times 0.568 + 0.329 \times 0.173}{1.014} = 1.49\ \text{m}.
+\end{aligned}$$
+
+The box was at $(0.25,\ 1.50)\ \text{m}$, so the fix lands $0.01\ \text{m}$
+from it. The residuals, $\hat{\mathbf n}_i\cdot\mathbf x - \hat{\mathbf n}_i\cdot\mathbf p_i$,
+are $0.016$, $-0.028$, and $0.015\ \text{m}$, all under each station's own
+$R_i\tan\sigma_\beta$ of about $0.04\ \text{m}$ at $1.5^\circ$: three good
+bearings (the check in "Residuals and Outliers" below). `numpy.linalg.solve` does the same
+arithmetic in one line.
 ::::
 
 ::::{frame} Cross-Range Error
@@ -597,8 +705,8 @@ derived in "Choosing Where to Measure" below.
 ::::{frame} Choosing Where to Measure
 :::{present}
 - Use the end stations that hear the fox: depth error falls as $1/B$.
-- Boxes within $\pm 30^\circ$ of broadside are best; $\pm 45^\circ$ still works.
-- Keep arrays and boxes at one height, in clear sight.
+- Best within $\pm 30^\circ$ of broadside; tracking starts to fail at $\pm 45^\circ$.
+- Point each array at the boxes, path clear.
 - Take a third bearing as a check.
 :::
 :::{present}
@@ -642,14 +750,17 @@ best fix.
 Spreading the stations has a limit: a station far to one side sees the box well
 off broadside. Within $\pm 30^\circ$ the grid step and the beamwidth stay near
 their broadside values. At $\pm 45^\circ$ the step is $1.29^\circ$, the beam is
-about $18^\circ$ wide, and the gain is $1.5\ \text{dB}$ down (L18, "Scan
-Loss"), which is still usable. Farther out, the HB100's own beam, aimed only
-roughly at the line, may leave the station too weak a tone to read.
+about $18^\circ$ wide, the gain is $1.5\ \text{dB}$ down (L18, "Scan
+Loss"), and the PHASER starts to lose tracking. A station that sees a box
+farther out than that gives no bearing worth using, and the HB100's own beam,
+aimed only roughly at the line, may leave it too weak a tone to read anyway.
 
-Height and line of sight remove the two systematic errors from earlier in the
-lesson: the cone-angle error pulls every bearing toward broadside when the
-source is above or below the array, and a reflector near the line of sight
-shifts the peak or replaces it. Finally, two bearings always cross somewhere,
+Two systematic errors from earlier in the lesson remain. The cone-angle error
+pulls every bearing toward broadside when the source is above or below the
+array; the range is set up with kits and boxes at one height to remove it, and
+pointing each array at the boxes with its element row level keeps it removed. A
+reflector near the line of sight shifts the peak or replaces it, so keep the
+path from each kit to the box field clear, people included. Finally, two bearings always cross somewhere,
 right or wrong. A third bearing is the only check that the first two are
 consistent.
 
@@ -662,12 +773,17 @@ $0.75\ \text{m}$ apart for the same reason.
 ::::
 
 ::::{frame} Residuals and Outliers
-:::{present}
-$$e_i = \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i)$$
+:class: read-only
 
-- $e_i$ is each bearing's miss distance at the fix, in meters.
-- Compare it with that bearing's own $R_i\tan\sigma_\beta$.
-- A residual several times larger marks a bad bearing: a reflection or a sign error.
+:::{present}
+$$\begin{aligned}
+R_i &= \lvert\mathbf x - \mathbf p_i\rvert \\
+e_i &= \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i) \\
+&= y\sin\theta_i - (x - x_i)\cos\theta_i
+\end{aligned}$$
+
+- At the fix $(x,\ y)$: $R_i$ is station $i$'s range, $e_i$ how far the fix sits off line $i$.
+- $\lvert e_i\rvert > 3R_i\tan\sigma_\beta$ flags a bad bearing: retake it, or drop it and solve again.
 :::
 :::{present}
 <img src="../../viz/img/L19-residuals.svg"
@@ -675,21 +791,37 @@ $$e_i = \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i)$$
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Once the least-squares fix is in hand, the distance from the fix to each line
-is that line's **residual**. If all the bearings are good, each residual should
-be about the size of that bearing's own cross-range error,
-$R_i\tan\sigma_\beta$, about $0.05\ \text{m}$ for a station $1.5\ \text{m}$
-from the fox at $\sigma_\beta = 2^\circ$. A
-residual several times that size says one bearing disagrees with the rest.
+Once the least-squares fix $\mathbf x = (x,\ y)$ is in hand, the
+perpendicular distance from the fix to each line is that line's **residual**,
+$e_i$. It is the same $\hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i)$ the
+least-squares frame minimized, now evaluated at the answer. On the firing line
+station $i$ sits at $\mathbf p_i = (x_i,\ 0)$ and its normal is
+$\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)$, which gives the second
+form on the slide, one line of Python per station. On the line itself
+$x - x_i = y\tan\theta_i$ and $e_i$ is zero.
+
+To judge a residual, compare it with what that bearing's own error would
+produce. $R_i$ is the distance from station $i$ to the fix, and a bearing
+error of $\sigma_\beta$ moves line $i$ sideways at the fix by
+$R_i\tan\sigma_\beta$, the cross-range error of "Cross-Range Error" above:
+about $0.05\ \text{m}$ for a station $1.5\ \text{m}$ from the fox at
+$\sigma_\beta = 2^\circ$. A good bearing's residual is about that size. One
+more than three times that size says the bearing disagrees with the rest.
+
+What to do with it is the procedure on the slide: solve the fix from every
+bearing, compute $R_i$ and $e_i$ for each station, and flag any station whose
+$\lvert e_i\rvert$ is more than $3R_i\tan\sigma_\beta$.
 
 The usual causes are the two errors that the budget does not cover because they
 are blunders rather than noise: a reflection that took over the peak, and a
 heading or sign mistake that put the line on the wrong side of broadside.
-Check that kit's setup, retake the bearing, or drop it and solve again with the
-others. In the figure the middle station's bearing is $10^\circ$ off: its
-residual is $19\ \text{cm}$ against its own $R_i\tan\sigma_\beta$ of
-$5\ \text{cm}$, and the bad line pulls the other residuals up to 4 to
-$7\ \text{cm}$. With only two bearings the residuals are always zero, because two lines
+Check that kit's setup and retake the bearing; if it still disagrees, drop it
+and solve again with the others. Drop one at a time, the worst first, because
+one bad line pulls the fix and raises every other residual a little. In the
+figure the middle station's bearing is $10^\circ$ off: its
+residual $e$ is $19\ \text{cm}$ against its own $R_i\tan\sigma_\beta$ of
+$5\ \text{cm}$, almost four times, and the bad line pulls the other residuals
+up to 4 to $7\ \text{cm}$, each under one and a half times its own. With only two bearings the residuals are always zero, because two lines
 always meet exactly, so two bearings cannot check each other.
 
 The L19 Lab adds one more check, the **Peak Gain** readout. Received power
@@ -727,7 +859,7 @@ themselves.
 | $\delta_\perp = R\tan\sigma_\beta$ | cross-range error of one line | $0.14\ \text{m}$ at $4\ \text{m}$, $2^\circ$ |
 | $\sigma_\text{fix} = \sqrt{2}\ \delta_\perp/\sin\gamma$ | RMS error of a two-bearing fix crossing at $\gamma$ | $0.20\ \text{m}$ at $90^\circ$, $0.76\ \text{m}$ at $15^\circ$ |
 | $\sigma_y = \sqrt{2}\ R^2\sigma_\beta/B$ | depth error from two stations $B$ apart on a firing line | $0.08\ \text{m}$ at $2\ \text{m}$ deep, $B = 3\ \text{m}$ |
-| residual $e_i$ | a bearing's miss distance at the fix | flags an outlier at several times $R_i\tan\sigma_\beta$ |
+| residual $e_i$ | the fix's perpendicular distance from line $i$ | flags an outlier above $3R_i\tan\sigma_\beta$ |
 ::::
 
 ::::{frame} The L19 Lab
@@ -740,18 +872,30 @@ firing line.
 - <a class="doc-link" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a>
 ::::
 
+::::{frame} Pre-Lab
+:class: read-only doc-links
+
+The L19 Lab's pre-lab is Part 1 of its packet, one per team, done before the
+lab period. It works this lesson's error budget for the range and has you
+write the fox-hunt script: start from the starter file, write its four
+functions, and test it on the supplied bearings. Bring the tested script to
+the lab on your laptop.
+
+- <a class="doc-link" href="../../labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">L19 Lab packet, Part 1 (PDF)</a>
+- <a class="doc-link" href="../../labs/foxhunt_starter.py" download>Fox-hunt starter script</a>
+::::
+
 ::::{frame} Looking Ahead
 :::{present}
 - In the L19 Lab, one kit takes a bearing from each station on a taped firing line.
-- Bring the error budget, a station plan, and your script.
-- L20-L24 return to the pattern itself: beamwidth, tapering, squint, and nulls.
+- Bring your tested script from the Pre-Lab.
+- L20 returns to shaping and steering the beam.
 :::
 
-In the L19 Lab you and a partner find the one live HB100 among five numbered
+In the L19 Lab you and a partner find the one live HB100 among the numbered
 boxes. You move one kit along a taped firing line, square to the tape at every
 station, read Angle off the beam sweep at each station mark, convert it to a
-room bearing, and solve for the fix. Come with this lesson's error budget and a
-plan for which stations give a steep crossing for any box in the field.
+room bearing, and solve for the fix. Come with the Pre-Lab script, tested.
 
 :::{depth}
 The rest of Module 3 returns to the pattern the sweep traces. L20 measures

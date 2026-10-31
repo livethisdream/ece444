@@ -5,7 +5,7 @@
 2 Reference     a source toward +x sets the sign s of Angle
 3 Walk          the fox is on; read Angle and Peak Gain at each station mark
 4 Fix           the bearings cross; the nearest box is the call
-5 Reveal        the instructor names the live box; Part 3 reconciles
+5 Reveal        the instructor names the live box; writeup compares
 
 Every panel is drawn to one scale from the range in the lab: a 3.0 m firing
 line with five station marks 0.75 m apart, and five boxes in a 2.0 m wide
@@ -43,7 +43,7 @@ STEPS = [
     ("2", "Reference shot", ["Source toward +x", "sets the sign s", "of Angle"]),
     ("3", "Walk the line", ["Fox on: Angle and", "Peak Gain at", "each station"]),
     ("4", "Fix", ["Bearings cross;", "the nearest box", "is your call"]),
-    ("5", "Reveal", ["Instructor names", "the live box;", "Part 3 reconciles"]),
+    ("5", "Reveal", ["Instructor names", "the live box;", "writeup compares"]),
 ]
 
 
