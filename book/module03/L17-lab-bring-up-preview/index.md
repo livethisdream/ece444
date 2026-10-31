@@ -443,17 +443,27 @@ then lines such as `Initializing SDR...` and `Connecting to SDR at
 ip:192.168.2.1...`, and keeps going.
 
 `Exception: No device found` after `Connecting to SDR` means the Pi cannot see
-the Pluto. Check its USB cable to the Pi; the service retries every few
-seconds and comes up on its own once the Pluto appears.
+the Pluto. Check its USB cable to the Pi. The page in Step 20 says the same
+thing with a **Pluto not found** card, and it reconnects on its own once the
+cable goes in.
 
 :::{depth}
-The log is a better check than `systemctl is-active phaser-headless`. A service
-that fails at start-up is restarted by systemd every five seconds, and between
-failures it reads `active`; on the instructor's kit it had restarted 83 times while
-the status still said `active`. The backend also starts the hardware before the
-web server, so a missing Pluto shows up in the browser only as a page that
-refuses to connect. `192.168.2.1` is the Pluto's own address on the USB link
-between it and the Pi.
+Read the log rather than `systemctl is-active phaser-headless`, which can say
+`active` while the backend is failing. On the instructor's first build the
+Pluto's USB cable to the Pi had been left unplugged. The backend started the
+hardware before its web server, so it died at start-up, systemd restarted it
+every five seconds, and it had restarted 83 times by the time anyone looked.
+`is-active` still said `active` because each restart is active for a moment,
+and the browser said only that the page refused to connect, which points at the
+network rather than the cable. The log named the cause on its first line:
+`No device found`.
+
+The backend now handles that case itself (phaser#47): with no Pluto it serves
+the page anyway, shows the **Pluto not found** card, and starts the full
+backend once the cable goes in, so a missing cable no longer crash-loops. The
+log is still the check for any other start-up failure, which can loop the same
+way. `192.168.2.1` is the Pluto's own address on the USB link between it and
+the Pi.
 :::
 ::::
 
