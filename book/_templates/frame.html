@@ -146,5 +146,9 @@
     the iframe its true height trades an inner scrollbar for a frame whose
     bottom is simply gone in present mode. -#}
 <script src="{{ asset('_static/viz-autosize.js') }}"></script>
+{#- Lab records: the Part 2 entry boxes on a lab page and its summary frame,
+    which writes them into the packet PDF (pdf-lib, loaded only on demand).
+    A no-op on a page without .rec blocks. -#}
+<script src="{{ asset('_static/records.js') }}"></script>
 </body>
 </html>
