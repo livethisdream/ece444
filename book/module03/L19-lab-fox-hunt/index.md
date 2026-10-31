@@ -32,16 +32,15 @@ with room for notes. Print from read mode for the whole lesson.
 </ol>
 ::::
 
-::::{frame} What Happens This Period
+::::{frame} The Fox Hunt
 :::{present}
-- One HB100 is on, in one of five numbered boxes downrange.
-- Kits sit on a firing line, broadside pointed straight downrange.
-- Bearings from stations along the line cross at the fox; amplitude breaks ties.
+- One HB100 is on, hidden in one of several numbered boxes.
+- Take measurements at different points on the table and determine which box contains the HB100.
 :::
 
-The L19 Lab puts Lesson 19 on the bench as a firing range. A taped firing line
-runs across the room, and five numbered boxes sit downrange of it at positions
-the instructor measured and posted. Every box holds an HB100, powered or not, so
+The L19 Lab puts Lesson 19 on the bench as a fox hunt. A taped firing line runs
+along the table, and numbered boxes sit downrange of it at positions the
+instructor measured and posted. Every box holds an HB100, powered or not, so
 weight gives nothing away; one of them is live.
 
 Your team moves its kit along the firing line, stopping at the station marks
@@ -58,14 +57,14 @@ close to the crossing, the pattern of levels along the line says which one fits.
 :::{present}
 <picture>
 <source media="(max-width: 600px)" srcset="../../viz/img/L19-lab-sequence-narrow.svg">
-<img src="../../viz/img/L19-lab-sequence.svg" alt="The L19 Lab in five steps, each a top view of the firing range. 1, bring up: your own HB100 at boresight, then Find HB100 and Calibrate. 2, reference shot: a source toward the plus-x end sets the sign s of Angle. 3, walk the line: with the fox on, read Angle and Peak Gain at each station mark. 4, fix: the bearings cross at a box, which is your call. 5, reveal: the instructor names the live box, and Part 3 reconciles." style="max-width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L19-lab-sequence.svg" alt="The L19 Lab in five steps, each a top view of the firing range. 1, bring up: your own HB100 at boresight, then Find HB100 and Calibrate. 2, reference shot: a source toward the plus-x end sets the sign s of Angle. 3, walk the line: with the fox on, read Angle and Peak Gain at each station mark. 4, fix: the bearings cross at a box, which is your call. 5, reveal: the instructor names the live box, and the Part 3 writeup compares it with your fix." style="max-width: 100%; display: block; margin: 0 auto;">
 </picture>
 :::
 
 Steps 1 and 2 happen before the fox goes on: the bring-up on your own HB100,
 then the reference shot that fixes which end of the tape positive Angle points
 to. Steps 3 and 4 are the hunt: the same measurement at every station mark,
-then the fix. Step 5 is the instructor's, and Part 3 of the packet starts
+then the fix. Step 5 is the instructor's, and the Part 3 writeup starts
 from it.
 ::::
 
@@ -93,43 +92,31 @@ you might expect; a deeper field hurts more, because depth is the direction a
 single firing line measures worst.
 ::::
 
-::::{frame} Part 1: The Plan You Bring
+::::{frame} Pre-Lab
 :::{present}
-- Bearing budget with a fixed heading: about $1.5^\circ$.
-- At range $R$: across range $R\tan\sigma_\beta$, in depth $\sqrt{2}\,R^2\sigma_\beta / B$.
-- Use the ends of the line: the baseline $B$ sets the depth error.
-- A tested script: fix, residuals, outlier, box ranking.
+- Bring your fox-hunt script, tested, on your laptop.
+- It finds where the bearings cross, flags a bad one, and ranks the boxes.
+- Part 1 of the packet, at the end of Lesson 19, walks you through it.
 :::
 
-Part 1 of the packet does Lesson 19's numbers for this range. Squaring the kit
-to the tape replaces the aimed heading of a free-standing kit: the grid,
-multipath, and noise terms are the lesson's, and squaring by eye adds about
-$1^\circ$, so
-
-$$\sigma_\beta = \sqrt{0.53^2 + 1.0^2 + 1.0^2 + 0.3^2} \approx 1.5^\circ.$$
-
-The geometry has a weak direction. Bearings from a firing line all look
-downrange, so they cross steeply only when the stations are far apart compared
-with the depth. Two stations a baseline $B$ apart fix a box at range $R$ across
-range to about $R\tan\sigma_\beta$, $0.05\ \text{m}$ at $2\ \text{m}$, but in
-depth only to about $\sqrt{2}\,R^2\sigma_\beta/B$ (Lesson 19 derives it): for a
-box $2\ \text{m}$ out between the two stations, $0.08\ \text{m}$ with the
-ends of the line, $B = 3\ \text{m}$; $0.11\ \text{m}$ with $B = 1.5\ \text{m}$;
-and $0.20\ \text{m}$ with neighbors, $B = 0.75\ \text{m}$. Plan to use the
-stations farthest apart that still hear the fox.
-
-The script is yours. Start from the
-<a href="../../labs/foxhunt_starter.py" download>starter file</a>, which reads the
-station and box files and prints the results, and write its four functions in
-Part 1. Test it there on a supplied set of bearings with one bad station in it,
-and bring it on your laptop.
+The Pre-Lab is Part 1 of the packet, done before the lab period and listed at
+the end of
+<a href="../L19-direction-finding/index.html">Lesson 19</a>. What you need at
+the bench is the script: start from the
+<a href="../../labs/foxhunt_starter.py" download>starter file</a>, which reads
+the station and box files and prints the results, write its four functions,
+and test it on the supplied set of bearings with one bad station in it. The
+error budget and station plan in Part 1 tell you what to expect: use the
+stations farthest apart that still detect the fox, because the distance
+between them sets how well the fix is pinned down in depth.
 ::::
 
 ::::{frame} Range Coordinates
 :::{present}
-- $x$ along the tape, $y$ straight downrange; origin at station 0.
-- Every kit faces $+y$, so a bearing is the line $x = x_i + y\tan\theta_i$.
-- The reference shot sets which end of the tape positive Angle points to.
+- Origin is at the center of the table, on the middle station.
+- $x$ runs along the tape, $y$ straight downrange.
+- Each Angle draws a line from its station toward the fox.
+- The reference shot sets which end is positive.
 :::
 
 The instructor tapes the firing line and marks station 0 at its middle, with
@@ -149,22 +136,21 @@ consecutive sweeps from the **Tracking** tab and use their mean. The spread of
 those ten, largest minus smallest, should be a degree or two.
 ::::
 
-::::{frame} Expected Numbers
+::::{frame} What to Expect
 :::{present}
-| Quantity | Expect |
-| :-- | :-- |
-| Stations hearing the fox | 2 to 4 of 5 |
-| Angle at a useful station | within $\pm 45^\circ$ |
-| Spread of ten readings | $1^\circ$ to $2^\circ$ |
-| Good-bearing residual | under $0.15\ \text{m}$ |
-| Fix to live box | $0.15$ to $0.2\ \text{m}$ |
+- Most stations detect the fox, but the far ends may not.
+- Ten readings at one station agree within a degree or two.
+- The bearing lines cross within a hand's width of the live box.
 :::
 
-An HB100 radiates mainly forward, so stations far off its axis may see a weak
-tone or none; skip those and keep going. A residual far larger than the rest
-flags a bad bearing, usually a reflection or a person in the path: retake it,
-or let your script drop it. The boxes are at least $0.75\ \text{m}$ apart, so a
-fix within $0.2\ \text{m}$ names the right one.
+An HB100 radiates mainly forward, so expect two to four of the stations to
+detect it; a station far off its axis may see a weak tone or none, and one that
+reads beyond $\pm 45^\circ$ is past what the PHASER tracks. Skip those and keep
+going. A good bearing passes within about $0.15\ \text{m}$ of the fix; one that
+misses by far more than the rest is a bad bearing, usually a reflection or a
+person in the path: retake it, or let your script drop it. The fix should land
+$0.15$ to $0.2\ \text{m}$ from the live box, and the boxes are at least
+$0.75\ \text{m}$ apart, so that is close enough to name the right one.
 
 Peak Gain is useful only when **Rx Gain (dB)** is the same at every
 station. Your script compares the levels along the line with the shape a source
@@ -223,7 +209,7 @@ kit to it. Keep the calibration from bring-up.
 12. Set **Rx Gain (dB)** for a clear tone from the fox at station 0 and record it. Leave it there.
 13. Put the kit on a station mark, squared to the tape, broadside downrange.
 14. On the **Tracking** tab, record ten consecutive Angle readings and **Peak Gain**.
-15. Repeat at every station that hears the fox, ends first.
+15. Repeat at every station that detects the fox, ends first.
 16. Write each row as $x_i$, $s\,\bar\theta_i$, Peak Gain into `stations.csv`.
 :::
 
@@ -243,7 +229,7 @@ of them.
 :class: read-only
 
 :::{present}
-17. Run your Part 1 script on `stations.csv` and `boxes.csv`, and record the fix, the residuals, and the ranking.
+17. Run your Pre-Lab script on `stations.csv` and `boxes.csv`, and record the fix, the residuals, and the ranking.
 18. If one residual is far larger than the rest, retake that station or accept your script's drop.
 19. Name the box and tell the instructor before the boxes are opened.
 20. Record the live box after the reveal, then press **Stop**.
@@ -253,8 +239,8 @@ of them.
 bearings alone, ranks the boxes by distance from the fix, and, when the two
 nearest are within $0.15\ \text{m}$ of each other in distance, uses the amplitude
 pattern to choose between them. The call is your team's, made in class from your
-own data. Part 3 compares your fix with the live box and asks what changes with
-the baseline and the depth.
+own data. The Part 3 writeup compares your fix with the live box and asks what
+changes with the baseline and the depth.
 ::::
 
 ::::{frame} Lab Packet
@@ -271,12 +257,15 @@ The L19 Lab packet is one submission per team for the whole lab, turned in compl
 
 ::::{frame} Looking Ahead
 :::{present}
-- Keep your bearings, levels, and script: Part 3 reuses all three.
-- L20 returns to the pattern the sweep traces: nulls, sidelobes, and beamwidth.
+- Keep your bearings, levels, and script: the Part 3 writeup reuses all three.
+- L20 returns to shaping and steering the beam.
 :::
 
-Lesson 20 derives the features of the trace you used today to find the peak,
-starting from the closed-form array factor: where the nulls fall, why the first
-sidelobe sits $12.8\ \text{dB}$ down, and how the beamwidth depends on the number
-of elements.
+Part 3 is the writeup, done as a team after the lab: how far your fix landed
+from the live box, the error of each bearing, and what the baseline and the
+depth did to the fix.
+
+Lesson 20 returns to shaping and steering the beam, starting from the
+closed-form array factor: where the nulls fall, why the first sidelobe sits
+$12.8\ \text{dB}$ down, and how the beamwidth depends on the number of elements.
 ::::

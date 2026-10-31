@@ -872,18 +872,30 @@ firing line.
 - <a class="doc-link" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a>
 ::::
 
+::::{frame} Pre-Lab
+:class: read-only doc-links
+
+The L19 Lab's pre-lab is Part 1 of its packet, one per team, done before the
+lab period. It works this lesson's error budget for the range and has you
+write the fox-hunt script: start from the starter file, write its four
+functions, and test it on the supplied bearings. Bring the tested script to
+the lab on your laptop.
+
+- <a class="doc-link" href="../../labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">L19 Lab packet, Part 1 (PDF)</a>
+- <a class="doc-link" href="../../labs/foxhunt_starter.py" download>Fox-hunt starter script</a>
+::::
+
 ::::{frame} Looking Ahead
 :::{present}
 - In the L19 Lab, one kit takes a bearing from each station on a taped firing line.
-- Bring the error budget, a station plan, and your script.
-- L20-L24 return to the pattern itself: beamwidth, tapering, squint, and nulls.
+- Bring your tested script from the Pre-Lab.
+- L20 returns to shaping and steering the beam.
 :::
 
-In the L19 Lab you and a partner find the one live HB100 among five numbered
+In the L19 Lab you and a partner find the one live HB100 among the numbered
 boxes. You move one kit along a taped firing line, square to the tape at every
 station, read Angle off the beam sweep at each station mark, convert it to a
-room bearing, and solve for the fix. Come with this lesson's error budget and a
-plan for which stations give a steep crossing for any box in the field.
+room bearing, and solve for the fix. Come with the Pre-Lab script, tested.
 
 :::{depth}
 The rest of Module 3 returns to the pattern the sweep traces. L20 measures
