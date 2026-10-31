@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Receive signal path: phase shift, gain, and sum after each element</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --c1:#0067b9; --c1l:#8db8e0; --c2:#3f7d34; --c2l:#a5cb9c; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:10px; }
+  canvas { display:block; box-sizing:border-box; width:100%; background:#fff;
+           border:1px solid var(--edge); border-radius:6px; }
+  /* Source and steer share one line above 650px; the taper and step row spans both. */
+  .controls { display:grid; grid-template-columns:1fr; gap:6px 20px; padding:7px 12px;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  @media (min-width:650px) { .controls { grid-template-columns:1fr 1fr; } .controls .wide { grid-column:1 / -1; } }
+  /* Below 650px the stage text takes its own line, always, so stepping never
+     changes the widget's height. */
+  @media (max-width:649px) { .ctl.wide { flex-wrap:wrap; row-gap:4px; } .ctl.wide .stage { flex:1 1 100%; } }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; }
+  .ctl .k { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3);
+            font-weight:700; white-space:nowrap; }
+  .ctl .k mjx-container { text-transform:none; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; font-weight:600;
+              font-size:12.5px; min-width:34px; text-align:right; }
+  .ctl input[type=range] { flex:1 1 auto; min-width:50px; width:0; accent-color:var(--mid); }
+  .ctl input[type=range]:disabled { opacity:0.55; }
+  .ctl select { font:600 12px 'Inter',system-ui,-apple-system,sans-serif; color:var(--navy);
+                border:1px solid var(--edge2); border-radius:4px; background:#fff; padding:2px 4px; }
+  .ctl .stage { font-size:11.5px; color:var(--ink3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+  .play { flex:0 0 auto; font:700 10.5px 'Inter',system-ui,-apple-system,sans-serif; text-transform:uppercase;
+          letter-spacing:0.05em; color:var(--navy); background:#fff; border:1px solid var(--edge2);
+          border-radius:4px; padding:3px 7px; cursor:pointer; line-height:14px; min-width:52px; }
+  .play.on { background:var(--navy); color:#fff; border-color:var(--navy); }
+  .play:focus-visible, .ctl select:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  .lock { flex:0 0 auto; display:flex; align-items:center; gap:4px; cursor:pointer;
+          font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;
+          color:var(--ink3); white-space:nowrap; min-width:52px; }
+  .lock input { margin:0; accent-color:var(--navy); }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(3, minmax(0,1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 6px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center; max-width:100%;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; text-transform:none; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; color:var(--navy); max-width:100%; overflow:hidden; }
+  /* A phone's three cells are ~100px: let a label take two lines there. */
+  @media (max-width:559px) { .ro .k { height:auto; min-height:15px; white-space:normal; } }
+  .ro.al { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.al .v { color:var(--grn); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="cv" aria-label="The receive chain of the eight-element array: a plane wave reaches each element, each element's signal passes through a phase shifter and a gain stage in its ADAR1000, the four signals of each chip are summed, and the two chip sums add to the total"></canvas>
+
+  <div class="controls" id="panel">
+    <div class="ctl">
+      <label class="k" for="ts">Source \(\theta_s\)</label>
+      <input type="range" id="ts" min="-60" max="60" step="1" value="30">
+      <span class="val" id="ts-val">+30°</span>
+      <button type="button" class="play" id="play" aria-label="Run the signals through the receive chain">play</button>
+    </div>
+    <div class="ctl">
+      <label class="k" for="t0">Steer \(\theta_0\)</label>
+      <input type="range" id="t0" min="-60" max="60" step="1" value="30">
+      <span class="val" id="t0-val">+30°</span>
+      <label class="lock" title="Tie the steer angle to the source angle"><input type="checkbox" id="lock">lock</label>
+    </div>
+    <div class="ctl wide">
+      <label class="k" for="taper">Taper</label>
+      <select id="taper">
+        <option value="uniform">uniform</option>
+        <option value="hann">Hann</option>
+        <option value="cheb30">Chebyshev −30</option>
+      </select>
+      <button type="button" class="play" id="step" aria-label="Show the next stage of the receive chain">step</button>
+      <span class="stage" id="stage" aria-live="polite"></span>
+    </div>
+  </div>
+
+  <div class="readouts" id="readouts">
+    <div class="ro"><span class="k">\(\Delta\phi\) per element</span><span class="v" id="r-dphi">&#8212;</span></div>
+    <div class="ro" id="ro-sum"><span class="k">total sum</span><span class="v" id="r-sum">&#8212;</span></div>
+    <div class="ro" id="ro-db"><span class="k">relative to 8</span><span class="v" id="r-db">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  const SANS = "Inter, system-ui, -apple-system, sans-serif";
+  const el = id => document.getElementById(id);
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+  // ---- the course array (COURSE_SPEC M3) ------------------------------------
+  // The same array, frequency and sign convention as steering-delay.html (the
+  // Time Alignment widget): eight elements, d = 14 mm, 10.3 GHz, real pi.
+  const N = 8, D_MM = 14, F_HZ = 10.3e9;
+  const LAMBDA_MM = 299792458e3 / F_HZ;           // 29.11 mm
+  const KD_DEG = 360 * D_MM / LAMBDA_MM;          // kd = 173.16 deg
+  const T_MAX = 60;
+  const rad = d => d * Math.PI / 180;
+  const deg = r => r * 180 / Math.PI;
+  const wrap360 = a => ((a % 360) + 360) % 360;
+
+  // Weights from L22's own tables, edge to center and back: Hann 12, 43, 77,
+  // 100; -30 dB Chebyshev 26, 52, 81, 100.
+  const TAPERS = {
+    uniform: [1, 1, 1, 1, 1, 1, 1, 1],
+    hann:    [0.12, 0.43, 0.77, 1, 1, 0.77, 0.43, 0.12],
+    cheb30:  [0.26, 0.52, 0.81, 1, 1, 0.81, 0.52, 0.26],
+  };
+
+  // ---- physics ---------------------------------------------------------------
+  // Element n sits n*d from element 0 toward +theta. A wave from +theta_s
+  // reaches it earlier, so its signal LEADS element 0's by n*kd*sin(theta_s).
+  // The ADAR1000 phase shifter DELAYS it by n*dphi, dphi = kd*sin(theta_0),
+  // which cancels the lead when theta_0 = theta_s. The gain stage scales it by
+  // w_n; each chip sums its four (#1: elements 0-3, #2: 4-7), and the two chip
+  // sums add to the total.
+  const leadDeg = (n, ts) => n * KD_DEG * Math.sin(rad(ts));
+  const dphiDeg = t0 => KD_DEG * Math.sin(rad(t0));
+  const shiftDeg = (n, t0) => wrap360(n * dphiDeg(t0));        // what the shifter is set to
+  function sums(ts, t0, w) {
+    const c = [[0, 0], [0, 0]];
+    for (let n = 0; n < N; n++) {
+      const k = n < 4 ? 0 : 1, p = rad(leadDeg(n, ts) - n * dphiDeg(t0));
+      c[k][0] += w[n] * Math.cos(p); c[k][1] += w[n] * Math.sin(p);
+    }
+    const tot = [c[0][0] + c[1][0], c[0][1] + c[1][1]];
+    const mt = Math.hypot(...tot);
+    return { chip: [Math.hypot(...c[0]), Math.hypot(...c[1])],
+             chipArg: [Math.atan2(c[0][1], c[0][0]), Math.atan2(c[1][1], c[1][0])],
+             total: mt, totArg: Math.atan2(tot[1], tot[0]),
+             db: 20 * Math.log10(Math.max(mt, 1e-9) / N) };
+  }
+
+  // ---- self-test -------------------------------------------------------------
+  // The same check values as steering-delay.html for a uniform array, plus the
+  // aligned totals of the two tapers. Run: ?selftest=1, or
+  // window.__rxSignalPath.selfTest() from a harness.
+  function selfTest() {
+    const out = [], fx = (v, n) => v.toFixed(n).replace('-', '−');
+    let ok = true;
+    const eq = (name, got, want) => {
+      const pass = got === want; ok = ok && pass;
+      out.push((pass ? 'PASS ' : 'FAIL ') + name + ': ' + got + (pass ? '' : ' (want ' + want + ')'));
+    };
+    const U = TAPERS.uniform;
+    eq('dphi at 30 (deg)', fx(dphiDeg(30), 1), '86.6');
+    let s = sums(30, 30, U);
+    eq('30/30 chips', s.chip.map(v => fx(v, 2)).join(', '), '4.00, 4.00');
+    eq('30/30 total', fx(s.total, 2), '8.00');
+    s = sums(30, 20, U);
+    eq('30/20 chips', s.chip.map(v => fx(v, 2)).join(', '), '3.45, 3.45');
+    eq('30/20 total', fx(s.total, 2), '3.99');
+    eq('30/20 dB', fx(s.db, 1), '−6.0');
+    s = sums(30, 0, U);
+    eq('30/0 dB', fx(s.db, 1), '−27.3');
+    s = sums(30, 30, TAPERS.hann);
+    eq('Hann aligned total', fx(s.total, 2), '4.64');
+    eq('Hann aligned dB', fx(s.db, 1), '−4.7');
+    s = sums(30, 30, TAPERS.cheb30);
+    eq('Chebyshev aligned total', fx(s.total, 2), '5.18');
+    eq('shifter settings at 30 (deg)', [0, 1, 2, 7].map(n => fx(shiftDeg(n, 30), 1)).join(', '),
+       '0.0, 86.6, 173.2, 246.1');
+    // The sign: the delay cancels the lead on every element when steered on.
+    eq('lead - delay = 0 mod 360 at 30/30', String([...Array(N).keys()].every(n => {
+      const r = wrap360(leadDeg(n, 30) - shiftDeg(n, 30)); return r < 1e-9 || 360 - r < 1e-9; })), 'true');
+    return { ok, lines: out };
+  }
+
+  // ---- state and controls ----------------------------------------------------
+  const STAGES = ['arrival', 'phase shift', 'gain', 'sum'];
+  const clampT = v => Math.max(-T_MAX, Math.min(T_MAX, Math.round(v)));
+  const state = { ts: 30, t0: 30, lock: false, taper: 'uniform', stage: 4 };
+  const qs = new URLSearchParams(location.search);
+  if (qs.has('ts') && isFinite(+qs.get('ts'))) state.ts = clampT(+qs.get('ts'));
+  if (qs.has('t0') && isFinite(+qs.get('t0'))) state.t0 = clampT(+qs.get('t0'));
+  if (qs.get('lock') === '1') { state.lock = true; state.t0 = state.ts; }
+  if (TAPERS[qs.get('taper')]) state.taper = qs.get('taper');
+  if (/^[1-4]$/.test(qs.get('stage') || '')) state.stage = +qs.get('stage');
+
+  const sgn = (v, n) => {
+    const r = Math.abs(v) < 0.5 / Math.pow(10, n) ? 0 : v;
+    return (r > 0 ? '+' : r < 0 ? '−' : '') + Math.abs(r).toFixed(n);
+  };
+  function syncControls() {
+    el('ts').value = state.ts; el('t0').value = state.t0;
+    el('ts-val').textContent = sgn(state.ts, 0) + '°';
+    el('t0-val').textContent = sgn(state.t0, 0) + '°';
+    el('lock').checked = state.lock;
+    el('t0').disabled = state.lock;
+    el('taper').value = state.taper;
+    el('stage').textContent = state.stage + ' of 4: ' + STAGES[state.stage - 1];
+  }
+  el('ts').addEventListener('input', e => {
+    state.ts = clampT(+e.target.value);
+    if (state.lock) state.t0 = state.ts;
+    syncControls(); drawAll();
+  });
+  el('t0').addEventListener('input', e => { state.t0 = clampT(+e.target.value); syncControls(); drawAll(); });
+  el('lock').addEventListener('change', e => {
+    state.lock = e.target.checked;
+    if (state.lock) state.t0 = state.ts;
+    syncControls(); drawAll();
+  });
+  el('taper').addEventListener('change', e => { state.taper = e.target.value; syncControls(); drawAll(); });
+  el('step').addEventListener('click', () => { state.stage = state.stage % 4 + 1; syncControls(); drawAll(); });
+
+  // ---- animation ---------------------------------------------------------------
+  // The 10.3 GHz carrier, slowed to one cycle every PERIOD_S seconds. Every
+  // wave on the canvas moves with the same clock, so a crest in the field runs
+  // into its element and on down that element's line.
+  const PERIOD_S = 1.6;
+  let phase0 = 0;                                 // carrier phase, rad
+  let anim = null;
+  function stopPlay() {
+    if (anim) cancelAnimationFrame(anim.id);
+    anim = null;
+    el('play').classList.remove('on'); el('play').textContent = 'play';
+  }
+  function startPlay() {
+    el('play').classList.add('on'); el('play').textContent = 'pause';
+    anim = { last: performance.now(), id: 0 };
+    const step = now => {
+      if (!anim) return;
+      const dt = Math.min(0.1, (now - anim.last) / 1000); anim.last = now;
+      phase0 = (phase0 + 2 * Math.PI * dt / PERIOD_S) % (2 * Math.PI);
+      draw(); anim.id = requestAnimationFrame(step);
+    };
+    anim.id = requestAnimationFrame(step);
+  }
+  el('play').addEventListener('click', () => { if (anim) stopPlay(); else startPlay(); });
+
+  // ---- canvas ------------------------------------------------------------------
+  const cv = el('cv'), ctx = cv.getContext('2d');
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  function fit(h) {
+    const dpr = window.devicePixelRatio || 1;
+    const w = Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
+    cv.style.height = h + 'px';
+    const bh = cv.offsetHeight - cv.clientHeight;
+    if (bh) cv.style.height = (h + bh) + 'px';
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    return w;
+  }
+  function txt(s, x, y, size, color, align, weight) {
+    ctx.fillStyle = color;
+    ctx.font = (weight ? weight + ' ' : '') + size + 'px ' + SANS;
+    ctx.textAlign = align || 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(s, x, y);
+  }
+  function arrow(x0, y0, x1, y1, col, lw, head) {
+    const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy);
+    if (L < 0.5) return;
+    const ux = dx / L, uy = dy / L, hl = Math.min(head, L * 0.45), hw = hl * 0.5;
+    const bx = x1 - ux * hl, by = y1 - uy * hl;
+    ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = lw; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(bx, by); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x1, y1);
+    ctx.lineTo(bx - uy * hw, by + ux * hw); ctx.lineTo(bx + uy * hw, by - ux * hw);
+    ctx.closePath(); ctx.fill();
+  }
+  // Liang-Barsky: the part of the infinite line P + u*D inside the box.
+  function clipLine(px, py, dx, dy, x0, y0, x1, y1) {
+    let u0 = -1e9, u1 = 1e9;
+    const tests = [[-dx, px - x0], [dx, x1 - px], [-dy, py - y0], [dy, y1 - py]];
+    for (const [p, q] of tests) {
+      if (Math.abs(p) < 1e-12) { if (q < 0) return null; continue; }
+      const r = q / p;
+      if (p < 0) u0 = Math.max(u0, r); else u1 = Math.min(u1, r);
+    }
+    return u0 > u1 ? null : [px + u0 * dx, py + u0 * dy, px + u1 * dx, py + u1 * dy];
+  }
+
+  // Layout. A desktop column holds the whole chain in one band, left to right.
+  // Below 600px it breaks into two bands, the second picking each line up at
+  // its gain stage, so a phone keeps the same chain in two rows of columns
+  // rather than squeezing ten columns into 340px. The stage each column
+  // belongs to drives the step dimming.
+  const COLS = {
+    field: { stage: 1, head: 'wavefront' }, rx:  { stage: 1, head: 'received' },
+    phi:   { stage: 2, head: 'phase' },     sh:  { stage: 2, head: 'shifted' },
+    amp:   { stage: 3, head: 'gain' },      wt:  { stage: 3, head: 'weighted' },
+    sig1:  { stage: 4, head: '' },          chip:{ stage: 4, head: 'per chip' },
+    sig2:  { stage: 4, head: '' },          tot: { stage: 4, head: 'total' },
+  };
+  const WIDE = [['field', .14], ['rx', .14], ['phi', .06], ['sh', .14], ['amp', .055], ['wt', .13],
+                ['sig1', .045], ['chip', .11], ['sig2', .04], ['tot', .14]];
+  const BAND1 = [['field', .21], ['rx', .29], ['phi', .14], ['sh', .36]];
+  const BAND2 = [['amp', .13], ['wt', .27], ['sig1', .09], ['chip', .2], ['sig2', .08], ['tot', .23]];
+  const HEAD = 18, PAD = 6, BAND_GAP = 12;
+  function layout(w) {
+    const phone = w < 600;
+    const rowH = phone ? clamp(Math.round(w * 0.064), 19, 23) : clamp(Math.round(w * 0.05), 30, 38);
+    const bandH = HEAD + N * rowH + PAD;
+    const mx = 8, W = w - 2 * mx;
+    const bands = (phone ? [BAND1, BAND2] : [WIDE]).map((spec, b) => {
+      const top = PAD + b * (bandH + BAND_GAP);
+      const cols = {};
+      let x = mx;
+      for (const [k, f] of spec) { cols[k] = { x0: x, x1: x + f * W, w: f * W }; x += f * W; }
+      return { top, yTop: top + HEAD, cols };
+    });
+    return { w, phone, rowH, bands, h: PAD + bands.length * bandH + (bands.length - 1) * BAND_GAP + 2 };
+  }
+
+  let L = null;
+  function draw() {
+    const w0 = cv.clientWidth || 600;
+    const g = L = layout(w0);
+    const w = fit(g.h);
+    if (Math.abs(w - w0) > 1) { L = layout(w); return draw(); }
+    const rowH = g.rowH;
+    const wts = TAPERS[state.taper], ts = state.ts, t0 = state.t0;
+    const S = sums(ts, t0, wts);
+    const AMBER = css('--amber'), NAVY = css('--navy'), INK3 = css('--ink3'), INK = css('--ink');
+    const col = n => n < 4 ? css('--c1') : css('--c2');
+    const colL = n => n < 4 ? css('--c1l') : css('--c2l');
+    const stage = state.stage;
+    const on = k => COLS[k].stage <= stage;
+    const DIM = 0.16;
+
+    // One pixel scale for the field and the lines: kpx px per mm, so a crest
+    // spacing in the field is the same length as a cycle on an element's line.
+    const kpx = rowH / D_MM;
+    const kappa = 2 * Math.PI / (LAMBDA_MM * kpx);                   // rad per px
+    const A1 = 0.33 * rowH;                                            // px for amplitude 1
+    const yRow = (band, n) => band.yTop + (N - 1 - n + 0.5) * rowH;   // element 7 on top
+    const yChip = (band, c) => band.yTop + (c === 2 ? 2 : 6) * rowH;   // chip 2 (4-7) on top
+    const yTot = band => band.yTop + 4 * rowH;
+
+    // Path length along each line, so a wave runs on from one column into the
+    // next; the boxes and the summing junctions take no length.
+    const lenOf = k => { for (const b of g.bands) if (b.cols[k]) return b.cols[k].w; return 0; };
+    const U0 = { rx: 0 };
+    U0.sh = U0.rx + lenOf('rx'); U0.wt = U0.sh + lenOf('sh');
+    U0.chip = U0.wt + lenOf('wt'); U0.tot = U0.chip + lenOf('chip');
+
+    function wave(x0, x1, yc, amp, ph, u0, color, lw, alpha) {
+      ctx.save(); ctx.globalAlpha = alpha;
+      ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineJoin = 'round';
+      ctx.beginPath();
+      for (let x = x0; x <= x1 + 0.01; x += 1.5) {
+        const y = yc - amp * Math.cos(phase0 - kappa * (u0 + x - x0) + ph);
+        if (x === x0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke(); ctx.restore();
+    }
+    function flat(x0, x1, yc, color, alpha) {
+      ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = color; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x0, yc); ctx.lineTo(x1, yc); ctx.stroke(); ctx.restore();
+    }
+    function box(x, yc, bw, bh, label, color, alpha) {
+      ctx.save(); ctx.globalAlpha = alpha;
+      ctx.fillStyle = '#fff'; ctx.strokeStyle = color; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.rect(x - bw / 2, yc - bh / 2, bw, bh); ctx.fill(); ctx.stroke();
+      txt(label, x, yc + 0.5, g.phone ? 10 : 10.5, color, 'center', 700);
+      ctx.restore();
+    }
+    function sigma(x, yc, r, color, alpha) {
+      ctx.save(); ctx.globalAlpha = alpha;
+      ctx.fillStyle = '#fff'; ctx.strokeStyle = color; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.arc(x, yc, r, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+      txt('Σ', x, yc + 0.5, r * 1.45, color, 'center', 700);
+      ctx.restore();
+    }
+    const ghost = (x0, x1, yc, a, color, alpha) => {
+      ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = color; ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(x0, yc + s * a); ctx.lineTo(x1, yc + s * a); ctx.stroke(); }
+      ctx.setLineDash([]); ctx.restore();
+    };
+
+    for (const band of g.bands) {
+      const C = band.cols;
+      // the two ADAR1000s: a faint tint behind the phase, gain and sum stages
+      const adarKeys = ['phi', 'sh', 'amp', 'wt', 'sig1'].filter(k => C[k]);
+      if (adarKeys.length) {
+        const xa = C[adarKeys[0]].x0 + 1, xb = C[adarKeys[adarKeys.length - 1]].x1 - 1;
+        for (const c of [1, 2]) {
+          ctx.fillStyle = c === 1 ? 'rgba(0,103,185,0.055)' : 'rgba(63,125,52,0.065)';
+          ctx.fillRect(xa, yChip(band, c) - 2 * rowH + 1, xb - xa, 4 * rowH - 2);
+        }
+      }
+      // column heads; the current stage's in navy
+      for (const k of Object.keys(C)) {
+        const hd = COLS[k].head; if (!hd) continue;
+        const cur = COLS[k].stage === stage, fut = !on(k);
+        txt(hd, (C[k].x0 + C[k].x1) / 2, band.top + HEAD / 2, 10.5,
+            cur ? NAVY : INK3, 'center', cur ? 700 : 400);
+        if (fut) {                                                   // fade a future head
+          ctx.save(); ctx.globalAlpha = 1 - DIM; ctx.fillStyle = '#fff';
+          ctx.fillRect(C[k].x0, band.top, C[k].w, HEAD); ctx.restore();
+        }
+      }
+
+      // the field: crests of the plane wave, the arrival and steer directions
+      if (C.field) {
+        const xE = C.field.x1 - 2;                                   // element faces
+        const y0 = yRow(band, 0);
+        const fx0 = C.field.x0, fx1 = xE - 6, fy0 = band.yTop, fy1 = band.yTop + N * rowH;
+        const sS = Math.sin(rad(ts)), cS = Math.cos(rad(ts));
+        // r.s_hat in mm at a screen point: along the array (up) a, out of the
+        // face (left) b; s_hat = (sin ts, cos ts) in (a, b).
+        const rs = (px, py) => ((y0 - py) * sS + (xE - px) * cS) / kpx;
+        let lo = 1e9, hi = -1e9;
+        for (const [px, py] of [[fx0, fy0], [fx0, fy1], [fx1, fy0], [fx1, fy1]]) {
+          const v = rs(px, py); lo = Math.min(lo, v); hi = Math.max(hi, v);
+        }
+        const K = 2 * Math.PI / LAMBDA_MM;
+        ctx.save(); ctx.globalAlpha = on('field') ? 0.55 : DIM;
+        ctx.strokeStyle = AMBER; ctx.lineWidth = 1.6;
+        for (let m = Math.ceil((phase0 + K * lo) / (2 * Math.PI)); m <= Math.floor((phase0 + K * hi) / (2 * Math.PI)); m++) {
+          const rho = (2 * Math.PI * m - phase0) / K;                 // mm
+          const px = xE - kpx * rho * cS, py = y0 - kpx * rho * sS;
+          const seg = clipLine(px, py, sS, -cS, fx0, fy0, fx1, fy1);
+          if (seg) { ctx.beginPath(); ctx.moveTo(seg[0], seg[1]); ctx.lineTo(seg[2], seg[3]); ctx.stroke(); }
+        }
+        ctx.restore();
+        // broadside, the arrival (amber) and steer (navy, dashed) directions,
+        // from the array center
+        const xc = xE - 4, yc = yTot(band);
+        const reach = (th) => {                                      // longest ray inside the field
+          const dx = -Math.cos(rad(th)), dy = -Math.sin(rad(th));
+          let r = (xc - fx0 - 4) / Math.max(1e-6, -dx);
+          if (dy < 0) r = Math.min(r, (yc - fy0 - 4) / -dy);
+          if (dy > 0) r = Math.min(r, (fy1 - yc - 4) / dy);
+          return r;
+        };
+        ctx.strokeStyle = '#c4ccd6'; ctx.lineWidth = 1; ctx.setLineDash([2, 3]);
+        ctx.beginPath(); ctx.moveTo(xc, yc); ctx.lineTo(fx0 + 2, yc); ctx.stroke();
+        const r0 = reach(t0);
+        ctx.strokeStyle = NAVY; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
+        const ex0 = xc - r0 * Math.cos(rad(t0)), ey0 = yc - r0 * Math.sin(rad(t0));
+        ctx.beginPath(); ctx.moveTo(xc, yc); ctx.lineTo(ex0, ey0); ctx.stroke();
+        ctx.setLineDash([]);
+        const rS = reach(ts);
+        const exs = xc - rS * cS, eys = yc - rS * sS;
+        arrow(exs, eys, xc - 12 * cS, yc - 12 * sS, AMBER, 1.8, 8);
+        if (window.MJ && MJ.ready) {
+          // the ray further up labels above its end, the other below its own
+          const lab = (tex, ex, ey, below, color) => {
+            const lw = MJ.width(tex, color, 14) || 12;
+            const x = clamp(ex + lw / 2 + 2, fx0 + lw / 2 + 2, fx1 - lw / 2);
+            const y = clamp(ey + (below ? 11 : -11), fy0 + 8, fy1 - 8);
+            ctx.fillStyle = 'rgba(255,255,255,0.88)';
+            ctx.fillRect(x - lw / 2 - 2, y - 8, lw + 4, 16);
+            MJ.draw(ctx, tex, x, y, 14, color, 'center');
+          };
+          const sUp = ts >= t0;
+          lab('\\theta_s', exs, eys, !sUp, AMBER);
+          lab('\\theta_0', ex0, ey0, sUp, NAVY);
+        }
+        // the elements
+        const ph = Math.min(16, rowH * 0.62), pw = 12;
+        for (let n = 0; n < N; n++) {
+          const y = yRow(band, n);
+          ctx.fillStyle = col(n);
+          ctx.fillRect(xE - pw, y - ph / 2, pw, ph);
+          txt(String(n), xE - pw / 2, y + 0.5, 9.5, '#fff', 'center', 700);
+        }
+      }
+
+      // per element: received, phase box, shifted, gain box, weighted
+      const bh = Math.min(20, rowH - 8);
+      for (let n = 0; n < N; n++) {
+        const y = yRow(band, n), c = col(n), cl = colL(n);
+        const lead = rad(leadDeg(n, ts)), shifted = lead - rad(n * dphiDeg(t0));
+        if (C.rx) {
+          if (on('rx')) wave(C.rx.x0, C.rx.x1, y, A1, lead, U0.rx, c, 1.5, 1);
+          else flat(C.rx.x0, C.rx.x1, y, cl, 1);
+        }
+        if (C.phi) {
+          const xm = (C.phi.x0 + C.phi.x1) / 2;
+          flat(C.phi.x0, C.phi.x1, y, cl, on('phi') ? 1 : DIM);
+          box(xm, y, C.phi.w - 6, bh, shiftDeg(n, t0).toFixed(0) + '°', c, on('phi') ? 1 : DIM + 0.1);
+        }
+        if (C.sh) {
+          if (on('sh')) wave(C.sh.x0, C.sh.x1, y, A1, shifted, U0.sh, c, 1.5, 1);
+          else flat(C.sh.x0, C.sh.x1, y, cl, DIM * 2);
+        }
+        if (C.amp) {
+          let x0 = C.amp.x0;
+          if (!C.rx) {                                               // second phone band: label the line
+            txt(String(n), x0 + 5, y + 0.5, 9.5, c, 'center', 700); x0 += 10;
+          }
+          flat(x0, C.amp.x1, y, cl, on('amp') ? 1 : DIM);
+          box((x0 + C.amp.x1) / 2, y, C.amp.x1 - x0 - 6, bh, wts[n].toFixed(2), c, on('amp') ? 1 : DIM + 0.1);
+        }
+        if (C.wt) {
+          if (on('wt')) wave(C.wt.x0, C.wt.x1, y, A1 * wts[n], shifted, U0.wt, c, 1.5, 1);
+          else flat(C.wt.x0, C.wt.x1, y, cl, DIM * 2);
+        }
+      }
+
+      // the sums: each chip's four lines into its junction, the chip sum on the
+      // same scale as one element (so four aligned unit waves make one four
+      // high), then both into the total, which can reach eight
+      if (C.sig1) {
+        const a4 = on('sig1') ? 1 : DIM;
+        const r = g.phone ? 6.5 : 8;
+        for (const ch of [1, 2]) {
+          const xs = C.sig1.x0, xj = C.sig1.x1 - r - 1, yj = yChip(band, ch);
+          ctx.save(); ctx.globalAlpha = a4; ctx.lineWidth = 1;
+          for (let n = (ch === 1 ? 0 : 4); n < (ch === 1 ? 4 : 8); n++) {
+            ctx.strokeStyle = colL(n);
+            ctx.beginPath(); ctx.moveTo(xs, yRow(band, n)); ctx.lineTo(xj - r, yj); ctx.stroke();
+          }
+          ctx.restore();
+          sigma(xj, yj, r, ch === 1 ? css('--c1') : css('--c2'), a4);
+        }
+      }
+      if (C.chip) {
+        for (const ch of [1, 2]) {
+          const yj = yChip(band, ch), cc = ch === 1 ? css('--c1') : css('--c2');
+          const full = (ch === 1 ? wts.slice(0, 4) : wts.slice(4)).reduce((a, b) => a + b, 0);
+          ghost(C.chip.x0, C.chip.x1, yj, full * A1, '#9aa6b2', on('chip') ? 0.9 : DIM);
+          if (on('chip')) {
+            wave(C.chip.x0, C.chip.x1, yj, A1 * S.chip[ch - 1], S.chipArg[ch - 1], U0.chip, cc, 2, 1);
+            txt('#' + ch + '  ' + S.chip[ch - 1].toFixed(2), C.chip.x0 + 2, yj - 2 * rowH + 8,
+                10.5, cc, 'left', 700);
+          } else flat(C.chip.x0, C.chip.x1, yj, cc, DIM);
+        }
+      }
+      if (C.sig2) {
+        const a4 = on('sig2') ? 1 : DIM, r = g.phone ? 7 : 9;
+        const xj = C.sig2.x1 - r - 1, yj = yTot(band);
+        ctx.save(); ctx.globalAlpha = a4; ctx.lineWidth = 1.3;
+        for (const ch of [1, 2]) {
+          ctx.strokeStyle = ch === 1 ? css('--c1l') : css('--c2l');
+          ctx.beginPath(); ctx.moveTo(C.sig2.x0, yChip(band, ch)); ctx.lineTo(xj - r, yj); ctx.stroke();
+        }
+        ctx.restore();
+        sigma(xj, yj, r, NAVY, a4);
+      }
+      if (C.tot) {
+        const yj = yTot(band);
+        const full = wts.reduce((a, b) => a + b, 0);
+        ghost(C.tot.x0, C.tot.x1, yj, full * A1, '#9aa6b2', on('tot') ? 0.9 : DIM);
+        if (on('tot')) {
+          wave(C.tot.x0, C.tot.x1, yj, A1 * S.total, S.totArg, U0.tot, NAVY, 2.4, 1);
+          txt(S.total.toFixed(2) + ' of 8', C.tot.x0 + 4, band.yTop + 8, 10.5, NAVY, 'left', 700);
+        } else flat(C.tot.x0, C.tot.x1, yj, NAVY, DIM);
+      }
+    }
+  }
+
+  // ---- readouts and redraw -----------------------------------------------------
+  function readouts() {
+    const s = sums(state.ts, state.t0, TAPERS[state.taper]);
+    const on = state.stage === 4;
+    el('r-dphi').textContent = sgn(dphiDeg(state.t0), 1) + '°';
+    el('r-sum').textContent = on ? s.total.toFixed(2) : '—';
+    el('r-db').textContent = !on ? '—' : s.db < -40 ? '< −40 dB' : sgn(s.db, 1) + ' dB';
+    const al = on && s.total > N - 0.005;
+    el('ro-sum').classList.toggle('al', al); el('ro-db').classList.toggle('al', al);
+  }
+  function drawAll() { draw(); readouts(); }
+
+  window.__rxSignalPath = { selfTest, sums, shiftDeg, dphiDeg, state, TAPERS,
+                            set: o => { Object.assign(state, o); if (state.lock) state.t0 = state.ts;
+                                        syncControls(); drawAll(); } };
+  if (qs.get('selftest') === '1') {
+    const r = selfTest();
+    r.lines.forEach(l => console.log(l));
+    console.log(r.ok ? 'SELF-TEST PASS' : 'SELF-TEST FAIL');
+  }
+
+  window.addEventListener('resize', drawAll);
+  syncControls();
+  drawAll();
+  if (qs.get('play') === '1') startPlay();
+  if (window.MJ) {
+    MJ.setRedraw(drawAll);
+    MJ.onReady(() => {
+      Promise.all([MJ.typeset(el('panel')), MJ.typeset(el('readouts'))]).then(drawAll);
+    });
+  }
+})();
+</script>
+</body>
+</html>
