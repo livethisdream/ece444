@@ -37,7 +37,7 @@ with room for notes. Print from read mode for the whole lesson.
 _Instructor and student introductions — background, career interests, prior exposure to RF or radar._
 ::::
 
-::::{frame} About Your Instructor
+::::{frame} About Me
 
 **Lt Col Neil Rogers, USAF (Ret)** — BS from TU; MSEE and PhD from AFIT.
 Currently the **Erdle Chair** at USAFA and a **Field Applications Engineer** at **Analog Devices**.

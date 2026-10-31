@@ -410,6 +410,36 @@ for the reverse: a mechanism is not "13 Ω". Catch it by reading the sentence
 with the number replaced by "this quantity" and asking whether it still says
 something true.
 
+### 25. First person, never "the instructor"
+
+> **Before:** On the instructor's kit, calibration first ran at the IF that
+> ships in the configuration file. If the ping fails, tell the instructor.
+>
+> **After:** On my kit, calibration first ran at the IF that ships in the
+> configuration file. If the ping fails, tell me.
+
+Neil, 2026-10-31: "I NEVER speak or write in 3rd person." The pages are his
+voice, so the person who assigns kits, keeps fallback cards, tapes the firing
+line, and opens the boxes is "I", and a cadet tells "me". The byline on a title
+frame and the syllabus's Instructor heading are labels, not prose, and stay.
+
+### 26. Every sentence earns its place
+
+> **Before:** The log is a better check than `systemctl is-active`. ... On the
+> instructor's kit it had restarted 83 times while the status still said
+> `active`.
+>
+> **After:** Read the log rather than `systemctl is-active`: a backend that
+> fails at start-up is restarted every five seconds and reads `active` between
+> failures.
+
+Neil, 2026-10-31: a sentence that does not contribute materially to the lesson,
+or distracts from its main points, comes out. Ask what a cadet does or
+understands differently because of it. If nothing, cut it. If something, say
+that thing directly. Build anecdotes, history, and a count with no cause behind
+it are the usual offenders; a measurement from the kit stays when the lesson
+uses the number.
+
 ## What he does *not* want changed
 
 His voice is direct, and that is deliberate. Do not soften it into hedged
@@ -431,4 +461,6 @@ hand-waving`, `is the price`, `dear reader`. Then grep for passive tells —
 `is referred to as`, and `\b(is|are|was|were|be|been)\b +\w+(ed|en)\b` — and
 rewrite each one with its agent named. Then read every sentence and ask
 whether it has a subject and a verb. Then ask whether any sentence is a joke,
-a wink, or a judgment about the reader. Rewrite anything that is.
+a wink, or a judgment about the reader. Rewrite anything that is. Grep for
+`instructor` and rewrite it in the first person (25). Then ask of each
+sentence what a cadet does differently because of it (26).
