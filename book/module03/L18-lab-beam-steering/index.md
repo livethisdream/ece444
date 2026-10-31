@@ -361,8 +361,8 @@ read its angle off the trace, and record that.
 :::{admonition} Scan loss needs distance
 :class: tip
 
-Take the scan-loss positions, Step 15, at $1.2\ \text{m}$ (4 ft) or more. On the
-instructor's kit at $1.2\ \text{m}$ the drop at $30^\circ$ read $-0.7$ dB,
+Take the scan-loss positions, Step 15, at $1.2\ \text{m}$ (4 ft) or more. On my
+kit at $1.2\ \text{m}$ the drop at $30^\circ$ read $-0.7$ dB,
 against $-0.6$ dB for an ideal element and $-0.8$ to $-0.9$ dB for a patch; at
 $1\ \text{m}$ the same drop read only $-0.2$ to $-0.4$ dB. One meter clears the
 far-field boundary, $0.88\ \text{m}$, which is enough for the pattern's shape,
@@ -426,7 +426,7 @@ $$\Delta G = 10\log_{10}(\cos 30^\circ) = -0.6\ \text{dB},$$
 and $-1.5\ \text{dB}$ at $45^\circ$. A patch element rolls off faster, closer to
 $\cos^{1.3}\theta$ to $\cos^{1.5}\theta$ in power, so expect $-0.8$ to
 $-0.9\ \text{dB}$ at $30^\circ$; Lesson 21 derives the element pattern. These
-values hold with the source at $1.2\ \text{m}$ or more, where the instructor's
+values hold with the source at $1.2\ \text{m}$ or more, where my
 kit read $-0.7\ \text{dB}$ at $30^\circ$. At $1\ \text{m}$ the same kit read only
 $-0.2$ to $-0.4\ \text{dB}$, so a level taken that close comes out smaller than
 theory. The $45^\circ$ drop is limited by reflections from the room: the kit

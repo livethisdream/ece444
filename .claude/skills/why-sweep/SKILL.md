@@ -1,6 +1,6 @@
 ---
 name: why-sweep
-description: Audit one lesson (page and practice set) for results stated without saying where they come from, rank the gaps, stop for Neil's pick, then fix the approved ones. Manual only -- run as /why-sweep <NN>.
+description: Audit one lesson (page, its lab page, and practice set) for statements that do not serve the lesson's points or distract from them, and for results stated without saying where they come from; rank the gaps, stop for Neil's pick, then fix the approved ones. Manual only -- run as /why-sweep <NN>.
 argument-hint: <lesson number, e.g. 15>
 disable-model-invocation: true
 ---
@@ -24,9 +24,27 @@ Read `project/ECE444_PROJECT.md` Status for anything recent on this lesson.
 
 ## Phase 1: audit, then stop
 
-Read the lesson page (`book/module*/L<NN>-*/index.md`) and the practice source
+Read the lesson page, its lab page if it has one (both match
+`book/module*/L<NN>-*/index.md`), and the practice source
 (`latex/ECE444_Practice_L<NN>.tex`) in full. List the gaps, ranked by student
-impact. Look for:
+impact. The point of the sweep (Neil, 2026-10-31) is to catch statements that do
+not contribute materially to the lesson, or that actively distract from its
+main points, as well as the results that need a mechanism. Look for:
+
+- **A sentence that does not earn its place.** For each one, ask what a cadet
+  does or understands differently because of it. If nothing, propose cutting
+  it; if something, propose saying that thing directly. The L17 Lab's "on the
+  instructor's kit it had restarted 83 times while the status still said
+  active" was a count with no cause and no consequence: the cadet needed only
+  "read the log; a failing service reads active between restarts". Build
+  anecdotes, history, asides, and repeated caveats are the usual offenders.
+- **A claim about the kit's software that may have gone stale.** Lab text about
+  what the GUI or the backend shows or does is checked against current
+  `livethisdream/phaser` `main`. The same L17 paragraph still said a missing
+  Pluto showed only as a page that refused to connect, weeks after phaser#47
+  replaced that with a "Pluto not found" card.
+- **Third person for Neil.** Any "the instructor" in prose becomes "I", "me",
+  or "my kit" (VOICE.md 25).
 
 - **A result with no mechanism.** L12's examples: "the current reverses around
   the loop", "2kh cos θ", "m = IA". L14's: G = η4πA/λ², the 10 dB rule, the

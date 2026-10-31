@@ -80,7 +80,7 @@ Each cadet has their own kit:
 - a 32 GB microSD card and an Ethernet cable
 - a laptop with Raspberry Pi Imager and an ssh client
 
-Your instructor assigns your kit a unique two-digit number, NN, and your kit
+I assign your kit a unique two-digit number, NN, and your kit
 is named `phaser-NN`. Wherever a step shows `phaser-NN`, type your own number
 in place of NN: kit 7 is `phaser-07`.
 
@@ -93,10 +93,10 @@ has the print settings: PETG if you can, no supports, and the platter printed
 upside down. It turns the tripod on the array's own center, so the source can
 stay put while the board rotates, and its engraved scale reads the angle.
 
-The instructor also keeps fallback cards, copies of one finished kit. A
+I also keep fallback cards, copies of one finished kit. A
 fallback card gets a kit running when a build cannot be finished in the
 period; it is named for your kit before it goes in, and it still needs Steps
-21 to 24, because the calibration it carries belongs to the instructor's kit.
+21 to 24, because the calibration it carries belongs to my kit.
 :::
 ::::
 
@@ -158,9 +158,9 @@ Support every cable so its weight does not hang on the board's connectors.
 
 If the kit stops responding, run `sudo reboot` first, then re-run the
 provisioning script (Step 16), which repairs the installation without
-erasing the card. Flash a new card only when the instructor tells you to.
+erasing the card. Flash a new card only when I tell you to.
 
-Kits stay in the classroom. Ask the instructor before you take one anywhere
+Kits stay in the classroom. Ask me before you take one anywhere
 else.
 :::
 ::::
@@ -277,7 +277,7 @@ the Pi and the laptop each give themselves a link-local address, one in
 `169.254.x.x` that only the cable can carry, and the laptop finds the Pi by
 name with multicast DNS, the `.local` lookup. That is why a direct cable works
 with no setup on either end, and why the first minute after power-on shows
-nothing. On the instructor's kit, `hostname -I` showed exactly one address at
+nothing. On my kit, `hostname -I` showed exactly one address at
 this point, `169.254.210.227`.
 :::
 ::::
@@ -308,9 +308,9 @@ EOF
 
 
 The classroom Wi-Fi is the open guest network `AF_ACADEMY_GUEST`. The reboot in
-Step 13 is not optional: on the instructor's kit, asking the Wi-Fi client to reread
+Step 13 is not optional: on my kit, asking the Wi-Fi client to reread
 its settings without a reboot left it offline, and the ping failed until the
-Pi restarted. If the ping fails after the reboot, tell the instructor.
+Pi restarted. If the ping fails after the reboot, tell me.
 
 :::{depth}
 Kuiper 2021_R2 is based on Raspberry Pi OS bullseye, where `wpa_supplicant`
@@ -322,7 +322,7 @@ country is set. The network block names the network, and `key_mgmt=NONE` tells
 privileges, which a plain `>>` redirection would not have.
 
 Two things must hold on an open guest network for this step and for provisioning, and
-the instructor checks both before class. The network must not put a captive
+I check both before class. The network must not put a captive
 portal, a sign-in or terms page, in front of a new client, because the Pi has
 no browser to click through one. It must also allow outbound HTTPS, because the
 provisioning script downloads the Phaser software from GitHub.
@@ -448,22 +448,10 @@ thing with a **Pluto not found** card, and it reconnects on its own once the
 cable goes in.
 
 :::{depth}
-Read the log rather than `systemctl is-active phaser-headless`, which can say
-`active` while the backend is failing. On the instructor's first build the
-Pluto's USB cable to the Pi had been left unplugged. The backend started the
-hardware before its web server, so it died at start-up, systemd restarted it
-every five seconds, and it had restarted 83 times by the time anyone looked.
-`is-active` still said `active` because each restart is active for a moment,
-and the browser said only that the page refused to connect, which points at the
-network rather than the cable. The log named the cause on its first line:
-`No device found`.
-
-The backend now handles that case itself (phaser#47): with no Pluto it serves
-the page anyway, shows the **Pluto not found** card, and starts the full
-backend once the cable goes in, so a missing cable no longer crash-loops. The
-log is still the check for any other start-up failure, which can loop the same
-way. `192.168.2.1` is the Pluto's own address on the USB link between it and
-the Pi.
+Read the log rather than `systemctl is-active phaser-headless`: a backend that
+fails at start-up is restarted every five seconds and reads `active` between
+failures. `192.168.2.1` is the Pluto's own address on the USB link between it
+and the Pi.
 :::
 ::::
 
@@ -554,7 +542,7 @@ curves the arriving wavefront enough to distort the patterns of later labs.
 One meter clears that boundary, so the angles and beamwidths measured there
 are the far-field values. It clears it by only 12%, though, which is marginal
 for comparing peak levels between two source positions, a difference of under
-a dB. On the instructor's kit, the drop with the source moved to $30^\circ$
+a dB. On my kit, the drop with the source moved to $30^\circ$
 read only 0.2 to 0.4 dB at $1\ \text{m}$ and 0.7 dB at $1.2\ \text{m}$,
 against a predicted 0.6 to 0.9 dB, so the L18 Lab takes its scan-loss levels
 at $1.2\ \text{m}$ (4 ft) or more.
@@ -583,7 +571,7 @@ stops and says so rather than calibrating against nothing.
 :::{depth}
 Each step needs the one before it. Characterizing the IF needs a tone at a
 known frequency, and calibrating needs the kit tuned to the source at an IF it
-can hear. On the instructor's kit, calibration first ran at the IF that ships in
+can hear. On my kit, calibration first ran at the IF that ships in
 the configuration file, $2.2\ \text{GHz}$, and heard nothing: on/off contrast
 $0.93\ \text{dB}$. That kit receives cleanly only from $1.2$ to
 $2.175\ \text{GHz}$, while a second kit works at $2.2\ \text{GHz}$; the usable
@@ -612,7 +600,7 @@ a different source.
 :class: tip
 
 Part A has no simulated version, because every step acts on the card, the Pi,
-or the network. If your kit will not come up, tell the instructor. The hosted
+or the network. If your kit will not come up, tell me. The hosted
 simulator covers Part B.
 :::
 ::::
@@ -632,7 +620,7 @@ cleanly and is always safe.
 | :-- | :-- | :-- |
 | Imager reports a write or verify error | the card or the card reader | reinsert the card and write again, then try another card |
 | `curl` reports a certificate error | the Pi's clock is wrong | Step 15, then try again |
-| `ping` fails | the Wi-Fi has not come up | `sudo reboot`, then ping again; then the instructor |
+| `ping` fails | the Wi-Fi has not come up | `sudo reboot`, then ping again; then tell me |
 | `bash: --hostname: No such file or directory` | the `-s` is missing | Step 16 exactly as written |
 | `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` | this laptop has met another card under the same name | `ssh-keygen -R` and the name you used (`analog.local` or `phaser-NN.local`), then ssh again and answer `yes` |
 | the page shows **Pluto not found** | the Pluto's USB cable to the Pi is unplugged, the most common miss in this lab | plug it in (Step 8); the page reconnects on its own |

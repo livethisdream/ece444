@@ -468,7 +468,7 @@ the assumed sinusoid tracks it.
 **nec_lab** runs in your browser:
 
 - **On the course site.** Open <a href="../../simulator/" target="_blank" rel="noopener">Simulator</a>. Nothing to install.
-- **Or a copy your instructor is serving** — the address is given in class.
+- **Or a copy I am serving** — the address is given in class.
 :::
 
 Every route runs the same tool and gives the same answers. The page has a form

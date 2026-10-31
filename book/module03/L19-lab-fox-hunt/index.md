@@ -39,8 +39,8 @@ with room for notes. Print from read mode for the whole lesson.
 :::
 
 The L19 Lab puts Lesson 19 on the bench as a fox hunt. A taped firing line runs
-along the table, and numbered boxes sit downrange of it at positions the
-instructor measured and posted. Every box holds an HB100, powered or not, so
+along the table, and numbered boxes sit downrange of it at positions I
+measured and posted. Every box holds an HB100, powered or not, so
 weight gives nothing away; one of them is live.
 
 Your team moves its kit along the firing line, stopping at the station marks
@@ -57,14 +57,14 @@ close to the crossing, the pattern of levels along the line says which one fits.
 :::{present}
 <picture>
 <source media="(max-width: 600px)" srcset="../../viz/img/L19-lab-sequence-narrow.svg">
-<img src="../../viz/img/L19-lab-sequence.svg" alt="The L19 Lab in five steps, each a top view of the firing range. 1, bring up: your own HB100 at boresight, then Find HB100 and Calibrate. 2, reference shot: a source toward the plus-x end sets the sign s of Angle. 3, walk the line: with the fox on, read Angle and Peak Gain at each station mark. 4, fix: the bearings cross at a box, which is your call. 5, reveal: the instructor names the live box, and the Part 3 writeup compares it with your fix." style="max-width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L19-lab-sequence.svg" alt="The L19 Lab in five steps, each a top view of the firing range. 1, bring up: your own HB100 at boresight, then Find HB100 and Calibrate. 2, reference shot: a source toward the plus-x end sets the sign s of Angle. 3, walk the line: with the fox on, read Angle and Peak Gain at each station mark. 4, fix: the bearings cross at a box, which is your call. 5, reveal: I name the live box, and the Part 3 writeup compares it with your fix." style="max-width: 100%; display: block; margin: 0 auto;">
 </picture>
 :::
 
 Steps 1 and 2 happen before the fox goes on: the bring-up on your own HB100,
 then the reference shot that fixes which end of the tape positive Angle points
 to. Steps 3 and 4 are the hunt: the same measurement at every station mark,
-then the fix. Step 5 is the instructor's, and the Part 3 writeup starts
+then the fix. Step 5 is mine, and the Part 3 writeup starts
 from it.
 ::::
 
@@ -119,8 +119,8 @@ between them sets how well the fix is pinned down in depth.
 - The reference shot sets which end is positive.
 :::
 
-The instructor tapes the firing line and marks station 0 at its middle, with
-stations at $x = -1.5, -0.75, 0, +0.75, +1.5\ \text{m}$, and posts the measured
+I tape the firing line and mark station 0 at its middle, with
+stations at $x = -1.5, -0.75, 0, +0.75, +1.5\ \text{m}$, and post the measured
 center of every box in the same frame. Place the middle of the array, between E4
 and E5, on the station mark, and square the board's patch face to the tape with
 a straightedge or a square, so broadside points straight downrange.
@@ -231,7 +231,7 @@ of them.
 :::{present}
 17. Run your Pre-Lab script on `stations.csv` and `boxes.csv`, and record the fix, the residuals, and the ranking.
 18. If one residual is far larger than the rest, retake that station or accept your script's drop.
-19. Name the box and tell the instructor before the boxes are opened.
+19. Name the box and tell me before the boxes are opened.
 20. Record the live box after the reveal, then press **Stop**.
 :::
 

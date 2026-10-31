@@ -5,7 +5,7 @@
 2 Reference     a source toward +x sets the sign s of Angle
 3 Walk          the fox is on; read Angle and Peak Gain at each station mark
 4 Fix           the bearings cross; the nearest box is the call
-5 Reveal        the instructor names the live box; writeup compares
+5 Reveal        I name the live box; writeup compares
 
 Every panel is drawn to one scale from the range in the lab: a 3.0 m firing
 line with five station marks 0.75 m apart, and five boxes in a 2.0 m wide
@@ -43,7 +43,7 @@ STEPS = [
     ("2", "Reference shot", ["Source toward +x", "sets the sign s", "of Angle"]),
     ("3", "Walk the line", ["Fox on: Angle and", "Peak Gain at", "each station"]),
     ("4", "Fix", ["Bearings cross;", "the nearest box", "is your call"]),
-    ("5", "Reveal", ["Instructor names", "the live box;", "writeup compares"]),
+    ("5", "Reveal", ["I name", "the live box;", "writeup compares"]),
 ]
 
 
@@ -170,7 +170,7 @@ def build(cols: int) -> str:
          f'aria-label="The L19 Lab in five steps, each a top view of the firing range: bring the kit up '
          f'on your own HB100; take the reference shot toward plus x to set the sign of Angle; with the '
          f'fox on, walk the station marks reading Angle and Peak Gain; the bearings cross at a box, which '
-         f'is your call; the instructor reveals the live box">']
+         f'is your call; I reveal the live box">']
     s.append(f'<defs><marker id="l19sArr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" '
              f'markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="{GRAY}"/></marker></defs>')
     for k in range(len(STEPS)):
