@@ -927,6 +927,13 @@ audio.lesson-demo {
 .bd-article .mt-card.mt-flashcards .mt-kind { color: #0c8aa5; }
 .bd-article .mt-card.mt-slides .mt-kind     { color: #1d7a4d; }
 .bd-article .mt-card.mt-practice .mt-kind   { color: #8a5a00; }
+/* A lab is its lesson's child page, so its card wears the lesson's blue, and
+   its "L17 Lab" label and a light tint mark it (Neil, 2026-11-01). Amber on
+   the overview pages then means one thing, the Phase lane. These follow the
+   practice rules on purpose: a lab card carries both classes. */
+.bd-article .mt-card.mt-lab              { border-left-color: #0067b9; background: #f2f7fc; }
+.bd-article .mt-card.mt-lab .mt-kind     { color: #0067b9; }
+.bd-article .mt-card.mt-lab:hover        { background: #e8f0f8; }
 
 .bd-article .module-nav {
   display: flex;
@@ -1370,6 +1377,13 @@ html[data-theme="dark"] .bd-article .module-synopsis {
 html[data-theme="dark"] .bd-article .mt-card .mt-kind {
   color: #b4c0cc;
 }
+/* Dark keeps the card's accent: a blue left rule and label, as in light mode,
+   and the lab's tint. */
+html[data-theme="dark"] .bd-article .mt-card { border-left-color: #5aa3e5; }
+html[data-theme="dark"] .bd-article .mt-card.mt-lesson .mt-kind,
+html[data-theme="dark"] .bd-article .mt-card.mt-lab .mt-kind { color: #8fc3ef; }
+html[data-theme="dark"] .bd-article .mt-card.mt-lab { background: #26303b; }
+html[data-theme="dark"] .bd-article .mt-card.mt-lab:hover { background: #2d3844; }
 html[data-theme="dark"] .bd-article .module-nav {
   border-top-color: #3a4552;
 }
@@ -1731,6 +1745,13 @@ html:not([data-theme="light"]) .bd-article .module-synopsis {
 html:not([data-theme="light"]) .bd-article .mt-card .mt-kind {
   color: #b4c0cc;
 }
+/* Dark keeps the card's accent: a blue left rule and label, as in light mode,
+   and the lab's tint. */
+html:not([data-theme="light"]) .bd-article .mt-card { border-left-color: #5aa3e5; }
+html:not([data-theme="light"]) .bd-article .mt-card.mt-lesson .mt-kind,
+html:not([data-theme="light"]) .bd-article .mt-card.mt-lab .mt-kind { color: #8fc3ef; }
+html:not([data-theme="light"]) .bd-article .mt-card.mt-lab { background: #26303b; }
+html:not([data-theme="light"]) .bd-article .mt-card.mt-lab:hover { background: #2d3844; }
 html:not([data-theme="light"]) .bd-article .module-nav {
   border-top-color: #3a4552;
 }
