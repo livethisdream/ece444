@@ -512,27 +512,49 @@ cross-range coordinate is nearly zero in every station's frame at once.
 ::::{frame} Many Bearings: Least Squares
 :::{present}
 $$\begin{aligned}
-e_i &= \hat{\mathbf n}_i\cdot\mathbf x - \hat{\mathbf n}_i\cdot\mathbf p_i \\
-\mathbf A\mathbf x - \mathbf b &= (e_1,\ e_2,\ e_3,\ \dots) \\
-\mathbf A^{\mathsf T}\mathbf A\ \mathbf x &= \mathbf A^{\mathsf T}\mathbf b
+\cos\theta_1\ x - \sin\theta_1\ y &= x_1\cos\theta_1 \\
+\cos\theta_2\ x - \sin\theta_2\ y &= x_2\cos\theta_2 \\
+\cos\theta_3\ x - \sin\theta_3\ y &= x_3\cos\theta_3
 \end{aligned}$$
 
-- Row $i$ of $\mathbf A$ is $\hat{\mathbf n}_i$; entry $i$ of $\mathbf b$ is $\hat{\mathbf n}_i\cdot\mathbf p_i = x_i\cos\theta_i$.
-- The fix $\mathbf x$ makes $\sum e_i^2$ smallest.
+- One line per station: $e_i = 0$. In matrix form, $\mathbf A\mathbf x = \mathbf b$.
+- $\mathbf A$: the coefficients of $x$ and $y$, one row per station. $\mathbf b$: the right-hand sides.
+- Three equations, two unknowns: no exact answer. The fix solves $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$.
 :::
 
-Each station's miss is linear in the unknown point: $\hat{\mathbf n}_i\cdot\mathbf x$
-minus a number we already know, $\hat{\mathbf n}_i\cdot\mathbf p_i = x_i\cos\theta_i$.
-Stack one per station. Each $\hat{\mathbf n}_i$ becomes a row of the matrix
-$\mathbf A$, each $x_i\cos\theta_i$ an entry of the vector $\mathbf b$, and the
-misses are the entries of $\mathbf A\mathbf x - \mathbf b$. With two stations
-both misses can be zero, at the crossing of the previous frames. With three or
-more they cannot all be zero, so least squares picks the $\mathbf x$ that
-makes $\sum_i e_i^2$ smallest. Setting its derivatives with respect to $x$ and
-$y$ to zero gives the **normal equations** on the slide,
-$\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$:
-a $2\times 2$ matrix times $\mathbf x$ equals a 2-vector, whatever the number
-of stations. In Python, `numpy.linalg.lstsq(A, b)` does it in one line. The
+Each station gives one equation. Its miss from the previous frame,
+$e_i = (x - x_i)\cos\theta_i - y\sin\theta_i$, is zero on its line, and
+moving the known part to the right-hand side writes that line as
+
+$$x\cos\theta_i - y\sin\theta_i = x_i\cos\theta_i.$$
+
+The left side is the station's $\hat{\mathbf n}_i = (\cos\theta_i,\ -\sin\theta_i)$
+dotted with the unknown point $(x,\ y)$; the right side is a number we already
+know from the station's position and reading. Write one such equation per
+station, one under the other, as on the slide, and the stack is the matrix
+equation $\mathbf A\mathbf x = \mathbf b$,
+
+$$\underbrace{\begin{bmatrix} \cos\theta_1 & -\sin\theta_1 \\ \cos\theta_2 & -\sin\theta_2 \\ \cos\theta_3 & -\sin\theta_3 \end{bmatrix}}_{\mathbf A}
+\underbrace{\begin{bmatrix} x \\ y \end{bmatrix}}_{\mathbf x} =
+\underbrace{\begin{bmatrix} x_1\cos\theta_1 \\ x_2\cos\theta_2 \\ x_3\cos\theta_3 \end{bmatrix}}_{\mathbf b}:$$
+
+$\mathbf A$ has one row per station, the two numbers
+$\cos\theta_i$ and $-\sin\theta_i$; $\mathbf x$ is the unknown point; and
+$\mathbf b$ has one entry per station, $x_i\cos\theta_i$. With $N$ stations
+$\mathbf A$ is $N\times 2$ and $\mathbf b$ has $N$ entries.
+
+With two stations the two equations have one exact solution, the crossing of
+the previous frames. With three or more there are more equations than
+unknowns, and because every bearing carries some error no point satisfies
+them all: $\mathbf A\mathbf x - \mathbf b$, the list of misses
+$(e_1,\ e_2,\ \dots)$, cannot be all zeros. Least squares picks the
+$\mathbf x$ that makes $\sum_i e_i^2$ smallest. Setting its derivatives with
+respect to $x$ and $y$ to zero gives the **normal equations**,
+$\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$.
+Multiplying by $\mathbf A^{\mathsf T}$ collapses the $N$ equations into two:
+$\mathbf A^{\mathsf T}\mathbf A$ is $2\times 2$ and $\mathbf A^{\mathsf T}\mathbf b$
+has two entries, whatever the number of stations, and a $2\times 2$ system
+solves by hand. In Python, `numpy.linalg.lstsq(A, b)` does it in one line. The
 L19 Lab's pre-lab has you write this as a short function and test it on a
 supplied set of bearings.
 
