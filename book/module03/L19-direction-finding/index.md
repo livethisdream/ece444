@@ -396,7 +396,7 @@ $$\begin{aligned}
 :::
 :::{present}
 <img src="../../viz/img/L19-bearing-line.svg"
-     alt="A kit at position p with its bearing line; the unit vector u points along the line toward the source and n is perpendicular to it; position vectors p and x both reach the line, and the line's distance from the origin along n is n dot p"
+     alt="A kit at position p with its bearing line at angle beta, counterclockwise from a dashed line parallel to the room x axis; the unit vector u points along the line toward the source and n is perpendicular to it; position vectors p and x both reach the line, and the line's distance from the origin along n is n dot p"
      style="max-width: 420px; width: 80%; display: block; margin: 0 auto;">
 :::
 
@@ -406,7 +406,10 @@ from a kit at a known position $\mathbf p$ says the source lies somewhere along
 the ray $\mathbf p + r\hat{\mathbf u}$, with $r$ unknown and positive. The unit
 vector $\hat{\mathbf u} = (\cos\beta,\ \sin\beta)$ points along the bearing,
 and $\hat{\mathbf n} = (-\sin\beta,\ \cos\beta)$ is the same vector turned
-$90^\circ$ counterclockwise. For computing a crossing it is easier to describe the
+$90^\circ$ counterclockwise. In the figure, $\beta$ is the angle at the kit from
+the dashed line, parallel to the room's $x$ axis, to the bearing line, so
+$\hat{\mathbf u}$ has components $\cos\beta$ along $x$ and $\sin\beta$ along
+$y$; the small squares mark the right angles. For computing a crossing it is easier to describe the
 line by its normal. Moving along the line moves only along $\hat{\mathbf u}$,
 which never changes the component of position along $\hat{\mathbf n}$. In the
 figure, that component is the length of the green segment, the line's

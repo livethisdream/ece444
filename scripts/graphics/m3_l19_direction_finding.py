@@ -690,7 +690,7 @@ def fig_bearing_line() -> None:
     ax.plot(*np.stack([foot - 0.25 * u, p]).T, color=BLUE, lw=1.0, ls="--")
     ax.plot(*np.stack([p, p + 1.7 * u]).T, color=BLUE, lw=1.6)
     # position vectors from the origin
-    for q, lab, off in ((p, "p", (0.12, -0.02)), (x, "x", (0.1, -0.1))):
+    for q, lab, off in ((p, "p", (0.04, -0.17)), (x, "x", (0.1, -0.1))):
         ax.annotate("", xy=q, xytext=(0, 0),
                     arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.0, mutation_scale=10,
                                     shrinkA=0, shrinkB=4))
@@ -700,14 +700,24 @@ def fig_bearing_line() -> None:
     ax.plot(*p, "s", ms=8, color=NAVY, zorder=3)
     ax.text(p[0] - 0.1, p[1] + 0.06, "kit", color=NAVY, fontsize=13, ha="right", va="bottom")
     # the unit vectors at the kit
-    for vec, lab, off in ((u, "u\u0302", (0.06, -0.14)), (n, "n\u0302", (-0.12, 0.02))):
+    for vec, lab, off in ((u, "u\u0302", (-0.04, 0.13)), (n, "n\u0302", (-0.12, 0.02))):
         ax.annotate("", xy=p + 0.45 * vec, xytext=p,
                     arrowprops=dict(arrowstyle="-|>", color=RED, lw=1.6, mutation_scale=12,
                                     shrinkA=0, shrinkB=0))
         ax.text(*(p + 0.5 * vec + np.array(off)), lab, color=RED, fontsize=15,
                 ha="center", va="center", weight="bold")
+    # beta: from the room's x direction at the kit to the bearing, CCW; and the
+    # right angle that turns u into n
+    ax.plot([p[0], p[0] + 1.0], [p[1], p[1]], color=GRAY, lw=1.0, ls="--", zorder=1)
+    arc(ax, p, 0.62, 0, beta, color=BLUE, lw=1.3)
+    lb = p + 0.74 * np.array([np.cos(np.radians(beta / 2)), np.sin(np.radians(beta / 2))])
+    ax.text(*lb, "\u03b2", color=BLUE, fontsize=16, ha="center", va="center", style="italic")
+    c = 0.09
+    ax.plot(*np.stack([p + c * u, p + c * (u + n), p + c * n]).T, color=RED, lw=1.0)
     # n.p: the distance from the origin to the line, the same for every point on it
     ax.plot(*np.stack([(0, 0), foot]).T, color=GREEN, lw=1.6)
+    c = 0.08                                       # it meets the line square
+    ax.plot(*np.stack([foot - c * n, foot - c * n + c * u, foot + c * u]).T, color=GREEN, lw=1.0)
     m = 0.55 * foot
     ax.text(m[0] - 0.08, m[1], "n\u0302\u00b7p", color=GREEN, fontsize=15, ha="right",
             va="center", weight="bold")
