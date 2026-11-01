@@ -497,6 +497,16 @@ the green segment in the figure, in meters and signed: positive on the $+x$
 side of the line. Setting $e_i = 0$ gives $\tan\theta_i = (x - x_i)/y$, the
 previous frame's line, so the bearing line is exactly the set of points with
 no miss.
+
+Another way to see the same arithmetic is as a change of coordinates.
+Subtracting $\mathbf p_i$ moves the origin to station $i$, and dotting with
+$\hat{\mathbf u}_i$ and $\hat{\mathbf n}_i$ reads the point's coordinates on
+axes turned by $\theta_i$, one along the bearing and one across it. In that
+frame $\hat{\mathbf u}_i\cdot(\mathbf x - \mathbf p_i)$ is how far down range
+the point is and $e_i$ is its **cross-range** coordinate, the same direction
+"Cross-Range Error" measures below. The bearing line is where that cross-range
+coordinate is zero, and least squares looks for the one point whose
+cross-range coordinate is nearly zero in every station's frame at once.
 ::::
 
 ::::{frame} Many Bearings: Least Squares
