@@ -11,8 +11,9 @@
   - L19-resolution   : two sources 20 deg apart and 8 deg apart
   - L19-residuals    : five bearings, one bent by a reflection, and their residuals
   - L19-room-bearing : heading, Angle, and the room bearing they add to
+  - L19-miss         : one station's line, u and n from its angle, and a point's miss e
 
-The lesson page shows all ten from book/extras/viz/img/. None carries an
+The lesson page shows all eleven from book/extras/viz/img/. None carries an
 equation: symbols, numbers, and short words only.
 
 Each figure sits in a present block beside text, about 477 px wide on a 1280
@@ -668,6 +669,58 @@ def fig_room_bearing() -> None:
     finalize(fig, "L19-room-bearing")
 
 
+def fig_miss() -> None:
+    """One station on the firing line and its bearing: u along the line (the
+    triangle's across and downrange over its hypotenuse), n across it, and a
+    point x off the line whose miss e is the part of x - p along n.
+
+    The hats are combining circumflexes in plain text; mathtext's \\hat comes
+    apart under svg.fonttype none."""
+    th = 34.6
+    s, c = np.sin(np.radians(th)), np.cos(np.radians(th))
+    u, n = np.array([s, c]), np.array([c, -s])
+    p = np.array([0.0, 0.0])
+    x = np.array([1.15, 1.2])
+    e = n @ (x - p)
+    foot = x - e * n
+    assert e > 0.25 and np.isclose(n @ (foot - p), 0)
+    fig, ax = plt.subplots(figsize=(4.4, 3.4))
+    ax.plot([-0.55, 1.6], [0, 0], color=LIGHT, lw=2.0, solid_capstyle="butt")
+    ax.plot([p[0] - 0.13, p[0] + 0.13], [0, 0], color=NAVY, lw=4, solid_capstyle="butt")
+    ax.text(p[0] - 0.12, -0.07, r"$\mathbf{p}_i$", color=NAVY, fontsize=15, ha="right", va="top")
+    # downrange, the bearing line, and theta between them
+    ax.plot([0, 0], [0, 1.75], color=GRAY, lw=1.0, ls=":")
+    ax.plot(*np.stack([p, p + 2.05 * u]).T, color=BLUE, lw=1.6)
+    t = np.radians(np.linspace(90, 90 - th, 40))
+    ax.plot(0.95 * np.cos(t), 0.95 * np.sin(t), color=INK, lw=1.0)
+    ax.text(0.2, 1.1, r"$\theta_i$", color=INK, fontsize=15, ha="center", va="center")
+    # u and n at the station
+    for vec, lab, off in ((u, "u\u0302", (-0.12, 0.05)), (n, "n\u0302", (0.1, 0.0))):
+        ax.annotate("", xy=p + 0.45 * vec, xytext=p,
+                    arrowprops=dict(arrowstyle="-|>", color=RED, lw=1.6, mutation_scale=12,
+                                    shrinkA=0, shrinkB=0))
+        ax.text(*(p + 0.5 * vec + np.array(off)), lab, color=RED, fontsize=15,
+                ha="center", va="center", weight="bold")
+    k = 0.07
+    ax.plot(*np.stack([p + k * u, p + k * (u + n), p + k * n]).T, color=RED, lw=1.0)
+    # the point, x - p, and its miss e: the part of x - p along n
+    ax.annotate("", xy=x, xytext=p, arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.1,
+                mutation_scale=10, shrinkA=0, shrinkB=3))
+    ax.plot(*x, "o", ms=5, color=INK)
+    ax.text(x[0] + 0.07, x[1] + 0.02, r"$\mathbf{x}$", color=INK, fontsize=15, ha="left", va="center")
+    m = 0.55 * x
+    ax.text(m[0] + 0.08, m[1] - 0.06, r"$\mathbf{x}-\mathbf{p}_i$", color=INK, fontsize=14,
+            ha="left", va="top")
+    ax.plot(*np.stack([foot, x]).T, color=GREEN, lw=2.2)
+    ax.plot(*np.stack([foot + k * n, foot + k * n + k * u, foot + k * u]).T, color=GREEN, lw=1.0)
+    mid = (foot + x) / 2
+    ax.text(mid[0] + 0.02, mid[1] + 0.1, r"$e_i$", color=GREEN, fontsize=16, ha="left", va="bottom")
+    ax.set_xlim(-0.6, 1.65)
+    ax.set_ylim(-0.45, 1.85)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    finalize(fig, "L19-miss")
+
 def main() -> None:
     v = numbers()
     for k, x in v.items():
@@ -684,6 +737,7 @@ def main() -> None:
     fig_resolution()
     fig_residuals()
     fig_room_bearing()
+    fig_miss()
 
 
 if __name__ == "__main__":

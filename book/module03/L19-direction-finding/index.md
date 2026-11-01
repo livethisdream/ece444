@@ -447,49 +447,84 @@ from the box. The two lines cross at $\gamma = \theta_A - \theta_B = 59.0^\circ$
 :::
 ::::
 
+::::{frame} Distance From a Line
+:::{present}
+$$\begin{aligned}
+\hat{\mathbf u}_i &= (\sin\theta_i,\ \cos\theta_i) \\
+\hat{\mathbf n}_i &= (\cos\theta_i,\ -\sin\theta_i) \\
+e_i &= \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i)
+\end{aligned}$$
+
+- $\hat{\mathbf u}_i$: along the bearing. $\hat{\mathbf n}_i$: across it.
+- $e_i$: how far a point $\mathbf x$ sits off line $i$, in meters. On the line, $e_i = 0$.
+:::
+:::{present}
+<img src="../../viz/img/L19-miss.svg"
+     alt="A station at p_i on the tape with its bearing line at theta_i from downrange; the unit vector u points along the line and n perpendicular to it; a point x off the line, the vector x minus p_i from the station to it, and the point's perpendicular miss e_i from the line"
+     style="max-width: 360px; width: 72%; display: block; margin: 0 auto;">
+:::
+
+Two bearings cross exactly, but three or more never quite meet: every bearing
+carries some error, so three lines form a small triangle. To pick the point
+that comes closest to all of them, we first need a way to say how far a point
+is from one line. Vectors make that one line of algebra.
+
+Start from the previous frame's triangle. From station $i$ at
+$\mathbf p_i = (x_i,\ 0)$ to the source, the legs are $x - x_i$ across and
+$y$ downrange, and dividing each by the hypotenuse gives $\sin\theta_i$ and
+$\cos\theta_i$. So the unit vector that points from the station along the
+bearing is
+
+$$\hat{\mathbf u}_i = (\sin\theta_i,\ \cos\theta_i),$$
+
+and turning it $90^\circ$ clockwise gives the unit vector across the line,
+toward $+x$,
+
+$$\hat{\mathbf n}_i = (\cos\theta_i,\ -\sin\theta_i).$$
+
+Now take any point $\mathbf x = (x,\ y)$ and the arrow
+$\mathbf x - \mathbf p_i$ from the station to it. That arrow splits into a part
+along $\hat{\mathbf u}_i$, how far down the line the point is, and a part along
+$\hat{\mathbf n}_i$, how far off the line it is. The dot product with a unit
+vector picks out the part along it, so the point's perpendicular miss is
+
+$$\begin{aligned}
+e_i &= \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i) \\
+&= (x - x_i)\cos\theta_i - y\sin\theta_i,
+\end{aligned}$$
+
+the green segment in the figure, in meters and signed: positive on the $+x$
+side of the line. Setting $e_i = 0$ gives $\tan\theta_i = (x - x_i)/y$, the
+previous frame's line, so the bearing line is exactly the set of points with
+no miss.
+::::
+
 ::::{frame} Many Bearings: Least Squares
 :::{present}
 $$\begin{aligned}
-x - y\tan\theta_i &= x_i \\
-x\cos\theta_i - y\sin\theta_i &= x_i\cos\theta_i \\
+e_i &= \hat{\mathbf n}_i\cdot\mathbf x - \hat{\mathbf n}_i\cdot\mathbf p_i \\
+\mathbf A\mathbf x - \mathbf b &= (e_1,\ e_2,\ e_3,\ \dots) \\
 \mathbf A^{\mathsf T}\mathbf A\ \mathbf x &= \mathbf A^{\mathsf T}\mathbf b
 \end{aligned}$$
 
-- Each station's line, times $\cos\theta_i$, is one row of $\mathbf A$ and one entry of $\mathbf b$.
-- Three or more lines never meet exactly; $\mathbf x = (x,\ y)$ comes closest to all.
+- Row $i$ of $\mathbf A$ is $\hat{\mathbf n}_i$; entry $i$ of $\mathbf b$ is $\hat{\mathbf n}_i\cdot\mathbf p_i = x_i\cos\theta_i$.
+- The fix $\mathbf x$ makes $\sum e_i^2$ smallest.
 :::
 
-With two bearings the crossing is exact. A third bearing adds a third line,
-and because every bearing carries some error, the three lines form a small
-triangle rather than meeting at a point. Three equations in two unknowns have
-no exact solution, so we take the point that comes closest to all three lines.
-
-Start from the previous frame's line, $x = x_i + y\tan\theta_i$, moved into the
-form $x - y\tan\theta_i = x_i$. For a point that is not on the line, the
-left side minus the right, $x - x_i - y\tan\theta_i$, is how far the point
-sits across from the line, measured along the tape. Multiplying the equation
-by $\cos\theta_i$ turns that into the point's perpendicular distance from the
-line, in meters, which is the miss we want to make small:
-
-$$e_i = x\cos\theta_i - y\sin\theta_i - x_i\cos\theta_i.$$
-
-Stack one such equation per station. Row $i$ of the matrix $\mathbf A$ is
-$(\cos\theta_i,\ -\sin\theta_i)$, entry $i$ of the vector $\mathbf b$ is
-$x_i\cos\theta_i$, and the misses are the entries of
-$\mathbf A\mathbf x - \mathbf b$. Least squares picks the $\mathbf x$ that
-minimizes $\sum_i e_i^2$, and setting the derivatives with respect to $x$ and
+Each station's miss is linear in the unknown point: $\hat{\mathbf n}_i\cdot\mathbf x$
+minus a number we already know, $\hat{\mathbf n}_i\cdot\mathbf p_i = x_i\cos\theta_i$.
+Stack one per station. Each $\hat{\mathbf n}_i$ becomes a row of the matrix
+$\mathbf A$, each $x_i\cos\theta_i$ an entry of the vector $\mathbf b$, and the
+misses are the entries of $\mathbf A\mathbf x - \mathbf b$. With two stations
+both misses can be zero, at the crossing of the previous frames. With three or
+more they cannot all be zero, so least squares picks the $\mathbf x$ that
+makes $\sum_i e_i^2$ smallest. Setting its derivatives with respect to $x$ and
 $y$ to zero gives the **normal equations** on the slide,
 $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$:
 a $2\times 2$ matrix times $\mathbf x$ equals a 2-vector, whatever the number
-of stations. For two bearings it reproduces the crossing of the previous frame
-exactly; for more, it is the least-squares compromise. In Python,
-`numpy.linalg.lstsq(A, b)` does it in one line. The L19 Lab's pre-lab has you
-write this as a short function and test it on a supplied set of bearings.
-
-Each row $\mathbf a_i = (\cos\theta_i,\ -\sin\theta_i)$ is a unit vector
-perpendicular to line $i$, since $\cos^2\theta_i + \sin^2\theta_i = 1$ and the
-line runs along $(\sin\theta_i,\ \cos\theta_i)$. That is why its equation
-measures perpendicular distance, and it is the form "The Crossing Angle" uses.
+of stations. In Python, `numpy.linalg.lstsq(A, b)` does it in one line. The
+L19 Lab's pre-lab has you write this as a short function and test it on a
+supplied set of bearings.
 
 Unweighted least squares treats every line as equally reliable. A bearing from
 a kit far from the source is less reliable in meters, as the next frame shows,
@@ -520,8 +555,8 @@ $$\begin{aligned}
 :::
 
 Stations at $x_i = -0.75$, $0$, and $+0.75\ \text{m}$ read Angle $34.6^\circ$,
-$8.8^\circ$, and $-17.7^\circ$. Each station is one row of $\mathbf A$,
-$(\cos\theta_i,\ -\sin\theta_i)$, and one entry of $\mathbf b$,
+$8.8^\circ$, and $-17.7^\circ$. Each station is one row of $\mathbf A$, its
+$\hat{\mathbf n}_i = (\cos\theta_i,\ -\sin\theta_i)$, and one entry of $\mathbf b$,
 $x_i\cos\theta_i$; station 1, for example, gives
 $-0.75 \times 0.823 = -0.617$.
 
@@ -599,16 +634,16 @@ parallel, and the overlap stretches into a long diamond along the bisector of
 the two lines.
 
 The least-squares fix puts a number on this. Divide each row of $\mathbf A$,
-the unit vector $\mathbf a_i$ perpendicular to line $i$, by that bearing's
+the unit vector $\hat{\mathbf n}_i$ across line $i$, by that bearing's
 $\delta_\perp$, and the matrix
 
-$$\mathbf M = \sum_i \frac{\mathbf a_i\mathbf a_i^{\mathsf T}}{\delta_{\perp,i}^2}$$
+$$\mathbf M = \sum_i \frac{\hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}}{\delta_{\perp,i}^2}$$
 
 describes the error region. The eigenvectors of $\mathbf M^{-1}$ point along
 the axes of the one-sigma error ellipse, its eigenvalues are the squared
 semi-axes, and the RMS error of the fix is the square root of their sum. Two
 unit rows at an angle $\gamma$, which is also the angle between the lines, give
-$\sum\mathbf a_i\mathbf a_i^{\mathsf T} = \mathbf A^{\mathsf T}\mathbf A$ a trace of 2 and a
+$\sum\hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T} = \mathbf A^{\mathsf T}\mathbf A$ a trace of 2 and a
 determinant of $\sin^2\gamma$, so its eigenvalues are $1 + \cos\gamma$ and
 $1 - \cos\gamma$. For two bearings with the same $\delta_\perp$,
 
@@ -744,7 +779,7 @@ $0.75\ \text{m}$ apart for the same reason.
 :::{present}
 $$\begin{aligned}
 R_i &= \sqrt{(x - x_i)^2 + y^2} \\
-e_i &= x\cos\theta_i - y\sin\theta_i - x_i\cos\theta_i
+e_i &= \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i)
 \end{aligned}$$
 
 - At the fix $(x,\ y)$: $R_i$ is station $i$'s range, $e_i$ how far the fix sits off line $i$.
@@ -758,7 +793,8 @@ e_i &= x\cos\theta_i - y\sin\theta_i - x_i\cos\theta_i
 
 Once the least-squares fix $\mathbf x = (x,\ y)$ is in hand, the
 perpendicular distance from the fix to each line is that line's **residual**,
-$e_i$. It is the same miss the least-squares frame minimized, entry $i$ of
+$e_i$. It is the miss of "Distance From a Line",
+$(x - x_i)\cos\theta_i - y\sin\theta_i$, entry $i$ of
 $\mathbf A\mathbf x - \mathbf b$, now evaluated at the answer: one line of
 Python per station. On the line itself $x - x_i = y\tan\theta_i$ and $e_i$ is
 zero.
@@ -818,7 +854,8 @@ themselves.
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | $x = x_i + y\tan\theta_i$ | one bearing line from station $x_i$ | one equation, two unknowns |
-| $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$ | least-squares fix; row $i$ of $\mathbf A$ is $(\cos\theta_i,\ -\sin\theta_i)$, $b_i = x_i\cos\theta_i$ | a $2\times 2$ solve |
+| $e_i = \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i)$ | a point's miss from line $i$; $\hat{\mathbf n}_i = (\cos\theta_i,\ -\sin\theta_i)$ | zero on the line |
+| $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$ | least-squares fix; row $i$ of $\mathbf A$ is $\hat{\mathbf n}_i$, $b_i = x_i\cos\theta_i$ | a $2\times 2$ solve |
 | $\delta_\perp = R\tan\sigma_\beta$ | cross-range error of one line | $0.14\ \text{m}$ at $4\ \text{m}$, $2^\circ$ |
 | $\sigma_\text{fix} = \sqrt{2}\ \delta_\perp/\sin\gamma$ | RMS error of a two-bearing fix crossing at $\gamma$ | $0.20\ \text{m}$ at $90^\circ$, $0.76\ \text{m}$ at $15^\circ$ |
 | $\sigma_y = \sqrt{2}\ R^2\sigma_\beta/B$ | depth error from two stations $B$ apart on a firing line | $0.08\ \text{m}$ at $2\ \text{m}$ deep, $B = 3\ \text{m}$ |
