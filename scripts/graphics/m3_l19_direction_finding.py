@@ -12,8 +12,10 @@
   - L19-residuals    : five bearings, one bent by a reflection, and their residuals
   - L19-room-bearing : heading, Angle, and the room bearing they add to
   - L19-miss         : one station's line, u and n from its angle, and a point's miss e
+  - L19-pulls        : three bearings that miss, the least-squares fix, each miss as a pull
+  - L19-three-fix    : the page's three-bearing example, the same picture with its numbers
 
-The lesson page shows all eleven from book/extras/viz/img/. None carries an
+The lesson page shows all thirteen from book/extras/viz/img/. None carries an
 equation: symbols, numbers, and short words only.
 
 Each figure sits in a present block beside text, about 477 px wide on a 1280
@@ -721,6 +723,87 @@ def fig_miss() -> None:
     ax.axis("off")
     finalize(fig, "L19-miss")
 
+def ls_misses(xs, th):
+    """Least-squares fix from firing-line stations xs and Angles th, and each
+    station's signed miss e_i = n_i.(x - p_i), n_i = (cos, -sin)."""
+    c, s = np.cos(np.radians(th)), np.sin(np.radians(th))
+    n = np.stack([c, -s], axis=1)
+    fix = np.linalg.lstsq(n, xs * c, rcond=None)[0]
+    e = n @ fix - xs * c
+    # the pulls balance: sum e_i n_i = 0 is A^T (A x - b) = 0
+    assert np.allclose((e[:, None] * n).sum(axis=0), 0, atol=1e-12)
+    return fix, n, e
+
+
+def fig_pulls(name, xs, th, half, box=None, values=False) -> None:
+    """Left: the firing line, three bearings, and a dashed square where they
+    nearly cross. Right: that square magnified, the three lines, the fix, and
+    each miss drawn from the fix to its line, the pull that line exerts."""
+    fix, n, e = ls_misses(xs, th)
+    fig, (a0, a1) = plt.subplots(1, 2, figsize=(5.6, 3.0), gridspec_kw=dict(width_ratios=[1.0, 1.15]))
+    top = fix[1] + 0.45
+    a0.plot([xs.min() - 0.35, xs.max() + 0.35], [0, 0], color=LIGHT, lw=2.0, solid_capstyle="butt")
+    for i, (xi, a) in enumerate(zip(xs, th)):
+        tn = np.tan(np.radians(a))
+        a0.plot([xi, xi + top * tn], [0, top], color=BLUE, lw=1.2)
+        a0.plot([xi - 0.12, xi + 0.12], [0, 0], color=NAVY, lw=4, solid_capstyle="butt")
+        a0.text(xi, -0.1, str(i + 1), color=NAVY, fontsize=13, ha="center", va="top")
+    a0.add_patch(Rectangle((fix[0] - half, fix[1] - half), 2 * half, 2 * half, fill=False,
+                           ec=INK, lw=1.0, ls="--"))
+    a0.set_xlim(xs.min() - 0.4, xs.max() + 0.4)
+    a0.set_ylim(-0.35, top + 0.05)
+    a0.set_aspect("equal")
+    a0.axis("off")
+    # the magnified square
+    for i, (xi, a) in enumerate(zip(xs, th)):
+        tn = np.tan(np.radians(a))
+        ys = np.array([fix[1] - 1.6 * half, fix[1] + 1.6 * half])
+        a1.plot(xi + ys * tn, ys, color=BLUE, lw=1.4)
+        foot = fix - e[i] * n[i]
+        a1.annotate("", xy=foot, xytext=fix, arrowprops=dict(arrowstyle="-|>", color=GREEN, lw=1.6,
+                    mutation_scale=11, shrinkA=0, shrinkB=0))
+        lab = f"{abs(e[i]) * 100:.1f} cm" if values else f"e{chr(0x2081 + i)}"
+        d = (foot - fix) / np.linalg.norm(foot - fix)  # from the fix toward its line
+        at = foot + 0.1 * half * d
+        a1.text(*at, lab, color=GREEN, fontsize=13, va="center",
+                ha="left" if d[0] > 0.3 else ("right" if d[0] < -0.3 else "center"))
+        # which station's line, near the bottom or top edge of the square
+        for yy in (fix[1] - 0.85 * half, fix[1] + 0.85 * half):
+            xx = xi + yy * tn
+            if abs(xx - fix[0]) < 0.8 * half:
+                a1.text(xx + 0.07 * half, yy, str(i + 1), color=NAVY, fontsize=12,
+                        ha="left", va="center")
+                break
+    if box is not None:
+        a1.plot(*box, "s", ms=7, mfc="none", mec=GRAY, mew=1.4, zorder=3)
+        a1.text(box[0], box[1] + 0.1 * half, "box", color=GRAY, fontsize=12,
+                ha="center", va="bottom")
+    a1.plot(*fix, "+", ms=12, mew=2.2, color=RED, zorder=4)
+    a1.text(fix[0], fix[1] - 0.16 * half, "fix", color=RED, fontsize=13,
+            ha="center", va="top")
+    a1.set_xlim(fix[0] - half, fix[0] + half)
+    a1.set_ylim(fix[1] - half, fix[1] + half)
+    a1.set_aspect("equal")
+    a1.set_xticks([]); a1.set_yticks([])
+    for sp in a1.spines.values():
+        sp.set_linestyle("--"); sp.set_color(INK); sp.set_linewidth(1.0)
+    finalize(fig, name)
+    return fix, e
+
+
+def fig_pulls_both() -> None:
+    xs = np.array([-1.0, 0.0, 1.0])
+    src = np.array([0.2, 1.5])
+    th = np.degrees(np.arctan((src[0] - xs) / src[1])) + np.array([3.0, -4.0, 3.0])
+    fix, e = fig_pulls("L19-pulls", xs, th, half=0.2)
+    print(f"   pulls: fix {fix.round(3)}, misses (cm) {(e * 100).round(1)}")
+    # the page's three-bearing example
+    xs = np.array([-0.75, 0.0, 0.75])
+    th = np.array([34.6, 8.8, -17.7])
+    fix, e = fig_pulls("L19-three-fix", xs, th, half=0.045, box=np.array([0.25, 1.5]))
+    assert [f"{abs(v) * 100:.1f}" for v in e] == ["1.6", "2.8", "1.5"], e
+    assert [f"{v:.2f}" for v in fix] == ["0.26", "1.49"]
+
 def main() -> None:
     v = numbers()
     for k, x in v.items():
@@ -738,6 +821,7 @@ def main() -> None:
     fig_residuals()
     fig_room_bearing()
     fig_miss()
+    fig_pulls_both()
 
 
 if __name__ == "__main__":

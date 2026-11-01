@@ -511,57 +511,52 @@ cross-range coordinate is nearly zero in every station's frame at once.
 
 ::::{frame} Many Bearings: Least Squares
 :::{present}
-$$\begin{aligned}
-\cos\theta_1\ x - \sin\theta_1\ y &= x_1\cos\theta_1 \\
-\cos\theta_2\ x - \sin\theta_2\ y &= x_2\cos\theta_2 \\
-\cos\theta_3\ x - \sin\theta_3\ y &= x_3\cos\theta_3
-\end{aligned}$$
-
-- One line per station: $e_i = 0$. In matrix form, $\mathbf A\mathbf x = \mathbf b$.
-- $\mathbf A$: the coefficients of $x$ and $y$, one row per station. $\mathbf b$: the right-hand sides.
-- Three equations, two unknowns: no exact answer. The fix solves $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$.
+- Three bearing lines never meet exactly: errors leave a small triangle.
+- The fix makes $e_1^2 + e_2^2 + e_3^2$ smallest.
+- Each line pulls the fix toward itself, harder the more it misses. At the fix the pulls balance.
+- In Python: `numpy.linalg.lstsq`.
+:::
+:::{present}
+<img src="../../viz/img/L19-pulls.svg"
+     alt="Three stations on the firing line whose bearings nearly cross; magnified, the three lines form a small triangle, and arrows e1, e2, e3 run from the least-squares fix to each line"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Each station gives one equation. Its miss from the previous frame,
-$e_i = (x - x_i)\cos\theta_i - y\sin\theta_i$, is zero on its line, and
-moving the known part to the right-hand side writes that line as
+With two bearings the crossing is exact. A third bearing adds a third line,
+and because every bearing carries some error, the three lines form a small
+triangle rather than meeting at a point. The figure magnifies it: no point
+lies on all three lines, so no point has all three misses $e_i$ of the
+previous frame equal to zero. The fix has to be a compromise.
 
-$$x\cos\theta_i - y\sin\theta_i = x_i\cos\theta_i.$$
+The usual compromise is **least squares**: choose the point that makes the
+sum of the squared misses, $e_1^2 + e_2^2 + e_3^2$, as small as it can be.
+Squaring keeps a miss on either side of a line from canceling one on the other
+side, gives one smooth bowl with a single bottom, and counts a large miss
+more heavily than two small ones, which suits bearings whose errors are
+mostly small.
 
-The left side is the station's $\hat{\mathbf n}_i = (\cos\theta_i,\ -\sin\theta_i)$
-dotted with the unknown point $(x,\ y)$; the right side is a number we already
-know from the station's position and reading. Write one such equation per
-station, one under the other, as on the slide, and the stack is the matrix
-equation $\mathbf A\mathbf x = \mathbf b$,
+There is a physical picture of where the bottom of that bowl is. Tie the
+candidate point to each line with a spring that pulls it straight toward the
+line, along $\hat{\mathbf n}_i$, with a force proportional to the miss $e_i$.
+The point comes to rest where the pulls balance,
 
-$$\underbrace{\begin{bmatrix} \cos\theta_1 & -\sin\theta_1 \\ \cos\theta_2 & -\sin\theta_2 \\ \cos\theta_3 & -\sin\theta_3 \end{bmatrix}}_{\mathbf A}
-\underbrace{\begin{bmatrix} x \\ y \end{bmatrix}}_{\mathbf x} =
-\underbrace{\begin{bmatrix} x_1\cos\theta_1 \\ x_2\cos\theta_2 \\ x_3\cos\theta_3 \end{bmatrix}}_{\mathbf b}:$$
+$$\sum_i e_i\ \hat{\mathbf n}_i = 0,$$
 
-$\mathbf A$ has one row per station, the two numbers
-$\cos\theta_i$ and $-\sin\theta_i$; $\mathbf x$ is the unknown point; and
-$\mathbf b$ has one entry per station, $x_i\cos\theta_i$. With $N$ stations
-$\mathbf A$ is $N\times 2$ and $\mathbf b$ has $N$ entries.
+and that resting point is exactly the least-squares fix: the arrows in the
+figure are those pulls, and they add to zero. The picture also says what a
+bad bearing does. A reflection that bends one line pulls the fix toward it,
+and because the other lines pull back, that line ends up with the largest
+miss, which is how "Residuals and Outliers" below finds it.
 
-With two stations the two equations have one exact solution, the crossing of
-the previous frames. With three or more there are more equations than
-unknowns, and because every bearing carries some error no point satisfies
-them all: $\mathbf A\mathbf x - \mathbf b$, the list of misses
-$(e_1,\ e_2,\ \dots)$, cannot be all zeros. Least squares picks the
-$\mathbf x$ that makes $\sum_i e_i^2$ smallest. Setting its derivatives with
-respect to $x$ and $y$ to zero gives the **normal equations**,
-$\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$.
-Multiplying by $\mathbf A^{\mathsf T}$ collapses the $N$ equations into two:
-$\mathbf A^{\mathsf T}\mathbf A$ is $2\times 2$ and $\mathbf A^{\mathsf T}\mathbf b$
-has two entries, whatever the number of stations, and a $2\times 2$ system
-solves by hand. In Python, `numpy.linalg.lstsq(A, b)` does it in one line. The
-L19 Lab's pre-lab has you write this as a short function and test it on a
-supplied set of bearings.
+Nobody solves this by hand in the fox hunt. The L19 Lab's pre-lab has you
+write it as a short Python function around `numpy.linalg.lstsq` and test it
+on a supplied set of bearings; "The General Form" below shows what that call
+computes.
 
 Unweighted least squares treats every line as equally reliable. A bearing from
-a kit far from the source is less reliable in meters, as the next frame shows,
-so if the ranges differ a lot, weighting each term by $1/r_i^2$ gives the
-better fix. In the fox hunt every bearing that counts is within about
+a kit far from the source is less reliable in meters, as "Cross-Range Error"
+shows, so if the ranges differ a lot, weighting each term by $1/r_i^2$ gives
+the better fix. In the fox hunt every bearing that counts is within about
 $\pm 45^\circ$ of broadside, so the ranges from the stations to one box differ
 by at most a factor of $\sqrt{2}$, the weights by a factor of 2, and the
 unweighted form is close enough.
@@ -572,30 +567,76 @@ unweighted form is close enough.
 | $\theta_i$ | $34.6^\circ$ | $8.8^\circ$ | $-17.7^\circ$ |
 | :-- | :-- | :-- | :-- |
 | $x_i$ | $-0.75\ \text{m}$ | $0$ | $+0.75\ \text{m}$ |
+| $\vert e_i\vert$ | $1.6\ \text{cm}$ | $2.8\ \text{cm}$ | $1.5\ \text{cm}$ |
 
-$$\begin{aligned}
-\mathbf A &= \begin{bmatrix} 0.823 & -0.568 \\ 0.988 & -0.153 \\ 0.953 & 0.304 \end{bmatrix} \\
-\mathbf b &= (-0.617,\ 0,\ 0.714)^{\mathsf T}
-\end{aligned}$$
+- Fix $(0.26,\ 1.49)\ \text{m}$; box at $(0.25,\ 1.50)\ \text{m}$.
 :::
 :::{present}
-$$\begin{aligned}
-\mathbf A^{\mathsf T}\mathbf A &= \begin{bmatrix} 2.562 & -0.329 \\ -0.329 & 0.438 \end{bmatrix} \\
-\mathbf A^{\mathsf T}\mathbf b &= \begin{bmatrix} 0.173 \\ 0.568 \end{bmatrix} \\
-\mathbf x &= (0.26,\ 1.49)\ \text{m}
-\end{aligned}$$
+<img src="../../viz/img/L19-three-fix.svg"
+     alt="The three bearings of the worked example; magnified near the fix, arrows e1, e2, e3 run from the fix to each line, and the box sits 1 centimeter away"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Stations at $x_i = -0.75$, $0$, and $+0.75\ \text{m}$ read Angle $34.6^\circ$,
-$8.8^\circ$, and $-17.7^\circ$. Each station is one row of $\mathbf A$, its
-$\hat{\mathbf n}_i = (\cos\theta_i,\ -\sin\theta_i)$, and one entry of $\mathbf b$,
-$x_i\cos\theta_i$; station 1, for example, gives
-$-0.75 \times 0.823 = -0.617$.
+$8.8^\circ$, and $-17.7^\circ$. `numpy.linalg.lstsq` puts the fix at
+$(0.26,\ 1.49)\ \text{m}$, $0.01\ \text{m}$ from the box at
+$(0.25,\ 1.50)\ \text{m}$. The three lines miss the fix by $1.6$, $2.8$, and
+$1.5\ \text{cm}$, all under each station's own $R_i\tan\sigma_\beta$ of about
+$4\ \text{cm}$ at $1.5^\circ$: three good bearings (the check in "Residuals
+and Outliers" below). "The General Form" works the same numbers by hand.
+::::
 
-Multiplying out, $\mathbf A^{\mathsf T}\mathbf A$ sums $\cos^2\theta_i$,
-$-\cos\theta_i\sin\theta_i$, and $\sin^2\theta_i$ over the three stations, and
-$\mathbf A^{\mathsf T}\mathbf b$ sums $x_i\cos^2\theta_i$ and
-$-x_i\cos\theta_i\sin\theta_i$. The normal equations are
+::::{frame} The General Form
+:class: read-only
+
+Each station's bearing line is one linear equation in the unknown point. Its
+miss from "Distance From a Line",
+$e_i = (x - x_i)\cos\theta_i - y\sin\theta_i$, is zero on the line, and
+moving the known part to the right-hand side writes the line as
+
+$$\cos\theta_i\ x - \sin\theta_i\ y = x_i\cos\theta_i.$$
+
+Write one such equation per station, one under the other:
+
+$$\begin{aligned}
+\cos\theta_1\ x - \sin\theta_1\ y &= x_1\cos\theta_1 \\
+\cos\theta_2\ x - \sin\theta_2\ y &= x_2\cos\theta_2 \\
+\cos\theta_3\ x - \sin\theta_3\ y &= x_3\cos\theta_3
+\end{aligned}$$
+
+In matrix form this is $\mathbf A\mathbf x = \mathbf b$:
+
+$$\underbrace{\begin{bmatrix} \cos\theta_1 & -\sin\theta_1 \\ \cos\theta_2 & -\sin\theta_2 \\ \cos\theta_3 & -\sin\theta_3 \end{bmatrix}}_{\mathbf A}
+\underbrace{\begin{bmatrix} x \\ y \end{bmatrix}}_{\mathbf x} =
+\underbrace{\begin{bmatrix} x_1\cos\theta_1 \\ x_2\cos\theta_2 \\ x_3\cos\theta_3 \end{bmatrix}}_{\mathbf b}.$$
+
+$\mathbf A$ holds the coefficients of $x$ and $y$, one row per station; each
+row is that station's $\hat{\mathbf n}_i$. $\mathbf b$ holds the right-hand
+sides. With $N$ stations $\mathbf A$ is $N\times 2$, and
+$\mathbf A\mathbf x - \mathbf b$ is the list of misses
+$(e_1,\ e_2,\ \dots,\ e_N)$.
+
+With two stations the two equations have one exact solution, the crossing of
+"A Two-Bearing Fix". With three or more there are more equations than
+unknowns, and no point satisfies them all. The least-squares point satisfies
+two combinations of them instead, the **normal equations**,
+
+$$\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b.$$
+
+Multiplying by $\mathbf A^{\mathsf T}$ adds up the $N$ equations twice, once
+weighted by each station's $\cos\theta_i$ and once by its $-\sin\theta_i$,
+leaving two equations in two unknowns, which always have one answer unless the
+lines are all parallel. They are the balance of pulls in another form:
+$\mathbf A^{\mathsf T}(\mathbf A\mathbf x - \mathbf b) = \sum_i e_i\ \hat{\mathbf n}_i = 0$.
+They are also what setting the derivatives of $\sum_i e_i^2$ with respect to
+$x$ and $y$ to zero gives.
+
+For the three-bearing example,
+
+$$\mathbf A = \begin{bmatrix} 0.823 & -0.568 \\ 0.988 & -0.153 \\ 0.953 & 0.304 \end{bmatrix},\quad
+\mathbf b = \begin{bmatrix} -0.617 \\ 0 \\ 0.714 \end{bmatrix},$$
+
+and multiplying out,
 
 $$\begin{bmatrix} 2.562 & -0.329 \\ -0.329 & 0.438 \end{bmatrix}
 \begin{bmatrix} x \\ y \end{bmatrix} =
@@ -609,12 +650,9 @@ x &= \frac{0.438 \times 0.173 + 0.329 \times 0.568}{1.014} = 0.26\ \text{m} \\
 y &= \frac{2.562 \times 0.568 + 0.329 \times 0.173}{1.014} = 1.49\ \text{m}.
 \end{aligned}$$
 
-The box was at $(0.25,\ 1.50)\ \text{m}$, so the fix lands $0.01\ \text{m}$
-from it. The misses, $\mathbf A\mathbf x - \mathbf b$, are $-0.016$, $0.028$,
-and $-0.015\ \text{m}$, all under each station's own $R_i\tan\sigma_\beta$ of
-about $0.04\ \text{m}$ at $1.5^\circ$: three good bearings (the check in
-"Residuals and Outliers" below). `numpy.linalg.lstsq` does the same arithmetic
-in one line.
+The misses, $\mathbf A\mathbf x - \mathbf b$, are $-0.016$, $0.028$, and
+$-0.015\ \text{m}$; their signs say which side of each line the fix sits on.
+`numpy.linalg.lstsq(A, b)` does the same arithmetic in one line.
 ::::
 
 ::::{frame} Cross-Range Error
