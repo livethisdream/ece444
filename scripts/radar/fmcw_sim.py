@@ -35,6 +35,9 @@ One function per target type, each adding its echo to a capture in place:
     add_hand(cap, r0, ...)          a hand moving back and forth
     add_walker(cap, r_start, ...)   a person walking out and back, with limbs
     add_spinner(cap, r0, ...)       a fidget spinner, edge-on: arms on a circle
+    add_rotor(cap, r0, rho, ...)    any rotor, edge-on, its rate drifting or spinning down
+    add_fan(cap, r0, ...)           a desk fan, edge-on: blades of points, hub to tip
+    add_dismount(cap, t, x, y, ...) a person walking any path on the floor (L31)
 
 A new target type is one more function that builds its scatterers' ranges as a
 function of time and calls _add_scatterer for each. A new waveform is one more
@@ -214,6 +217,104 @@ def add_spinner(cap: dict, r0: float = 0.5, radius: float = 0.03,
     for k in range(n_arms):
         r_t = r0 + radius * np.cos(2 * np.pi * rev_hz * t + 2 * np.pi * k / n_arms)
         _add_scatterer(cap, r_t, echo_dbfs(cap, r_t, rcs_arm), az=az)
+
+
+def add_rotor(cap: dict, r0: float, rho, rcs_pts, rpm: float, n_blades: int = 3,
+              spin_down_s: float | None = None, wobble: float = 0.0, seed: int = 0,
+              rcs_hub: float = 0.02, tilt: float = 0.0, phase0: float = 0.0,
+              az: float = 0.0) -> None:
+    """Any rotor seen edge-on: n_blades identical blades, each a set of points.
+
+    rho (m) and rcs_pts (m^2) list one blade's points: their radii and their
+    cross sections. The hub, and whatever holds the rotor, sits still at r0
+    (rcs_hub). A point at radius rho turns through the rotor's angle theta(t),
+    so its range swings rho cos(theta + 2 pi b / n_blades) about r0. Held
+    tilt degrees off edge-on, only cos(tilt) of that swing lies along the
+    line of sight: the Doppler band shrinks, but keeps its shape.
+
+    A real rotor's rate is not constant. spin_down_s is the time constant of
+    a free spin slowing down (a fidget spinner); wobble is the RMS fractional
+    wander of a driven rotor's rate (a fan), slow next to a turn. Either keeps
+    the spectrogram's fine structure from repeating exactly, as a recording
+    of a real rotor does not. Added for the L31 Lab.
+    """
+    _, t = _times(cap)
+    _add_scatterer(cap, np.full_like(t, r0), echo_dbfs(cap, r0, rcs_hub), phase0=0.9, az=az)
+    # the turn rate, rev/s, on a fine grid, integrated to the angle
+    tg = np.arange(0.0, t.max() + 2e-3, 1e-3)
+    rate = np.full(tg.size, rpm / 60.0)
+    if spin_down_s:
+        rate = rate * np.exp(-tg / spin_down_s)
+    if wobble:
+        rng = np.random.default_rng(seed)
+        w = np.convolve(rng.standard_normal(tg.size + 400), np.hanning(401), "valid")[:tg.size]
+        rate = rate * (1 + wobble * w / w.std())
+    theta = np.interp(t, tg, 2 * np.pi * np.cumsum(rate) * 1e-3) + phase0
+    for b in range(n_blades):
+        c = np.cos(theta + 2 * np.pi * b / n_blades)
+        for rh, rcs in zip(np.atleast_1d(rho), np.atleast_1d(rcs_pts)):
+            r_t = r0 + rh * np.cos(np.radians(tilt)) * c
+            _add_scatterer(cap, r_t, echo_dbfs(cap, r_t, rcs), phase0=11.0 * rh, az=az)
+
+
+def add_fan(cap: dict, r0: float = 1.0, radius: float = 0.075, rpm: float = 1000.0,
+            n_blades: int = 3, n_pts: int = 25, rcs_blade: float = 0.01,
+            rcs_stand: float = 0.05, wobble: float = 0.02, seed: int = 0,
+            tilt: float = 0.0, az: float = 0.0) -> None:
+    """A desk fan seen edge-on: n_blades blades, each a line of n_pts points.
+
+    The points run evenly from the hub, 15 mm out, to the tip at radius, and
+    share rcs_blade evenly, so a blade fills the Doppler band from zero out
+    to the tip speed pi (2 radius) rpm / 60. That filled band sets a fan
+    apart from a spinner, whose weight sits at its rim. The stand sits still
+    at r0 (rcs_stand); the motor's rate wanders by wobble; tilt is as
+    add_rotor's. Added for the L31 Lab.
+    """
+    rho = np.linspace(0.015, radius, n_pts)
+    add_rotor(cap, r0, rho, np.full(n_pts, rcs_blade / n_pts), rpm, n_blades,
+              wobble=wobble, seed=seed, rcs_hub=rcs_stand, tilt=tilt, az=az)
+
+
+def add_dismount(cap: dict, t_path, x_path, y_path, stride_hz: float = 0.9,
+                 rcs_body: float = 0.5, seed: int = 1) -> None:
+    """A person walking along any path on the floor, with swinging limbs.
+
+    The torso is at (x, y) m at the times t_path s, interpolated between them:
+    y is straight out from the kit along its boresight, and x is to the side,
+    positive on the E8 side (fmcw_sim's positive az). Range is hypot(x, y)
+    and azimuth atan2(x, y), so a diagonal walk changes both, and the two
+    subarray channels see the azimuth change. The limbs of add_walker swing
+    along the direction of walking, so only the part of their swing along the
+    line of sight shows as micro-Doppler, as for L26's walker at an aspect.
+    A stretch with no motion has no heading; the limbs then hold still.
+    Added for the L31 Lab's dismount track and its walker records.
+    """
+    _, t = _times(cap)
+    tt = np.asarray(t_path, float)
+    x = np.interp(t, tt, np.asarray(x_path, float))
+    y = np.interp(t, tt, np.asarray(y_path, float))
+    # heading: the unit vector of the walking direction, from the path itself
+    dt = 1e-3
+    hx = np.interp(t + dt, tt, x_path) - np.interp(t - dt, tt, x_path)
+    hy = np.interp(t + dt, tt, y_path) - np.interp(t - dt, tt, y_path)
+    hn = np.hypot(hx, hy)
+    hx, hy = np.where(hn > 0, hx / np.maximum(hn, 1e-12), 0.0), np.where(hn > 0, hy / np.maximum(hn, 1e-12), 0.0)
+    # Limb swing along the walk, m, and share of rcs. At a 1 Hz stride the legs
+    # reach 2 pi (0.42) = 2.6 m/s about the torso, L26's walker (add_walker's
+    # 0.25 m legs, written for the L28 waterfall, reach 1.6 m/s).
+    limbs = [(0.42, 0.0, 0.08), (0.42, np.pi, 0.08),      # legs
+             (0.25, np.pi, 0.04), (0.25, 0.0, 0.04)]      # arms, opposite legs
+    rng = np.random.default_rng(seed)
+
+    def scatter(px, py, rcs):
+        r_t = np.hypot(px, py)
+        az_t = np.degrees(np.arctan2(px, py))
+        _add_scatterer(cap, r_t, echo_dbfs(cap, r_t, rcs), rng.uniform(0, 6.28), az_t)
+
+    scatter(x, y, rcs_body)
+    for swing, ph, share in limbs:
+        s = swing * np.sin(2 * np.pi * stride_hz * t + ph)
+        scatter(x + s * hx, y + s * hy, share * rcs_body)
 
 
 def save(cap: dict, path: Path, note: str, channels: bool = True) -> Path:
