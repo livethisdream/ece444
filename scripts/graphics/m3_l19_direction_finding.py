@@ -536,7 +536,7 @@ def fig_cone() -> None:
     Side view (looking along the array): a level source and one 31 deg below
     it (a kit 0.9 m above a box 1.5 m out), both at unit distance; the low one
     reaches only cos(31 deg) = 0.86 out horizontally. Top view (from above):
-    both at 30 deg on the floor plan, the low one's shadow shorter by that
+    both at 30 deg on the floor plan, the low one's horizontal projection shorter by that
     0.86. The array reads the part along its own row, sin(az) cos(el): 0.500
     for the level source, 0.429 for the low one, which is 30.0 and 25.4 deg."""
     v = numbers()
@@ -545,7 +545,7 @@ def fig_cone() -> None:
     ce = np.cos(el)
     along = (np.sin(az), np.sin(az) * ce)
     assert f"{np.degrees(np.arcsin(along[1])):.1f}" == f"{v['cone_30']:.1f}" == "25.4"
-    fig, (a0, a1) = plt.subplots(1, 2, figsize=(5.6, 2.9), gridspec_kw=dict(width_ratios=[1.0, 1.25]))
+    fig, (a0, a1) = plt.subplots(1, 2, figsize=(5.8, 3.0), gridspec_kw=dict(width_ratios=[1.0, 1.35]))
     # side view: horizontal is out from the array (broadside side), vertical is up
     a0.plot([0, 1.08], [0, 0], color=LIGHT, lw=1.2, ls="--")
     a0.text(1.08, 0.04, "level, at array height", color=GRAY, fontsize=12, ha="right", va="bottom")
@@ -567,32 +567,46 @@ def fig_cone() -> None:
     a0.set_ylim(-0.72, 0.42)
     a0.set_aspect("equal")
     a0.axis("off")
-    # top view: the array along x, broadside up
+    # top view: the array along x, broadside up. The box is 30 deg off
+    # broadside; its horizontal projection is 0.86 long, so its part along
+    # the row is 0.429. A level source at 25.4 deg has that same 0.429 along
+    # the row, which is why the kit reports 25.4: both tips sit on one vertical.
     a1.plot([-0.35, 0.35], [0, 0], color=NAVY, lw=6, solid_capstyle="butt")
     a1.text(-0.38, 0, "array", color=NAVY, fontsize=12, ha="right", va="center")
-    a1.plot([0, 0], [0, 1.05], color=GRAY, lw=1.0, ls=":")
-    a1.text(0.04, 1.02, "broadside", color=GRAY, fontsize=12, ha="left", va="center")
-    for L, col, lw in ((1.0, GRAY, 1.6), (ce, RED, 1.8)):
-        tip = L * np.array([np.sin(az), np.cos(az)])
-        a1.annotate("", xy=tip, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=col, lw=lw,
-                    mutation_scale=11, shrinkA=0, shrinkB=0))
-        a1.plot([tip[0], tip[0]], [tip[1], 0], color=col, lw=0.9, ls=":")
-    tt = np.linspace(np.pi / 2, np.pi / 2 - az, 30)
-    a1.plot(0.3 * np.cos(tt), 0.3 * np.sin(tt), color=INK, lw=1.0)
-    a1.text(0.2, 0.17, "30\u00b0", color=INK, fontsize=12, ha="left", va="center")
-    a1.text(-0.45, -0.1, "along the row:", color=INK, fontsize=12, ha="left", va="top")
-    a1.text(-0.45, -0.27, f"level  {along[0]:.3f}, reads 30.0\u00b0", color=GRAY, fontsize=12,
-            ha="left", va="top")
-    a1.text(-0.45, -0.44, f"box  {along[1]:.3f}, reads {v['cone_30']:.1f}\u00b0", color=RED, fontsize=12,
-            ha="left", va="top")
-
-    a1.set_xlim(-0.5, 1.2)
-    a1.set_ylim(-0.62, 1.15)
+    a1.plot([0, 0], [0, 1.3], color=GRAY, lw=1.0, ls=":")
+    a1.text(-0.04, 1.25, "broadside", color=GRAY, fontsize=12, ha="right", va="center")
+    L = 1.3                                   # drawn long so the two rays separate
+    true_tip = L * np.array([np.sin(az), np.cos(az)])
+    proj = ce * true_tip
+    rd = np.arcsin(along[1])
+    read_tip = L * np.array([np.sin(rd), np.cos(rd)])
+    assert np.isclose(proj[0], read_tip[0])
+    a1.annotate("", xy=true_tip, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=GRAY, lw=1.4,
+                mutation_scale=11, shrinkA=0, shrinkB=0))
+    a1.plot(*np.stack([(0, 0), read_tip]).T, color=RED, lw=1.4, ls="--")
+    a1.annotate("", xy=proj, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=RED, lw=2.0,
+                mutation_scale=11, shrinkA=0, shrinkB=0))
+    a1.plot([proj[0], proj[0]], [0, read_tip[1]], color=RED, lw=0.9, ls=":")
+    a1.plot([true_tip[0], true_tip[0]], [0, true_tip[1]], color=GRAY, lw=0.9, ls=":")
+    a1.text(true_tip[0] + 0.04, true_tip[1], "box at 30\u00b0", color=GRAY, fontsize=12,
+            ha="left", va="center")
+    a1.text(read_tip[0] - 0.02, read_tip[1] + 0.04, f"kit reads {v['cone_30']:.1f}\u00b0", color=RED,
+            fontsize=12, ha="center", va="bottom")
+    a1.text(proj[0] * 0.5 + 0.08, proj[1] * 0.5 - 0.04, f"horizontal\nprojection {ce:.2f}", color=RED,
+            fontsize=12, ha="left", va="center", linespacing=1.1)
+    a1.text(proj[0] - 0.01, -0.08, f"{along[1]:.3f}", color=RED, fontsize=12, ha="right", va="top")
+    a1.text(true_tip[0] + 0.01, -0.08, f"{along[0]:.3f}", color=GRAY, fontsize=12, ha="left", va="top")
+    a1.text((proj[0] + true_tip[0]) / 2, -0.27, "along the row", color=INK, fontsize=12,
+            ha="center", va="top")
+    a1.set_xlim(-0.55, 1.45)
+    a1.set_ylim(-0.42, 1.45)
     a1.set_aspect("equal")
     a1.axis("off")
-    for ax_, lab in ((a0, "side view"), (a1, "top view")):
-        fig.text(ax_.get_position().x0, 0.97, lab, fontsize=13, color=INK, weight="bold",
-                 ha="left", va="top")
+    for ax_, lab, sub in ((a0, "Side view", "looking along the array"),
+                          (a1, "Top view", "looking down from above")):
+        x0 = ax_.get_position().x0
+        fig.text(x0, 1.06, lab, fontsize=14, color=INK, weight="bold", ha="left", va="bottom")
+        fig.text(x0, 1.05, sub, fontsize=12, color=GRAY, ha="left", va="top")
     finalize(fig, "L19-cone")
 
 
