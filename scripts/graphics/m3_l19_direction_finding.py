@@ -7,7 +7,7 @@
   - L19-crossing     : the error region of a 90 deg and a 30 deg crossing
   - L19-depth        : a firing-line pair 0.75 m and 3 m apart, the same box, the depth ellipse
   - L19-reflection   : a direct lobe, a -10 dB reflection lobe, and their sum
-  - L19-cone         : the cone of directions a line array cannot tell apart
+  - L19-cone         : side and top views of a low source reading closer to broadside
   - L19-resolution   : two sources 20 deg apart and 8 deg apart
   - L19-residuals    : five bearings, one bent by a reflection, and their residuals
   - L19-room-bearing : heading, Angle, and the room bearing they add to
@@ -139,8 +139,12 @@ def numbers() -> dict:
     out["hpbw"] = np.degrees(0.886 * LAM / (N * D))
     out["null_sin"] = LAM / (N * D)
     out["null_deg"] = np.degrees(np.arcsin(LAM / (N * D)))
-    el = np.degrees(np.arctan(0.75 / 3.0))
+    # a tabletop kit 0.9 m (3 ft) above a box on the floor 1.5 m (5 ft) out,
+    # and the same box 3.0 m (10 ft) out
+    el = np.degrees(np.arctan(0.9 / 1.5))
     out["el"] = el
+    out["el_far"] = np.degrees(np.arctan(0.9 / 3.0))
+    out["cone_30_far"] = np.degrees(np.arcsin(np.sin(np.radians(30)) * np.cos(np.radians(out["el_far"]))))
     out["cone_30"] = np.degrees(np.arcsin(np.sin(np.radians(30)) * np.cos(np.radians(el))))
     out["cone_45"] = np.degrees(np.arcsin(np.sin(np.radians(45)) * np.cos(np.radians(el))))
     # The lobe's own slope at its half-power points, in units of 1/theta_HP.
@@ -166,8 +170,25 @@ def check_numbers(v: dict) -> None:
     assert f"{v['step_30'] / 2:.2f}" == "0.53"
     assert f"{v['hpbw']:.1f}" == "12.9"
     assert f"{v['null_sin']:.3f}" == "0.254" and f"{v['null_deg']:.1f}" == "14.7"
-    assert f"{v['el']:.1f}" == "14.0"
-    assert f"{v['cone_30']:.1f}" == "29.0" and f"{v['cone_45']:.1f}" == "43.3"
+    assert f"{v['el']:.1f}" == "31.0" and f"{v['el_far']:.1f}" == "16.7"
+    assert f"{v['cone_30']:.1f}" == "25.4" and f"{v['cone_45']:.1f}" == "37.3"
+    assert f"{v['cone_30_far']:.1f}" == "28.6"
+    # the floor case on the lab's range: five stations, a box at (0.25, 1.5) m,
+    # kits 0.9 m above it. Uncorrected, the fix lands 0.25 m deep; correcting
+    # each reading with el from the first fix, twice, brings it within 1 cm.
+    xs = np.array([-1.5, -0.75, 0.0, 0.75, 1.5]); box = np.array([0.25, 1.5]); dh = 0.9
+    dx = box[0] - xs
+    th = np.arcsin(dx / np.sqrt(dx ** 2 + box[1] ** 2 + dh ** 2))
+    def _fix(a):
+        c, s = np.cos(a), np.sin(a)
+        return np.linalg.lstsq(np.stack([c, -s], 1), xs * c, rcond=None)[0]
+    f = _fix(th)
+    miss = [np.linalg.norm(f - box)]
+    for _ in range(2):
+        el_i = np.arctan(dh / np.hypot(f[0] - xs, f[1]))
+        f = _fix(np.arcsin(np.sin(th) / np.cos(el_i)))
+        miss.append(np.linalg.norm(f - box))
+    assert [f"{m:.2f}" for m in miss] == ["0.25", "0.04", "0.01"], miss
     assert f"{v['slope_k']:.2f}" == "1.05"
     assert f"{v['noise_30dB']:.1f}" == "0.3" and f"{v['noise_16']:.1f}" == "0.2"
     assert f"{v['grid_sd']:.2f}" == "0.30"
@@ -510,38 +531,68 @@ def fig_reflection() -> None:
 
 
 def fig_cone() -> None:
-    """Directions with the same Angle form a cone around the array's axis."""
-    from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
+    """Why a low source reads closer to broadside, in two flat views.
+
+    Side view (looking along the array): a level source and one 31 deg below
+    it (a kit 0.9 m above a box 1.5 m out), both at unit distance; the low one
+    reaches only cos(31 deg) = 0.86 out horizontally. Top view (from above):
+    both at 30 deg on the floor plan, the low one's shadow shorter by that
+    0.86. The array reads the part along its own row, sin(az) cos(el): 0.500
+    for the level source, 0.429 for the low one, which is 30.0 and 25.4 deg."""
     v = numbers()
-    s = np.sin(np.radians(v["cone_30"]))          # x-component every cone direction shares
-    fig = plt.figure(figsize=(4.4, 3.3))
-    ax = fig.add_axes([0.0, 0.0, 0.62, 1.0], projection="3d")
-    ax.view_init(elev=16, azim=-58)
-    ax.plot([-0.3, 0.3], [0, 0], [0, 0], color=NAVY, lw=5, solid_capstyle="butt")
-    phi = np.linspace(-np.pi / 2 + 0.05, np.pi / 2 - 0.05, 121)
-    r = np.sqrt(1 - s ** 2)
-    rim = np.stack([np.full_like(phi, s), r * np.cos(phi), r * np.sin(phi)])
-    ax.plot(*rim, color=BLUE, lw=1.4)
-    for p in np.linspace(-1.3, 1.3, 7):
-        q = np.array([s, r * np.cos(p), r * np.sin(p)])
-        ax.plot([0, q[0]], [0, q[1]], [0, q[2]], color=BLUE, lw=0.6, alpha=0.45)
-    az, el = np.radians(30.0), np.radians(-v["el"])
-    flat = np.array([np.sin(az), np.cos(az), 0.0])
-    src = np.array([np.sin(az) * np.cos(el), np.cos(az) * np.cos(el), np.sin(el)])
-    assert np.isclose(src[0], s)                      # the source sits on the 29.0 deg cone
-    ax.plot([0, flat[0]], [0, flat[1]], [0, flat[2]], color=GRAY, lw=1.2, ls="--")
-    ax.plot([0, src[0]], [0, src[1]], [0, src[2]], color=RED, lw=1.8)
-    ax.set_xlim(-0.4, 0.8)
-    ax.set_ylim(0, 1.1)
-    ax.set_zlim(-0.6, 0.6)
-    ax.set_box_aspect((1.2, 1.1, 1.2))
-    ax.set_axis_off()
-    # the key sits in its own column to the right, clear of the drawing
-    for y, lab, col in ((0.80, "array", NAVY),
-                        (0.64, "30° on the\nfloor plan", GRAY),
-                        (0.40, f"source {v['el']:.0f}°\ndown: reads\n{v['cone_30']:.1f}°", RED),
-                        (0.14, f"every line on\nthe cone reads\n{v['cone_30']:.1f}°", BLUE)):
-        fig.text(0.64, y, lab, color=col, fontsize=13, ha="left", va="center")
+    el = np.radians(v["el"])
+    az = np.radians(30.0)
+    ce = np.cos(el)
+    along = (np.sin(az), np.sin(az) * ce)
+    assert f"{np.degrees(np.arcsin(along[1])):.1f}" == f"{v['cone_30']:.1f}" == "25.4"
+    fig, (a0, a1) = plt.subplots(1, 2, figsize=(5.6, 2.9), gridspec_kw=dict(width_ratios=[1.0, 1.25]))
+    # side view: horizontal is out from the array (broadside side), vertical is up
+    a0.plot([0, 1.08], [0, 0], color=LIGHT, lw=1.2, ls="--")
+    a0.text(1.08, 0.04, "level, at array height", color=GRAY, fontsize=12, ha="right", va="bottom")
+    a0.plot(0, 0, "s", ms=8, color=NAVY)                 # the array, seen end-on
+    a0.text(-0.02, -0.07, "kit", color=NAVY, fontsize=12, ha="center", va="top")
+    a0.annotate("", xy=(1.0, 0), xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=GRAY, lw=1.6,
+                mutation_scale=11, shrinkA=0, shrinkB=0))
+    a0.annotate("", xy=(ce, -np.sin(el)), xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=RED,
+                lw=1.8, mutation_scale=11, shrinkA=0, shrinkB=0))
+    a0.plot([ce, ce], [0, -np.sin(el)], color=RED, lw=0.9, ls=":")
+    a0.plot(ce, -np.sin(el), "s", ms=7, mfc="none", mec=RED, mew=1.4)
+    a0.text(ce + 0.05, -np.sin(el), "box", color=RED, fontsize=12, ha="left", va="center")
+    tt = np.linspace(0, -el, 30)
+    a0.plot(0.42 * np.cos(tt), 0.42 * np.sin(tt), color=RED, lw=1.0)
+    a0.text(0.5, -0.075, f"{v['el']:.0f}\u00b0", color=RED, fontsize=13, ha="left", va="center")
+    a0.text(ce, -np.sin(el) - 0.06, f"reaches out {ce:.2f}", color=RED, fontsize=12, ha="center", va="top")
+
+    a0.set_xlim(-0.1, 1.12)
+    a0.set_ylim(-0.72, 0.42)
+    a0.set_aspect("equal")
+    a0.axis("off")
+    # top view: the array along x, broadside up
+    a1.plot([-0.35, 0.35], [0, 0], color=NAVY, lw=6, solid_capstyle="butt")
+    a1.text(-0.38, 0, "array", color=NAVY, fontsize=12, ha="right", va="center")
+    a1.plot([0, 0], [0, 1.05], color=GRAY, lw=1.0, ls=":")
+    a1.text(0.04, 1.02, "broadside", color=GRAY, fontsize=12, ha="left", va="center")
+    for L, col, lw in ((1.0, GRAY, 1.6), (ce, RED, 1.8)):
+        tip = L * np.array([np.sin(az), np.cos(az)])
+        a1.annotate("", xy=tip, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=col, lw=lw,
+                    mutation_scale=11, shrinkA=0, shrinkB=0))
+        a1.plot([tip[0], tip[0]], [tip[1], 0], color=col, lw=0.9, ls=":")
+    tt = np.linspace(np.pi / 2, np.pi / 2 - az, 30)
+    a1.plot(0.3 * np.cos(tt), 0.3 * np.sin(tt), color=INK, lw=1.0)
+    a1.text(0.2, 0.17, "30\u00b0", color=INK, fontsize=12, ha="left", va="center")
+    a1.text(-0.45, -0.1, "along the row:", color=INK, fontsize=12, ha="left", va="top")
+    a1.text(-0.45, -0.27, f"level  {along[0]:.3f}, reads 30.0\u00b0", color=GRAY, fontsize=12,
+            ha="left", va="top")
+    a1.text(-0.45, -0.44, f"box  {along[1]:.3f}, reads {v['cone_30']:.1f}\u00b0", color=RED, fontsize=12,
+            ha="left", va="top")
+
+    a1.set_xlim(-0.5, 1.2)
+    a1.set_ylim(-0.62, 1.15)
+    a1.set_aspect("equal")
+    a1.axis("off")
+    for ax_, lab in ((a0, "side view"), (a1, "top view")):
+        fig.text(ax_.get_position().x0, 0.97, lab, fontsize=13, color=INK, weight="bold",
+                 ha="left", va="top")
     finalize(fig, "L19-cone")
 
 

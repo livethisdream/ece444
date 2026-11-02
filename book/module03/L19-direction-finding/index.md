@@ -252,11 +252,11 @@ $$\sin\theta_\text{meas} = \hat{\mathbf u}\cdot\hat{\mathbf x} = \sin(\text{az})
 
 - The ramp sees only the part of the arrival direction $\hat{\mathbf u}$ along the element row $\hat{\mathbf x}$.
 - A source below the array shortens that part by $\cos(\text{el})$.
-- $30^\circ$ azimuth, $14.0^\circ$ down, reads $29.0^\circ$.
+- Kit $0.9\ \text{m}$ above a box $1.5\ \text{m}$ out: $31^\circ$ down, and $30^\circ$ reads $25.4^\circ$.
 :::
 :::{present}
 <img src="../../viz/img/L19-cone.svg"
-     alt="The cone of directions around the array's axis that all read 29.0 degrees; the floor-plan direction at 30 degrees lies off the cone, and the source 14 degrees below it lies on it"
+     alt="Side view: a level source and one 31 degrees below the array, which reaches out only 0.86 horizontally. Top view: both at 30 degrees on the floor plan; along the array the level one is 0.500, reading 30.0 degrees, and the low one 0.429, reading 25.4 degrees"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -280,14 +280,37 @@ cone around the row has the same projection, and so the same reading, which is
 why a line array measures a cone angle and not a floor-plan azimuth.
 
 When the source is at the array's height, el is zero and the two angles agree.
-A box on the floor $0.75\ \text{m}$ below a tabletop kit at $3\ \text{m}$ is
-$14.0^\circ$ down, and a source at $30^\circ$ azimuth reads $29.0^\circ$; at
-$45^\circ$ it reads $43.3^\circ$. The error always pulls the bearing toward
-broadside. The L19 Lab's range is set up with the kits and the boxes at one
-height, so el is near zero there. What the kit's position on its stand does
-change is the row itself: tipping the board up or down to aim it at the boxes
-turns it about the row and leaves the reading alone, but raising one end of
-the row tilts the cone and adds the same kind of error. Keep the row level.
+Below it, the reading is pulled toward broadside, and at classroom distances
+the pull is not small. The figure shows it in two flat views. A kit on a table
+$0.9\ \text{m}$ (3 ft) above a box on the floor $1.5\ \text{m}$ (5 ft) out sees
+the box $31.0^\circ$ down, so the arrival direction reaches out only
+$\cos 31^\circ = 0.86$ of the way horizontally (side view). On the floor plan
+the box is still $30^\circ$ off broadside, but its part along the row is
+$0.86 \times 0.500 = 0.429$ instead of $0.500$ (top view), and the kit reads
+$25.4^\circ$: a $4.6^\circ$ error, three times the whole bearing budget. At
+$45^\circ$ it reads $37.3^\circ$. At $3.0\ \text{m}$ (10 ft) out the box is
+$16.7^\circ$ down and $30^\circ$ reads $28.6^\circ$. The error is zero at
+broadside, grows off it, and always pulls toward broadside. On a firing line
+that shows up mostly as depth: five stations $0.9\ \text{m}$ above a box at
+$(0.25,\ 1.5)\ \text{m}$ put the uncorrected fix $0.25\ \text{m}$ too far
+downrange.
+
+Two things remove it. Putting the kits at the boxes' height makes el zero.
+When that is not possible, undo it. With the height difference $\Delta h$
+known and a station's horizontal range $r$ to the fix,
+$\text{el} = \arctan(\Delta h/r)$, and each reading converts back to a
+floor-plan angle with
+
+$$\sin(\text{az}) = \frac{\sin\theta_\text{meas}}{\cos(\text{el})}.$$
+
+The range comes from a first, uncorrected fix: correct each reading, solve
+again, and repeat once. In the example above one pass brings the fix within
+$0.04\ \text{m}$ of the box and a second within $0.01\ \text{m}$.
+
+Aiming the board does not help. Tipping it up or down toward the boxes turns
+it about the row and leaves the reading alone, because the cone is centered on
+the row. Raising one end of the row tilts the cone and adds the same kind of
+error, so keep the row level.
 
 The cone has a back half as well, a source behind the array at the mirror
 angle, but the PHASER's patches sit over a ground plane and receive almost
@@ -828,8 +851,8 @@ aimed only roughly at the line, may leave it too weak a tone to read anyway.
 
 Two systematic errors from earlier in the lesson remain. The cone-angle error
 pulls every bearing toward broadside when the source is above or below the
-array; the range is set up with kits and boxes at one height to remove it, and
-pointing each array at the boxes with its element row level keeps it removed. A
+array. Put the kits at the boxes' height, or correct each reading as "The
+Cone Angle" describes, and keep each element row level. A
 reflector near the line of sight shifts the peak or replaces it, so keep the
 path from each kit to the box field clear, people included. Finally, two bearings always cross somewhere,
 right or wrong. A third bearing is the only check that the first two are
@@ -914,7 +937,7 @@ themselves.
 | $\psi = kd(\sin\theta_s - \sin\theta_0)$ | residual phase step after steering to $\theta_0$ | sum peaks where $\theta_0 = \theta_s$ |
 | Angle | steer angle of the largest sample in the sweep | on a grid $0.0159$ apart in $\sin\theta$ |
 | $\theta_\text{HP}$ | sets resolution of two sources, not accuracy for one | $12.9^\circ$ at broadside |
-| $\sin\theta_\text{meas} = \sin(\text{az})\cos(\text{el})$ | the cone angle a line array measures | $29.0^\circ$ for $30^\circ$ at $14^\circ$ down |
+| $\sin\theta_\text{meas} = \sin(\text{az})\cos(\text{el})$ | the cone angle a line array measures | $25.4^\circ$ for $30^\circ$ at $31^\circ$ down |
 | $\beta = h + \theta_\text{est}$ | room bearing from heading and Angle | $\sigma_\beta \approx 1.5^\circ$ with a taped heading |
 ::::
 
