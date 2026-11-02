@@ -227,7 +227,7 @@ kit to it. Keep the calibration from bring-up.
 13. Put the kit on a station mark, squared to the tape, broadside downrange.
 14. On the **Tracking** tab, record ten consecutive Angle readings and **Peak Gain**.
 15. Repeat at every station that detects the fox, ends first.
-16. Type each station into the notebook: $x_i$, $s\,\bar\theta_i$, and Peak Gain.
+16. Type each station into the notebook and run the plot. Retake any station whose line misses the crossing, then press **Stop**.
 :::
 
 <div class="rec" data-lab="L19">
@@ -264,6 +264,12 @@ others.
 Do not change Rx Gain once the hunt starts. The bearings do not care, but the
 amplitude ranking compares levels across stations and assumes one gain for all
 of them.
+
+The plot is your last check before you leave the bench. It draws each station's
+bearing line over the posted boxes, even before your functions are finished, and
+the lines should cross near one box. A line that misses the crossing is a station
+to retake now, while the kit is still set up; once you leave, a bad bearing can
+only be dropped.
 ::::
 
 ::::{frame} The Call and the Reveal
@@ -271,9 +277,9 @@ of them.
 
 :::{present}
 17. Type the posted boxes into the notebook, run it, and record the fix, the residuals, and the ranking.
-18. If one residual is far larger than the rest, retake that station or accept the notebook's drop.
-19. Name the box and tell me before the boxes are opened.
-20. Record the live box after the reveal, then press **Stop**.
+18. If one residual is far larger than the rest, accept the notebook's drop.
+19. Submit the box you name before the reveal, at the bench or after class.
+20. Record the live box after the reveal.
 :::
 
 <div class="rec" data-lab="L19">
@@ -287,8 +293,10 @@ of them.
 The instructor posts the box centers. Your notebook fixes the source from the
 bearings alone, ranks the boxes by distance from the fix, and, when the two
 nearest are within $0.15\ \text{m}$ of each other in distance, uses the amplitude
-pattern to choose between them. The call is your team's, made in class from your
-own data. The Part 3 writeup compares your fix with the live box and asks what
+pattern to choose between them. The call is your team's, made from your own
+data. The notebook needs only your laptop, so you can make the call at the bench
+or after class, wherever you are; I reveal the live box once every team's call
+is in. The Part 3 writeup compares your fix with the live box and asks what
 changes with the baseline and the depth.
 ::::
 
@@ -315,8 +323,8 @@ viewer instead.
 The L19 Lab packet is one submission per team for the whole lab, turned in complete before Lesson 20. It has three parts:
 
 1. **Part 1, Pre-Lab** (before the lab period): the bearing budget with a fixed heading, the across-range and depth errors for this range, a station plan, and the notebook tested on a supplied set of bearings.
-2. **Part 2, Measurements** (your team, in class): the reference shot, the bearings and levels from every station, and the call.
-3. **Part 3, Writeup** (after the lab): the fix against the live box, the error of each bearing, and what the baseline and the depth did to the fix.
+2. **Part 2, Measurements** (your team): the reference shot and the bearings and levels from every station, in class; the call, at the bench or after class, before the reveal.
+3. **Part 3, Writeup** (after the reveal): the fix against the live box, the error of each bearing, and what the baseline and the depth did to the fix.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">L19 Lab packet (PDF)</a>
 ::::
