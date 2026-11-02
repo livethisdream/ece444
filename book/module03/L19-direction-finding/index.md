@@ -606,15 +606,17 @@ unweighted form is close enough.
 
 ::::{frame} The General Form
 :::{present}
-$$\begin{aligned}
-\cos\theta_1\ x - \sin\theta_1\ y &= x_1\cos\theta_1 \\
-\cos\theta_2\ x - \sin\theta_2\ y &= x_2\cos\theta_2 \\
-\cos\theta_3\ x - \sin\theta_3\ y &= x_3\cos\theta_3
-\end{aligned}$$
+$$x\cos\theta_i - y\sin\theta_i = x_i\cos\theta_i$$
 
-- $\theta_i$: station $i$'s Angle readout. Each line is one equation; together, $\mathbf A\mathbf x = \mathbf b$.
-- $\mathbf A$: the coefficients of $x$ and $y$, one row per station. $\mathbf b$: the right-hand sides.
-- No exact answer; the fix solves $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$.
+$$\begin{aligned}
+\mathbf A &= \begin{bmatrix} \cos\theta_1 & -\sin\theta_1 \\ \cos\theta_2 & -\sin\theta_2 \\ \cos\theta_3 & -\sin\theta_3 \end{bmatrix} \\
+\mathbf b &= \begin{bmatrix} x_1\cos\theta_1 \\ x_2\cos\theta_2 \\ x_3\cos\theta_3 \end{bmatrix}
+\end{aligned}$$
+:::
+:::{present}
+- $\mathbf x = (x,\ y)$: the fox, unknown; $x$ along the tape, $y$ downrange.
+- Station $i$: tape mark $x_i$, Angle readout $\theta_i$ (positive toward $+x$).
+- Solve $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$.
 :::
 
 Each station's bearing line is one linear equation in the unknown point. Its
@@ -662,15 +664,12 @@ solve them by hand.
 | $\theta_i$ | $34.6^\circ$ | $8.8^\circ$ | $-17.7^\circ$ |
 | :-- | :-- | :-- | :-- |
 | $x_i$ | $-0.75\ \text{m}$ | $0$ | $+0.75\ \text{m}$ |
-| $\cos\theta_i$ | $0.823$ | $0.988$ | $0.953$ |
-| $-\sin\theta_i$ | $-0.568$ | $-0.153$ | $0.304$ |
-| $x_i\cos\theta_i$ | $-0.617$ | $0$ | $0.714$ |
 
-- Each column is one station: $(\cos\theta_i,\ -\sin\theta_i)$ is its row of $\mathbf A$; $x_i\cos\theta_i$ is its entry of $\mathbf b$.
+$$\begin{aligned}
+\mathbf A &= \begin{bmatrix} 0.823 & -0.568 \\ 0.988 & -0.153 \\ 0.953 & 0.304 \end{bmatrix} \\
+\mathbf b &= (-0.617,\ 0,\ 0.714)^{\mathsf T}
+\end{aligned}$$
 :::
-
-$$\mathbf A = \begin{bmatrix} 0.823 & -0.568 \\ 0.988 & -0.153 \\ 0.953 & 0.304 \end{bmatrix},\quad
-\mathbf b = \begin{bmatrix} -0.617 \\ 0 \\ 0.714 \end{bmatrix}.$$
 
 Stations at $x_i = -0.75$, $0$, and $+0.75\ \text{m}$ on the tape read Angle
 $34.6^\circ$, $8.8^\circ$, and $-17.7^\circ$; each $\theta_i$ is that
@@ -681,18 +680,14 @@ coefficients of $x$ and $y$ in its line equation, and its entry of
 $\mathbf b$ is $x_i\cos\theta_i$; station 1, for example, gives
 $\cos 34.6^\circ = 0.823$, $-\sin 34.6^\circ = -0.568$, and
 $-0.75 \times 0.823 = -0.617$. Stack the three rows and the three entries and
-the system is the one written out above: three equations, two unknowns.
+the system is the one on the slide: three equations, two unknowns.
 ::::
 
-::::{frame} Three Bearings: Solve for the Fix
+::::{frame} Three Bearings: The Fix
 :::{present}
-$$\begin{aligned}
-\mathbf A^{\mathsf T}\mathbf A &= \begin{bmatrix} 2.562 & -0.329 \\ -0.329 & 0.438 \end{bmatrix} \\
-\mathbf A^{\mathsf T}\mathbf b &= \begin{bmatrix} 0.173 \\ 0.568 \end{bmatrix} \\
-\mathbf x &= (0.26,\ 1.49)\ \text{m}
-\end{aligned}$$
-
-- The box is at $(0.25,\ 1.50)\ \text{m}$. The lines miss the fix by $1.6$, $2.8$, $1.5\ \text{cm}$.
+- Solving gives the fix $(0.26,\ 1.49)\ \text{m}$; the box is at $(0.25,\ 1.50)\ \text{m}$.
+- The three lines miss the fix by $1.6$, $2.8$, and $1.5\ \text{cm}$.
+- In Python: build `A` and `b`, then `numpy.linalg.lstsq(A, b)`.
 :::
 :::{present}
 <img src="../../viz/img/L19-three-fix.svg"
@@ -700,7 +695,7 @@ $$\begin{aligned}
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Multiplying out, $\mathbf A^{\mathsf T}\mathbf A$ sums $\cos^2\theta_i$,
+To check by hand: $\mathbf A^{\mathsf T}\mathbf A$ sums $\cos^2\theta_i$,
 $-\cos\theta_i\sin\theta_i$, and $\sin^2\theta_i$ over the three stations, and
 $\mathbf A^{\mathsf T}\mathbf b$ sums $x_i\cos^2\theta_i$ and
 $-x_i\cos\theta_i\sin\theta_i$; for the first entry,
