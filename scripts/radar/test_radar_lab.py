@@ -169,6 +169,13 @@ def l30():
     fa = [d[edge].sum() for d in (d_ca, d_go, d_so)]
     ok &= check("go fewest, so most false alarms at a clutter edge", fa[1] <= fa[0] <= fa[2] and fa[1] < fa[2],
                 f"ca {fa[0]}, go {fa[1]}, so {fa[2]}")
+    # At the first and last range cells one half of the ring is empty. "so" must
+    # take the other half, not an empty half's zero (which flagged every cell
+    # of both end rows until 2026-11-02).
+    d_so, _ = rl.cfar_2d(10 * np.log10(P), 2, 4, 13, method="so")
+    ends = d_so[[0, -1]].mean()
+    ok &= check("so at the range ends: no empty-half detections", ends < 0.01,
+                f"{ends:.3f} of the end cells detected, interior {d_so[10:-10].mean():.4f}")
     hit = [h for h in hits if abs(h[0] - 30.0) < 1e-9 and h[1] == 40]
     ok &= check("target in the hit list, with axes", len(hit) == 1 and hit[0][2] > 20,
                 f"{hit[0][2]:.1f} dB over its estimate" if hit else "missing")

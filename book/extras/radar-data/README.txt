@@ -25,3 +25,10 @@ no iq_ch, 2.5 MB each; a wall at 2.5 m in every burst):
                               3 cm radius at 15 rev/s (tip speed 2.83 m/s)
 The simulated chirps are timed perfectly, so a pulse canceller removes the wall
 completely; no kit does.
+L30 (the L29 burst: 256 chirps of 300 us, PRI 0.5 ms, 4 MSPS, 500 MHz, f0 101.4 kHz;
+iq only, no iq_ch), written by scripts/radar/make_l30_data.py:
+  L30_empty.npz             noise and the kit's leakage, no target: false alarms, task (a)
+  L30_wall_hand.npz         a wall at 5.0 m and a hand waving at 2.4 m: tasks (b) and (c)
+  L30_weak_strong.npz       a strong mover at 4.2 m, +0.6 m/s, and a weak one at 3.0 m, +0.5 m/s: masking
+  L30_walker.npz            a person walking 1.0 m -> 4.5 m -> 1.0 m past a wall at 6.0 m; one chirp
+                            every 0.1 s (PRI 0.1 s), 70 display updates: Procedure B without a kit

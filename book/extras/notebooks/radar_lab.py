@@ -141,7 +141,8 @@ def cfar_2d(rd_db, guard, ref, bias_db, axes=None, method="ca"):
     averages only the cells that exist, and the Doppler axis wraps around.
     method "ca" averages the whole ring; "go" and "so" average the ring's
     nearer-range and farther-range halves separately and keep the greater or
-    the smaller. A cell is a detection when it exceeds its estimate by bias_db.
+    the smaller; where a range end leaves one half empty, the other half is
+    the estimate. A cell is a detection when it exceeds its estimate by bias_db.
 
     det is a boolean map like rd_db. hits lists (range, velocity, snr_db) for
     each detected cell, in meters and m/s when axes=(range_m, vel_mps) is passed,
@@ -162,7 +163,8 @@ def cfar_2d(rd_db, guard, ref, bias_db, axes=None, method="ca"):
         k = kernel[::-1, ::-1]                  # convolution flips; undo it
         total = signal.fftconvolve(pad(P), k, mode="valid")
         count = signal.fftconvolve(pad(np.ones_like(P)), k, mode="valid")
-        return np.maximum(total, 1e-30) / np.maximum(count, 1e-9)
+        mean = np.maximum(total, 1e-30) / np.maximum(count, 1e-9)
+        return np.where(count > 0.5, mean, np.nan)     # NaN: no reference cells at all
 
     if method == "ca":
         noise = mean_over(win)
@@ -170,7 +172,9 @@ def cfar_2d(rd_db, guard, ref, bias_db, axes=None, method="ca"):
         near, far = win.copy(), win.copy()
         near[nr:, :] = 0                        # keep the nearer-range rows
         far[:nr + 1, :] = 0                     # keep the farther-range rows
-        pick = np.maximum if method == "go" else np.minimum
+        # fmax and fmin skip a NaN half: at the first and last range cells one
+        # half holds no cells, and the other half is the whole estimate.
+        pick = np.fmax if method == "go" else np.fmin
         noise = pick(mean_over(near), mean_over(far))
     else:
         raise ValueError(f"method must be 'ca', 'go', or 'so', not {method!r}")
