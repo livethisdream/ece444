@@ -614,9 +614,9 @@ $$\begin{aligned}
 \end{aligned}$$
 :::
 :::{present}
-- $\mathbf x = (x,\ y)$: the fox, unknown; $x$ along the tape, $y$ downrange.
+- $\mathbf x = (x,\ y)$: the fox, unknown.
 - Station $i$: tape mark $x_i$, Angle readout $\theta_i$ (positive toward $+x$).
-- Solve $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$.
+- Row $i$ of $\mathbf A\mathbf x - \mathbf b$ is the miss $e_i$. The fix minimizes $\sum e_i^2$: $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$.
 :::
 
 Each station's bearing line is one linear equation in the unknown point. Its
@@ -685,9 +685,10 @@ the system is the one on the slide: three equations, two unknowns.
 
 ::::{frame} Three Bearings: The Fix
 :::{present}
-- Solving gives the fix $(0.26,\ 1.49)\ \text{m}$; the box is at $(0.25,\ 1.50)\ \text{m}$.
-- The three lines miss the fix by $1.6$, $2.8$, and $1.5\ \text{cm}$.
-- In Python: build `A` and `b`, then `numpy.linalg.lstsq(A, b)`.
+- Fix $(0.26,\ 1.49)\ \text{m}$; box at $(0.25,\ 1.50)\ \text{m}$.
+- The arrows are the residuals, $\mathbf e = \mathbf A\mathbf x - \mathbf b$: $-1.6$, $2.8$, $-1.5\ \text{cm}$.
+- All under $R_i\tan\sigma_\beta \approx 4\ \text{cm}$: three good bearings. One several times larger is an outlier.
+- Python: `numpy.linalg.lstsq(A, b)`.
 :::
 :::{present}
 <img src="../../viz/img/L19-three-fix.svg"
