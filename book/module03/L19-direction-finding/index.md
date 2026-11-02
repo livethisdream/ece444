@@ -389,6 +389,8 @@ $$\begin{aligned}
 | grid | $\theta_\text{est}$ | half a step at $30^\circ$ | $0.53^\circ$ |
 | multipath | $\theta_\text{est}$ | a weak reflection | $1.0^\circ$ |
 | noise | $\theta_\text{est}$ | $30\ \text{dB}$ SNR | $0.3^\circ$ |
+
+- In meters: $\delta_\perp = R\tan\sigma_\beta$, $0.05\ \text{m}$ at $2\ \text{m}$.
 :::
 
 Each term of $\beta = h + \theta_\text{est}$ carries an error, and the error in
@@ -402,32 +404,24 @@ step, which keeps the budget conservative. The grid, multipath, and noise
 terms make up $\sigma_\theta$, the error in the Angle readout itself, and all
 four are independent, so they add as a root sum of squares, the chain on the
 slide. Setting the heading by eye, about $3^\circ$, raises the total to $3.2^\circ$.
-::::
-
-::::{frame} Cross-Range Error
-:::{present}
-$$\delta_\perp = R\tan\sigma_\beta$$
-
-- At $\sigma_\beta = 2^\circ$ the line moves $0.03\ \text{m}$ at $1\ \text{m}$, $0.07\ \text{m}$ at $2\ \text{m}$, $0.14\ \text{m}$ at $4\ \text{m}$.
-- A bearing constrains the source across its line, not along it.
-:::
 
 A bearing error is an angle, but the fix is a position, so what matters is how
 far the error moves the line where the source is. A line rotated by
-$\sigma_\beta$ about the kit moves sideways, at range $R$, by
+$\sigma_\beta$ about the kit moves sideways, at range $R$, by the
+**cross-range error**
 
 $$\delta_\perp = R\tan\sigma_\beta.$$
 
-At $\sigma_\beta = 2^\circ$, a little worse than the taped-heading budget,
-that is $0.03\ \text{m}$ at $1\ \text{m}$, $0.07\ \text{m}$ at $2\ \text{m}$,
-and $0.14\ \text{m}$ at $4\ \text{m}$. The error grows in proportion to range,
-which is why a closer station gives a tighter line.
-
-The error is all in one direction. A bearing says nothing about how far along
-the line the source is, so its uncertainty is a narrow strip, $2\delta_\perp$
-wide at one standard deviation and unbounded along its length. The second
-bearing's strip is what limits the fix along the first one, and how well it does
-that depends on the angle between them.
+At the budget's $1.5^\circ$ that is $0.05\ \text{m}$ at $2\ \text{m}$; at
+$\sigma_\beta = 2^\circ$, a little worse, it is $0.03\ \text{m}$ at
+$1\ \text{m}$, $0.07\ \text{m}$ at $2\ \text{m}$, and $0.14\ \text{m}$ at
+$4\ \text{m}$. The error grows in proportion to range, which is why a closer
+station gives a tighter line. It is also all in one direction. A bearing says
+nothing about how far along the line the source is, so its uncertainty is a
+narrow strip, $2\delta_\perp$ wide at one standard deviation and unbounded
+along its length. A second bearing's strip is what limits the fix along the
+first one, and how well it does that depends on the angle between them, "The
+Crossing Angle" below.
 ::::
 
 ::::{frame} A Two-Bearing Fix
@@ -552,7 +546,7 @@ $\hat{\mathbf u}_i$ and $\hat{\mathbf n}_i$ reads the point's coordinates on
 axes turned by $\theta_i$, one along the bearing and one across it. In that
 frame $\hat{\mathbf u}_i\cdot(\mathbf x - \mathbf p_i)$ is how far down range
 the point is and $e_i$ is its **cross-range** coordinate, the same direction
-"Cross-Range Error" measures above. The bearing line is where that cross-range
+the cross-range error of "The Bearing Error Budget" measures. The bearing line is where that cross-range
 coordinate is zero, and least squares looks for the one point whose
 cross-range coordinate is nearly zero in every station's frame at once.
 ::::
@@ -598,40 +592,16 @@ miss, which is how "Residuals and Outliers" below finds it.
 
 Nobody solves this by hand in the fox hunt. The L19 Lab's pre-lab has you
 write it as a short Python function around `numpy.linalg.lstsq` and test it
-on a supplied set of bearings; "The General Form" below shows what that call
-computes.
+on a supplied set of bearings; "The General Form" next shows what that call
+computes, and the two frames after it work an example.
 
 Unweighted least squares treats every line as equally reliable. A bearing from
-a kit far from the source is less reliable in meters, as "Cross-Range Error"
+a kit far from the source is less reliable in meters, as the cross-range error
 showed, so if the ranges differ a lot, weighting each term by $1/r_i^2$ gives
 the better fix. In the fox hunt every bearing that counts is within about
 $\pm 45^\circ$ of broadside, so the ranges from the stations to one box differ
 by at most a factor of $\sqrt{2}$, the weights by a factor of 2, and the
 unweighted form is close enough.
-::::
-
-::::{frame} A Three-Bearing Fix
-:::{present}
-| $\theta_i$ | $34.6^\circ$ | $8.8^\circ$ | $-17.7^\circ$ |
-| :-- | :-- | :-- | :-- |
-| $x_i$ | $-0.75\ \text{m}$ | $0$ | $+0.75\ \text{m}$ |
-| $\vert e_i\vert$ | $1.6\ \text{cm}$ | $2.8\ \text{cm}$ | $1.5\ \text{cm}$ |
-
-- Fix $(0.26,\ 1.49)\ \text{m}$; box at $(0.25,\ 1.50)\ \text{m}$.
-:::
-:::{present}
-<img src="../../viz/img/L19-three-fix.svg"
-     alt="The three bearings of the worked example; magnified near the fix, arrows e1, e2, e3 run from the fix to each line, and the box sits 1 centimeter away"
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
-:::
-
-Stations at $x_i = -0.75$, $0$, and $+0.75\ \text{m}$ read Angle $34.6^\circ$,
-$8.8^\circ$, and $-17.7^\circ$. `numpy.linalg.lstsq` puts the fix at
-$(0.26,\ 1.49)\ \text{m}$, $0.01\ \text{m}$ from the box at
-$(0.25,\ 1.50)\ \text{m}$. The three lines miss the fix by $1.6$, $2.8$, and
-$1.5\ \text{cm}$, all under each station's own $R_i\tan\sigma_\beta$ of about
-$4\ \text{cm}$ at $1.5^\circ$: three good bearings (the check in "Residuals
-and Outliers" below). "The General Form" works the same numbers by hand.
 ::::
 
 ::::{frame} The General Form
@@ -642,7 +612,7 @@ $$\begin{aligned}
 \cos\theta_3\ x - \sin\theta_3\ y &= x_3\cos\theta_3
 \end{aligned}$$
 
-- Each line, $e_i = 0$, is one equation. Together: $\mathbf A\mathbf x = \mathbf b$.
+- $\theta_i$: station $i$'s Angle readout. Each line is one equation; together, $\mathbf A\mathbf x = \mathbf b$.
 - $\mathbf A$: the coefficients of $x$ and $y$, one row per station. $\mathbf b$: the right-hand sides.
 - No exact answer; the fix solves $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$.
 :::
@@ -682,12 +652,59 @@ $\mathbf A^{\mathsf T}(\mathbf A\mathbf x - \mathbf b) = \sum_i e_i\ \hat{\mathb
 They are also what setting the derivatives of $\sum_i e_i^2$ with respect to
 $x$ and $y$ to zero gives.
 
-For the three-bearing example,
+`numpy.linalg.lstsq(A, b)` solves the normal equations in one line, and the
+next two frames build $\mathbf A$ and $\mathbf b$ for three real readings and
+solve them by hand.
+::::
+
+::::{frame} Three Bearings: Build A and b
+:::{present}
+| $\theta_i$ | $34.6^\circ$ | $8.8^\circ$ | $-17.7^\circ$ |
+| :-- | :-- | :-- | :-- |
+| $x_i$ | $-0.75\ \text{m}$ | $0$ | $+0.75\ \text{m}$ |
+| $\cos\theta_i$ | $0.823$ | $0.988$ | $0.953$ |
+| $-\sin\theta_i$ | $-0.568$ | $-0.153$ | $0.304$ |
+| $x_i\cos\theta_i$ | $-0.617$ | $0$ | $0.714$ |
+
+- Each column is one station: $(\cos\theta_i,\ -\sin\theta_i)$ is its row of $\mathbf A$; $x_i\cos\theta_i$ is its entry of $\mathbf b$.
+:::
 
 $$\mathbf A = \begin{bmatrix} 0.823 & -0.568 \\ 0.988 & -0.153 \\ 0.953 & 0.304 \end{bmatrix},\quad
-\mathbf b = \begin{bmatrix} -0.617 \\ 0 \\ 0.714 \end{bmatrix},$$
+\mathbf b = \begin{bmatrix} -0.617 \\ 0 \\ 0.714 \end{bmatrix}.$$
 
-and multiplying out,
+Stations at $x_i = -0.75$, $0$, and $+0.75\ \text{m}$ on the tape read Angle
+$34.6^\circ$, $8.8^\circ$, and $-17.7^\circ$; each $\theta_i$ is that
+station's Angle readout, measured from broadside and positive toward the $+x$
+end of the tape, not a room bearing. Building the system takes three numbers
+per station. Its row of $\mathbf A$ is $\cos\theta_i$ and $-\sin\theta_i$, the
+coefficients of $x$ and $y$ in its line equation, and its entry of
+$\mathbf b$ is $x_i\cos\theta_i$; station 1, for example, gives
+$\cos 34.6^\circ = 0.823$, $-\sin 34.6^\circ = -0.568$, and
+$-0.75 \times 0.823 = -0.617$. Stack the three rows and the three entries and
+the system is the one written out above: three equations, two unknowns.
+::::
+
+::::{frame} Three Bearings: Solve for the Fix
+:::{present}
+$$\begin{aligned}
+\mathbf A^{\mathsf T}\mathbf A &= \begin{bmatrix} 2.562 & -0.329 \\ -0.329 & 0.438 \end{bmatrix} \\
+\mathbf A^{\mathsf T}\mathbf b &= \begin{bmatrix} 0.173 \\ 0.568 \end{bmatrix} \\
+\mathbf x &= (0.26,\ 1.49)\ \text{m}
+\end{aligned}$$
+
+- The box is at $(0.25,\ 1.50)\ \text{m}$. The lines miss the fix by $1.6$, $2.8$, $1.5\ \text{cm}$.
+:::
+:::{present}
+<img src="../../viz/img/L19-three-fix.svg"
+     alt="The three bearings of the worked example; magnified near the fix, arrows e1, e2, e3 run from the fix to each line, and the box sits 1 centimeter away"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+Multiplying out, $\mathbf A^{\mathsf T}\mathbf A$ sums $\cos^2\theta_i$,
+$-\cos\theta_i\sin\theta_i$, and $\sin^2\theta_i$ over the three stations, and
+$\mathbf A^{\mathsf T}\mathbf b$ sums $x_i\cos^2\theta_i$ and
+$-x_i\cos\theta_i\sin\theta_i$; for the first entry,
+$0.823^2 + 0.988^2 + 0.953^2 = 2.562$. The normal equations are
 
 $$\begin{bmatrix} 2.562 & -0.329 \\ -0.329 & 0.438 \end{bmatrix}
 \begin{bmatrix} x \\ y \end{bmatrix} =
@@ -701,9 +718,13 @@ x &= \frac{0.438 \times 0.173 + 0.329 \times 0.568}{1.014} = 0.26\ \text{m} \\
 y &= \frac{2.562 \times 0.568 + 0.329 \times 0.173}{1.014} = 1.49\ \text{m}.
 \end{aligned}$$
 
-The misses, $\mathbf A\mathbf x - \mathbf b$, are $-0.016$, $0.028$, and
-$-0.015\ \text{m}$; their signs say which side of each line the fix sits on.
-`numpy.linalg.lstsq(A, b)` does the same arithmetic in one line.
+The box was at $(0.25,\ 1.50)\ \text{m}$, so the fix lands $0.01\ \text{m}$
+from it. The misses, $\mathbf A\mathbf x - \mathbf b$, are $-0.016$, $0.028$,
+and $-0.015\ \text{m}$, all under each station's own $R_i\tan\sigma_\beta$ of
+about $0.04\ \text{m}$ at $1.5^\circ$: three good bearings (the check in
+"Residuals and Outliers" below). In Python the whole frame is two lines:
+build `A` and `b` from the readings as on the previous frame, then
+`numpy.linalg.lstsq(A, b)`.
 ::::
 
 ::::{frame} The Crossing Angle
@@ -897,7 +918,7 @@ zero.
 To judge a residual, compare it with what that bearing's own error would
 produce. $R_i$ is the distance from station $i$ to the fix, and a bearing
 error of $\sigma_\beta$ moves line $i$ sideways at the fix by
-$R_i\tan\sigma_\beta$, the cross-range error of "Cross-Range Error" above:
+$R_i\tan\sigma_\beta$, the cross-range error of "The Bearing Error Budget" above:
 about $0.05\ \text{m}$ for a station $1.5\ \text{m}$ from the fox at
 $\sigma_\beta = 2^\circ$. A good bearing's residual is about that size. One
 more than three times that size says the bearing disagrees with the rest.
