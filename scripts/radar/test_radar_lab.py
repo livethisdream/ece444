@@ -5,7 +5,8 @@
 
 Each check builds a capture with a known answer (a target's range, velocity,
 or angle; a clutter edge; a walker against a hand) and asserts the chain
-recovers it. Runs in about half a minute; no files are written.
+recovers it, and that the recorded L28 and L29 data read what their lab pages
+say. Runs in about half a minute; no files are written.
 """
 
 import sys
@@ -97,6 +98,53 @@ def l29():
         ok &= check(f"mti {kind}: wall cancelled, mover down as predicted", drop > 60 and abs(keep - n * stage) < 1.5,
                     f"wall down {drop:.0f} dB, mover down {keep:.1f} dB, predicted {n * stage:.1f}")
     ok &= check("mti keeps iq_ch in step", rl.mti(cap, "3pulse")["iq_ch"].shape[1] == cap["iq"].shape[0] - 2, "")
+    return ok
+
+
+def l29_data():
+    """The L29 Lab's recorded bursts read what the page, the notebook, and the packet say."""
+    ok = True
+    load = lambda name: rl.load_capture(DATA / f"L29_{name}.npz")
+
+    def mover(rd, r, v):
+        m = ((r > 0.3) & (r < 6))[:, None] & (np.abs(v) > 0.3)[None, :]
+        i, j = np.unravel_index(np.argmax(np.where(m, rd, -400)), rd.shape)
+        a, b, c = rd[i, j - 1], rd[i, j], rd[i, j + 1]          # the notebook's parabola
+        return r[i], v[j] + 0.5 * (a - c) / (a - 2 * b + c) * (v[1] - v[0]), rd[i, j]
+
+    for name, r0, v0 in (("hand_closing", 1.0, 1.0), ("hand_opening", 0.7, -1.5)):
+        cap = load(name)
+        ok &= check(f"{name} is a 256-chirp burst, iq only", cap["iq"].shape == (256, 1200) and "iq_ch" not in cap,
+                    f"{cap['iq'].shape}, {cap['iq'].nbytes / 1e6:.1f} MB")
+        rd, r, v = rl.range_doppler(cap)
+        rr, vv, _ = mover(rd, r, v)
+        ok &= check(f"{name}: range and velocity", abs(rr - r0) < 0.3 and abs(vv - v0) < 0.06,
+                    f"{rr:.2f} m, {vv:+.2f} m/s")
+    cap = load("hand_closing_B200")
+    r = rl.range_axis(cap)
+    ok &= check("B200 range cell", abs(r[1] - r[0] - 0.75) < 1e-9, f"{r[1] - r[0]:.2f} m")
+    # The canceller takes the closing hand down by the predicted 13.6 and 27.2 dB, and the wall into the floor.
+    cap = load("hand_closing")
+    rd, r, v = rl.range_doppler(cap)
+    _, vv, h0 = mover(rd, r, v)
+    stage = 10 * np.log10(4 * np.sin(np.pi * (2 * vv / LAM) * cap["PRI"]) ** 2)
+    iw = np.argmin(np.abs(r - 2.5))
+    for kind, n in (("2pulse", 1), ("3pulse", 2)):
+        rd2, r2, v2 = rl.range_doppler(rl.mti(cap, kind))
+        _, _, h1 = mover(rd2, r2, v2)
+        wall = rd[iw, np.argmin(np.abs(v))] - rd2[iw, np.argmin(np.abs(v2))]
+        ok &= check(f"recorded hand through {kind}", abs(h1 - h0 - n * stage) < 0.5 and wall > 60,
+                    f"hand {h1 - h0:+.1f} dB for {n * stage:+.1f}, wall down {wall:.0f} dB")
+    # The spinner: lines 3 x 15 Hz apart, the outermost within a line of the 2.83 m/s tip speed.
+    cap = load("spinner")
+    rd, r, v = rl.range_doppler(cap)
+    i = np.argmin(np.abs(r - 0.5))
+    row = rd[i] - rd[i].max()
+    lines = v[1:-1][(row[1:-1] > row[:-2]) & (row[1:-1] > row[2:]) & (row[1:-1] > -25) & (np.abs(v[1:-1]) > 0.3)]
+    gap = np.median(np.diff(lines))
+    tip = 2 * np.pi * 0.03 * 15
+    ok &= check("spinner lines and band edge", abs(gap - LAM * 45 / 2) < 0.06 and abs(lines.max() - tip) < 0.7
+                and abs(lines.min() + tip) < 0.7, f"lines {gap:.2f} m/s apart, out to {lines.min():+.2f}/{lines.max():+.2f}")
     return ok
 
 
@@ -201,7 +249,7 @@ def l31():
 
 if __name__ == "__main__":
     results = []
-    for name, fn in (("L28", l28), ("L29", l29), ("L30", l30), ("L31", l31)):
+    for name, fn in (("L28", l28), ("L29", l29), ("L29 recorded data", l29_data), ("L30", l30), ("L31", l31)):
         print(name)
         results.append(fn())
     print("all checks pass" if all(results) else "SOME CHECKS FAILED")
