@@ -34,6 +34,7 @@ One function per target type, each adding its echo to a capture in place:
     add_point(cap, r0, v, rcs, az)  a point target: plate, corner, wall (v > 0 closing)
     add_hand(cap, r0, ...)          a hand moving back and forth
     add_walker(cap, r_start, ...)   a person walking out and back, with limbs
+    add_spinner(cap, r0, ...)       a fidget spinner, edge-on: arms on a circle
 
 A new target type is one more function that builds its scatterers' ranges as a
 function of time and calls _add_scatterer for each. A new waveform is one more
@@ -43,9 +44,9 @@ sit D_SUB = 4 x 14 mm apart, so a target at az puts k D_SUB sin(az) between
 them. Each channel carries half the summed echo, so iq at broadside matches the
 L25 budget, and half the noise power, so iq's noise is NOISE_DBFS.
 
-    python3 scripts/radar/fmcw_sim.py               # the L28 sets
+    python3 scripts/radar/fmcw_sim.py               # the L28 and L29 sets
     python3 scripts/radar/fmcw_sim.py --out DIR     # somewhere else
-    -> book/extras/radar-data/L28_*.npz
+    -> book/extras/radar-data/L28_*.npz, L29_*.npz
 """
 
 from __future__ import annotations
@@ -69,7 +70,7 @@ PRESETS = {
     "l28_range": dict(fs=0.6e6, fc=10.0e9, B=500e6, T_ramp=0.5e-3,
                       PRI=50e-3, n_chirps=32, f0=101.4e3),
     # The L29-L31 range-Doppler burst: 256 chirps of 300 us, PRI 0.5 ms,
-    # 4 MSPS (11.1 kHz per meter, CPI 128 ms). Provisional until the L29 pass.
+    # 4 MSPS (11.1 kHz per meter, CPI 128 ms; 1200 samples a chirp).
     "l29_burst": dict(fs=4.0e6, fc=10.0e9, B=500e6, T_ramp=300e-6,
                       PRI=0.5e-3, n_chirps=256, f0=101.4e3),
 }
@@ -195,11 +196,35 @@ def add_walker(cap: dict, r_start: float = 1.0, r_turn: float = 4.0,
                        rng.uniform(0, 6.28), az)
 
 
-def save(cap: dict, path: Path, note: str) -> Path:
-    """Write a capture in the contract's .npz format: iq and iq_ch as complex64."""
+def add_spinner(cap: dict, r0: float = 0.5, radius: float = 0.03,
+                rev_hz: float = 15.0, n_arms: int = 3, rcs_arm: float = 1e-3,
+                rcs_hub: float = 0.02, az: float = 0.0) -> None:
+    """A fidget spinner held edge-on, its plane of rotation along the line of sight.
+
+    The hub, and the hand holding it, sit still at r0 (rcs_hub). n_arms
+    equal weights turn on a circle of the given radius at rev_hz revolutions
+    a second, so each arm's range swings radius cos(2 pi rev_hz t + 2 pi k /
+    n_arms) about r0 and its radial speed reaches the tip speed 2 pi radius
+    rev_hz either way: a band of Doppler out to +/- the tip speed, in lines
+    n_arms rev_hz apart, since the arms are identical. A fan is the same
+    target with more arms, a larger radius, and a slower turn.
+    """
+    _, t = _times(cap)
+    _add_scatterer(cap, np.full_like(t, r0), echo_dbfs(cap, r0, rcs_hub), phase0=0.9, az=az)
+    for k in range(n_arms):
+        r_t = r0 + radius * np.cos(2 * np.pi * rev_hz * t + 2 * np.pi * k / n_arms)
+        _add_scatterer(cap, r_t, echo_dbfs(cap, r_t, rcs_arm), az=az)
+
+
+def save(cap: dict, path: Path, note: str, channels: bool = True) -> Path:
+    """Write a capture in the contract's .npz format: iq and iq_ch as complex64.
+
+    channels=False leaves iq_ch out, halving the file; L29 captures do that
+    to stay small (a 256-chirp burst is 2.5 MB with iq alone).
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
-    np.savez(path, iq=iq(cap).astype(np.complex64),
-             iq_ch=cap["iq_ch"].astype(np.complex64),
+    extra = dict(iq_ch=cap["iq_ch"].astype(np.complex64)) if channels else {}
+    np.savez(path, iq=iq(cap).astype(np.complex64), **extra,
              fs=cap["fs"], fc=cap["fc"], B=cap["B"], T_ramp=cap["T_ramp"],
              PRI=cap["PRI"], f0=cap["f0"], note=np.str_(note))
     return path
@@ -252,11 +277,63 @@ def l28_sets(out: Path = OUT) -> list[Path]:
     return written
 
 
+# The L29 Lab's scene: the room, plus a wall 2.5 m in front of the kit, the
+# strong static return the MTI procedure removes. The hand speeds are the
+# lesson's 1.0 m/s closing (-13.6 dB through the 2-pulse canceller) and a
+# 1.5 m/s opening; the spinner's tip speed is 2 pi (0.03 m)(15 rev/s) = 2.83 m/s.
+L29_WALL = dict(r0=2.5, rcs=5.0, phase0=2.6)
+L29_HAND_CLOSE = dict(r0=1.0, v=+1.0, rcs=0.02, phase0=1.3)
+L29_HAND_OPEN = dict(r0=0.7, v=-1.5, rcs=0.02, phase0=1.3)
+L29_SPINNER = dict(r0=0.5, radius=0.03, rev_hz=15.0, n_arms=3)
+
+
+def l29_room(cap: dict) -> None:
+    """The L28 room plus the L29 wall."""
+    room(cap)
+    add_point(cap, **L29_WALL)
+
+
+def l29_sets(out: Path = OUT) -> list[Path]:
+    """The L29 Lab's recorded data: 256-chirp bursts, iq only, about 2.5 MB each."""
+    written = []
+    burst = "256 chirps of 300 us every 0.5 ms, 4 MSPS"
+
+    cap = new_capture("l29_burst")
+    l29_room(cap)
+    written.append(save(cap, out / "L29_static.npz",
+                        f"L29 Lab recorded data: no mover, the leakage and a wall at 2.5 m; {burst}, B 500 MHz",
+                        channels=False))
+
+    for tag, kw, words in (("closing", L29_HAND_CLOSE, "from 1.0 m toward the kit at 1.0 m/s"),
+                           ("opening", L29_HAND_OPEN, "from 0.7 m away from the kit at 1.5 m/s")):
+        cap = new_capture("l29_burst")
+        l29_room(cap)
+        add_point(cap, **kw)
+        written.append(save(cap, out / f"L29_hand_{tag}.npz",
+                            f"L29 Lab recorded data: a hand moving {words}, the wall at 2.5 m; {burst}, B 500 MHz",
+                            channels=False))
+
+    cap = new_capture("l29_burst", B=200e6)
+    l29_room(cap)
+    add_point(cap, **L29_HAND_CLOSE)
+    written.append(save(cap, out / "L29_hand_closing_B200.npz",
+                        f"L29 Lab recorded data: the closing hand at B 200 MHz; {burst}",
+                        channels=False))
+
+    cap = new_capture("l29_burst")
+    l29_room(cap)
+    add_spinner(cap, **L29_SPINNER)
+    written.append(save(cap, out / "L29_spinner.npz",
+                        "L29 Lab recorded data: a fidget spinner held edge-on at 0.5 m, three arms on a "
+                        f"3 cm radius at 15 rev/s; {burst}, B 500 MHz", channels=False))
+    return written
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--out", type=Path, default=OUT, help="output directory")
     args = ap.parse_args()
-    for p in l28_sets(args.out):
+    for p in l28_sets(args.out) + l29_sets(args.out):
         print(f"wrote {p.relative_to(ROOT) if p.is_relative_to(ROOT) else p} "
               f"({p.stat().st_size / 1e3:.0f} kB)")
 
