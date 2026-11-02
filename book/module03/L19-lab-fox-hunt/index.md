@@ -172,6 +172,10 @@ the level by several dB.
 6. Press **Start**, and check the **FFT** tab for one tone near $0\ \text{MHz}$, at least $20\ \text{dB}$ above the floor.
 :::
 
+<div class="rec" data-lab="L19">
+<label>Step 3: your own HB100's Signal Freq <input data-field="f.own"></label>
+</div>
+
 This is the L18 Lab's bring-up. Calibrate needs your own HB100 at boresight
 while it runs; it is the only time today a source sits there on purpose. The
 kit stays on its stand for every reading, pointed at the boxes with its element
@@ -197,6 +201,12 @@ each Angle before you trust the fix, as Lesson 19's "The Cone Angle" shows.
 11. When the hunt starts, press **Find HB100** again and record the fox's Signal Freq. Do not press **Calibrate**.
 :::
 
+<div class="rec" data-lab="L19">
+<label>Step 9: Angle, source toward +x <input data-field="ref.angle"></label>
+<label>Step 9: the sign s <input data-field="ref.s"></label>
+<label>Step 11: the fox's Signal Freq, after re-tune <input data-field="f.fox"></label>
+</div>
+
 The reference shot checks two things. The sign gives $s$, which you apply to
 every reading so that $s\,\theta$ is positive toward $+x$; the size checks the
 setup, since $\tan^{-1}(0.5/1.0) = 26.6^\circ$. A reading far from that means
@@ -218,6 +228,30 @@ kit to it. Keep the calibration from bring-up.
 15. Repeat at every station that detects the fox, ends first.
 16. Write each row as $x_i$, $s\,\bar\theta_i$, Peak Gain into `stations.csv`.
 :::
+
+<div class="rec" data-lab="L19">
+<label>Step 12: Rx Gain for the hunt <input data-field="f.gain"></label>
+<label>Station −1.5 m: s times the mean Angle <input data-field="h.m150.theta"></label>
+<label>Station −1.5 m: spread <input data-field="h.m150.spread"></label>
+<label>Station −1.5 m: Peak Gain <input data-field="h.m150.gain"></label>
+<label>Station −1.5 m: use it? <input data-field="h.m150.use"></label>
+<label>Station −0.75 m: s times the mean Angle <input data-field="h.m075.theta"></label>
+<label>Station −0.75 m: spread <input data-field="h.m075.spread"></label>
+<label>Station −0.75 m: Peak Gain <input data-field="h.m075.gain"></label>
+<label>Station −0.75 m: use it? <input data-field="h.m075.use"></label>
+<label>Station 0.0 m: s times the mean Angle <input data-field="h.0.theta"></label>
+<label>Station 0.0 m: spread <input data-field="h.0.spread"></label>
+<label>Station 0.0 m: Peak Gain <input data-field="h.0.gain"></label>
+<label>Station 0.0 m: use it? <input data-field="h.0.use"></label>
+<label>Station +0.75 m: s times the mean Angle <input data-field="h.p075.theta"></label>
+<label>Station +0.75 m: spread <input data-field="h.p075.spread"></label>
+<label>Station +0.75 m: Peak Gain <input data-field="h.p075.gain"></label>
+<label>Station +0.75 m: use it? <input data-field="h.p075.use"></label>
+<label>Station +1.5 m: s times the mean Angle <input data-field="h.p150.theta"></label>
+<label>Station +1.5 m: spread <input data-field="h.p150.spread"></label>
+<label>Station +1.5 m: Peak Gain <input data-field="h.p150.gain"></label>
+<label>Station +1.5 m: use it? <input data-field="h.p150.use"></label>
+</div>
 
 Take the end stations first: they set the baseline, and the baseline sets the
 depth error. Stay out of the line of sight while the kit is reading; a person
@@ -241,12 +275,37 @@ of them.
 20. Record the live box after the reveal, then press **Stop**.
 :::
 
+<div class="rec" data-lab="L19">
+<label>Step 17: the fix (m) <input data-field="call.fix"></label>
+<label>Step 17: largest residual <input data-field="call.resid"></label>
+<label>Step 18: station dropped <input data-field="call.dropped"></label>
+<label>Step 19: the box you named <input data-field="call.named"></label>
+<label>Step 20: the live box <input data-field="call.live"></label>
+</div>
+
 `boxes.csv` holds the posted box centers. Your script fixes the source from the
 bearings alone, ranks the boxes by distance from the fix, and, when the two
 nearest are within $0.15\ \text{m}$ of each other in distance, uses the amplitude
 pattern to choose between them. The call is your team's, made in class from your
 own data. The Part 3 writeup compares your fix with the live box and asks what
 changes with the baseline and the depth.
+::::
+
+::::{frame} Your Part 2 Entries
+:class: read-only
+
+Every box you filled in on this page, in one place. Your entries stay in this
+browser only, saved as you type. **Download my packet** writes them into Part 2
+of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
+viewer, and upload one PDF to Gradescope. If you have already typed Part 1 into
+the packet PDF, use **Fill my own copy** and choose that file instead: your Part 1
+is kept, and Part 2 is added to it. Either way the result is locked, so finish
+any typing in the PDF first. **Export entries** saves a small backup file you
+can **Import** on another laptop or after clearing your browser. The boxes are
+optional: the blank packet is in the next frame, to fill on paper or in a PDF
+viewer instead.
+
+<div class="rec-summary" data-lab="L19" data-pdf="../../labs/ECE444_Lab_L19_FoxHunt_blank.pdf" data-file="ECE444_L19_Lab"></div>
 ::::
 
 ::::{frame} Lab Packet

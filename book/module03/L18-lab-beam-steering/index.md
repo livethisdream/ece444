@@ -311,6 +311,10 @@ positive.
 9. Open the **Rectangular** tab.
 :::
 
+<div class="rec" data-lab="L18">
+<label>Step 3: Signal Freq after <b>Find HB100</b> <input data-field="freq"></label>
+</div>
+
 This is Lesson 17's order, for the same reason: **Calibrate** reads the frequency
 that **Find HB100** stores, and it needs the source at boresight while it runs,
 or it bakes a steering ramp into the calibration offsets. The pill sits at the
@@ -342,6 +346,22 @@ within about $\pm 1\ \text{MHz}$. If it is buried, re-aim the HB100 or press
 14. Move it to $+45^\circ$ and record the same two. If **Angle** jumps to about $-90^\circ$, read the main lobe's angle off the trace and record that.
 15. Move the HB100 straight out to $1.2\ \text{m}$ (4 ft) or more on the $+45^\circ$ line and record **Peak Gain**; repeat on the $+30^\circ$ and $0^\circ$ lines at the same distance.
 :::
+
+<div class="rec" data-lab="L18">
+<label>Table A, source at 0°: Angle <input data-field="a.0.angle"></label>
+<label>Table A, source at 0°: difference from the arc angle <input data-field="a.0.diff"></label>
+<label>Table A, source at 0°: half-power beamwidth <input data-field="a.0.hpbw"></label>
+<label>Table A, source at 0°: Peak Gain <input data-field="a.0.gain"></label>
+<label>Table A, source at 30°: Angle <input data-field="a.30.angle"></label>
+<label>Table A, source at 30°: difference from the arc angle <input data-field="a.30.diff"></label>
+<label>Table A, source at 30°: half-power beamwidth <input data-field="a.30.hpbw"></label>
+<label>Table A, source at 30°: Peak Gain <input data-field="a.30.gain"></label>
+<label>Table A, source at 45°: Angle <input data-field="a.45.angle"></label>
+<label>Table A, source at 45°: difference from the arc angle <input data-field="a.45.diff"></label>
+<label>Table A, source at 45°: half-power beamwidth <input data-field="a.45.hpbw"></label>
+<label>Table A, source at 45°: Peak Gain <input data-field="a.45.gain"></label>
+<label>Table A: distance for the Peak Gain column <input data-field="a.dist"></label>
+</div>
 
 Read the half-power beamwidth as the distance between the two angles where the
 trace falls $3\ \text{dB}$ below its own peak. The sweep runs continuously and
@@ -388,6 +408,45 @@ same kit read $-1.0$ dB there, less than even the ideal $-1.5$ dB.
 20. Repeat for 45; if **Angle** jumps to about $-90^\circ$, record the main lobe's angle off the trace, as in Step 14.
 21. Press **Reset** under **Phase Control** before you leave the station.
 :::
+
+<div class="rec" data-lab="L18">
+<label>Table B, Apply 15: Angle <input data-field="b.15.angle"></label>
+<label>Table B, Apply 15: difference from the Apply value <input data-field="b.15.diff"></label>
+<label>Table B, Apply 15: half-power beamwidth <input data-field="b.15.hpbw"></label>
+<label>Table B, Apply 15: Peak Gain <input data-field="b.15.gain"></label>
+<label>Table B, Apply 30: Angle <input data-field="b.30.angle"></label>
+<label>Table B, Apply 30: difference from the Apply value <input data-field="b.30.diff"></label>
+<label>Table B, Apply 30: half-power beamwidth <input data-field="b.30.hpbw"></label>
+<label>Table B, Apply 30: Peak Gain <input data-field="b.30.gain"></label>
+<label>Table B, Apply 45: Angle <input data-field="b.45.angle"></label>
+<label>Table B, Apply 45: difference from the Apply value <input data-field="b.45.diff"></label>
+<label>Table B, Apply 45: half-power beamwidth <input data-field="b.45.hpbw"></label>
+<label>Table B, Apply 45: Peak Gain <input data-field="b.45.gain"></label>
+<label>Phase Control, E1: predicted (your Question 2(a)) <input data-field="pc.pred.1"></label>
+<label>Phase Control, E2: predicted (your Question 2(a)) <input data-field="pc.pred.2"></label>
+<label>Phase Control, E3: predicted (your Question 2(a)) <input data-field="pc.pred.3"></label>
+<label>Phase Control, E4: predicted (your Question 2(a)) <input data-field="pc.pred.4"></label>
+<label>Phase Control, E5: predicted (your Question 2(a)) <input data-field="pc.pred.5"></label>
+<label>Phase Control, E6: predicted (your Question 2(a)) <input data-field="pc.pred.6"></label>
+<label>Phase Control, E7: predicted (your Question 2(a)) <input data-field="pc.pred.7"></label>
+<label>Phase Control, E8: predicted (your Question 2(a)) <input data-field="pc.pred.8"></label>
+<label>Phase Control, E1: read back <input data-field="pc.read.1"></label>
+<label>Phase Control, E2: read back <input data-field="pc.read.2"></label>
+<label>Phase Control, E3: read back <input data-field="pc.read.3"></label>
+<label>Phase Control, E4: read back <input data-field="pc.read.4"></label>
+<label>Phase Control, E5: read back <input data-field="pc.read.5"></label>
+<label>Phase Control, E6: read back <input data-field="pc.read.6"></label>
+<label>Phase Control, E7: read back <input data-field="pc.read.7"></label>
+<label>Phase Control, E8: read back <input data-field="pc.read.8"></label>
+<label>Phase Control, E1: difference <input data-field="pc.diff.1"></label>
+<label>Phase Control, E2: difference <input data-field="pc.diff.2"></label>
+<label>Phase Control, E3: difference <input data-field="pc.diff.3"></label>
+<label>Phase Control, E4: difference <input data-field="pc.diff.4"></label>
+<label>Phase Control, E5: difference <input data-field="pc.diff.5"></label>
+<label>Phase Control, E6: difference <input data-field="pc.diff.6"></label>
+<label>Phase Control, E7: difference <input data-field="pc.diff.7"></label>
+<label>Phase Control, E8: difference <input data-field="pc.diff.8"></label>
+</div>
 
 Apply also rewrites **Element Gains** with the chosen taper, so leave it on
 Uniform. The offsets stay loaded until you press Reset, and they add to every
@@ -518,6 +577,23 @@ worth seeing once as a preview of Lesson 23's beam squint: phases set for
 $10.525\ \text{GHz}$ and observed at $10.325\ \text{GHz}$ point a $30^\circ$ beam
 $0.6^\circ$ farther out, and a $45^\circ$ beam $1.1^\circ$ farther.
 :::
+::::
+
+::::{frame} Your Part 2 Entries
+:class: read-only
+
+Every box you filled in on this page, in one place. Your entries stay in this
+browser only, saved as you type. **Download my packet** writes them into Part 2
+of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
+viewer, and upload one PDF to Gradescope. If you have already typed Part 1 into
+the packet PDF, use **Fill my own copy** and choose that file instead: your Part 1
+is kept, and Part 2 is added to it. Either way the result is locked, so finish
+any typing in the PDF first. **Export entries** saves a small backup file you
+can **Import** on another laptop or after clearing your browser. The boxes are
+optional: the blank packet is in the next frame, to fill on paper or in a PDF
+viewer instead.
+
+<div class="rec-summary" data-lab="L18" data-pdf="../../labs/ECE444_Lab_L18_Steering_blank.pdf" data-file="ECE444_L18_Lab"></div>
 ::::
 
 ::::{frame} Lab Packet
