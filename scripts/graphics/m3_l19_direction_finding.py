@@ -590,9 +590,11 @@ def fig_cone() -> None:
     a1.set_ylim(-0.62, 1.15)
     a1.set_aspect("equal")
     a1.axis("off")
-    for ax_, lab in ((a0, "side view"), (a1, "top view")):
-        fig.text(ax_.get_position().x0, 0.97, lab, fontsize=13, color=INK, weight="bold",
-                 ha="left", va="top")
+    for ax_, lab, sub in ((a0, "Side view", "looking along the array"),
+                          (a1, "Top view", "looking down from above")):
+        x0 = ax_.get_position().x0
+        fig.text(x0, 1.06, lab, fontsize=14, color=INK, weight="bold", ha="left", va="bottom")
+        fig.text(x0, 1.05, sub, fontsize=12, color=GRAY, ha="left", va="top")
     finalize(fig, "L19-cone")
 
 
