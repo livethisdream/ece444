@@ -264,6 +264,16 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
   the hardware). So each lab page carries a short setup (Python with numpy,
   scipy, matplotlib and Jupyter) and how a capture saved in the Phaser app
   reaches the laptop.
+- **A complete simulation track** (Neil, 2026-11-02: one student runs the
+  whole final project on the simulation files). Every lab's No Hardware?
+  frame maps **every** procedure, GUI steps included, to a recorded capture
+  and a notebook cell, and every packet row is completable on recorded data,
+  with the key giving the recorded-data values. The packet keeps "say which
+  results are recorded". The final-project rubric applies unchanged; for that
+  student the report's analysis is of simulated data, and gaps the
+  simulation cannot show (real clutter, timing error, a kit's own f0) are
+  hers to discuss, not penalties. L28 and L29 meet this; L30 is being
+  extended (#185); L31's brief carries it.
 - **Shared code contract** (2026-10-27, so the labs chain though written in
   parallel). The provided module, `radar_lab.py`, holds the chain; one capture
   format, an `.npz` with `iq` (complex, `n_chirps × n_samples`, the summed
