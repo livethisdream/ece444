@@ -536,7 +536,7 @@ def fig_cone() -> None:
     Side view (looking along the array): a level source and one 31 deg below
     it (a kit 0.9 m above a box 1.5 m out), both at unit distance; the low one
     reaches only cos(31 deg) = 0.86 out horizontally. Top view (from above):
-    both at 30 deg on the floor plan, the low one's shadow shorter by that
+    both at 30 deg on the floor plan, the low one's horizontal projection shorter by that
     0.86. The array reads the part along its own row, sin(az) cos(el): 0.500
     for the level source, 0.429 for the low one, which is 30.0 and 25.4 deg."""
     v = numbers()
@@ -568,7 +568,7 @@ def fig_cone() -> None:
     a0.set_aspect("equal")
     a0.axis("off")
     # top view: the array along x, broadside up. The box is 30 deg off
-    # broadside; its shadow on the floor plane is 0.86 long, so its part along
+    # broadside; its horizontal projection is 0.86 long, so its part along
     # the row is 0.429. A level source at 25.4 deg has that same 0.429 along
     # the row, which is why the kit reports 25.4: both tips sit on one vertical.
     a1.plot([-0.35, 0.35], [0, 0], color=NAVY, lw=6, solid_capstyle="butt")
@@ -577,26 +577,26 @@ def fig_cone() -> None:
     a1.text(-0.04, 1.25, "broadside", color=GRAY, fontsize=12, ha="right", va="center")
     L = 1.3                                   # drawn long so the two rays separate
     true_tip = L * np.array([np.sin(az), np.cos(az)])
-    shadow = ce * true_tip
+    proj = ce * true_tip
     rd = np.arcsin(along[1])
     read_tip = L * np.array([np.sin(rd), np.cos(rd)])
-    assert np.isclose(shadow[0], read_tip[0])
+    assert np.isclose(proj[0], read_tip[0])
     a1.annotate("", xy=true_tip, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=GRAY, lw=1.4,
                 mutation_scale=11, shrinkA=0, shrinkB=0))
     a1.plot(*np.stack([(0, 0), read_tip]).T, color=RED, lw=1.4, ls="--")
-    a1.annotate("", xy=shadow, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=RED, lw=2.0,
+    a1.annotate("", xy=proj, xytext=(0, 0), arrowprops=dict(arrowstyle="-|>", color=RED, lw=2.0,
                 mutation_scale=11, shrinkA=0, shrinkB=0))
-    a1.plot([shadow[0], shadow[0]], [0, read_tip[1]], color=RED, lw=0.9, ls=":")
+    a1.plot([proj[0], proj[0]], [0, read_tip[1]], color=RED, lw=0.9, ls=":")
     a1.plot([true_tip[0], true_tip[0]], [0, true_tip[1]], color=GRAY, lw=0.9, ls=":")
     a1.text(true_tip[0] + 0.04, true_tip[1], "box at 30\u00b0", color=GRAY, fontsize=12,
             ha="left", va="center")
     a1.text(read_tip[0] - 0.02, read_tip[1] + 0.04, f"kit reads {v['cone_30']:.1f}\u00b0", color=RED,
             fontsize=12, ha="center", va="bottom")
-    a1.text(shadow[0] * 0.5 + 0.08, shadow[1] * 0.5 - 0.04, "box's shadow", color=RED,
-            fontsize=12, ha="left", va="center")
-    a1.text(shadow[0] - 0.01, -0.08, f"{along[1]:.3f}", color=RED, fontsize=12, ha="right", va="top")
+    a1.text(proj[0] * 0.5 + 0.08, proj[1] * 0.5 - 0.04, f"horizontal\nprojection {ce:.2f}", color=RED,
+            fontsize=12, ha="left", va="center", linespacing=1.1)
+    a1.text(proj[0] - 0.01, -0.08, f"{along[1]:.3f}", color=RED, fontsize=12, ha="right", va="top")
     a1.text(true_tip[0] + 0.01, -0.08, f"{along[0]:.3f}", color=GRAY, fontsize=12, ha="left", va="top")
-    a1.text((shadow[0] + true_tip[0]) / 2, -0.27, "along the row", color=INK, fontsize=12,
+    a1.text((proj[0] + true_tip[0]) / 2, -0.27, "along the row", color=INK, fontsize=12,
             ha="center", va="top")
     a1.set_xlim(-0.55, 1.45)
     a1.set_ylim(-0.42, 1.45)

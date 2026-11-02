@@ -190,7 +190,8 @@ z
     <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #b01e24" x="250.834149" y="81.294572" transform="rotate(-0 250.834149 81.294572)">kit reads 25.4°</text>
    </g>
    <g id="text_10">
-    <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #b01e24" x="235.733556" y="153.774982" transform="rotate(-0 235.733556 153.774982)">box's shadow</text>
+    <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #b01e24" transform="translate(235.733556 145.856506)">horizontal</text>
+    <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #b01e24" transform="translate(235.733556 160.679553)">projection 0.86</text>
    </g>
    <g id="text_11">
     <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #b01e24" x="251.679244" y="205.207592" transform="rotate(-0 251.679244 205.207592)">0.429</text>
