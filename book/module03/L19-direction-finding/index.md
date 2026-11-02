@@ -426,19 +426,20 @@ Crossing Angle" below.
 
 ::::{frame} A Two-Bearing Fix
 :::{present}
-- Origin at the middle of the tape: $x$ along it, $y$ downrange.
-- $\theta_i$ is positive toward $+x$.
+- Origin mid-tape, $x$ along it, $y$ downrange; $\theta_i$ is positive toward $+x$
+- The fox is on both lines: set their $x$ values equal, solve for $y$.
 
 $$\begin{aligned}
 \tan\theta_i &= \frac{x - x_i}{y} \\
 x &= x_i + y\tan\theta_i \\
-y &= \frac{x_B - x_A}{\tan\theta_A - \tan\theta_B} = 1.73\ \text{m}
+x_A + y\tan\theta_A &= x_B + y\tan\theta_B \\
+y &= \frac{x_B - x_A}{\tan\theta_A - \tan\theta_B}
 \end{aligned}$$
 :::
 :::{present}
 <img src="../../viz/img/L19-two-bearings.svg"
      alt="A firing line with station marks every half meter; stations A at x = -1 m and B at x = +1 m face straight downrange, and their bearing lines at +36.6 and -22.4 degrees cross at the fix, inside the box at (0.25, 1.75) m"
-     style="max-width: 300px; width: 100%; display: block; margin: 0 auto;">
+     style="max-width: 300px; width: 58%; display: block; margin: 0 auto;">
 :::
 
 On the L19 Lab's firing range every station faces straight downrange, so all
