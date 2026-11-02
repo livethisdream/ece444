@@ -367,7 +367,7 @@ The L28–L31 Labs are the scaffolding for the final project, a report on the ra
 - **L30** CFAR Processing
   - **L30 Lab** — CFAR Processing
 - **L31** Classification and Tracking — micro-Doppler classification, range and angle tracking
-  - **L31 Lab** — Micro-Doppler Spectrogram
+  - **L31 Lab** — Micro-Doppler Classification and Dismount Tracking
 
 ## Textbooks & materials
 

@@ -186,7 +186,7 @@ needs its rubric, published with the L28 Lab packet.
 | L28 | FMCW on the Phaser, with the L28 Lab: FMCW Range (range and waterfall) |
 | L29 | Range-Doppler and MTI, with the L29 Lab (adds the spectrogram) |
 | L30 | CFAR Processing, with the L30 Lab |
-| L31 | Classification and Tracking, with the L31 Lab: Micro-Doppler Spectrogram |
+| L31 | Classification and Tracking, with the L31 Lab: Micro-Doppler Classification and Dismount Tracking |
 | Final Project | Radar Systems Report: one report on the L28–L31 Labs, in the cadet's words (`module04/final-project`) |
 
 **Module 4 outlines** (Neil approved, 2026-10-25). Each lesson thread writes
