@@ -5,7 +5,7 @@ Each capture is one burst of the l29_burst waveform in scripts/radar/fmcw_sim.py
 (256 chirps of 300 us, PRI 0.5 ms, 4 MSPS, B 500 MHz, 10 GHz), the same
 waveform as the L29 Lab's maps, built only from fmcw_sim's own functions so
 this script never needs the simulator changed. Each file holds `iq` only (no
-`iq_ch`: CFAR needs no angle), about 2.5 MB:
+`iq_ch`: CFAR needs no angle), at most 2.5 MB:
 
     L30_empty.npz        noise and the kit's own leakage: no target. Every
                          detection away from 0 m and 0 m/s is a false alarm.
@@ -17,6 +17,10 @@ this script never needs the simulator changed. Each file holds `iq` only (no
     L30_weak_strong.npz  a strong mover at 4.2 m and a weak one 1.2 m nearer,
                          four range cells apart, at nearly the same velocity:
                          the masking case.
+    L30_walker.npz       a person walking 1.0 m -> 4.5 m -> 1.0 m past a wall at
+                         6.0 m, one chirp every 0.1 s for 7 s: the app's
+                         range spectrum, one update a chirp (0.7 MB). The
+                         no-kit stand-in for Procedure B.
 
     python3 scripts/radar/make_l30_data.py           # write the three files
     python3 scripts/radar/make_l30_data.py --check   # and assert the numbers the
@@ -45,6 +49,7 @@ WALL_R, WALL_RCS = 5.0, 5.0                     # a wall face, square to the bea
 HAND_R = 2.4                                    # the hand's mean range
 STRONG = dict(r0=4.2, v=0.6, rcs=0.5)           # about a person's torso
 WEAK = dict(r0=3.0, v=0.5, rcs=0.02)            # about a hand
+WALK_PRI, WALK_N, WALK_WALL_R = 0.1, 70, 6.0     # the walker: one chirp per display update
 
 
 def _save(cap: dict, path: Path, note: str) -> Path:
@@ -84,6 +89,18 @@ def l30_sets(out: Path = OUT) -> list[Path]:
                          f"L30 Lab recorded data: a strong mover at {STRONG['r0']:.1f} m, "
                          f"{STRONG['v']:+.1f} m/s and a weak one at {WEAK['r0']:.1f} m, "
                          f"{WEAK['v']:+.1f} m/s, one 256-chirp burst"))
+    # The app's view, one chirp a display update: a walker out and back past a
+    # far wall. The L29 chirp (300 us at 4 MSPS), one kept every 0.1 s, as the
+    # L28 recorded waterfall keeps one every 50 ms; 70 updates, 7 s.
+    cap = sim.new_capture("l29_burst", PRI=WALK_PRI, n_chirps=WALK_N)
+    sim.add_noise(cap, seed=3004)
+    sim.add_leakage(cap)
+    sim.add_point(cap, WALK_WALL_R, rcs=WALL_RCS, phase0=0.4)
+    sim.add_walker(cap, r_start=1.0, r_turn=4.5, speed=1.0)
+    written.append(_save(cap, out / "L30_walker.npz",
+                         f"L30 Lab recorded data: a person walking 1.0 m -> 4.5 m -> 1.0 m at 1 m/s, "
+                         f"a wall at {WALK_WALL_R:.1f} m; one 300 us chirp every {WALK_PRI:.1f} s, "
+                         f"{WALK_N} updates"))
     return written
 
 
@@ -149,6 +166,50 @@ def check(out: Path = OUT) -> bool:
     # The detection list: after the 2-pulse canceller, the hand and one false alarm.
     expect("detection list, (range, velocity, cells)", clusters(wall_hand, "ca", mti=True),
            [(2.57, -0.82, 10), (10.97, -1.65, 1)])
+    # Procedures A-C without a kit: CFAR along one chirp's range profile, the
+    # app's overlay, at the key's setting of 1 guard and 4 reference cells a side.
+    def threshold_1d(p_db, guard, ref, bias):
+        _, hits = rl.cfar_2d(p_db[:, None], (guard, 0), (ref, 0), -np.inf)
+        snr = np.array([h[2] for h in hits])
+        return p_db - snr + bias, snr > bias
+
+    def crossings(det, r):
+        e = np.flatnonzero(np.diff(np.r_[0, det.astype(int), 0]))
+        return [(r[a] + r[b - 1]) / 2 for a, b in zip(e[::2], e[1::2])]
+
+    r, p = rl.range_profile(wall_hand, chirp=0)
+    band = (r > 1.5) & (r < 3.5)
+    ih = np.flatnonzero(band)[np.argmax(p[band])]
+    objects = (r < 0.6) | (np.abs(r - r[ih]) < 0.6) | (np.abs(r - 5.0) < 0.6)
+    got = []
+    for g, ref, b in ((2, 16, 12.4), (1, 4, 13.4), (0, 4, 13.4)):
+        thr, _ = threshold_1d(p, g, ref, b)
+        got.append((round(float(p[ih] - thr[ih]), 1), round(float(np.max((p - thr)[~objects])), 1)))
+    expect("procedure A: hand and noise margins, lesson window / key / no guard", got,
+           [(-23.2, -2.9), (2.6, -2.1), (-3.6, -5.8)])
+
+    walker = rl.load_capture(out / "L30_walker.npz")
+    got = []
+    for b in (13.4, 16.4):
+        found = others = 0
+        far = 0.0
+        for k in range(walker["iq"].shape[0]):
+            r, p = rl.range_profile(walker, chirp=k)
+            xs = [x for x in crossings(threshold_1d(p, 1, 4, b)[1], r)
+                  if not (x <= 0.6 or 5.4 <= x <= 6.6)]
+            near = [x for x in xs if x < 5.4]
+            found += bool(near); others += bool(set(xs) - set(near)); far = max([far] + near)
+        got.append((found, round(far, 2), others))
+    expect("procedure B: walker updates, farthest, other updates", got, [(49, 4.07, 4), (44, 4.07, 0)])
+
+    got = []
+    for b in (13.4, 10.4, 7.4):
+        hits = 0
+        for k in range(30):
+            r, p = rl.range_profile(empty, chirp=k)
+            hits += any(x > 1.0 for x in crossings(threshold_1d(p, 1, 4, b)[1], r))
+        got.append(hits)
+    expect("procedure C: updates of 30 with a crossing", got, [2, 23, 30])
     return ok
 
 

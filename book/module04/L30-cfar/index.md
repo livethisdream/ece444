@@ -383,17 +383,17 @@ The course's Phaser app runs the radar in its FMCW mode, and its CFAR threshold 
 :class: read-only
 
 ```{note}
-If your kit will not produce a clean capture, or the app's overlay is not
-available, use the course's recorded data: the notebook runs on it as
-shipped, and the packet marks which rows can come from it. The files are
-single bursts of the L29 waveform from a simulation of the PHASER at the
-course's settings, with a kit whose 0 m frequency is 101.4 kHz, and they
-hold `iq` only. Say in your packet which results are recorded rather than
-your own.
+The whole lab can be done without a kit. The course's recorded data and the
+notebook stand in for every procedure, and every row of the packet can be
+filled from them. The files are bursts of the L29 waveform from a simulation
+of the PHASER at the course's settings, with a kit whose 0 m frequency is
+101.4 kHz, and they hold `iq` only. Say in your packet which results are
+recorded rather than your own.
 
-- <a href="../../radar-data/L30_empty.npz">L30_empty.npz</a>: noise and the kit's leakage, no target, for task (a)
-- <a href="../../radar-data/L30_wall_hand.npz">L30_wall_hand.npz</a>: a wall at 5.0 m and a hand waving at 2.4 m, for tasks (b) and (c)
-- <a href="../../radar-data/L30_weak_strong.npz">L30_weak_strong.npz</a>: a strong mover at 4.2 m and a weak one at 3.0 m, for task (b)
+- **Procedure A**, place the threshold: the notebook's Procedure A cell draws one chirp of <a href="../../radar-data/L30_wall_hand.npz">L30_wall_hand.npz</a> with the overlay's threshold. Tune its guard cells, reference cells, and bias until the threshold sits under the hand and over the noise; Table A.
+- **Procedure B**, apply it and walk: the Procedure B cell applies your setting to <a href="../../radar-data/L30_walker.npz">L30_walker.npz</a>, a person walking 1.0 m to 4.5 m and back past a wall at 6.0 m, one update every 0.1 s for 7 s, and counts the updates that find the walker and those with any other crossing; Table B.
+- **Procedure C**, false alarms on an empty scene: the Procedure C cell counts crossings in 30 updates of <a href="../../radar-data/L30_empty.npz">L30_empty.npz</a>, noise and the kit's leakage with no target, at your bias and 3 and 6 dB below it; Table C.
+- **Procedure D**, the notebook's tasks: L30_empty.npz for task (a); L30_wall_hand.npz and <a href="../../radar-data/L30_weak_strong.npz">L30_weak_strong.npz</a>, a strong mover at 4.2 m and a weak one at 3.0 m, for task (b); L30_wall_hand.npz for task (c); Tables D to F.
 ```
 ::::
 
@@ -402,7 +402,7 @@ your own.
 
 1. Stand 2 m in front of the kit, facing it, and hold still. Find your peak in the range spectrum, and the clutter: the leakage at 0 m, the far wall, and any furniture.
 2. Turn on the threshold overlay, but do not apply it. Start from the lesson's 1D window, 2 guard and 16 reference cells a side, and the 12.4 dB bias.
-3. Adjust the bias, the guard cells, and the reference cells until the threshold sits **below your peak and above every clutter peak**. Record the three settings in Table A, with the margin of your peak over the threshold and of the highest clutter peak under it.
+3. Adjust the bias, the guard cells, and the reference cells until the threshold sits **below your peak and above every noise and sidelobe peak**. The leakage near 0 m and the far wall are real echoes and stay above any CFAR threshold; note them, but do not tune them away. Record the three settings in Table A, with the margin of your peak over the threshold and of the highest noise peak under it.
 4. Set the guard cells to 0 and record what happens to the threshold at your peak. Then return them to your setting.
 ::::
 
@@ -433,7 +433,7 @@ The notebook runs on your own laptop in the folder you made for the L28 Lab; the
 ::::{frame} Procedure D: Run the Notebook
 :class: read-only
 
-Do this part after the bench, in about 30 to 45 minutes. The notebook starts from the recorded bursts; to run a task on your own L29 or L30 burst, change the file name in its first cell.
+Do this part after the bench, in about 30 to 45 minutes. The notebook starts from the recorded bursts; to run a task on your own L29 or L30 burst, change the file name in its first cell. Its Procedure A to C cells are for working without a kit, as the No Hardware? frame describes; with a kit, skip them.
 
 1. **Task (a):** set `BIAS_DB` from `PFA` and `N` (one line) and run the cell at $10^{-3}$; then set `PFA = 1e-4`; then set `WINDOW = None` with `PFA` back at $10^{-3}$. Record the design and measured counts in Table D.
 2. **Task (b):** run the method cell with `METHOD = "ca"`, then `"go"`, then `"so"`. Record the clusters at the wall, the hand, the strong and weak targets, and anywhere else, in Table E.
