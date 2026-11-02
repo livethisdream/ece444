@@ -94,7 +94,7 @@ single firing line measures worst.
 
 ::::{frame} Pre-Lab
 :::{present}
-- Bring your fox-hunt script, tested, on your laptop.
+- Bring your fox-hunt notebook, tested, on your laptop.
 - It finds where the bearings cross, flags a bad one, and ranks the boxes.
 - Part 1 of the packet, at the end of Lesson 19, walks you through it.
 :::
@@ -102,10 +102,11 @@ single firing line measures worst.
 The Pre-Lab is Part 1 of the packet, done before the lab period and listed at
 the end of
 <a href="../L19-direction-finding/index.html">Lesson 19</a>. What you need at
-the bench is the script: start from the
-<a href="../../labs/foxhunt_starter.py" download>starter file</a>, which reads
-the station and box files and prints the results, write its four functions,
-and test it on the supplied set of bearings with one bad station in it. The
+the bench is the notebook,
+<a href="../../notebooks/L19_foxhunt.ipynb" download>`L19_foxhunt.ipynb`</a>:
+it holds the practice set, draws every bearing line over the boxes, and prints
+the results. Write its four functions and run it on the practice set, which
+has one bad station in it. The
 error budget and station plan in Part 1 tell you what to expect: use the
 stations farthest apart that still detect the fox, because the distance
 between them sets how well the fix is pinned down in depth.
@@ -148,12 +149,12 @@ detect it; a station far off its axis may see a weak tone or none, and one that
 reads beyond $\pm 45^\circ$ is past what the PHASER tracks. Skip those and keep
 going. A good bearing passes within about $0.15\ \text{m}$ of the fix; one that
 misses by far more than the rest is a bad bearing, usually a reflection or a
-person in the path: retake it, or let your script drop it. The fix should land
+person in the path: retake it, or let your notebook drop it. The fix should land
 $0.15$ to $0.2\ \text{m}$ from the live box, and the boxes are at least
 $0.75\ \text{m}$ apart, so that is close enough to name the right one.
 
 Peak Gain is useful only when **Rx Gain (dB)** is the same at every
-station. Your script compares the levels along the line with the shape a source
+station. Your notebook compares the levels along the line with the shape a source
 in each candidate box would produce, free-space spreading plus the element
 roll-off you measured in the L18 Lab, with the overall level fitted out. It
 cannot give a range on its own: the fox's aim and the room's reflections move
@@ -226,7 +227,7 @@ kit to it. Keep the calibration from bring-up.
 13. Put the kit on a station mark, squared to the tape, broadside downrange.
 14. On the **Tracking** tab, record ten consecutive Angle readings and **Peak Gain**.
 15. Repeat at every station that detects the fox, ends first.
-16. Write each row as $x_i$, $s\,\bar\theta_i$, Peak Gain into `stations.csv`.
+16. Type each station into the notebook: $x_i$, $s\,\bar\theta_i$, and Peak Gain.
 :::
 
 <div class="rec" data-lab="L19">
@@ -269,8 +270,8 @@ of them.
 :class: read-only
 
 :::{present}
-17. Run your Pre-Lab script on `stations.csv` and `boxes.csv`, and record the fix, the residuals, and the ranking.
-18. If one residual is far larger than the rest, retake that station or accept your script's drop.
+17. Type the posted boxes into the notebook, run it, and record the fix, the residuals, and the ranking.
+18. If one residual is far larger than the rest, retake that station or accept the notebook's drop.
 19. Name the box and tell me before the boxes are opened.
 20. Record the live box after the reveal, then press **Stop**.
 :::
@@ -283,7 +284,7 @@ of them.
 <label>Step 20: the live box <input data-field="call.live"></label>
 </div>
 
-`boxes.csv` holds the posted box centers. Your script fixes the source from the
+The instructor posts the box centers. Your notebook fixes the source from the
 bearings alone, ranks the boxes by distance from the fix, and, when the two
 nearest are within $0.15\ \text{m}$ of each other in distance, uses the amplitude
 pattern to choose between them. The call is your team's, made in class from your
@@ -313,7 +314,7 @@ viewer instead.
 
 The L19 Lab packet is one submission per team for the whole lab, turned in complete before Lesson 20. It has three parts:
 
-1. **Part 1, Pre-Lab** (before the lab period): the bearing budget with a fixed heading, the across-range and depth errors for this range, a station plan, and the script tested on a supplied set of bearings.
+1. **Part 1, Pre-Lab** (before the lab period): the bearing budget with a fixed heading, the across-range and depth errors for this range, a station plan, and the notebook tested on a supplied set of bearings.
 2. **Part 2, Measurements** (your team, in class): the reference shot, the bearings and levels from every station, and the call.
 3. **Part 3, Writeup** (after the lab): the fix against the live box, the error of each bearing, and what the baseline and the depth did to the fix.
 
@@ -322,7 +323,7 @@ The L19 Lab packet is one submission per team for the whole lab, turned in compl
 
 ::::{frame} Looking Ahead
 :::{present}
-- Keep your bearings, levels, and script: the Part 3 writeup reuses all three.
+- Keep your notebook, with your bearings and levels in it: the Part 3 writeup reuses all three.
 - L20 returns to shaping and steering the beam.
 :::
 
