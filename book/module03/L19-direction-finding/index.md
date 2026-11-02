@@ -455,13 +455,13 @@ $$\begin{aligned}
 e_i &= \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i)
 \end{aligned}$$
 
-- $\hat{\mathbf u}_i$: along the bearing. $\hat{\mathbf n}_i$: across it.
-- $e_i$: how far a point $\mathbf x$ sits off line $i$, in meters. On the line, $e_i = 0$.
+- $\mathbf p_i = (x_i,\ 0)$: station $i$ on the tape. $\hat{\mathbf u}_i$: along its bearing. $\hat{\mathbf n}_i$: across it.
+- $e_i$: how far a point $\mathbf x$ sits off line $i$, in meters; zero on the line.
 :::
 :::{present}
 <img src="../../viz/img/L19-miss.svg"
      alt="A station at p_i on the tape with its bearing line at theta_i from downrange; the unit vector u points along the line and n perpendicular to it; a point x off the line, the vector x minus p_i from the station to it, and the point's perpendicular miss e_i from the line"
-     style="max-width: 360px; width: 72%; display: block; margin: 0 auto;">
+     style="max-width: 360px; width: 66%; display: block; margin: 0 auto;">
 :::
 
 Two bearings cross exactly, but three or more never quite meet: every bearing
