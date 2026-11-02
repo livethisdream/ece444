@@ -256,7 +256,7 @@ $$\sin\theta_\text{meas} = \hat{\mathbf u}\cdot\hat{\mathbf x} = \sin(\text{az})
 :::
 :::{present}
 <img src="../../viz/img/L19-cone.svg"
-     alt="Side view: a level source and one 31 degrees below the array, which reaches out only 0.86 horizontally. Top view: both at 30 degrees on the floor plan; along the array the level one is 0.500, reading 30.0 degrees, and the low one 0.429, reading 25.4 degrees"
+     alt="Side view: a level source and one 31 degrees below the array, which reaches out only 0.86 horizontally. Top view: the box is at 30 degrees on the floor plan, but its shadow is shorter, so its part along the array is 0.429 instead of 0.500, the same as a level source at 25.4 degrees, which is what the kit reads"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -285,9 +285,13 @@ the pull is not small. The figure shows it in two flat views. A kit on a table
 $0.9\ \text{m}$ (3 ft) above a box on the floor $1.5\ \text{m}$ (5 ft) out sees
 the box $31.0^\circ$ down, so the arrival direction reaches out only
 $\cos 31^\circ = 0.86$ of the way horizontally (side view). On the floor plan
-the box is still $30^\circ$ off broadside, but its part along the row is
-$0.86 \times 0.500 = 0.429$ instead of $0.500$ (top view), and the kit reads
-$25.4^\circ$: a $4.6^\circ$ error, three times the whole bearing budget. At
+the box is still $30^\circ$ off broadside, but its shadow on the floor plan
+is only $0.86$ long, so its part along the row is $0.86 \times 0.500 = 0.429$
+instead of $0.500$ (top view). The array cannot tell that shortened shadow
+from a level source at the angle whose part along the row is also $0.429$,
+$\arcsin 0.429 = 25.4^\circ$, the dashed line in the top view, and so it
+reports $25.4^\circ$: a $4.6^\circ$ error, three times the whole bearing
+budget. At
 $45^\circ$ it reads $37.3^\circ$. At $3.0\ \text{m}$ (10 ft) out the box is
 $16.7^\circ$ down and $30^\circ$ reads $28.6^\circ$. The error is zero at
 broadside, grows off it, and always pulls toward broadside. On a firing line
