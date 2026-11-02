@@ -116,7 +116,7 @@ $$\begin{aligned}
 
 - Steer to $\theta_0$: each delay takes away $n\ kd\sin\theta_0$.
 - The sum is L16's $\vert AF_N(\psi)\vert$, largest at $\psi = 0$.
-- So the sum peaks when $\theta_0 = \theta_s$.
+- It peaks at $\theta_0 = \theta_s$, so the GUI's **Angle** at the peak is the bearing.
 :::
 :::{present}
 <img src="../../viz/img/L19-sweep.svg"
@@ -145,15 +145,6 @@ function the L18 Lab measured, read the other way, and the curve L16 drew with
 the grid and the noise floor in "The Measured Sweep". There the source sat still
 and the curve showed where the beam pointed; here the beam moves and the peak
 shows where the source is.
-::::
-
-::::{frame} Key Point
-:::{present}
-:class: callout
-The sweep tries every phase ramp the hardware can set. The ramp that cancels
-the arrival ramp gives the largest sum, so the steer angle at the peak is the
-bearing: the GUI's **Angle** readout, set to **Peak**.
-:::
 ::::
 
 ::::{frame} Accuracy and Resolution
@@ -413,6 +404,32 @@ four are independent, so they add as a root sum of squares, the chain on the
 slide. Setting the heading by eye, about $3^\circ$, raises the total to $3.2^\circ$.
 ::::
 
+::::{frame} Cross-Range Error
+:::{present}
+$$\delta_\perp = R\tan\sigma_\beta$$
+
+- At $\sigma_\beta = 2^\circ$ the line moves $0.03\ \text{m}$ at $1\ \text{m}$, $0.07\ \text{m}$ at $2\ \text{m}$, $0.14\ \text{m}$ at $4\ \text{m}$.
+- A bearing constrains the source across its line, not along it.
+:::
+
+A bearing error is an angle, but the fix is a position, so what matters is how
+far the error moves the line where the source is. A line rotated by
+$\sigma_\beta$ about the kit moves sideways, at range $R$, by
+
+$$\delta_\perp = R\tan\sigma_\beta.$$
+
+At $\sigma_\beta = 2^\circ$, a little worse than the taped-heading budget,
+that is $0.03\ \text{m}$ at $1\ \text{m}$, $0.07\ \text{m}$ at $2\ \text{m}$,
+and $0.14\ \text{m}$ at $4\ \text{m}$. The error grows in proportion to range,
+which is why a closer station gives a tighter line.
+
+The error is all in one direction. A bearing says nothing about how far along
+the line the source is, so its uncertainty is a narrow strip, $2\delta_\perp$
+wide at one standard deviation and unbounded along its length. The second
+bearing's strip is what limits the fix along the first one, and how well it does
+that depends on the angle between them.
+::::
+
 ::::{frame} A Two-Bearing Fix
 :::{present}
 - Origin at the middle of the tape: $x$ along it, $y$ downrange.
@@ -535,7 +552,7 @@ $\hat{\mathbf u}_i$ and $\hat{\mathbf n}_i$ reads the point's coordinates on
 axes turned by $\theta_i$, one along the bearing and one across it. In that
 frame $\hat{\mathbf u}_i\cdot(\mathbf x - \mathbf p_i)$ is how far down range
 the point is and $e_i$ is its **cross-range** coordinate, the same direction
-"Cross-Range Error" measures below. The bearing line is where that cross-range
+"Cross-Range Error" measures above. The bearing line is where that cross-range
 coordinate is zero, and least squares looks for the one point whose
 cross-range coordinate is nearly zero in every station's frame at once.
 ::::
@@ -586,7 +603,7 @@ computes.
 
 Unweighted least squares treats every line as equally reliable. A bearing from
 a kit far from the source is less reliable in meters, as "Cross-Range Error"
-shows, so if the ranges differ a lot, weighting each term by $1/r_i^2$ gives
+showed, so if the ranges differ a lot, weighting each term by $1/r_i^2$ gives
 the better fix. In the fox hunt every bearing that counts is within about
 $\pm 45^\circ$ of broadside, so the ranges from the stations to one box differ
 by at most a factor of $\sqrt{2}$, the weights by a factor of 2, and the
@@ -618,7 +635,17 @@ and Outliers" below). "The General Form" works the same numbers by hand.
 ::::
 
 ::::{frame} The General Form
-:class: read-only
+:::{present}
+$$\begin{aligned}
+\cos\theta_1\ x - \sin\theta_1\ y &= x_1\cos\theta_1 \\
+\cos\theta_2\ x - \sin\theta_2\ y &= x_2\cos\theta_2 \\
+\cos\theta_3\ x - \sin\theta_3\ y &= x_3\cos\theta_3
+\end{aligned}$$
+
+- Each line, $e_i = 0$, is one equation. Together: $\mathbf A\mathbf x = \mathbf b$.
+- $\mathbf A$: the coefficients of $x$ and $y$, one row per station. $\mathbf b$: the right-hand sides.
+- No exact answer; the fix solves $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$.
+:::
 
 Each station's bearing line is one linear equation in the unknown point. Its
 miss from "Distance From a Line",
@@ -627,14 +654,7 @@ moving the known part to the right-hand side writes the line as
 
 $$\cos\theta_i\ x - \sin\theta_i\ y = x_i\cos\theta_i.$$
 
-Write one such equation per station, one under the other:
-
-$$\begin{aligned}
-\cos\theta_1\ x - \sin\theta_1\ y &= x_1\cos\theta_1 \\
-\cos\theta_2\ x - \sin\theta_2\ y &= x_2\cos\theta_2 \\
-\cos\theta_3\ x - \sin\theta_3\ y &= x_3\cos\theta_3
-\end{aligned}$$
-
+Write one such equation per station, one under the other, as on the slide.
 In matrix form this is $\mathbf A\mathbf x = \mathbf b$:
 
 $$\underbrace{\begin{bmatrix} \cos\theta_1 & -\sin\theta_1 \\ \cos\theta_2 & -\sin\theta_2 \\ \cos\theta_3 & -\sin\theta_3 \end{bmatrix}}_{\mathbf A}
@@ -684,32 +704,6 @@ y &= \frac{2.562 \times 0.568 + 0.329 \times 0.173}{1.014} = 1.49\ \text{m}.
 The misses, $\mathbf A\mathbf x - \mathbf b$, are $-0.016$, $0.028$, and
 $-0.015\ \text{m}$; their signs say which side of each line the fix sits on.
 `numpy.linalg.lstsq(A, b)` does the same arithmetic in one line.
-::::
-
-::::{frame} Cross-Range Error
-:::{present}
-$$\delta_\perp = R\tan\sigma_\beta$$
-
-- At $\sigma_\beta = 2^\circ$ the line moves $0.03\ \text{m}$ at $1\ \text{m}$, $0.07\ \text{m}$ at $2\ \text{m}$, $0.14\ \text{m}$ at $4\ \text{m}$.
-- A bearing constrains the source across its line, not along it.
-:::
-
-A bearing error is an angle, but the fix is a position, so what matters is how
-far the error moves the line where the source is. A line rotated by
-$\sigma_\beta$ about the kit moves sideways, at range $R$, by
-
-$$\delta_\perp = R\tan\sigma_\beta.$$
-
-At $\sigma_\beta = 2^\circ$, a little worse than the taped-heading budget,
-that is $0.03\ \text{m}$ at $1\ \text{m}$, $0.07\ \text{m}$ at $2\ \text{m}$,
-and $0.14\ \text{m}$ at $4\ \text{m}$. The error grows in proportion to range,
-which is why a closer station gives a tighter line.
-
-The error is all in one direction. A bearing says nothing about how far along
-the line the source is, so its uncertainty is a narrow strip, $2\delta_\perp$
-wide at one standard deviation and unbounded along its length. The second
-bearing's strip is what limits the fix along the first one, and how well it does
-that depends on the angle between them.
 ::::
 
 ::::{frame} The Crossing Angle

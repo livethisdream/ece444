@@ -178,6 +178,12 @@ kit stays on its stand for every reading, pointed at the boxes with its element
 row level: raising one end of the row tilts the cone of directions and pulls
 every bearing toward broadside (Lesson 19, "The Cone Angle"), and a kit held by
 hand reads it wrong by far more than the budget.
+
+If the boxes sit lower than the kit, as they do when the boxes are on the
+floor and the kit is on a table, every reading is pulled toward broadside too,
+by several degrees at these ranges. Measure the height difference between the
+middle of the array and the boxes, record it with your readings, and correct
+each Angle before you trust the fix, as Lesson 19's "The Cone Angle" shows.
 ::::
 
 ::::{frame} Reference Shot
