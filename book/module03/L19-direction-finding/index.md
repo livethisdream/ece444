@@ -252,11 +252,11 @@ $$\sin\theta_\text{meas} = \hat{\mathbf u}\cdot\hat{\mathbf x} = \sin(\text{az})
 
 - The ramp sees only the part of the arrival direction $\hat{\mathbf u}$ along the element row $\hat{\mathbf x}$.
 - A source below the array shortens that part by $\cos(\text{el})$.
-- $30^\circ$ azimuth, $14.0^\circ$ down, reads $29.0^\circ$.
+- Kit $0.9\ \text{m}$ above a box $1.5\ \text{m}$ out: $31^\circ$ down, and $30^\circ$ reads $25.4^\circ$.
 :::
 :::{present}
 <img src="../../viz/img/L19-cone.svg"
-     alt="The cone of directions around the array's axis that all read 29.0 degrees; the floor-plan direction at 30 degrees lies off the cone, and the source 14 degrees below it lies on it"
+     alt="Side view: a level source and one 31 degrees below the array, which reaches out only 0.86 horizontally. Top view: both at 30 degrees on the floor plan; along the array the level one is 0.500, reading 30.0 degrees, and the low one 0.429, reading 25.4 degrees"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -280,14 +280,37 @@ cone around the row has the same projection, and so the same reading, which is
 why a line array measures a cone angle and not a floor-plan azimuth.
 
 When the source is at the array's height, el is zero and the two angles agree.
-A box on the floor $0.75\ \text{m}$ below a tabletop kit at $3\ \text{m}$ is
-$14.0^\circ$ down, and a source at $30^\circ$ azimuth reads $29.0^\circ$; at
-$45^\circ$ it reads $43.3^\circ$. The error always pulls the bearing toward
-broadside. The L19 Lab's range is set up with the kits and the boxes at one
-height, so el is near zero there. What the kit's position on its stand does
-change is the row itself: tipping the board up or down to aim it at the boxes
-turns it about the row and leaves the reading alone, but raising one end of
-the row tilts the cone and adds the same kind of error. Keep the row level.
+Below it, the reading is pulled toward broadside, and at classroom distances
+the pull is not small. The figure shows it in two flat views. A kit on a table
+$0.9\ \text{m}$ (3 ft) above a box on the floor $1.5\ \text{m}$ (5 ft) out sees
+the box $31.0^\circ$ down, so the arrival direction reaches out only
+$\cos 31^\circ = 0.86$ of the way horizontally (side view). On the floor plan
+the box is still $30^\circ$ off broadside, but its part along the row is
+$0.86 \times 0.500 = 0.429$ instead of $0.500$ (top view), and the kit reads
+$25.4^\circ$: a $4.6^\circ$ error, three times the whole bearing budget. At
+$45^\circ$ it reads $37.3^\circ$. At $3.0\ \text{m}$ (10 ft) out the box is
+$16.7^\circ$ down and $30^\circ$ reads $28.6^\circ$. The error is zero at
+broadside, grows off it, and always pulls toward broadside. On a firing line
+that shows up mostly as depth: five stations $0.9\ \text{m}$ above a box at
+$(0.25,\ 1.5)\ \text{m}$ put the uncorrected fix $0.25\ \text{m}$ too far
+downrange.
+
+Two things remove it. Putting the kits at the boxes' height makes el zero.
+When that is not possible, undo it. With the height difference $\Delta h$
+known and a station's horizontal range $r$ to the fix,
+$\text{el} = \arctan(\Delta h/r)$, and each reading converts back to a
+floor-plan angle with
+
+$$\sin(\text{az}) = \frac{\sin\theta_\text{meas}}{\cos(\text{el})}.$$
+
+The range comes from a first, uncorrected fix: correct each reading, solve
+again, and repeat once. In the example above one pass brings the fix within
+$0.04\ \text{m}$ of the box and a second within $0.01\ \text{m}$.
+
+Aiming the board does not help. Tipping it up or down toward the boxes turns
+it about the row and leaves the reading alone, because the cone is centered on
+the row. Raising one end of the row tilts the cone and adds the same kind of
+error, so keep the row level.
 
 The cone has a back half as well, a source behind the array at the mirror
 angle, but the PHASER's patches sit over a ground plane and receive almost
@@ -455,13 +478,13 @@ $$\begin{aligned}
 e_i &= \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i)
 \end{aligned}$$
 
-- $\hat{\mathbf u}_i$: along the bearing. $\hat{\mathbf n}_i$: across it.
-- $e_i$: how far a point $\mathbf x$ sits off line $i$, in meters. On the line, $e_i = 0$.
+- $\mathbf p_i = (x_i,\ 0)$: station $i$ on the tape. $\hat{\mathbf u}_i$: along its bearing. $\hat{\mathbf n}_i$: across it.
+- $e_i$: how far a point $\mathbf x$ sits off line $i$, in meters; zero on the line.
 :::
 :::{present}
 <img src="../../viz/img/L19-miss.svg"
      alt="A station at p_i on the tape with its bearing line at theta_i from downrange; the unit vector u points along the line and n perpendicular to it; a point x off the line, the vector x minus p_i from the station to it, and the point's perpendicular miss e_i from the line"
-     style="max-width: 360px; width: 72%; display: block; margin: 0 auto;">
+     style="max-width: 360px; width: 66%; display: block; margin: 0 auto;">
 :::
 
 Two bearings cross exactly, but three or more never quite meet: every bearing
@@ -511,35 +534,52 @@ cross-range coordinate is nearly zero in every station's frame at once.
 
 ::::{frame} Many Bearings: Least Squares
 :::{present}
-$$\begin{aligned}
-e_i &= \hat{\mathbf n}_i\cdot\mathbf x - \hat{\mathbf n}_i\cdot\mathbf p_i \\
-\mathbf A\mathbf x - \mathbf b &= (e_1,\ e_2,\ e_3,\ \dots) \\
-\mathbf A^{\mathsf T}\mathbf A\ \mathbf x &= \mathbf A^{\mathsf T}\mathbf b
-\end{aligned}$$
-
-- Row $i$ of $\mathbf A$ is $\hat{\mathbf n}_i$; entry $i$ of $\mathbf b$ is $\hat{\mathbf n}_i\cdot\mathbf p_i = x_i\cos\theta_i$.
-- The fix $\mathbf x$ makes $\sum e_i^2$ smallest.
+- Three bearing lines never meet exactly: errors leave a small triangle.
+- The fix makes $e_1^2 + e_2^2 + e_3^2$ smallest.
+- Each line pulls the fix toward itself, harder the more it misses. At the fix the pulls balance.
+- In Python: `numpy.linalg.lstsq`.
+:::
+:::{present}
+<img src="../../viz/img/L19-pulls.svg"
+     alt="Three stations on the firing line whose bearings nearly cross; magnified, the three lines form a small triangle, and arrows e1, e2, e3 run from the least-squares fix to each line"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Each station's miss is linear in the unknown point: $\hat{\mathbf n}_i\cdot\mathbf x$
-minus a number we already know, $\hat{\mathbf n}_i\cdot\mathbf p_i = x_i\cos\theta_i$.
-Stack one per station. Each $\hat{\mathbf n}_i$ becomes a row of the matrix
-$\mathbf A$, each $x_i\cos\theta_i$ an entry of the vector $\mathbf b$, and the
-misses are the entries of $\mathbf A\mathbf x - \mathbf b$. With two stations
-both misses can be zero, at the crossing of the previous frames. With three or
-more they cannot all be zero, so least squares picks the $\mathbf x$ that
-makes $\sum_i e_i^2$ smallest. Setting its derivatives with respect to $x$ and
-$y$ to zero gives the **normal equations** on the slide,
-$\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$:
-a $2\times 2$ matrix times $\mathbf x$ equals a 2-vector, whatever the number
-of stations. In Python, `numpy.linalg.lstsq(A, b)` does it in one line. The
-L19 Lab's pre-lab has you write this as a short function and test it on a
-supplied set of bearings.
+With two bearings the crossing is exact. A third bearing adds a third line,
+and because every bearing carries some error, the three lines form a small
+triangle rather than meeting at a point. The figure magnifies it: no point
+lies on all three lines, so no point has all three misses $e_i$ of the
+previous frame equal to zero. The fix has to be a compromise.
+
+The usual compromise is **least squares**: choose the point that makes the
+sum of the squared misses, $e_1^2 + e_2^2 + e_3^2$, as small as it can be.
+Squaring keeps a miss on either side of a line from canceling one on the other
+side, gives one smooth bowl with a single bottom, and counts a large miss
+more heavily than two small ones, which suits bearings whose errors are
+mostly small.
+
+There is a physical picture of where the bottom of that bowl is. Tie the
+candidate point to each line with a spring that pulls it straight toward the
+line, along $\hat{\mathbf n}_i$, with a force proportional to the miss $e_i$.
+The point comes to rest where the pulls balance,
+
+$$\sum_i e_i\ \hat{\mathbf n}_i = 0,$$
+
+and that resting point is exactly the least-squares fix: the arrows in the
+figure are those pulls, and they add to zero. The picture also says what a
+bad bearing does. A reflection that bends one line pulls the fix toward it,
+and because the other lines pull back, that line ends up with the largest
+miss, which is how "Residuals and Outliers" below finds it.
+
+Nobody solves this by hand in the fox hunt. The L19 Lab's pre-lab has you
+write it as a short Python function around `numpy.linalg.lstsq` and test it
+on a supplied set of bearings; "The General Form" below shows what that call
+computes.
 
 Unweighted least squares treats every line as equally reliable. A bearing from
-a kit far from the source is less reliable in meters, as the next frame shows,
-so if the ranges differ a lot, weighting each term by $1/r_i^2$ gives the
-better fix. In the fox hunt every bearing that counts is within about
+a kit far from the source is less reliable in meters, as "Cross-Range Error"
+shows, so if the ranges differ a lot, weighting each term by $1/r_i^2$ gives
+the better fix. In the fox hunt every bearing that counts is within about
 $\pm 45^\circ$ of broadside, so the ranges from the stations to one box differ
 by at most a factor of $\sqrt{2}$, the weights by a factor of 2, and the
 unweighted form is close enough.
@@ -550,30 +590,76 @@ unweighted form is close enough.
 | $\theta_i$ | $34.6^\circ$ | $8.8^\circ$ | $-17.7^\circ$ |
 | :-- | :-- | :-- | :-- |
 | $x_i$ | $-0.75\ \text{m}$ | $0$ | $+0.75\ \text{m}$ |
+| $\vert e_i\vert$ | $1.6\ \text{cm}$ | $2.8\ \text{cm}$ | $1.5\ \text{cm}$ |
 
-$$\begin{aligned}
-\mathbf A &= \begin{bmatrix} 0.823 & -0.568 \\ 0.988 & -0.153 \\ 0.953 & 0.304 \end{bmatrix} \\
-\mathbf b &= (-0.617,\ 0,\ 0.714)^{\mathsf T}
-\end{aligned}$$
+- Fix $(0.26,\ 1.49)\ \text{m}$; box at $(0.25,\ 1.50)\ \text{m}$.
 :::
 :::{present}
-$$\begin{aligned}
-\mathbf A^{\mathsf T}\mathbf A &= \begin{bmatrix} 2.562 & -0.329 \\ -0.329 & 0.438 \end{bmatrix} \\
-\mathbf A^{\mathsf T}\mathbf b &= \begin{bmatrix} 0.173 \\ 0.568 \end{bmatrix} \\
-\mathbf x &= (0.26,\ 1.49)\ \text{m}
-\end{aligned}$$
+<img src="../../viz/img/L19-three-fix.svg"
+     alt="The three bearings of the worked example; magnified near the fix, arrows e1, e2, e3 run from the fix to each line, and the box sits 1 centimeter away"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Stations at $x_i = -0.75$, $0$, and $+0.75\ \text{m}$ read Angle $34.6^\circ$,
-$8.8^\circ$, and $-17.7^\circ$. Each station is one row of $\mathbf A$, its
-$\hat{\mathbf n}_i = (\cos\theta_i,\ -\sin\theta_i)$, and one entry of $\mathbf b$,
-$x_i\cos\theta_i$; station 1, for example, gives
-$-0.75 \times 0.823 = -0.617$.
+$8.8^\circ$, and $-17.7^\circ$. `numpy.linalg.lstsq` puts the fix at
+$(0.26,\ 1.49)\ \text{m}$, $0.01\ \text{m}$ from the box at
+$(0.25,\ 1.50)\ \text{m}$. The three lines miss the fix by $1.6$, $2.8$, and
+$1.5\ \text{cm}$, all under each station's own $R_i\tan\sigma_\beta$ of about
+$4\ \text{cm}$ at $1.5^\circ$: three good bearings (the check in "Residuals
+and Outliers" below). "The General Form" works the same numbers by hand.
+::::
 
-Multiplying out, $\mathbf A^{\mathsf T}\mathbf A$ sums $\cos^2\theta_i$,
-$-\cos\theta_i\sin\theta_i$, and $\sin^2\theta_i$ over the three stations, and
-$\mathbf A^{\mathsf T}\mathbf b$ sums $x_i\cos^2\theta_i$ and
-$-x_i\cos\theta_i\sin\theta_i$. The normal equations are
+::::{frame} The General Form
+:class: read-only
+
+Each station's bearing line is one linear equation in the unknown point. Its
+miss from "Distance From a Line",
+$e_i = (x - x_i)\cos\theta_i - y\sin\theta_i$, is zero on the line, and
+moving the known part to the right-hand side writes the line as
+
+$$\cos\theta_i\ x - \sin\theta_i\ y = x_i\cos\theta_i.$$
+
+Write one such equation per station, one under the other:
+
+$$\begin{aligned}
+\cos\theta_1\ x - \sin\theta_1\ y &= x_1\cos\theta_1 \\
+\cos\theta_2\ x - \sin\theta_2\ y &= x_2\cos\theta_2 \\
+\cos\theta_3\ x - \sin\theta_3\ y &= x_3\cos\theta_3
+\end{aligned}$$
+
+In matrix form this is $\mathbf A\mathbf x = \mathbf b$:
+
+$$\underbrace{\begin{bmatrix} \cos\theta_1 & -\sin\theta_1 \\ \cos\theta_2 & -\sin\theta_2 \\ \cos\theta_3 & -\sin\theta_3 \end{bmatrix}}_{\mathbf A}
+\underbrace{\begin{bmatrix} x \\ y \end{bmatrix}}_{\mathbf x} =
+\underbrace{\begin{bmatrix} x_1\cos\theta_1 \\ x_2\cos\theta_2 \\ x_3\cos\theta_3 \end{bmatrix}}_{\mathbf b}.$$
+
+$\mathbf A$ holds the coefficients of $x$ and $y$, one row per station; each
+row is that station's $\hat{\mathbf n}_i$. $\mathbf b$ holds the right-hand
+sides. With $N$ stations $\mathbf A$ is $N\times 2$, and
+$\mathbf A\mathbf x - \mathbf b$ is the list of misses
+$(e_1,\ e_2,\ \dots,\ e_N)$.
+
+With two stations the two equations have one exact solution, the crossing of
+"A Two-Bearing Fix". With three or more there are more equations than
+unknowns, and no point satisfies them all. The least-squares point satisfies
+two combinations of them instead, the **normal equations**,
+
+$$\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b.$$
+
+Multiplying by $\mathbf A^{\mathsf T}$ adds up the $N$ equations twice, once
+weighted by each station's $\cos\theta_i$ and once by its $-\sin\theta_i$,
+leaving two equations in two unknowns, which always have one answer unless the
+lines are all parallel. They are the balance of pulls in another form:
+$\mathbf A^{\mathsf T}(\mathbf A\mathbf x - \mathbf b) = \sum_i e_i\ \hat{\mathbf n}_i = 0$.
+They are also what setting the derivatives of $\sum_i e_i^2$ with respect to
+$x$ and $y$ to zero gives.
+
+For the three-bearing example,
+
+$$\mathbf A = \begin{bmatrix} 0.823 & -0.568 \\ 0.988 & -0.153 \\ 0.953 & 0.304 \end{bmatrix},\quad
+\mathbf b = \begin{bmatrix} -0.617 \\ 0 \\ 0.714 \end{bmatrix},$$
+
+and multiplying out,
 
 $$\begin{bmatrix} 2.562 & -0.329 \\ -0.329 & 0.438 \end{bmatrix}
 \begin{bmatrix} x \\ y \end{bmatrix} =
@@ -587,12 +673,9 @@ x &= \frac{0.438 \times 0.173 + 0.329 \times 0.568}{1.014} = 0.26\ \text{m} \\
 y &= \frac{2.562 \times 0.568 + 0.329 \times 0.173}{1.014} = 1.49\ \text{m}.
 \end{aligned}$$
 
-The box was at $(0.25,\ 1.50)\ \text{m}$, so the fix lands $0.01\ \text{m}$
-from it. The misses, $\mathbf A\mathbf x - \mathbf b$, are $-0.016$, $0.028$,
-and $-0.015\ \text{m}$, all under each station's own $R_i\tan\sigma_\beta$ of
-about $0.04\ \text{m}$ at $1.5^\circ$: three good bearings (the check in
-"Residuals and Outliers" below). `numpy.linalg.lstsq` does the same arithmetic
-in one line.
+The misses, $\mathbf A\mathbf x - \mathbf b$, are $-0.016$, $0.028$, and
+$-0.015\ \text{m}$; their signs say which side of each line the fix sits on.
+`numpy.linalg.lstsq(A, b)` does the same arithmetic in one line.
 ::::
 
 ::::{frame} Cross-Range Error
@@ -768,8 +851,8 @@ aimed only roughly at the line, may leave it too weak a tone to read anyway.
 
 Two systematic errors from earlier in the lesson remain. The cone-angle error
 pulls every bearing toward broadside when the source is above or below the
-array; the range is set up with kits and boxes at one height to remove it, and
-pointing each array at the boxes with its element row level keeps it removed. A
+array. Put the kits at the boxes' height, or correct each reading as "The
+Cone Angle" describes, and keep each element row level. A
 reflector near the line of sight shifts the peak or replaces it, so keep the
 path from each kit to the box field clear, people included. Finally, two bearings always cross somewhere,
 right or wrong. A third bearing is the only check that the first two are
@@ -854,7 +937,7 @@ themselves.
 | $\psi = kd(\sin\theta_s - \sin\theta_0)$ | residual phase step after steering to $\theta_0$ | sum peaks where $\theta_0 = \theta_s$ |
 | Angle | steer angle of the largest sample in the sweep | on a grid $0.0159$ apart in $\sin\theta$ |
 | $\theta_\text{HP}$ | sets resolution of two sources, not accuracy for one | $12.9^\circ$ at broadside |
-| $\sin\theta_\text{meas} = \sin(\text{az})\cos(\text{el})$ | the cone angle a line array measures | $29.0^\circ$ for $30^\circ$ at $14^\circ$ down |
+| $\sin\theta_\text{meas} = \sin(\text{az})\cos(\text{el})$ | the cone angle a line array measures | $25.4^\circ$ for $30^\circ$ at $31^\circ$ down |
 | $\beta = h + \theta_\text{est}$ | room bearing from heading and Angle | $\sigma_\beta \approx 1.5^\circ$ with a taped heading |
 ::::
 
