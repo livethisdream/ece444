@@ -74,7 +74,7 @@ m\textsuperscript{2} and in dBsm.
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part The sphere.
+		\part Find the sphere's peak RCS.
 		\begin{solution}[1.0in]
 		The circumference is $2\pi(0.1)/0.030 = 21$ wavelengths, so the sphere is in the
 		optical region and returns its shadow area:
@@ -87,7 +87,7 @@ m\textsuperscript{2} and in dBsm.
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part The flat plate.
+		\part Find the flat plate's peak RCS.
 		\begin{solution}[1.1in]
 		The plate intercepts over $A$ and re-radiates with the uniform-aperture gain
 		$4\pi A/\lambda^2$:
@@ -101,7 +101,7 @@ m\textsuperscript{2} and in dBsm.
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part The corner reflector.
+		\part Find the corner reflector's peak RCS.
 		\begin{solution}[1.1in]
 		\eq{ \sigma &= \frac{4\pi a^4}{3\lambda^2} = \frac{4\pi (0.2)^4}{3\ (0.030)^2} \\
 		&= 7.45\ \text{m}^2 = +8.7\ \dbsm }
@@ -113,13 +113,13 @@ m\textsuperscript{2} and in dBsm.
 	\end{minipage}
 
 	\part The plate has the largest peak RCS, yet radar ranges calibrate against corner
-	reflectors. Explain why, and state what the corner gives up in exchange.
+	reflectors. Explain why, and state how the corner's peak RCS compares with the plate's.
 		\begin{solution}[1.3in]
 		The plate returns its echo in a beam as narrow as its own aperture pattern, so its RCS
 		falls $3\db$ within a few degrees of normal and a small misalignment changes the
 		calibration by many dB. The corner's three perpendicular faces send every ray back the
-		way it came, so its RCS stays within $3\db$ of the peak over about $\pm 19\mydeg$. It
-		gives up about $4.8\db$ of peak RCS against the plate of the same size, because only
+		way it came, so its RCS stays within $3\db$ of the peak over about $\pm 19\mydeg$. Its
+		peak RCS is about $4.8\db$ below that of the plate of the same size, because only
 		the hexagonal part of its opening returns a triple bounce.
 		\end{solution}
 
