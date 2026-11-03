@@ -68,8 +68,8 @@ L24 Lab reads it in a single snapshot. And it arrives weaker by an amount the
 radar equation of L25 predicts, so the received power says something about
 the target's cross section.
 
-This lesson covers the first two. Angle and power are already in hand, and
-L27 combines them with noise to decide whether an echo is there at all.
+This lesson covers the first two. Module 3 covered angle and L25 covered
+power, and L27 combines them with noise to decide whether an echo is there at all.
 ::::
 
 ::::{frame} Range From Round-Trip Delay
@@ -90,8 +90,8 @@ transmission. Turned around, a measured delay gives the range,
 
 $$R = \frac{c\tau}{2}.$$
 
-The factor of 2 is the one detail of this relation that is easy to lose:
-range is half the distance the wave covered. With $c = 3.00\times 10^8\ \text{m/s}$,
+The factor of 2 comes from the round trip: range is half the distance the
+wave covered. With $c = 3.00\times 10^8\ \text{m/s}$,
 every meter of range adds $2/c = 6.67\ \text{ns}$ of delay. A target across
 the lab, $3\ \text{m}$ from the kit, returns its echo after $20\ \text{ns}$,
 which is far too short to time directly with the Pluto's sample clock; L28
@@ -128,7 +128,7 @@ A target farther out still reflects, but its echo arrives after the next
 pulse has gone out, and the receiver times it from that pulse. In the figure
 a target at $170\ \text{km}$ returns its echo $1.133\ \text{ms}$ after its
 pulse, which is $0.133\ \text{ms}$ after the next one, so the radar reports it at
-$170 - 150 = 20\ \text{km}$. Radars resolve this by changing the PRF from one
+$170 - 150 = 20\ \text{km}$. Radars remove this ambiguity by changing the PRF from one
 burst to the next: a true range stays put, and a folded one moves.
 ::::
 
@@ -160,7 +160,7 @@ the targets $225\ \text{m}$ apart give two echoes, and the targets
 $75\ \text{m}$ apart give one, a little taller where they overlap.
 ::::
 
-::::{frame} Resolution Is Set by Bandwidth
+::::{frame} Resolution and Bandwidth
 :::{present}
 $$\begin{aligned}
 \Delta R &= \frac{c\ \tau_p}{2} \approx \frac{c}{2B} \\
@@ -168,21 +168,21 @@ $$\begin{aligned}
 \end{aligned}$$
 
 - A short pulse has bandwidth $B \approx 1/\tau_p$.
-- A chirp sweeps $B$ in a long pulse: resolution and energy together.
+- A chirp sweeps $B$ over a long pulse, so it has both the resolution and the energy.
 - The PHASER chirp sweeps $500\ \text{MHz}$.
 :::
 
 A short pulse resolves well but carries little energy, since energy is power
 times duration, and every transmitter has a peak-power limit. Detection,
-L27's subject, wants energy; resolution wants a short pulse. The way out is
-to notice what a short pulse provides. A pulse of length $\tau_p$
+L27's subject, needs energy; resolution needs a short pulse. A short pulse
+resolves well because of its bandwidth: a pulse of length $\tau_p$
 occupies a bandwidth of about $B \approx 1/\tau_p$, so the resolution can be
 written
 
 $$\Delta R = \frac{c}{2B}.$$
 
-This form is the general one. What separates two echoes is the bandwidth of
-the waveform, not its length. A **chirp**, a pulse whose frequency sweeps
+This form is the general one, because what separates two echoes is the
+bandwidth of the waveform, not its length. A **chirp**, a pulse whose frequency sweeps
 across $B$ during a long transmission, has the bandwidth of a short pulse and
 the energy of a long one, and processing that undoes the sweep (pulse
 compression, in a pulsed radar) recovers the resolution $c/2B$. ADI's FMCW
@@ -214,7 +214,11 @@ f_D &= \frac{1}{2\pi}\frac{d\phi}{dt} = -\frac{2}{\lambda}\frac{dR}{dt} \\
 :::
 
 The echo's phase records the round trip. A wave that travels $2R$ picks up a
-phase of $-k(2R) = -4\pi R/\lambda$ relative to the transmitted signal. If the
+phase relative to the transmitted signal of
+
+$$\phi = -k(2R) = -\frac{4\pi R}{\lambda}.$$
+
+If the
 target moves, $R$ changes with time and so does that phase, and a phase that
 changes steadily with time is a frequency. Differentiating gives the
 **Doppler shift**
@@ -227,7 +231,7 @@ At a $10\ \text{GHz}$ carrier, $\lambda = 3.0\ \text{cm}$ and each meter per
 second of closing speed shifts the echo by $66.7\ \text{Hz}$.
 ::::
 
-::::{frame} Which Direction Is Positive
+::::{frame} Doppler Sign Convention
 :::{present}
 - **Closing**: the path shortens, the echo rises in frequency, $f_D > 0$.
 - **Opening**: the echo falls, $f_D < 0$.
@@ -258,7 +262,7 @@ has no Doppler shift at all, which is why a Doppler radar can lose a target
 that is moving fast but tangentially.
 ::::
 
-::::{frame} The Shift Is Small
+::::{frame} Size of the Doppler Shift
 :::{present}
 | $100\ \text{mph} = 44.7\ \text{m/s}$ | $\lambda$ | $f_D$ |
 | :-- | --: | --: |
@@ -274,7 +278,10 @@ ADI's CW radar lab
 takes a car at $100\ \text{mph}$ as its example. In meters per second that is
 $44.7\ \text{m/s}$, and
 
-$$f_D = \frac{2(44.7)}{0.125} = 715\ \text{Hz} \qquad \text{and} \qquad f_D = \frac{2(44.7)}{0.030} = 2980\ \text{Hz}$$
+$$\begin{aligned}
+f_D &= \frac{2(44.7)}{0.125} = 715\ \text{Hz} \\
+f_D &= \frac{2(44.7)}{0.030} = 2980\ \text{Hz}
+\end{aligned}$$
 
 at $2.4$ and $10\ \text{GHz}$. ADI quotes $716$ and $2982\ \text{Hz}$; the
 difference is only the value of $c$, which they take as $2.998\times 10^8$
@@ -323,7 +330,7 @@ A person walking is well inside that window; a car on a highway is not. L29
 builds the range-Doppler map from exactly this kind of burst.
 ::::
 
-::::{frame} One PRF, Two Limits
+::::{frame} The Range-Velocity Tradeoff
 :::{present}
 $$R_\text{ua}\ v_\text{ua} = \frac{c}{2\ \text{PRF}}\cdot\frac{\lambda\ \text{PRF}}{4} = \frac{c\lambda}{8}$$
 
@@ -332,7 +339,8 @@ $$R_\text{ua}\ v_\text{ua} = \frac{c}{2\ \text{PRF}}\cdot\frac{\lambda\ \text{PR
 - PRF $1\ \text{kHz}$: $150\ \text{km}$ and $\pm 7.5\ \text{m/s}$.
 :::
 
-The PRF appears in both unambiguous limits, on opposite sides. A low PRF
+The PRF appears in both unambiguous limits, in the denominator of one and
+the numerator of the other. A low PRF
 leaves a long listening time between pulses, so the unambiguous range is long,
 but it samples the Doppler slowly, so the unambiguous velocity is small. A
 high PRF does the reverse. The product of the two does not depend on the PRF
@@ -357,7 +365,7 @@ the same idea used against a folded range above.
         width="100%" height="403"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
-        title="One PRF, two limits: the unambiguous range and velocity windows a PRF sets, a target's true range and closing speed, and what the radar reports">
+        title="Range-velocity tradeoff: the unambiguous range and velocity windows a PRF sets, a target's true range and closing speed, and what the radar reports">
 </iframe>
 :::
 
@@ -395,7 +403,7 @@ closer than $c\tau_p/2$ returns its echo while the pulse is still going out.
 A **continuous-wave** (CW) radar transmits and receives at the same time.
 Its transmitter never switches off, so it needs a separate transmit antenna,
 far enough from the receive antenna that the leakage between them does not
-swamp the echo. Its average power is modest, which suits short ranges, and it
+overwhelm the echo. Its average power is modest, which suits short ranges, and it
 has no blind zone near the radar. That makes it the right choice for a radar
 on a lab bench. The PHASER is set up this way: the transmit antenna on
 OUT2 sits beside the eight-element receive array, at the same height.
@@ -415,8 +423,8 @@ echo with the transmitted tone and the difference is a sine wave at $f_D$,
 whose frequency an FFT reads directly. The delay is not measurable at all.
 Every cycle of a pure tone looks like every other cycle, so there is no
 feature in the echo to time against the transmission. A CW radar therefore
-measures speed but not range, which is what a police speed radar needs and no
-more.
+measures speed but not range, which is all a police speed radar
+requires.
 
 The FFT of the CW echo is one spectrum for the whole beam. A car and a fence
 behind it both reflect; the fence sits at $0\ \text{Hz}$ and the car at its
@@ -444,16 +452,21 @@ $0.6\ \text{MHz}$ for each spectrum, $109\ \text{ms}$ of echo, so by
 $\Delta f = 1/T$ its bins are $9.2\ \text{Hz}$ wide, or $0.14\ \text{m/s}$ at
 $10\ \text{GHz}$.
 
-A fan is a useful target because it holds still and moves at the same time.
+A fan is a useful target because its body stays in place while its blades
+move.
 Seen edge-on, a point on a blade at radius $\rho$ swings toward and away from
 the radar at up to $\Omega\rho$, where $\Omega$ is the rotation rate in
 radians per second. The tips move fastest: a $0.3\ \text{m}$ fan at
-$1200\ \text{rpm}$ has a tip speed
+$1200\ \text{rpm}$ has a tip speed and a peak Doppler shift of
 
-$$v_\text{tip} = \pi D\ \frac{\text{rpm}}{60} = \pi(0.30)(20) = 18.8\ \text{m/s},$$
+$$\begin{aligned}
+v_\text{tip} &= \pi D\ \frac{\text{rpm}}{60} = \pi(0.30)(20) \\
+&= 18.8\ \text{m/s} \\
+f_D &= \pm\frac{2v_\text{tip}}{\lambda} = \pm\frac{2(18.8)}{0.030} \\
+&= \pm 1.26\ \text{kHz}.
+\end{aligned}$$
 
-and so a Doppler shift of up to $\pm 2(18.8)/0.030 = \pm 1.26\ \text{kHz}$. The
-spectrum fills the band between, one return for each part of each blade,
+The spectrum fills the band between, one return for each part of each blade,
 while the hub and the stand stay at $0\ \text{Hz}$. Speed the fan up and the
 band widens in proportion; the edge of the band measures the tip speed. Face
 the fan head-on and the blades move across the line of sight instead of along
@@ -473,7 +486,7 @@ figure comes from the three blades passing 20 times a second, $60\ \text{Hz}$.
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-The fan shows the general idea. A target is rarely one rigid body moving at
+The fan is one case of a general effect. A target is rarely one rigid body moving at
 one speed. A walker's torso approaches at a steady speed, while the arms and
 legs swing forward and back about it; a helicopter's rotor spins on top of a
 fuselage; a drone's propellers spin on a hovering frame. Each moving part
@@ -482,7 +495,7 @@ called **micro-Doppler**, change in time with the motion.
 
 A single spectrum blurs those changes together. A **spectrogram**, a run of
 short spectra plotted against time, shows them. The figure is a simulation of
-a walker approaching at $1.3\ \text{m/s}$ at $10\ \text{GHz}$: the torso is
+a walker approaching at $1.3\ \text{m/s}$ at $10\ \text{GHz}$: the torso produces
 the steady line at $87\ \text{Hz}$, and two limbs swinging in opposite phase,
 once a second, trace sinusoids that reach $267\ \text{Hz}$ ($4.0\ \text{m/s}$)
 going forward and about $-93\ \text{Hz}$ going back. The spectrogram trades
@@ -527,7 +540,7 @@ from spectrograms recorded on your own kit.
 
 ::::{frame} Looking Ahead
 :::{present}
-- L27: is an echo there at all, against the noise?
+- L27: detection, deciding whether an echo is present above the noise.
 - L28: FMCW turns delay into a beat frequency, with $\Delta R = c/2B$.
 - L29: range and Doppler together, from a burst of chirps.
 - L31: micro-Doppler spectrograms for classification.
