@@ -43,8 +43,9 @@ asks what else the echo carries. Its delay gives the range, its bandwidth sets
 how close two targets can be and still be told apart, and its frequency shift
 gives the target's speed along the line of sight. Each of these depends on the
 waveform the radar sends, and the choices that improve one usually limit
-another. The L28 through L31 Labs measure every quantity defined here on your
-own kit, so the numbers in this lesson are the ones you will check there.
+another. The L28 through L31 Labs measure several of these quantities on
+your own kit: the range resolution in L28, the velocity resolution and
+unambiguous velocity in L29, and micro-Doppler in L31.
 :::
 ::::
 
@@ -157,7 +158,9 @@ $$\Delta R = \frac{c\ \tau_p}{2}.$$
 
 A $1\ \mu\text{s}$ pulse resolves targets $150\ \text{m}$ apart. In the figure
 the targets $225\ \text{m}$ apart give two echoes, and the targets
-$75\ \text{m}$ apart give one, a little taller where they overlap.
+$75\ \text{m}$ apart give one. Where two echoes overlap they add as phasors,
+so the overlap is stronger or weaker than either echo depending on their
+relative phase; the figure shows them in phase.
 ::::
 
 ::::{frame} Resolution and Bandwidth
@@ -175,17 +178,24 @@ $$\begin{aligned}
 A short pulse resolves well but carries little energy, since energy is power
 times duration, and every transmitter has a peak-power limit. Detection,
 L27's subject, needs energy; resolution needs a short pulse. A short pulse
-resolves well because of its bandwidth: a pulse of length $\tau_p$
-occupies a bandwidth of about $B \approx 1/\tau_p$, so the resolution can be
-written
+resolves well because of its bandwidth. A pulse's spectrum is the Fourier
+transform of its envelope, and a rectangle of length $\tau_p$ transforms to a
+sinc whose main lobe is about $1/\tau_p$ wide. That is the transform <a href="../../module03/L15-aperture-distributions/index.html#frame-the-transform-relationship">L15</a>
+applies to a uniform aperture, where a length $L$ gives a beam about
+$\lambda/L$ wide: the shorter the pulse, the wider its spectrum. A pulse of
+length $\tau_p$ therefore occupies a bandwidth of about $B \approx 1/\tau_p$,
+and the resolution can be written
 
 $$\Delta R = \frac{c}{2B}.$$
 
 This form is the general one, because what separates two echoes is the
 bandwidth of the waveform, not its length. A **chirp**, a pulse whose frequency sweeps
 across $B$ during a long transmission, has the bandwidth of a short pulse and
-the energy of a long one, and processing that undoes the sweep (pulse
-compression, in a pulsed radar) recovers the resolution $c/2B$. ADI's FMCW
+the energy of a long one. Comparing the echo with the outgoing chirp turns
+each delay into a different frequency, so two echoes $1/B$ apart in delay
+separate in frequency, and the radar recovers the resolution $c/2B$.
+<a href="../L28-fmcw/index.html">L28</a> derives this as stretch processing; a pulsed radar does the
+equivalent with pulse compression. ADI's FMCW
 lab sweeps the PHASER's transmitter across $500\ \text{MHz}$, which gives
 $\Delta R = 0.30\ \text{m}$: two corner reflectors on the bench must be more
 than $30\ \text{cm}$ apart in range to appear as two. L28 derives the FMCW
@@ -258,8 +268,10 @@ $$v_r = v\cos\alpha.$$
 An aircraft at $200\ \text{m/s}$ flying $60^\circ$ off the line of sight
 closes at $100\ \text{m/s}$ and shifts a $10\ \text{GHz}$ echo by
 $6.67\ \text{kHz}$. One crossing the line of sight at $\alpha = 90^\circ$
-has no Doppler shift at all, which is why a Doppler radar can lose a target
-that is moving fast but tangentially.
+has no Doppler shift at all. A Doppler radar removes zero-Doppler returns,
+because the ground, the walls, and every other fixed reflector sit there
+(the clutter that <a href="../L29-range-doppler-mti/index.html#frame-clutter-at-zero-velocity">L29</a>'s MTI removes), so a target moving fast
+but tangentially is removed with them.
 ::::
 
 ::::{frame} Size of the Doppler Shift
@@ -315,11 +327,16 @@ through by $2/\lambda$, that is a velocity resolution
 $$\Delta v = \frac{\lambda}{2T}.$$
 
 A pulsed radar sees the target only once per pulse, so it samples the Doppler
-phase at the PRF, and by the sampling theorem it can only tell apart Doppler
-shifts within $\pm\text{PRF}/2$. A faster target aliases into that window and
-reports the wrong speed, possibly the wrong sign. The unambiguous velocity is
+phase at the PRF. Those samples are complex, so by the sampling theorem of
+<a href="../../module03/L17-phased-array-hardware/index.html#frame-the-back-end">L17</a> they cover a window one sampling rate wide, $\pm\text{PRF}/2$.
+A faster target aliases into that window and reports the wrong speed,
+possibly the wrong sign. Setting the largest shift equal to the window edge
+gives the unambiguous velocity:
 
-$$v_\text{ua} = \pm\frac{\lambda\ \text{PRF}}{4} = \pm\frac{\lambda}{4\ T_\text{PRI}}.$$
+$$\begin{aligned}
+\frac{2v_\text{ua}}{\lambda} &= \pm\frac{\text{PRF}}{2} \\
+v_\text{ua} &= \pm\frac{\lambda\ \text{PRF}}{4} = \pm\frac{\lambda}{4\ T_\text{PRI}}.
+\end{aligned}$$
 
 ADI's range-Doppler lab
 ([Analog Devices, "Range Doppler Radar Processing"](https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-doppler/))
@@ -350,7 +367,8 @@ $$R_\text{ua}\ v_\text{ua} = \frac{c\lambda}{8}.$$
 
 At $10\ \text{GHz}$ that is $1.1\times 10^6\ \text{m}^2/\text{s}$. A
 $1\ \text{kHz}$ PRF gives $150\ \text{km}$ of unambiguous range and only
-$\pm 7.5\ \text{m/s}$ of unambiguous velocity, slower than a bicycle. An
+$\pm 7.5\ \text{m/s}$ of unambiguous velocity, about $17\ \text{mph}$, the
+speed of a fast bicycle. An
 airborne radar that must report both range and closing speed for fast
 aircraft cannot satisfy both limits with one PRF, so it switches among
 several and works out the true range and velocity from how the readings move,
@@ -447,7 +465,7 @@ the delay becomes a measurable frequency difference.
 :::
 
 ADI's CW lab points the PHASER at a variable-speed fan and shows its Doppler
-spectrum as a running waterfall. ADI's script takes 65,536 samples at
+spectrum as a waterfall, successive spectra stacked in time. ADI's script takes 65,536 samples at
 $0.6\ \text{MHz}$ for each spectrum, $109\ \text{ms}$ of echo, so by
 $\Delta f = 1/T$ its bins are $9.2\ \text{Hz}$ wide, or $0.14\ \text{m/s}$ at
 $10\ \text{GHz}$.
@@ -502,9 +520,9 @@ going forward and about $-93\ \text{Hz}$ going back. The spectrogram trades
 resolution for time: each column uses $64\ \text{ms}$ of echo, so it resolves
 only about $16\ \text{Hz}$, by the same $\Delta f = 1/T$.
 
-A walker, a fan, and a swinging pendulum produce three distinct patterns.
-L31 turns those patterns into features, and the L31 Lab classifies targets
-from spectrograms recorded on your own kit.
+A walker, a fan, a fidget spinner, and a waving hand each produce a
+distinct pattern. L31 turns those patterns into features, and the L31 Lab
+classifies those four targets from spectrograms recorded on your own kit.
 ::::
 
 ::::{frame} Summary: Range
@@ -546,13 +564,12 @@ from spectrograms recorded on your own kit.
 - L31: micro-Doppler spectrograms for classification.
 :::
 
-Every quantity in this lesson comes back in the labs. L27 adds noise and asks
+Most of this lesson's quantities come back in the labs. L27 adds noise and asks
 how reliably a radar decides that an echo is present. L28 sets up the
 PHASER's FMCW mode, where the chirp's $500\ \text{MHz}$ sets the
 $0.30\ \text{m}$ range resolution and the delay of each echo appears as a beat
 frequency; the L28 Lab measures it on corner reflectors. L29 sends a burst of
 chirps and forms the range-Doppler map, with the velocity resolution and the
 unambiguous velocity defined here as its axes. L31 returns to micro-Doppler
-and classifies targets from their spectrograms. Bring this lesson's numbers to
-each of those labs: every pre-lab starts from a prediction made with them.
+and classifies targets from their spectrograms.
 ::::
