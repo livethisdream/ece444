@@ -55,6 +55,8 @@ $$
 
 <a href="../../module01/L02-antenna-properties/index.html#frame-the-friis-transmission-equation">Lesson 2</a> built the one-way link from two pieces. The transmitter's power spreads over a sphere, so at range $R$ the power density $S$ in the direction of the main beam is the first line below. The receive antenna collects that density over its effective aperture $A_e$, and the product is the **Friis transmission equation**:
 
+<img src="../../viz/img/L02-friis-geometry.svg" alt="One-way link geometry from Lesson 2: the transmitter's power spreading over a sphere of radius R and the receive antenna's capture disk, its effective aperture, collecting its share" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+
 $$
 \begin{aligned}
 S &= \frac{P_t G_t}{4\pi R^2} \\
@@ -121,8 +123,10 @@ P_r\ [\text{dBm}] = {} & P_t + G_t + G_r \\
 \end{aligned}
 $$
 
-- The echo falls 40 dB per decade of range.
-- A one-way link falls 20 dB per decade.
+- The echo falls 40 dB per decade of range, twice the one-way slope.
+:::
+:::{present}
+<img src="../../viz/img/L25-falloff.svg" alt="Received power relative to its value at 1 m against range from 1 to 30 m on a logarithmic axis. The one-way line falls 20 dB per decade and the two-way line 40 dB per decade. From 3 m to 6 m the one-way power drops 6 dB and the two-way power drops 12 dB" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Link budgets run in decibels, because the products become sums and each term can be read on its own. Take $10\log_{10}$ of every factor. Power is in dBm, gains in dBi, $\lambda$ in meters, $R$ in meters, and the radar cross section in **dBsm**, decibels relative to one square meter. The constant is $10\log_{10}(4\pi)^3 = 33.0$ dB. The range term, $40\log_{10} R$, is the **two-way path loss** that sets the slope: every factor of 10 in range takes 40 dB off the echo.
@@ -140,6 +144,8 @@ $$
 :::
 
 The radar equation treats the target as a fictitious area: it intercepts the incident power density over $\sigma$ square meters and re-radiates all of it equally in every direction. A real target does neither. It intercepts power over its physical shadow and re-radiates it in a pattern of its own, often concentrated in a few directions. The radar cross section folds both effects into one number, defined by what the radar measures: the ratio of the scattered field $E_s$ at the radar to the incident field $E_i$ at the target, scaled to the sphere of radius $R$ that the echo spreads over. The limit removes the dependence on range, so $\sigma$ belongs to the target and the viewing direction, not to the geometry of the measurement.
+
+<img src="../../viz/img/L25-rcs-equivalent.svg" alt="Left: a real target whose scattered power goes out in several lobes of different sizes, one of them toward the radar. Right: an isotropic scatterer of area sigma that scatters equally in all directions, with the same power toward the radar as the real target" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 
 Because $\sigma$ includes the target's own re-radiation pattern, it can be much larger or much smaller than the target's physical cross section. A target that sends its echo straight back toward the radar has a large $\sigma$; one that sends it elsewhere has a small one, which is the principle behind stealth shaping.
 ::::
@@ -179,6 +185,10 @@ $$
 $$
 
 A sphere much smaller than a wavelength is in the **Rayleigh region**, where $\sigma$ grows as $a^6/\lambda^4$. At L-band, with $\lambda = 23\ \text{cm}$, the same raindrop returns $40\log_{10}(23/3) = 35$ dB less than at X-band, which is why weather radars operate from S-band to X-band. Between the two regions, near $2\pi a \approx \lambda$, the **resonance region** oscillates as surface waves around the sphere add and cancel.
+
+<img src="../../viz/img/L25-sphere-regions.svg" alt="Backscatter RCS of a conducting sphere, normalized to pi a squared, against the circumference in wavelengths on log-log axes. Below about 0.5 the curve follows 9 x to the fourth, the Rayleigh region. It peaks at 3.7 near a circumference of one wavelength, oscillates through the resonance region, and settles to 1 in the optical region, where the 10 cm sphere at 10 GHz sits at a circumference of 10.5 wavelengths" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+
+The curve is the exact series solution for a perfectly conducting sphere. It peaks at $3.7\pi a^2$ when the circumference is about one wavelength, and the 10 cm sphere sits at $0.99\pi a^2$, where the optical value $\pi a^2$ holds.
 ::::
 
 ::::{frame} The Flat Plate
@@ -240,6 +250,9 @@ $$
 
 - Three perpendicular faces send every ray back the way it came.
 - A corner with 10 cm edges has $\sigma = 0.47$ m², or $-3.3$ dBsm.
+:::
+:::{present}
+<img src="../../viz/img/L25-corner-3d.svg" alt="A trihedral corner reflector drawn in three dimensions, three triangular faces meeting at right angles. One ray enters, bounces once off each face, flipping its x, then y, then z direction component, and leaves parallel to the way it came in" style="max-width: 420px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 A trihedral corner reflector is three flat plates joined at right angles, like the inside corner of a box. Each bounce off one face reverses one component of the ray's direction, so a ray that strikes all three faces leaves with all three components reversed and travels back exactly antiparallel to the way it came. That holds for any arrival direction inside the corner's opening, which is why the corner reflector is the standard radar target, the lab target here, and the reason bicycle reflectors work.
@@ -374,6 +387,14 @@ Two things move the SNR that do not appear in the received power. A lower noise 
 
 ::::{frame} The PHASER Link Budget
 :::{present}
+<img src="../../viz/img/L25-level-diagram.svg" alt="The PHASER link budget as a horizontal waterfall in dBm. The echo starts at minus 16 dBm, rises 21 dB for the two antenna gains, then falls 30.5 dB for lambda squared, 3.3 dB for the corner's RCS, 33.0 dB for 4 pi cubed, and 19.1 dB for R to the fourth, arriving at minus 80.8 dBm. The noise starts at minus 174 dBm per hertz, rises 60 dB for the 1 MHz bandwidth and 2 dB for the noise figure, reaching minus 112.0 dBm. The gap between the two, the SNR, is 31.1 dB" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
+- The echo arrives at $-80.8$ dBm.
+- The noise in 1 MHz is $-112.0$ dBm.
+- The SNR is 31.1 dB.
+:::
+
 | Term | Value | dB |
 | :-- | :-- | --: |
 | $P_t$ | 25 µW | $-16.0$ dBm |
@@ -385,7 +406,6 @@ Two things move the SNR that do not appear in the received power. A lower noise 
 | $P_r$ | | $-80.8$ dBm |
 | $N$, 1 MHz | | $-112.0$ dBm |
 | SNR | | $31.1$ dB |
-:::
 
 Here is the whole budget for the lab setup: a corner reflector with 10 cm edges at 3 m, in front of the PHASER at 10 GHz. The transmit power, the transmit antenna's gain, and the target size are provisional until I confirm them on a kit, so treat this budget as the method with representative numbers.
 
