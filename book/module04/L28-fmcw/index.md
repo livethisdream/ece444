@@ -69,7 +69,7 @@ $$
 \begin{aligned}
 f_b &= \frac{B}{T_s}\ \tau = \frac{2RB}{cT_s} \\
 &= \frac{2\ (1\ \text{m})(500\ \text{MHz})}{(3.00\times 10^8\ \text{m/s})(0.5\ \text{ms})} \\
-&= 6.67\ \text{kHz per meter}
+&= 6.67\ \text{kHz}
 \end{aligned}
 $$
 :::
@@ -116,7 +116,7 @@ $$
 - The chirp length cancels: only $B$ sets the resolution.
 :::
 
-The radar sees each target's beat for one chirp, $T_s$, and an FFT over a record of length $T_s$ separates two tones only if they differ by at least $1/T_s$. Over one chirp, that is a difference of one cycle. Converting that frequency step to range with the beat per meter,
+The radar sees each target's beat for one chirp, $T_s$, and an FFT over a record of length $T_s$ separates two tones only if they differ by at least $1/T_s$. Over one chirp, that is a difference of one cycle. Converting that frequency step to range with the beat per meter gives
 
 $$
 \begin{aligned}
@@ -126,9 +126,9 @@ $$
 \end{aligned}
 $$
 
-the result of <a href="../L26-range-resolution-doppler/index.html#frame-resolution-and-bandwidth">Lesson 26</a>. At 500 MHz it is 0.30 m. A longer chirp makes the beat per meter smaller but lets the FFT resolve finer frequency steps in the same proportion, so $T_s$ cancels. Halving the bandwidth to 250 MHz doubles the resolution cell to 0.60 m; doubling the chirp length to 1 ms leaves it at 0.30 m.
+which is the result of <a href="../L26-range-resolution-doppler/index.html#frame-resolution-and-bandwidth">Lesson 26</a>. At 500 MHz it is 0.30 m. A longer chirp makes the beat per meter smaller but lets the FFT resolve finer frequency steps in the same proportion, so $T_s$ cancels. Halving the bandwidth to 250 MHz doubles the resolution cell to 0.60 m; doubling the chirp length to 1 ms leaves it at 0.30 m.
 
-The number of beat cycles in one chirp is $f_bT_s = 2RB/c$, which does not depend on $T_s$ either. Two plates 0.30 m apart differ by exactly one cycle a chirp at 500 MHz; closer than that, their beats stay in step for the whole chirp and the FFT returns one peak.
+The number of beat cycles in one chirp is $f_bT_s = 2RB/c$, which does not depend on $T_s$ either. Two plates 0.30 m apart differ by exactly one cycle a chirp at 500 MHz; closer than that, their beats stay within one cycle of each other for the whole chirp and the FFT returns one peak.
 ::::
 
 ::::{frame} The Range FFT
@@ -137,14 +137,14 @@ $$
 R = \frac{cT_s}{2B}\left(f - f_0\right)
 $$
 
-- One chirp: 300 samples at 0.6 MSPS, one FFT.
+- Each chirp gives 300 samples at 0.6 MSPS, and one FFT turns them into a range profile.
 - Each FFT bin is 2 kHz, one 0.30 m range cell.
 :::
 :::{present}
 <img src="../../viz/img/L28-range-profile.svg" alt="Power in dBFS against range from minus 0.3 to 8 m, with a top axis of beat frequency above the 0 m frequency from 0 to 53 kHz. Three peaks: leakage at 0 m near minus 20 dBFS, a corner reflector at 2.0 m near minus 20 dBFS, and the far wall at 5.5 m near minus 31 dBFS, over a floor near minus 84 dBFS" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-The PHASER's Pluto samples the beat at $f_s = 0.6$ MSPS, so one 0.5 ms chirp is $N = 300$ complex samples. The FFT of those samples is the **range profile**: each bin is a frequency, and the beat-per-meter relation converts it to a range,
+The PHASER's Pluto samples the beat at $f_s = 0.6$ MSPS, so one 0.5 ms chirp yields $N = 300$ complex samples. The FFT of those samples is the **range profile**: each bin is a frequency, and the beat-per-meter relation converts it to a range,
 
 $$
 R = \frac{cT_s}{2B}\left(f - f_0\right),
@@ -154,7 +154,16 @@ where $f_0$ is the 0 m frequency of the next frame. The bins are $f_s/N = 2$ kHz
 
 The figure is one chirp from the lab's recorded data: a 10 cm corner reflector at 2.0 m, the transmit antenna's direct path into the array at 0 m, and the far wall at 5.5 m. The top axis shows the same profile as beat frequency above $f_0$, at 6.67 kHz per meter.
 
-The FFT also integrates. The 300 samples of a steady tone add in phase while the noise adds in power, so the tone rises $10\log_{10}300 = 24.8$ dB above the noise per sample, as <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a> described. Seen another way, each bin listens to only 2 kHz of noise. That is the narrowing <a href="../L25-radar-equation/index.html#frame-signal-to-noise-ratio">Lesson 25</a> promised: the corner at 3 m, 31.1 dB above the noise in 1 MHz, stands $31.1 + 10\log_{10}(1\ \text{MHz}/2\ \text{kHz}) = 58.1$ dB above it in one bin.
+The FFT also integrates. The 300 samples of a steady tone add in phase while the noise adds in power, so the tone rises $10\log_{10}300 = 24.8$ dB above the noise per sample, as <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a> described. Seen another way, each bin collects noise from only 2 kHz. That is the narrowing <a href="../L25-radar-equation/index.html#frame-signal-to-noise-ratio">Lesson 25</a> described: the corner at 3 m, 31.1 dB above the noise in 1 MHz, stands
+
+$$
+\begin{aligned}
+\text{SNR}_\text{bin} &= 31.1\ \text{dB} + 10\log_{10}\frac{1\ \text{MHz}}{2\ \text{kHz}} \\
+&= 58.1\ \text{dB}
+\end{aligned}
+$$
+
+above it in one bin.
 ::::
 
 ::::{frame} The 0 m Frequency
@@ -169,16 +178,17 @@ The PHASER does not put a 0 m echo at zero frequency. The Pluto transmits its to
 The calibration is simple. Hold a flat metal plate against the array face, read the frequency of the peak, and record it as $f_0$; ADI's lab expects a value such as 99 or 103 kHz. With the plate gone, a peak stays at $f_0$: it is the transmit antenna's direct path into the array, the **leakage**, and it marks 0 m on every capture you take. A kit whose $f_0$ is off by 1 kHz reports every range 0.15 m long or short.
 ::::
 
-::::{frame} Range the Sample Rate Allows
+::::{frame} Maximum Range from the Sample Rate
 :::{present}
 $$
 \begin{aligned}
 R_\text{max} &= \frac{cT_s}{2B}\left(\frac{f_s}{2} - f_0\right) \\
-&= \frac{300\ \text{kHz} - 100\ \text{kHz}}{6.67\ \text{kHz/m}} = 30\ \text{m}
+&= \frac{300\ \text{kHz} - 100\ \text{kHz}}{6.67\ \text{kHz/m}} \\
+&= 30\ \text{m}
 \end{aligned}
 $$
 
-- 250 MHz or 1 ms doubles it to 60 m.
+- Halving $B$ to 250 MHz or doubling $T_s$ to 1 ms doubles it to 60 m.
 :::
 
 The Pluto samples complex data at $f_s$, so it can represent beat frequencies up to $f_s/2 = 300$ kHz. A target far enough away to put its beat above that limit aliases: it reappears at a wrong frequency, and the range profile shows it at a wrong range. With the 0 m frequency at 100 kHz, the beats above it have 200 kHz of room, so the farthest range the profile reports is
@@ -190,7 +200,7 @@ R_\text{max} &= \frac{cT_s}{2B}\left(\frac{f_s}{2} - f_0\right) \\
 \end{aligned}
 $$
 
-This limit comes from the sample rate, not from the transmit power; <a href="../L25-radar-equation/index.html#frame-maximum-range">Lesson 25</a> put the detection range of a 10 cm corner near 8.5 m in a 1 MHz bandwidth, and further out in the 2 kHz of one bin. A slower slope reaches further: halving $B$ or doubling $T_s$ halves the beat per meter and doubles $R_\text{max}$ to 60 m. Halving $B$ also doubles the resolution cell, so the two settings trade reach against resolution in different ways, which the lab measures.
+This limit comes from the sample rate, not from the transmit power; <a href="../L25-radar-equation/index.html#frame-maximum-range">Lesson 25</a> put the detection range of a 10 cm corner near 8.5 m in a 1 MHz bandwidth, and farther out in the 2 kHz of one bin. A slower slope reaches farther: halving $B$ or doubling $T_s$ halves the beat per meter and doubles $R_\text{max}$ to 60 m. Halving $B$ also doubles the resolution cell, so the two settings trade reach against resolution in different ways, which the lab measures.
 ::::
 
 ::::{frame} Windowing the Chirp
@@ -199,12 +209,18 @@ This limit comes from the sample rate, not from the transmit power; <a href="../
 :::
 :::{present}
 - Rectangular: sidelobes at $-13$ dB hide weak targets.
-- Hann: sidelobes at $-31$ dB, a main lobe 1.6 times wider, 1.8 dB less SNR.
+- Hann lowers the sidelobes to $-31$ dB but widens the main lobe 1.6 times and loses 1.8 dB of SNR.
 :::
 
 An FFT of one chirp treats the record as if it started and stopped abruptly, which gives each tone a $\sin x/x$ response with sidelobes $13$ dB below the peak, falling slowly. A strong target's sidelobes then cover the bins around it, and a weak target nearby disappears under them. In the figure the second target, 40 dB weaker and 0.9 m beyond the first, is invisible with the rectangular window.
 
-Multiplying the samples by a **window** that tapers smoothly to zero at both ends of the chirp lowers the sidelobes. The Hann window, $w[n] = \tfrac{1}{2}\left(1 - \cos(2\pi n/N)\right)$, puts the first sidelobe at $-31$ dB and the rest falling fast, and the weak target appears. This is the amplitude taper of <a href="../../module03/L22-sidelobes-tapering/index.html">Lesson 22</a> applied in time instead of across the array, with the same consequences: the main lobe widens, from a 3 dB width of 0.89 bins to 1.44 bins, so two equal targets one cell apart may merge, and the window discards some signal energy, a 1.8 dB loss in SNR. The course uses Hann by default; the rectangular window is the choice only when two equal targets must be split at the edge of the resolution.
+Multiplying the samples by a **window** that tapers smoothly to zero at both ends of the chirp lowers the sidelobes. The Hann window,
+
+$$
+w[n] = \frac{1}{2}\left(1 - \cos\frac{2\pi n}{N}\right),
+$$
+
+puts the first sidelobe at $-31$ dB and the rest falling fast, and the weak target appears. This is the amplitude taper of <a href="../../module03/L22-sidelobes-tapering/index.html">Lesson 22</a> applied in time instead of across the array, with the same consequences: the main lobe widens, from a 3 dB width of 0.89 bins to 1.44 bins, so two equal targets one cell apart may merge, and the window discards some signal energy, a 1.8 dB loss in SNR. We use Hann by default; the rectangular window is the choice only when two equal targets must be split at the edge of the resolution.
 ::::
 
 ::::{frame} The Range Waterfall
@@ -217,7 +233,7 @@ Multiplying the samples by a **window** that tapers smoothly to zero at both end
 - The slope of the trace is the walker's speed.
 :::
 
-One range profile is a snapshot. Stacking the profiles of successive chirps, one row per chirp and darker for a stronger echo, gives the **range waterfall**: range across, time up. A fixed object, the leakage at 0 m or the wall at 5.5 m, keeps the same range in every row and draws a vertical line. A person walking from 1 m out to 4 m and back draws a zigzag, and the slope of each leg is the walking speed: 3 m in 3 s is 1 m/s.
+One range profile is a snapshot. Stacking the profiles of successive chirps, one row per chirp and darker for a stronger echo, gives the **range waterfall**: range across, time up. A fixed object, the leakage at 0 m or the wall at 5.5 m, keeps the same range in every row and draws a vertical line. A person walking from 1 m out to 4 m and back draws a zigzag, and the slope of each leg is the walking speed: a 3 m leg in 3 s gives 1 m/s.
 
 The waterfall records range against time and nothing else. Its rows here are 50 ms apart, one profile each time the display updates, and over 50 ms a walker's carrier phase changes by many cycles, so successive rows say nothing about the walker's velocity except through the range they show. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> takes chirps a fixed 0.5 ms apart and reads the velocity from that phase.
 ::::
@@ -250,17 +266,17 @@ def range_axis(cap, n_fft=None):
     return (f - cap["f0"]) * k
 ```
 
-The bins come out in the order `np.fft.fft` returns them, and the bins below $f_0$ as negative ranges. Two more L28 functions build on `range_fft`: `range_profile(cap, chirp=0, window="hann")` returns one chirp's ranges at or beyond 0 m and its power in dB, `(r, p_db)`, and `waterfall(cap)` returns `(r, t, w_db)`, one row per chirp. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> uses `range_doppler` and `mti`, <a href="../L30-cfar/index.html">Lesson 30</a> uses `cfar_2d`, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses the spectrogram, a classifier, and a tracker, all in the same module. The L28 notebook is <a href="../../notebooks/L28_range.ipynb">`L28_range.ipynb`</a>.
+The bins come out in the order `np.fft.fft` returns them, and the bins below $f_0$ come out as negative ranges. Two more L28 functions build on `range_fft`: `range_profile(cap, chirp=0, window="hann")` returns one chirp's ranges at or beyond 0 m and its power in dB, `(r, p_db)`, and `waterfall(cap)` returns `(r, t, w_db)`, one row per chirp. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> uses `range_doppler` and `mti`, <a href="../L30-cfar/index.html">Lesson 30</a> uses `cfar_2d`, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses the spectrogram, a classifier, and a tracker, all in the same module. The L28 notebook is <a href="../../notebooks/L28_range.ipynb">`L28_range.ipynb`</a>.
 ::::
 
 ::::{frame} L28 Lab: FMCW Range
 :::{present}
 - Calibrate $f_0$, then place a plate at 1, 2, and 3 m: measure the kHz per meter.
-- Predict, then measure, 250 MHz and 1 ms.
+- Predict, then measure, the beat at 250 MHz and at 1 ms.
 - Read the waterfall; run the notebook's three tasks.
 :::
 
-The L28 Lab measures everything this lesson derived, on your own kit: the 0 m frequency, the beat per meter, how the bandwidth and the chirp length change it, and the range waterfall. The Phaser app does all of the live work: the calibration, the range spectrum, the waterfall, and saving captures. The lab ends in the course's notebook, where you run the provided range FFT on the captures you saved and change one line for each of three tasks. You work the lab on your own, outside class, and turn in one packet in three parts: **Part 1, Pre-Lab**, the predictions, before you go to the bench; **Part 2, Measurements**, from your own kit; and **Part 3, Writeup**, after it. The packet is checked and returned with feedback. It is the first piece of scaffolding for your final report, and it is not the report.
+The L28 Lab measures everything this lesson derived, on your own kit: the 0 m frequency, the beat per meter, how the bandwidth and the chirp length change it, and the range waterfall. The Phaser app does all of the live work: the calibration, the range spectrum, the waterfall, and saving captures. The lab ends in the course's notebook, where you run the provided range FFT on the captures you saved and change one line for each of three tasks. You work the lab on your own, outside class, and turn in one packet in three parts: **Part 1, Pre-Lab**, the predictions, before you go to the bench; **Part 2, Measurements**, from your own kit; and **Part 3, Writeup**, after it. I check the packet and return it with feedback. It is the first piece of scaffolding for your final report, and it is not the report.
 
 The procedure is <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-fmcw/" target="_blank" rel="noopener">ADI's FMCW lab</a> with the course's numbers: a 10 GHz carrier, 500 MHz in 0.5 ms, and $c = 3.00\times 10^8$ m/s. The <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-setup/" target="_blank" rel="noopener">radar setup page</a> describes the transmit path.
 ::::
@@ -284,9 +300,9 @@ The table is the core of Part 1. Every number in it follows from the beat-freque
 - Use a flat metal plate, square to the array, at array height.
 :::
 
-A static target is only static if nothing else moves. Your own body is a larger reflector than a small plate, so step behind the kit or well to one side while you read a static range; otherwise your echo adds a moving peak near the target's and the profile you save is not the one you meant to save. Keep the beam's path clear of walls and furniture for at least 4 m if you can, and expect the far wall to show up as a peak of its own.
+A static measurement requires that nothing else in the beam moves. Your own body is a larger reflector than a small plate, so step behind the kit or well to one side while you read a static range; otherwise your echo adds a moving peak near the target's and the profile you save is not the one you meant to save. Keep the beam's path clear of walls and furniture for at least 4 m if you can, and expect the far wall to show up as a peak of its own.
 
-Any flat metal plate about 20 cm on a side works, and so does aluminum foil glued smoothly to cardboard. A plate reflects strongly only when it faces the array squarely, so turn it slowly until its peak is highest before you read the frequency. A trihedral folded from three foil-covered cardboard squares is more forgiving of its angle. The course has only one or two commercial corner reflectors; no step needs one, and if one is free, Part 2 has an optional reading for it. Measure range from the array face to the plate's front with a tape measure.
+Any flat metal plate about 20 cm on a side works, and so does aluminum foil glued smoothly to cardboard. A plate reflects strongly only when it faces the array squarely, so turn it slowly until its peak is highest before you read the frequency. A trihedral folded from three foil-covered cardboard squares is more forgiving of its angle. I have only one or two commercial corner reflectors; no step needs one, and if one is free, Part 2 has an optional reading for it. Measure range from the array face to the plate's front with a tape measure.
 ::::
 
 ::::{frame} Results to Keep
@@ -296,7 +312,7 @@ Any flat metal plate about 20 cm on a side works, and so does aluminum foil glue
 - Your notebook, with its edits and plots.
 :::
 
-The L29 Lab starts from your own L28 captures and notebook, so keep them together with `radar_lab.py`, with the capture file names written in your packet. For the final report, keep three results from this lab: the beat per meter you measured against the 6.67 kHz the lesson predicts, the resolution you saw at 500 and 250 MHz, and a waterfall you can explain line by line. The report asks you to explain how a chirp becomes a range measurement and what resolution you actually reached, in your own words; the packet's tables are the evidence for it, not the explanation.
+The L29 Lab starts from your own L28 captures and notebook, so keep them together with `radar_lab.py`, with the capture file names written in your packet. For the final report, keep three results from this lab: the beat per meter you measured against the 6.67 kHz the lesson predicts, the resolution you saw at 500 and 250 MHz, and a waterfall you can explain line by line. The report asks you to explain how a chirp becomes a range measurement and the resolution you measured, in your own words; the packet's tables are the evidence for it, not the explanation.
 ::::
 
 ::::{frame} Equipment and Setup
@@ -309,7 +325,7 @@ You need:
 - a tape measure and about 4 m of clear floor in front of the kit;
 - your laptop, on the kit's network for the Phaser app, and set up for the notebook as the Notebook Setup frame describes.
 
-The course's Phaser app runs the radar in its FMCW mode. That mode is still being finished, so its control names and layout are not yet known; this page names each setting by the quantity it sets, and where the app's label differs, use the app's. ADI's <a href="https://github.com/analogdevicesinc/system-level/blob/main/docs/solutions/platforms/phaser/labs/resources/python/FMCW_RADAR_Waterfall.py" target="_blank" rel="noopener">`FMCW_RADAR_Waterfall.py`</a> makes the same measurements from a script, with a bandwidth slider, a range toggle, and a chirp length set in its `ramp_time` variable; its 12.145 GHz carrier does not change the beat per meter.
+The course's Phaser app runs the radar in its FMCW mode. That mode is not finished yet, so this page does not give its control names or layout; this page names each setting by the quantity it sets, and where the app's label differs, use the app's. ADI's <a href="https://github.com/analogdevicesinc/system-level/blob/main/docs/solutions/platforms/phaser/labs/resources/python/FMCW_RADAR_Waterfall.py" target="_blank" rel="noopener">`FMCW_RADAR_Waterfall.py`</a> makes the same measurements from a script, with a bandwidth slider, a range toggle, and a chirp length set in its `ramp_time` variable; its 12.145 GHz carrier does not change the beat per meter.
 
 1. With the kit powered off, connect the transmit antenna to **OUT2**.
 2. Power the kit, wait for the Pi to boot, open the Phaser app, and select its FMCW mode.
@@ -365,7 +381,7 @@ Write your Part 1 predictions in Table C before you change anything.
 3. Set the bandwidth back to 500 MHz and the chirp length to **1 ms**. Record the peak's frequency, and save a capture.
 4. Return the chirp length to **0.5 ms**.
 
-In ADI's script the bandwidth takes effect when you press **Set RF Bandwidth**, and the chirp length is the `ramp_time` variable in microseconds, set before you run it. Whether the Phaser app changes the chirp length from its panel is not yet known.
+In ADI's script the bandwidth takes effect when you press **Set RF Bandwidth**, and the chirp length is the `ramp_time` variable in microseconds, set before you run it. I have not yet confirmed whether the Phaser app changes the chirp length from its panel.
 ::::
 
 ::::{frame} Procedure D: Read the Waterfall
@@ -380,7 +396,7 @@ In ADI's script the bandwidth takes effect when you press **Set RF Bandwidth**, 
 ::::{frame} Notebook Setup
 :class: read-only
 
-The notebooks run on your own laptop, with Python 3 and four packages: numpy, scipy, matplotlib, and Jupyter. Nothing else is needed, and once they are installed the notebook runs without a network connection.
+The notebooks run on your own laptop, with Python 3 and four packages: numpy, scipy, matplotlib, and Jupyter. You need nothing else, and once they are installed the notebook runs without a network connection.
 
 1. Install Python 3.10 or newer from <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org</a> if your laptop does not have it. Then, in a terminal, install the four packages in one line:
 
@@ -389,7 +405,7 @@ The notebooks run on your own laptop, with Python 3 and four packages: numpy, sc
    ```
 
 2. Make a folder for the Module 4 labs, such as `ece444-radar`, and save these into it from the site: <a href="../../notebooks/radar_lab.py" download>`radar_lab.py`</a>, <a href="../../notebooks/L28_range.ipynb" download>`L28_range.ipynb`</a>, and the recorded captures task (b) and the waterfall cell use, <a href="../../radar-data/L28_two_corners.npz" download>`L28_two_corners.npz`</a> and <a href="../../radar-data/L28_walker.npz" download>`L28_walker.npz`</a>, with any others from the No Hardware? frame you need.
-3. Save your own captures into the same folder. The Phaser app's FMCW mode is expected to offer each capture as a download from the browser; that is not confirmed until the mode lands. If your capture cannot reach the laptop, use the recorded data and say so in the packet.
+3. Save your own captures into the same folder. The Phaser app's FMCW mode should offer each capture as a browser download once the mode is finished. If your capture cannot reach the laptop, use the recorded data and say so in the packet.
 4. In a terminal, change to the folder and start Jupyter with `jupyter lab`. Open `L28_range.ipynb` and run its first cell: it prints the capture's chirps, samples, bandwidth, chirp length, and $f_0$. If it reports that `radar_lab` is missing, the module is not in the same folder as the notebook.
 
 Keep this folder for the whole module. Each later lab adds its notebook and captures to it, and they all use the same `radar_lab.py`.
@@ -438,5 +454,11 @@ Each task's markdown cell states the result to check against. Anything you do be
 - The `range_fft` you ran here is the first FFT of its range-Doppler map.
 :::
 
-This lesson used one chirp at a time and threw away its phase. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> keeps it. A burst of 256 chirps, each 300 µs long and repeated every 0.5 ms, gives each target a phase that advances from chirp to chirp at its Doppler frequency, and a second FFT across the chirps reads that frequency as a velocity, with the resolution $\lambda/(2MT_\text{PRI}) = 0.12$ m/s of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>. The first FFT of that map is the range FFT you ran here, applied to every chirp of the burst. Moving target indication, in the same lesson, removes the fixed lines of the waterfall, the leakage and the wall, so that only what moves remains.
+This lesson used one chirp at a time and discarded its phase, which <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> keeps. A burst of 256 chirps, each 300 µs long and repeated every 0.5 ms, gives each target a phase that advances from chirp to chirp at its Doppler frequency, and a second FFT across the chirps reads that frequency as a velocity, with the resolution of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>,
+
+$$
+\Delta v = \frac{\lambda}{2MT_\text{PRI}} = 0.12\ \text{m/s}.
+$$
+
+The first FFT of that map is the range FFT you ran here, applied to every chirp of the burst. Moving target indication, in the same lesson, removes the fixed lines of the waterfall, the leakage and the wall, so that only what moves remains.
 ::::
