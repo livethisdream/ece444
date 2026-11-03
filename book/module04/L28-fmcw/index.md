@@ -126,7 +126,7 @@ $$
 \end{aligned}
 $$
 
-the result of <a href="../L26-range-resolution-doppler/index.html#frame-resolution-is-set-by-bandwidth">Lesson 26</a>. At 500 MHz it is 0.30 m. A longer chirp makes the beat per meter smaller but lets the FFT resolve finer frequency steps in the same proportion, so $T_s$ cancels. Halving the bandwidth to 250 MHz doubles the resolution cell to 0.60 m; doubling the chirp length to 1 ms leaves it at 0.30 m.
+the result of <a href="../L26-range-resolution-doppler/index.html#frame-resolution-and-bandwidth">Lesson 26</a>. At 500 MHz it is 0.30 m. A longer chirp makes the beat per meter smaller but lets the FFT resolve finer frequency steps in the same proportion, so $T_s$ cancels. Halving the bandwidth to 250 MHz doubles the resolution cell to 0.60 m; doubling the chirp length to 1 ms leaves it at 0.30 m.
 
 The number of beat cycles in one chirp is $f_bT_s = 2RB/c$, which does not depend on $T_s$ either. Two plates 0.30 m apart differ by exactly one cycle a chirp at 500 MHz; closer than that, their beats stay in step for the whole chirp and the FFT returns one peak.
 ::::

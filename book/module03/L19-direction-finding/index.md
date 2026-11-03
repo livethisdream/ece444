@@ -990,25 +990,25 @@ firing line.
 
 The L19 Lab's pre-lab is Part 1 of its packet, one per team, done before the
 lab period. It works this lesson's error budget for the range and has you
-write the fox-hunt script: start from the starter file, write its four
-functions, and test it on the supplied bearings. Bring the tested script to
-the lab on your laptop.
+write the fox-hunt notebook: write its four functions and test them on the
+practice set it holds. Bring the tested notebook to the lab on your laptop. It needs Python 3 with numpy, matplotlib, and Jupyter:
+`python -m pip install numpy matplotlib jupyterlab` installs all three.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">L19 Lab packet, Part 1 (PDF)</a>
-- <a class="doc-link" href="../../labs/foxhunt_starter.py" download>Fox-hunt starter script</a>
+- <a class="doc-link" href="../../notebooks/L19_foxhunt.ipynb" download>Fox-hunt notebook (`L19_foxhunt.ipynb`)</a>
 ::::
 
 ::::{frame} Looking Ahead
 :::{present}
 - In the L19 Lab, one kit takes a bearing from each station on a taped firing line.
-- Bring your tested script from the Pre-Lab.
+- Bring your tested notebook from the Pre-Lab.
 - L20 returns to shaping and steering the beam.
 :::
 
 In the L19 Lab you and a partner find the one live HB100 among the numbered
 boxes. You move one kit along a taped firing line, square to the tape at every
 station, read Angle off the beam sweep at each station mark, convert it to a
-room bearing, and solve for the fix. Come with the Pre-Lab script, tested.
+room bearing, and solve for the fix. Come with the Pre-Lab notebook, tested.
 
 :::{depth}
 The rest of Module 3 returns to the pattern the sweep traces. L20 measures
