@@ -197,13 +197,14 @@ $290\ \text{K}$, and the bandwidth is $1\ \mhz$.
 		\begin{solution}[1.3in]
 		\eq{ P_r &= P_t + G_t + G_r + 10\mylog{\lambda^2} \\
 		&\quad + \sigma - 33.0 - 40\mylog{R} \\
-		&= -16 + 6 + 15 - 30.5 - 3.3 - 33.0 - 28.0 \\
-		&= -89.8\ \dbm }
+		&= -16.00 + 6.00 + 15.00 - 30.46 \\
+		&\quad - 3.32 - 32.98 - 27.96 \\
+		&= -89.7\ \dbm }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$P_r$ = \ansbox[1.3in]{$-89.8\ \dbm$}
+		$P_r$ = \ansbox[1.3in]{$-89.7\ \dbm$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -211,20 +212,20 @@ $290\ \text{K}$, and the bandwidth is $1\ \mhz$.
 		\begin{solution}[1.1in]
 		With $T_A = T_0$ the noise is $kT_0BF$:
 		\eq{ N &= -174 + 60 + 2 = -112.0\ \dbm \\
-		\text{SNR} &= -89.8 - (-112.0) = 22.2\db }
+		\text{SNR} &= -89.7 - (-112.0) = 22.3\db }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		SNR = \ansbox[1.3in]{$22.2\db$}
+		SNR = \ansbox[1.3in]{$22.3\db$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part The detector needs an SNR of at least $13\db$. Find the maximum range.
 		\begin{solution}[1.2in]
-		The echo has $22.2 - 13 = 9.2\db$ to spare at $5\ \m$, and range enters at
+		The echo has $22.3 - 13 = 9.3\db$ to spare at $5\ \m$, and range enters at
 		$40\db$ per decade:
-		\eq{ R_\text{max} = 5\ \m \times 10^{9.2/40} = 8.5\ \m }
+		\eq{ R_\text{max} = 5\ \m \times 10^{9.3/40} = 8.5\ \m }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -258,43 +259,43 @@ $\sigma = -20\ \dbsm$, still in a $1\ \mhz$ bandwidth and with a $13\db$ thresho
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Find the maximum range against the drone.
 		\begin{solution}[1.2in]
-		RCS enters at one quarter of its dB value. The drone is $16.7\db$ below the corner, so
-		\eq{ R_\text{max} = 8.5\ \m \times 10^{-16.7/40} = 3.3\ \m }
+		RCS enters at one quarter of its dB value. The drone is $16.68\db$ below the corner, so
+		\eq{ R_\text{max} = 8.53\ \m \times 10^{-16.68/40} = 3.27\ \m }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$R_\text{max}$ = \ansbox[1.3in]{$3.3\ \m$}
+		$R_\text{max}$ = \ansbox[1.3in]{$3.27\ \m$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part How many dB must the budget improve to detect the drone at $10\ \m$?
 		\begin{solution}[0.9in]
-		\eq{ \Delta = 40\mylog{\frac{10}{3.3}} = 19.3\db }
+		\eq{ \Delta = 40\mylog{\frac{10}{3.27}} = 19.4\db }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\Delta$ = \ansbox[1.3in]{$19.3\db$}
+		$\Delta$ = \ansbox[1.3in]{$19.4\db$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Find the receiver bandwidth that provides the whole improvement on its own.
 		\begin{solution}[1.0in]
 		Noise power is proportional to bandwidth, so
-		\eq{ B = \frac{1\ \mhz}{10^{19.3/10}} = 11.7\ \khz }
+		\eq{ B = \frac{1\ \mhz}{10^{19.4/10}} = 11.5\ \khz }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$B$ = \ansbox[1.3in]{$11.7\ \khz$}
+		$B$ = \ansbox[1.3in]{$11.5\ \khz$}
 	\end{minipage}
 
-	\part The same $19.3\db$ could come from about 85 times the transmit power instead. State
+	\part The same $19.4\db$ could come from about 87 times the transmit power instead. State
 	which change you would make on the PHASER and why, in two or three sentences.
 		\begin{solution}[1.4in]
 		Narrow the bandwidth. A narrower filter, or a longer FFT on the processed signal,
-		removes noise without any new hardware, while 85 times the power needs a larger
+		removes noise without any new hardware, while 87 times the power needs a larger
 		amplifier, more prime power, and more heat removal.
 		The narrower bandwidth requires a longer observation of the target, which a radar
 		obtains by integrating over more time, and Lesson 28 shows how the FMCW processing
