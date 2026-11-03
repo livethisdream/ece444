@@ -262,6 +262,46 @@ def rcs_shapes() -> None:
     finalize(fig, "L25-rcs-shapes")
 
 
+def corner_hexagon() -> None:
+    """The triple-bounce region seen down the corner's symmetry axis.
+
+    The opening projects to an equilateral triangle (sides a*sqrt(2)). A ray
+    entering at p leaves at -p, its point reflection through the center, so
+    it returns after three bounces only when -p is also in the triangle. The
+    overlap of the triangle and its reflection is a hexagon of 2/3 the area.
+    """
+    s = np.sqrt(2.0)                                   # side, in units of a
+    rc = s / np.sqrt(3.0)                              # circumradius
+    ang = np.deg2rad([90, 210, 330])
+    tri = np.c_[rc * np.cos(ang), rc * np.sin(ang)]
+    inv = -tri
+    hexa = np.array(_clip(list(tri), list(inv)))
+    fig, ax = plt.subplots(figsize=(4.2, 3.9))
+    ax.add_patch(Polygon(hexa, closed=True, fc="#dcebdf", ec="none"))
+    ax.add_patch(Polygon(tri, closed=True, fill=False, ec=NAVY, lw=2.2))
+    ax.add_patch(Polygon(inv, closed=True, fill=False, ec=GRAY, lw=1.3, ls=(0, (4, 3))))
+    ax.plot(0, 0, "o", color=INK, ms=3)
+    # a ray inside the hexagon returns; one in a tip of the triangle does not
+    p = np.array([0.22, 0.12])
+    q = 0.78 * tri[0]
+    for pt, col, mk in ((p, GREEN, "o"), (q, RED, "o")):
+        ax.plot([pt[0], -pt[0]], [pt[1], -pt[1]], color=col, lw=1.0, ls=(0, (2, 2)))
+        ax.plot(*pt, mk, color=col, ms=6)
+        ax.plot(*(-pt), mk, mfc="white", mec=col, ms=6, mew=1.5)
+    off = 0.07
+    ax.text(p[0] + off, p[1] + off * 0.4, r"$p$", color=GREEN, fontsize=13)
+    ax.text(-p[0] - off, -p[1] - off * 0.4, r"$-p$", color=GREEN, fontsize=13, ha="right", va="top")
+    ax.text(q[0] - 2.4 * off, q[1], r"$q$", color=RED, fontsize=13, ha="right", va="center")
+    ax.text(-q[0] + off, -q[1], r"$-q$", color=RED, fontsize=13, va="center")
+    ax.text(0.0, -0.33 * rc, r"$A_\mathrm{eff}$", color=GREEN, fontsize=13, ha="center", va="center")
+    lim = 1.08 * rc
+    ax.set_xlim(-lim, lim); ax.set_ylim(-lim, lim)
+    ax.set_aspect("equal"); ax.axis("off")
+    area_tri = _area(list(tri)); area_hex = _area(list(hexa))
+    assert abs(area_hex / area_tri - 2 / 3) < 1e-9 and abs(area_hex - 1 / np.sqrt(3)) < 1e-9
+    finalize(fig, "L25-corner-hexagon")
+
+
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     pk = corner_rcs([0.0])[0]
@@ -275,6 +315,7 @@ def main() -> int:
     rcs_aspect()
     two_trips()
     rcs_shapes()
+    corner_hexagon()
     return 0
 
 

@@ -135,7 +135,7 @@ $$
 $$
 
 - $\sigma$ is the area of an isotropic scatterer that would return the same echo.
-- Size, shape, and the viewing angle set it.
+- Size, shape, wavelength, and the viewing angle set it.
 - We quote it in dBsm, relative to 1 m².
 :::
 
@@ -146,7 +146,7 @@ Because $\sigma$ includes the target's own re-radiation pattern, it can be much 
 
 ::::{frame} Sphere, Plate, and Corner
 :::{present}
-<img src="../../viz/img/L25-rcs-shapes.svg" alt="Three scatterers with parallel incident rays. The sphere reflects each ray off its curved surface in a different direction. The flat plate at normal incidence reflects the rays straight back. The corner reflector bounces each ray off two faces and sends it back parallel to the way it came, even though the rays arrive at an angle" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L25-rcs-shapes.svg" alt="Three scatterers with parallel incident rays. The sphere reflects each ray off its curved surface in a different direction. The flat plate at normal incidence reflects the rays straight back. The corner reflector, drawn as a two-dimensional cut that shows two of its three bounces, sends each ray back parallel to the way it came, even though the rays arrive at an angle" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
 | Shape, 10 cm | Peak $\sigma$ | dBsm |
@@ -169,7 +169,7 @@ $$
 - A 10 cm sphere has $\sigma = 0.0079$ m², or $-21.0$ dBsm.
 :::
 
-A sphere much larger than a wavelength scatters the power it intercepts nearly equally in every direction, so it is the one shape whose radar cross section equals its physical shadow, $\pi a^2$. It is also the only shape whose $\sigma$ does not depend on the viewing angle, which is why calibration spheres hang from balloons over radar test ranges. For the 10 cm sphere, $a = 0.05\ \text{m}$ and the circumference is $10.5\lambda$, just inside this **optical region**:
+A sphere much larger than a wavelength scatters the power it intercepts nearly equally in every direction, so it is the one shape whose radar cross section equals its physical shadow, $\pi a^2$. It is also the only shape whose $\sigma$ does not depend on the viewing angle. For the 10 cm sphere, $a = 0.05\ \text{m}$ and the circumference is $10.5\lambda$, just inside this **optical region**:
 
 $$
 \begin{aligned}
@@ -178,7 +178,7 @@ $$
 \end{aligned}
 $$
 
-A sphere much smaller than a wavelength is in the **Rayleigh region**, where $\sigma$ grows as $a^6/\lambda^4$. That steep dependence on frequency is why a weather radar sees raindrops at X-band and not at L-band. Between the two regions, near $2\pi a \approx \lambda$, the **resonance region** oscillates as surface waves around the sphere add and cancel.
+A sphere much smaller than a wavelength is in the **Rayleigh region**, where $\sigma$ grows as $a^6/\lambda^4$. At L-band, with $\lambda = 23\ \text{cm}$, the same raindrop returns $40\log_{10}(23/3) = 35$ dB less than at X-band, which is why weather radars operate from S-band to X-band. Between the two regions, near $2\pi a \approx \lambda$, the **resonance region** oscillates as surface waves around the sphere add and cancel.
 ::::
 
 ::::{frame} The Flat Plate
@@ -215,9 +215,18 @@ That is 22.5 dB above the sphere of the same size, because the plate concentrate
 - The corner holds within 3 dB out to $\pm 19^\circ$.
 :::
 
-Turn the plate away from the radar by an angle $\theta$ and its re-radiated beam turns by $2\theta$, because a mirror reflects at the angle of incidence. The echo falls off along the plate's own aperture pattern, a $\text{sinc}^2$ with sidelobes, and the first null arrives at $\sin\theta = \lambda/2a$, or $8.6^\circ$ for the 10 cm plate. The argument carries a factor of two over the one-way pattern of Lesson 15 because the wave crosses the path difference across the plate twice, so a plate returns a strong echo only when it faces the radar to within a few degrees.
+Turn the plate away from the radar by an angle $\theta$ and its re-radiated beam turns by $2\theta$, because a mirror reflects at the angle of incidence. The echo falls off along the plate's own aperture pattern, the uniform-aperture $\text{sinc}^2$ of <a href="../../module03/L15-aperture-distributions/index.html#frame-part-2-the-uniform-aperture">Lesson 15</a> with the aperture length $L$ replaced by $2a$, because the wave crosses the path difference across the plate twice. Lesson 15's half-power point $u = 0.4429$ and first null $u = 1$ then give
 
-The corner's peak RCS is 4.8 dB below the plate's, but its angular response is much wider: it stays within 3 dB of its peak out to $\pm 19^\circ$, and within 6 dB out to $\pm 26^\circ$. The sphere is flat at every angle. The plate curve is the physical-optics result, and the corner curve is a geometric-optics estimate computed from the area that returns a triple bounce, which is why it drops abruptly near $\pm 38^\circ$ where a real corner rolls off more gradually.
+$$
+\begin{aligned}
+\sin\theta_\text{3 dB} &= 0.4429\ \frac{\lambda}{2a} = 0.066 \quad (3.8^\circ) \\
+\sin\theta_\text{null} &= \frac{\lambda}{2a} = 0.15 \quad (8.6^\circ)
+\end{aligned}
+$$
+
+for the 10 cm plate, so a plate returns a strong echo only when it faces the radar to within a few degrees.
+
+The corner's peak RCS is 4.8 dB below the plate's, but its angular response is much wider: it stays within 3 dB of its peak out to $\pm 19^\circ$, and within 6 dB out to $\pm 26^\circ$. The sphere is flat at every angle. The plate curve is the physical-optics result, and the corner curve is a geometric-optics estimate computed from the area that returns a triple bounce, which is why it drops abruptly near $\pm 39^\circ$ where a real corner rolls off more gradually.
 ::::
 
 ::::{frame} The Corner Reflector
@@ -235,7 +244,15 @@ $$
 
 A trihedral corner reflector is three flat plates joined at right angles, like the inside corner of a box. Each bounce off one face reverses one component of the ray's direction, so a ray that strikes all three faces leaves with all three components reversed and travels back exactly antiparallel to the way it came. That holds for any arrival direction inside the corner's opening, which is why the corner reflector is the standard radar target, the lab target here, and the reason bicycle reflectors work.
 
-The corner behaves like a flat plate that always faces the radar. The plate's area is the part of the opening that returns a triple bounce. Looking straight down the symmetry axis, that region is a hexagon of area $a^2/\sqrt{3}$, and the plate formula gives
+The corner behaves like a flat plate that always faces the radar. The plate's area is the part of the opening that returns a triple bounce. Looking straight down the symmetry axis, the opening is an equilateral triangle whose sides are the face diagonals, $a\sqrt{2}$ long. A ray that enters at a point $p$ leaves at $-p$, the point reflection of $p$ through the center, so it completes all three bounces only if $-p$ also lies inside the triangle. The triple-bounce region is the overlap of the triangle with its own reflection, a hexagon that covers two thirds of the triangle:
+
+<img src="../../viz/img/L25-corner-hexagon.svg" alt="The corner reflector's opening seen down its symmetry axis: a solid equilateral triangle, its point reflection through the center drawn dashed, and their overlap, a shaded hexagon labeled A eff. A point p inside the hexagon reflects to minus p, also inside the triangle. A point q in a tip of the triangle reflects to minus q, outside it" style="max-width: 320px; width: 100%; display: block; margin: 0 auto;">
+
+$$
+A_\text{eff} = \frac{2}{3}\cdot\frac{\sqrt{3}}{4}\left(a\sqrt{2}\right)^2 = \frac{a^2}{\sqrt{3}} .
+$$
+
+The plate formula then gives
 
 $$
 \begin{aligned}
@@ -276,7 +293,7 @@ $$
 - Noise grows with bandwidth, 10 dB per decade.
 :::
 
-An echo is only useful if it stands above the noise, so the second half of the budget is the noise power. Any resistive source at absolute temperature $T$ delivers an available **thermal noise power**
+An echo is only useful if it stands above the noise, so the second half of the budget is the noise power. As in <a href="../../module02/L12-loop-monopole-antennas/index.html#frame-low-efficiency-same-snr">Lesson 12</a>, any resistive source at absolute temperature $T$ delivers an available **thermal noise power**
 
 $$
 N = kTB
@@ -299,9 +316,18 @@ $$
 - Its $G/T$ is $15.0 - 26.6 = -11.6$ dB/K.
 :::
 
-The receiver adds noise of its own. Its **noise factor** $F$ is the ratio of the output noise to the noise a noiseless receiver would deliver from a 290 K source, and in decibels it is the **noise figure**. We can also describe the same receiver by an **equivalent noise temperature** $T_e = T_0(F-1)$, the temperature a resistor at the input would need to produce the added noise. The antenna contributes its own **antenna temperature** $T_A$, set by what its beam sees. Indoors the beam sees walls, people, and furniture at about 290 K, so $T_A \approx T_0$. The **system noise temperature** is the sum, $T_\text{sys} = T_A + T_e$.
+The receiver adds noise of its own, which <a href="../../module02/L12-loop-monopole-antennas/index.html#frame-low-efficiency-same-snr">Lesson 12</a> described in two equivalent ways. Its **noise factor** $F$ is the ratio of the output noise to the noise a noiseless receiver would deliver from a 290 K source, and in decibels it is the **noise figure**. We can also describe the same receiver by an **equivalent noise temperature** $T_e = T_0(F-1)$, the temperature a resistor at the input would need to produce the added noise. The antenna contributes its **antenna temperature** $T_A$ from Lesson 12, set by what its beam sees. Indoors the beam sees walls, people, and furniture at about 290 K, so $T_A \approx T_0$. The **system noise temperature** is the sum, $T_\text{sys} = T_A + T_e$.
 
-Every PHASER channel starts with an ADL8107 low-noise amplifier with a 1.3 dB noise figure and 24 dB of gain, per the ADI <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/hardware/" target="_blank" rel="noopener">hardware page</a>. That gain makes the stages behind it contribute little, so we use $F = 2$ dB for the whole receiver. Then
+Every PHASER channel starts with an ADL8107 low-noise amplifier with a 1.3 dB noise figure and 24 dB of gain, per the ADI <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/hardware/" target="_blank" rel="noopener">hardware page</a>. The cascade formula of <a href="../../module03/L17-phased-array-hardware/index.html#frame-the-patches-and-the-lnas">Lesson 17</a> shows how little the stages behind it add:
+
+$$
+\begin{aligned}
+F &= F_1 + \frac{F_2 - 1}{G_1} \\
+&= 1.35 + \frac{10 - 1}{251} = 1.38 \quad (1.4\ \text{dB}),
+\end{aligned}
+$$
+
+taking Lesson 17's 10 dB beamformer stage behind the LNA. We use $F = 2$ dB for the whole receiver, which leaves 0.6 dB of margin for any loss ahead of the LNA and for stages this estimate does not count. Then
 
 $$
 \begin{aligned}
@@ -310,7 +336,7 @@ T_\text{sys} &= 290 + 170 = 460\ \text{K} = 26.6\ \text{dBK}.
 \end{aligned}
 $$
 
-The ratio of the receive gain to the system temperature, **G/T** in dB/K, is the receiver's figure of merit. It is the receive-side counterpart of the transmitter's EIRP: gain raises the signal and temperature raises the noise, so only their ratio matters for the SNR. For the PHASER at broadside, $G/T = 15.0 - 26.6 = -11.6$ dB/K. Satellite ground stations quote G/T on their datasheets for the same reason.
+The ratio of the receive gain to the system temperature, **G/T** in dB/K, is the receiver's figure of merit. It is the receive-side counterpart of the transmitter's EIRP from <a href="../../module01/L02-antenna-properties/index.html#frame-the-friis-transmission-equation-combining-the-two">Lesson 2</a>: gain raises the signal and temperature raises the noise, so only their ratio matters for the SNR. For the PHASER at broadside, $G/T = 15.0 - 26.6 = -11.6$ dB/K.
 ::::
 
 ::::{frame} Signal-to-Noise Ratio
@@ -326,15 +352,24 @@ $$
 - In 1 MHz the PHASER's noise is $N = -174 + 60 + 2 = -112$ dBm.
 :::
 
-The **signal-to-noise ratio** is the echo power divided by the noise power in the same bandwidth. Substitute the radar equation for $P_r$ and the noise for $N$ and every quantity in the lesson appears in one expression. With the antenna at $T_0$, $kT_\text{sys}B = kT_0BF$, so in decibels the noise is
+The **signal-to-noise ratio** is the echo power divided by the noise power in the same bandwidth. Substitute the radar equation for $P_r$ and the noise for $N$ and every quantity in the lesson appears in one expression. With the antenna at $T_0$, the system temperature reduces to one factor,
+
+$$
+\begin{aligned}
+T_\text{sys} &= T_A + T_e = T_0 + T_0(F - 1) \\
+&= T_0F ,
+\end{aligned}
+$$
+
+so $kT_\text{sys}B = kT_0BF$ and in decibels the noise is
 
 $$
 N\ [\text{dBm}] = -174 + 10\log_{10}B + F .
 $$
 
-For the PHASER in a 1 MHz bandwidth that is $-112$ dBm.
+For the PHASER in a 1 MHz bandwidth that is $-112$ dBm. The 1 MHz is a round placeholder for the receiver's bandwidth before any processing; Lesson 28 replaces it with the 2 kHz of one FFT bin.
 
-Two things move the SNR that do not appear in the received power. A lower noise figure helps decibel for decibel, which is why the LNA sits directly behind each antenna element. A narrower bandwidth helps 10 dB per decade, and Lesson 28 shows that the FFT of an FMCW radar narrows the effective bandwidth far below 1 MHz.
+Two things move the SNR that do not appear in the received power. A lower noise figure helps decibel for decibel, which is why the LNA sits directly behind each antenna element. A narrower bandwidth helps 10 dB per decade.
 ::::
 
 ::::{frame} The PHASER Link Budget
@@ -369,7 +404,7 @@ P_r &= -16.00 + 21.00 - 30.46 \\
 \end{aligned}
 $$
 
-The chain carries two decimals so the rounding of the table does not accumulate. Against the $-112.0$ dBm noise in 1 MHz, the echo stands 31.1 dB above the noise. A transmitter of 25 µW is enough because the target is close: at 3 m the two-way path loss is only 19.1 dB beyond the 1 m reference, where a radar at 30 km would lose another 160 dB.
+The chain carries two decimals so the rounding of the table does not accumulate. Against the $-112.0$ dBm noise in 1 MHz, the echo stands 31.1 dB above the noise. A transmitter of 25 µW is enough because the target is close. The range term $40\log_{10}R$ takes $R$ in meters, so it is 0 dB at 1 m and only 19.1 dB at 3 m; a radar at 30 km would lose another 160 dB.
 ::::
 
 ::::{frame} Radar Equation Explorer
@@ -403,7 +438,7 @@ $$
 R_\text{max} = 3\ \text{m} \times 10^{18.1/40} = 8.5\ \text{m}
 $$
 
-in a 1 MHz bandwidth. Because of the fourth root, every term inside the brackets enters at one quarter of its decibel value, so 16 times the transmit power, or 12 dB, only doubles the range. Raising the antenna gains, lowering the noise, and narrowing the bandwidth all enter at the same quarter of their decibel value, and a radar designer usually finds the gain and the bandwidth easier to change than the transmitter.
+in a 1 MHz bandwidth. Because of the fourth root, every term inside the brackets enters at one quarter of its decibel value, so 16 times the transmit power, or 12 dB, only doubles the range. Raising the antenna gains, lowering the noise, and narrowing the bandwidth all enter at the same quarter of their decibel value.
 ::::
 
 ::::{frame} Summary
