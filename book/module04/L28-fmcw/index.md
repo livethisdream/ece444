@@ -265,7 +265,7 @@ The L28 Lab measures everything this lesson derived, on your own kit: the 0 m fr
 The procedure is <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-fmcw/" target="_blank" rel="noopener">ADI's FMCW lab</a> with the course's numbers: a 10 GHz carrier, 500 MHz in 0.5 ms, and $c = 3.00\times 10^8$ m/s. The <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-setup/" target="_blank" rel="noopener">radar setup page</a> describes the transmit path.
 ::::
 
-::::{frame} Predict Before You Measure
+::::{frame} Pre-Lab Predictions
 :::{present}
 | $B$ | $T_s$ | kHz per meter | $\Delta R$ | $R_\text{max}$ |
 | :-- | :-- | --: | --: | --: |
@@ -289,7 +289,7 @@ A static target is only static if nothing else moves. Your own body is a larger 
 Any flat metal plate about 20 cm on a side works, and so does aluminum foil glued smoothly to cardboard. A plate reflects strongly only when it faces the array squarely, so turn it slowly until its peak is highest before you read the frequency. A trihedral folded from three foil-covered cardboard squares is more forgiving of its angle. The course has only one or two commercial corner reflectors; no step needs one, and if one is free, Part 2 has an optional reading for it. Measure range from the array face to the plate's front with a tape measure.
 ::::
 
-::::{frame} What You Keep
+::::{frame} Results to Keep
 :::{present}
 - Your captures: the 2 m plate and the walk.
 - Your $f_0$ and your measured kHz per meter.

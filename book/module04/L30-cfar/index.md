@@ -57,7 +57,7 @@ $$
 
 The threshold for $P_{fa} = 10^{-6}$ is $T = 13.8\ P_n$, 11.4 dB above the mean noise. If the noise rises by a factor $g$ while $T$ stays put, the probability becomes $P_{fa}^{1/g}$, and a 3 dB rise turns $10^{-6}$ into $10^{-3}$. At the million decisions a second of the L29 burst, that is a thousand false targets a second.
 
-The noise on a real map does move. Stationary clutter fills the cells near zero velocity, strong reflections fill the cells nearest the radar, and the receiver gain sets the level of everything. A fixed threshold high enough for the worst of these misses targets everywhere else. <a href="../L27-radar-detection/index.html#frame-a-fixed-threshold-fails">Lesson 27's last figure</a> showed the alternative: estimate the noise power from the cells around the one being tested, and set the threshold from that estimate.
+The noise on a real map does move. Stationary clutter fills the cells near zero velocity, strong reflections fill the cells nearest the radar, and the receiver gain sets the level of everything. A fixed threshold high enough for the worst of these misses targets everywhere else. <a href="../L27-radar-detection/index.html#frame-the-fixed-threshold">Lesson 27's last figure</a> showed the alternative: estimate the noise power from the cells around the one being tested, and set the threshold from that estimate.
 ::::
 
 ::::{frame} Cell Under Test, Guard, and Reference
@@ -337,7 +337,7 @@ The L30 Lab runs this lesson's detector on your own kit and on range-Doppler map
 The bench part follows <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-cfar/" target="_blank" rel="noopener">ADI's CFAR lab</a>, which sets the bias, guard cells, and reference cells of its script's threshold by eye against a live range spectrum. The course's numbers replace ADI's: the L29 burst of 256 chirps of 300 µs, 0.5 ms apart, at 10 GHz and 500 MHz, so the map's cells are 0.30 m by 0.12 m/s.
 ::::
 
-::::{frame} Predict Before You Measure
+::::{frame} Pre-Lab Predictions
 :::{present}
 | Window | $N$ | $10^{-3}$ | $10^{-4}$ | $10^{-6}$ |
 | :-- | --: | --: | --: | --: |
@@ -363,7 +363,7 @@ Every cadet has a kit, so every beam in the room crosses someone. Point yours al
 ADI's lab asks you to move slowly while the threshold is applied, because each update computes a threshold for every cell; a fast walk smears your echo across the updates you count. ADI also asks you to leave the display's intensity limits alone while you set the threshold: setting the threshold by making the clutter fade from the display hides the clutter from you, not from the detector. No step needs a corner reflector.
 ::::
 
-::::{frame} What You Keep
+::::{frame} Results to Keep
 :::{present}
 - Your overlay settings, and why you chose them.
 - Your measured false-alarm rates against the design.

@@ -624,7 +624,7 @@ are the L29 burst's: 300 µs chirps, 0.5 ms apart, at 10 GHz and 500 MHz, so
 the slow-time spectrogram spans $\pm 1\ \text{kHz}$, or $\pm 15\ \text{m/s}$.
 ::::
 
-::::{frame} Predict Before You Measure
+::::{frame} Pre-Lab Predictions
 :::{present}
 | Target | Largest speed | Doppler |
 | :-- | --: | --: |
@@ -671,7 +671,7 @@ through while you record. Walk at a steady pace you can repeat, about 1 m/s.
 No step needs a corner reflector.
 ::::
 
-::::{frame} What You Keep
+::::{frame} Results to Keep
 :::{present}
 - Your confusion matrices, before and after your feature.
 - Your track, the $\alpha$ you chose, and why.
