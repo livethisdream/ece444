@@ -36,7 +36,7 @@ with room for notes. Print from read mode for the whole lesson.
 ```
 
 :::{depth}
-<a href="../L25-radar-equation/index.html">Lesson 25</a> gave us the received power from a target and the noise power it competes with, and <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> divided the return into range and Doppler cells. Neither one tells us whether the radar reports a target. That is a decision the processor makes in every cell, many thousands of times a second, and every one of those decisions is made against noise. Today we work out how often it decides correctly, how often it reports a target that is not there, and how much signal-to-noise ratio (SNR) a given performance requires.
+<a href="../L25-radar-equation/index.html">Lesson 25</a> gave us the received power from a target and the noise power it competes with, and <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> divided the return into range and Doppler cells. Neither one tells us whether the radar reports a target. That is a decision the processor makes in every cell, many thousands of times a second, and it makes every one of them against noise. Today we work out how often it decides correctly, how often it reports a target that is not there, and how much signal-to-noise ratio (SNR) a given performance requires.
 :::
 ::::
 
@@ -44,7 +44,7 @@ with room for notes. Print from read mode for the whole lesson.
 :::{present}
 - Every range cell holds noise, and some also hold a target.
 - The processor compares the power in each cell with a **threshold**.
-- Above the threshold it reports a target; below, nothing.
+- It reports a target in a cell above the threshold and nothing in a cell below it.
 :::
 :::{present}
 <img src="../../viz/img/L27-range-profile.svg" alt="One range profile of 200 cells: noise power scattered from about minus 20 to plus 7 dB about the mean, one target cell at 13 dB, and a dashed threshold at 11.4 dB that only the target crosses" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
@@ -85,7 +85,8 @@ The exponential density is largest at $z = 0$ and falls off steadily. That is wh
 :::{present}
 $$
 \begin{aligned}
-P_{fa} &= \int_T^{\infty} \frac{1}{P_n}\ e^{-z/P_n}\ dz = e^{-T/P_n} \\
+P_{fa} &= \int_T^{\infty} \frac{1}{P_n}\ e^{-z/P_n}\ dz \\
+&= e^{-T/P_n} \\
 \frac{T}{P_n} &= \ln\frac{1}{P_{fa}}
 \end{aligned}
 $$
@@ -130,14 +131,14 @@ $$
 
 where $Q_1$ is the Marcum Q-function. It has no closed form, but scipy evaluates it as the survival function of a noncentral chi-square: `scipy.stats.ncx2.sf(2*T/Pn, 2, 2*SNR)`.
 
-The figure draws both densities against the power in the cell in dB, which is how the range profile showed them. The noise density is the broad hump at 0 dB. The target-plus-noise density for 13 dB SNR is the narrow peak near 13 dB, narrower because the steady target dominates the random part. With the threshold at 11.4 dB, 87% of the target density lies above it, so $P_d = 0.87$. The noise tail above the threshold is $10^{-6}$ of its area, far too small to draw, and that is the point of choosing it there.
+The figure draws both densities against the power in the cell in dB, which is how the range profile showed them. The noise density is the broad hump at 0 dB. The target-plus-noise density for 13 dB SNR is the narrow peak near 13 dB, narrower because the steady target dominates the random part. With the threshold at 11.4 dB, 87% of the target density lies above it, so $P_d = 0.87$. The noise tail above the threshold is $10^{-6}$ of its area, the value we set the threshold for, and far too small to draw.
 ::::
 
 ::::{frame} Threshold Explorer
 :class: viz-frame
 
 :::{depth}
-The widget draws the two densities and the threshold, and beside them the probability of detection against the probability of false alarm, with the present operating point marked. Move the threshold and watch the two shaded areas trade. Raise the target SNR and the target density moves away from the noise. The pulse and noise controls belong to the second half of the lesson: integrating $N$ pulses coherently moves the target density up by $10\log_{10}N$ dB, and the noise control raises the noise while the threshold stays where it was set.
+The widget draws the two densities and the threshold, and beside them the probability of detection against the probability of false alarm, with the present operating point marked. Move the threshold and one shaded area grows as the other shrinks. Raise the target SNR and the target density moves away from the noise. The pulse and noise controls belong to the second half of the lesson: integrating $N$ pulses coherently moves the target density up by $10\log_{10}N$ dB, and the noise control raises the noise while the threshold stays where it was set.
 :::
 
 <iframe src="../../viz/detection-threshold.html"
@@ -179,7 +180,7 @@ $$
 \text{FAR} = P_{fa} \times \frac{\text{cells tested}}{\text{second}} .
 $$
 
-Consider the range-Doppler burst the L29–L31 Labs use: 256 chirps at a pulse repetition interval (PRI) of 0.5 ms, so a new map every 128 ms, and say 512 range cells in each map. That is $512 \times 256 = 131\,072$ decisions per map and $131\,072/0.128\ \text{s} = 1.0 \times 10^{6}$ decisions per second. At $P_{fa} = 10^{-6}$ the radar reports about one false target every second, which is too many for a display and far too many for a tracker.
+Consider the range-Doppler burst the L29–L31 Labs use: 256 chirps at a pulse repetition interval (PRI) of 0.5 ms, so a new map every 128 ms, and say 512 range cells in each map. That is $512 \times 256 = 131072$ decisions per map and $131072/0.128\ \text{s} = 1.0 \times 10^{6}$ decisions per second. At $P_{fa} = 10^{-6}$ the radar reports about one false target every second, which is too many for a display and far too many for a tracker.
 
 Working backward is the usual design step. A specification of one false alarm per minute requires
 
@@ -197,8 +198,9 @@ which puts the threshold at $\ln(6.1 \times 10^{7}) = 17.9$, or 12.5 dB above th
 :::{present}
 $$
 \begin{aligned}
-A &= \ln\frac{0.62}{P_{fa}}, \qquad B = \ln\frac{P_d}{1 - P_d} \\
-\text{SNR}_\text{dB} &= 10\log_{10}\left(A + 0.12AB + 1.7B\right)
+A &= \ln\frac{0.62}{P_{fa}} \\
+B &= \ln\frac{P_d}{1 - P_d} \\
+\text{SNR} &= A + 0.12AB + 1.7B
 \end{aligned}
 $$
 
@@ -211,7 +213,7 @@ $$
 \begin{aligned}
 A &= \ln\frac{0.62}{P_{fa}} \\
 B &= \ln\frac{P_d}{1 - P_d} \\
-\text{SNR}_\text{dB} &= 10\log_{10}\left(A + 0.12AB + 1.7B\right).
+\text{SNR}_\text{dB} &= 10\log_{10}\left(A + 0.12AB + 1.7B\right)
 \end{aligned}
 $$
 
@@ -224,7 +226,7 @@ $$
 \end{aligned}
 $$
 
-The fit holds to within about 0.2 dB for $10^{-7} \le P_{fa} \le 10^{-3}$ and $0.1 \le P_d \le 0.9$, and it stays close a little beyond. The table shows how the requirement moves. Asking for $P_d = 0.99$ instead of 0.9 costs about 1.5 dB; asking for a hundred times fewer false alarms costs about 1 dB.
+The fit holds to within about 0.2 dB for $10^{-7} \le P_{fa} \le 10^{-3}$ and $0.1 \le P_d \le 0.9$, and it stays close a little beyond. The table shows how the requirement moves. Asking for $P_d = 0.99$ instead of 0.9 raises the requirement by about 1.5 dB; asking for a hundred times fewer false alarms adds about 1 dB.
 
 | $P_d$ | $P_{fa} = 10^{-4}$ | $P_{fa} = 10^{-6}$ | $P_{fa} = 10^{-8}$ |
 | :-- | --: | --: | --: |
@@ -233,7 +235,7 @@ The fit holds to within about 0.2 dB for $10^{-7} \le P_{fa} \le 10^{-3}$ and $0
 | 0.99 | 13.3 dB | 14.5 dB | 15.5 dB |
 
 :::{note}
-These numbers are for a **steady** target, one whose echo has the same amplitude on every look. Most real targets fluctuate as they turn, because their scatterers add with changing phases (the radar cross section of <a href="../L25-radar-equation/index.html">Lesson 25</a> is an average). For a target that fluctuates from one look to the next with an exponential power distribution, Swerling's first case, $P_d = P_{fa}^{1/(1 + \text{SNR})}$, and $P_d = 0.9$ at $P_{fa} = 10^{-6}$ needs 21.1 dB, 8 dB more than the steady target. The fades are what cost the extra SNR.
+These numbers are for a **steady** target, one whose echo has the same amplitude on every look. Most real targets fluctuate as they turn, because their scatterers add with changing phases (the radar cross section of <a href="../L25-radar-equation/index.html">Lesson 25</a> is an average). For a target that fluctuates from one look to the next with an exponential power distribution, Swerling's first case, $P_d = P_{fa}^{1/(1 + \text{SNR})}$, and $P_d = 0.9$ at $P_{fa} = 10^{-6}$ needs 21.1 dB, 8 dB more than the steady target. The extra 8 dB comes from the fades: on a look where the echo fades well below its average, it misses the threshold.
 :::
 ::::
 
@@ -253,7 +255,7 @@ $$
 \frac{R_\text{max}}{R_0} = \left(\frac{\text{SNR}_0}{\text{SNR}_\text{req}}\right)^{1/4} .
 $$
 
-A target measured at 20 dB SNR at 100 m has $20 - 13.1 = 6.9$ dB to spare against $P_d = 0.9$, $P_{fa} = 10^{-6}$, so $R_\text{max} = 100\ \text{m} \times 10^{6.9/40} = 149$ m. The fourth root is a hard limit: doubling the range requires 16 times the SNR, 12 dB. That makes every decibel of SNR the processor can recover without a bigger transmitter or antenna valuable, which is the subject of the rest of the lesson.
+A target measured at 20 dB SNR at 100 m has $20 - 13.1 = 6.9$ dB to spare against $P_d = 0.9$, $P_{fa} = 10^{-6}$, so $R_\text{max} = 100\ \text{m} \times 10^{6.9/40} = 149$ m. The fourth root is a hard limit: doubling the range requires 16 times the SNR, 12 dB. Any SNR the processor recovers without a bigger transmitter or antenna therefore extends the range, and recovering it is the subject of the rest of the lesson.
 ::::
 
 ::::{frame} Integrating Pulses
@@ -266,7 +268,7 @@ T_\text{d} &= N\ T_c
 $$
 
 - $N = 256$ chirps give 24.1 dB, so each chirp needs only $13.1 - 24.1 = -11.0$ dB.
-- The cost is the **dwell time** $T_\text{d}$.
+- The radar must stay on the cell for the **dwell time** $T_\text{d}$.
 :::
 
 A radar does not have to decide on one pulse. If it keeps looking at the same cell for $N$ pulses (chirps, on the PHASER) and adds the returns before thresholding, the target's echoes add in phase while the noise samples, independent from pulse to pulse, add in power. The signal voltage grows as $N$, so its power grows as $N^2$; the noise power grows as $N$; and the SNR grows as $N$:
@@ -277,7 +279,7 @@ $$
 
 That is **coherent integration**. With the $N = 256$ chirps of the L29–L31 burst the gain is $10\log_{10}256 = 24.1$ dB, so a single chirp at $-11.0$ dB SNR, invisible on its own, integrates to the 13.1 dB a 90% detection needs. By the fourth-root rule of the last frame, the same gain extends the detection range by $256^{1/4} = 4.0$ times.
 
-The price is time. The radar must stay on the cell for the **dwell time**
+Integration takes time: the radar must stay on the cell for the **dwell time**
 
 $$
 T_\text{d} = N\ T_c,
@@ -297,26 +299,27 @@ where $T_c$ is the time between chirps, the PRI. With a chirp every 0.5 ms, 256 
 
 Coherent integration requires that the radar know how the target's phase changes from pulse to pulse, which a Doppler FFT supplies. When the phase is unknown or unstable, the radar can still add the *powers* $\vert x\vert^2$ from $N$ pulses and threshold the sum. That is **noncoherent integration**. It discards the phase, and squaring each return before adding creates cross terms between the target and the noise, so the gain falls short of $N$.
 
-Albersheim's equation covers it. For $N$ pulses integrated noncoherently, the required SNR per pulse is
+Albersheim's equation also covers noncoherent integration. For $N$ pulses integrated noncoherently, the required SNR per pulse is
 
 $$
 \begin{aligned}
 \text{SNR}_\text{dB} = &-5\log_{10}N \\
-&+ \left(6.2 + \frac{4.54}{\sqrt{N + 0.44}}\right)\log_{10}\left(A + 0.12AB + 1.7B\right),
+&+ \left(6.2 + \frac{4.54}{\sqrt{N + 0.44}}\right) \\
+&\times \log_{10}\left(A + 0.12AB + 1.7B\right),
 \end{aligned}
 $$
 
 which reduces to the single-pulse form at $N = 1$. For $P_d = 0.9$ and $P_{fa} = 10^{-6}$, 16 pulses need 3.6 dB each, a gain of 9.5 dB where coherent integration gives 12.0 dB; 64 pulses need $-0.1$ dB each, a gain of 13.3 dB against 18.1 dB. The gap grows with $N$, so a radar integrates coherently whenever it can and adds powers only across looks it cannot phase-align, such as two different dwells.
 ::::
 
-::::{frame} What Limits the Dwell
+::::{frame} Limits on the Dwell
 :::{present}
 - The target must stay in one range cell: $T_\text{d} < \Delta R / v$.
 - At 0.30 m and 1.5 m/s, that is 0.2 s.
 - A longer dwell also refreshes the map, and the track, less often.
 :::
 
-More pulses always give more SNR, so something else must cap the dwell. Three things do.
+More pulses always give more SNR, so something else must cap the dwell, and three things do.
 
 The first is the target's motion. Integration assumes the target stays in one range cell for the whole dwell. A walking person at $v = 1.5$ m/s, seen with the $\Delta R = c/2B = 0.30$ m resolution of a 500 MHz chirp, crosses a cell in
 
@@ -343,7 +346,7 @@ The PHASER's FMCW mode follows the chain of this lesson in order. Each chirp swe
 The L28 Lab builds the first stage and the L29 Lab the second. The numbers this lesson uses, $P_{fa}$, the threshold above the noise, the integration gain, and the dwell, are the quantities to report when you explain what your own maps can detect. The <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-fmcw/" target="_blank" rel="noopener">ADI FMCW lab</a> describes the waveform and the example settings.
 ::::
 
-::::{frame} A Fixed Threshold Fails
+::::{frame} The Fixed Threshold
 :::{present}
 <img src="../../viz/img/L27-fixed-threshold.svg" alt="A 600-cell range profile whose noise rises 6 dB beyond cell 330. A fixed threshold at 11.4 dB is crossed by noise at eight cells in the noisy region. A local-average threshold steps up with the noise and is not crossed" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
@@ -366,7 +369,7 @@ A 3 dB rise, $g = 2$, turns $10^{-6}$ into $10^{-3}$. At the $1.0 \times 10^{6}$
 Setting the threshold for the worst noise does not help either. A threshold 3 dB higher keeps the false alarms in check when the noise is high, but when the noise is at its normal level that threshold corresponds to $P_{fa} = 10^{-12}$, and a target at 13.1 dB SNR, which the original threshold detected with $P_d = 0.89$, now has $P_d = 0.17$. A fixed threshold trades false alarms in noisy cells against missed targets in quiet ones, and the widget's noise control shows both.
 ::::
 
-::::{frame} Measure the Noise Where You Test
+::::{frame} Local Noise Estimate
 :::{present}
 $$
 T = \alpha\ \hat{P}_n
@@ -421,5 +424,5 @@ Where the noise is 6 dB higher, $\hat{P}_n$ is 6 dB higher and so is the thresho
 
 The rest of Module 4 builds the chain this lesson analyzed, one stage at a time. <a href="../L28-fmcw/index.html">Lesson 28</a> and the L28 Lab produce the range profile from the beat signal, and the range FFT is the first integration. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> adds the Doppler FFT across chirps, the second integration, and MTI to remove the stationary clutter that would otherwise raise the noise floor in the near range cells. <a href="../L30-cfar/index.html">Lesson 30</a> then places the threshold, measuring the noise in the map rather than assuming it.
 
-A detection is also where angle measurement begins: the monopulse ratio of the <a href="../../module03/L24-lab-null-steering/index.html#frame-sum-and-delta">L24 Lab</a> is formed in the cells the detector has already declared, and its accuracy improves with the same SNR this lesson computes. For your final report, keep the threshold you choose, the $P_{fa}$ it implies, and the integration gain of your dwell; those three numbers say what your radar can and cannot see.
+A detection is also where angle measurement begins: the processor forms the monopulse ratio of the <a href="../../module03/L24-lab-null-steering/index.html#frame-sum-and-delta">L24 Lab</a> in the cells the detector has already declared, and its accuracy improves with the same SNR this lesson computes. For your final report, keep the threshold you choose, the $P_{fa}$ it implies, and the integration gain of your dwell; those three numbers say what your radar can and cannot see.
 ::::
