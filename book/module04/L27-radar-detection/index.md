@@ -161,7 +161,7 @@ The widget draws the two densities and the threshold, and beside them the probab
 
 Each curve fixes the SNR and sweeps the threshold. Moving the threshold down moves the operating point up and to the right along its curve: more detections and more false alarms, always together. This curve is the **receiver operating characteristic**, and it is the complete statement of what a detector can do at one SNR.
 
-The curves also show how steeply detection depends on SNR. At $P_{fa} = 10^{-6}$, 8 dB of SNR gives $P_d = 0.06$, 12 dB gives 0.68, and 14 dB gives 0.97. Between 10 and 14 dB, each decibel moves $P_d$ by 0.1 to 0.2. The threshold sets which error we accept; only the SNR decides how small both can be at once.
+The curves also show how steeply detection depends on SNR. At $P_{fa} = 10^{-6}$, 8 dB of SNR gives $P_d = 0.06$, 12 dB gives 0.68, and 14 dB gives 0.97. Between 10 and 14 dB, each decibel moves $P_d$ by 0.1 to 0.25. The threshold sets which error we accept; only the SNR decides how small both can be at once.
 ::::
 
 ::::{frame} False-Alarm Rate
@@ -226,7 +226,7 @@ $$
 \end{aligned}
 $$
 
-The fit holds to within about 0.2 dB for $10^{-7} \le P_{fa} \le 10^{-3}$ and $0.1 \le P_d \le 0.9$, and it stays close a little beyond. The table shows how the requirement moves. Asking for $P_d = 0.99$ instead of 0.9 raises the requirement by about 1.5 dB; asking for a hundred times fewer false alarms adds about 1 dB.
+The fit holds to within about 0.2 dB for $10^{-7} \le P_{fa} \le 10^{-3}$ and $0.1 \le P_d \le 0.9$, and it stays close a little beyond. At $P_d = 0.9$ and $P_{fa} = 10^{-6}$ the exact requirement from the Marcum Q-function is 13.2 dB, so the fit is 0.07 dB optimistic: 13.1 dB gives $P_d = 0.89$, the value the fixed-threshold frame uses. The table shows how the requirement moves. Asking for $P_d = 0.99$ instead of 0.9 raises the requirement by about 1.5 dB; asking for a hundred times fewer false alarms adds about 1 dB.
 
 | $P_d$ | $P_{fa} = 10^{-4}$ | $P_{fa} = 10^{-6}$ | $P_{fa} = 10^{-8}$ |
 | :-- | --: | --: | --: |
@@ -277,7 +277,7 @@ $$
 \text{SNR}_N = N\ \text{SNR}_1 .
 $$
 
-That is **coherent integration**. With the $N = 256$ chirps of the L29–L31 burst the gain is $10\log_{10}256 = 24.1$ dB, so a single chirp at $-11.0$ dB SNR, invisible on its own, integrates to the 13.1 dB a 90% detection needs. By the fourth-root rule of the last frame, the same gain extends the detection range by $256^{1/4} = 4.0$ times.
+Here $\text{SNR}_1$ is the SNR of one chirp after its range FFT, which has already integrated the samples within that chirp, so the gain $N$ comes only from adding the chirps. That is **coherent integration**. With the $N = 256$ chirps of the L29–L31 burst the gain is $10\log_{10}256 = 24.1$ dB, so a single chirp at $-11.0$ dB SNR, invisible on its own, integrates to the 13.1 dB a 90% detection needs. By the fourth-root rule of the last frame, the same gain extends the detection range by $256^{1/4} = 4.0$ times.
 
 Integration takes time: the radar must stay on the cell for the **dwell time**
 
@@ -289,6 +289,8 @@ where $T_c$ is the time between chirps, the PRI. With a chirp every 0.5 ms, 256 
 ::::
 
 ::::{frame} Coherent Versus Noncoherent
+:class: read-only
+
 :::{present}
 <img src="../../viz/img/L27-integration-gain.svg" alt="Integration gain in dB against N on a log axis. Coherent is a straight line, 10 log N. Noncoherent, from Albersheim's equation, falls below it: 2.5 dB short at N = 16 and 4.8 dB short at N = 64" style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
@@ -386,7 +388,7 @@ $$
 T = \alpha\ \hat{P}_n .
 $$
 
-Where the noise is 6 dB higher, $\hat{P}_n$ is 6 dB higher and so is the threshold, so the probability of false alarm stays at its design value everywhere. That property gives the method its name, **constant false-alarm rate** (CFAR) detection, and it is the green line in the previous figure. Because $\hat{P}_n$ is itself an estimate from a finite number of cells, $\alpha$ is somewhat larger than $\ln(1/P_{fa})$, and the radar needs a fraction of a decibel to a decibel or so more SNR than with a known noise power. <a href="../L30-cfar/index.html">Lesson 30</a> derives $\alpha$ and the L30 Lab runs CFAR on your own range-Doppler maps; ADI's <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-cfar/" target="_blank" rel="noopener">CFAR lab</a> uses the same guard cells, reference cells, and bias.
+Where the noise is 6 dB higher, $\hat{P}_n$ is 6 dB higher and so is the threshold, so the probability of false alarm stays at its design value everywhere. That property gives the method its name, **constant false-alarm rate** (CFAR) detection, and it is the green line in the previous figure. Because $\hat{P}_n$ is itself an estimate from a finite number of cells, $\alpha$ is somewhat larger than $\ln(1/P_{fa})$, and the radar needs more SNR than with a known noise power: about 1 dB with 32 reference cells and 2 dB with 16, the CFAR loss that Lesson 30 computes. <a href="../L30-cfar/index.html">Lesson 30</a> derives $\alpha$ and the L30 Lab runs CFAR on your own range-Doppler maps; ADI's <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-cfar/" target="_blank" rel="noopener">CFAR lab</a> uses the same guard cells, reference cells, and bias (ADI's name for $\alpha$).
 ::::
 
 ::::{frame} Summary
@@ -417,12 +419,12 @@ Where the noise is 6 dB higher, $\hat{P}_n$ is 6 dB higher and so is the thresho
 
 ::::{frame} Looking Ahead
 :::{present}
-- **L28** builds the FMCW range profile, the first integration stage.
-- **L29** adds the Doppler FFT, the second, and MTI.
+- **L28** builds the FMCW range profile.
+- **L29** adds the Doppler FFT and MTI.
 - **L30** sets the threshold from the data, with CFAR.
 :::
 
-The rest of Module 4 builds the chain this lesson analyzed, one stage at a time. <a href="../L28-fmcw/index.html">Lesson 28</a> and the L28 Lab produce the range profile from the beat signal, and the range FFT is the first integration. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> adds the Doppler FFT across chirps, the second integration, and MTI to remove the stationary clutter that would otherwise raise the noise floor in the near range cells. <a href="../L30-cfar/index.html">Lesson 30</a> then places the threshold, measuring the noise in the map rather than assuming it.
+The rest of Module 4 builds the chain this lesson analyzed, one stage at a time. <a href="../L28-fmcw/index.html">Lesson 28</a> and the L28 Lab produce the range profile from the beat signal. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> adds the Doppler FFT across chirps and MTI to remove the stationary clutter that would otherwise raise the noise floor in the near range cells. <a href="../L30-cfar/index.html">Lesson 30</a> then places the threshold, measuring the noise in the map rather than assuming it.
 
 A detection is also where angle measurement begins: the processor forms the monopulse ratio of the <a href="../../module03/L24-lab-null-steering/index.html#frame-sum-and-delta">L24 Lab</a> in the cells the detector has already declared, and its accuracy improves with the same SNR this lesson computes. For your final report, keep the threshold you choose, the $P_{fa}$ it implies, and the integration gain of your dwell; those three numbers say what your radar can and cannot see.
 ::::
