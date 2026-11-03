@@ -414,7 +414,7 @@ The burst sees everything that moves in the beam, and you are the largest mover 
 Use a wall, or the L28 plate standing on its own, about 2.5 m in front of the kit as the static target the cancellers remove. Hold the spinner by its hub at arm's length with its plane of rotation horizontal or vertical and pointed at the kit, so the arms move toward and away from it. A spinner with metal weights in its arms reflects more than an all-plastic one. The transmit antenna stays on **OUT2**, connected before you power the kit, as in the L28 Lab. No step needs a corner reflector.
 ::::
 
-::::{frame} Results to Keep
+::::{frame} Results
 :::{present}
 - Keep your bursts of the hand with the wall, the spinner, and the static scene.
 - Keep your notebook, its edits, and `L29_spinner_spectrogram.npz`.
