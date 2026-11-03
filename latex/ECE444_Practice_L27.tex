@@ -13,12 +13,13 @@ is required (write \textbf{None} if you did not collaborate).}
 
 \question \textbf{Threshold and false alarms.} A square-law detector tests one range cell that
 holds only receiver noise of mean power $P_n$. The power $z$ in the cell is exponentially
-distributed, $p(z) = e^{-z/P_n}/P_n$.
+distributed,
+\eq{ p(z) = \frac{1}{P_n}\ e^{-z/P_n} . }
 
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part The threshold is set at $T = 10P_n$. Find the probability of false alarm.
+		\part The detector sets its threshold at $T = 10P_n$. Find the probability of false alarm.
 		\begin{solution}[1.1in]
 		$P_{fa}$ is the area of the noise density above the threshold:
 		\eq{ P_{fa} &= \int_T^{\infty} \frac{1}{P_n} e^{-z/P_n}\ dz = e^{-T/P_n} \\
@@ -57,8 +58,8 @@ distributed, $p(z) = e^{-z/P_n}/P_n$.
 \newpage
 
 \question \textbf{False-alarm rate.} A radar forms a range-Doppler map of 256 range cells by
-32 Doppler cells and refreshes it every $32\ \text{ms}$. Every cell of every map is tested
-against the threshold.
+32 Doppler cells and refreshes it every $32\ \text{ms}$. The detector tests every cell of every
+map against the threshold.
 
 \begin{parts}
 
@@ -238,9 +239,9 @@ $P_{fa} = 10^{-6}$. The received power falls as $1/R^4$ and the noise does not d
 
 \newpage
 
-\question \textbf{A fixed threshold.} A detector's threshold was set for $P_{fa} = 10^{-6}$
-when the mean noise power was $P_n$. Later, interference raises the noise by $2\db$ and the
-threshold is not changed.
+\question \textbf{A fixed threshold.} The threshold of a detector sits where it gives
+$P_{fa} = 10^{-6}$ at mean noise $P_n$. Later, interference raises the noise by $2\db$ and the
+threshold stays where it was.
 
 \begin{parts}
 
