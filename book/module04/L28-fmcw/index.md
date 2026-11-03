@@ -305,7 +305,7 @@ A static measurement requires that nothing else in the beam moves. Your own body
 Any flat metal plate about 20 cm on a side works, and so does aluminum foil glued smoothly to cardboard. A plate reflects strongly only when it faces the array squarely, so turn it slowly until its peak is highest before you read the frequency. A trihedral folded from three foil-covered cardboard squares is more forgiving of its angle. I have only one or two commercial corner reflectors; no step needs one, and if one is free, Part 2 has an optional reading for it. Measure range from the array face to the plate's front with a tape measure.
 ::::
 
-::::{frame} Results to Keep
+::::{frame} Results
 :::{present}
 - Your captures: the 2 m plate and the walk.
 - Your $f_0$ and your measured kHz per meter.

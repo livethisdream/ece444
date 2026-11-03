@@ -363,7 +363,7 @@ Every cadet has a kit, so every beam in the room crosses someone. Point yours al
 ADI's lab asks you to move slowly while the threshold is applied, because each update computes a threshold for every cell; a fast walk smears your echo across the updates you count. ADI also asks you to leave the display's intensity limits alone while you set the threshold: setting the threshold by making the clutter fade from the display hides the clutter from you, not from the detector. No step needs a corner reflector.
 ::::
 
-::::{frame} Results to Keep
+::::{frame} Results
 :::{present}
 - Your overlay settings, and why you chose them.
 - Your measured false-alarm rates against the design.

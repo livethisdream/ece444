@@ -671,7 +671,7 @@ through while you record. Walk at a steady pace you can repeat, about 1 m/s.
 No step needs a corner reflector.
 ::::
 
-::::{frame} Results to Keep
+::::{frame} Results
 :::{present}
 - Your confusion matrices, before and after your feature.
 - Your track, the $\alpha$ you chose, and why.
