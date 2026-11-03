@@ -61,8 +61,8 @@ f_D(t) &= \frac{2}{\lambda}\left[v_\text{body} + v_\text{part}(t)\right] \\
 v_\text{part}(t) &= \Omega\rho\ \sin(\Omega t) \quad \text{(a rotor)}
 \end{aligned}$$
 
-- Walker: torso $87\ \text{Hz}$, limbs to $267\ \text{Hz}$, once a stride.
-- $15\ \text{cm}$ fan at $1000\ \text{rpm}$: tips $7.9\ \text{m/s}$, $\pm 524\ \text{Hz}$.
+- A walker's torso sits at $87\ \text{Hz}$, and its limbs reach $267\ \text{Hz}$ once a stride.
+- A $15\ \text{cm}$ fan at $1000\ \text{rpm}$ has $7.9\ \text{m/s}$ tips, $\pm 524\ \text{Hz}$.
 :::
 
 Lesson 26 derived the Doppler shift of a rigid target, $f_D = 2v_r/\lambda$.
@@ -78,7 +78,10 @@ swings sinusoidally between $\pm 2\Omega\rho/\lambda$. Every point along a
 blade does this at its own radius, so a blade fills the band from zero out to
 its tip. The tips move fastest, at
 
-$$v_\text{tip} = \pi D\ \frac{\text{rpm}}{60} = \pi(0.15)\frac{1000}{60} = 7.9\ \text{m/s},$$
+$$\begin{aligned}
+v_\text{tip} &= \pi D\ \frac{\text{rpm}}{60} \\
+&= \pi(0.15)\frac{1000}{60} = 7.9\ \text{m/s},
+\end{aligned}$$
 
 for a $15\ \text{cm}$ desk fan at $1000\ \text{rpm}$, which is
 $\pm 2(7.9)/0.030 = \pm 524\ \text{Hz}$ at the course's $10\ \text{GHz}$.
@@ -93,10 +96,10 @@ property a classifier needs.
 
 ::::{frame} Four Signatures
 :::{present}
-- **Walker**: a torso line off zero; limbs swing once a stride.
-- **Fan**: a steady band to $\pm 524\ \text{Hz}$.
-- **Spinner**: steady lines at its tips, $\pm 293\ \text{Hz}$.
-- **Hand**: one trace, swinging through zero.
+- The **walker** shows a torso line off zero, and its limbs swing once a stride.
+- The **fan** shows a steady band to $\pm 524\ \text{Hz}$.
+- The **spinner** shows steady lines at its tips, $\pm 293\ \text{Hz}$.
+- The **hand** shows one trace swinging through zero.
 :::
 :::{present}
 <img src="../../viz/img/L31-signatures.svg"
@@ -107,7 +110,7 @@ property a classifier needs.
 The L31 Lab records four targets: you walking, a desk fan, a fidget spinner,
 and your hand waving. The figure simulates each one as the lab records it,
 one range bin sampled once per chirp, with the spectrogram the next frames
-build. Each has a pattern of its own.
+build.
 
 The **walker** is the only target that goes anywhere, so it is the only one
 whose pattern sits off zero: the torso is the steady line at $87\ \text{Hz}$
@@ -126,7 +129,7 @@ trace crosses zero twice a cycle, so the hand has no average Doppler at all.
 
 ::::{frame} One Range Bin in Slow Time
 :::{present}
-- One sample per chirp: $2\ \text{kHz}$, so $\pm 1\ \text{kHz}$, $\pm 15\ \text{m/s}$.
+- One sample per chirp gives $2\ \text{kHz}$, so the map spans $\pm 1\ \text{kHz}$, or $\pm 15\ \text{m/s}$.
 - L26's $30\ \text{cm}$ fan at $1200\ \text{rpm}$ ($18.8\ \text{m/s}$ tips) aliases.
 - A walker crosses a $0.30\ \text{m}$ bin in $0.23\ \text{s}$: sum the bins around it.
 :::
@@ -185,12 +188,15 @@ def spectrogram(cap, range_bin, n_win=64, hop=16):
 ::::{frame} Window Length
 :::{present}
 $$\begin{aligned}
-\Delta f &= \frac{1}{T_w} \qquad \delta f = \dot f_D\ T_w = \frac{2a}{\lambda}\ T_w \\
-T_w &= \frac{1}{\sqrt{\dot f_D}} = \frac{1}{\sqrt{1131\ \text{Hz/s}}} = 30\ \text{ms}
+\Delta f &= \frac{1}{T_w} \\
+\delta f &= \dot f_D\ T_w = \frac{2a}{\lambda}\ T_w \\
+T_w &= \frac{1}{\sqrt{\dot f_D}} \\
+&= \frac{1}{\sqrt{1131\ \text{Hz/s}}} = 30\ \text{ms}
 \end{aligned}$$
-
-- A walker's limbs: $a = 17\ \text{m/s}^2$; use $64$ chirps, $32\ \text{ms}$.
-- Fan tips: $55\ \text{kHz/s}$, $4.3\ \text{ms}$; no window follows a blade.
+:::
+:::{present}
+- A walker's limbs accelerate at $17\ \text{m/s}^2$, so we use $64$ chirps, $32\ \text{ms}$.
+- Fan tips change at $55\ \text{kHz/s}$, so the best window is $4.3\ \text{ms}$, and no window follows a blade.
 :::
 
 Every spectrogram trades resolution in frequency against resolution in time.
@@ -203,12 +209,15 @@ along the line of sight, $\dot f_D = 2a/\lambda$, by differentiating
 $f_D = 2v/\lambda$.
 
 The resolution improves as the window grows and the smear worsens, so the
-best window makes the two equal, $1/T_w = \dot f_D T_w$, which is the second
-line of the slide. L26's walker swings its limbs $2.7\ \text{m/s}$ about the
+best window makes the two equal, $1/T_w = \dot f_D T_w$, which gives the slide's
+$T_w = 1/\sqrt{\dot f_D}$. L26's walker swings its limbs $2.7\ \text{m/s}$ about the
 torso, once a second, so their peak acceleration is
 $2\pi(1.0)(2.7) = 17\ \text{m/s}^2$ and
 
-$$\dot f_D = \frac{2(17)}{0.030} = 1131\ \text{Hz/s}, \qquad T_w = 30\ \text{ms},$$
+$$\begin{aligned}
+\dot f_D &= \frac{2(17)}{0.030} = 1131\ \text{Hz/s}, \\
+T_w &= 30\ \text{ms},
+\end{aligned}$$
 
 about 59 chirps. We round up to 64 chirps, $32\ \text{ms}$, which resolves
 $31\ \text{Hz}$ ($0.47\ \text{m/s}$) and smears the fastest-changing part of
@@ -258,9 +267,9 @@ $$\begin{aligned}
 \sigma_f(t) &= \sqrt{\frac{\sum_f \left(f-\bar f\right)^2 P(f,t)}{\sum_f P(f,t)}}
 \end{aligned}$$
 
-- **Centroid** $\lambda\bar f/2$: how fast the body moves.
-- **Spread** $\lambda\sigma_f/2$: how fast its parts move about it.
-- **Periodicity**: how strongly the spectrogram repeats, at $0.25$ to $2\ \text{s}$.
+- The **centroid** $\lambda\bar f/2$ is the body's speed.
+- The **spread** $\lambda\sigma_f/2$ is its parts' speed about it.
+- The **periodicity** is how strongly it repeats, at $0.25$ to $2\ \text{s}$.
 :::
 
 A classifier does not look at a picture; it compares numbers. A **feature**
@@ -316,8 +325,8 @@ z_i &= \frac{x_i - \mu_i}{s_i} \\
 \hat c &= \arg\min_k \lVert \mathbf z - \bar{\mathbf z}_k \rVert
 \end{aligned}$$
 
-- Train: each class's mean in scaled features.
-- Classify: the nearest mean.
+- Training stores each class's mean.
+- A trial takes the nearest mean's class.
 :::
 
 A **nearest-centroid** classifier is the simplest one that learns from data.
@@ -370,8 +379,8 @@ def classify(x, model):
 | hand | 0 | 0 | 0 | **20** |
 :::
 :::{present}
-- Accuracy $67/80 = 84\%$, on unseen trials.
-- Every error is a rotor called the other rotor.
+- Accuracy on unseen trials is $67/80 = 84\%$.
+- Every error mistakes one rotor for the other.
 :::
 
 The **confusion matrix** counts, for each true class (a row), how many trials
@@ -393,7 +402,7 @@ while walkers and hands are never wrong. An 84% classifier that never misses
 a person is a different instrument from one that misses people 16% of the
 time, and only the matrix tells them apart. It also says what to improve: a
 feature that measures tip speed better than the RMS spread does, such as the
-band's edge, would attack the only errors there are. Finally, the number is
+band's edge, would address the only errors the classifier makes. Finally, the number is
 an estimate. Five different draws of 80 test trials score between 80% and
 91%, so with 20 trials a class report the counts, not only the percentage.
 ::::
@@ -409,7 +418,7 @@ e_k &= z_k - \hat R_k^- \\
 
 - Predict, compare with the detection $z_k$, correct.
 - $\Delta t = 128\ \text{ms}$, one range-Doppler frame.
-- A missed frame: predict only.
+- On a missed frame, the filter only predicts.
 :::
 
 A detection list is noisy. Each range is the center of a $0.30\ \text{m}$ bin,
@@ -450,9 +459,11 @@ def alpha_beta(track_meas, alpha, beta, dt):
 
 ::::{frame} Choosing Alpha and Beta
 :::{present}
-- $\beta = \alpha^2/(2-\alpha)$ balances noise against lag.
-- $\alpha = 0.5$: $0.08\ \text{m}$ RMS on the straights, $0.31\ \text{m}$ at the turn.
-- $\alpha = 0.2$: smoother, but trails the turn by $1.2\ \text{m}$.
+$$\beta = \frac{\alpha^2}{2-\alpha}$$
+
+- This $\beta$ balances noise against lag.
+- With $\alpha = 0.5$, the track holds $0.08\ \text{m}$ RMS and is $0.31\ \text{m}$ off at the turn.
+- With $\alpha = 0.2$, it is smoother but trails the turn by $1.2\ \text{m}$.
 :::
 :::{present}
 <img src="../../viz/img/L31-alpha-beta.svg"
@@ -460,7 +471,7 @@ def alpha_beta(track_meas, alpha, beta, dt):
      style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-The two gains set how far the track trusts a new detection. A large $\alpha$
+The two gains set how much weight the track gives a new detection. A large $\alpha$
 follows each detection closely, noise and all; a small one averages over many
 frames and smooths the noise, but it is slow to notice a change in velocity,
 so it lags a target that turns. The usual choice ties the two gains together,
@@ -491,7 +502,7 @@ $$\begin{aligned}
 \theta &= \arcsin\frac{\lambda\ \Delta\phi}{2\pi D}
 \end{aligned}$$
 
-- Two subarray channels, $D = 56\ \text{mm}$ apart: one look, no sweep.
+- Two subarray channels $D = 56\ \text{mm}$ apart give the angle in one look, with no sweep.
 - Unambiguous within $\pm 15.5^\circ$ of the steer direction.
 - Read in the detection's range-Doppler cell.
 :::
@@ -514,8 +525,10 @@ of the slide turns a measured phase back into an angle. A phase is known only
 within $\pm 180^\circ$, so the angle is unambiguous while
 $\vert\sin\theta\vert < \lambda/(2D) = 0.268$, which is $\pm 15.5^\circ$ about
 the direction the array is steered. The L24 Lab's error function,
-$\text{Im}\lbrace\Delta\Sigma^*\rbrace/\vert\Sigma\vert^2$, is the same
-comparison written for the sum and difference beams.
+
+$$\frac{\text{Im}\lbrace\Delta\Sigma^*\rbrace}{\vert\Sigma\vert^2},$$
+
+is the same comparison written for the sum and difference beams.
 
 In the radar we take the two channels' values in the range-Doppler cell where
 CFAR declared the target. That cell holds the target's echo with the 256-chirp
@@ -528,8 +541,8 @@ is a hardware-day check, as it was in L19.
 ::::{frame} A Crossing Walker
 :::{present}
 - At $1\ \text{m/s}$ and $4\ \text{m}$ the walker moves $14.3^\circ/\text{s}$.
-- Sweeps: $15.9^\circ$ between looks, past the $13.6^\circ$ beam.
-- Monopulse: $1.8^\circ$ a frame.
+- Between sweeps the walker moves $15.9^\circ$, more than the $13.6^\circ$ beam.
+- Between monopulse frames it moves $1.8^\circ$.
 :::
 :::{present}
 :class: callout
@@ -544,7 +557,10 @@ the walker moves
 $$\frac{14.3^\circ/\text{s}}{0.9\ \text{s}^{-1}} = 15.9^\circ,$$
 
 more than the array's beamwidth at $10\ \text{GHz}$,
-$0.886\lambda/(Nd) = 13.6^\circ$. A sweep can find a walker who stands still;
+
+$$\theta_\text{3dB} = \frac{0.886\lambda}{Nd} = 13.6^\circ.$$
+
+A sweep can find a walker who stands still;
 it cannot hold one who crosses, because the walker can leave the beam between
 one look and the next. Monopulse measures once a frame, and in
 $128\ \text{ms}$ the walker moves $1.8^\circ$, well inside the $\pm 15.5^\circ$
@@ -553,11 +569,11 @@ monopulse window.
 The tracker closes the loop. A second alpha-beta filter runs on the monopulse
 angles, and its prediction for the next frame becomes the next frame's steer
 angle, so the walker stays near boresight, where the L24 Lab found the
-monopulse response straight (about $\pm 5^\circ$). Range from the FMCW
-processing, angle from the array, and the beam pointed by the track: that is
-the integration objective 4.8 asks for.
+monopulse response straight (about $\pm 5^\circ$). Objective 4.8 asks for
+exactly this integration: range from the FMCW processing, angle from the
+array, and a beam the track points.
 
-One caution for Part B. A walker moving exactly across the line of sight has
+Part B needs one caution. A walker moving exactly across the line of sight has
 $v_r = v\cos 90^\circ = 0$ (L26), so the torso's echo sits at
 $0\ \text{Hz}$ and MTI removes it. Part B's walker takes a diagonal path, so
 the range and the angle both change and the Doppler never vanishes.
@@ -573,7 +589,7 @@ the range and the angle both change and the Doppler never vanishes.
 | $\Delta f = 1/T_w$, $\delta f = \dot f_D T_w$ | window: resolution against smear | best $T_w = 1/\sqrt{\dot f_D}$; $64$ chirps for a walker |
 | centroid, spread, periodicity | three features | $\lambda\bar f/2$, $\lambda\sigma_f/2$, autocorrelation at $0.25$-$2\ \text{s}$ |
 | nearest centroid | the class whose mean is nearest, in scaled features | train and test on different trials |
-| confusion matrix | true class against the call | $67/80 = 84\%$; every error a rotor |
+| confusion matrix | true class against the call | $67/80 = 84\%$; every error confuses the two rotors |
 | alpha-beta | predict, residual, correct | $\alpha = 0.5$, $\beta = \alpha^2/(2-\alpha) = 0.167$ |
 | monopulse | $\Delta\phi = 2\pi D\sin\theta/\lambda$ | $D = 56\ \text{mm}$; $\pm 15.5^\circ$ |
 | crossing walker | beam sweep against monopulse | $15.9^\circ$ a sweep, $1.8^\circ$ a frame |
@@ -600,7 +616,7 @@ tune the spectrogram window, add one feature and see whether the confusion
 matrix improves, and tune $\alpha$ against the walk's truth. You work the lab
 on your own, outside class, and turn in one packet in three parts: **Part 1,
 Pre-Lab**, the predictions; **Part 2, Measurements**, from the app and the
-notebook; and **Part 3, Writeup**. The packet is checked and returned with
+notebook; and **Part 3, Writeup**. I check the packet and return it with
 feedback. It is scaffolding for your final report, not the report.
 
 ADI's Phaser labs stop at CFAR, so this lab is the course's own. Its settings
@@ -629,7 +645,7 @@ and your own walk, in place of these.
 Part 1 also predicts two things the bench checks. A rotor held off edge-on
 shows only $\cos\psi$ of its tip speed, where $\psi$ is the tilt, so a fan
 turned $45^\circ$ reads like a fast spinner; a feature that measures the
-**shape** of the band, rather than its width, is unaffected by the tilt. And
+shape of the band, rather than its width, is unaffected by the tilt. And
 the walk of Part B turns at B: the torso's radial speed passes through zero
 there, so the 2-pulse canceller cuts it, and the predict step of the alpha-beta
 filter carries the track through the turn. Pre-Lab Question 4 predicts how
@@ -638,9 +654,9 @@ far each $\alpha$ trails the turn.
 
 ::::{frame} Bench Rules
 :::{present}
-- Transmit antenna on **OUT2**, before you power the kit.
-- Rotors edge-on, fingers clear of the fan.
-- Walkers: agree on a lane; other cadets in your beam are targets.
+- Connect the transmit antenna to **OUT2** before you power the kit.
+- Hold rotors edge-on, and keep your fingers clear of the fan.
+- Walkers agree on a lane, because other cadets in your beam are targets.
 :::
 
 A rotor shows micro-Doppler only where its parts move along the line of
@@ -666,7 +682,7 @@ This is the last lab, so what you keep is the material for the final report,
 not for a next lab. From this lab, keep three results: the confusion matrix
 and accuracy with three features and with yours, with your explanation of
 which records were wrong and why; the track in range and angle against the
-truth, with the $\alpha$ you chose and the noise and lag it trades; and your
+truth, with the $\alpha$ you chose and the noise and lag that come with it; and your
 Part A readings of the four targets against your predictions. The report asks
 you to explain, in your own words, how your radar decides what a target is
 and where it is going. Keep this notebook, `L31_track.csv`, your records, and
@@ -711,9 +727,9 @@ walk keeps every 8th chirp, PRI 4 ms, so its 128 ms frames are 32 chirps, and
 it carries both subarray channels and its truth. Say in your packet which
 results are recorded rather than your own.
 
-- **Procedure A**, four targets: the notebook's Procedure A cell shows the range-Doppler view of record 1 of each, and prints the speeds each one reaches and what the record holds: <a href="../../radar-data/L31_walker_1.npz">L31_walker_1.npz</a>, <a href="../../radar-data/L31_fan_1.npz">L31_fan_1.npz</a>, <a href="../../radar-data/L31_spinner_1.npz">L31_spinner_1.npz</a>, and <a href="../../radar-data/L31_hand_1.npz">L31_hand_1.npz</a>. The records you would have saved are `L31_<target>_<n>.npz`, `n` from 1 to 4, in the same folder; each one's note says how fast and how tilted it was. Tables A and C.
-- **Procedure B**, the crossing walker: the Procedure B cell shows three frames of <a href="../../radar-data/L31_dismount.npz">L31_dismount.npz</a>, a person walking at 1 m/s from A, 1.5 m out and $12^\circ$ to the E1 side, to B, 4.0 m out and $10^\circ$ to the E8 side, turning, and walking back, past a chair at 3.2 m. A and B are the tape marks of Table B. Table B.
-- **Procedure C**, the notebook's tasks: the spinner and walker records 1 for task (a), all sixteen records for task (b), and `L31_dismount.npz` for task (c); Tables D to F.
+- **Procedure A**, four targets: the notebook's Procedure A cell shows the range-Doppler view of record 1 of each, and prints the speeds each one reaches and what the record holds: <a href="../../radar-data/L31_walker_1.npz">L31_walker_1.npz</a>, <a href="../../radar-data/L31_fan_1.npz">L31_fan_1.npz</a>, <a href="../../radar-data/L31_spinner_1.npz">L31_spinner_1.npz</a>, and <a href="../../radar-data/L31_hand_1.npz">L31_hand_1.npz</a>. The records you would have saved are `L31_<target>_<n>.npz`, `n` from 1 to 4, in the same folder; each one's note says how fast and how tilted it was. These fill Tables A and C.
+- **Procedure B**, the crossing walker: the Procedure B cell shows three frames of <a href="../../radar-data/L31_dismount.npz">L31_dismount.npz</a>, a person walking at 1 m/s from A, 1.5 m out and $12^\circ$ to the E1 side, to B, 4.0 m out and $10^\circ$ to the E8 side, turning, and walking back, past a chair at 3.2 m. A and B are the tape marks of Table B. This fills Table B.
+- **Procedure C**, the notebook's tasks: the spinner and walker records 1 for task (a), all sixteen records for task (b), and `L31_dismount.npz` for task (c). These fill Tables D to F.
 ```
 ::::
 
