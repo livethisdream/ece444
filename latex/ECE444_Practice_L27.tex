@@ -104,10 +104,10 @@ map against the threshold.
 	\end{minipage}
 
 	\part The false-alarm rate fell by a factor of 150 between parts (b) and (c). Explain why
-	the threshold moved by only $1.4\db$.
+	the threshold moved by only $1.3\db$.
 		\begin{solution}[1.1in]
 		The threshold depends on the logarithm of $1/P_{fa}$: $T/P_n$ went from
-		$\ln 10^{6} = 13.8$ to 18.8, a ratio of 1.36, or $1.4\db$. The exponential noise
+		$\ln 10^{6} = 13.8$ to 18.8, a ratio of 1.36, or $1.3\db$. The exponential noise
 		tail falls so fast that a small move in the threshold removes most of the crossings.
 		\end{solution}
 
@@ -185,9 +185,9 @@ SNR as
 		\begin{solution}[1.6in]
 		\eq{ \text{SNR}_\text{dB} &= -5\mylog{16} \\
 		&\quad + \lp 6.2 + \frac{4.54}{4.05} \rp \mylog{15.2} \\
-		&= -6.02 + 7.32 \times 1.182 = 2.6\db }
-		Coherent integration of 16 chirps needs $11.8 - 12.0 = -0.2\db$ per chirp, so the
-		noncoherent detector needs $2.8\db$ more.
+		&= -6.02 + 7.32 \times 1.182 = 2.64\db }
+		Coherent integration of 16 chirps needs $11.83 - 12.04 = -0.21\db$ per chirp, so the
+		noncoherent detector needs $2.9\db$ more.
 		\end{solution}
 
 \end{parts}
