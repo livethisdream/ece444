@@ -38,13 +38,15 @@ iq only, no iq_ch), written by scripts/radar/make_l30_data.py:
   L30_walker.npz            a person walking 1.0 m -> 4.5 m -> 1.0 m past a wall at 6.0 m; one chirp
                             every 0.1 s (PRI 0.1 s), 70 display updates: Procedure B without a kit
 L31, written by scripts/radar/make_l31_data.py (fmcw_sim's add_fan, add_rotor and add_dismount);
-each iq rounded to 12-bit steps and saved compressed, 1.2-1.6 MB a file, 23.4 MB in all:
-  L31_<target>_<n>.npz      n = 1-4 for walker, fan, spinner, hand: 2.0 s of back-to-back L29 chirps
-                            (300 us, PRI 0.5 ms, 500 MHz), 4000 chirps, thinned to 90 samples a chirp
+each iq rounded to 12-bit steps and saved compressed, 1.2-2.7 MB a file, 24.8 MB in all; the
+Phaser app's Range + Velocity preset (9.9 GHz, 500 MHz, 300 us, PRI 0.5 ms, 2 MSPS), and each
+plays in the app's Load Recording:
+  L31_<target>_<n>.npz      n = 1-4 for walker, fan, spinner, hand: 2.0 s of back-to-back chirps
+                            (300 us, PRI 0.5 ms, 500 MHz), 4000 chirps, resampled to 90 samples a chirp
                             (0.3 MSPS: the same 0.30 m bins, reaching 4.4 m); iq only. Record 1 is the
                             lesson's example of each target; 2-4 change speed, size, range and tilt
                             (the note says which). Part A and tasks (a) and (b) without a kit
   L31_dismount.npz          a person walking from A (1.5 m, 12 deg to E1) to B (4.0 m, 10 deg to E8),
-                            turning, and back at 1 m/s, a chair at 3.2 m; every 8th chirp (PRI 4 ms),
+                            turning, and back at 1 m/s, a chair at 3.2 m; every 4th chirp (PRI 2 ms),
                             44 frames of 128 ms; iq and iq_ch, with truth_t, truth_r, truth_az per frame.
                             Part B and task (c) without a kit

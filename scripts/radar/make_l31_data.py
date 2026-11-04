@@ -6,12 +6,13 @@ three target functions the L31 Lab added to it (add_rotor, add_fan,
 add_dismount). Two kinds of file, both in the course's capture format:
 
   L31_<target>_<n>.npz   n = 1..4 for each of fan, spinner, hand, walker: a
-                         2.0 s record of back-to-back chirps of the L29 burst
-                         (300 us, PRI 0.5 ms, 500 MHz, 10 GHz), 4000 chirps,
-                         iq only. To keep each file near 1.3 MB the samples
-                         of each chirp are thinned to 0.3 MSPS, 90 a chirp:
-                         the range bins are still 0.30 m, and they reach
-                         4.4 m instead of 171 m. Record 1 of each target is
+                         2.0 s record of back-to-back chirps of the Phaser
+                         app's range_doppler preset, "Range + Velocity"
+                         (300 us, PRI 0.5 ms, 500 MHz, 9.9 GHz, 2 MSPS;
+                         COURSE_SPEC M8.1), 4000 chirps, iq only. To keep
+                         each file near 1.4 MB each chirp is resampled to
+                         0.3 MSPS, 90 samples: the range bins are still
+                         0.30 m, and they reach 4.4 m instead of 81 m. Record 1 of each target is
                          the lesson's example of it (L31, Four Signatures);
                          records 2-4 change the speed, the size, the range,
                          and how the target is held. The note says which.
@@ -19,9 +20,12 @@ add_dismount). Two kinds of file, both in the course's capture format:
                          the E1 side) out to B (4.0 m, 10 deg to the E8 side),
                          turning, and walking back: iq and iq_ch, and the
                          truth (truth_t, truth_r, truth_az at the center of
-                         each 128 ms frame). Every 8th chirp is kept, PRI 4 ms,
-                         so a 128 ms frame is 32 chirps: the burst's velocity
-                         cell of 0.12 m/s, with +/-1.9 m/s unambiguous.
+                         each 128 ms frame). Every 4th chirp is kept, PRI 2 ms,
+                         so a 128 ms frame is 64 chirps: the burst's velocity
+                         cell of 0.12 m/s, with +/-3.8 m/s unambiguous.
+
+The waveform is passed to fmcw_sim.new_capture explicitly (PRESET below);
+fmcw_sim's own PRESETS belong to the L28 and L29 Labs.
 
 Every file's iq is rounded to a 12-bit converter's steps (2^-11 of full
 scale), as a capture's samples are, and saved compressed.
@@ -47,8 +51,12 @@ import fmcw_sim as sim                          # noqa: E402
 
 OUT = ROOT / "book/extras/radar-data"
 LSB = 2.0 ** -11                                # a 12-bit converter's step, full scale 1
+# The Phaser app's range_doppler preset ("Range + Velocity"), COURSE_SPEC M8.1:
+# frontend-radar/src/sim/constants.generated.js FMCW_PRESETS, PRI = ramp_time
+# + pri_guard_ms. f0 is the recorded kit's calibrated 0 m frequency.
+PRESET = dict(fs=2.0e6, fc=9.9e9, B=500e6, T_ramp=300e-6, PRI=0.5e-3, n_chirps=256, f0=101.4e3)
 FS_REC, T_REC = 0.3e6, 2.0                      # the records: 90 samples a chirp, 2.0 s
-PRI_TRK, FRAME = 4.0e-3, 0.128                  # the walk: every 8th chirp, 128 ms frames
+PRI_TRK, FRAME = 2.0e-3, 0.128                  # the walk: every 4th chirp, 128 ms frames
 KINDS = ["walker", "fan", "spinner", "hand"]
 
 # The records. Fans are 15 cm across, spinners 7 cm (arms at 28 and 35 mm),
@@ -113,7 +121,7 @@ def _save(cap: dict, path: Path, note: str, channels: bool = False, **extra) -> 
 
 def record(kind: str, p: dict, seed: int) -> dict:
     """One 2.0 s record of one target: the room's noise and leakage, and the target."""
-    cap = sim.new_capture("l29_burst", fs=FS_REC, n_chirps=int(round(T_REC / 0.5e-3)))
+    cap = sim.new_capture("l29_burst", **{**PRESET, "fs": FS_REC, "n_chirps": int(round(T_REC / PRESET["PRI"]))})
     sim.add_noise(cap, seed=seed)
     sim.add_leakage(cap)
     if kind == "fan":
@@ -158,13 +166,14 @@ def l31_sets(out: Path = OUT) -> list[Path]:
             seed = 3100 + 10 * KINDS.index(kind) + n
             cap = record(kind, p, seed)
             written.append(_save(cap, out / f"L31_{kind}_{n}.npz",
-                                 f"L31 Lab recorded data: {describe(kind, p)}; 2.0 s of 300 us chirps "
-                                 f"every 0.5 ms, thinned to 90 samples a chirp (0.3 MSPS)"))
+                                 f"L31 Lab recorded data: {describe(kind, p)}; 2.0 s of the Range + Velocity "
+                                 f"preset's chirps (300 us every 0.5 ms, 9.9 GHz), resampled to 90 samples "
+                                 f"a chirp (0.3 MSPS)"))
 
     t, x, y, t_end, _ = walk_path()
     n_frames = int(t_end / FRAME)
     n_per = int(round(FRAME / PRI_TRK))
-    cap = sim.new_capture("l29_burst", fs=FS_REC, PRI=PRI_TRK, n_chirps=n_frames * n_per)
+    cap = sim.new_capture("l29_burst", **{**PRESET, "fs": FS_REC, "PRI": PRI_TRK, "n_chirps": n_frames * n_per})
     sim.add_noise(cap, seed=3150)
     sim.add_leakage(cap)
     sim.add_point(cap, **CHAIR)
@@ -175,7 +184,7 @@ def l31_sets(out: Path = OUT) -> list[Path]:
         cap, out / "L31_dismount.npz",
         f"L31 Lab recorded data: a person walking from A ({WALK_A[0]:.1f} m, {-WALK_A[1]:.0f} deg to the E1 side) "
         f"to B ({WALK_B[0]:.1f} m, {WALK_B[1]:.0f} deg to the E8 side) at {WALK_V:.1f} m/s, turning, and back; "
-        f"a chair at {CHAIR['r0']:.1f} m, {CHAIR['az']:.0f} deg; every 8th chirp (PRI 4 ms), "
+        f"a chair at {CHAIR['r0']:.1f} m, {CHAIR['az']:.0f} deg; every 4th chirp (PRI 2 ms), "
         f"{n_frames} frames of 128 ms, both subarray channels; truth_t, truth_r, truth_az",
         channels=True, truth_t=tf, truth_r=np.hypot(xf, yf), truth_az=np.degrees(np.arctan2(xf, yf))))
     return written
@@ -217,7 +226,7 @@ def check(out: Path = OUT) -> bool:
     print(f"        L31 total {sum(sizes.values()) / 1e6:.1f} MB")
 
     caps = {(k, n): rl.load_capture(out / f"L31_{k}_{n}.npz") for k in KINDS for n in range(1, 5)}
-    lam = rl.C / 10e9
+    lam = rl.C / PRESET["fc"]
 
     # The Pre-Lab's predictions, record 1 of each target: largest speed, m/s.
     expect("pre-lab: fan, spinner, hand tips; walker torso and limbs, m/s",
@@ -225,7 +234,7 @@ def check(out: Path = OUT) -> bool:
             round(2 * np.pi * 1.5 * 0.2, 1), 1.3, round(1.3 + 2.7, 1)],
            [7.9, 4.4, 1.9, 1.3, 4.0])
     speeds = (np.pi * 0.15 * 1000 / 60, np.pi * 0.07 * 1200 / 60, 2 * np.pi * 1.5 * 0.2, 1.3, 4.0)
-    expect("pre-lab: the same as Doppler, Hz", [round(2 * v / lam) for v in speeds], [524, 293, 126, 87, 267])
+    expect("pre-lab: the same as Doppler, Hz", [round(2 * v / lam) for v in speeds], [518, 290, 124, 86, 264])
 
     # Procedure A without a kit: each record 1's speeds in the max-hold view, 20 dB.
     got = []
@@ -235,25 +244,37 @@ def check(out: Path = OUT) -> bool:
         band = vel[prof > prof.max() - 20]
         got.append((k, round(float(band.min()), 1), round(float(band.max()), 1)))
     expect("procedure A, record 1 speeds within 20 dB, m/s",
-           got, [("walker", -1.3, 3.9), ("fan", -8.6, 8.7), ("spinner", -4.9, 4.9), ("hand", -2.0, 2.0)])
+           got, [("walker", -1.3, 3.9), ("fan", -8.7, 8.7), ("spinner", -5.0, 5.0), ("hand", -2.0, 2.0)])
 
     # Procedure B without a kit: three frames of the walk.
     walk = rl.load_capture(out / "L31_dismount.npz")
     n = int(round(FRAME / walk["PRI"]))
     nf = walk["iq"].shape[0] // n
-    got = []
+    got, turn_lines = [], []
     for k in (1, nf // 2, nf - 3):
         sl = slice(k * n, (k + 1) * n)
         rd, rng, vel = rl.range_doppler(rl.mti({**walk, "iq": walk["iq"][sl]}, "2pulse"))
         det, hits = rl.cfar_2d(rd, (2, 2), (4, 4), 11.6, axes=(rng, vel))
-        c = h["clusters"](det, hits, rd)[0]
-        got.append((k, round(float(c[0]), 2), round(float(c[1]), 2)))
-    expect("procedure B: frame, walker range m, velocity m/s", got, [(1, 1.67, -0.85), (22, 3.77, -1.81), (41, 1.97, 0.85)])
+        cl = h["clusters"](det, hits, rd)
+        got.append((k, round(float(cl[0][0]), 2), round(float(cl[0][1]), 2)))
+        if k == nf // 2:
+            turn_lines = [(round(float(c[0]), 2), round(float(c[1]), 2), round(float(c[2]), 1)) for c in cl[:6]]
+    expect("procedure B: frame, strongest line's range m, velocity m/s", got,
+           [(1, 1.67, -0.84), (22, 3.77, -1.8), (41, 1.97, 0.84)])
+    # The cell prints six lines a frame, by peak power; at the turn the torso is the 5th.
+    expect("procedure B: the torso at the turn, among the six lines printed (m, m/s, dB SNR)",
+           (4.07, 0.12, 21.9) in turn_lines, True)
     t, x, y, t_end, t1 = walk_path()
     tf = walk["truth_t"]
     vr = np.gradient(walk["truth_r"], tf)
     print(f"        truth: radial velocity at those frames {[round(float(-vr[k]), 2) for k in (1, nf // 2, nf - 3)]} "
           f"(+ closing); turn from {t1:.2f} s to {t1 + 1:.2f} s; walk {t_end:.2f} s")
+
+    # The angle at mark B, as shipped: the farthest detection of the walk.
+    br, ba = h["track_meas"](walk)
+    kb = int(np.nanargmax(br))
+    expect("angle at B: farthest detection m, deg, frame", (round(float(br[kb]), 2), round(float(ba[kb]), 1), kb),
+           (4.07, 9.9, 21))
 
     # Task (a): the window.
     got = []
@@ -268,7 +289,7 @@ def check(out: Path = OUT) -> bool:
                 row.append(round(float(rl.features(t, f, S, lam)[1]), 2))
         got.append(tuple(row))
     expect("task (a): n_win, resolution Hz, spinner line Hz, walker torso Hz, walker spread m/s", got,
-           [(16, 125.0, 192, 246, 1.28), (64, 31.2, 72, 56, 0.68), (256, 7.8, 41, 11, 0.48)])
+           [(16, 125.0, 196, 243, 1.29), (64, 31.2, 72, 57, 0.68), (256, 7.8, 41, 13, 0.51)])
 
     # Task (b): the confusion matrix, three features, + edge, + shape.
     def my_features(t, f, S, extra):
@@ -295,7 +316,7 @@ def check(out: Path = OUT) -> bool:
             names.append(f"{k}_{n}")
     print("        L30 detections:", dets)
     y = np.array(y)
-    want = {None: ([[4, 0, 0, 0], [0, 2, 2, 0], [0, 1, 3, 0], [0, 0, 0, 4]], ["fan_2", "fan_3", "spinner_2"]),
+    want = {None: ([[4, 0, 0, 0], [0, 1, 3, 0], [0, 1, 3, 0], [0, 0, 0, 4]], ["fan_2", "fan_3", "fan_4", "spinner_2"]),
             "edge": ([[4, 0, 0, 0], [0, 3, 1, 0], [0, 1, 3, 0], [0, 0, 0, 4]], ["fan_3", "spinner_2"]),
             "shape": ([[4, 0, 0, 0], [0, 3, 1, 0], [0, 0, 4, 0], [0, 0, 0, 4]], ["fan_3"])}
     for e in X:
@@ -307,12 +328,12 @@ def check(out: Path = OUT) -> bool:
         print("        " + "\n        ".join(f"{nm:10s} {np.round(x, 2)}" for nm, x in zip(names, Xe)))
 
     # Task (c): the walk.
-    zr, za = h["track_meas"](walk)
+    zr, za = br, ba
     Rt, At = walk["truth_r"], walk["truth_az"]
     expect("task (c): frames, frames missed", (len(zr), int(np.isnan(zr).sum())), (44, 0))
     expect("task (c): detections RMS, range m and angle deg",
            (round(float(np.sqrt(np.nanmean((zr - Rt) ** 2))), 2),
-            round(float(np.sqrt(np.nanmean((za - At) ** 2))), 2)), (0.1, 0.19))
+            round(float(np.sqrt(np.nanmean((za - At) ** 2))), 2)), (0.09, 0.29))
     settled = tf > 1.0
     turn = settled & (np.abs(tf - tf[np.argmax(Rt)]) < 0.8)
     got = []
@@ -325,8 +346,8 @@ def check(out: Path = OUT) -> bool:
                     round(float(np.sqrt(np.mean(ea[settled] ** 2))), 2),
                     round(float(np.abs(ea[settled]).max()), 2)))
     expect("task (c): alpha, beta, range RMS, largest, at the turn; angle RMS, largest", got,
-           [(0.2, 0.022, 0.37, 0.61, 0.58, 2.56, 3.9), (0.5, 0.167, 0.06, 0.16, 0.16, 0.31, 0.62),
-            (0.8, 0.533, 0.08, 0.22, 0.22, 0.16, 0.76)])
+           [(0.2, 0.022, 0.37, 0.62, 0.6, 2.5, 3.81), (0.5, 0.167, 0.06, 0.16, 0.16, 0.26, 0.66),
+            (0.8, 0.533, 0.07, 0.14, 0.14, 0.19, 0.67)])
     return ok
 
 
