@@ -7,6 +7,10 @@ disable-model-invocation: true
 
 # "Why" sweep for one lesson
 
+A page written with `write-lesson` (2026-11-04 on) already had this lens in its
+end-of-draft review; run this sweep on a page written before that, or when
+Neil asks for it.
+
 Run on demand, one lesson at a time: `/why-sweep 15`. The lesson is
 `$ARGUMENTS`. L12 is the model for the finished shape; L13 and L14 were done
 the same way (their "why" commits show the pattern).

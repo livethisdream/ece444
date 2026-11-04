@@ -592,7 +592,7 @@ $$
 guarantees the ratio $A_e/G$ is the *same* constant for *every* antenna, from
 a short dipole to a giant dish. (Equivalently, a thermodynamic argument — an
 antenna in a blackbody cavity must absorb and re-radiate equally in each
-direction — pins down the same constant.) So the boxed relation is truly
+direction — pins down the same constant.) So the boxed relation is
 universal.
 ::::
 

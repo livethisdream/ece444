@@ -177,7 +177,7 @@ connector is a slow, intermittent way to lose a calibration.
 
 The service will even run with no positioner attached at all, and says so —
 the scan button reads *no positioner* and everything that turns the tower is
-greyed out, while the Sweep tab keeps working. That is the shape of today's
+grayed out, while the Sweep tab keeps working. That is the shape of today's
 measurement: one port, one sweep, nothing moving.
 :::
 ::::
@@ -290,7 +290,7 @@ writing one measurement down.
 This is Lesson 9's "four names for one number" with the instrument doing the
 conversion instead of you:
 
-$$Z = Z_0\,\frac{1 + \Gamma}{1 - \Gamma}, \qquad
+$$Z = Z_0\ \frac{1 + \Gamma}{1 - \Gamma}, \qquad
 \text{VSWR} = \frac{1 + \vert \Gamma \vert}{1 - \vert \Gamma \vert}, \qquad
 \text{RL} = -20 \log_{10} \vert \Gamma \vert$$
 

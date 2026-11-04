@@ -34,7 +34,7 @@ with room for notes. Print from read mode for the whole lesson.
 
 ::::{frame} Welcome & Introductions
 
-_Instructor and student introductions — background, career interests, prior exposure to RF or radar._
+_Introductions, mine and then yours — background, career interests, prior exposure to RF or radar._
 ::::
 
 ::::{frame} About Me

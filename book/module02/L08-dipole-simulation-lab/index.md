@@ -148,7 +148,7 @@ This is the move that makes the problem finite. An unknown *function* on the
 wire becomes $N$ unknown *numbers*, and the pattern integral becomes a sum of
 $N$ elementary patterns with those numbers as coefficients:
 
-$$F(\theta) \;=\; \sum_{n=1}^{N} a_n\ F_n(\theta),$$
+$$F(\theta) = \sum_{n=1}^{N} a_n\ F_n(\theta),$$
 
 where each $F_n$ is the pattern of one short segment carrying its basis shape —
 an object Lesson 6 already handed you. NEC's basis functions are a
