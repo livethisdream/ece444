@@ -12,7 +12,7 @@ a dict with the keys of the course contract (ROADMAP section 5, the L28 brief):
     iq_ch   (optional) complex64, shape (2, n_chirps, n_samples): the two
             subarray channels, whose sum is iq; the L31 monopulse needs them
     fs      sample rate, Hz
-    fc      carrier, Hz (10 GHz, COURSE_SPEC section M8)
+    fc      carrier, Hz (the app preset's, COURSE_SPEC section M8.1)
     B       chirp bandwidth, Hz
     T_ramp  chirp length, s
     PRI     time from the start of one chirp to the start of the next, s
@@ -67,11 +67,12 @@ OUT = ROOT / "book/extras/radar-data"
 # Waveforms, from COURSE_SPEC section M8. f0 is a kit's calibrated 0 m
 # frequency: "about 100 kHz, set per kit"; the recorded kit read 101.4 kHz.
 PRESETS = {
-    # The L28 Lab range chirp: 500 MHz in 0.5 ms, 6.67 kHz of beat per meter.
-    # 0.6 MSPS is ADI's FMCW_RADAR_Waterfall.py rate (300 samples a chirp,
-    # a 30 m reach above f0). One chirp is kept per display update, so the
-    # PRI is the waterfall's line time, not the chirp length.
-    "l28_range": dict(fs=0.6e6, fc=10.0e9, B=500e6, T_ramp=0.5e-3,
+    # The L28 Lab range chirp: the Phaser app's Range (Basic) preset as it
+    # ships (COURSE_SPEC M8.1), 500 MHz in 1 ms at 12.145 GHz, 0.6 MSPS:
+    # 3.33 kHz of beat per meter, a 60 m reach above f0. l28_capture keeps
+    # the 540 samples the app keeps of each chirp. One chirp is kept per
+    # display update, so the PRI is the waterfall's line time, 50 ms.
+    "l28_range": dict(fs=0.6e6, fc=12.145e9, B=500e6, T_ramp=1.0e-3,
                       PRI=50e-3, n_chirps=32, f0=101.4e3),
     # The L29-L31 range-Doppler burst: the Phaser app's range_doppler preset
     # ("Range + Velocity", COURSE_SPEC M8.1): 9.9 GHz, 256 chirps of 300 us,
@@ -358,43 +359,75 @@ def room(cap: dict) -> None:
     add_point(cap, 5.5, rcs=2.0, phase0=0.4)       # the far wall, weak and fixed
 
 
-def l28_sets(out: Path = OUT) -> list[Path]:
-    """The L28 Lab's recorded data: calibration, three static ranges, two waveforms, two close corners, a walker."""
-    written = []
+# The L28 Lab's kit and bench. The app keeps the last 90% of each chirp, after
+# the ramp settles (phaser_radar_dsp.chirp_plan, RAMP_SETTLE_FRACTION): 540
+# of the 600 samples of a 1 ms chirp. A capture saved before the 0 m
+# calibration carries the IF tone, 100 kHz, as its f0, as the app writes it;
+# one saved after it carries the kit's 101.4 kHz. The tape is read with the
+# few-centimeter errors of a real bench, so a fitted slope is not exact.
+L28_IF_TONE = 100e3
+L28_SETTLE = 0.1
+L28_TAPE = {1: 0.99, 2: 2.01, 3: 3.03}          # tape range -> true range, m
+L28_CORNER_RCS = 0.47 * (12.145 / 10.0) ** 2    # the 10 cm corner at 12.145 GHz
+L28_FAST = dict(fs=5.0e6, fc=10.0e9, T_ramp=0.5e-3)   # the app's Range (Fast)
 
-    cap = new_capture("l28_range")
+
+def l28_capture(**overrides) -> dict:
+    """An empty L28 capture, trimmed to the samples the app keeps of each chirp."""
+    cap = new_capture("l28_range", **overrides)
+    ramp = cap["T_ramp"]
+    n = int((ramp - L28_SETTLE * ramp) * cap["fs"])      # chirp_plan's arithmetic
+    cap["iq_ch"] = np.zeros(cap["iq_ch"].shape[:2] + (n,), dtype=np.complex128)
+    return cap
+
+
+def l28_sets(out: Path = OUT) -> list[Path]:
+    """The L28 Lab's recorded data, at the app's Range (Basic) preset unless named."""
+    written = []
+    basic = "Range (Basic): 12.145 GHz, B 500 MHz, T_ramp 1 ms, 0.6 MSPS"
+
+    def write(cap, name, note, f0_field=None):
+        if f0_field is not None:
+            cap["f0"] = f0_field
+        written.append(save(cap, out / name, f"L28 Lab recorded data: {note}", channels=False))
+
+    cap = l28_capture()
+    room(cap)
+    write(cap, "L28_clear.npz", f"the bench clear, before the 0 m calibration (f0 is the IF tone); {basic}",
+          L28_IF_TONE)
+
+    cap = l28_capture()
     room(cap)
     add_point(cap, 0.02, level_dbfs=-8.0, phase0=2.0)  # plate against the array
-    written.append(save(cap, out / "L28_cal_0m.npz",
-                        "L28 Lab recorded data: a metal plate held against the array, for the 0 m calibration"))
+    write(cap, "L28_cal_0m.npz", "a metal plate held against the array, before the 0 m calibration "
+          f"(f0 is the IF tone); {basic}", L28_IF_TONE)
 
-    for r in (1.0, 2.0, 3.0):
-        cap = new_capture("l28_range")
+    for tape, r in L28_TAPE.items():
+        cap = l28_capture()
         room(cap)
-        add_point(cap, r, rcs=0.47)
-        written.append(save(cap, out / f"L28_corner_{r:.0f}m.npz",
-                            f"L28 Lab recorded data: a 10 cm corner reflector at {r:.1f} m, B 500 MHz, T_ramp 0.5 ms"))
+        add_point(cap, r, rcs=L28_CORNER_RCS)
+        write(cap, f"L28_corner_{tape}m.npz", f"a 10 cm corner reflector at {tape:.2f} m by the tape; {basic}")
 
-    for tag, kw in (("B250", dict(B=250e6)), ("T1ms", dict(T_ramp=1.0e-3))):
-        cap = new_capture("l28_range", **kw)
+    for name, kw, words in (
+            ("L28_corner_2m_fast.npz", L28_FAST,
+             "the corner at 2.00 m by the tape, Range (Fast): 10 GHz, B 500 MHz, T_ramp 0.5 ms, 5 MSPS"),
+            ("L28_corner_2m_B250.npz", dict(B=250e6),
+             "the corner at 2.00 m by the tape, B 250 MHz; otherwise Range (Basic)")):
+        cap = l28_capture(**kw)
         room(cap)
-        add_point(cap, 2.0, rcs=0.47)
-        written.append(save(cap, out / f"L28_corner_2m_{tag}.npz",
-                            f"L28 Lab recorded data: the corner at 2.0 m, B {cap['B']/1e6:.0f} MHz, "
-                            f"T_ramp {cap['T_ramp']*1e3:.1f} ms"))
+        add_point(cap, L28_TAPE[2], rcs=L28_CORNER_RCS * (cap["fc"] / 12.145e9) ** 2)
+        write(cap, name, words)
 
-    cap = new_capture("l28_range")
+    cap = l28_capture()
     room(cap)
-    add_point(cap, 2.0, rcs=0.47)
-    add_point(cap, 2.2, rcs=0.47, phase0=1.9)
-    written.append(save(cap, out / "L28_two_corners.npz",
-                        "L28 Lab recorded data: two corners at 2.0 and 2.2 m, inside one 0.30 m resolution cell"))
+    add_point(cap, 2.0, rcs=L28_CORNER_RCS)
+    add_point(cap, 2.2, rcs=L28_CORNER_RCS, phase0=0.4)   # in phase: one peak midway
+    write(cap, "L28_two_corners.npz", f"two corners at 2.0 and 2.2 m, inside one resolution cell; {basic}")
 
-    cap = new_capture("l28_range", n_chirps=200)    # 10 s at 50 ms a line
+    cap = l28_capture(n_chirps=200)    # 10 s at 50 ms a line
     room(cap)
     add_walker(cap, r_start=1.0, r_turn=4.0, speed=1.0)
-    written.append(save(cap, out / "L28_walker.npz",
-                        "L28 Lab recorded data: a person walking from 1 m out to 4 m and back, at 1 m/s, for 10 s"))
+    write(cap, "L28_walker.npz", f"a person walking from 1 m out to 4 m and back, at 1 m/s, for 10 s; {basic}")
     return written
 
 

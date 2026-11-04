@@ -108,9 +108,9 @@ property a classifier needs.
 :::
 
 The L31 Lab records four targets: you walking, a desk fan, a fidget spinner,
-and your hand waving. The figure simulates each one as the lab records it,
-one range bin sampled once per chirp, with the spectrogram the next frames
-build.
+and your hand waving. The figure simulates each one at the lesson's
+$10\ \text{GHz}$, one range bin sampled once per chirp, with the spectrogram
+the next frames build; the lab's $9.9\ \text{GHz}$ lowers every Doppler by 1%.
 
 The **walker** is the only target that goes anywhere, so it is the only one
 whose pattern sits off zero: the torso is the steady line at $87\ \text{Hz}$
@@ -597,41 +597,50 @@ the range and the angle both change and the Doppler never vanishes.
 
 ::::{frame} L31 Lab: Micro-Doppler Classification and Dismount Tracking
 :::{present}
-- Read four targets' micro-Doppler in the app, and record each.
-- Watch a walker cross on a diagonal, and record both channels.
+- Read four targets' micro-Doppler in the app's Range-Doppler view.
+- Watch a walker cross on a diagonal; save one burst on mark B with both channels.
 - In the notebook: tune the window, add a feature, tune $\alpha$.
 :::
 
 The L31 Lab is the last stage of the chain your
 [final project](../final-project/index.md) report explains. It starts in the
-Phaser app: in **Part A** you read the micro-Doppler of a fan, a fidget
-spinner, a waving hand, and yourself walking in the range-Doppler view, and
-save four records of each; in **Part B** a walker crosses in front of the kit
-on a diagonal and back, and you save that walk with both subarray channels.
-The rest runs in the lab's notebook, which calls the provided `radar_lab.py`:
-it finds each target with your L30 detector, computes its spectrogram and
-features, classifies every record with a classifier trained on the others,
-and tracks the walk in range and angle. Your tasks are small changes to it:
-tune the spectrogram window, add one feature and see whether the confusion
-matrix improves, and tune $\alpha$ against the walk's truth. You work the lab
-on your own, outside class, and turn in one packet in three parts: **Part 1,
-Pre-Lab**, the predictions; **Part 2, Measurements**, from the app and the
-notebook; and **Part 3, Writeup**. I check the packet and return it with
-feedback. It is scaffolding for your final report, not the report.
+Phaser app: in **Procedure A** you read the micro-Doppler of a fan, a fidget
+spinner, a waving hand, and yourself walking in the Range-Doppler view; in
+**Procedure B** you walk in front of the kit on a diagonal and back, read the
+walk in the same view, and save one burst on the far mark with both subarray
+channels, which gives the sign of the angle. The rest runs in the lab's
+notebook, which calls the provided `radar_lab.py`: it finds each target with
+the L30 detector, computes its spectrogram and features, classifies every
+record with a classifier trained on the others, and tracks a walk in range and
+angle. Your tasks are small changes to it: tune the spectrogram window, add
+one feature and see whether the confusion matrix improves, and tune $\alpha$
+against the walk's truth. You work the lab on your own, outside class, and
+turn in one packet in three parts: **Part 1, Pre-Lab**, the predictions;
+**Part 2, Measurements**, from the app and the notebook; and **Part 3,
+Writeup**. I check the packet and return it with feedback. It is scaffolding
+for your final report, not the report.
+
+The app's **Save Capture** keeps one burst, 256 chirps or 128 ms. That is
+too short to hold a stride, which lasts about a second, or a turn, so the
+notebook classifies the course's 2 s records and tracks the course's recorded
+walk, with or without a kit. The recorded walk also carries its truth, which
+is what scores a track.
 
 ADI's Phaser labs stop at CFAR, so this lab is the course's own. Its settings
-are the L29 burst's: 300 µs chirps, 0.5 ms apart, at 10 GHz and 500 MHz, so
-the slow-time spectrogram spans $\pm 1\ \text{kHz}$, or $\pm 15\ \text{m/s}$.
+are the app's **Range + Velocity** preset: 300 µs chirps of 500 MHz, one every
+0.5 ms, at 9.9 GHz, so $\lambda = 3.03\ \text{cm}$ and the slow-time
+spectrogram spans $\pm 1\ \text{kHz}$, or $\pm 15.2\ \text{m/s}$. Each Doppler
+is 1% below the lesson's round 10 GHz values.
 ::::
 
 ::::{frame} Pre-Lab Predictions
 :::{present}
 | Target | Largest speed | Doppler |
 | :-- | --: | --: |
-| Walker | limbs $4.0\ \text{m/s}$ | $267\ \text{Hz}$ |
-| Fan, $1000\ \text{rpm}$ | $\pm 7.9\ \text{m/s}$ | $\pm 524\ \text{Hz}$ |
-| Spinner, $1200\ \text{rpm}$ | $\pm 4.4\ \text{m/s}$ | $\pm 293\ \text{Hz}$ |
-| Hand, $1.5\ \text{Hz}$ | $\pm 1.9\ \text{m/s}$ | $\pm 126\ \text{Hz}$ |
+| Walker | limbs $4.0\ \text{m/s}$ | $264\ \text{Hz}$ |
+| Fan, $1000\ \text{rpm}$ | $\pm 7.9\ \text{m/s}$ | $\pm 518\ \text{Hz}$ |
+| Spinner, $1200\ \text{rpm}$ | $\pm 4.4\ \text{m/s}$ | $\pm 290\ \text{Hz}$ |
+| Hand, $1.5\ \text{Hz}$ | $\pm 1.9\ \text{m/s}$ | $\pm 124\ \text{Hz}$ |
 :::
 
 The table is the core of Part 1, from the lesson's Micro-Doppler frame, for
@@ -639,17 +648,17 @@ the lesson's targets: a $15\ \text{cm}$ fan and a $7\ \text{cm}$ spinner,
 whose tips move at $\pi D\ \text{rpm}/60$; a hand waving $0.2\ \text{m}$
 each way, which peaks at $2\pi f A$; and a walker whose limbs swing up to
 $2.7\ \text{m/s}$ about a torso closing at $1.3\ \text{m/s}$. Doppler is $2v/\lambda$ with
-$\lambda = 3.0\ \text{cm}$. Use your own fan's diameter and speed setting,
+$\lambda = 3.03\ \text{cm}$. Use your own fan's diameter and speed setting,
 and your own walk, in place of these.
 
 Part 1 also predicts two things the bench checks. A rotor held off edge-on
 shows only $\cos\psi$ of its tip speed, where $\psi$ is the tilt, so a fan
 turned $45^\circ$ reads like a fast spinner; a feature that measures the
 shape of the band, rather than its width, is unaffected by the tilt. And
-the walk of Part B turns at B: the torso's radial speed passes through zero
-there, so the 2-pulse canceller cuts it, and the predict step of the alpha-beta
-filter carries the track through the turn. Pre-Lab Question 4 predicts how
-far each $\alpha$ trails the turn.
+the walk of Procedure B turns at B: the torso's radial speed passes through
+zero there, so the 2-pulse canceller cuts it, and the predict step of the
+alpha-beta filter carries the track through the turn. Pre-Lab Question 4
+predicts how far each $\alpha$ trails the turn.
 ::::
 
 ::::{frame} Bench Rules
@@ -663,12 +672,12 @@ A rotor shows micro-Doppler only where its parts move along the line of
 sight, so hold the fan and the spinner edge-on, with the plane they turn in
 pointing at the array. Face-on, the blades cross the beam and show almost
 nothing. Use a fan with a guard, keep your fingers out of it, and stand to
-the side while it records; your own breathing and fidgeting are targets too.
+the side while you read it; your own breathing and fidgeting are targets too.
 
-Every cadet has a kit, so every beam crosses someone. For Part B you need
-about 4.5 m of clear floor in front of the kit and a lane no one else walks
-through while you record. Walk at a steady pace you can repeat, about 1 m/s.
-No step needs a corner reflector.
+Every cadet has a kit, so every beam crosses someone. For Procedure B you
+need about 4.5 m of clear floor in front of the kit and a lane no one else
+walks through while you walk it. Walk at a steady pace you can repeat, about
+1 m/s. No step needs a corner reflector.
 ::::
 
 ::::{frame} Results
@@ -683,10 +692,10 @@ not for a next lab. From this lab, keep three results: the confusion matrix
 and accuracy with three features and with yours, with your explanation of
 which records were wrong and why; the track in range and angle against the
 truth, with the $\alpha$ you chose and the noise and lag that come with it; and your
-Part A readings of the four targets against your predictions. The report asks
-you to explain, in your own words, how your radar decides what a target is
-and where it is going. Keep this notebook, `L31_track.csv`, your records, and
-`radar_lab.py` with the L28 to L30 work.
+Procedure A readings of the four targets against your predictions. The report
+asks you to explain, in your own words, how your radar decides what a target
+is and where it is going. Keep this notebook, `L31_track.csv`, your burst from
+mark B, and `radar_lab.py` with the L28 to L30 work.
 ::::
 
 ::::{frame} Equipment and Setup
@@ -697,82 +706,79 @@ You need:
 - the ADALM-PHASER kit with its Raspberry Pi and Pluto attached, and its transmit antenna;
 - a desk fan with a guard, 15 cm across or a larger one on its lowest setting, and a fidget spinner;
 - a tape measure, masking tape, and about 4.5 m of clear floor in front of the kit;
-- your laptop, on the kit's network for the Phaser app, with the Module 4 folder from the <a href="../L28-fmcw/index.html#frame-notebook-setup">L28 Lab's Notebook Setup</a>, and your L28 to L30 work in it.
-
-The course's Phaser app is still gaining its FMCW mode. This page assumes
-that it shows the range-Doppler view with the 2-pulse canceller on, that it
-can save a record of a few seconds of back-to-back chirps, and that it can
-save the two subarray channels separately (`iq_ch` in the course's capture
-format) as well as their sum. None of the three is confirmed yet. Where the
-app's labels differ, use the app's; where it cannot do a step, use the
-recorded data for that step, as the No Hardware? frame describes, and say so
-in the packet.
+- your laptop, on the kit's network for the Phaser app, with the lab's bundle unzipped as the Notebook Setup frame below describes.
 
 1. With the kit powered off, connect the transmit antenna to **OUT2**.
-2. Power the kit, open the Phaser app, and select its FMCW mode with the L29 settings: 500 MHz, 300 µs chirps, 0.5 ms apart. Enter your 0 m frequency from the L28 Lab if the app asks for it.
-3. Show the range-Doppler view against **range** and **velocity**, with the 2-pulse canceller on and the beam steered to broadside, $0^\circ$.
+2. Power the kit, open the Phaser app, and select **FMCW**. Set **Preset** to **Range + Velocity**.
+3. Set the 0 m frequency for this preset with **Calibrate…**, as in the L28 Lab, so that **0 m Beat (kHz)** holds your kit's value.
+4. Turn **MTI** on, with **MTI Mode** at 2-pulse, open the **Range-Doppler** view, and press **Start**. The FMCW mode holds the beam at broadside, $0^\circ$. The view's readouts give the **Peak Range** and **Peak Velocity** of its strongest cell.
 ::::
 
 ::::{frame} No Hardware?
 :class: read-only
 
 ```{note}
-The whole lab can be done without a kit. The course's recorded data and the
-notebook stand in for every procedure, and every row of the packet can be
-filled from them. The files come from a simulation of the PHASER at the
-course's settings, with a kit whose 0 m frequency is 101.4 kHz. Each target
-record is 2.0 s of back-to-back chirps; to keep the files small, each chirp
-keeps 90 samples, so the range bins are the same 0.30 m and reach 4.4 m. The
-walk keeps every 8th chirp, PRI 4 ms, so its 128 ms frames are 32 chirps, and
-it carries both subarray channels and its truth. Say in your packet which
-results are recorded rather than your own.
+The whole lab can be done without a kit, in the Phaser app's browser
+simulator and the notebook. Open the simulator at
+[livethisdream.github.io/phaser/radar](https://livethisdream.github.io/phaser/radar/),
+select **FMCW**, set **Preset** to **Range + Velocity**, turn **MTI** on at
+2-pulse, and open the **Range-Doppler** view. Its **Scene** list (`static`,
+`corners`, `walker`, `hand`) shows a live hand and walker, but it has no fan
+or spinner, so every procedure below uses **Load Recording**, which plays one
+of the course's recorded files through the same view as if it were live,
+looping. The files are in the lab's bundle (Notebook Setup, below). They come
+from a simulation of the PHASER at this preset, with a kit whose 0 m frequency
+is 101.4 kHz. Each target record is 2.0 s of back-to-back chirps; to keep the
+files small, each chirp keeps 90 samples, so the range bins are the same
+0.30 m and the view ends at 4.1 m. Say in your packet which results are
+recorded rather than your own.
 
-- **Procedure A**, four targets: the notebook's Procedure A cell shows the range-Doppler view of record 1 of each, and prints the speeds each one reaches and what the record holds: <a href="../../radar-data/L31_walker_1.npz">L31_walker_1.npz</a>, <a href="../../radar-data/L31_fan_1.npz">L31_fan_1.npz</a>, <a href="../../radar-data/L31_spinner_1.npz">L31_spinner_1.npz</a>, and <a href="../../radar-data/L31_hand_1.npz">L31_hand_1.npz</a>. The records you would have saved are `L31_<target>_<n>.npz`, `n` from 1 to 4, in the same folder; each one's note says how fast and how tilted it was. These fill Tables A and C.
-- **Procedure B**, the crossing walker: the Procedure B cell shows three frames of <a href="../../radar-data/L31_dismount.npz">L31_dismount.npz</a>, a person walking at 1 m/s from A, 1.5 m out and $12^\circ$ to the E1 side, to B, 4.0 m out and $10^\circ$ to the E8 side, turning, and walking back, past a chair at 3.2 m. A and B are the tape marks of Table B. This fills Table B.
-- **Procedure C**, the notebook's tasks: the spinner and walker records 1 for task (a), all sixteen records for task (b), and `L31_dismount.npz` for task (c). These fill Tables D to F.
+- **Procedure A**, four targets: load `L31_walker_1.npz`, `L31_fan_1.npz`, `L31_spinner_1.npz`, and `L31_hand_1.npz` in turn, and read each as Procedure A says. The notebook's Procedure A cell prints the speeds the key uses, from the same four files, so check your readings against it. This fills Table A.
+- **Procedure B**, the crossing walker: load `L31_dismount.npz`, a person walking at 1 m/s from A, 1.5 m out and $12^\circ$ to the E1 side, to B, 4.0 m out and $10^\circ$ to the E8 side, turning, and walking back, past a chair at 3.2 m. A and B are the tape marks of Table B. The file keeps every 4th chirp, so the view spans $\pm 3.8\ \text{m/s}$ and each of its updates covers 0.5 s of walking, which blurs the range; the notebook's Procedure B cell prints three 128 ms frames of it, which fill Table B's rows. The angle at B is the notebook's angle cell, run as shipped on this file; it is the angle task (c)'s plot shows at the turn, and + is the E8 side.
+- **Procedure C**, the notebook's tasks: these run on the bundle's files with or without a kit. Table C comes from the notes the first code cell prints.
 ```
 ::::
 
 ::::{frame} Procedure A: Four Targets
 :class: read-only
 
-For each target, read the range-Doppler view first, then save its records.
-Name the files `L31_<target>_<n>.npz`, with `<target>` one of `walker`,
-`fan`, `spinner`, `hand`, and `n` from 1 to 4; the notebook loads them by
-these names.
+For each target, watch the Range-Doppler view for a few seconds, and read the
+largest speed its pattern reaches on each side of 0 m/s from the velocity
+axis. Record your prediction, the two speeds read, and whether the pattern is
+centered on 0 m/s in Table A. You save nothing here: a saved
+burst is 128 ms, and the classifier needs records of 2 s.
 
-1. **Fan.** Set the fan about 1 m in front of the kit, edge-on, on a setting you can name. Measure its diameter. Watch the view for a few seconds and read the largest speed of its band on each side of 0 m/s. Record your prediction, the two speeds read, and whether the band is centered on 0 m/s in Table A.
-2. Save four records of at least 2 s each: edge-on at two settings, and tilted about $30^\circ$ and $45^\circ$ off edge-on. Record each one's setting and tilt in Table C.
-3. **Spinner.** Spin the fidget spinner and hold it edge-on about 0.5 m out, steady. Read and record it as in step 1. Save four records: two edge-on, at a fresh spin and after it has slowed, and two tilted. Estimate the spin from how long it runs, or use the lesson's 1200 rpm.
-4. **Hand.** Wave your hand toward and away from the kit, about 0.2 m each way, about 1.5 times a second, at 0.8 m. Read and record it. Save four records with different sizes and rates of wave.
-5. **Walker.** Walk straight toward the kit from 4 m at a normal pace. Read and record the torso's speed and the largest speed of the limbs. Save four records: two walking toward the kit and two away, at different paces and up to about $15^\circ$ off the line to the kit.
-6. Copy the sixteen records to your laptop's Module 4 folder.
+1. **Fan.** Set the fan about 1 m in front of the kit, edge-on, on a setting you can name. Measure its diameter, and predict its tip speed from the diameter and the setting's rpm. Read and record it. Then turn it about $45^\circ$ off edge-on and watch the band narrow, and face-on, where it nearly disappears.
+2. **Spinner.** Spin the fidget spinner and hold it edge-on about 0.5 m out, steady. Read and record it. Estimate the spin from how long it runs, or use the lesson's 1200 rpm.
+3. **Hand.** Wave your hand toward and away from the kit, about 0.2 m each way, about 1.5 times a second, at 0.8 m. Read and record it.
+4. **Walker.** Set the laptop beside the kit, its screen toward you, and walk straight toward the kit from 4 m at a normal pace, watching the view as you come. Read and record the torso's speed, the strongest line off zero, and the largest speed of the limbs.
 ::::
 
 ::::{frame} Procedure B: A Crossing Walker
 :class: read-only
 
-1. Facing the patches, E1 is on your right. Tape mark **A** on the floor 1.47 m straight out from the array and 0.31 m to the E1 side, and mark **B** 3.94 m out and 0.69 m to the E8 side. Measure each mark's range and angle from the array's center, and record both in Table B. The angles are within the $\pm 15.5^\circ$ monopulse window of the lesson.
-2. With the beam at $0^\circ$ and the canceller on, walk from A to B at about 1 m/s, turn at B, and walk back to A. Watch the view while a partner walks it, or walk it twice. Record in Table B your range and velocity just after A, at B, and just before A on the way back.
-3. Save the walk as one record with both subarray channels, `L31_dismount.npz`. If the app saves only the summed channel, save that: the notebook tracks range from it, and you take the angle from the recorded walk.
-4. Stand still on mark B, save a short record, and check the sign of the angle the notebook gives for it. Which side of broadside reads positive depends on the kit's channel order; record it in Table B.
+1. Facing the patches, E1 is on your right. Tape mark **A** on the floor 1.47 m straight out from the array and 0.31 m to the E1 side, and mark **B** 3.94 m out and 0.69 m to the E8 side. Measure each mark's range and angle from the array's center, and record both in Table B. The angles are within the monopulse window, $\pm 15.7^\circ$ at 9.9 GHz (the lesson's $\pm 15.5^\circ$ at 10 GHz).
+2. With MTI on, walk from A to B at about 1 m/s, turn at B, and walk back to A. Read the walker's range and velocity just after A, at B, and just before A on the way back, and record them in Table B. Walking out, your back is to the screen: have a partner read the view, or start a screen recording on the laptop, walk, and read the three moments from the recording afterwards.
+3. Stand on mark B and sway, shifting your weight toward and away from the kit, because the canceller removes a person standing still. Turn **Subarray Channels** on and press **Save Capture**. The app downloads one burst with both channels, `phaser_range_doppler_<date>-<time>.npz`; rename it `L31_sway_B.npz` and move it into the notebook's folder.
+4. In the notebook, set `B_REC = "L31_sway_B.npz"` in the angle cell after Procedure B, and run it. It prints the range and angle of your detection; record the sign in Table B. Which side of broadside reads positive depends on the kit's channel order.
 ::::
 
 ::::{frame} Notebook Setup
 :class: read-only
 
-The notebook runs on your own laptop in the folder you made for the L28 Lab; the <a href="../L28-fmcw/index.html#frame-notebook-setup">L28 Lab's Notebook Setup</a> frame has the steps. Add to that folder <a href="../../notebooks/L31_classify_track.ipynb" download>`L31_classify_track.ipynb`</a>, the current <a href="../../notebooks/radar_lab.py" download>`radar_lab.py`</a>, and the recorded files the No Hardware? frame lists, which the notebook loads by name. Start Jupyter in the folder with `jupyter lab` and open `L31_classify_track.ipynb`.
+Download the lab's bundle, <a href="../../bundles/L31_lab.zip" download>`L31_lab.zip`</a>, and unzip it into a folder of its own in your Module 4 folder. It holds the notebook, `L31_classify_track.ipynb`; the provided `radar_lab.py`; every recorded file the notebook loads, `L31_*.npz`; and the data README. Python with numpy, scipy, matplotlib, and Jupyter is the setup from the <a href="../L28-fmcw/index.html#frame-notebook-setup">L28 Lab's Notebook Setup</a> frame. Start Jupyter in the unzipped folder with `jupyter lab`, and open `L31_classify_track.ipynb`.
 ::::
 
 ::::{frame} Procedure C: Run the Notebook
 :class: read-only
 
-Do this part after the bench, in about 30 to 45 minutes. The notebook starts from the recorded data; to run it on your own records, change the file names in its first cell. Its Procedure A and B cells are for working without a kit, as the No Hardware? frame describes; with a kit, skip them. Each record's target is found by the chain that wrote your `L30_detections.csv`, run on the record's first burst: the 2-pulse canceller, the range-Doppler map, and `cfar_2d`; its detection's range and velocity pick the range bins the spectrogram sums.
+Do this part after the bench, in about 30 to 45 minutes. The notebook's first code cell names the files it loads, `RECORDS` and `WALK`; leave them as shipped. Its Procedure A and B cells print the numbers the No Hardware? frame uses; with a kit, they still run, and the angle cell takes your burst from mark B. Each record's target is found by the L30 chain, run on the record's first burst: the 2-pulse canceller, the range-Doppler map, and `cfar_2d`; its detection's range and velocity pick the range bins the spectrogram sums.
 
-1. **Task (a):** run the window cell with `N_WIN = 64`, then `16`, then `256`. Record the resolution and the three widths in Table D, and compare the plots.
-2. **Task (b):** run the two classifier cells as they stand. Then add one line to `my_features` to append the band's edge, and run both again; then change it to append the band's shape, the spread over the edge, and run both again. Record the three confusion matrices and accuracies in Table E.
-3. **Task (c):** run the tracking cell with `ALPHA = 0.5`, then `0.2`, then `0.8`. Record each row in Table F. Then set `ALPHA` to the value you would use and run it once more; it writes `L31_track.csv`.
-4. Save the notebook with its edits and plots and turn it in with the packet.
+1. Run the first code cell. It prints each record's note: copy the setting, the tilt or the pace, and the range of each into Table C.
+2. **Task (a):** run the window cell with `N_WIN = 64`, then `16`, then `256`. Record the resolution and the three widths in Table D, and compare the plots.
+3. **Task (b):** run the two classifier cells as they stand. Then add one line to `my_features` to append the band's edge, and run both again; then change it to append the band's shape, the spread over the edge, and run both again. Record the three confusion matrices and accuracies in Table E.
+4. **Task (c):** run the tracking cell with `ALPHA = 0.5`, then `0.2`, then `0.8`, on the recorded walk, whose truth scores the track. Record each row in Table F. Then set `ALPHA` to the value you would use and run it once more; it writes `L31_track.csv`.
+5. Save the notebook with its edits and plots, and upload the `.ipynb` with the packet.
 
 Each task's markdown cell states the result to check against. Anything you do beyond the three tasks belongs in your report's Extra Effort.
 ::::

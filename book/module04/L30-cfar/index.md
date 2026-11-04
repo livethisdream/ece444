@@ -55,7 +55,7 @@ $$
 P_{fa} = e^{-T/P_n} .
 $$
 
-The threshold for $P_{fa} = 10^{-6}$ is $T = 13.8\ P_n$, 11.4 dB above the mean noise. If the noise rises by a factor $g$ while $T$ stays put, the probability becomes $P_{fa}^{1/g}$, and a 3 dB rise turns $10^{-6}$ into $10^{-3}$. At the million decisions a second of the L29 burst, that is a thousand false targets a second.
+The threshold for $P_{fa} = 10^{-6}$ is $T = 13.8\ P_n$, 11.4 dB above the mean noise. If the noise rises by a factor $g$ while $T$ stays put, the probability becomes $P_{fa}^{1/g}$, and a 3 dB rise turns $10^{-6}$ into $10^{-3}$. At the half a million decisions a second of the L29 burst, that is 500 false targets a second.
 
 The noise on a real map does move. Stationary clutter fills the cells near zero velocity, strong reflections fill the cells nearest the radar, and the receiver gain sets the level of everything. A fixed threshold high enough for the worst of these misses targets everywhere else. <a href="../L27-radar-detection/index.html#frame-the-fixed-threshold">Lesson 27's last figure</a> showed the alternative: estimate the noise power from the cells around the one being tested, and set the threshold from that estimate.
 ::::
@@ -250,7 +250,7 @@ The two directions need not match. At the L29 burst's 0.30 m range cells and 0.1
 
 Without MTI, every stationary object puts its echo at zero velocity, so the map has a ridge of clutter along the zero-Doppler column. To a CFAR window, that ridge is a clutter edge in the Doppler direction: cells on the ridge are compared with an average that is mostly noise, and they are declared targets. MTI from Lesson 29 removes most of the ridge before CFAR runs.
 
-A map of $512 \times 256$ cells with 144 reference cells each is 19 million additions. A Python loop over every cell is slow, but a convolution of the map with the window does the same sums in a fraction of a second, and the next frame's code works that way.
+The L29 burst's map of $269 \times 256$ cells, with 144 reference cells each, is 10 million additions. A Python loop over every cell is slow, but a convolution of the map with the window does the same sums in a fraction of a second, and the next frame's code works that way.
 ::::
 
 ::::{frame} Detections From the Map
@@ -294,14 +294,14 @@ $$
 \hat{P}_{fa} = \frac{\text{false detections}}{\text{cells tested}}
 $$
 
-- At $10^{-6}$, a $512 \times 256$ map averages one false alarm every 7.6 maps.
+- At $10^{-6}$, a $269 \times 256$ map averages one false alarm every 15 maps.
 - Check the design at a lower bias, where false alarms are common.
 - $P_d$ is the fraction of maps that find the target.
 :::
 
 We set the bias from a design $P_{fa}$ and check it by counting. On maps with no target, or in the cells far from any target, every detection is a false alarm, and the measured probability is the number of false detections over the number of cells tested.
 
-Counting false alarms at the design rate takes many maps: a $512 \times 256$ map is 131 072 decisions, so at $10^{-6}$ it averages 0.13 false alarms, one every 7.6 maps. Counting ten of them to get the rate within about a third takes 76 maps. Instead, we lower the bias to a design $P_{fa}$ of $10^{-3}$ or $10^{-4}$, where a single map has 13 to 130 false alarms, and check the measured rate against $(1 + \alpha/N)^{-N}$ at a few biases. If the counts follow the curve, the extrapolation to $10^{-6}$ is sound; if they come out high, the noise in the reference cells does not match the noise in the cells under test.
+Counting false alarms at the design rate takes many maps: the L29 burst's map of $269 \times 256$ cells is 68 864 decisions, so at $10^{-6}$ it averages 0.07 false alarms, one every 15 maps. Counting ten of them to get the rate within about a third takes 145 maps. Instead, we lower the bias to a design $P_{fa}$ of $10^{-3}$ or $10^{-4}$, where a single map has 7 to 69 false alarms, and check the measured rate against $(1 + \alpha/N)^{-N}$ at a few biases. If the counts follow the curve, the extrapolation to $10^{-6}$ is sound; if they come out high, the noise in the reference cells does not match the noise in the cells under test.
 
 We measure the probability of detection the same way, against a target you placed: the fraction of maps in which CFAR declares it. Compare it with <a href="../L27-radar-detection/index.html#frame-pd-against-pfa">Lesson 27's curves</a> at the SNR the detection list reports, with the CFAR loss added. For a hand or a person, which fluctuate from map to map, expect the Swerling numbers of Lesson 27 rather than the steady ones.
 ::::
@@ -322,55 +322,57 @@ We measure the probability of detection the same way, against a target you place
 | Greatest-of, smallest-of | keep the larger or smaller half | GO for edges, SO for close targets; 0.2 and 0.7 dB more loss |
 | Ends of the map | range: one-sided; Doppler: wraps | one-sided at the same bias: $8 \times 10^{-6}$ |
 | 2D CFAR | nested boxes on the range-Doppler map | 144 cells: 11.6 dB, 0.2 dB loss |
-| Measured $P_{fa}$ | false detections over cells tested | $10^{-6}$ on $512 \times 256$: one every 7.6 maps |
+| Measured $P_{fa}$ | false detections over cells tested | $10^{-6}$ on $269 \times 256$: one every 15 maps |
 ::::
 
 ::::{frame} L30 Lab: CFAR Processing
 :::{present}
-- Set the app's CFAR overlay under your echo and over the clutter, then walk.
+- Tune the app's CFAR on your range profile, then walk.
 - Count false alarms on an empty scene.
 - In the notebook: bias for a false-alarm rate, three methods, $P_d$, and the detection list.
 :::
 
-The L30 Lab runs this lesson's detector on your own kit and on range-Doppler maps like the ones you made in the L29 Lab. It starts in the Phaser app, with its CFAR threshold overlay on the live range spectrum: you place the threshold by eye, apply it, walk, and count what crosses it on an empty scene. The rest runs in the lab's notebook, which calls the provided `cfar_2d` on saved bursts: you set the bias for a false-alarm rate and count the false alarms, switch among cell averaging, greatest-of, and smallest-of, measure the probability of detection against Lesson 27, and keep a detection list for the L31 Lab. You work the lab on your own, outside class, and turn in one packet in three parts: **Part 1, Pre-Lab**, the predictions; **Part 2, Measurements**, from the app and the notebook; and **Part 3, Writeup**. I check the packet and return it with feedback. It is scaffolding for your final report, not the report.
+The L30 Lab runs this lesson's detector twice. It starts in the Phaser app, on its **Range (CFAR)** preset: one chirp of 500 MHz in 0.5 ms at 10 GHz each display update, with a one-dimensional CFAR threshold drawn over the live range profile. You place the threshold by eye, apply it, walk, and count what crosses it on an empty scene. The rest runs in the lab's notebook, which calls the provided `cfar_2d` on range-Doppler bursts of the **Range + Velocity** preset, the L29 burst: you set the bias for a false-alarm rate and count the false alarms, switch among cell averaging, greatest-of, and smallest-of, measure the probability of detection against Lesson 27, and make a detection list. You work the lab on your own, outside class, and turn in one packet in three parts: **Part 1, Pre-Lab**, the predictions; **Part 2, Measurements**, from the app and the notebook; and **Part 3, Writeup**. I check the packet and return it with feedback. It is scaffolding for your final report, not the report.
 
-The bench part follows <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-cfar/" target="_blank" rel="noopener">ADI's CFAR lab</a>, which sets the bias, guard cells, and reference cells of its script's threshold by eye against a live range spectrum. The course's numbers replace ADI's: the L29 burst of 256 chirps of 300 µs, 0.5 ms apart, at 10 GHz and 500 MHz, so the map's cells are 0.30 m by 0.12 m/s.
+The bench part follows <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-cfar/" target="_blank" rel="noopener">ADI's CFAR lab</a>, which tunes the bias, guard cells, and reference cells of its script's threshold by eye against a live range spectrum. The app's Range (CFAR) preset is that lab's waveform, so its range cells are 0.30 m, 6.67 kHz of beat per meter. The notebook's bursts are the app's Range + Velocity preset: 256 chirps of 300 µs, 0.5 ms apart, 500 MHz at 9.9 GHz, so the map's cells are 0.30 m by 0.118 m/s.
 ::::
 
 ::::{frame} Pre-Lab Predictions
 :::{present}
 | Window | $N$ | $10^{-3}$ | $10^{-4}$ | $10^{-6}$ |
 | :-- | --: | --: | --: | --: |
+| 4 a side, range only | 8 | 10.4 dB | 12.4 dB | 15.7 dB |
 | 16 a side, range only | 32 | 8.9 dB | 10.3 dB | 12.4 dB |
 | 4 each way, 2D | 144 | 8.5 dB | 9.8 dB | 11.6 dB |
-| False alarms a map | | 136 | 14 | 0.14 |
 :::
 
-The table is the core of Part 1. Each bias is $10\log_{10}\alpha$ with $\alpha = N(P_{fa}^{-1/N} - 1)$, from the bias frame of this lesson. The first row is the window the lesson used for one range profile, 2 guard and 16 reference cells a side; the second is the 2D window of the notebook, 2 guard and 4 reference cells each way. The last row multiplies each $P_{fa}$ by the 136 406 cells the notebook tests in an empty map: the cells beyond 1 m and far enough from 0 m/s that the kit's own leakage never enters their reference cells.
+The table is the core of Part 1. Each bias is $10\log_{10}\alpha$ with $\alpha = N(P_{fa}^{-1/N} - 1)$, from the bias frame of this lesson. The first row is a short window in the app, 4 reference cells on each side of the cell under test; the second is the window the lesson used for one range profile, 2 guard and 16 reference cells a side; the third is the 2D window of the notebook, 2 guard and 4 reference cells each way.
 
-The bench checks the first two columns. A design of $10^{-3}$ on one map should give about 136 false alarms, and $10^{-4}$ about 14, each with a scatter of about its own square root. At $10^{-6}$ we expect a single map to show none, which is why the notebook checks the design at the lower biases, as the measuring frame of this lesson describes. Part 1 also predicts how far a walker can go before a higher bias loses them. A bias 3 dB higher needs about 3 dB more SNR for the same $P_d$, and the $R^4$ of the radar equation turns 3 dB into $10^{-3/40} = 0.84$ of the range: 16% less.
+The app's Ref Cells and Guard Cells count **one side** of the cell under test, and the app averages the reference cells as power, as this lesson does, so Ref Cells = 4 is $N = 8$ and this lesson's bias formula applies to it. Its profile runs from 0 to 20 m in 63 cells beyond 1 m. At a 13 dB bias, $P_{fa} = (1 + 20/8)^{-8} = 4.5 \times 10^{-5}$, and 30 empty updates should hold a crossing in about 0.1 of them; at 10 dB, about 3; at 7 dB, about 22. The notebook's empty map tests 64 106 cells, so its design counts are 64 at $10^{-3}$, 6 at $10^{-4}$, and 0.06 at $10^{-6}$, each with a scatter of about its own square root. That is why the notebook checks the design at the lower biases, as the measuring frame of this lesson describes.
+
+Part 1 also predicts how far you could walk before the threshold loses you. Your echo falls as $R^{-4}$, so a peak that stands $M$ dB over the threshold at 3 m stays over it out to $3 \times 10^{M/40}$ m, if nothing else enters the window, and a bias 3 dB higher shortens that by $10^{-3/40} = 0.84$.
 ::::
 
 ::::{frame} Bench Rules
 :::{present}
 - Transmit antenna on **OUT2**, before you power the kit.
 - Point the kit at a clear part of the room; other cadets in your beam are targets too.
-- Walk slowly: the app tests every cell on every update.
+- Walk slowly, and leave the dB scale alone while you tune.
 :::
 
-Every cadet has a kit, so every beam in the room crosses someone. Point yours along a clear line, at least 4 m long if you can, and agree with your neighbors on who walks when. For the empty scene, step behind the kit or well to one side, and check the range spectrum before you count: a peak that moves is a person, not a false alarm.
+Every cadet has a kit, so every beam in the room crosses someone. Point yours along a clear line, at least 4 m long if you can, and agree with your neighbors on who walks when. For the empty scene, step behind the kit or well to one side, and check the range profile before you count: a peak that moves is a person, not a false alarm.
 
-ADI's lab asks you to move slowly while the threshold is applied, because each update computes a threshold for every cell; a fast walk smears your echo across the updates you count. ADI also asks you to leave the display's intensity limits alone while you set the threshold: setting the threshold by making the clutter fade from the display hides the clutter from you, not from the detector. No step needs a corner reflector.
+ADI's lab asks you to move slowly while the threshold is applied, because each update computes a threshold for every cell, and a fast walk smears your echo across the updates. ADI also asks you to leave the display's limits alone while you set the threshold: making the clutter fade from the plot hides it from you, not from the detector. No step needs a corner reflector.
 ::::
 
 ::::{frame} Results
 :::{present}
-- Your overlay settings, and why you chose them.
+- Your CFAR settings, and why you chose them.
 - Your measured false-alarm rates against the design.
-- `L30_detections.csv`: one entry per target, for the L31 Lab.
+- `L30_detections.csv`: one entry per object the chain found.
 :::
 
-The L31 Lab classifies the targets in your detection list, so keep `L30_detections.csv` with your captures, `radar_lab.py`, and this lab's notebook, in the same folder as the L28 and L29 work. For the final report, keep three results from this lab: the bias you chose and the false-alarm rate you measured with it, with your explanation of why the two differ; what greatest-of and smallest-of did to your scene, and which one you would run on it; and the probability of detection you measured against the Lesson 27 prediction. The report asks you to explain how your radar decides that a target is present, in your own words. The packet's tables are the evidence for it, not the explanation.
+Keep `L30_detections.csv` with your captures, `radar_lab.py`, and this lab's notebook, in the same folder as the L28 and L29 work. The L31 Lab runs the same chain, the canceller, the map, and `cfar_2d`, on its own records, so the file is your record of what the chain found, not an input to L31. For the final report, keep three results from this lab: the bias you chose and the false-alarm rate you measured with it, with your explanation of why the two differ; what greatest-of and smallest-of did to your scene, and which one you would run on it; and the probability of detection you measured against the Lesson 27 prediction. The report asks you to explain how your radar decides that a target is present, in your own words. The packet's tables are the evidence for it, not the explanation.
 ::::
 
 ::::{frame} Equipment and Setup
@@ -380,76 +382,86 @@ You need:
 
 - the ADALM-PHASER kit with its Raspberry Pi and Pluto attached, and its transmit antenna;
 - a tape measure and about 4 m of clear floor in front of the kit;
-- your laptop, on the kit's network for the Phaser app, with the Module 4 folder from the <a href="../L28-fmcw/index.html#frame-notebook-setup">L28 Lab's Notebook Setup</a>, and your L29 captures in it.
+- your laptop, on the kit's network for the Phaser app, with your Module 4 folder and this lab's bundle unzipped into it, as the Notebook Setup frame describes;
+- a screen recorder on the laptop for Procedure B: the Xbox Game Bar on Windows (Win+Alt+R starts and stops it) or Shift+Cmd+5 on a Mac.
 
-The course's Phaser app runs the radar in its FMCW mode, and its CFAR threshold overlay is not built yet. This page assumes the overlay works as ADI's script does: a threshold drawn over the live range spectrum, set by a bias in dB, a number of guard cells, and a number of reference cells, with a control that shows only what crosses it. Where the app's labels differ, use the app's. Two things about it are unknown until it runs: whether its "reference cells" counts one side or both, and whether it averages the reference cells as power, as this lesson does, or in dB, as ADI's `target_detection_dbfs.py` does. Write in the packet what the app shows, and if it averages in dB, expect its bias to differ from this lesson's numbers by the 2.5 dB of the lesson's note.
+The app's FMCW panel holds everything this lab uses. **Preset** picks the waveform. **CFAR** turns the detector on; **CFAR Mode** switches between **Show Threshold**, the dashed threshold and detection markers over the whole trace, for tuning, and **Detections Only**, which blanks everything below the threshold. **Guard Cells**, **Ref Cells**, and **CFAR Bias (dB)** set the window and the bias; Guard Cells and Ref Cells count the cells on each side of the cell under test, and the app averages the reference cells as power. The app runs CFAR only on a single-chirp preset; on Range + Velocity it grays its CFAR rows out. **Save Capture** writes the course's `.npz` to your laptop: on Range (CFAR), 32 updates, one chirp each; on Range + Velocity, one 256-chirp burst.
 
 1. With the kit powered off, connect the transmit antenna to **OUT2**.
-2. Power the kit, open the Phaser app, and select its FMCW mode with the L29 settings: 500 MHz, 300 µs chirps, 0.5 ms apart. Enter your 0 m frequency from the L28 Lab if the app asks for it.
-3. Show the range spectrum against range, with MTI off.
+2. Power the kit, wait for the Pi to boot, open the Phaser app, and select **FMCW**.
+3. Set **Preset** to **Range (CFAR)**. Enter your 0 m frequency from the L28 Lab in **0 m Beat (kHz)**, or press **Calibrate…** and follow it. Leave **Range Max (m)** at 20 and the **FFT Window** at Blackman, the defaults the recorded data uses.
+4. Open the **Range** view and turn **CFAR** on, with **CFAR Mode** at **Show Threshold**.
 ::::
 
 ::::{frame} No Hardware?
 :class: read-only
 
 ```{note}
-The whole lab can be done without a kit. The course's recorded data and the
-notebook stand in for every procedure, and every row of the packet can be
-filled from them. The files are bursts of the L29 waveform from a simulation
-of the PHASER at the course's settings, with a kit whose 0 m frequency is
-101.4 kHz, and they hold `iq` only. Say in your packet which results are
-recorded rather than your own.
+The whole lab can be done without a kit. Open the Phaser app's simulator at
+<a href="https://livethisdream.github.io/phaser/" target="_blank" rel="noopener">livethisdream.github.io/phaser</a>,
+select **FMCW**, and set it up as the Equipment and Setup frame describes,
+skipping the kit steps. Its **Scene** list gives you live targets to tune on:
+**corners**, three corner reflectors at 1, 2, and 3 m; **walker**, a person
+walking out to 4 m and back; and **static**, which holds the empty scene's
+leakage. For the packet's numbers, press **Load Recording** and open the
+course's recording from this lab's bundle: the app plays it through the same
+CFAR as if live, one update at a time, and loops. The notebook's No Kit
+cells compute exactly what the app draws on the same files, and print the
+numbers each table asks for. Say in your packet which tables hold recorded data
+rather than your own.
 
-- **Procedure A**, place the threshold: the notebook's Procedure A cell draws one chirp of <a href="../../radar-data/L30_wall_hand.npz">L30_wall_hand.npz</a> with the overlay's threshold. Tune its guard cells, reference cells, and bias until the threshold sits under the hand and over the noise; Table A.
-- **Procedure B**, apply it and walk: the Procedure B cell applies your setting to <a href="../../radar-data/L30_walker.npz">L30_walker.npz</a>, a person walking 1.0 m to 4.5 m and back past a wall at 6.0 m, one update every 0.1 s for 7 s, and counts the updates that find the walker and those with any other crossing; Table B.
-- **Procedure C**, false alarms on an empty scene: the Procedure C cell counts crossings in 30 updates of <a href="../../radar-data/L30_empty.npz">L30_empty.npz</a>, noise and the kit's leakage with no target, at your bias and 3 and 6 dB below it; Table C.
-- **Procedure D**, the notebook's tasks: L30_empty.npz for task (a); L30_wall_hand.npz and <a href="../../radar-data/L30_weak_strong.npz">L30_weak_strong.npz</a>, a strong mover at 4.2 m and a weak one at 3.0 m, for task (b); L30_wall_hand.npz for task (c); Tables D to F.
+- **Procedure A**, place the threshold: Load Recording, `L30_range_person.npz`, a person standing still at 3.0 m in front of a wall at 6.0 m; the notebook's Procedure A cell; Table A.
+- **Procedure B**, apply it and walk: Load Recording, `L30_walker.npz`, a person walking from 1.0 m to 4.5 m and back toward a wall at 6.0 m, one update every 0.1 s for 7 s; the Procedure B cell; Table B.
+- **Procedure C**, false alarms on an empty scene: Load Recording, `L30_range_empty.npz`, noise and the kit's leakage with no target; the Procedure C cell; Table C.
+- **Procedure D**, the notebook's tasks, on bursts of the Range + Velocity preset: `L30_empty.npz` for task (a); `L30_wall_hand.npz`, a wall at 5.0 m and a hand waving at about 2.3 to 2.6 m, and `L30_weak_strong.npz`, a strong mover at 4.2 m and a weak one at 3.0 m, for task (b); `L30_wall_hand.npz` for task (c); Tables D to F.
 ```
+
+The files come from a simulation of the PHASER at the app's presets, with a kit whose 0 m frequency is 101.4 kHz, and they hold `iq` only. Load Recording sets the waveform and the 0 m frequency from the file, so the Preset and Scene rows gray out while it plays; leave **0 m Beat (kHz)** empty, because a value there overrides the file's. The app draws a course recording about 66 dB lower on its dB axis than the notebook's dBFS, because the course files hold full-scale units and the app expects the kit's raw counts. Every number the tables ask for is a difference in dB, so the two agree.
 ::::
 
 ::::{frame} Procedure A: Place the Threshold
 :class: read-only
 
-1. Stand 2 m in front of the kit, facing it, and hold still. Find your peak in the range spectrum, and the clutter: the leakage at 0 m, the far wall, and any furniture.
-2. Turn on the threshold overlay, but do not apply it. Start from the lesson's 1D window, 2 guard and 16 reference cells a side, and the 12.4 dB bias.
-3. Adjust the bias, the guard cells, and the reference cells until the threshold sits below your peak and above every noise and sidelobe peak. The leakage near 0 m and the far wall are real echoes and stay above any CFAR threshold; note them, but do not tune them away. Record the three settings in Table A, with the margin of your peak over the threshold and of the highest noise peak under it.
-4. Set the guard cells to 0 and record what happens to the threshold at your peak. Then return them to your setting.
+1. You cannot tune the app while you stand in the beam, so put a stand-in at 3 m on the tape: a chair with a backpack on it, or a metal trash can. Find its peak in the Range view, and the clutter: the leakage at 0 m, the far wall, and any furniture.
+2. With CFAR on and **CFAR Mode** at **Show Threshold**, look at the threshold at the app's opening setting: 4 Guard Cells, 16 Ref Cells, and 6 dB. Then set the lesson's window, 2 Guard Cells, 16 Ref Cells, and 12.4 dB, and look again.
+3. Adjust **Guard Cells**, **Ref Cells**, and **CFAR Bias (dB)** until the threshold sits at least 3 dB below the stand-in's peak and at least 3 dB above every noise and skirt peak. Hover over the plot to read the levels. The leakage near 0 m and the far wall are real echoes and stay above any CFAR threshold; note them, but do not tune them away. Record the three settings in Table A, with the margin of the peak over the threshold and of the highest noise peak under it.
+4. Set **Guard Cells** to 0 and record how far the threshold rises at the peak. Then return it to your setting, and move the stand-in out of the beam.
 ::::
 
 ::::{frame} Procedure B: Apply It and Walk
 :class: read-only
 
-1. Apply the threshold, so the display shows only what crosses it.
-2. Walk slowly straight out from 1 m to the far end of your clear line, and back. Record in Table B the farthest range at which you stay detected in most updates, or the end of the line if you never drop out, and anything else that crossed the threshold.
-3. Raise the bias by 3 dB and walk again. Record the farthest range again.
-4. Return the bias to your setting.
+1. Set **CFAR Mode** to **Detections Only**, so the plot shows only what crosses the threshold, and start your screen recording.
+2. Walk slowly straight out from 1 m along the tape to the far end of your clear line, and back. Stop the recording.
+3. Raise **CFAR Bias (dB)** by 3 dB, record a second walk, and return the bias to your setting.
+4. Play each recording back and read, from the plot's range axis, the nearest and the farthest range at which your peak stays detected, and anything else that crossed the threshold. Record both walks in Table B.
 ::::
 
 ::::{frame} Procedure C: False Alarms on an Empty Scene
 :class: read-only
 
-1. With the threshold applied at your setting, step behind the kit and clear the beam.
-2. Count the updates, out of 30, in which anything beyond 1 m crosses the threshold. Note where the crossings land. Record the count in Table C.
-3. Lower the bias by 3 dB and count 30 more updates; lower it by 3 dB again and count 30 more.
-4. With the scene still empty, save a burst capture; then save one with a hand waving about 2 m out. Record the file names. These are your own versions of `L30_empty.npz` and `L30_wall_hand.npz`, and the notebook runs on them.
+1. At your setting, still in **Detections Only**, step behind the kit and clear the beam. Watch a few seconds of updates at your bias, then 3 dB lower, then 6 dB lower, and note where the crossings land. Return the bias to your setting.
+2. Press **Save Capture**: it saves 32 updates of the empty scene. The saved chirps do not depend on the CFAR settings, so one capture serves all three biases.
+3. Run the notebook's Procedure C cell with `EMPTY_FILE` in its first cell set to your capture's name. It counts the updates, out of 30, with a crossing beyond 1 m at your bias and 3 and 6 dB below it. Record the three rows in Table C.
+4. Set **Preset** to **Range + Velocity** and press **Save Capture** with the scene still empty; then save one with a hand waving about 2 m out. Record the file names. These are your own versions of `L30_empty.npz` and `L30_wall_hand.npz`, and the notebook runs on them.
 ::::
 
 ::::{frame} Notebook Setup
 :class: read-only
 
-The notebook runs on your own laptop in the folder you made for the L28 Lab; the <a href="../L28-fmcw/index.html#frame-notebook-setup">L28 Lab's Notebook Setup</a> frame has the steps. Add to that folder <a href="../../notebooks/L30_cfar.ipynb" download>`L30_cfar.ipynb`</a>, the current <a href="../../notebooks/radar_lab.py" download>`radar_lab.py`</a> (replace the copy you have: I corrected its smallest-of method for the first and last range cells), and the three recorded captures from the No Hardware? frame, which the notebook loads by name. Start Jupyter in the folder with `jupyter lab` and open `L30_cfar.ipynb`.
+Download this lab's bundle, <a href="../../bundles/L30_lab.zip" download>`L30_lab.zip`</a>, and unzip it into your Module 4 folder from the <a href="../L28-fmcw/index.html#frame-notebook-setup">L28 Lab's Notebook Setup</a>, which has the Python steps. It holds everything the notebook loads: `L30_cfar.ipynb`, the current `radar_lab.py` (replace the copy you have), the six `L30_*.npz` recordings, and the data `README.txt`. Put your own Save Capture files in the same folder. Start Jupyter in the folder with `jupyter lab` and open `L30_cfar.ipynb`. Its first cell prints each file it found; if it reports that `radar_lab` is missing, the module is not in the same folder as the notebook.
 ::::
 
 ::::{frame} Procedure D: Run the Notebook
 :class: read-only
 
-Do this part after the bench, in about 30 to 45 minutes. The notebook starts from the recorded bursts; to run a task on your own L29 or L30 burst, change the file name in its first cell. Its Procedure A to C cells are for working without a kit, as the No Hardware? frame describes; with a kit, skip them.
+Do this part after the bench, in about 30 to 45 minutes. Its No Kit cells, for Procedures A to C, run on the Range (CFAR) recordings, or on your own captures from that preset; tasks (a) to (c) run on Range + Velocity bursts. To run a task on your own burst, change the file name in its first cell.
 
 1. **Task (a):** set `BIAS_DB` from `PFA` and `N` (one line) and run the cell at $10^{-3}$; then set `PFA = 1e-4`; then set `WINDOW = None` with `PFA` back at $10^{-3}$. Record the design and measured counts in Table D.
 2. **Task (b):** run the method cell with `METHOD = "ca"`, then `"go"`, then `"so"`. Record the clusters at the wall, the hand, the strong and weak targets, and anywhere else, in Table E.
-3. **Task (c):** run the detection cell at `BIAS_DB_C = 11.6`, then at your $10^{-3}$ bias from task (a). Record the measured $P_d$ and the two predictions in Table F.
-4. **Task (c), the list:** add `axes=(rng, vel)` to the `cfar_2d` call in the last cell and run it. Record each entry in Table F and say which are targets.
-5. Save the notebook with its edits and plots and turn it in with the packet.
+3. **Task (c), steps 1 and 2:** run the detection cell at `BIAS_DB_C = 11.6`, then at your $10^{-3}$ bias from task (a). Record the measured $P_d$ and the predictions in Table F.
+4. **Task (c), step 3:** add `axes=(rng, vel)` to the `cfar_2d` call in the last cell and run it. Record each entry of the list in Table F and say which are targets.
+5. Save the notebook with its edits and plots, and upload the `.ipynb` with the packet.
 
 Each task's markdown cell states the result to check against. Anything you do beyond the three tasks belongs in your report's Extra Effort.
 ::::
