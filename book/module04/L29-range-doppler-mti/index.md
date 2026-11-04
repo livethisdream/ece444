@@ -49,6 +49,9 @@ You will run all of this on your own kit in the L29 Lab, outside class, so the l
 - A hand at 1 m/s moves 0.3 mm during a 300 µs chirp, 1% of a wavelength.
 - Velocity comes from comparing chirps: the burst sends 256, one every 0.5 ms.
 :::
+:::{present}
+<img src="../../viz/img/L29-burst-timing.svg" alt="Frequency against time for the first four chirps of the burst. Each chirp ramps up 500 MHz in 300 µs, drops back, and waits; a new chirp starts every 0.5 ms, the PRI. The burst continues to 256 chirps, 128 ms" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 In <a href="../L28-fmcw/index.html">Lesson 28</a> one chirp gave one range profile. The echo, compared with the chirp still going out, is a tone whose frequency is proportional to range, and the range FFT sorts the echoes into range cells. The burst the L29–L31 Labs use sweeps 500 MHz in 300 µs, so the beat rises by 11.1 kHz for every meter of range, and the 0.30 m range cells of $\Delta R = c/2B$ are 3.33 kHz apart.
 
@@ -103,6 +106,9 @@ $$
 
 - In slow time each range cell holds a tone at $f_D = 2v/\lambda$.
 - At 1 m/s, $f_D$ is 66.7 Hz and the phase advances 12° a chirp.
+:::
+:::{present}
+<img src="../../viz/img/L29-slow-time.svg" alt="Left, the complex value in the hand's range cell for chirps 0 to 29, drawn as points on a circle 12 degrees apart, so the phasor makes one full turn in 30 chirps. Right, the real part of that value against chirp number from 0 to 60: a sampled cosine with a period of 30 chirps, the slow-time tone" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Take the range FFT of every row. The target now sits in the same range cell of every chirp, and that cell holds a complex number whose phase is the phase of the echo, $-4\pi R_m/\lambda$, set by the round trip $2R_m$ in wavelengths. Between chirps the target moves. With a closing speed $v$, the range at chirp $m$ is $R_m = R_0 - v\ m\ T_\text{PRI}$, and substituting it gives the chain on the slide. The first term is a constant. The second grows linearly with $m$, which is a tone in slow time at
@@ -351,6 +357,10 @@ The figure runs the scene of the range-Doppler frame through each canceller and 
 
 The cancellers also weaken moving targets, and they weaken the slow ones most. A hand at 1.0 m/s has $f_D T_\text{PRI} = 66.7 \times 0.5 \times 10^{-3} = 0.033$, deep in the notch: the two-pulse canceller multiplies its power by $4\sin^2(0.105) = 0.044$, −13.6 dB, and the three-pulse by −27.2 dB. The noise goes through the same filter. Each output adds independent noise samples, so the total noise power rises by the sum of the squared taps: $1^2 + 1^2 = 2$, +3.0 dB, for the two-pulse canceller and $1^2 + 2^2 + 1^2 = 6$, +7.8 dB, for the three-pulse. Against that total the hand's SNR falls by 16.6 dB and 35.0 dB, and every target slower than about 7.5 m/s (two-pulse) or 8.6 m/s (three-pulse) loses SNR; that is the loss a detector would see if it looked at the canceled chirps without a Doppler FFT. The map does not compare the hand with the total. The Doppler FFT gives each velocity its own cell, and the noise in the hand's cell passed through the same notch as the hand, so it drops by the same 13.6 or 27.2 dB, and the hand stands as high above its own floor as it did without MTI. The floor rises only toward ±15 m/s, by up to 6.0 and 12.0 dB, so the canceller shapes the floor the way it shapes the targets, and the L29 Lab's notebook measures both. MTI improves the ratio of a target to the clutter, not to the noise, so it helps where clutter, not noise, limits what the radar can see.
 
+The figure shows both effects from the same simulated burst. Each line is the noise floor against velocity, averaged over range cells with no target in them; each dot is the hand at +1.0 m/s. The cancellers lower the hand and the floor beneath it by the same amount, and they raise the floor toward ±15 m/s.
+
+<img src="../../viz/img/L29-mti-floor.svg" alt="Power against velocity from minus 15 to plus 15 m/s with no MTI, the 2-pulse canceller, and the 3-pulse canceller. With no MTI the noise floor is flat near minus 38 dB and the hand is a dot at 0 dB. With either canceller the floor dips into a notch at 0 m/s and rises toward plus and minus 15 m/s, and the hand's dot falls 13.6 dB or 27.2 dB, as far as the floor beneath it falls" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+
 Two more consequences follow from the notch. The canceller removes a target that stops moving, and also one moving across the beam, whose radial velocity is zero. The spinner shows both effects at once: the arms moving fastest along the line of sight survive, and the canceller removes the parts of its spectrum near 0 m/s with the clutter. For a hovering drone, ADI's MTI lab points out, the body disappears but the blades' micro-Doppler remains, which is what <a href="../L31-classification-tracking/index.html">Lesson 31</a> classifies.
 
 The choice of canceller is therefore a choice about the scene. With strong clutter and fast targets the three-pulse canceller gives the cleanest map; for a slow hand the two-pulse canceller, or none, keeps more of the target. The L29 Lab measures both on the same captures.
@@ -390,6 +400,9 @@ $$
 - Edge-on, each arm swings through $\pm v_\text{tip}$ along the line of sight, which spreads the echo into a band at one range.
 - Three identical arms repeat every $1/(3f_\text{rev})$, which puts the spectrum in lines $3f_\text{rev}$ apart.
 :::
+:::{present}
+<img src="../../viz/img/L29-spinner.svg" alt="Top, the radial velocity of each of three arms over one 66.7 ms turn: three sinusoids 120 degrees apart, each swinging between plus and minus 2.83 m/s. Bottom, the Doppler spectrum at the spinner's range from one 256-chirp burst: a band of evenly spaced lines 0.68 m/s apart filling minus 2.83 to plus 2.83 m/s, strongest near its edges" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 A fidget spinner held edge-on, its plane of rotation along the line of sight, moves each of its arms toward the kit for half a turn and away for the other half. An arm on a circle of radius $a$ turning at $f_\text{rev}$ revolutions a second has a radial velocity of
 
@@ -397,7 +410,7 @@ $$
 v_r(t) = v_\text{tip}\sin\left(2\pi f_\text{rev}t\right),
 $$
 
-so over a burst its echo covers every velocity between $-v_\text{tip}$ and $+v_\text{tip}$. The arm spends the longest near the extremes, where its radial velocity turns around, so the band is brightest at its edges. For arms 3 cm from the hub at 15 revolutions a second, $v_\text{tip} = 2\pi(0.03)(15) = 2.83$ m/s, a band of ±189 Hz. The hub, and the hand that holds it, do not move, and sit at 0 m/s.
+so over a burst its echo covers every velocity between $-v_\text{tip}$ and $+v_\text{tip}$. The arm spends the longest near the extremes, where its radial velocity turns around, so the band is brightest at its edges. For arms 3 cm from the hub at 15 revolutions a second, $v_\text{tip} = 2\pi(0.03)(15) = 2.83$ m/s, a band of ±188 Hz. The hub, and the hand that holds it, do not move, and sit at 0 m/s.
 
 The band is not smooth. Three identical arms make a pattern that repeats every third of a turn, and a signal that repeats every $1/(3f_\text{rev})$ seconds has its spectrum in lines $3f_\text{rev}$ apart: 45 Hz, or $\lambda(45\ \text{Hz})/2 = 0.68$ m/s, so the 0.12 m/s cells of the 256-chirp map resolve them. The spacing gives the spin rate without a ruler, and the band's edge gives it with one; the lab measures both. Held face-on, the spinner moves its arms across the beam, with no radial velocity, and the band collapses into the 0 m/s column. This is the micro-Doppler of <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a>, the parts of a target moving relative to its body, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses it to tell one kind of target from another.
 ::::
