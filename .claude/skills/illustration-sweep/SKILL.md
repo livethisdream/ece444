@@ -7,6 +7,10 @@ disable-model-invocation: true
 
 # Illustration sweep for one lesson
 
+A page written with `write-lesson` (2026-11-04 on) already had this lens in its
+end-of-draft review; run this sweep on a page written before that, or when
+Neil asks for it.
+
 Run on demand, one lesson at a time: `/illustration-sweep 15`. The lesson is
 `$ARGUMENTS`. Neil's standing view (2026-09-29, on L13: "the more
 illustrations, the better"; 2026-10-01: "anywhere you could/should build an

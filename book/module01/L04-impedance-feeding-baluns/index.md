@@ -439,7 +439,7 @@ $P = \tfrac{1}{2}|I|^2 R = 10\ \text{W}$, and nothing about the resistor
 changes. But the voltage across the *whole branch* is not 20 V, it is
 
 $$
-|V| = |I|\,|Z| = \sqrt{20^2 + 24.5^2} = 31.6\ \text{V},
+|V| = |I|\ |Z| = \sqrt{20^2 + 24.5^2} = 31.6\ \text{V},
 $$
 ::::
 
@@ -531,7 +531,7 @@ No formula involving $R$ and $X$ defines $Q$. Energy defines it — the same
 definition you met for antennas in Lesson 3:
 
 $$
-Q = \omega\,\frac{\text{peak energy stored}}{\text{average power dissipated}}.
+Q = \omega\ \frac{\text{peak energy stored}}{\text{average power dissipated}}.
 $$
 ::::
 
@@ -548,7 +548,7 @@ $$
 so
 
 $$
-Q = \omega\,\frac{\tfrac{1}{2} L I_0^{2}}{\tfrac{1}{2} I_0^{2} R}
+Q = \omega\ \frac{\tfrac{1}{2} L I_0^{2}}{\tfrac{1}{2} I_0^{2} R}
   = \frac{\omega L}{R} = \frac{X}{R}.
 $$
 ::::

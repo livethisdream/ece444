@@ -25,6 +25,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # The mechanical prose rules (VOICE.md, CLAUDE.md), every page: a FAIL
+      # stops the job before the build, so no PR ships a hedge word, a
+      # third-person "instructor", a British spelling, a thin space, or math
+      # the page cannot render. scripts/verify/check_voice.py says which rule.
+      - name: Voice check
+        run: python scripts/verify/check_voice.py -q
+
       # Build the book
       - name: Build the book
         run: jupyter-book build book/

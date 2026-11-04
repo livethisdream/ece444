@@ -325,7 +325,12 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
 ## 6. Work queue, in order
 
 1. **Lesson passes in teaching order:** L22–L24 with the L22–L23 and L24
-   Labs, each before it is taught. The three sweeps are user-invoked only:
+   Labs, each before it is taught. **A new lesson or lab page (the Module 4
+   thread's L25-L31 included) is written with the `write-lesson` skill**
+   (Neil, 2026-11-04): the three sweeps' rules apply while it is written, one
+   parallel three-lens review replaces the three sweeps, and
+   `check_voice.py` gates every PR in CI. The three sweeps remain for older
+   pages and are user-invoked only:
    Neil types `/voice-sweep NN` (then why, then illustration) in the lesson
    thread's own session; a thread cannot start them or replay them by hand. A lesson's pass converts its lab's sheet to a
    packet and folds in the dry-run lessons (`review/M3_LAB_DRYRUN.md`):

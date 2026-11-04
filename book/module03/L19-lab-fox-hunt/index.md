@@ -209,7 +209,7 @@ each Angle before you trust the fix, as Lesson 19's "The Cone Angle" shows.
 </div>
 
 The reference shot checks two things. The sign gives $s$, which you apply to
-every reading so that $s\,\theta$ is positive toward $+x$; the size checks the
+every reading so that $s\ \theta$ is positive toward $+x$; the size checks the
 setup, since $\tan^{-1}(0.5/1.0) = 26.6^\circ$. A reading far from that means
 the kit is not square to the tape or the source is not where you think.
 
@@ -290,7 +290,7 @@ only be dropped.
 <label>Step 20: the live box <input data-field="call.live"></label>
 </div>
 
-The instructor posts the box centers. Your notebook fixes the source from the
+I post the box centers. Your notebook fixes the source from the
 bearings alone, ranks the boxes by distance from the fix, and, when the two
 nearest are within $0.15\ \text{m}$ of each other in distance, uses the amplitude
 pattern to choose between them. The call is your team's, made from your own

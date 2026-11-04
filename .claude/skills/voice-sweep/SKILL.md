@@ -7,6 +7,10 @@ disable-model-invocation: true
 
 # Voice sweep for one lesson
 
+A page written with `write-lesson` (2026-11-04 on) already had this lens in its
+end-of-draft review; run this sweep on a page written before that, or when
+Neil asks for it.
+
 Run on demand, one lesson at a time: `/voice-sweep 15`. The lesson is
 `$ARGUMENTS`. `VOICE.md` is the rubric; the L12 and L13 voice-sweep commits
 (`a5e7033`, `5dd2346`) show the finished shape. Run this one before

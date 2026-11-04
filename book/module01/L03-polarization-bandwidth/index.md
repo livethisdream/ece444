@@ -252,7 +252,7 @@ $$
 $$
 
 Half the incident power is thrown away and no amount of turning the whip
-recovers it. That fixed 3 dB is the price of the rotation-immunity
+recovers it. That fixed 3 dB loss comes with the rotation-immunity
 described in the next section.
 :::
 ::::

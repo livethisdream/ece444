@@ -234,7 +234,7 @@ do this by creating an inclusive environment and putting in the work *with*
 you. If you work hard and communicate with me, I will do everything in my power
 to make sure you succeed.
 
-Have questions? **Ask** — there is genuinely no such thing as a stupid question.
+Have questions? **Ask** — there is no such thing as a stupid question.
 Have concerns, especially about your learning environment? Let's talk. You face
 many challenges here at USAFA; I am in your corner — so let's go.
 

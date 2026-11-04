@@ -82,10 +82,20 @@ loads on its own — the render checks vendor it from npm (`scripts/verify`,
 `npm install`) and reroute the CDN to the local copy. Every defect
 listed below was found that way and would have shipped otherwise.
 
-## Quality sweeps (manual)
+## Writing a lesson, and the sweeps
 
-Three project skills audit one lesson at a time and stop for Neil's pick before
-editing anything. Run them on demand, not on every merge:
+**A new lesson or lab page, or a rewrite of most of one, uses the
+`write-lesson` skill** (Neil, 2026-11-04: "why not just build those rules into
+the creation of lessons?"). It applies the voice, why, and illustration rules
+while the page is written, then runs one review with the three lenses in
+parallel and stops once for Neil's pick. `scripts/verify/check_voice.py`
+holds the mechanical rules (hedge words, "the instructor", British spelling,
+thin spaces, `\,` in page math, math in the objectives list, `|` in table
+math) and runs in CI on every page, so a FAIL blocks the PR.
+
+The three sweeps below are for pages written before that. Each audits one
+lesson and stops for Neil's pick before editing anything. Run them on demand,
+not on every merge:
 
 - `/voice-sweep <NN>`: the page and practice set against `VOICE.md`.
 - `/why-sweep <NN>`: results stated without a mechanism, undefined jargon,
