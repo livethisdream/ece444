@@ -8,8 +8,16 @@
   - L26-radial        : a target's velocity and its radial component
   - L26-fan-spectrum  : the CW Doppler spectrum of a fan viewed edge-on
   - L26-micro-doppler : the spectrogram of a walker, torso and two limbs
+  - L26-chirp-spectrum: a 1 us pulse, a 10 us pulse, and a 10 us chirp, with
+                        their spectra (resolution comes from bandwidth)
+  - L26-doppler-alias : the slow-time phasor of a 25 m/s target sampled at
+                        2 kHz, +300 deg a chirp read as -60 deg (Q4(d))
+  - L26-crests        : time against range, crests returning closer together
+  - L26-pulsed-cw     : pulsed and CW transmit/receive timing, the blind zone
+  - L26-prf-tradeoff  : R_ua and v_ua against PRF at 10 GHz
+  - L26-cw-spectrum   : one CW spectrum, a fence and two cars in one bin
 
-The lesson page shows all five from book/extras/viz/img/. None carries an
+The lesson page shows all eleven from book/extras/viz/img/. None carries an
 equation: symbols, numbers, and short words only.
 
 Each figure sits in a present block beside text, about 477 px wide on a 1280
@@ -365,6 +373,261 @@ def fig_micro_doppler(v: dict) -> None:
     finalize(fig, "L26-micro-doppler")
 
 
+# ------------------------------------------------- illustration sweep, 2026-11 --
+
+def fig_chirp_spectrum() -> None:
+    """A 1 us pulse, a 10 us pulse, and a 10 us chirp sweeping 1 MHz: each
+    waveform (real part, baseband) and its spectrum. The chirp keeps the long
+    pulse's duration and takes the short pulse's bandwidth."""
+    fs = 200e6
+    t = np.arange(-2e-6, 14e-6, 1 / fs)
+    B, T = 1e6, 10e-6
+    k = B / T
+    rows = [
+        ("1 µs pulse", ((t >= 0) & (t < 1e-6)).astype(complex), BLUE),
+        ("10 µs pulse", ((t >= 0) & (t < T)).astype(complex), NAVY),
+        ("10 µs chirp", ((t >= 0) & (t < T)) * np.exp(1j * np.pi * k * (t - T / 2) ** 2), RED),
+    ]
+    nfft = 1 << 18
+    f = np.fft.fftshift(np.fft.fftfreq(nfft, 1 / fs))
+    fig, axs = plt.subplots(3, 2, figsize=(4.8, 2.5), gridspec_kw=dict(width_ratios=[1, 1]))
+    widths = []
+    for i, (lab, s, col) in enumerate(rows):
+        a, b = axs[i]
+        a.plot(t * 1e6, s.real, color=col, lw=1.0)
+        a.set_xlim(-1, 12)
+        a.set_ylim(-1.3, 2.6)
+        a.set_yticks([])
+        a.text(-1.0, 2.6, lab, ha="left", va="top", color=col)
+        S = np.abs(np.fft.fftshift(np.fft.fft(s, nfft))) ** 2
+        S /= S.max()
+        b.plot(f / 1e6, S, color=col, lw=1.2)
+        b.set_xlim(-2, 2)
+        b.set_ylim(0, 1.6)
+        b.set_yticks([])
+        # half-power width, measured
+        above = f[S >= 0.5]
+        widths.append((above.max() - above.min()) / 1e6)
+        for ax in (a, b):
+            for side in ("top", "right", "left"):
+                ax.spines[side].set_visible(False)
+            ax.tick_params(length=3)
+        if i < 2:
+            a.set_xticklabels([])
+            b.set_xticklabels([])
+    axs[2, 0].set_xlabel("time (µs)")
+    axs[2, 1].set_xlabel("frequency (MHz)")
+    axs[0, 0].set_xticks([0, 5, 10])
+    axs[1, 0].set_xticks([0, 5, 10])
+    axs[2, 0].set_xticks([0, 5, 10])
+    for r in range(3):
+        axs[r, 1].set_xticks([-1, 0, 1])
+    # the short pulse and the chirp both span about 1 MHz; the long pulse 0.1 MHz
+    print(f"   chirp-spectrum half-power widths (MHz): {[round(w, 3) for w in widths]}")
+    assert 0.8 < widths[0] < 1.0 and 0.08 < widths[1] < 0.1 and 0.65 < widths[2] < 1.05
+    fig.subplots_adjust(hspace=0.3, wspace=0.12)
+    finalize(fig, "L26-chirp-spectrum")
+
+
+def fig_doppler_alias() -> None:
+    """Practice Q4(d): 25 m/s closing at 10 GHz is 1667 Hz; sampled once per
+    0.5 ms chirp the phase steps +300 deg, which the samples cannot tell from
+    -60 deg, so the radar reports -333 Hz, -5 m/s."""
+    prf = 2000.0
+    fd = doppler(25.0)
+    step = 360.0 * fd / prf                       # 300 deg
+    app = (step + 180.0) % 360.0 - 180.0          # -60 deg
+    assert abs(step - 300.0) < 0.1 and abs(app + 60.0) < 0.1
+    assert abs(app / 360 * prf * LAM / 2 + 5.0) < 0.01
+    fig, ax = plt.subplots(figsize=(4.4, 2.9))
+    th = np.linspace(0, 2 * np.pi, 200)
+    ax.plot(np.cos(th), np.sin(th), color=RULE, lw=1.0)
+    ax.plot([-1.25, 1.25], [0, 0], color=RULE, lw=0.8)
+    ax.plot([0, 0], [-1.25, 1.25], color=RULE, lw=0.8)
+    for n in range(6):
+        ang = np.radians(90 + n * step)
+        x, y = np.cos(ang), np.sin(ang)
+        ax.plot(x, y, "o", ms=8, color=NAVY, zorder=3)
+        ax.text(1.27 * x, 1.27 * y, str(n), ha="center", va="center", color=NAVY)
+    # true step 0 -> 1: +300 deg the long way, dashed
+    a0 = np.radians(90)
+    arc = np.linspace(a0, a0 + np.radians(step), 120)
+    ax.plot(0.45 * np.cos(arc), 0.45 * np.sin(arc), color=RED, lw=1.4, ls="--")
+    ax.add_patch(FancyArrowPatch((0.45 * np.cos(arc[-3]), 0.45 * np.sin(arc[-3])),
+                                 (0.45 * np.cos(arc[-1]), 0.45 * np.sin(arc[-1])),
+                                 arrowstyle="-|>", mutation_scale=12, color=RED, lw=1.4))
+    arc2 = np.linspace(a0, a0 + np.radians(app), 40)
+    ax.plot(0.72 * np.cos(arc2), 0.72 * np.sin(arc2), color=BLUE, lw=2.0)
+    ax.add_patch(FancyArrowPatch((0.72 * np.cos(arc2[-3]), 0.72 * np.sin(arc2[-3])),
+                                 (0.72 * np.cos(arc2[-1]), 0.72 * np.sin(arc2[-1])),
+                                 arrowstyle="-|>", mutation_scale=12, color=BLUE, lw=2.0))
+    x0 = 1.65
+    ax.text(x0, 0.95, "one sample per chirp", ha="left", va="center", color=NAVY)
+    ax.text(x0, 0.35, "true: +300° a chirp", ha="left", va="center", color=RED)
+    ax.text(x0, -0.05, "+1667 Hz, +25 m/s", ha="left", va="center", color=RED)
+    ax.text(x0, -0.55, "reads: −60° a chirp", ha="left", va="center", color=BLUE)
+    ax.text(x0, -0.95, "−333 Hz, −5 m/s", ha="left", va="center", color=BLUE)
+    ax.set_xlim(-1.45, 4.6)
+    ax.set_ylim(-1.45, 1.45)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    finalize(fig, "L26-doppler-alias")
+
+
+def fig_crests() -> None:
+    """Time against range: crests sent every T reflect from a closing target
+    and return spaced T (c - v)/(c + v). The target speed is exaggerated to
+    0.25 c so the compression is visible."""
+    c, v, T = 1.0, 0.25, 1.0
+    R0 = 2.5
+    fig, ax = plt.subplots(figsize=(4.6, 2.3))
+    t_end = 6.2
+    tt = np.array([0, t_end])
+    ax.plot(R0 - v * tt, tt, color=INK, lw=2.0)
+    ax.text(R0 + 0.12, 0.0, "target", ha="left", va="center", color=INK)
+    rx = []
+    for n in range(4):
+        ts = n * T
+        th = (R0 + c * ts) / (c + v)                # hit: c (t - ts) = R0 - v t
+        rh = c * (th - ts)
+        tr = th + rh / c
+        rx.append(tr)
+        ax.plot([0, rh], [ts, th], color=NAVY, lw=1.2)
+        ax.plot([rh, 0], [th, tr], color=RED, lw=1.2)
+    sp = rx[1] - rx[0]
+    assert abs(sp - T * (c - v) / (c + v)) < 1e-9
+    for n in range(4):
+        ax.plot([-0.08, 0], [n * T, n * T], color=NAVY, lw=2.0)
+        ax.plot([-0.08, 0], [rx[n], rx[n]], color=RED, lw=2.0)
+    ax.text(-0.25, 1.5 * T, "sent\nevery T", ha="right", va="center", color=NAVY)
+    ax.text(-0.25, 0.5 * (rx[1] + rx[2]), "echo:\ncloser\ntogether", ha="right",
+            va="center", color=RED)
+    ax.plot([0, 0], [-0.1, t_end], color=GRAY, lw=1.0)
+    ax.text(0.0, t_end + 0.15, "radar", ha="center", va="bottom", color=GRAY)
+    ax.set_xlim(-1.9, 3.4)
+    ax.set_ylim(-0.4, t_end + 0.7)
+    ax.set_xlabel("range")
+    ax.annotate("", xy=(3.2, t_end), xytext=(3.2, 3.2),
+                arrowprops=dict(arrowstyle="-|>", color=GRAY, lw=1.0))
+    ax.text(3.1, 4.7, "time", ha="right", va="center", color=GRAY, rotation=90)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for side in ("top", "right", "left"):
+        ax.spines[side].set_visible(False)
+    ax.spines["bottom"].set_bounds(0, 3.4)
+    ax.xaxis.set_label_coords(0.68, -0.04)
+    finalize(fig, "L26-crests")
+
+
+def fig_pulsed_cw() -> None:
+    """Timing of a pulsed radar (transmit, then listen; blind while the pulse
+    is out) and a CW radar (transmit and receive at once, two antennas)."""
+    fig, ax = plt.subplots(figsize=(4.6, 2.7))
+    w, pri = 0.5, 4.0
+    y = {"ptx": 3.6, "prx": 2.6, "ctx": 1.0, "crx": 0.0}
+    h = 0.6
+    for k in range(2):
+        t0 = k * pri
+        pulse(ax, t0, w, y["ptx"], h, NAVY)
+        ax.add_patch(Rectangle((t0 + w, y["prx"]), pri - w, h, color=BLUE, alpha=0.18, lw=0))
+        ax.add_patch(Rectangle((t0, y["prx"]), w, h, color=GRAY, alpha=0.35, lw=0, hatch="///"))
+        pulse(ax, t0 + 2.2, w, y["prx"] + 0.1, h - 0.2, BLUE)
+    ax.text(0.25, y["prx"] - 0.12, "blind", ha="center", va="top", color=GRAY)
+    ax.text(2.45, y["prx"] - 0.12, "echo", ha="center", va="top", color=BLUE)
+    ax.text(pri + 1.6, y["prx"] - 0.12, "listen", ha="center", va="top", color=BLUE)
+    ax.add_patch(Rectangle((0, y["ctx"]), 8.5, h, color=NAVY, lw=0))
+    ax.add_patch(Rectangle((0, y["crx"]), 8.5, h, color=BLUE, alpha=0.45, lw=0))
+    for key, lab in (("ptx", "Tx"), ("prx", "Rx"), ("ctx", "Tx"), ("crx", "Rx")):
+        ax.text(-0.15, y[key] + h / 2, lab, ha="right", va="center", color=INK)
+    ax.text(-1.0, 0.5 * (y["ptx"] + y["prx"]) + h / 2, "pulsed", ha="right", va="center",
+            color=NAVY, rotation=90)
+    ax.text(-1.0, 0.5 * (y["ctx"] + y["crx"]) + h / 2, "CW", ha="right", va="center",
+            color=NAVY, rotation=90)
+    ax.set_xlim(-1.5, 8.6)
+    ax.set_ylim(-0.6, 4.4)
+    ax.set_yticks([])
+    ax.set_xticks([])
+    ax.set_xlabel("time")
+    for side in ("top", "right", "left"):
+        ax.spines[side].set_visible(False)
+    ax.spines["bottom"].set_bounds(0, 8.5)
+    finalize(fig, "L26-pulsed-cw")
+
+
+def fig_prf_tradeoff() -> None:
+    """R_ua = c/(2 PRF) and v_ua = lambda PRF/4 at 10 GHz, against PRF."""
+    prf = np.logspace(2, 5, 200)
+    R = C / (2 * prf) / 1e3
+    vv = LAM * prf / 4
+    fig, ax = plt.subplots(figsize=(4.6, 2.9))
+    ax2 = ax.twinx()
+    ax.loglog(prf / 1e3, R, color=NAVY, lw=1.8)
+    ax2.loglog(prf / 1e3, vv, color=RED, lw=1.8)
+    for p in (1e3, 2e3):
+        r, u = C / (2 * p) / 1e3, LAM * p / 4
+        ax.plot(p / 1e3, r, "o", color=NAVY, ms=6)
+        ax2.plot(p / 1e3, u, "o", color=RED, ms=6)
+    assert abs(C / 2e3 / 1e3 - 150) < 1e-9 and abs(LAM * 1e3 / 4 - 7.5) < 1e-9
+    ax.text(0.85, 120, "150 km", ha="right", va="top", color=NAVY)
+    ax.text(2.5, 90, "75 km", ha="left", va="bottom", color=NAVY)
+    ax2.text(0.85, 8.5, "7.5 m/s", ha="right", va="bottom", color=RED)
+    ax2.text(2.2, 15, "15 m/s", ha="left", va="top", color=RED)
+    ax.text(40, 2.6, "range", ha="right", va="top", color=NAVY)
+    ax2.text(15, 300, "velocity", ha="right", va="bottom", color=RED)
+    ax.set_xlim(0.1, 100)
+    ax.set_ylim(1, 2000)
+    ax2.set_ylim(0.5, 1000)
+    ax.set_xlabel("PRF (kHz)")
+    ax.set_ylabel("unambiguous range (km)", color=NAVY)
+    ax2.set_ylabel("unambiguous velocity (m/s)", color=RED)
+    ax.set_xticks([0.1, 1, 10, 100])
+    ax.set_xticklabels(["0.1", "1", "10", "100"])
+    ax.set_yticks([1, 10, 100, 1000])
+    ax.set_yticklabels(["1", "10", "100", "1000"])
+    ax2.set_yticks([1, 10, 100, 1000])
+    ax2.set_yticklabels(["1", "10", "100", "1000"])
+    ax.minorticks_off()
+    ax2.minorticks_off()
+    for a in (ax, ax2):
+        a.spines["top"].set_visible(False)
+        a.tick_params(length=3)
+    finalize(fig, "L26-prf-tradeoff")
+
+
+def fig_cw_spectrum() -> None:
+    """One CW spectrum for the whole beam at 10 GHz: a fence at 0 Hz, and two
+    cars closing at 20 m/s at different ranges. Range only changes each car's
+    phase, so both land in the same bin. 109 ms of samples at 8 kHz."""
+    fs, T = 8000.0, 65536 / 0.6e6
+    n = int(round(fs * T))
+    t = np.arange(n) / fs
+    fd = doppler(20.0)
+    assert abs(fd - 1333.33) < 0.01
+    rng = np.random.default_rng(17)
+    s = 3.0 * np.ones(n, dtype=complex)
+    for a, R in ((0.20, 40.0), (0.12, 90.0)):
+        s += a * np.exp(1j * (2 * np.pi * fd * t - 4 * np.pi * R / LAM))
+    s += (rng.standard_normal(n) + 1j * rng.standard_normal(n)) * 0.01
+    S = np.abs(np.fft.fftshift(np.fft.fft(s * np.hanning(n)))) ** 2
+    f = np.fft.fftshift(np.fft.fftfreq(n, 1 / fs))
+    db = 10 * np.log10(S / S.max())
+    fig, ax = plt.subplots(figsize=(4.6, 2.6))
+    ax.plot(f, db, color=BLUE, lw=0.9)
+    ax.text(60, -3, "fence", ha="left", va="center", color=NAVY)
+    pk = db[np.argmin(abs(f - fd))]
+    ax.text(fd + 60, pk + 2, "two cars, 20 m/s,\nat 40 m and 90 m", ha="left", va="bottom",
+            color=RED)
+    ax.set_xlim(-500, 2500)
+    ax.set_ylim(-80, 12)
+    ax.set_xticks([0, 1333])
+    ax.set_xticklabels(["0", "1333"])
+    ax.set_yticks([-80, -40, 0])
+    ax.set_xlabel("Doppler (Hz)")
+    ax.set_ylabel("power (dB)")
+    style(ax)
+    finalize(fig, "L26-cw-spectrum")
+
+
 def main() -> None:
     v = numbers()
     check_numbers(v)
@@ -375,6 +638,12 @@ def main() -> None:
     fig_radial()
     fig_fan_spectrum(v)
     fig_micro_doppler(v)
+    fig_chirp_spectrum()
+    fig_doppler_alias()
+    fig_crests()
+    fig_pulsed_cw()
+    fig_prf_tradeoff()
+    fig_cw_spectrum()
 
 
 if __name__ == "__main__":

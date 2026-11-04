@@ -172,7 +172,11 @@ $$\begin{aligned}
 
 - A short pulse has bandwidth $B \approx 1/\tau_p$.
 - A chirp sweeps $B$ over a long pulse, so it has both the resolution and the energy.
-- The PHASER chirp sweeps $500\ \text{MHz}$.
+:::
+:::{present}
+<img src="../../viz/img/L26-chirp-spectrum.svg"
+     alt="Three waveforms and their spectra. A 1 microsecond pulse has a spectrum about 1 MHz wide; a 10 microsecond pulse has one ten times narrower, about 0.1 MHz; a 10 microsecond chirp sweeping 1 MHz keeps the long duration but has a spectrum about 1 MHz wide, like the short pulse"
+     style="max-width: 320px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 A short pulse resolves well but carries little energy, since energy is power
@@ -200,6 +204,12 @@ lab sweeps the PHASER's transmitter across $500\ \text{MHz}$, which gives
 $\Delta R = 0.30\ \text{m}$: two corner reflectors on the bench must be more
 than $30\ \text{cm}$ apart in range to appear as two. L28 derives the FMCW
 version of this result.
+
+The figure puts the three waveforms side by side. The $1\ \mu\text{s}$ pulse
+spreads over about $1\ \text{MHz}$, and the $10\ \mu\text{s}$ pulse, ten times
+longer, over about a tenth of that. The $10\ \mu\text{s}$ chirp sweeps
+$1\ \text{MHz}$, so it lasts as long as the long pulse and carries its energy,
+while its spectrum is as wide as the short pulse's.
 ::::
 
 ::::{frame} Key Point
@@ -222,6 +232,11 @@ f_D &= \frac{1}{2\pi}\frac{d\phi}{dt} = -\frac{2}{\lambda}\frac{dR}{dt} \\
 - $v_r = -dR/dt$, the closing speed.
 - At $10\ \text{GHz}$, $\lambda = 3.0\ \text{cm}$: $66.7\ \text{Hz}$ per $\text{m/s}$.
 :::
+:::{present}
+<img src="../../viz/img/L26-crests.svg"
+     alt="Time against range. Wave crests leave the radar at even intervals T, travel out to a target that is moving toward the radar, and reflect back. Because each crest meets the target closer than the one before, the returning crests reach the radar closer together than they were sent"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 The echo's phase records the round trip. A wave that travels $2R$ picks up a
 phase relative to the transmitted signal of
@@ -239,6 +254,13 @@ where $v_r = -dR/dt$ is the rate at which the range is closing. The 2 is the
 same factor as in $R = c\tau/2$: the path changes twice as fast as the range.
 At a $10\ \text{GHz}$ carrier, $\lambda = 3.0\ \text{cm}$ and each meter per
 second of closing speed shifts the echo by $66.7\ \text{Hz}$.
+
+The figure draws the same result as crests in time and range, with the
+target's speed exaggerated so the effect is visible. Each crest leaves the
+radar a time $T$ after the one before, meets the target a little closer in,
+and so has a shorter trip back. The echoes arrive spaced
+$T(c - v_r)/(c + v_r)$ apart, less than $T$, which is a higher frequency; for
+$v_r \ll c$ that is the $2v_r/\lambda$ shift above.
 ::::
 
 ::::{frame} Doppler Sign Convention
@@ -318,6 +340,11 @@ v_\text{ua} &= \pm\frac{\lambda}{4\ T_\text{PRI}}
 - Pulses sample the Doppler at the PRF: $\pm\text{PRF}/2$ is unambiguous.
 - $256$ pulses, $0.5\ \text{ms}$ apart: $0.12\ \text{m/s}$, $\pm 15\ \text{m/s}$.
 :::
+:::{present}
+<img src="../../viz/img/L26-doppler-alias.svg" 
+     alt="The echo phase sampled once per chirp, drawn as points on a circle numbered 0 to 5. A target closing at 25 m/s at 10 GHz advances the phase 300 degrees each chirp, plus 1667 Hz; the samples are identical to a phase that steps back 60 degrees each chirp, so the radar reads minus 333 Hz, a target moving away at 5 m/s"
+     style="max-width: 320px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 Range and Doppler have the same two limits. To tell two frequencies apart, the
 radar has to watch the echo long enough for them to drift a full cycle apart,
@@ -345,6 +372,12 @@ burst lasts $T = 128\ \text{ms}$, so it resolves $7.8\ \text{Hz}$, or
 $0.12\ \text{m/s}$, and its unambiguous velocity is $\pm 15\ \text{m/s}$.
 A person walking is well inside that window; a car on a highway is not. L29
 builds the range-Doppler map from exactly this kind of burst.
+
+The figure follows a car closing at $25\ \text{m/s}$ through this burst. Its
+true shift is $1667\ \text{Hz}$, so the phase advances $300^\circ$ from one
+chirp to the next. The samples alone cannot tell that from a step of
+$-60^\circ$, which is $-333\ \text{Hz}$, and the radar reports a target moving
+away at $5\ \text{m/s}$.
 ::::
 
 ::::{frame} The Range-Velocity Tradeoff
@@ -373,6 +406,14 @@ airborne radar that must report both range and closing speed for fast
 aircraft cannot satisfy both limits with one PRF, so it switches among
 several and works out the true range and velocity from how the readings move,
 the same idea used against a folded range above.
+
+<img src="../../viz/img/L26-prf-tradeoff.svg"
+     alt="Unambiguous range and unambiguous velocity at 10 GHz against PRF from 0.1 to 100 kHz on log axes. Range falls as one over PRF and velocity rises in proportion to PRF; at 1 kHz they are 150 km and 7.5 m/s, at 2 kHz 75 km and 15 m/s"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+
+The figure plots both limits against PRF at $10\ \text{GHz}$. The range limit
+falls and the velocity limit rises at the same rate, so no PRF moves one
+without moving the other the opposite way.
 ::::
 
 ::::{frame} Folded Range and Aliased Speed
@@ -408,6 +449,11 @@ correctly.
 | Antennas | one, shared | separate Tx and Rx |
 | Power | high peak | low, steady |
 | Best at | long range | short range |
+:::
+:::{present}
+<img src="../../viz/img/L26-pulsed-cw.svg"
+     alt="Timing of a pulsed and a CW radar. The pulsed radar transmits short pulses; its receiver is blind while each pulse is out and listens between pulses, where the echo arrives. The CW radar transmits and receives continuously"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 ADI's radar setup page
@@ -450,6 +496,16 @@ $f_D$, and two cars at the same speed fall in the same bin regardless of
 range. L28's FMCW waveform restores the time mark: it sweeps the transmitted
 frequency in a ramp, so the frequency of the echo says when it was sent, and
 the delay becomes a measurable frequency difference.
+
+<img src="../../viz/img/L26-cw-spectrum.svg"
+     alt="A simulated CW Doppler spectrum at 10 GHz: a strong line at 0 Hz from a fence, and a single line at 1333 Hz that holds two cars closing at 20 m/s, one at 40 m and one at 90 m"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+
+The figure is a simulated CW spectrum of that scene at $10\ \text{GHz}$. The
+fence is the strong line at $0\ \text{Hz}$. Two cars close at
+$20\ \text{m/s}$, one at $40\ \text{m}$ and one at $90\ \text{m}$; their ranges
+change only each echo's phase, so both land in the single line at
+$1333\ \text{Hz}$.
 ::::
 
 ::::{frame} The Fan Demo
