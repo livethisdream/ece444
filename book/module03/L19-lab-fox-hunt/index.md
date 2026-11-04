@@ -300,6 +300,36 @@ is in. The Part 3 writeup compares your fix with the live box and asks what
 changes with the baseline and the depth.
 ::::
 
+::::{frame} No Kit? No Problem.
+:class: read-only
+
+If you miss the lab period, run the hunt here. The simulator puts the range,
+the posted boxes, and one live fox in your browser, with the kit's errors at
+the size this page says to expect. Use the hunt number and box count I give
+you: each pair is its own field of boxes and its own fox, and the same pair
+always gives the same hunt, so I can check your call against it. Seven or
+eight boxes sit closer than the lab's $0.75\ \text{m}$, which makes the
+amplitude check matter more.
+
+1. Type your hunt number in **Hunt** and pick the **Boxes** count.
+2. Press **reference shot**, read the mean Angle, and set **s**: $+1$ if it is positive, $-1$ if negative.
+3. Pick a station, or tap its mark on the map, and press **take 10 readings**. Do every station, ends first.
+4. Press **copy for notebook** and paste the boxes and stations into the notebook's bench cell. Run it and make your call.
+5. Submit your call with your hunt number and box count. **reveal** is mine: once every call is in, I reveal each live box, and Part 3 starts from it.
+
+<iframe src="../../viz/foxhunt-sim.html"
+        width="100%" height="416"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Fox hunt simulator: a taped firing line with five station marks and numbered boxes downrange. Take a reference shot, then ten readings of Angle and Peak Gain at each station, copy them for the notebook; I reveal the live box.">
+</iframe>
+
+In the packet, fill Part 2 from the simulator, and write "simulator, hunt"
+with your number and box count in the boxes for your HB100's frequency and Rx Gain, which
+the simulator does not use. A station the simulator marks "no clear tone"
+goes in the table as "none", as it would at the bench.
+::::
+
 ::::{frame} Your Part 2 Entries
 :class: read-only
 
