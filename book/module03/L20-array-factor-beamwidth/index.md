@@ -321,7 +321,7 @@ Eight half-wave dipoles, at $2.15$ dBi each, would make an $11.0$ dBi array. The
 
 ::::{frame} Designing to a Beamwidth
 :::{present}
-Goal: $\theta_\text{HP}$ ≤ 5° at $10\ \text{GHz}$, scan $\pm 45^\circ$.
+Sample requirement: $\theta_\text{HP}$ ≤ 5° at $10\ \text{GHz}$, scan $\pm 45^\circ$.
 
 | Step | Result |
 | :-- | :-- |
@@ -336,7 +336,7 @@ Goal: $\theta_\text{HP}$ ≤ 5° at $10\ \text{GHz}$, scan $\pm 45^\circ$.
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-We can run every result so far in reverse. A radar or communications requirement arrives as a beamwidth and a scan volume, and three steps give the array.
+We can run every result so far in reverse. If we fix the beamwidth and scan volume as requirements, we can design the array using the following three-step process.
 
 1. **Aperture.** Invert the half-power formula, with $\theta_\text{HP}$ in radians:
 
@@ -352,7 +352,7 @@ We can run every result so far in reverse. A radar or communications requirement
 
 :::{admonition} Worked example — a 5° pencil beam at X-band
 :class: tip
-Specification: $\theta_\text{HP}$ ≤ 5° at $10\ \text{GHz}$, scanning to $\pm 45^\circ$. At $10\ \text{GHz}$, $\lambda$ = 30 mm.
+Sample requirement: $\theta_\text{HP}$ ≤ 5° at $10\ \text{GHz}$, scanning to $\pm 45^\circ$. These two numbers are an example chosen to give an array of a few dozen elements, not a requirement from a real system. At $10\ \text{GHz}$, $\lambda$ = 30 mm.
 
 | Step | Work | Result |
 | :-- | :-- | :-- |
