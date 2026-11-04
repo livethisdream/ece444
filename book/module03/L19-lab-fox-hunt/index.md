@@ -331,11 +331,11 @@ The L19 Lab packet is one submission per team for the whole lab, turned in compl
 
 ::::{frame} Looking Ahead
 :::{present}
-- Keep your notebook, with your bearings and levels in it: the Part 3 writeup reuses all three.
+- Keep your notebook: the Part 3 writeup re-solves your stations in it.
 - L20 returns to shaping and steering the beam.
 :::
 
-Part 3 is the writeup, done as a team after the lab: how far your fix landed
+Part 3 is the writeup, done as a team after the reveal: how far your fix landed
 from the live box, the error of each bearing, and what the baseline and the
 depth did to the fix.
 
