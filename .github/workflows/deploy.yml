@@ -36,6 +36,13 @@ jobs:
       - name: Build the book
         run: jupyter-book build book/
 
+      # One zip per Module 4 lab (notebook, radar_lab.py, that lab's recorded
+      # captures), linked from each lab's Notebook Setup frame as
+      # ../../bundles/LNN_lab.zip. Built, not committed: the data is already
+      # in book/extras/radar-data/.
+      - name: Lab bundles
+        run: python scripts/radar/make_lab_bundles.py
+
       - name: Upload book as artifact
         uses: actions/upload-artifact@v4
         with:
