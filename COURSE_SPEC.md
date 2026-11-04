@@ -1255,7 +1255,7 @@ notebook checks, page numbers and packet keys follow them. L25–L27 keep the
 
 | App preset (UI name) | Lab | Carrier | B | Chirp | fs | Chirps | Derived |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| `range` (Range (Basic)) | L28 | 12.145 GHz | 500 MHz | 1 ms | 0.6 MSPS | 1 | 3.33 kHz of beat per meter; 0.30 m cells; reach about 60 m for a 100 kHz 0 m frequency |
+| `range` (Range (Basic)) | L28 | 12.145 GHz | 500 MHz | 1 ms | 0.6 MSPS | 1 | 3.33 kHz of beat per meter; $c/2B$ = 0.30 m, but the app keeps 540 of the 600 samples (0.9 ms), so its bins are 1.11 kHz = 0.33 m; reach about 60 m for a 100 kHz 0 m frequency |
 | `range_doppler` (Range + Velocity) | L29, L31 | 9.9 GHz | 500 MHz | 300 µs, PRI 0.5 ms | 2 MSPS | 256 | 11.1 kHz/m; CPI 128 ms; $\Delta v$ = 0.118 m/s; $v_\text{max}$ = ±15.2 m/s; λ = 3.03 cm |
 | `cfar` (Range (CFAR)) | L30, the app's CFAR overlay | 10 GHz | 500 MHz | 0.5 ms | 2 MSPS | 1 | 6.67 kHz/m; the overlay is on the range profile (1-D) |
 
