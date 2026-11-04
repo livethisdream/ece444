@@ -32,6 +32,9 @@
   .ro .v { font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--navy); line-height:17px; overflow-wrap:anywhere; }
   .ro .v .dim { color:var(--ink3); font-weight:500; }
   .ro .v .bad { color:var(--red); }
+  .ro .v.posted { display:grid; grid-template-columns:1fr 1fr; gap:0 8px; font-size:12px; font-weight:500; line-height:16px; }
+  .ro .v.posted b { display:inline-block; min-width:12px; }
+  .ro .v.posted .live { color:var(--red); font-weight:700; }
   table { border-collapse:collapse; width:100%; font-size:12px; font-variant-numeric:tabular-nums; }
   th { font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink3); text-align:right; padding:1px 4px; }
   td { text-align:right; padding:1px 4px; color:var(--navy); border-top:1px solid var(--edge); }
@@ -60,6 +63,11 @@
         <button id="newhunt" type="button">new hunt</button>
       </div>
       <div class="row">
+        <span class="lab">Boxes</span>
+        <select id="nbox"><option>5</option><option>6</option><option selected>7</option><option>8</option></select>
+        <span class="note" id="sep-note"></span>
+      </div>
+      <div class="row">
         <span class="lab">Station</span>
         <select id="station"></select>
         <span class="lab">s</span>
@@ -70,6 +78,7 @@
         <button id="take" type="button" class="primary">take 10 readings</button>
       </div>
     </div>
+    <div class="ro"><span class="k">Posted boxes, x and y (m)</span><span class="v posted" id="posted"></span></div>
     <div class="ro"><span class="k" id="r-head">Angle, ten sweeps</span><span class="v" id="r-read"><span class="dim">Take the reference shot first.</span></span></div>
     <div class="ro" id="tbl-box"><span class="k">Recorded, s applied</span>
       <table><thead><tr><th>x (m)</th><th>s &times; mean</th><th>spread</th><th>Peak Gain</th></tr></thead><tbody id="tbl"></tbody></table>
@@ -90,8 +99,12 @@ const D2R=Math.PI/180;
 
 /* ---- the range, the L19 Lab's: a 3.0 m tape along x at y = 0 with a station
    mark every 0.75 m, and a box field 2.0 m wide (x within FX of the middle)
-   from FY0 to FY1 downrange. Boxes are at least SEP apart, center to center. */
-const MARKS=[-1.5,-0.75,0,0.75,1.5], FX=1.0, FY0=1.0, FY1=2.0, SEP=0.75;
+   from FY0 to FY1 downrange. The lab spaces its boxes at least 0.75 m apart,
+   and the field holds six that way; seven or eight have to sit closer, which
+   makes the fix's depth error matter more and the amplitude check earn its
+   place. SEPS is the spacing for each count. */
+const MARKS=[-1.5,-0.75,0,0.75,1.5], FX=1.0, FY0=1.0, FY1=2.0;
+const SEPS={5:0.75, 6:0.75, 7:0.62, 8:0.55};
 // the reference shot: your own HB100 1 m downrange and 0.5 m toward +x
 const REF=[0.5,1.0];
 
@@ -116,15 +129,17 @@ function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.im
 function gauss(r){ let u=0; while(u===0) u=r(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r()); }
 
 let hunt=null;
-function makeHunt(n){
-  const r=mulberry32(n*7919+17);
-  let boxes=[];
-  const want = r()<0.5 ? 5 : 6;
-  for(let tries=0; tries<200 && boxes.length<want; tries++){
+// a hunt is its number and its box count: the same pair always gives the
+// same boxes, live box, board orientation, and errors
+function makeHunt(n, want){
+  const r=mulberry32(n*7919+want*104723+17);
+  let boxes=[], sep=SEPS[want];
+  for(let tries=0; boxes.length<want; tries++){
+    if(tries && tries%200===0) sep-=0.02;     // a field that will not pack: tighten a little
     boxes=[];
     for(let k=0;k<4000 && boxes.length<want;k++){
       const p=[FX*(2*r()-1), FY0+(FY1-FY0)*r()];
-      if(boxes.every(q=>Math.hypot(p[0]-q[0],p[1]-q[1])>=SEP)) boxes.push(p);
+      if(boxes.every(q=>Math.hypot(p[0]-q[0],p[1]-q[1])>=sep)) boxes.push(p);
     }
   }
   // number the boxes left to right, so the map reads like a posted list
@@ -135,7 +150,7 @@ function makeHunt(n){
   const bias=MARKS.map(()=>{ let b=gauss(r)*BIAS; if(r()<P_REFL) b+=(r()<0.5?-1:1)*(7+3*r()); return b; });
   const aim=gauss(r)*15;                       // the fox's aim error, deg
   const level=-7+gauss(r)*2;                   // overall level, dB
-  return { n, boxes, live, s, bias, aim, level, takes:MARKS.map(()=>0), rec:MARKS.map(()=>null), refDone:false, revealed:false, last:null };
+  return { n, nb:want, sep, boxes, live, s, bias, aim, level, takes:MARKS.map(()=>0), rec:MARKS.map(()=>null), refDone:false, revealed:false, last:null };
 }
 
 // one sweep's peak: the angle on the steer grid nearest the true one
@@ -196,19 +211,24 @@ function notebookText(){
   const st=MARKS.map((m,i)=>{ const R=hunt.rec[i]; if(!R) return null;
     if(R.none) return `    # (${m.toFixed(2)}, no clear tone),`;
     return `    (${m.toFixed(2)}, ${(s*mean(R.reads)).toFixed(1)}, ${R.gain.toFixed(1)}),`; }).filter(Boolean).join('\n');
-  return `# Fox hunt simulator, hunt ${hunt.n}\nBOXES = [\n${bx}\n]\nSTATIONS = [\n    # x_m, s * mean angle_deg, peak_gain_db\n${st}\n]\n`;
+  return `# Fox hunt simulator, hunt ${hunt.n}, ${hunt.nb} boxes\nBOXES = [\n${bx}\n]\nSTATIONS = [\n    # x_m, s * mean angle_deg, peak_gain_db\n${st}\n]\n`;
 }
-function refresh(){ showReadings(); showTable(); if(!$('out').classList.contains('hidden')) $('out').value=notebookText(); draw(); }
+function showPosted(){
+  $('posted').innerHTML=hunt.boxes.map((p,k)=>`<span${hunt.revealed&&k===hunt.live?' class="live"':''}><b>${k+1}</b> ${fmt(p[0],2)}, ${p[1].toFixed(2)}</span>`).join('');
+}
+function refresh(){ showPosted(); showReadings(); showTable(); if(!$('out').classList.contains('hidden')) $('out').value=notebookText(); draw(); }
 
 function startHunt(n){
   n=Math.max(1,Math.min(9999,Math.round(n)||1));
-  $('hunt').value=n; hunt=makeHunt(n); $('sgn').value='0';
+  $('hunt').value=n; hunt=makeHunt(n, +$('nbox').value); $('sgn').value='0';
+  $('sep-note').textContent='at least '+hunt.sep.toFixed(2)+' m apart';
   $('out').classList.add('hidden'); $('tbl-box').classList.remove('hidden'); $('copy').textContent='copy for notebook';
   $('reveal').textContent='reveal';
   refresh();
 }
 $('newhunt').onclick=()=>startHunt(1+Math.floor(Math.random()*9999));
 $('hunt').onchange=()=>startHunt(+$('hunt').value);
+$('nbox').onchange=()=>startHunt(+$('hunt').value);
 $('station').onchange=()=>{ kitAt=+$('station').value; draw(); };
 $('sgn').onchange=refresh;
 $('ref').onclick=()=>{ kitAt=2; $('station').value='2'; hunt.last=takeReadings(2,true); hunt.refDone=true; refresh(); };
@@ -223,9 +243,9 @@ $('copy').onclick=()=>{
   try { navigator.clipboard.writeText(out.value).catch(()=>{}); } catch(e) {}
 };
 $('reveal').onclick=()=>{
-  if(hunt.revealed){ hunt.revealed=false; $('reveal').textContent='reveal'; draw(); return; }
-  if(!confirm('Submit your call first. Reveal the live box for hunt '+hunt.n+'?')) return;
-  hunt.revealed=true; $('reveal').textContent='hide'; draw();
+  if(hunt.revealed){ hunt.revealed=false; $('reveal').textContent='reveal'; showPosted(); draw(); return; }
+  if(!confirm('Submit your call first. Reveal the live box for hunt '+hunt.n+', '+hunt.nb+' boxes?')) return;
+  hunt.revealed=true; $('reveal').textContent='hide'; showPosted(); draw();
 };
 
 /* ---- drawing */
@@ -267,16 +287,32 @@ function draw(){
       ctx.strokeStyle='rgba(0,74,133,0.55)'; ctx.lineWidth=1.3;
       ctx.beginPath(); ctx.moveTo(X(m),ty); ctx.lineTo(X(m+L*Math.sin(th)),Y(L*Math.cos(th))); ctx.stroke(); });
   }
-  // the boxes, numbered, each with its posted center
+  // the boxes, numbered; then, on a desktop, each posted center as a label
+  // in the first clear spot around its box (below, above, right, left), left
+  // off when none is clear: the panel's list carries every center anyway
+  const half=Math.max(7,0.08*S), rects=[];
   hunt.boxes.forEach((p,k)=>{
-    const x=X(p[0]), y=Y(p[1]), live=hunt.revealed&&k===hunt.live, half=Math.max(7,0.08*S);
+    const x=X(p[0]), y=Y(p[1]), live=hunt.revealed&&k===hunt.live;
     ctx.fillStyle=live?'rgba(176,30,36,0.12)':'#fff'; ctx.strokeStyle=live?red:'#7a6a4f'; ctx.lineWidth=live?2.2:1.3;
     ctx.beginPath(); ctx.rect(x-half,y-half,2*half,2*half); ctx.fill(); ctx.stroke();
     stext(ctx,String(k+1),x,y+0.5,11,live?red:cssv('--ink'),'center',true);
-    const lab=`(${p[0].toFixed(2)}, ${p[1].toFixed(2)})`;
-    ctx.font='10.5px '+SANS; const tw=ctx.measureText(lab).width;
-    ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fillRect(x-tw/2-2,y+half+2,tw+4,14);
-    stext(ctx,lab,x,y+half+9,10.5,live?red:ink3,'center');
+    rects.push([x-half-1,y-half-1,x+half+1,y+half+1]);
+  });
+  const overlap=(a,b)=>a[0]<b[2]&&b[0]<a[2]&&a[1]<b[3]&&b[1]<a[3];
+  // on a phone the map is too small to label: the panel's list carries them
+  ctx.font='10.5px '+SANS;
+  if(!(STACK&&STACK.matches)) hunt.boxes.forEach((p,k)=>{
+    const x=X(p[0]), y=Y(p[1]), live=hunt.revealed&&k===hunt.live;
+    const lab=`(${p[0].toFixed(2)}, ${p[1].toFixed(2)})`, tw=ctx.measureText(lab).width+4;
+    const spots=[[x,y+half+9],[x,y-half-9],[x+half+4+tw/2,y],[x-half-4-tw/2,y]];
+    for(const [cx,cy] of spots){
+      const r=[cx-tw/2,cy-7,cx+tw/2,cy+7];
+      if(r[0]<2||r[2]>W-2||r[1]<20||r[3]>Y(0)-8) continue;
+      if(rects.some(q=>overlap(r,q))) continue;
+      ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fillRect(r[0],r[1],r[2]-r[0],r[3]-r[1]);
+      stext(ctx,lab,cx,cy,10.5,live?red:ink3,'center');
+      rects.push(r); break;
+    }
   });
   // the reference source, while its readings are up
   if(hunt.last&&hunt.last.ref){
@@ -287,7 +323,7 @@ function draw(){
   // the kit on its mark
   kitGlyph(X(MARKS[kitAt]),ty,navy);
   // hunt number, top left; reveal state, top right
-  stext(ctx,'hunt '+hunt.n,8,11,10.5,ink3,'left',true);
+  stext(ctx,'hunt '+hunt.n+' \u00b7 '+hunt.nb+' boxes',8,11,10.5,ink3,'left',true);
   if(hunt.revealed) stext(ctx,'live box: '+(hunt.live+1),W-8,11,10.5,red,'right',true);
   else stext(ctx,'tap a mark to move the kit',W-8,11,10.5,ink3,'right');
 }
@@ -304,13 +340,13 @@ map.addEventListener('click',ev=>{
 
 /* ---- sizing. Side by side above 620 px the map is as tall as it is wide
    times 0.72, up to 360 px; stacked on a phone the design box shortens to
-   0.66 of the width. The world scale follows the box: the tape plus margins
+   0.6 of the width. The world scale follows the box: the tape plus margins
    across, and the field's depth plus room for labels down. */
 const STACK=window.matchMedia ? window.matchMedia('(max-width:619px)') : null;
 function fit(){
   const dpr=window.devicePixelRatio||1, stacked=STACK&&STACK.matches;
   const w=Math.max(220, map.clientWidth);
-  const h=stacked ? Math.round(Math.min(w*0.66, 250)) : Math.round(Math.min(w*0.78, 380));
+  const h=stacked ? Math.round(Math.min(w*0.6, 230)) : Math.round(Math.min(w*0.78, 380));
   map.width=Math.round(w*dpr); map.height=Math.round(h*dpr); map.style.height=h+'px';
   const bh=map.offsetHeight-map.clientHeight; if(bh) map.style.height=(h+bh)+'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -323,6 +359,7 @@ function fit(){
 }
 
 const q=new URLSearchParams(location.search);
+if(q.has('boxes') && SEPS[+q.get('boxes')]) $('nbox').value=q.get('boxes');
 startHunt(q.has('hunt') ? +q.get('hunt') : 1+Math.floor(Math.random()*9999));
 window.addEventListener('resize',fit);
 fit();
