@@ -617,7 +617,7 @@ $$\begin{aligned}
 :::{present}
 - $\mathbf x = (x,\ y)$: the fox, unknown.
 - Station $i$: tape mark $x_i$, Angle readout $\theta_i$ (positive toward $+x$).
-- Row $i$ of $\mathbf A\mathbf x - \mathbf b$ is the miss $e_i$. The fix minimizes $\sum e_i^2$: $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$.
+- Row $i$ of $\mathbf A\mathbf x - \mathbf b$ is the miss $e_i$. Balanced pulls: $\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b$.
 :::
 
 Each station's bearing line is one linear equation in the unknown point. Its
@@ -647,17 +647,62 @@ two combinations of them instead, the **normal equations**,
 
 $$\mathbf A^{\mathsf T}\mathbf A\ \mathbf x = \mathbf A^{\mathsf T}\mathbf b.$$
 
-Multiplying by $\mathbf A^{\mathsf T}$ adds up the $N$ equations twice, once
-weighted by each station's $\cos\theta_i$ and once by its $-\sin\theta_i$,
-leaving two equations in two unknowns, which always have one answer unless the
-lines are all parallel. They are the balance of pulls in another form:
-$\mathbf A^{\mathsf T}(\mathbf A\mathbf x - \mathbf b) = \sum_i e_i\ \hat{\mathbf n}_i = 0$.
-They are also what setting the derivatives of $\sum_i e_i^2$ with respect to
-$x$ and $y$ to zero gives.
+They say the pulls of "Many Bearings: Least Squares" balance, and the next
+frame expands $\mathbf A^{\mathsf T}(\mathbf A\mathbf x - \mathbf b)$ once to
+show it. They leave two equations in two unknowns, which always have one
+answer unless the lines are all parallel.
 
 `numpy.linalg.lstsq(A, b)` solves the normal equations in one line, and the
-next two frames build $\mathbf A$ and $\mathbf b$ for three real readings and
-solve them by hand.
+frames after the next build $\mathbf A$ and $\mathbf b$ for three real readings
+and solve them.
+::::
+
+::::{frame} Balancing the Pulls
+:::{present}
+$$\begin{aligned}
+\mathbf A^{\mathsf T}\mathbf e &= \begin{bmatrix} c_1 & c_2 & c_3 \\ -s_1 & -s_2 & -s_3 \end{bmatrix}
+\begin{bmatrix} e_1 \\ e_2 \\ e_3 \end{bmatrix} \\
+&= \begin{bmatrix} e_1 c_1 + e_2 c_2 + e_3 c_3 \\ -e_1 s_1 - e_2 s_2 - e_3 s_3 \end{bmatrix} \\
+&= e_1\hat{\mathbf n}_1 + e_2\hat{\mathbf n}_2 + e_3\hat{\mathbf n}_3
+\end{aligned}$$
+
+- $c_i = \cos\theta_i$, $s_i = \sin\theta_i$, $\mathbf e = \mathbf A\mathbf x - \mathbf b$. Column $i$ of $\mathbf A^{\mathsf T}$ is $\hat{\mathbf n}_i = (c_i,\ -s_i)$.
+- So $\mathbf A^{\mathsf T}\mathbf e$ adds the three pulls. At the fix it is zero.
+:::
+
+$\mathbf A^{\mathsf T}$ is $\mathbf A$ turned on its side: the rows of
+$\mathbf A$, one per station, become its columns. Multiplying a matrix by a
+column vector takes each row of the matrix, multiplies it entry by entry with
+the vector, and adds. The first row of $\mathbf A^{\mathsf T}$ holds the three
+$\cos\theta_i$, so the first entry of the product is
+$e_1\cos\theta_1 + e_2\cos\theta_2 + e_3\cos\theta_3$; the second row holds the
+three $-\sin\theta_i$, which gives the second entry. Read by columns instead,
+the same product is each station's $\hat{\mathbf n}_i$ scaled by its own miss
+$e_i$, added up, which is exactly the sum of the three arrows in the
+least-squares figure: each line pulls the point toward itself along
+$\hat{\mathbf n}_i$, harder the more it misses.
+
+At the least-squares fix those pulls cancel, so
+$\mathbf A^{\mathsf T}(\mathbf A\mathbf x - \mathbf b) = 0$. Multiplying out,
+$\mathbf A^{\mathsf T}\mathbf A\ \mathbf x - \mathbf A^{\mathsf T}\mathbf b = 0$,
+which is the normal equations. $\mathbf A^{\mathsf T}\mathbf A$ is
+$2\times 2$ and $\mathbf A^{\mathsf T}\mathbf b$ has two entries whatever the
+number of stations, so the system always comes down to two equations in $x$
+and $y$.
+
+For those who have had calculus, the same equations come from asking where
+$S = \sum_i e_i^2$ is smallest. $S$ is a bowl over the floor, and at its
+bottom a small step in $x$ or in $y$ does not change it, so both slopes are
+zero. Each $e_i = \cos\theta_i\ x - \sin\theta_i\ y - x_i\cos\theta_i$ is
+linear, so by the chain rule
+
+$$\begin{aligned}
+\frac{\partial S}{\partial x} &= 2\sum_i e_i\cos\theta_i, &
+\frac{\partial S}{\partial y} &= -2\sum_i e_i\sin\theta_i,
+\end{aligned}$$
+
+which are the two entries of $2\mathbf A^{\mathsf T}\mathbf e$. The bottom of
+the bowl and the balance of the pulls are the same point.
 ::::
 
 ::::{frame} Three Bearings: Build A and b
@@ -999,6 +1044,8 @@ and run them on the practice set it holds. Bring the tested notebook to the lab 
 ::::
 
 ::::{frame} Looking Ahead
+:class: read-only
+
 :::{present}
 - In the L19 Lab, one kit takes a bearing from each station on a taped firing line.
 - Do the <a href="../../labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">Pre-Lab</a> and bring the <a href="../../notebooks/L19_foxhunt.ipynb" download>fox-hunt notebook</a>, tested.
