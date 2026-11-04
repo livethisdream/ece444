@@ -105,8 +105,8 @@ the end of
 the bench is the notebook,
 <a href="../../notebooks/L19_foxhunt.ipynb" download>`L19_foxhunt.ipynb`</a>:
 it holds the practice set, draws every bearing line over the boxes, and prints
-the results. Write its four functions and run it on the practice set, which
-has one bad station in it. The
+the results. Write its four functions, run its test cell until every check
+passes, and then run it on the practice set, which has one bad station in it. The
 error budget and station plan in Part 1 tell you what to expect: use the
 stations farthest apart that still detect the fox, because the distance
 between them sets how well the fix is pinned down in depth.

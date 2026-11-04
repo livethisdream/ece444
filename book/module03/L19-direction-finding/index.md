@@ -990,8 +990,8 @@ firing line.
 
 The L19 Lab's pre-lab is Part 1 of its packet, one per team, done before the
 lab period. It works this lesson's error budget for the range and has you
-write the fox-hunt notebook: write its four functions and test them on the
-practice set it holds. Bring the tested notebook to the lab on your laptop. It needs Python 3 with numpy, matplotlib, and Jupyter:
+write the fox-hunt notebook: write its four functions, pass its test cell,
+and run them on the practice set it holds. Bring the tested notebook to the lab on your laptop. It needs Python 3 with numpy, matplotlib, and Jupyter:
 `python -m pip install numpy matplotlib jupyterlab` installs all three.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">L19 Lab packet, Part 1 (PDF)</a>
