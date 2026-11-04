@@ -20,10 +20,12 @@ results, plots, and code that a section of the report is built on.
 | [L30 Lab — CFAR Processing](../L30-cfar/index.md) | CFAR detections on your range-Doppler maps | how a detection is declared, and what set your false alarms | 4.7 |
 | [L31 Lab — Micro-Doppler Classification and Dismount Tracking](../L31-classification-tracking/index.md) | classifying a detected target from its spectrogram, then tracking a walker in range and angle | what told your targets apart, how often it was right, and how well the radar held a moving person | 4.8, 4.9 |
 
-Each lab starts from the one before it: your L29 processing begins with your
-own L28 range code, the L30 Lab runs CFAR on your L29 maps, and the L31 Lab
-classifies and tracks what your L30 detector found. Keep your code, data, and plots from
-every lab.
+Each lab builds on the one before it, through one processing chain: the
+range FFT of the L28 Lab is the first step of the L29 range-Doppler map,
+the L30 Lab runs CFAR on those maps, and the L31 Lab classifies and tracks
+what the detector finds. The course provides the chain as `radar_lab.py`;
+you run it, tune it, and explain it. Keep your captures, notebooks, and
+plots from every lab in one folder.
 
 ## The lab packets are not the report
 
