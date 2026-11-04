@@ -33,6 +33,7 @@ One function per target type, each adding its echo to a capture in place:
     add_leakage(cap)                transmit-to-receive leakage, the 0 m spike
     add_point(cap, r0, v, rcs, az)  a point target: plate, corner, wall (v > 0 closing)
     add_hand(cap, r0, ...)          a hand moving back and forth
+    add_crossing(cap, r0, ...)      a hand moving side to side, across the beam (L29)
     add_walker(cap, r_start, ...)   a person walking out and back, with limbs
     add_spinner(cap, r0, ...)       a fidget spinner, edge-on: arms on a circle
     add_rotor(cap, r0, rho, ...)    any rotor, edge-on, its rate drifting or spinning down
@@ -72,9 +73,10 @@ PRESETS = {
     # PRI is the waterfall's line time, not the chirp length.
     "l28_range": dict(fs=0.6e6, fc=10.0e9, B=500e6, T_ramp=0.5e-3,
                       PRI=50e-3, n_chirps=32, f0=101.4e3),
-    # The L29-L31 range-Doppler burst: 256 chirps of 300 us, PRI 0.5 ms,
-    # 4 MSPS (11.1 kHz per meter, CPI 128 ms; 1200 samples a chirp).
-    "l29_burst": dict(fs=4.0e6, fc=10.0e9, B=500e6, T_ramp=300e-6,
+    # The L29-L31 range-Doppler burst: the Phaser app's range_doppler preset
+    # ("Range + Velocity", COURSE_SPEC M8.1): 9.9 GHz, 256 chirps of 300 us,
+    # PRI 0.5 ms, 2 MSPS (11.1 kHz per meter, CPI 128 ms; 600 samples a chirp).
+    "l29_burst": dict(fs=2.0e6, fc=9.9e9, B=500e6, T_ramp=300e-6,
                       PRI=0.5e-3, n_chirps=256, f0=101.4e3),
 }
 
@@ -173,6 +175,24 @@ def add_hand(cap: dict, r0: float = 0.6, swing: float = 0.15,
     _, t = _times(cap)
     r_t = r0 + swing * np.sin(2 * np.pi * rate_hz * t)
     _add_scatterer(cap, r_t, echo_dbfs(cap, r_t, rcs), phase0=1.3, az=az)
+
+
+def add_crossing(cap: dict, r0: float = 0.8, swing: float = 0.20,
+                 rate_hz: float = 1.0, rcs: float = 0.02, phase0: float = 1.3) -> None:
+    """A hand moving side to side across the beam, r0 m straight out.
+
+    Its cross-range offset is swing sin(2 pi rate_hz t), m, so its range is
+    hypot(r0, offset) and its azimuth atan2(offset, r0). The hand moves fast,
+    2 pi swing rate_hz at the center, but almost all of that is across the
+    line of sight: its radial speed peaks near pi swing^2 rate_hz / r0, about
+    one cell of the 256-chirp map, and is zero as it passes the center.
+    Added for the L29 Lab's MTI table.
+    """
+    _, t = _times(cap)
+    x = swing * np.sin(2 * np.pi * rate_hz * t)
+    r_t = np.hypot(r0, x)
+    az_t = np.degrees(np.arctan2(x, r0))
+    _add_scatterer(cap, r_t, echo_dbfs(cap, r_t, rcs), phase0, az_t)
 
 
 def add_walker(cap: dict, r_start: float = 1.0, r_turn: float = 4.0,
@@ -380,12 +400,20 @@ def l28_sets(out: Path = OUT) -> list[Path]:
 
 # The L29 Lab's scene: the room, plus a wall 2.5 m in front of the kit, the
 # strong static return the MTI procedure removes. The hand speeds are the
-# lesson's 1.0 m/s closing (-13.6 dB through the 2-pulse canceller) and a
-# 1.5 m/s opening; the spinner's tip speed is 2 pi (0.03 m)(15 rev/s) = 2.83 m/s.
+# lesson's 1.0 m/s closing (66.0 Hz at 9.9 GHz, -13.7 dB through the 2-pulse
+# canceller) and a 1.5 m/s opening; the spinner's tip speed is
+# 2 pi (0.03 m)(15 rev/s) = 2.83 m/s. A hand held still keeps a 2 mm tremor
+# (6 mm/s at most, far inside one 0.118 m/s cell); one moved across the beam
+# swings 0.20 m either side of boresight at 0.8 m; the face-on spinner is held
+# 10 degrees off face-on, as a hand holds it, so cos(80) = 0.17 of its swing
+# reaches the line of sight.
 L29_WALL = dict(r0=2.5, rcs=5.0, phase0=2.6)
 L29_HAND_CLOSE = dict(r0=1.0, v=+1.0, rcs=0.02, phase0=1.3)
 L29_HAND_OPEN = dict(r0=0.7, v=-1.5, rcs=0.02, phase0=1.3)
+L29_HAND_STILL = dict(r0=0.8, swing=0.002, rate_hz=0.5, rcs=0.02)
+L29_HAND_ACROSS = dict(r0=0.8, swing=0.20, rate_hz=1.0, rcs=0.02)
 L29_SPINNER = dict(r0=0.5, radius=0.03, rev_hz=15.0, n_arms=3)
+L29_SPINNER_FACEON = dict(r0=0.5, rho=[0.03], rcs_pts=[1e-3], rpm=900.0, n_blades=3, tilt=80.0)
 
 
 def l29_room(cap: dict) -> None:
@@ -395,38 +423,32 @@ def l29_room(cap: dict) -> None:
 
 
 def l29_sets(out: Path = OUT) -> list[Path]:
-    """The L29 Lab's recorded data: 256-chirp bursts, iq only, about 2.5 MB each."""
+    """The L29 Lab's recorded data: 256-chirp bursts, iq only, about 1.2 MB each."""
     written = []
-    burst = "256 chirps of 300 us every 0.5 ms, 4 MSPS"
+    burst = "256 chirps of 300 us every 0.5 ms, 9.9 GHz, 2 MSPS"
 
-    cap = new_capture("l29_burst")
-    l29_room(cap)
-    written.append(save(cap, out / "L29_static.npz",
-                        f"L29 Lab recorded data: no mover, the leakage and a wall at 2.5 m; {burst}, B 500 MHz",
-                        channels=False))
-
-    for tag, kw, words in (("closing", L29_HAND_CLOSE, "from 1.0 m toward the kit at 1.0 m/s"),
-                           ("opening", L29_HAND_OPEN, "from 0.7 m away from the kit at 1.5 m/s")):
-        cap = new_capture("l29_burst")
+    def one(name, note, add=None, **kw):
+        cap = new_capture("l29_burst", **kw)
         l29_room(cap)
-        add_point(cap, **kw)
-        written.append(save(cap, out / f"L29_hand_{tag}.npz",
-                            f"L29 Lab recorded data: a hand moving {words}, the wall at 2.5 m; {burst}, B 500 MHz",
-                            channels=False))
+        if add:
+            add(cap)
+        written.append(save(cap, out / name, f"L29 Lab recorded data: {note}", channels=False))
 
-    cap = new_capture("l29_burst", B=200e6)
-    l29_room(cap)
-    add_point(cap, **L29_HAND_CLOSE)
-    written.append(save(cap, out / "L29_hand_closing_B200.npz",
-                        f"L29 Lab recorded data: the closing hand at B 200 MHz; {burst}",
-                        channels=False))
-
-    cap = new_capture("l29_burst")
-    l29_room(cap)
-    add_spinner(cap, **L29_SPINNER)
-    written.append(save(cap, out / "L29_spinner.npz",
-                        "L29 Lab recorded data: a fidget spinner held edge-on at 0.5 m, three arms on a "
-                        f"3 cm radius at 15 rev/s; {burst}, B 500 MHz", channels=False))
+    one("L29_static.npz", f"no mover, the leakage and a wall at 2.5 m; {burst}, B 500 MHz")
+    one("L29_hand_closing.npz", f"a hand moving from 1.0 m toward the kit at 1.0 m/s, the wall at 2.5 m; {burst}, B 500 MHz",
+        lambda c: add_point(c, **L29_HAND_CLOSE))
+    one("L29_hand_opening.npz", f"a hand moving from 0.7 m away from the kit at 1.5 m/s, the wall at 2.5 m; {burst}, B 500 MHz",
+        lambda c: add_point(c, **L29_HAND_OPEN))
+    one("L29_hand_closing_B200.npz", f"the closing hand at B 200 MHz; {burst}",
+        lambda c: add_point(c, **L29_HAND_CLOSE), B=200e6)
+    one("L29_hand_still.npz", f"a hand held still at 0.8 m, a 2 mm tremor, the wall at 2.5 m; {burst}, B 500 MHz",
+        lambda c: add_hand(c, **L29_HAND_STILL))
+    one("L29_hand_across.npz", "a hand moved side to side across the beam at 0.8 m, 0.20 m either way at 1 Hz, "
+        f"the wall at 2.5 m; {burst}, B 500 MHz", lambda c: add_crossing(c, **L29_HAND_ACROSS))
+    one("L29_spinner.npz", "a fidget spinner held edge-on at 0.5 m, three arms on a "
+        f"3 cm radius at 15 rev/s; {burst}, B 500 MHz", lambda c: add_spinner(c, **L29_SPINNER))
+    one("L29_spinner_faceon.npz", "the same spinner turned face-on, held 10 deg off face-on, at 0.5 m; "
+        f"{burst}, B 500 MHz", lambda c: add_rotor(c, **L29_SPINNER_FACEON))
     return written
 
 

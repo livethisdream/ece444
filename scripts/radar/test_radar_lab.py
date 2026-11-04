@@ -79,7 +79,7 @@ def l29():
     rd, rng, vel = rl.range_doppler(cap)
     ok &= check("range_doppler shape [range, velocity]", rd.shape == (rng.size, vel.size), str(rd.shape))
     dv = vel[1] - vel[0]
-    ok &= check("velocity resolution", abs(dv - 0.117) < 0.002, f"{dv:.4f} m/s")
+    ok &= check("velocity resolution", abs(dv - rl.C / cap["fc"] / (2 * 256 * cap["PRI"])) < 1e-4, f"{dv:.4f} m/s")
     for r0, v0 in ((2.0, 1.0), (3.5, -0.6)):
         m = (np.abs(rng - r0) < 0.5)[:, None] & (np.abs(vel) > 0.2)[None, :]
         i, j = np.unravel_index(np.argmax(np.where(m, rd, -300)), rd.shape)
@@ -114,7 +114,7 @@ def l29_data():
 
     for name, r0, v0 in (("hand_closing", 1.0, 1.0), ("hand_opening", 0.7, -1.5)):
         cap = load(name)
-        ok &= check(f"{name} is a 256-chirp burst, iq only", cap["iq"].shape == (256, 1200) and "iq_ch" not in cap,
+        ok &= check(f"{name} is a 256-chirp burst, iq only", cap["iq"].shape == (256, 600) and "iq_ch" not in cap,
                     f"{cap['iq'].shape}, {cap['iq'].nbytes / 1e6:.1f} MB")
         rd, r, v = rl.range_doppler(cap)
         rr, vv, _ = mover(rd, r, v)
@@ -123,7 +123,7 @@ def l29_data():
     cap = load("hand_closing_B200")
     r = rl.range_axis(cap)
     ok &= check("B200 range cell", abs(r[1] - r[0] - 0.75) < 1e-9, f"{r[1] - r[0]:.2f} m")
-    # The canceller takes the closing hand down by the predicted 13.6 and 27.2 dB, and the wall into the floor.
+    # The canceller takes the closing hand down by the predicted 13.7 and 27.4 dB, and the wall into the floor.
     cap = load("hand_closing")
     rd, r, v = rl.range_doppler(cap)
     _, vv, h0 = mover(rd, r, v)
@@ -143,8 +143,25 @@ def l29_data():
     lines = v[1:-1][(row[1:-1] > row[:-2]) & (row[1:-1] > row[2:]) & (row[1:-1] > -25) & (np.abs(v[1:-1]) > 0.3)]
     gap = np.median(np.diff(lines))
     tip = 2 * np.pi * 0.03 * 15
-    ok &= check("spinner lines and band edge", abs(gap - LAM * 45 / 2) < 0.06 and abs(lines.max() - tip) < 0.7
+    lam = rl.C / cap["fc"]
+    ok &= check("spinner lines and band edge", abs(gap - lam * 45 / 2) < 0.06 and abs(lines.max() - tip) < 0.7
                 and abs(lines.min() + tip) < 0.7, f"lines {gap:.2f} m/s apart, out to {lines.min():+.2f}/{lines.max():+.2f}")
+    # Face-on, the band collapses toward 0 m/s: nothing within 10 dB of its strongest line beyond 1 m/s.
+    rd, r, v = rl.range_doppler(load("spinner_faceon"))
+    row = rd[i]
+    top = row[np.abs(v) > 0.3].max()
+    ok &= check("face-on spinner: band inside 1 m/s", (row[np.abs(v) > 1.0] < top - 10).all(),
+                f"strongest beyond 1 m/s {row[np.abs(v) > 1.0].max() - top:+.1f} dB on its strongest line")
+    # A hand held still, and one moved across the beam, sit in the canceller's notch:
+    # each drops far more than the 13.7 dB of the 1 m/s pushing hand.
+    for name, least in (("hand_still", 50), ("hand_across", 25)):
+        cap = load(name)
+        drops = []
+        for kind in ("none", "2pulse"):
+            rd, r, v = rl.range_doppler(rl.mti(cap, kind))
+            i = np.argmin(np.abs(r - 0.8))
+            drops.append(rd[i, np.abs(v) < 2].max())
+        ok &= check(f"{name} through 2pulse", drops[0] - drops[1] > least, f"down {drops[0] - drops[1]:.1f} dB")
     return ok
 
 
