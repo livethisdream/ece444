@@ -818,7 +818,7 @@ derived in "Choosing Where to Measure" below.
 
 ::::{frame} Choosing Where to Measure
 :::{present}
-- Use the end stations that hear the fox: depth error falls as $1/B$.
+- Use the end stations that detect the fox: depth error falls as $1/B$.
 - Best within $\pm 30^\circ$ of broadside; tracking starts to fail at $\pm 45^\circ$.
 - Point each array at the boxes, path clear.
 - Take a third bearing as a check.
@@ -842,8 +842,8 @@ lines cross at $\gamma$, with
 $$\sin\frac{\gamma}{2} = \frac{B/2}{R}.$$
 
 The two lines sit symmetrically about the downrange direction, so the axes of
-the error ellipse point across and down range. The eigenvalues of $\mathbf M$
-are $2\cos^2(\gamma/2)/\delta_\perp^2$ across range and
+the error ellipse point cross-range and downrange. The eigenvalues of $\mathbf M$
+are $2\cos^2(\gamma/2)/\delta_\perp^2$ in cross-range and
 $2\sin^2(\gamma/2)/\delta_\perp^2$ in depth, and the depth error is the inverse
 square root of the second:
 
@@ -856,9 +856,9 @@ With the taped-heading budget, $\sigma_\beta = 1.5^\circ$, and the L19 Lab's
 station marks $0.75\ \text{m}$ apart, the end stations, $3\ \text{m}$ apart,
 fix a box $2\ \text{m}$ downrange to $0.08\ \text{m}$ in depth, stations
 $1.5\ \text{m}$ apart to $0.11\ \text{m}$, and neighboring stations,
-$0.75\ \text{m}$ apart, to $0.20\ \text{m}$. Across range the same pairs fix
+$0.75\ \text{m}$ apart, to $0.20\ \text{m}$. In cross-range the same pairs fix
 it to $0.04$ to $0.06\ \text{m}$. The depth error grows as $R^2$ and
-falls as $1/B$, so the stations farthest apart that still hear the fox give the
+falls as $1/B$, so the stations farthest apart that still detect the fox give the
 best fix.
 
 Spreading the stations has a limit: a station far to one side sees the box well
@@ -938,7 +938,7 @@ always meet exactly, so two bearings cannot check each other.
 
 The L19 Lab adds one more check, the **Peak Gain** readout. Received power
 cannot give range on its own, because the transmitter's power is unknown, but
-every station hears the same transmitter, so comparing levels between stations
+every station detects the same transmitter, so comparing levels between stations
 removes that unknown. Free-space spreading then sets the difference: a station
 at range $R_2$ reads $20\log_{10}(R_2/R_1)$ dB below one at $R_1$, which is
 $2.5\ \text{dB}$ for $2.0\ \text{m}$ against $1.5\ \text{m}$, and a source off

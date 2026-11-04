@@ -322,7 +322,7 @@ viewer instead.
 
 The L19 Lab packet is one submission per team for the whole lab, turned in complete before Lesson 20. It has three parts:
 
-1. **Part 1, Pre-Lab** (before the lab period): the bearing budget with a fixed heading, the across-range and depth errors for this range, a station plan, and the notebook tested on a supplied set of bearings.
+1. **Part 1, Pre-Lab** (before the lab period): the bearing budget with a fixed heading, the cross-range and depth errors for this range, a station plan, and the notebook tested on a supplied set of bearings.
 2. **Part 2, Measurements** (your team): the reference shot and the bearings and levels from every station, in class; the call, at the bench or after class, before the reveal.
 3. **Part 3, Writeup** (after the reveal): the fix against the live box, the error of each bearing, and what the baseline and the depth did to the fix.
 
