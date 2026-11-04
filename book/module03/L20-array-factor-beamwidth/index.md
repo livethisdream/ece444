@@ -373,8 +373,8 @@ The last $45^\circ$ of scan volume is what added the eight extra channels. Wheth
 | Elements | $Nd/\lambda$ | HPBW | FNBW | Sidelobe |
 | :-- | :-- | :-- | :-- | :-- |
 | 8 (worked) | 3.85 | $13.3^\circ$ | $30.1^\circ$ | $-12.8$ dB |
-| Center 4 | 1.92 | Part 1 | Part 1 | Part 1 |
-| Center 2 | 0.96 | Part 1 | Part 1 | Part 1 |
+| Center 4 | Part 1 | Part 1 | Part 1 | Part 1 |
+| Center 2 | Part 1 | Part 1 | Part 1 | Part 1 |
 :::
 
 The L20 Lab sweeps the PHASER with all eight elements on, then with the center four, then with the center pair, and measures the beamwidth each time. Predict first, measure second, reconcile third. The eight-element row is this lesson's worked example at $10.3\ \text{GHz}$, with the HPBW solved exactly from the array factor; the $0.886$ rule gives $13.2^\circ$. The other two rows are yours: Part 1 of the L20 Lab packet asks for them at your kit's **Find HB100** frequency, with the methods of this lesson. Three details are worth knowing before you start.
