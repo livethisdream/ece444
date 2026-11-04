@@ -1239,10 +1239,29 @@ it when a rounded number differs from ADI's (L26: 715 Hz vs ADI's 716).
 | :-- | :-- | :-- |
 | carrier $f_c$ | 10.0 GHz | $\lambda$ = 3.0 cm |
 | chirp bandwidth $B$ | 500 MHz | $\Delta R = c/2B$ = 0.30 m |
-| range chirp (L28 Lab), $T_s$ | 0.5 ms at 0.6 MSPS (ADI's `FMCW_RADAR_Waterfall.py` rate) | 6.67 kHz of beat per meter; 300 samples a chirp, 2 kHz bins, 30 m reach; 250 MHz or 1 ms halves the beat and doubles the reach. An L28 capture's `PRI` is the waterfall line time (50 ms in the recorded data), not the chirp length |
-| range-Doppler burst (L29–L31) | 256 chirps of 300 µs, PRI 0.5 ms, 4 MSPS | 11.1 kHz per meter; CPI 128 ms; $\Delta v = \lambda/(2M\,T_\text{PRI})$ = 0.12 m/s; $v_\text{max} = \pm\lambda/(4T_\text{PRI})$ = ±15 m/s |
+| range chirp (L28 Lab) | **superseded 2026-11-04: see M8.1** | |
+| range-Doppler burst (L29–L31) | **superseded 2026-11-04: see M8.1** | |
 | 0 m frequency | about 100 kHz, set per kit by the L28 calibration | ADI's `signal_freq`; never called an IF on a page |
 | corner reflector | edge $a$ = 10 cm (provisional) | $\sigma = 4\pi a^4/3\lambda^2$ = 0.47 m² |
+
+### M8.1 The Phaser app's FMCW presets are the lab numbers (Neil, 2026-11-04)
+
+Neil: change the predictions, not the presets ("that feels like playing
+with fire"). The L28–L31 Labs use the Phaser app's presets exactly as they
+ship (`livethisdream/phaser` main, `frontend-radar/src/sim/constants.generated.js`
+`FMCW_PRESETS`, mirrored from `phaser_radar_dsp.py`). Recorded data,
+notebook checks, page numbers and packet keys follow them. L25–L27 keep the
+10 GHz teaching numbers above, stated as round values.
+
+| App preset (UI name) | Lab | Carrier | B | Chirp | fs | Chirps | Derived |
+| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
+| `range` (Range (Basic)) | L28 | 12.145 GHz | 500 MHz | 1 ms | 0.6 MSPS | 1 | 3.33 kHz of beat per meter; 0.30 m cells; reach about 60 m for a 100 kHz 0 m frequency |
+| `range_doppler` (Range + Velocity) | L29, L31 | 9.9 GHz | 500 MHz | 300 µs, PRI 0.5 ms | 2 MSPS | 256 | 11.1 kHz/m; CPI 128 ms; $\Delta v$ = 0.118 m/s; $v_\text{max}$ = ±15.2 m/s; λ = 3.03 cm |
+| `cfar` (Range (CFAR)) | L30, the app's CFAR overlay | 10 GHz | 500 MHz | 0.5 ms | 2 MSPS | 1 | 6.67 kHz/m; the overlay is on the range profile (1-D) |
+
+L30's 2-D CFAR on range-Doppler maps runs in the notebook on `range_doppler`
+bursts. If a preset changes in the app, these rows, the recorded data and
+the keys change with it, and the Phaser thread says so.
 
 The lab has one or two commercial corner reflectors, so no lab step may need
 one per kit. **Open, Neil:** the L25 link-budget inputs (transmit power, the
