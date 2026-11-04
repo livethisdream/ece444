@@ -5,12 +5,13 @@
                         time, with the delay and the beat marked (not to scale)
   - L28-range-profile : one chirp's range FFT from the recorded 2 m corner
                         capture: the 0 m leakage, the corner, the far wall
-  - L28-windows       : a strong and a weak target 0.9 m apart, rectangular
+  - L28-windows       : a strong target and one 30 dB weaker, 2.0 m apart, rectangular
                         against Hann window
   - L28-waterfall     : range profiles of the recorded walker, stacked in time
 
 The data figures run on the recorded-data fallback, scripts/radar/fmcw_sim.py,
-so the page shows what a cadet's own code will draw from those files. The
+so the page shows what the notebook draws from those files: the app's
+Range (Basic) preset, 500 MHz in 1 ms at 0.6 MSPS. The
 figures carry no equations (house rule).
 
     python3 scripts/graphics/m4_l28_fmcw.py
@@ -131,25 +132,26 @@ def range_profile() -> None:
     ax.set_xlabel("range (m)")
     ax.set_ylabel("power (dBFS)")
     tidy(ax)
-    top = ax.secondary_xaxis("top", functions=(lambda x: x * 6.667, lambda f: f / 6.667))
+    kpm = 2 * cap["B"] / (C * cap["T_ramp"]) / 1e3            # kHz of beat per meter
+    top = ax.secondary_xaxis("top", functions=(lambda x: x * kpm, lambda f: f / kpm))
     top.set_xlabel("beat above the 0 m frequency (kHz)", color=GRAY, fontsize=12)
     top.tick_params(colors=GRAY)
     finalize(fig, "L28-range-profile")
 
 
 def windows() -> None:
-    cap = sim.new_capture("l28_range", n_chirps=1)
+    cap = sim.l28_capture(n_chirps=1)
     sim.add_point(cap, 2.0, level_dbfs=-10.0)
-    sim.add_point(cap, 2.9, level_dbfs=-50.0, phase0=1.0)
+    sim.add_point(cap, 4.0, level_dbfs=-40.0, phase0=1.0)
     sim.add_noise(cap, level_dbfs=-75.0, seed=3)
     fig, ax = plt.subplots(figsize=(6.6, 3.0))
     for win, color, lab, ls in ((None, ORANGE, "rectangular", "-"), ("hann", NAVY, "Hann", "-")):
         r, p = profile_db(sim.iq(cap)[0], cap, win)
-        keep = (r >= 0.5) & (r <= 4.0)
+        keep = (r >= 0.5) & (r <= 5.0)
         ax.plot(r[keep], p[keep], color=color, lw=1.4, ls=ls, label=lab)
-    ax.annotate("weak target, 2.9 m", (2.9, -51), xytext=(3.05, -32), fontsize=12, color=INK,
+    ax.annotate("weak target, 4.0 m", (4.0, -40), xytext=(3.75, -18), fontsize=12, color=INK,
                 arrowprops=dict(arrowstyle="-", color=INK, lw=0.8))
-    ax.set_xlim(0.5, 4.0)
+    ax.set_xlim(0.5, 5.0)
     ax.set_ylim(-100, 0)
     ax.set_xlabel("range (m)")
     ax.set_ylabel("power (dBFS)")

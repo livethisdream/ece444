@@ -7,13 +7,18 @@ scripts/radar/fmcw_sim.py (re-run it to regenerate). Each .npz holds:
   fs, fc, B, T_ramp, PRI, f0   (Hz, Hz, Hz, s, s, Hz)
   note    what the capture holds
 
-L28 (500 MHz, 0.5 ms, 0.6 MSPS, PRI 50 ms, f0 101.4 kHz):
-  L28_cal_0m.npz            plate against the array, for the 0 m calibration
-  L28_corner_{1,2,3}m.npz   10 cm corner reflector at 1, 2, 3 m
-  L28_corner_2m_B250.npz    the 2 m corner at B = 250 MHz
-  L28_corner_2m_T1ms.npz    the 2 m corner at T_ramp = 1 ms
+L28, the Phaser app's Range (Basic) preset (12.145 GHz, 500 MHz, 1 ms, 0.6 MSPS):
+32 chirps of 540 samples, the part of each chirp the app keeps, one every 50 ms;
+iq only. The simulated kit's 0 m frequency is 101.4 kHz; the tape readings carry
+a bench's few-centimeter errors.
+  L28_clear.npz             the bench clear: the leakage and the far wall; f0 field = 100 kHz, the IF tone
+  L28_cal_0m.npz            plate against the array, for the 0 m calibration; f0 field = 100 kHz
+  L28_corner_{1,2,3}m.npz   10 cm corner reflector at 1, 2, 3 m by the tape; f0 field = 101.4 kHz
+  L28_corner_2m_fast.npz    the 2 m corner at the app's Range (Fast) preset: 10 GHz, 500 MHz in
+                            0.5 ms, 5 MSPS, 2250 samples a chirp
+  L28_corner_2m_B250.npz    the 2 m corner at B = 250 MHz, otherwise Range (Basic)
   L28_two_corners.npz       corners at 2.0 and 2.2 m, closer than one resolution cell
-  L28_walker.npz            a person walking 1 m -> 4 m -> 1 m at 1 m/s, 10 s
+  L28_walker.npz            a person walking 1 m -> 4 m -> 1 m at 1 m/s, 200 chirps, 10 s
 
 L29 (256 chirps of 300 us, PRI 0.5 ms, 4 MSPS, 500 MHz, f0 101.4 kHz; iq only,
 no iq_ch, 2.5 MB each; a wall at 2.5 m in every burst):
