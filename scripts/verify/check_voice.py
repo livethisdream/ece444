@@ -30,6 +30,11 @@ WARN (read each one; a regex cannot decide them):
     check_voice.py                         the whole book, a report
     check_voice.py -q ...                  FAIL lines only (CI)
 
+A course can demote a rule to WARN in scripts/verify/voice_rules.json,
+{"warn_only": ["third-person"], "why": "..."}: ECE 343 is co-taught, so
+"your instructor" there names either of two people, not Neil in the third
+person. The file is optional; with none, every FAIL rule fails.
+
 Exit 1 if any FAIL. The whole book was brought to 0 FAIL when this landed
 (2026-11-04), so CI runs it over every page; --added-since is there for a
 branch that wants to see only its own lines.
@@ -38,6 +43,7 @@ branch that wants to see only its own lines.
 from __future__ import annotations
 
 import glob
+import json
 import re
 import subprocess
 import sys
@@ -59,6 +65,8 @@ WARN = {
     "passive": re.compile(r"\b(is|are|was|were|be|been) +\w+(ed|en)\b"),
     "money": re.compile(r"\b(buy|buys|bought|pay|pays|price|costs?|spend|cheap|free lunch|for free)\b", re.I),
 }
+_CFG = Path(__file__).with_name("voice_rules.json")
+WARN_ONLY = set(json.loads(_CFG.read_text())["warn_only"]) if _CFG.is_file() else set()
 INLINE_MATH = re.compile(r"(?<![\\$])\$(?!\$)(.+?)(?<!\\)\$")
 
 
@@ -78,7 +86,7 @@ def line_hits(path: str, n: int, line: str, lo_lines: set[int]):
         for m in rx.finditer(line):
             if name == "british" and is_filename(m.group(0)):
                 continue
-            yield "FAIL", name, m.group(0)
+            yield ("WARN" if name in WARN_ONLY else "FAIL"), name, m.group(0)
             break
     if md and n in lo_lines and "$" in line:
         yield "FAIL", "lo-math", line.strip()[:40]
@@ -105,14 +113,14 @@ def lo_block_lines(text: str) -> set[int]:
 def targets(args: list[str]) -> list[str]:
     if not args:
         md = [p for p in glob.glob(str(ROOT / "book/**/*.md"), recursive=True) if "/_build/" not in p]
-        return sorted(md) + sorted(glob.glob(str(ROOT / "latex/ECE444_Practice_L*.tex")))
+        return sorted(md) + sorted(glob.glob(str(ROOT / "latex/ECE*_Practice_L*.tex")))
     out = []
     for a in args:
         m = re.fullmatch(r"L(\d+)", a)
         if m:
             nn = int(m.group(1))
             out += glob.glob(str(ROOT / f"book/module*/L{nn:02d}-*/index.md"))
-            out += glob.glob(str(ROOT / f"latex/ECE444_Practice_L{nn:02d}.tex"))
+            out += glob.glob(str(ROOT / f"latex/ECE*_Practice_L{nn:02d}.tex"))
         else:
             out.append(str((ROOT / a) if not Path(a).is_absolute() else Path(a)))
     return sorted(set(out))
@@ -120,7 +128,7 @@ def targets(args: list[str]) -> list[str]:
 
 def added_lines(ref: str) -> dict[str, set[int]]:
     diff = subprocess.run(["git", "-C", str(ROOT), "diff", "-U0", "--no-color", f"{ref}...HEAD", "--",
-                           "book/*.md", "book/**/*.md", "latex/ECE444_Practice_L*.tex"],
+                           "book/*.md", "book/**/*.md", "latex/ECE*_Practice_L*.tex"],
                           capture_output=True, text=True, check=True).stdout
     out: dict[str, set[int]] = {}
     cur = None
