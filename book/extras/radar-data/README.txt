@@ -20,16 +20,21 @@ a bench's few-centimeter errors.
   L28_two_corners.npz       corners at 2.0 and 2.2 m, closer than one resolution cell
   L28_walker.npz            a person walking 1 m -> 4 m -> 1 m at 1 m/s, 200 chirps, 10 s
 
-L29 (256 chirps of 300 us, PRI 0.5 ms, 4 MSPS, 500 MHz, f0 101.4 kHz; iq only,
-no iq_ch, 2.5 MB each; a wall at 2.5 m in every burst):
+L29 (the Phaser app's range_doppler preset, "Range + Velocity": 9.9 GHz, 256 chirps of 300 us,
+PRI 0.5 ms, 2 MSPS, 500 MHz, f0 101.4 kHz; iq only, no iq_ch, 1.2 MB each; a wall at 2.5 m in every
+burst), written by scripts/radar/make_l29_data.py (fmcw_sim's l29_sets):
   L29_static.npz              the leakage and the wall, nothing moving
   L29_hand_closing.npz        a hand from 1.0 m toward the kit at 1.0 m/s
   L29_hand_opening.npz        a hand from 0.7 m away from the kit at 1.5 m/s
   L29_hand_closing_B200.npz   the closing hand at B = 200 MHz (0.75 m range cells)
+  L29_hand_still.npz          a hand held still at 0.8 m, with a 2 mm tremor
+  L29_hand_across.npz         a hand moved side to side across the beam at 0.8 m, 0.20 m either way at 1 Hz
   L29_spinner.npz             a fidget spinner edge-on at 0.5 m: three arms on a
                               3 cm radius at 15 rev/s (tip speed 2.83 m/s)
+  L29_spinner_faceon.npz      the same spinner turned face-on, held 10 deg off, so 0.17 of its swing
+                              reaches the line of sight
 The simulated chirps are timed perfectly, so a pulse canceller removes the wall
-completely; no kit does.
+completely; no kit does. Load Recording in the Phaser app plays any of these as if live.
 L30, written by scripts/radar/make_l30_data.py on two of the Phaser app's presets; iq only, no iq_ch:
   Range (CFAR), 0.5 ms chirps of 500 MHz at 10 GHz, 2 MSPS, f0 101.4 kHz, one chirp a display update,
   as the app's Save Capture writes it (the app's CFAR overlay runs on this range profile):
