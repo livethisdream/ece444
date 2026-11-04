@@ -1001,7 +1001,7 @@ practice set it holds. Bring the tested notebook to the lab on your laptop. It n
 ::::{frame} Looking Ahead
 :::{present}
 - In the L19 Lab, one kit takes a bearing from each station on a taped firing line.
-- Bring your tested notebook from the Pre-Lab.
+- Do the <a href="../../labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">Pre-Lab</a> and bring the <a href="../../notebooks/L19_foxhunt.ipynb" download>fox-hunt notebook</a>, tested.
 - L20 returns to shaping and steering the beam.
 :::
 

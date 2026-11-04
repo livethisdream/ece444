@@ -94,9 +94,9 @@ single firing line measures worst.
 
 ::::{frame} Pre-Lab
 :::{present}
-- Bring your fox-hunt notebook, tested, on your laptop.
+- Bring the <a href="../../notebooks/L19_foxhunt.ipynb" download>fox-hunt notebook</a>, tested, on your laptop.
 - It finds where the bearings cross, flags a bad one, and ranks the boxes.
-- Part 1 of the packet, at the end of Lesson 19, walks you through it.
+- <a href="../../labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">Part 1 of the packet</a> walks you through it.
 :::
 
 The Pre-Lab is Part 1 of the packet, done before the lab period and listed at
@@ -331,11 +331,11 @@ The L19 Lab packet is one submission per team for the whole lab, turned in compl
 
 ::::{frame} Looking Ahead
 :::{present}
-- Keep your notebook, with your bearings and levels in it: the Part 3 writeup reuses all three.
+- Use your recorded data in the notebook to solve for the fox's location.
 - L20 returns to shaping and steering the beam.
 :::
 
-Part 3 is the writeup, done as a team after the lab: how far your fix landed
+Part 3 is the writeup, done as a team after the reveal: how far your fix landed
 from the live box, the error of each bearing, and what the baseline and the
 depth did to the fix.
 
