@@ -292,7 +292,7 @@ $$G_\text{total} = G_\text{element} + D_\text{array}$$
 
 :::{admonition} Worked example — directivity of the course array
 :class: tip
-$D$ ≈ 2(8)(0.481) = 7.7, or $10\log_{10}(7.7)$ = 8.9 dB. Turning off four elements to leave the center four gives $D$ ≈ 3.85 = 5.9 dB, exactly $3$ dB less, and doubles the beamwidth from $13.2^\circ$ to $26.4^\circ$ by the formula ($27.4^\circ$ solved exactly).
+$D$ ≈ 2(8)(0.481) = 7.7, or $10\log_{10}(7.7)$ = 8.9 dB. Turning off four elements to leave the center four gives $D$ ≈ 3.85 = 5.9 dB, exactly $3$ dB less, and doubles the beamwidth.
 
 That $3$ dB is the drop in directivity, and the L20 Lab measures a different quantity, the received peak. On receive, the array adds the element voltages in phase, so the peak voltage is proportional to $N$ and the peak power to $N^2$. Halving the active elements therefore drops the ideal received peak by $6$ dB: $3$ dB because half the elements collect half the power, and $3$ dB because the beam's directivity halves. The dry-run kit read $5.1$ and $4.8$ dB per halving, so expect about $5 \pm 1$ dB on your own kit. The cause of the shortfall is still open, and it does not touch the beamwidths, which the lab grades.
 
@@ -372,32 +372,26 @@ The last $45^\circ$ of scan volume is what added the eight extra channels. Wheth
 :::{present}
 | Elements | $Nd/\lambda$ | HPBW | FNBW | Sidelobe |
 | :-- | :-- | :-- | :-- | :-- |
-| 8 | 3.85 | $13.3^\circ$ | $30.1^\circ$ | $-13$ dB |
-| Center 4 | 1.92 | $27.4^\circ$ | $63^\circ$ | $-11$ dB |
-| Center 2 | 0.96 | $63^\circ$ | $180^\circ$ | none |
+| 8 (worked) | 3.85 | $13.3^\circ$ | $30.1^\circ$ | $-12.8$ dB |
+| Center 4 | Part 1 | Part 1 | Part 1 | Part 1 |
+| Center 2 | Part 1 | Part 1 | Part 1 | Part 1 |
 :::
 
-| Configuration | Aperture $Nd$ | HPBW | FNBW | First sidelobe |
-| :-- | :-- | :-- | :-- | :-- |
-| 8 elements | 112 mm = 3.85 $\lambda$ | $13.3^\circ$ | $30.1^\circ$ | $-13$ dB |
-| Center 4 | 56 mm = 1.92 $\lambda$ | $27.4^\circ$ | $63^\circ$ | $-11$ dB |
-| Center 2 | 28 mm = 0.96 $\lambda$ | $63^\circ$ | $180^\circ$ by convention | none |
-
-The HPBW column is the half-power width of the array factor solved exactly, the same values the L20 Lab uses. The $0.886$ rule gives $13.2^\circ$, $26.4^\circ$, and $52.8^\circ$, and it falls further short as the array gets smaller. All values are at $10.3\ \text{GHz}$; recompute them at your kit's **Find HB100** frequency.
-
-The L20 Lab sweeps the PHASER with all eight elements on, then with the center four, then with the center pair, and measures the beamwidth each time. Predict first, measure second, reconcile third. Every number in the table comes from this lesson, and three details in it are worth stating before the lab rather than after.
+The L20 Lab sweeps the PHASER with all eight elements on, then with the center four, then with the center pair, and measures the beamwidth each time. Predict first, measure second, reconcile third. The eight-element row is this lesson's worked example at $10.3\ \text{GHz}$, with the HPBW solved exactly from the array factor; the $0.886$ rule gives $13.2^\circ$. The other two rows are yours: Part 1 of the L20 Lab packet asks for them at your kit's **Find HB100** frequency, with the methods of this lesson. Three details are worth knowing before you start.
 ::::
 
 ::::{frame} Three Details in the Prediction Table
 :::{present}
-- Two elements: no null or sidelobe ($\lambda/Nd$ > 1); HPBW $63^\circ$, not the formula's $53^\circ$.
-- The first sidelobe is $-12.8$ dB at 8 elements and $-11.3$ dB at 4.
+- The $0.886$ rule assumes a narrow beam; check that before using it at $N = 2$.
+- Check whether each first null lands at a real angle.
 - Samples sit one $2.8125^\circ$ phase step apart: about $0.9^\circ$ near broadside.
 :::
 
-The two-element row has no null and no sidelobe. With $Nd$ under a wavelength, $\lambda/Nd$ exceeds $1$ and the first null falls outside the visible region, so the pattern is a single broad hump and we quote the first-null beamwidth as $180^\circ$ by convention. Its half-power width is $62.6^\circ$, not the $52.8^\circ$ the small-angle formula returns, because a beam that wide breaks the approximation used to derive it.
+The $0.886$ rule carries a small-angle step, and the wider the beam, the worse that step gets. Before you use it for a small aperture, decide whether the beam is narrow enough; where it is not, solve the array factor's half-power point directly. For two elements the array factor is just $\cos(\psi/2)$, which you can solve by hand.
 
-The first sidelobe drifts with element count. The $-13$ dB figure is the large-array limit; eight elements give $-12.8$ dB and four give about $-11$ dB. All three are far above the sweep's noise floor, which sits roughly $23$ dB below the uniform-taper peak.
+The null formula $\sin\theta = m\lambda/Nd$ only gives a null where the right-hand side is at most 1. Check that for each aperture before you write a first-null beamwidth down, and decide what that means for the sidelobes too.
+
+The first sidelobe drifts with element count. The $-13$ dB figure is the large-array limit; eight elements give $-12.8$ dB, and smaller arrays land higher. The sweep's noise floor sits roughly $23$ dB below the uniform-taper peak.
 
 The sweep is a discrete grid. With Use Bits on, as in every lab preset, the GUI steps the element-to-element phase one phase-shifter LSB, $2.8125^\circ$, per point. One step moves $\sin\theta$ by 2.8125°/173.2° = 0.0162, which is $0.93^\circ$ of angle at broadside and $1.07^\circ$ at $30^\circ$, widening as $1/\cos\theta$. A half-power width read as the span between the outermost samples above $-3$ dB comes out short by up to one step: $12.1^\circ$ to $13.1^\circ$ for the full array, against $13.3^\circ$ from the pattern. Interpolating between the two samples that straddle each $-3$ dB crossing recovers the width to within $0.1^\circ$. The nulls are read at their lowest sample, which puts the measured FNBW between $30.1^\circ$ and $31.1^\circ$. That spread comes from the sampling grid, not from the array.
 ::::
@@ -441,11 +435,11 @@ The sweep is a discrete grid. With Use Bits on, as in every lab preset, the GUI 
 
 ::::{frame} Looking Ahead
 :::{present}
-- The L20 Lab: sweep 8, 4, and 2 elements against the prediction table; bring the calculated column filled in.
+- The L20 Lab: sweep 8, 4, and 2 elements, then E1 and E8; bring Part 1 of the packet filled in.
 - L21: real patches have their own pattern, and the array pattern is element pattern times array factor.
 :::
 
 Lesson 21 addresses what the array factor leaves out. Every result in this lesson treats the elements as isotropic points, which is why the directivity came out independent of scan angle and why the pattern in the widget is the same at $60^\circ$ as at boresight. Real patches have their own pattern, it rolls off toward the edges of the scan volume, and the full array pattern is the product of the two. That product is where the array's measured gain, its usable scan range, and its cross-polarization all come from.
 
-The L20 Lab puts the prediction table above in front of the hardware. You will load the Array Factor preset, sweep the full array, then drop to four elements and two, and compare measured beamwidths against the numbers you calculated today. Bring the calculated column filled in; a measurement you cannot predict within a couple of degrees is a measurement you cannot use to find a fault later. Read the prediction table and the L20 Lab procedure before you go to the bench.
+The L20 Lab puts your predictions in front of the hardware. You will load the Array Factor preset, sweep the full array, then drop to four elements and two, then leave only the two end elements on, and compare measured beamwidths against the numbers you calculated in Part 1 of the packet. Bring Part 1 filled in; a measurement you cannot predict within a couple of degrees is a measurement you cannot use to find a fault later. Read the L20 Lab procedure before you go to the bench.
 ::::
