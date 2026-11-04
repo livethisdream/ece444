@@ -88,20 +88,31 @@ def hpbw_exact(th0_deg: float) -> float:
     return deg[b] - deg[a]
 
 
+def gap_arrow(ax, a, b, text):
+    """A labeled double arrow between two nulls, low in the plot where the lobes are narrow."""
+    ax.annotate("", xy=(b, -37), xytext=(a, -37),
+                arrowprops=dict(arrowstyle="<->", color=GREEN, lw=1.2, shrinkA=0, shrinkB=0))
+    if not text:
+        return
+    ax.text((a + b) / 2, -35.5, text, ha="center", va="bottom", color=GREEN,
+            fontsize=11,
+            bbox=dict(boxstyle="round,pad=0.1", fc="white", ec="none", alpha=0.9))
+
+
 def null_comb() -> None:
     nulls_s = SPACING * np.arange(1, 5)                   # 0.260 ... 1.040
     vis = nulls_s[nulls_s <= 1]
     nulls_deg = np.rad2deg(np.arcsin(vis))
     assert np.allclose(np.round(nulls_deg, 1), [15.1, 31.3, 51.2]), nulls_deg
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6.6, 4.1),
-                                   gridspec_kw=dict(hspace=0.45))
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(5.4, 3.05),
+                                   gridspec_kw=dict(hspace=0.55))
     s = np.linspace(-1.3, 1.3, 20001)
     ax1.axvspan(-1.3, -1, color=SHADE, lw=0)
     ax1.axvspan(1, 1.3, color=SHADE, lw=0)
     ax1.plot(s, af_db(s), color=NAVY, lw=1.6)
     ax1.set_xlim(-1.3, 1.3)
-    ax1.set_ylim(-40, 3)
+    ax1.set_ylim(-40, 12)
     ax1.set_yticks([-40, -20, 0])
     ax1.set_xticks([-1, -0.5, 0, 0.5, 1])
     ax1.set_xlabel("sine of the angle from broadside")
@@ -113,21 +124,20 @@ def null_comb() -> None:
             ax1.plot([sgn * x] * 2, [-40, -33], color=RED if x <= 1 else GRAY, lw=1.4)
     ax1.text(1.15, -9, "no real\nangle", ha="center", va="center", color=GRAY, fontsize=10.5)
     ax1.text(-1.15, -9, "no real\nangle", ha="center", va="center", color=GRAY, fontsize=10.5)
-    ax1.annotate("", xy=(2 * SPACING, -37), xytext=(SPACING, -37),
-                 arrowprops=dict(arrowstyle="<->", color=GREEN, lw=1.2))
-    ax1.text(1.5 * SPACING, -35.5, f"{SPACING:.3f}", ha="center", va="bottom",
-             color=GREEN, fontsize=11, fontweight="bold",
+    # The point of the figure: the gaps. Equal in sine (top), growing in angle (bottom).
+    edges_s = np.concatenate([[0.0], vis])
+    for a, b in zip(edges_s[:-1], edges_s[1:]):
+        gap_arrow(ax1, a, b, "")
+    ax1.text(edges_s[2], -32, f"{SPACING:.3f} apart", ha="center", va="bottom", color=GREEN,
+             fontsize=12, fontweight="bold",
              bbox=dict(boxstyle="round,pad=0.1", fc="white", ec="none", alpha=0.9))
-    ax1.annotate("", xy=(3 * SPACING, -37), xytext=(2 * SPACING, -37),
-                 arrowprops=dict(arrowstyle="<->", color=GREEN, lw=1.2))
-    ax1.text(2.5 * SPACING, -35.5, f"{SPACING:.3f}", ha="center", va="bottom",
-             color=GREEN, fontsize=11, fontweight="bold",
-             bbox=dict(boxstyle="round,pad=0.1", fc="white", ec="none", alpha=0.9))
+    ax1.text(-1.27, 6, "equal steps in sine", ha="left", va="bottom", color=GREEN,
+             fontsize=12.5, fontweight="bold")
 
     deg = np.linspace(-90, 90, 20001)
     ax2.plot(deg, af_db(np.sin(np.deg2rad(deg))), color=NAVY, lw=1.6)
     ax2.set_xlim(-90, 90)
-    ax2.set_ylim(-40, 3)
+    ax2.set_ylim(-40, 12)
     ax2.set_yticks([-40, -20, 0])
     ax2.set_xticks([-90, -60, -30, 0, 30, 60, 90])
     ax2.set_xlabel("angle from broadside (deg)")
@@ -136,12 +146,14 @@ def null_comb() -> None:
         for sgn in (-1, 1):
             ax2.plot([sgn * th] * 2, [-40, -33], color=RED, lw=1.4)
             con = ConnectionPatch(xyA=(sgn * x, -40), coordsA=ax1.transData,
-                                  xyB=(sgn * th, 3), coordsB=ax2.transData,
+                                  xyB=(sgn * th, 12), coordsB=ax2.transData,
                                   color=RED, lw=0.9, ls=(0, (3, 3)), alpha=0.7)
             fig.add_artist(con)
-        ax2.text(th, -31, f"{th:.1f}°", ha="center", va="bottom", color=RED,
-                 fontsize=10.5, fontweight="bold",
-                 bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.85))
+    edges_d = np.concatenate([[0.0], nulls_deg])
+    for a, b in zip(edges_d[:-1], edges_d[1:]):
+        gap_arrow(ax2, a, b, f"{b - a:.1f}°")
+    ax2.text(-88, 6, "growing steps in angle", ha="left", va="bottom", color=GREEN,
+             fontsize=12.5, fontweight="bold")
     ax1.spines[["bottom", "right"]].set_visible(False)
     ax2.spines[["top", "right"]].set_visible(False)
     finalize(fig, "L20-null-comb")
@@ -187,6 +199,54 @@ def steering_cone() -> None:
     finalize(fig, "L20-steering-cone")
 
 
+def half_power_edges(th0_deg: float):
+    """The exact half-power angles of the course array steered to th0, in degrees."""
+    deg = np.linspace(-90, 90, 360001)
+    db = af_db(np.sin(np.deg2rad(deg)), np.sin(np.deg2rad(th0_deg)), floor=-200)
+    i0 = np.argmin(np.abs(deg - th0_deg))
+    a = i0
+    while db[a] >= -3.0103:
+        a -= 1
+    b = i0
+    while db[b] >= -3.0103:
+        b += 1
+    return deg[a], deg[b]
+
+
+def sine_slope() -> None:
+    """Why the beam widens by 1/cos(theta0): the same band of sin(theta) covers more angle
+    where sin(theta) is flatter. The band is the course array's exact half-power width."""
+    fig, ax = plt.subplots(figsize=(4.9, 3.1))
+    th = np.linspace(-90, 90, 721)
+    ax.plot(th, np.sin(np.deg2rad(th)), color=NAVY, lw=1.8)
+    for th0, color in ((0.0, BLUE), (60.0, ORANGE)):
+        lo, hi = half_power_edges(th0)
+        slo, shi = np.sin(np.deg2rad(lo)), np.sin(np.deg2rad(hi))
+        ax.axhspan(slo, shi, xmin=0, xmax=(hi + 90) / 180, color=color, alpha=0.18, lw=0)
+        ax.axvspan(lo, hi, ymin=0, ymax=(shi + 1.1) / 2.2, color=color, alpha=0.30, lw=0)
+        ax.plot([lo, lo], [-1.1, slo], color=color, lw=1.0)
+        ax.plot([hi, hi], [-1.1, shi], color=color, lw=1.0)
+        # tangent at theta0: slope cos(theta0) per radian
+        k = np.cos(np.deg2rad(th0)) * np.pi / 180
+        x = np.linspace(th0 - 22, th0 + 22, 2)
+        ax.plot(x, np.sin(np.deg2rad(th0)) + k * (x - th0), color=INK, lw=1.0, ls=(0, (4, 3)))
+        ax.text((lo + hi) / 2, -1.04, f"{hi - lo:.1f}°", ha="center", va="bottom",
+                color=INK, fontsize=13, fontweight="bold",
+                bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.9))
+    ax.text(-86, 0.16, "both bands: same width in sine", ha="left", va="bottom", color=BLUE, fontsize=12.5)
+    ax.text(14, -0.05, "slope cos 0° = 1", ha="left", va="top", color=INK, fontsize=12)
+    ax.text(33, 0.98, "slope cos 60° = 0.5", ha="right", va="bottom", color=INK, fontsize=12)
+    ax.set_xlim(-90, 90)
+    ax.set_ylim(-1.1, 1.1)
+    ax.set_xticks([-90, -60, -30, 0, 30, 60, 90])
+    ax.set_yticks([-1, -0.5, 0, 0.5, 1])
+    ax.set_xlabel("angle from broadside (deg)")
+    ax.set_ylabel("sine of the angle")
+    ax.spines[["top", "right"]].set_visible(False)
+    finalize(fig, "L20-sine-slope")
+
+
 if __name__ == "__main__":
     null_comb()
     steering_cone()
+    sine_slope()
