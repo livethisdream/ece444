@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fox hunt simulator</title>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:8px; padding:12px; align-items:start; }
+  .side { display:flex; flex-direction:column; gap:7px; min-width:0; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff;
+           border:1px solid var(--edge); border-radius:6px; touch-action:manipulation; cursor:pointer; }
+  .controls { display:flex; flex-direction:column; gap:6px; padding:7px 9px;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .row { display:flex; flex-wrap:wrap; align-items:center; gap:5px 8px; min-width:0; }
+  .lab { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  input[type=number], select { font:inherit; font-size:12px; color:var(--navy); border:1px solid var(--edge2); border-radius:5px; background:#fff; padding:2px 4px; }
+  input[type=number] { width:58px; }
+  .btns { display:flex; gap:6px; }
+  .btns button { flex:1 1 0; }
+  button { font:inherit; font-size:12px; font-weight:600; padding:4px 7px; border-radius:5px;
+           border:1px solid var(--edge2); background:#fff; color:var(--navy); cursor:pointer; white-space:nowrap; }
+  button:hover { background:var(--bg); }
+  button.primary { background:var(--navy); color:#fff; border-color:var(--navy); }
+  button.primary:hover { background:var(--mid); }
+  .ro { display:flex; flex-direction:column; gap:2px; padding:5px 8px 6px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink3); }
+  .ro .v { font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--navy); line-height:17px; overflow-wrap:anywhere; }
+  .ro .v .dim { color:var(--ink3); font-weight:500; }
+  .ro .v .bad { color:var(--red); }
+  table { border-collapse:collapse; width:100%; font-size:12px; font-variant-numeric:tabular-nums; }
+  th { font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink3); text-align:right; padding:1px 4px; }
+  td { text-align:right; padding:1px 4px; color:var(--navy); border-top:1px solid var(--edge); }
+  th:first-child, td:first-child { text-align:left; }
+  td.none { color:var(--ink3); }
+  textarea { box-sizing:border-box; width:100%; height:120px; font:11px/1.35 ui-monospace,Menlo,Consolas,monospace;
+             color:var(--ink); border:1px solid var(--edge2); border-radius:5px; padding:4px; resize:none; }
+  .note { font-size:11px; color:var(--ink3); line-height:15px; }
+  .hidden { display:none; }
+  /* Below 620px the panel goes under the map, and the map's design box
+     shortens (fit() sets the height, and the world scale follows it). */
+  @media (max-width:619px) {
+    .app { grid-template-columns:1fr; padding:8px; gap:6px; }
+    textarea { height:96px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="map" aria-label="Top view of the fox-hunt range: the taped firing line with five station marks, and numbered boxes downrange at their posted positions. Tap a station mark to move the kit there."></canvas>
+  <div class="side">
+    <div class="controls">
+      <div class="row">
+        <span class="lab">Hunt</span>
+        <input type="number" id="hunt" min="1" max="9999" step="1">
+        <button id="newhunt" type="button">new hunt</button>
+      </div>
+      <div class="row">
+        <span class="lab">Station</span>
+        <select id="station"></select>
+        <span class="lab">s</span>
+        <select id="sgn"><option value="0">not set</option><option value="1">+1</option><option value="-1">&minus;1</option></select>
+      </div>
+      <div class="btns">
+        <button id="ref" type="button">reference shot</button>
+        <button id="take" type="button" class="primary">take 10 readings</button>
+      </div>
+    </div>
+    <div class="ro"><span class="k" id="r-head">Angle, ten sweeps</span><span class="v" id="r-read"><span class="dim">Take the reference shot first.</span></span></div>
+    <div class="ro" id="tbl-box"><span class="k">Recorded, s applied</span>
+      <table><thead><tr><th>x (m)</th><th>s &times; mean</th><th>spread</th><th>Peak Gain</th></tr></thead><tbody id="tbl"></tbody></table>
+    </div>
+    <textarea id="out" class="hidden" readonly aria-label="Boxes and stations, ready to paste into the notebook"></textarea>
+    <div class="btns">
+      <button id="copy" type="button">copy for notebook</button>
+      <button id="reveal" type="button">reveal</button>
+    </div>
+  </div>
+</div>
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+const D2R=Math.PI/180;
+
+/* ---- the range, the L19 Lab's: a 3.0 m tape along x at y = 0 with a station
+   mark every 0.75 m, and a box field 2.0 m wide (x within FX of the middle)
+   from FY0 to FY1 downrange. Boxes are at least SEP apart, center to center. */
+const MARKS=[-1.5,-0.75,0,0.75,1.5], FX=1.0, FY0=1.0, FY1=2.0, SEP=0.75;
+// the reference shot: your own HB100 1 m downrange and 0.5 m toward +x
+const REF=[0.5,1.0];
+
+/* ---- the measurement model, sized to the lab page's simulation of the hunt
+   ("The Range"): a bearing error of about 2.5 deg, a bearing off by 7 to 10
+   deg about one station in seven, and an HB100 aimed only roughly at the
+   line. Run over 2000 hunts with the lesson's method (keep the stations
+   within 45 deg, drop one outlier, name the nearest box), it names the right
+   box about 90% of the time with a median miss of 0.15 m, and two to four
+   stations detect the fox, as the lab page says to expect.
+   Every reading is the true angle plus that station's own error, which stays
+   put for the whole hunt (how the kit sits on that mark, and the room's
+   multipath there), plus sweep-to-sweep jitter, and then lands on the beam
+   sweep's grid: steps of 2.8125 deg of phase, 0.0159 in sin(theta), the
+   lesson's "Sweep Grid". Peak Gain follows free-space spreading, the element
+   roll-off, and the fox's own pattern about its loosely aimed axis; the
+   overall level is unknown, as on the bench. */
+const BIAS=2.5, JIT=0.45, P_REFL=1/7, GRID=2.8125/176.8, GJIT=0.35;
+
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a);
+  t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function gauss(r){ let u=0; while(u===0) u=r(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r()); }
+
+let hunt=null;
+function makeHunt(n){
+  const r=mulberry32(n*7919+17);
+  let boxes=[];
+  const want = r()<0.5 ? 5 : 6;
+  for(let tries=0; tries<200 && boxes.length<want; tries++){
+    boxes=[];
+    for(let k=0;k<4000 && boxes.length<want;k++){
+      const p=[FX*(2*r()-1), FY0+(FY1-FY0)*r()];
+      if(boxes.every(q=>Math.hypot(p[0]-q[0],p[1]-q[1])>=SEP)) boxes.push(p);
+    }
+  }
+  // number the boxes left to right, so the map reads like a posted list
+  boxes.sort((a,b)=>a[0]-b[0]);
+  boxes=boxes.map(p=>[Math.round(p[0]*100)/100, Math.round(p[1]*100)/100]);
+  const live=Math.floor(r()*boxes.length);
+  const s = r()<0.5 ? 1 : -1;                 // which way round the board sits
+  const bias=MARKS.map(()=>{ let b=gauss(r)*BIAS; if(r()<P_REFL) b+=(r()<0.5?-1:1)*(7+3*r()); return b; });
+  const aim=gauss(r)*15;                       // the fox's aim error, deg
+  const level=-7+gauss(r)*2;                   // overall level, dB
+  return { n, boxes, live, s, bias, aim, level, takes:MARKS.map(()=>0), rec:MARKS.map(()=>null), refDone:false, revealed:false, last:null };
+}
+
+// one sweep's peak: the angle on the steer grid nearest the true one
+const onGrid=th=>{ const u=Math.sin(th*D2R), q=Math.round(u/GRID)*GRID; return Math.asin(Math.max(-1,Math.min(1,q)))/D2R; };
+
+function takeReadings(i, ref){
+  const h=hunt, x=MARKS[i], k=h.takes[i]++;
+  const r=mulberry32(h.n*104729 + (ref?999:i)*7907 + k*31 + 5);
+  const tgt = ref ? REF : h.boxes[h.live];
+  const dx=tgt[0]-x, dy=tgt[1], R=Math.hypot(dx,dy), th=Math.atan2(dx,dy)/D2R;
+  const b = ref ? gauss(r)*0.6 : h.bias[i];
+  const reads=[];
+  for(let j=0;j<10;j++) reads.push(h.s*onGrid(th+b+gauss(r)*JIT));
+  // level: spreading, element roll-off (cos^1.2), and the fox's pattern off
+  // its axis, which points at the middle of the tape give or take its aim
+  let lvl;
+  if(ref) lvl=-4+gauss(r)*GJIT;
+  else {
+    const axis=Math.atan2(-tgt[0],-tgt[1])/D2R + h.aim;          // fox looks back toward the tape
+    const toSta=Math.atan2(x-tgt[0],-tgt[1])/D2R, off=((toSta-axis)%360+540)%360-180;
+    lvl=h.level-20*Math.log10(R)+12*Math.log10(Math.max(Math.cos(th*D2R),1e-3))-12*(off/50)**2+gauss(r)*GJIT;
+  }
+  const none = !ref && (lvl < -22 || Math.abs(th) > 62);
+  return { i, ref, reads, gain:Math.round(lvl*10)/10, none };
+}
+
+/* ---- the panel */
+const $=id=>document.getElementById(id);
+MARKS.forEach((m,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=(m>0?'+':m<0?'−':'')+Math.abs(m).toFixed(2)+' m'; $('station').appendChild(o); });
+$('station').value='2';
+let kitAt=2;
+const fmt=(v,d)=>(v<0?'−':v>0?'+':'')+Math.abs(v).toFixed(d===undefined?1:d);
+const mean=a=>a.reduce((s,v)=>s+v,0)/a.length;
+const spread=a=>Math.max(...a)-Math.min(...a);
+const sgn=()=>+$('sgn').value;
+
+function showReadings(){
+  const L=hunt.last, el=$('r-read');
+  if(!L){ el.innerHTML='<span class="dim">Take the reference shot first.</span>'; $('r-head').textContent='Angle, ten sweeps'; return; }
+  $('r-head').textContent = L.ref ? 'Reference shot, station 0' : 'Angle, ten sweeps, station '+$('station').options[L.i].textContent;
+  if(L.none){ el.innerHTML='<span class="bad">no clear tone at this station</span>'; return; }
+  el.innerHTML = L.reads.map(v=>fmt(v)).join(' ')+'<br>'
+    + `<span class="dim">mean</span> ${fmt(mean(L.reads))}° <span class="dim">spread</span> ${spread(L.reads).toFixed(1)}°`
+    + (L.ref ? '' : ` <span class="dim">Peak Gain</span> ${fmt(L.gain)} dB`);
+}
+function showTable(){
+  const s=sgn();
+  $('tbl').innerHTML = MARKS.map((m,i)=>{
+    const R=hunt.rec[i]; if(!R) return '';
+    const x=(m>0?'+':m<0?'−':'')+Math.abs(m).toFixed(2);
+    if(R.none) return `<tr><td>${x}</td><td class="none" colspan="3">no clear tone</td></tr>`;
+    return `<tr><td>${x}</td><td>${s?fmt(s*mean(R.reads))+'°':'<span class="dim">set s</span>'}</td><td>${spread(R.reads).toFixed(1)}°</td><td>${fmt(R.gain)}</td></tr>`;
+  }).join('') || '<tr><td colspan="4" class="none">none yet</td></tr>';
+}
+function notebookText(){
+  const s=sgn();
+  const bx=hunt.boxes.map((p,k)=>`    ("${k+1}", ${p[0].toFixed(2)}, ${p[1].toFixed(2)}),`).join('\n');
+  const st=MARKS.map((m,i)=>{ const R=hunt.rec[i]; if(!R) return null;
+    if(R.none) return `    # (${m.toFixed(2)}, no clear tone),`;
+    return `    (${m.toFixed(2)}, ${(s*mean(R.reads)).toFixed(1)}, ${R.gain.toFixed(1)}),`; }).filter(Boolean).join('\n');
+  return `# Fox hunt simulator, hunt ${hunt.n}\nBOXES = [\n${bx}\n]\nSTATIONS = [\n    # x_m, s * mean angle_deg, peak_gain_db\n${st}\n]\n`;
+}
+function refresh(){ showReadings(); showTable(); if(!$('out').classList.contains('hidden')) $('out').value=notebookText(); draw(); }
+
+function startHunt(n){
+  n=Math.max(1,Math.min(9999,Math.round(n)||1));
+  $('hunt').value=n; hunt=makeHunt(n); $('sgn').value='0';
+  $('out').classList.add('hidden'); $('tbl-box').classList.remove('hidden'); $('copy').textContent='copy for notebook';
+  $('reveal').textContent='reveal';
+  refresh();
+}
+$('newhunt').onclick=()=>startHunt(1+Math.floor(Math.random()*9999));
+$('hunt').onchange=()=>startHunt(+$('hunt').value);
+$('station').onchange=()=>{ kitAt=+$('station').value; draw(); };
+$('sgn').onchange=refresh;
+$('ref').onclick=()=>{ kitAt=2; $('station').value='2'; hunt.last=takeReadings(2,true); hunt.refDone=true; refresh(); };
+$('take').onclick=()=>{ const i=+$('station').value; kitAt=i; const L=takeReadings(i,false); hunt.last=L; hunt.rec[i]=L; refresh(); };
+$('copy').onclick=()=>{
+  const out=$('out'), showing=!out.classList.contains('hidden');
+  if(showing){ out.classList.add('hidden'); $('tbl-box').classList.remove('hidden'); $('copy').textContent='copy for notebook'; return; }
+  if(!sgn()){ alert('Set s from your reference shot first: +1 if its Angle read positive, −1 if negative.'); return; }
+  out.value=notebookText(); out.classList.remove('hidden'); $('tbl-box').classList.add('hidden');
+  $('copy').textContent='back to table';
+  out.focus(); out.select();
+  try { navigator.clipboard.writeText(out.value).catch(()=>{}); } catch(e) {}
+};
+$('reveal').onclick=()=>{
+  if(hunt.revealed){ hunt.revealed=false; $('reveal').textContent='reveal'; draw(); return; }
+  if(!confirm('Submit your call first. Reveal the live box for hunt '+hunt.n+'?')) return;
+  hunt.revealed=true; $('reveal').textContent='hide'; draw();
+};
+
+/* ---- drawing */
+const map=$('map'), ctx=map.getContext('2d');
+let W=0, H=0, S=1, OX=0, OY=0;
+const X=x=>OX+x*S, Y=y=>OY-y*S;
+
+function kitGlyph(x,y,color){
+  ctx.fillStyle=color; ctx.fillRect(x-14,y-2,28,4);
+  ctx.strokeStyle=color; ctx.lineWidth=1.6; ctx.beginPath();
+  ctx.moveTo(x,y-4); ctx.lineTo(x,y-18); ctx.moveTo(x-3.5,y-13); ctx.lineTo(x,y-18); ctx.lineTo(x+3.5,y-13); ctx.stroke();
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const ink3=cssv('--ink3'), navy=cssv('--navy'), red=cssv('--red'), amber=cssv('--amber');
+  // 0.5 m grid
+  ctx.strokeStyle='#eef3f8'; ctx.lineWidth=1; ctx.beginPath();
+  for(let x=-2;x<=2;x+=0.5){ ctx.moveTo(Math.round(X(x))+0.5,0); ctx.lineTo(Math.round(X(x))+0.5,H); }
+  for(let y=0;y<=3;y+=0.5){ ctx.moveTo(0,Math.round(Y(y))+0.5); ctx.lineTo(W,Math.round(Y(y))+0.5); }
+  ctx.stroke();
+  // the box field
+  ctx.fillStyle='rgba(138,90,0,0.05)'; ctx.strokeStyle='rgba(138,90,0,0.6)'; ctx.lineWidth=1.2; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.rect(X(-FX),Y(FY1),2*FX*S,(FY1-FY0)*S); ctx.fill(); ctx.stroke(); ctx.setLineDash([]);
+  // the tape and its marks; recorded stations get a filled dot
+  const ty=Y(0);
+  ctx.strokeStyle='#b9a37a'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(X(-1.5),ty); ctx.lineTo(X(1.5),ty); ctx.stroke();
+  MARKS.forEach((m,i)=>{
+    const x=X(m);
+    ctx.strokeStyle=ink3; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(Math.round(x)+0.5,ty-6); ctx.lineTo(Math.round(x)+0.5,ty+6); ctx.stroke();
+    const s=(m<0?'−':'')+Math.abs(m)+(i===MARKS.length-1?' m':'');
+    stext(ctx,s,x,ty+18,10.5,ink3,'center');
+    if(hunt.rec[i]){ ctx.fillStyle=hunt.rec[i].none?ink3:cssv('--grn'); ctx.beginPath(); ctx.arc(x,ty+31,3.5,0,7); ctx.fill(); }
+  });
+  // after the reveal, each recorded bearing as a line, s applied with the
+  // board's true orientation so a wrong s does not hide a good hunt
+  if(hunt.revealed){
+    MARKS.forEach((m,i)=>{ const R=hunt.rec[i]; if(!R||R.none) return;
+      const th=hunt.s*mean(R.reads)*D2R, L=3.2;
+      ctx.strokeStyle='rgba(0,74,133,0.55)'; ctx.lineWidth=1.3;
+      ctx.beginPath(); ctx.moveTo(X(m),ty); ctx.lineTo(X(m+L*Math.sin(th)),Y(L*Math.cos(th))); ctx.stroke(); });
+  }
+  // the boxes, numbered, each with its posted center
+  hunt.boxes.forEach((p,k)=>{
+    const x=X(p[0]), y=Y(p[1]), live=hunt.revealed&&k===hunt.live, half=Math.max(7,0.08*S);
+    ctx.fillStyle=live?'rgba(176,30,36,0.12)':'#fff'; ctx.strokeStyle=live?red:'#7a6a4f'; ctx.lineWidth=live?2.2:1.3;
+    ctx.beginPath(); ctx.rect(x-half,y-half,2*half,2*half); ctx.fill(); ctx.stroke();
+    stext(ctx,String(k+1),x,y+0.5,11,live?red:cssv('--ink'),'center',true);
+    const lab=`(${p[0].toFixed(2)}, ${p[1].toFixed(2)})`;
+    ctx.font='10.5px '+SANS; const tw=ctx.measureText(lab).width;
+    ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fillRect(x-tw/2-2,y+half+2,tw+4,14);
+    stext(ctx,lab,x,y+half+9,10.5,live?red:ink3,'center');
+  });
+  // the reference source, while its readings are up
+  if(hunt.last&&hunt.last.ref){
+    const x=X(REF[0]), y=Y(REF[1]);
+    ctx.fillStyle=amber; ctx.beginPath(); ctx.arc(x,y,4.5,0,7); ctx.fill();
+    stext(ctx,'your HB100',x+8,y,10.5,amber,'left');
+  }
+  // the kit on its mark
+  kitGlyph(X(MARKS[kitAt]),ty,navy);
+  // hunt number, top left; reveal state, top right
+  stext(ctx,'hunt '+hunt.n,8,11,10.5,ink3,'left',true);
+  if(hunt.revealed) stext(ctx,'live box: '+(hunt.live+1),W-8,11,10.5,red,'right',true);
+  else stext(ctx,'tap a mark to move the kit',W-8,11,10.5,ink3,'right');
+}
+
+// tap a mark to move the kit there
+map.addEventListener('click',ev=>{
+  const b=map.getBoundingClientRect(), px=ev.clientX-b.left, py=ev.clientY-b.top;
+  if(Math.abs(py-Y(0))>34) return;
+  let best=-1, bd=30;
+  MARKS.forEach((m,i)=>{ const d=Math.abs(X(m)-px); if(d<bd){ bd=d; best=i; } });
+  if(best<0) return;
+  kitAt=best; $('station').value=String(best); draw();
+});
+
+/* ---- sizing. Side by side above 620 px the map is as tall as it is wide
+   times 0.72, up to 360 px; stacked on a phone the design box shortens to
+   0.66 of the width. The world scale follows the box: the tape plus margins
+   across, and the field's depth plus room for labels down. */
+const STACK=window.matchMedia ? window.matchMedia('(max-width:619px)') : null;
+function fit(){
+  const dpr=window.devicePixelRatio||1, stacked=STACK&&STACK.matches;
+  const w=Math.max(220, map.clientWidth);
+  const h=stacked ? Math.round(Math.min(w*0.66, 250)) : Math.round(Math.min(w*0.78, 380));
+  map.width=Math.round(w*dpr); map.height=Math.round(h*dpr); map.style.height=h+'px';
+  const bh=map.offsetHeight-map.clientHeight; if(bh) map.style.height=(h+bh)+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  W=w; H=h;
+  const BELOW=40, TOP=24;
+  S=Math.min(W/3.6, (H-BELOW-TOP)/(FY1+0.12));
+  const spare=Math.max(0,H-BELOW-TOP-(FY1+0.12)*S);
+  OX=W/2; OY=H-BELOW-spare/2;
+  draw();
+}
+
+const q=new URLSearchParams(location.search);
+startHunt(q.has('hunt') ? +q.get('hunt') : 1+Math.floor(Math.random()*9999));
+window.addEventListener('resize',fit);
+fit();
+</script>
+</body>
+</html>
