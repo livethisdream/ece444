@@ -70,8 +70,10 @@
       <div class="row">
         <span class="lab">Station</span>
         <select id="station"></select>
-        <span class="lab">s</span>
-        <select id="sgn"><option value="0">not set</option><option value="1">+1</option><option value="-1">&minus;1</option></select>
+      </div>
+      <div class="row">
+        <span class="lab" title="Which way round the board sits: +1 if the reference shot's Angle reads positive, −1 if negative. Every Angle is multiplied by it, so a positive angle points toward +x.">sign s</span>
+        <select id="sgn" title="+1 if the reference shot's Angle reads positive, −1 if negative"><option value="0">not set</option><option value="1">+1</option><option value="-1">&minus;1</option></select>
       </div>
       <div class="btns">
         <button id="ref" type="button">reference shot</button>
@@ -194,7 +196,7 @@ function showReadings(){
   if(L.none){ el.innerHTML='<span class="bad">no clear tone at this station</span>'; return; }
   el.innerHTML = L.reads.map(v=>fmt(v)).join(' ')+'<br>'
     + `<span class="dim">mean</span> ${fmt(mean(L.reads))}° <span class="dim">spread</span> ${spread(L.reads).toFixed(1)}°`
-    + (L.ref ? '' : ` <span class="dim">Peak Gain</span> ${fmt(L.gain)} dB`);
+    + (L.ref ? '<br><span class="dim">Set <b>sign s</b>: +1 if this mean is positive, −1 if negative.</span>' : ` <span class="dim">Peak Gain</span> ${fmt(L.gain)} dB`);
 }
 function showTable(){
   const s=sgn();
@@ -202,7 +204,7 @@ function showTable(){
     const R=hunt.rec[i]; if(!R) return '';
     const x=(m>0?'+':m<0?'−':'')+Math.abs(m).toFixed(2);
     if(R.none) return `<tr><td>${x}</td><td class="none" colspan="3">no clear tone</td></tr>`;
-    return `<tr><td>${x}</td><td>${s?fmt(s*mean(R.reads))+'°':'<span class="dim">set s</span>'}</td><td>${spread(R.reads).toFixed(1)}°</td><td>${fmt(R.gain)}</td></tr>`;
+    return `<tr><td>${x}</td><td>${s?fmt(s*mean(R.reads))+'°':'<span class="dim">set sign s</span>'}</td><td>${spread(R.reads).toFixed(1)}°</td><td>${fmt(R.gain)}</td></tr>`;
   }).join('') || '<tr><td colspan="4" class="none">none yet</td></tr>';
 }
 function notebookText(){
@@ -236,7 +238,7 @@ $('take').onclick=()=>{ const i=+$('station').value; kitAt=i; const L=takeReadin
 $('copy').onclick=()=>{
   const out=$('out'), showing=!out.classList.contains('hidden');
   if(showing){ out.classList.add('hidden'); $('tbl-box').classList.remove('hidden'); $('copy').textContent='copy for notebook'; return; }
-  if(!sgn()){ alert('Set s from your reference shot first: +1 if its Angle read positive, −1 if negative.'); return; }
+  if(!sgn()){ alert('Set sign s from your reference shot first: +1 if its Angle read positive, −1 if negative.'); return; }
   out.value=notebookText(); out.classList.remove('hidden'); $('tbl-box').classList.add('hidden');
   $('copy').textContent='back to table';
   out.focus(); out.select();
@@ -374,13 +376,13 @@ map.addEventListener('click',ev=>{
 
 /* ---- sizing. Side by side above 620 px the map is as tall as it is wide
    times 0.72, up to 360 px; stacked on a phone the design box shortens to
-   0.6 of the width. The world scale follows the box: the tape plus margins
+   0.56 of the width. The world scale follows the box: the tape plus margins
    across, and the field's depth plus room for labels down. */
 const STACK=window.matchMedia ? window.matchMedia('(max-width:619px)') : null;
 function fit(){
   const dpr=window.devicePixelRatio||1, stacked=STACK&&STACK.matches;
   const w=Math.max(220, map.clientWidth);
-  const h=stacked ? Math.round(Math.min(w*0.6, 230)) : Math.round(Math.min(w*0.78, 380));
+  const h=stacked ? Math.round(Math.min(w*0.56, 210)) : Math.round(Math.min(w*0.78, 380));
   map.width=Math.round(w*dpr); map.height=Math.round(h*dpr); map.style.height=h+'px';
   const bh=map.offsetHeight-map.clientHeight; if(bh) map.style.height=(h+bh)+'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
