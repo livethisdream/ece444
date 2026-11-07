@@ -85,8 +85,10 @@ Every lab page (VOICE.md 27-34, from Neil's L20 Lab notes):
   preset"), not the GUI's numbered label.
 - No dry-run anecdotes unless the cadet needs the number.
 - Entry boxes at each step that takes a reading, and a summary frame, as
-  the L17-L20 Labs do; packet boxes right-justified in one column or in one
-  row along the bottom of the part.
+  the L17-L20 Labs do; packet boxes 1.5 in, right-justified in the 0.42
+  answer column or in one row along the bottom of the part.
+- Bold for control names, defined terms and step leads only; italics almost
+  never (VOICE.md 35).
 
 Figures and widgets as you go: generators in `scripts/graphics/` through
 `apply_font_stack()`, widgets from `book/extras/viz/reflector-gain.html` as

@@ -518,7 +518,18 @@ confusing."
 
 Every answer box in a lab packet is either right-justified in one vertically
 aligned column or set in one row along the bottom of its part. "I want a
-consistent look and feel. Not random boxes everywhere."
+consistent look and feel. Not random boxes everywhere." Every packet uses the
+same numbers: boxes 1.5 in wide (`\boxw`), and a worked part in a 0.55
+column with its boxes in a 0.42 column (`anscol`). A row that does not fit
+at that width goes into the column instead of wrapping.
+
+### 35. Bold and italics, rarely
+
+Neil, 2026-11-07: "don't randomly sprinkle bold and italics. Use it in rare
+instances." Bold marks a control's name, a term where it is defined, the lead
+of a numbered step, and little else (rule 14: never a claim). Italics are
+rarer still. A list's labels, a sentence's emphasis, and an expected result
+are plain text.
 
 ## What he does *not* want changed
 
