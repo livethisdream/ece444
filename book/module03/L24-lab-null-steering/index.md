@@ -73,14 +73,14 @@ $$
 The table converts the weights to what the GUI accepts: element gain as a
 percentage of the largest, $100\vert w_n\vert/\max\vert w\vert$, and phase
 offset as $\angle w_n$, entered with its sign. It is worked at $10.443$ GHz,
-the frequency **Find HB100** reported for phaser-00, one of the course kits.
+the frequency **Find HB100** reported for my kit.
 Part 1 of the packet has you compute the same table at your own kit's
 frequency; at the nominal $10.525$ GHz the outer gains read 75 % and the
 phases of elements 2 and 7 read $\pm 3.1^\circ$, so the table moves only
 slightly from kit to kit.
 
 The predictions assume the Element Gains slider is linear in voltage, which it
-is on current Phaser software. On phaser-00 the main lobe dropped 2.5 dB
+is on current Phaser software. On my kit the main lobe dropped 2.5 dB
 against the predicted 2.0.
 
 <img src="../../viz/img/L24-element-settings.svg"
@@ -102,7 +102,7 @@ Neither column nulls anything on its own; only the eight weights together do.
 
 <a href="../L24-null-steering/index.html#frame-quantization-and-null-depth">Lesson 24</a>
 estimated the depth that small, independent channel errors allow, about
-$48$ dB below the uniform peak, and phaser-00 reached $46$ to $50$ dB in an open
+$48$ dB below the uniform peak, and my kit reached $46$ to $50$ dB in an open
 room. Rounding the weights to the ADAR1000's $2.8125^\circ$ and 1 %
 steps does not set that limit: the rounded table keeps its mirror symmetry, so
 its null survives and moves only a fraction of a degree. On a freshly
@@ -136,7 +136,7 @@ elements 5–8. Adding them is the ordinary sum beam. Subtracting them, by
 setting Beam 1 Phase to $180^\circ$, cancels the two halves wherever they
 arrive in phase, which is boresight. The result is a null there with twin
 peaks near $\pm 11^\circ$: the **monopulse difference beam**, which Procedure D
-and Module 4 use for angle measurement. On phaser-00 it measured $-41.5$ dB in
+and Module 4 use for angle measurement. On my kit it measured $-41.5$ dB in
 an open room and $-22$ dB in a cramped one, centered on boresight, with the
 peaks at $\pm 12.0^\circ$. It needs no arithmetic, so its depth is a direct
 reading of what the room lets through.
@@ -196,7 +196,7 @@ channels can distinguish.
 At $+30^\circ$ both limits act at once, and the measurement shows what follows. MVDR
 still spends its one null on the interferer, but to the two channels the
 interferer looks like the look direction, and the HB100 sits a fraction of a
-degree off it, so the null lands on the target too. On phaser-00 the target
+degree off it, so the null lands on the target too. On my kit the target
 dropped about 10 dB, and MVDR did worse against the interferer than Manual.
 **Diagonal loading** is the guard: the Phaser adds
 $\delta\ \text{tr}(\hat{\mathbf{R}})/2$ to the diagonal of $\hat{\mathbf{R}}$
@@ -210,7 +210,7 @@ Procedure C also uses $K = 1024$ snapshots rather than 128. At the kit's
 3 MSPS, 128 samples span only four cycles of the 100 kHz offset between target
 and interferer, so the two are partly correlated in each estimate of
 $\hat{\mathbf{R}}$ and the null wanders from one update to the next. 1024
-samples span 34 cycles; on phaser-00 the spread of ten suppression readings
+samples span 34 cycles; on my kit the spread of ten suppression readings
 fell from about 25 dB to under 10.
 ::::
 
@@ -539,9 +539,9 @@ Part 2 in class, Part 3 after. <a href="../../labs/ECE444_Lab_L24_NullSteering_b
 | Idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | Weight subtraction | $\mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\mathbf{w}_\text{n}$, as gain % and phase | main lobe drops about $2$ dB for a null at $+22.5^\circ$ |
-| Notch depth | set by one-step channel errors, not by rounding, until the room limits it | about $-48$ dB; phaser-00 $-46$ to $-50$ dB open, $-22$ to $-24$ dB cramped |
-| Difference beam | Beam 1 Phase $= 180^\circ$ subtracts the two channels | boresight null, peaks near $\pm 11^\circ$; phaser-00 $-41.5$ dB open, $-22$ dB cramped |
-| MVDR | $\mathbf{w} = \mathbf{R}^{-1}\mathbf{s} / (\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s})$ from $K$ snapshots | one null from two channels; phaser-00 about $17$ dB at $+20^\circ$, $K = 1024$, loading $0.1$ |
+| Notch depth | set by one-step channel errors, not by rounding, until the room limits it | about $-48$ dB; my kit $-46$ to $-50$ dB open, $-22$ to $-24$ dB cramped |
+| Difference beam | Beam 1 Phase $= 180^\circ$ subtracts the two channels | boresight null, peaks near $\pm 11^\circ$; my kit $-41.5$ dB open, $-22$ dB cramped |
+| MVDR | $\mathbf{w} = \mathbf{R}^{-1}\mathbf{s} / (\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s})$ from $K$ snapshots | one null from two channels; my kit about $17$ dB at $+20^\circ$, $K = 1024$, loading $0.1$ |
 | Monopulse error | signed ratio of delta to sum, from one look | zero on boresight, slope $0.11$ per degree |
 ::::
 
