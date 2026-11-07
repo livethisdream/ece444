@@ -64,7 +64,7 @@ The expectation table is the prediction column for every taper measurement.
 The GUI writes these amplitudes to the eight Element Gains sliders when you
 press a preset button; everything else is what the sweep reads relative to a
 uniform-taper reference. The beamwidths are the array factor's at
-$10.443\ \text{GHz}$, the frequency of the phaser-00 test run; repeat them at
+$10.443\ \text{GHz}$, the frequency of my test run; repeat them at
 your own kit's Find HB100 frequency in the packet's Part 1.
 
 | Preset | $a_n$ (%) |
@@ -77,7 +77,7 @@ your own kit's Find HB100 frequency in the packet's Part 1.
 The predictions assume each slider is linear in voltage, which the Phaser
 software provides once the kit has the gain-slider fix. On an older install the
 slider follows the ADAR1000's register curve, about $(\%/100)^{0.68}$ in
-voltage, and every taper comes out milder: the phaser-00 test run read Hann at
+voltage, and every taper comes out milder: my test run read Hann at
 $17.2^\circ$ and $-3.7$ dB against $18.9^\circ$ and $-4.7$ dB predicted.
 ::::
 
@@ -109,19 +109,19 @@ from.
 
 ::::{frame} The Floor Sets What You Can Report
 :::{present}
-- Tapered sidelobes sit below the sweep's floor: write **"below the floor"** and its level.
+- Tapered sidelobes sit below the sweep's floor: write "below the floor" and its level.
 - We first estimated the floor at $-23$ dBc.
-- Phaser-00 read floors from $-17$ to $-31$ dBc, setup to setup.
+- My kit read floors from $-17$ to $-31$ dBc, setup to setup.
 :::
 
 One measurement will refuse to give you a number. Every tapered preset pushes
 its first sidelobe below the floor of the sweep, so the correct table entry in
-those rows is **"below the floor"**, with the floor's level beside it, not a
+those rows is "below the floor", with the floor's level beside it, not a
 value read off the grass. Quoting $-27$ dBc from a trace whose floor is at
 $-23$ dBc reports the noise, not the antenna.
 
 The floor itself is not one fixed number. We first estimated it at about
-$23$ dB under the uniform-taper peak. The phaser-00 test run read floors from
+$23$ dB under the uniform-taper peak. My test run read floors from
 $-17$ to $-31$ dBc on the same kit, depending on the setup, and a wall beside
 the kit raised a false lobe to $-9$ dBc. Read your own floor before you
 record anything, and write it at the top of Part 2.
@@ -154,7 +154,7 @@ compare it against the peak drop pill each time — the two never agree.
 :::{present}
 - Every third element on, $42$ mm: lobes at $\pm 43.2^\circ$, peak $-8.5$ dB.
 - Every fourth, $56$ mm: lobes at $\pm 30.9^\circ$, peak $-12.0$ dB.
-- Phaser-00: $-43.6^\circ$ and $+42.3^\circ$; $-33.0^\circ$ and $+29.8^\circ$.
+- My kit: $-43.6^\circ$ and $+42.3^\circ$; $-33.0^\circ$ and $+29.8^\circ$.
 :::
 
 The taper runs measure the defect a taper can fix. Lesson 23 derived the three
@@ -164,7 +164,7 @@ the tapers: predict, sweep, record. The predictions above are at $10.443\ \text{
 kit's own frequency.
 
 The peak drops on hardware run about $1$ dB short of the element count
-($-7.8$ and $-10.9$ dB on phaser-00), even with elements fully on or off. That
+($-7.8$ and $-10.9$ dB on my kit), even with elements fully on or off. That
 shortfall also shows up when the whole array is compared with its single
 elements, and its cause is still open, so this step is graded on the lobe
 angles.
@@ -175,21 +175,21 @@ angles.
 :::{present}
 - Signal BW $500$ MHz: the GUI sets the phases $500$ MHz below the signal.
 - Source at $45^\circ$: the sweep finds it at $48.0^\circ$, a $+3.0^\circ$ shift.
-- Phaser-00, source at $41.1^\circ$: $+2.5^\circ$ measured, $+2.6^\circ$ predicted.
+- My kit, source at $41.1^\circ$: $+2.5^\circ$ measured, $+2.6^\circ$ predicted.
 :::
 
 The Beam Squint preset sets **Signal BW** to $500\ \text{MHz}$, which tells the GUI to
-compute the steering phases for a frequency $500\ \text{MHz}$ *below* the
+compute the steering phases for a frequency $500\ \text{MHz}$ below the
 Signal Freq and receive at the Signal Freq. That is what a signal at the edge
 of a $500\ \text{MHz}$ band sees. The same phases are a slightly different
 steer at the real frequency, so the whole beam moves and the sweep has to
-command a larger angle to land on the source. **Signal BW resets to 0** after
+command a larger angle to land on the source. Signal BW resets to 0 after
 Calibrate, Find HB100, and the Rect preset, so check it before every squint
 sweep.
 ::::
 
 
-::::{frame} Quantization: Hold the Beam, Walk the Source
+::::{frame} Quantization: Hold the Beam, Move the Source
 :::{present}
 - The Quantization preset: beam held at $15^\circ$, Blackman taper, Signal vs Time.
 - A $15^\circ$ ramp steps $45.4^\circ$: almost on the 3- and 4-bit grids.
@@ -198,14 +198,14 @@ sweep.
 
 The Quantization preset holds the beam at $15^\circ$ with the Blackman taper, so every true
 sidelobe is below the floor and anything that appears is the phase shifter's
-doing. You walk the HB100 across the arc and read the level against time, at
+doing. You move the HB100 across the arc and read the level against time, at
 7, 4, 3, and 2 bits. Lesson 23's widget shows why the answer depends on the
 angle: a $15^\circ$ ramp steps $45.4^\circ$ per element, which rounds to the
 $22.5^\circ$ and $45^\circ$ grids with errors of $3^\circ$ or less, while at
 2 bits every other element is off by about $44^\circ$ and the array factor puts
-a lobe near $-51^\circ$ at about $-8$ dBc. On phaser-00 the 7-, 4-, and 3-bit
-walks all read the floor, 17 to 19 dB below the peak, and the 2-bit walk put a
-lobe about 10 dB down near $-53^\circ$. If lobes appear at 3 or 4 bits on your
+a lobe near $-51^\circ$ at about $-8$ dBc. Expect the 7-, 4-, and 3-bit moves
+to read the floor, 17 to 19 dB below the peak, and the 2-bit move to put a lobe
+about 10 dB down near $-53^\circ$. If lobes appear at 3 or 4 bits on your
 kit, it is rounding more than the steering ramp; record what you see.
 ::::
 
@@ -331,8 +331,8 @@ simulator equivalent; use the expectation tables.
     <label>Step 11, Chebyshev: first sidelobe <input data-field="a.cheb.sll"></label>
     </div>
 12. **Design your own taper.** With Enforce Symmetric Taper on, meet this
-    specification: **HPBW no wider than $17^\circ$, with the first sidelobe
-    below $-20$ dBc.** Start from Uniform, pull the end elements down to about
+    specification: HPBW no wider than $17^\circ$, with the first sidelobe
+    below $-20$ dBc. Start from Uniform, pull the end elements down to about
     25% to 30%, and step smoothly up to 100% in the middle; 30, 55, 90, 100 is
     a good start, and with a linear slider it predicts $16.5^\circ$, a
     $-3.3$ dB peak drop, and a first sidelobe at $-25$ dBc. Set the sliders,
@@ -429,19 +429,19 @@ simulator equivalent; use the expectation tables.
 19. **Load the preset.** Put the HB100 at the arc's $-90^\circ$ end and choose
     the Quantization preset. It holds the beam at $15^\circ$ with the Blackman
     taper and opens **Signal vs Time** on the Tracking tab.
-20. **Walk at 7 bits.** With **Use Bits** checked, set **Phase Shift Bits** to
-    7, then walk the HB100 from $-90^\circ$ to $+90^\circ$ along the $1.2$ m arc,
+20. **Move at 7 bits.** With **Use Bits** checked, set **Phase Shift Bits** to
+    7, then move the HB100 from $-90^\circ$ to $+90^\circ$ along the $1.2$ m arc,
     aimed at the array, in about 20 s. Record the strongest lobe outside the
     main lobe, and where it is; write "floor" where nothing rises out of it.
     The trace keeps the last 30 s, counted from when the mode starts, so begin
-    walking promptly; a slower walk runs off its end.
+    moving promptly; a slower move runs off its end.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 20, 7 bits: strongest lobe (dBc) <input data-field="e.7.lobe"></label>
     <label>Step 20, 7 bits: where <input data-field="e.7.where"></label>
     </div>
-21. **Walk at 4, 3, and 2 bits.** Repeat Step 20 at each, checking the bit
-    count and the box before each walk. Lobes at 3 or 4 bits would point to
+21. **Move at 4, 3, and 2 bits.** Repeat Step 20 at each, checking the bit
+    count and the box before each move. Lobes at 3 or 4 bits would point to
     the kit rounding more than the steering ramp; record what you see.
 
     <div class="rec" data-lab="L22-L23">
@@ -505,8 +505,8 @@ angles, and that ratio only falls by $\eta_t$. If you re-normalized each trace
 to its own peak instead of to the uniform peak, the 4.7 dB would vanish from
 the plot entirely and the beam shape would be unchanged.
 
-The practical statement is short. **The peak drop is a plot artifact of a
-common reference; the taper efficiency is the antenna's actual loss.** A system
+The practical statement is short. The peak drop is a plot artifact of a
+common reference; the taper efficiency is the antenna's actual loss. A system
 budget that debits 4.7 dB for the taper overstates the loss by a factor of two
 in power.
 ::::
@@ -546,7 +546,7 @@ Part 2 in class, Part 3 after. <a href="../../labs/ECE444_Lab_L22_L23_TaperSquin
 | $\sum a_n / N$ | coherent receive-voltage fraction at broadside | Hann: $4.64/8 \rightarrow -4.7$ dB |
 | $\eta_t = (\sum a_n)^2/(N\sum a_n^2)$ | taper efficiency — the directivity the array loses | Hann: 0.75, or $-1.2$ dB |
 | HPBW with taper | broadens as the aperture is de-weighted | $13.1^\circ$ uniform, $18.9^\circ$ Hann, $22.6^\circ$ Chebyshev |
-| Floor | the limit on any sidelobe reading | $-17$ to $-31$ dBc on phaser-00; tapered sidelobes sit below it |
+| Floor | the limit on any sidelobe reading | $-17$ to $-31$ dBc on my kit; tapered sidelobes sit below it |
 | Mild taper | most of the sidelobe benefit, little directivity lost | ends at 30%: $16.5^\circ$, $-0.7$ dB of $\eta_t$ |
 ::::
 
@@ -565,7 +565,7 @@ Part 2 in class, Part 3 after. <a href="../../labs/ECE444_Lab_L22_L23_TaperSquin
 ::::{frame} Looking Ahead
 :::{present}
 - Turn in the packet, all three parts, before Lesson 24.
-- L24 places a null on purpose; phaser-00 measured nulls $-40$ to $-50$ dB deep.
+- L24 places a null on purpose; my kit measured nulls $-40$ to $-50$ dB deep.
 :::
 
 The taper runs measured the defect a taper can fix: the sidelobes came down,
