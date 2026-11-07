@@ -271,7 +271,7 @@ peak moves away from broadside while the sidelobe structure stretches with it.
 - A protractor arc centered on the array; facing the patches, $+\theta$ is to your left, toward E8.
 :::
 :::{present}
-<img src="../../viz/img/L18-bench-setup.svg"
+<img src="../../viz/img/L18-lab-setup.svg"
      alt="The setup from above: the eight-element array, a 1 m protractor arc centered between E4 and E5, and the HB100 positions at 0, 30, and 45 degrees on the plus side, toward E8, filled on the 1 m arc for the angle readings and hollow 1.2 m out on the same lines for the scan-loss levels; confirm the plus side with the Angle readout"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
@@ -526,20 +526,20 @@ beamwidths will not equal $13.0^\circ$ and $15.1^\circ$ exactly. Three
 independent effects account for the difference, and Part 1 of the packet sized
 all three before the measurement.
 
-**Sweep grid.** With Use Bits on, the sweep steps the element phase one
+Sweep grid. With Use Bits on, the sweep steps the element phase one
 $2.8125^\circ$ LSB at a time. One step moves $\sin\theta$ by
 $2.8125^\circ/176.8^\circ = 0.0159$, which is $0.91^\circ$ of angle at broadside
 and $1.05^\circ$ at $30^\circ$, widening as $1/\cos\theta$. The trace holds no
 information between samples, so a peak read off it can be wrong by half a step,
 $0.53^\circ$ at $30^\circ$.
 
-**Arc placement and aim.** At $1\ \text{m}$, one degree of arc is
+Arc placement and aim. At $1\ \text{m}$, one degree of arc is
 $17.5\ \text{mm}$, so a tripod placed by eye to within $25\ \text{mm}$ gives a
 $1.4^\circ$ error in the reference angle; centering the arc and pointing the
 module bring the budget figure to $1.5^\circ$. This error is in the reference,
 not in the array.
 
-**Multipath.** The table, the walls, and the people nearby return copies of the
+Multipath. The table, the walls, and the people nearby return copies of the
 tone. A reflection $20\ \text{dB}$ below the direct path has an amplitude ratio of
 0.1, so, depending on its phase, it raises or lowers the level by
 
