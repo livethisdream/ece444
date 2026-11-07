@@ -85,7 +85,7 @@ def pattern_db(theta_deg, steer_deg):
 def warp(u, coeffs=(0.45, 0.30, -0.18)):
     """Monotone time warp on [0,1]: g(0)=0, g(1)=1, g' = 1 + sum c_k sin(2 pi k u).
 
-    Models a hand that speeds up and slows down during the walk. With
+    Models a hand that speeds up and slows down during the sweep. With
     sum|c_k| < 1 the map stays monotone, so no angle is visited twice.
     """
     u = np.asarray(u, dtype=float)
@@ -125,7 +125,7 @@ def time_vs_angle() -> None:
     """One hand-rotation run, drawn twice: against elapsed time and against
     the true source angle. Same peaks, different spacing."""
     rng = np.random.default_rng(444)
-    T = 7.4                                    # seconds for the -90 -> +90 walk
+    T = 7.4                                    # seconds for the -90 -> +90 azimuth sweep
     u = np.linspace(0.0, 1.0, 3000)
     t = u * T
     theta = -90.0 + 180.0 * warp(u)            # hand-like: angle vs time
@@ -149,7 +149,7 @@ def time_vs_angle() -> None:
     ax_t.set_axisbelow(True)
 
     # tick marks at the instants the source crossed each 30 deg: under a
-    # hand-like walk these land unevenly, which is the whole point.
+    # hand-like pace these land unevenly, which is the whole point.
     marks = np.arange(-60, 61, 30)
     tm = T * warp_inverse((marks + 90.0) / 180.0)
     for ang, tt in zip(marks, tm):
