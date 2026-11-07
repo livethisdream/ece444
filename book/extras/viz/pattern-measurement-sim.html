@@ -75,7 +75,7 @@
       </select>
     </div>
     <div class="ctl">
-      <button id="replay" type="button">Replay walk</button>
+      <button id="replay" type="button">Replay</button>
     </div>
   </div>
 
@@ -88,7 +88,7 @@
   <div class="note">N = 8, d = 14 mm, HB100 at 10.525 GHz, ideal element power
   \(\cos\theta\). The main-lobe readout is referenced to the broadside peak, so the
   30&deg; run reads the scan loss. Orange ticks under the trace mark the instants
-  the source passed each 30&deg;: with a hand-like walk they land unevenly, and
+  the source passed each 30&deg;: with a hand-moved source they land unevenly, and
   the lobe spacing stretches with them while the lobe amplitudes do not move.</div>
 </div>
 
@@ -98,7 +98,7 @@
   var C = 3e8, F = 10.525e9, LAM = C / F, D = 0.014, N = 8;
   var DL = D / LAM;                         // 0.4912
   var FLOOR = -34, TOP = 4;                 // trace dB window
-  var WALK_MS = 7400;                       // one -90 -> +90 walk
+  var MOVE_MS = 7400;                       // one -90 -> +90 move
 
   var plan = document.getElementById('cvPlan'), pctx = plan.getContext('2d');
   var trc = document.getElementById('cvTrace'), tctx = trc.getContext('2d');
@@ -128,7 +128,7 @@
   }
 
   /* Monotone time warp on [0,1]: g(0)=0, g(1)=1,
-     g'(u) = 1 + sum c_k sin(2 pi k u). With sum|c_k| < 1 the walk never
+     g'(u) = 1 + sum c_k sin(2 pi k u). With sum|c_k| < 1 the move never
      reverses, so every angle is visited exactly once. */
   var COEF = [0.45, 0.30, -0.18];
   function warp(u, hand) {
@@ -147,7 +147,7 @@
   }
   function angleAt(u, hand) { return -90 + 180 * warp(u, hand); }
 
-  /* Reproducible amplitude noise: a small LCG, so the same walk replays the
+  /* Reproducible amplitude noise: a small LCG, so the same move replays the
      same way and the readout values are stable. */
   function noiseAt(i) {
     var x = Math.sin(i * 12.9898 + 78.233) * 43758.5453;
@@ -168,7 +168,7 @@
 
   function step(ts) {
     if (!startTime) startTime = ts;
-    var u = Math.min((ts - startTime) / WALK_MS, 1);
+    var u = Math.min((ts - startTime) / MOVE_MS, 1);
     var last = run.samples.length ? run.samples[run.samples.length - 1].u : -1;
     // sample on a fixed grid so the trace does not depend on frame rate
     var grid = 900, i, uu, ang, db;
@@ -180,7 +180,7 @@
     }
     drawAll();
     if (u >= 1) {
-      // hold the finished trace and its measurement lines; the walk repeats
+      // hold the finished trace and its measurement lines; the move repeats
       // only when the student asks for it
       run.done = true;
       raf = null;
@@ -236,7 +236,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.60) : h; 
       return [cx + r * Math.sin(t), cy - r * Math.cos(t)];
     }
 
-    // the arc the source walks
+    // the arc the source moves along
     pctx.strokeStyle = EDGE; pctx.lineWidth = 1.4;
     pctx.setLineDash([5, 4]);
     pctx.beginPath(); pctx.arc(cx, cy, R, Math.PI, 2 * Math.PI); pctx.stroke();
@@ -357,7 +357,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.60) : h; 
       }
     }
 
-    // once the walk is finished, mark what was measured
+    // once the move is finished, mark what was measured
     if (run.done) {
       var m = measure();
       tctx.save();

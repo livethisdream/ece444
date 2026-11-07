@@ -35,7 +35,7 @@ with room for notes. Print from read mode for the whole lesson.
 ::::{frame} From Prediction to Measurement
 :::{present}
 - Part 1, before today: the expected patterns and two error budgets.
-- Part 2, today: walk the source by hand, then turn the kit on its stand.
+- Part 2, today: move the source by hand, then turn the kit on its stand.
 - Part 3, after: which model the data support, and which method resolves it.
 :::
 
@@ -53,7 +53,7 @@ reconciles the numbers with the predictions and compares the two methods.
 
 ::::{frame} Three Ways to Trace a Pattern
 :::{present}
-| | Sweep the beam | Walk the source | Turn the kit |
+| | Sweep the beam | Move the source | Turn the kit |
 | :-- | :-- | :-- | :-- |
 | x-axis | steer angle | elapsed time | stand angle |
 | Measures | array factor | element $\times$ array | element $\times$ array |
@@ -69,21 +69,21 @@ There are three ways to get a pattern out of an array, and they are not the
 same measurement.
 
 The first is the one you have used since the L18 Lab: put a source somewhere,
-leave it there, and **sweep the beam** electronically past it, recording
+leave it there, and sweep the beam electronically past it, recording
 received power at each steer angle. The source sits at one physical angle, so
 the element pattern contributes the same constant to every point on the trace
 and drops out of its shape. The trace is the array factor, plotted against the
 angle the beamformer was commanded to.
 
-The second is the one ADI's workshop uses. **Hold the beam fixed** and carry the
+The second is the one ADI's workshop uses. Hold the beam fixed and carry the
 source around the array on an arc. Now the physical angle changes at every
 instant, so the element pattern multiplies the array factor exactly as Lesson 21
 described, and the trace is the antenna pattern. The GUI plots it against
-elapsed time, though, so the angle axis is only as good as your walking, and
+elapsed time, though, so the angle axis is only as good as your pace, and
 the level is only as steady as your arm.
 
 The third is what an antenna range does. Hold the beam fixed, leave the source
-on its tripod, and **turn the kit** in front of it. The trace is the antenna
+on its tripod, and turn the kit in front of it. The trace is the antenna
 pattern again, but every reading carries a real angle, and the distance to the
 source never changes.
 ::::
@@ -110,12 +110,12 @@ removes the back hemisphere, so the reading with the source behind the board
 should sit at the floor.
 ::::
 
-::::{frame} The Walk Paints as You Go
+::::{frame} The Trace Paints as You Move
 :class: viz-frame
 
 :::{depth}
-The widget below runs the walk in simulation. Choose a steer angle and a
-walking-speed profile, then watch the trace paint as the source moves around the
+The widget below runs the move in simulation. Choose a steer angle and a
+speed profile, then watch the trace paint as the source moves around the
 arc. Run it once with the uniform profile and once with the hand-like profile,
 and compare the two readouts: the lobe spacing changes completely and the lobe
 levels do not move at all. The simulation keeps the radius perfect; your arm
@@ -127,14 +127,14 @@ will not.
         width="100%" height="459"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
-        title="Simulated hand-walk pattern measurement: a source walks an arc around a fixed beam while the level-versus-time trace paints below">
+        title="Simulated pattern measurement with a hand-moved source: the source moves along an arc around a fixed beam while the level-versus-time trace paints below">
 </iframe>
 :::
 ::::
 
 ::::{frame} Amplitudes Survive, Angles Do Not
 :::{present}
-- The walk's x-axis is time: an uneven pace moves and stretches the lobes.
+- With a moved source, the x-axis is time: an uneven pace moves and stretches the lobes.
 - Pace cannot change a lobe's height, but a $10\ \text{cm}$ radius drift moves it $0.7\ \text{dB}$.
 :::
 :::{present}
@@ -145,12 +145,12 @@ will not.
 
 The level the GUI records at any instant is the pattern at the angle the source
 occupied at that instant, and it does not depend on how fast the source was
-moving. Walking slowly through a lobe draws it wider on the plot without
-changing its height, so the lobe levels survive an uneven walk and the angles do
+moving. Moving slowly through a lobe draws it wider on the plot without
+changing its height, so the lobe levels survive an uneven pace and the angles do
 not. The level is not immune to your arm, though: received power goes as
 $1/r^2$, so drifting $10\ \text{cm}$ in or out at $1.2\ \text{m}$ moves the
 reading by $0.7$ to $0.8\ \text{dB}$, more than the scan loss you want to see.
-Three walks, compared in the packet, show how large that scatter is in practice.
+Three moves, compared in the packet, show how large that scatter is in practice.
 ::::
 
 ::::{frame} Turning the Kit on Its Stand
@@ -165,7 +165,7 @@ Three walks, compared in the packet, show how large that scatter is in practice.
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Turning the kit in front of a fixed source records the same pattern as walking
+Turning the kit in front of a fixed source records the same pattern as moving
 the source around a fixed kit, because only the angle between the array normal
 and the source matters. What changes is everything else. The distance never
 changes, so the levels can be compared from one reading to the next; the HB100
@@ -205,27 +205,27 @@ With the beam held at $30^\circ$, the main lobe appears when the source reaches
 about $30^\circ$ instead of boresight. The peak reads lower than the broadside
 run, by $0.6\ \text{dB}$ for the ideal element and about $0.9\ \text{dB}$ for a
 real patch. The rotation can resolve that difference because the
-distance never changes. A walk cannot, because the radius drift alone is as
+distance never changes. A hand-moved source cannot, because the radius drift alone is as
 large as the effect.
 
 The pattern is no longer symmetric. The first sidelobe on the inside of the
 beam, near $+8^\circ$, sits about $-12.2$ dBc; the one on the outside, near
 $+59^\circ$, sits about $-15.1$ dBc. The array factor alone would make them
-equal, and the element pattern lowers the outer one. A careful walk can show the
+equal, and the element pattern lowers the outer one. A careful move can show the
 direction of that $2.9\ \text{dB}$ asymmetry; the rotation can put a number on
 it.
 ::::
 
 ::::{frame} Two Error Budgets
 :::{present}
-| Error | Walk | Rotation |
+| Error | Move | Rotation |
 | :-- | :-- | :-- |
 | Angle axis | time, not angle | $\pm 1^\circ$ |
 | Distance | $\pm 0.7$ dB | $\pm 0.14$ dB |
 | Room reflections | $\pm 1$ dB | $\pm 1$ dB |
 :::
 
-The packet's Part 1 builds both budgets. The walk's angle error comes from
+The packet's Part 1 builds both budgets. The move's angle error comes from
 converting time to angle at a constant pace you did not have: a hand $30\%$
 fast or slow through the main lobe makes a $13.0^\circ$ beam read anywhere from
 $10.0^\circ$ to $18.6^\circ$. Its level error comes from the radius. The
@@ -242,7 +242,7 @@ trustworthy than either reading alone.
 :::{present}
 - The kit on its rotating stand, $0^\circ$ toward the source.
 - The HB100 on its tripod, $1.2\ \text{m}$ out at patch-row height, and a taped $1.2\ \text{m}$ arc.
-- Four parts: bring up, check the angle axis, walk the source, turn the kit.
+- Four parts: bring up, check the angle axis, move the source, turn the kit.
 :::
 
 Tape the stand's base to the table with its $0^\circ$ mark toward the source,
@@ -258,11 +258,11 @@ Set the HB100 $1.2\ \text{m}$ from the array face at the height of the patch
 row, facing the array. Lesson 21 put the far-field distance of this aperture at
 $0.67\ \text{m}$, but level comparisons of under a decibel need more distance:
 at $1\ \text{m}$ the scan loss reads only about half its value. Tape the
-walk's arc on the floor at the same $1.2\ \text{m}$ radius, with marks at
+arc for moving the source on the floor at the same $1.2\ \text{m}$ radius, with marks at
 $-90^\circ$, $0^\circ$, and $+90^\circ$.
 
 The procedure has four parts: Steps 1 to 6 bring up the kit, Steps 7 to 9
-check the angle axis, Steps 10 to 15 walk the source by hand, and Steps 16 to
+check the angle axis, Steps 10 to 15 move the source by hand, and Steps 16 to
 20 turn the kit on its stand. Each step that takes a reading has boxes for it,
 which fill Part 2 of the packet.
 ::::
@@ -327,7 +327,7 @@ which fill Part 2 of the packet.
    </div>
 ::::
 
-::::{frame} Run 2: Walk It by Hand
+::::{frame} Run 2: Move It by Hand
 :class: read-only
 
 10. **Load the preset.** Choose the **Antenna Pattern** preset. It sets
@@ -344,36 +344,36 @@ which fill Part 2 of the packet.
     </div>
 12. **Pick up the source.** Lift the HB100 off its tripod and stand on the
     $-90^\circ$ mark, aimed at the array.
-13. **Walk.** Walk the arc to $+90^\circ$ in about 20 to $25\ \text{s}$,
+13. **Move.** Carry the HB100 along the arc to $+90^\circ$ in about 20 to $25\ \text{s}$,
     keeping the radius and the aim. The $30\ \text{s}$ window counts from when
-    the mode starts, so begin promptly. Practice the walk once before you
+    the mode starts, so begin promptly. Practice the move once before you
     record: too fast and each lobe gets only a few updates, too slow and the
     pattern runs off the edge.
 14. **Read the trace.** Hover over the trace to read the main-lobe peak and
     both first sidelobes. Expect the room to make the two sidelobes unequal by
     a few decibels, with their average near $-13$ dBc, and the floor 25 to
     30 dB below the peak, so both sidelobes stand clear of it.
-15. **Repeat.** Walk twice more, then return the HB100 to its tripod at
-    boresight. The three walks will not agree exactly, and that disagreement
+15. **Repeat.** Move it twice more, then return the HB100 to its tripod at
+    boresight. The three moves will not agree exactly, and that disagreement
     is a measurement in its own right: record the spread, largest minus
     smallest, and Part 3 compares it with the rotation's.
 
     <div class="rec" data-lab="L21">
-    <label>Walk 1: walk time (s) <input data-field="c.w1.time" data-label="Step 15, walk 1: walk time (s)"></label>
-    <label>Walk 1: peak (dBFS) <input data-field="c.w1.peak" data-label="Step 15, walk 1: peak (dBFS)"></label>
-    <label>Walk 1: left first sidelobe (dBc) <input data-field="c.w1.left" data-label="Step 15, walk 1: left first sidelobe (dBc)"></label>
-    <label>Walk 1: right first sidelobe (dBc) <input data-field="c.w1.right" data-label="Step 15, walk 1: right first sidelobe (dBc)"></label>
-    <label>Walk 2: walk time (s) <input data-field="c.w2.time" data-label="Step 15, walk 2: walk time (s)"></label>
-    <label>Walk 2: peak (dBFS) <input data-field="c.w2.peak" data-label="Step 15, walk 2: peak (dBFS)"></label>
-    <label>Walk 2: left first sidelobe (dBc) <input data-field="c.w2.left" data-label="Step 15, walk 2: left first sidelobe (dBc)"></label>
-    <label>Walk 2: right first sidelobe (dBc) <input data-field="c.w2.right" data-label="Step 15, walk 2: right first sidelobe (dBc)"></label>
-    <label>Walk 3: walk time (s) <input data-field="c.w3.time" data-label="Step 15, walk 3: walk time (s)"></label>
-    <label>Walk 3: peak (dBFS) <input data-field="c.w3.peak" data-label="Step 15, walk 3: peak (dBFS)"></label>
-    <label>Walk 3: left first sidelobe (dBc) <input data-field="c.w3.left" data-label="Step 15, walk 3: left first sidelobe (dBc)"></label>
-    <label>Walk 3: right first sidelobe (dBc) <input data-field="c.w3.right" data-label="Step 15, walk 3: right first sidelobe (dBc)"></label>
-    <label>Spread of the three walks: peak (dB) <input data-field="c.spread.peak" data-label="Step 15, spread of the three walks: peak (dB)"></label>
-    <label>Spread: left sidelobe (dB) <input data-field="c.spread.left" data-label="Step 15, spread of the three walks: left sidelobe (dB)"></label>
-    <label>Spread: right sidelobe (dB) <input data-field="c.spread.right" data-label="Step 15, spread of the three walks: right sidelobe (dB)"></label>
+    <label>Move 1: time (s) <input data-field="c.w1.time" data-label="Step 15, move 1: time (s)"></label>
+    <label>Move 1: peak (dBFS) <input data-field="c.w1.peak" data-label="Step 15, move 1: peak (dBFS)"></label>
+    <label>Move 1: left first sidelobe (dBc) <input data-field="c.w1.left" data-label="Step 15, move 1: left first sidelobe (dBc)"></label>
+    <label>Move 1: right first sidelobe (dBc) <input data-field="c.w1.right" data-label="Step 15, move 1: right first sidelobe (dBc)"></label>
+    <label>Move 2: time (s) <input data-field="c.w2.time" data-label="Step 15, move 2: time (s)"></label>
+    <label>Move 2: peak (dBFS) <input data-field="c.w2.peak" data-label="Step 15, move 2: peak (dBFS)"></label>
+    <label>Move 2: left first sidelobe (dBc) <input data-field="c.w2.left" data-label="Step 15, move 2: left first sidelobe (dBc)"></label>
+    <label>Move 2: right first sidelobe (dBc) <input data-field="c.w2.right" data-label="Step 15, move 2: right first sidelobe (dBc)"></label>
+    <label>Move 3: time (s) <input data-field="c.w3.time" data-label="Step 15, move 3: time (s)"></label>
+    <label>Move 3: peak (dBFS) <input data-field="c.w3.peak" data-label="Step 15, move 3: peak (dBFS)"></label>
+    <label>Move 3: left first sidelobe (dBc) <input data-field="c.w3.left" data-label="Step 15, move 3: left first sidelobe (dBc)"></label>
+    <label>Move 3: right first sidelobe (dBc) <input data-field="c.w3.right" data-label="Step 15, move 3: right first sidelobe (dBc)"></label>
+    <label>Spread of the three moves: peak (dB) <input data-field="c.spread.peak" data-label="Step 15, spread of the three moves: peak (dB)"></label>
+    <label>Spread: left sidelobe (dB) <input data-field="c.spread.left" data-label="Step 15, spread of the three moves: left sidelobe (dB)"></label>
+    <label>Spread: right sidelobe (dB) <input data-field="c.spread.right" data-label="Step 15, spread of the three moves: right sidelobe (dB)"></label>
     </div>
 ::::
 
@@ -529,10 +529,10 @@ you back to Calibrate and to the element gain sliders.
 
 ::::{frame} Classroom Against Chamber
 :::{present}
-- **Angle:** the rotation reads it; a range encodes it.
-- **Distance:** the rotation fixes it.
-- **Reflections:** $\pm 1$ dB in a room; a chamber absorbs them.
-- **Far field:** set by the room's size, chamber or not.
+- Angle: the rotation reads it; a range encodes it.
+- Distance: the rotation fixes it.
+- Reflections: $\pm 1$ dB in a room; a chamber absorbs them.
+- Far field: set by the room's size, chamber or not.
 :::
 :::{present}
 <img src="../../viz/img/L21-range-artifacts.svg"
@@ -545,11 +545,11 @@ shows what the classroom still leaves in your data.
 
 **Angle.** A range turns the antenna on a turntable with a shaft encoder, so
 every sample carries its angle to a fraction of a degree. Your sweep's Angle
-readout gives each stop's angle to about a degree, which the walk's time axis
+readout gives each stop's angle to about a degree, which the moved source's time axis
 cannot.
 
 **Distance.** A range bolts the source at a fixed distance. So does the
-rotation; the walk does not.
+rotation; moving the source does not.
 
 **Reflections.** The direct path is not the only path from the HB100 to the
 array. Reflections off the floor, the ceiling, and the whiteboard arrive too and
@@ -567,11 +567,11 @@ as a large antenna in a classroom.
 :class: read-only
 
 ```{note}
-The walk and the rotation have no simulated version: the simulator's source is
+Moving the source and turning the kit have no simulated version: the simulator's source is
 fixed at boresight and cannot be moved, and turning a simulated kit changes
 nothing. Run the electrical sweep of Table B in the hosted simulator at
 [livethisdream.github.io/phaser](https://livethisdream.github.io/phaser/), and
-use the walk widget above to see what a walked trace looks like.
+use the widget above to see what a hand-moved trace looks like.
 ```
 ::::
 
@@ -597,9 +597,9 @@ viewer instead.
 
 The L21 Lab packet is one submission for the whole lab, turned in complete before Lesson 22. It has three parts:
 
-1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it in class): the patterns to expect with the beam at $0^\circ$ and $30^\circ$, the error budgets of the walk and the rotation, and reading dBc off a trace.
-2. **Part 2, Measurements** (your own kit's data, recorded in class): the angle check, the electrical sweep, three walks, and two rotations.
-3. **Part 3, Writeup** (individual, after the lab): which model the data support, the walk against the rotation, and a far-field problem.
+1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it in class): the patterns to expect with the beam at $0^\circ$ and $30^\circ$, the error budgets of moving the source and the rotation, and reading dBc off a trace.
+2. **Part 2, Measurements** (your own kit's data, recorded in class): the angle check, the electrical sweep, three moves, and two rotations.
+3. **Part 3, Writeup** (individual, after the lab): which model the data support, moving the source against the rotation, and a far-field problem.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet (PDF)</a>
 ::::
@@ -610,7 +610,7 @@ The L21 Lab packet is one submission for the whole lab, turned in complete befor
 | Idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | Beam sweep | beam swept past a fixed source | the array factor; x-axis is steer angle |
-| Hand walk | source carried around a held beam | x-axis is time; $\pm 0.7$ dB from a $10\ \text{cm}$ radius drift |
+| Moved source | source carried around a held beam | x-axis is time; $\pm 0.7$ dB from a $10\ \text{cm}$ radius drift |
 | Rotation | kit turned in front of a fixed source | real angles, fixed distance; $\pm 1^\circ$ |
 | Scan loss | element pattern at the steer angle | $-0.6$ dB ideal, $-0.9$ dB patch, at $30^\circ$ |
 | Sidelobe asymmetry | element pattern lowers the outer lobe | $-12.2$ vs $-15.1$ dBc at $30^\circ$ |

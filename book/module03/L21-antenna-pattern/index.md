@@ -553,7 +553,7 @@ $31.8^\circ$ for a $30^\circ$ command points to the setup, not the antenna.
 
 ::::{frame} Looking Ahead
 :::{present}
-- The L21 Lab: measure the pattern two ways, electronic sweep and a walked source.
+- The L21 Lab: measure the pattern two ways, electronic sweep and a hand-moved source.
 - Compare both to $AF$ alone and to $EF \cdot AF$; bring today's numbers.
 - L22: design the sidelobes with a taper.
 :::

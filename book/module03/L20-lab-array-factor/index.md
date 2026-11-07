@@ -569,7 +569,7 @@ The L20 Lab packet is one submission for the whole lab, turned in complete befor
 :::{present}
 - Today's traces are the array factor, read against a commanded angle.
 - Lesson 21 adds the element pattern: what the patches do to the beam.
-- The L21 Lab holds the beam still and walks the source around it.
+- The L21 Lab holds the beam still and moves the source around it.
 :::
 
 Every trace you took today plots received power against the angle you asked
