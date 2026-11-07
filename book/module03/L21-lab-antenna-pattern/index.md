@@ -39,13 +39,12 @@ with room for notes. Print from read mode for the whole lesson.
 - Part 3, after: which model the data support, and which method resolves it.
 :::
 
-Lesson 21 separated the array factor from the pattern the array radiates and
-predicted where the two part company: the peak drops as $\cos\theta_0$ when the
-beam steers, the two first sidelobes of a steered beam stop matching, and
-nothing comes out the back. Today we test those predictions on the bench. The
-L21 Lab packet starts from them: Part 1, the pre-lab you completed before
-class, works out the patterns at your HB100's frequency and sizes the errors of
-the two methods. Today you measure the pattern twice with the beam held still,
+Lesson 21 compared the kit's Rectangular plot, built by stepping the beam past
+a fixed source, with the antenna-range method, which holds one beam still and
+moves the source. Today we take both on the bench and compare the lobe levels.
+Part 1 of the L21 Lab packet, the pre-lab you completed before class, works out
+the patterns at your HB100's frequency and sizes the errors of the two
+methods. Today you measure the pattern twice with the beam held still,
 once by carrying the source around the array by hand and once by turning the
 kit in front of a fixed source. Part 3, on your own before Lesson 22,
 reconciles the numbers with the predictions and compares the two methods.
@@ -77,8 +76,8 @@ angle the beamformer was commanded to.
 
 The second is the one ADI's workshop uses. **Hold the beam fixed** and carry the
 source around the array on an arc. Now the physical angle changes at every
-instant, so the element pattern multiplies the array factor exactly as Lesson 21
-described, and the trace is the antenna pattern. The GUI plots it against
+instant, so the trace also carries each patch's own pattern, and it is the
+antenna pattern of one beam. The GUI plots it against
 elapsed time, though, so the angle axis is only as good as your walking, and
 the level is only as steady as your arm.
 
@@ -100,14 +99,15 @@ source never changes.
 
 Part 1 of the packet works these out at your own kit's frequency; the dBc values
 barely move with frequency, and the angles move by about $0.15^\circ$ per
-$100\ \text{MHz}$, less than you can read off the stand's scale. With the beam at
-$0^\circ$ the element pattern lowers the $\pm 21.4^\circ$ sidelobes by only
-$0.3\ \text{dB}$, too little to see in a room. With the beam at $30^\circ$ it
-lowers the peak by $0.6\ \text{dB}$ and the outer sidelobe, near $59^\circ$, by
-$2.9\ \text{dB}$, while the inner one, near $8^\circ$, sits where the element is
-flat. The array factor alone would put both at $-12.8$ dBc. The ground plane
-removes the back hemisphere, so the reading with the source behind the board
-should sit at the floor.
+$100\ \text{MHz}$, less than you can read off the stand's scale. The table
+includes each patch's own pattern, which the walk and the rotation see and the
+sweep does not. At $0^\circ$ it changes the first sidelobes by only
+$0.3\ \text{dB}$. At $30^\circ$ it lowers the peak by $0.6\ \text{dB}$ and the
+outer sidelobe, near $59^\circ$, by about $3\ \text{dB}$; the sweep would put both
+first sidelobes at $-12.8$ dBc. The room can move a dBc value by about as much,
+so treat these as the direction to expect, not a number to match. The ground
+plane blocks everything behind the board, so the reading with the source behind
+it should sit at the floor.
 ::::
 
 ::::{frame} The Walk Paints as You Go
@@ -124,7 +124,7 @@ will not.
 
 :::{present}
 <iframe src="../../viz/pattern-measurement-sim.html"
-        width="100%" height="459"
+        width="100%" height="461"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Simulated hand-walk pattern measurement: a source walks an arc around a fixed beam while the level-versus-time trace paints below">
@@ -192,8 +192,8 @@ two, which is fine for a lobe $15^\circ$ wide.
 
 ::::{frame} The Steered Pattern
 :::{present}
-- Beam held at $30^\circ$: the peak is $0.6\ \text{dB}$ below the broadside peak.
-- Inner sidelobe $-12.2$ dBc, outer $-15.1$ dBc: the element pattern, not a fault.
+- With the beam held at $30^\circ$, the lobe is wider on the outside: nulls at $14.2^\circ$ and $49.0^\circ$.
+- The outer sidelobe should read lower than the inner one, by about as much as the room can move it.
 :::
 :::{present}
 <img src="../../viz/img/L21-steer-compare.svg"
@@ -202,19 +202,20 @@ two, which is fine for a lobe $15^\circ$ wide.
 :::
 
 With the beam held at $30^\circ$, the main lobe appears when the source reaches
-about $30^\circ$ instead of boresight. The peak reads lower than the broadside
-run, by $0.6\ \text{dB}$ for the ideal element and about $0.9\ \text{dB}$ for a
-real patch; the Module 3 dry run measured $0.7\ \text{dB}$ with the source
-$1.2\ \text{m}$ out. The rotation can resolve that difference because the
-distance never changes. A walk cannot, because the radius drift alone is as
-large as the effect.
+about $30^\circ$ instead of boresight. The array factor slides in $\sin\theta$,
+so the first nulls fall at $14.2^\circ$ and $49.0^\circ$, and the lobe reaches
+farther above its peak than below it. The peak reads about $0.6\ \text{dB}$
+below the broadside run, the scan loss of Lesson 18; the Module 3 dry run
+measured $0.7\ \text{dB}$ with the source $1.2\ \text{m}$ out. A walk cannot see
+that drop, because the radius drift alone is as large; the rotation, at a fixed
+distance, can show it when the reading repeats.
 
-The pattern is no longer symmetric. The first sidelobe on the inside of the
-beam, near $+8^\circ$, sits about $-12.2$ dBc; the one on the outside, near
-$+59^\circ$, sits about $-15.1$ dBc. The array factor alone would make them
-equal, and the element pattern lowers the outer one. A careful walk can show the
-direction of that $2.9\ \text{dB}$ asymmetry; the rotation can put a number on
-it.
+The first sidelobe on the inside of the beam, near $+8^\circ$, should read about
+$-12.2$ dBc, and the one on the outside, near $+59^\circ$, about $-15.1$ dBc,
+because each patch receives about $3\ \text{dB}$ less at $59^\circ$ than at
+broadside. The room made the two first sidelobes of a broadside walk differ by
+about $3\ \text{dB}$ on my kit, so compare your $30^\circ$ difference with your
+own broadside difference before you credit it to the patches.
 ::::
 
 ::::{frame} Two Error Budgets
@@ -257,10 +258,9 @@ turn toward E1 reads positive, and turn the tripod carefully about that
 center.
 
 Set the HB100 $1.2\ \text{m}$ from the array face at the height of the patch
-row, facing the array. Lesson 21 put the far-field distance of this aperture at
-$0.67\ \text{m}$, but level comparisons of under a decibel need more distance:
-in the Module 3 dry run, scan loss read correctly at $1.2\ \text{m}$ and only
-half of it at $1\ \text{m}$. Tape the walk's arc on the floor at the same
+row, facing the array. The far-field distance of this aperture is
+$2D^2/\lambda = 0.88\ \text{m}$ with $D = Nd = 112\ \text{mm}$ (Lesson 21), and
+$1.2\ \text{m}$ stays past it even with the walk's radius drift. Tape the walk's arc on the floor at the same
 $1.2\ \text{m}$ radius, with marks at $-90^\circ$, $0^\circ$, and $+90^\circ$.
 ::::
 
@@ -428,7 +428,7 @@ add to the direct signal in and out of phase, which is the $\pm 1\ \text{dB}$ of
 ripple in both of your methods. An anechoic chamber lines every surface with
 absorber so only the direct path survives.
 
-**Far field.** You set $1.2\ \text{m}$ against Lesson 21's $0.67\ \text{m}$. A
+**Far field.** You set $1.2\ \text{m}$ against Lesson 21's $0.88\ \text{m}$. A
 chamber satisfies the far-field condition only if it is long enough for the
 antenna and frequency; a large antenna in a short chamber has the same problem
 as a large antenna in a classroom.
@@ -466,9 +466,9 @@ The L21 Lab packet is one submission for the whole lab, turned in complete befor
 | Beam sweep | beam swept past a fixed source | the array factor; x-axis is steer angle |
 | Hand walk | source carried around a held beam | x-axis is time; $\pm 0.7$ dB from a $10\ \text{cm}$ radius drift |
 | Rotation | kit turned in front of a fixed source | real angles, fixed distance; $\pm 1^\circ$ |
-| Scan loss | element pattern at the steer angle | $-0.6$ dB ideal, $-0.9$ dB patch, at $30^\circ$ |
-| Sidelobe asymmetry | element pattern lowers the outer lobe | $-12.2$ vs $-15.1$ dBc at $30^\circ$ |
-| Source distance | far field and level accuracy | $0.67\ \text{m}$ far field; measure at $1.2\ \text{m}$ |
+| Scan loss | the steered peak against the broadside peak | about $-0.6$ dB at $30^\circ$ |
+| Sidelobe asymmetry | the patch pattern lowers the outer lobe | about $3$ dB at $30^\circ$; the room adds as much |
+| Source distance | far field | $0.88\ \text{m}$ with $D = Nd$; measure at $1.2\ \text{m}$ |
 | Room reflections | direct path plus copies | $\pm 1$ dB a reading, $\pm 2$ dB on a dBc value |
 ::::
 

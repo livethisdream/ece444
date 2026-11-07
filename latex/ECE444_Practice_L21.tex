@@ -1,7 +1,8 @@
 % !TEX root =./ECE444_Practice_main.tex
 %
-% L21 practice set (Antenna Pattern) -- pattern multiplication with a
-% patch element factor, scan loss bookkeeping, and reading a measured trace.
+% L21 practice set (Antenna Pattern) -- how the kit builds its sweep, the
+% antenna-range method (Signal vs Time walk), comparing the two traces, and
+% what bends a measured trace.
 
 \fullwidth{\textbf{Learning Objective 3.6: } I can distinguish between array factor and true
 antenna pattern and account for element pattern effects.
@@ -10,267 +11,211 @@ is required (write \textbf{None} if you did not collaborate).}
 
 \begin{questions}
 
-\question \textbf{The gain budget of the course array.} The ADALM-PHASER
-carries $N = 8$ microstrip patch elements spaced $d = 14$ \text{mm} apart. At the
-workshop frequency of $10.3\ \ghz$ the wavelength is $29.1$ \text{mm}. Model each
-element as an ideal element that captures its share of the aperture, so its
-\emph{power} pattern follows the projected-aperture rule
-$G_e(\theta) = G_e(0)\cosp{\theta}$ with a broadside element gain of $6.0$ dBi.
-\begin{parts}
-	\part In one or two sentences, state the difference between the array factor
-		and the antenna pattern, and say what the element factor contributes to
-		the product.
-		\begin{solution}[1.2in]
-		The array factor is the contribution of the element positions and their
-		relative phases alone; it is what a set of isotropic radiators at those
-		positions would produce. The antenna pattern is the array factor
-		multiplied by the element factor, which is the pattern of one element in
-		the array. The element factor supplies the shape of a single radiator --
-		here a broad hemispherical lobe peaked at broadside -- and it sets an
-		envelope that the steered array factor cannot exceed.
-		\end{solution}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the broadside peak gain of the array from the element gain
-			and the array gain.
-		\begin{solution}[1.1in]
-		The eight elements add coherently, so the array gain is
-		\eq{ G_{\text{array}} = 10\mylog{8} = 9.0\db }
-		and the total broadside gain is
-		\eq{ G(0\mydeg) = 6.0\dbi + 9.0\db = 15.0\dbi }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$G(0\mydeg)$ = \ansbox[1.3in]{$15.0\dbi$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part The beam is steered to $\theta_0 = 45\mydeg$. Compute the element
-			factor penalty in decibels at that angle.
-		\begin{solution}[1.1in]
-		The projected-aperture rule is stated in power, so the penalty uses
-		ten times the logarithm:
-		\eq{ 10\mylog{\cosp{45\mydeg}} = 10\mylog{0.707} = -1.5\db }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\Delta G$ = \ansbox[1.3in]{$-1.5\db$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the peak gain of the array steered to $45\mydeg$.
-		\begin{solution}[1.1in]
-		Only the element term depends on the steer angle; the array gain of
-		$9.0\db$ is unchanged because the elements still add in phase.
-		\eq{ G(45\mydeg) &= 6.0\dbi - 1.5\db + 9.0\db \\ &= 13.5\dbi }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$G(45\mydeg)$ = \ansbox[1.3in]{$13.5\dbi$}
-	\end{minipage}
-\end{parts}
-
-\newpage
-
-\question \textbf{Scan loss and the practical scan limit.} Use the same array
-and the same ideal element. Recall from L20 that the array
-factor's half-power beamwidth off broadside is
-$\theta_{\text{HP}} \approx 0.886\lambda/(Nd\cosp{\theta_0})$, which is
-$13.2\mydeg$ at broadside for this array.
+\question \textbf{How the kit builds its sweep.} The ADALM-PHASER carries
+$N = 8$ elements spaced $d = 14$ \text{mm} apart. At $10.3\ \ghz$ the
+wavelength is $29.1$ \text{mm}, so $kd = 173.2\mydeg$ of phase per unit of
+$\sin\theta$. In the Rectangular plot the kit holds the HB100 still and steps
+the element-to-element phase one $2.8125\mydeg$ LSB per point.
 \begin{parts}
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the element factor penalty at $\theta_0 = 30\mydeg$.
-		\begin{solution}[1.0in]
-		\eq{ 10\mylog{\cosp{30\mydeg}} = 10\mylog{0.866} = -0.6\db }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\Delta G$ = \ansbox[1.3in]{$-0.6\db$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the element factor penalty at $\theta_0 = 60\mydeg$.
-		\begin{solution}[1.0in]
-		\eq{ 10\mylog{\cosp{60\mydeg}} = 10\mylog{0.500} = -3.0\db }
-		This is the ideal-element bound. A real patch rolls off faster, roughly
-		as $\cosp{\theta}^{1.4}$ in power, and measures about $-4.2$ dB at the
-		same angle.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\Delta G$ = \ansbox[1.3in]{$-3.0\db$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the array factor half-power beamwidth at
-			$\theta_0 = 60\mydeg$.
+		\part Find the change in $\sin\theta_0$ for one step, and the step in
+			angle near broadside.
 		\begin{solution}[1.1in]
-		\eq{ \theta_{\text{HP}} = \frac{13.2\mydeg}{\cosp{60\mydeg}}
-			= \frac{13.2\mydeg}{0.500} = 26.4\mydeg }
+		\eq{ \Delta\lp\sin\theta_0\rp &= \frac{2.8125\mydeg}{173.2\mydeg} = 0.0162 \\
+			\Delta\theta_0 &\approx 0.0162\ \text{rad} = 0.93\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$26.4\mydeg$}
+		$\Delta\theta_0$ = \ansbox[1.3in]{$0.93\mydeg$}
 	\end{minipage}
 
-	\part A radar engineer specifies this array for coverage over
-		$\pm 75\mydeg$. Using your numbers from parts (a) through (c), write
-		two sentences explaining the trade the engineer is accepting, and state
-		why $\pm 60\mydeg$ is the usual limit quoted for patch arrays.
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the same step in angle near $30\mydeg$.
+		\begin{solution}[1.1in]
+		A fixed step in $\sin\theta$ is a larger step in $\theta$ where
+		$\cosp{\theta}$ is small:
+		\eq{ \Delta\theta_0 \approx \frac{0.93\mydeg}{\cosp{30\mydeg}} = 1.07\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta\theta_0$ = \ansbox[1.3in]{$1.07\mydeg$}
+	\end{minipage}
+
+	\part Every point of the sweep comes from a different beam. In two or
+		three sentences, explain why the trace still looks like the pattern of
+		a single beam.
 		\begin{solution}[1.4in]
-		At $60\mydeg$ the beam has already lost $3\db$ of gain for an ideal element,
-		closer to $4\db$ for a real patch, and the array factor's beam has doubled
-		in width from $13.2\mydeg$ to $26.4\mydeg$, so the same target returns
-		less power and is located less precisely. Pushing to $75\mydeg$ loses
-		about $5.9\db$ and widens the beam to nearly $51\mydeg$, so a target at
-		the edge of the scan is detected at shorter range and located far less
-		precisely than one at broadside. The $\pm 60\mydeg$ limit is where both
-		penalties are still tolerable; beyond it the gain falls faster than the
-		coverage grows.
+		The array factor depends only on
+		$\psi = kd\lp\sin\theta_\text{src} - \sin\theta_0\rp$, and its magnitude
+		is the same for $\psi$ and $-\psi$. Stepping $\theta_0$ past a fixed
+		source runs $\psi$ through the same values as moving the source past a
+		beam held at a fixed $\theta_0$, so both draw the same curve. The
+		sweep's x-axis is the commanded angle $\theta_0$, not a measured
+		arrival angle.
+		\end{solution}
+
+	\part State one thing the sweep cannot show that a measurement with one
+		beam held still can, and give the reason.
+		\begin{solution}[1.2in]
+		The pattern of each patch element. The sweep holds the source in one
+		direction, so each patch receives the same level at every point, and
+		that constant drops out of a trace read in dBc. A held beam with a
+		moving source carries the source across each patch's pattern, which
+		falls toward $\pm 90\mydeg$.
 		\end{solution}
 \end{parts}
 
 \newpage
 
-\question \textbf{Reading a steered sweep.} A student steers the array to
-$\theta_0 = 30\mydeg$ and records the rectangular sweep. The peak reads
-$-0.6\db$ relative to the broadside peak and sits at $29.6\mydeg$. The first
-sidelobe on the broadside side of the beam reads $-12.2$ dBc and the first
-sidelobe on the outboard side reads $-15.2$ dBc. Uniform array factor theory
-predicts $-12.8$ dBc for both.
-\begin{parts}
-	\part Explain in one or two sentences why the measured peak sits at
-		$29.6\mydeg$ rather than at the commanded $30\mydeg$.
-		\begin{solution}[1.2in]
-		The element factor falls monotonically away from broadside, so the
-		product of the array factor and the element factor is largest slightly
-		inboard of the array factor's own peak. The beam is pulled toward
-		broadside. The effect grows with steer angle: a $60\mydeg$ command on
-		this array peaks near $56.8\mydeg$.
-		\end{solution}
-
-	\part Explain why the two first sidelobes differ by $3$ dB when the
-		array factor predicts that they are equal.
-		\begin{solution}[1.2in]
-		Sidelobe levels are quoted relative to the peak of the same trace, and
-		the element factor multiplies each lobe by a different amount. The
-		inboard lobe near $7\mydeg$ sits where the element pattern is
-		essentially flat, so it is unchanged, while the peak it is referenced to
-		fell by $0.6\text{ dB}$; that lobe therefore reads about half a decibel
-		\emph{higher} than theory. The outboard lobe near $60\mydeg$ is
-		attenuated $3.0\db$ by the element pattern, so it reads well below
-		theory.
-		\end{solution}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Express the inboard sidelobe level relative to the array's
-			\emph{broadside} peak rather than relative to the steered peak.
-		\begin{solution}[1.1in]
-		The steered peak is $0.6\db$ below the broadside peak, so
-		\eq{ -12.2\db - 0.6\db = -12.8\db }
-		relative to broadside. Referenced this way the lobe matches the array
-		factor prediction exactly, which shows that nothing about the sidelobe
-		changed -- only the reference did.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		Level = \ansbox[1.3in]{$-12.8\db$}
-	\end{minipage}
-
-	\part The same student holds the beam fixed, carries the source around
-		the array by hand, and repeats the measurement. The new trace has the same shape but every feature is
-		shifted $1.8\mydeg$ in the same direction. State whether this is an
-		antenna effect or a measurement effect, and give the reason.
-		\begin{solution}[1.2in]
-		It is a measurement effect. A uniform shift of every feature by the same
-		amount, with no change in shape, is an offset in the angle axis, from the
-		taped marks or from where the source sat at boresight. An antenna effect such as beam pulling changes the peak and
-		the sidelobes by different amounts and therefore changes the shape of the
-		trace, not just its position.
-		\end{solution}
-\end{parts}
-
-\newpage
-
-\question \textbf{The element and its ground plane.} Take the ideal element
-power pattern to be $\cosp{\theta}$ over the front hemisphere and zero behind the
-ground plane.
+\question \textbf{The walk.} With Lab Preset 7 the kit holds the beam at
+$0\mydeg$ and plots the peak level against time while you carry the HB100
+from $-90\mydeg$ to $+90\mydeg$ on a $1.2\ \m$ arc in $25$ s. The beam's
+half-power width is $13.3\mydeg$.
 \begin{parts}
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the half-power beamwidth of this element.
+		\part At a constant pace, how long does the source spend inside the
+			half-power width of the main lobe?
 		\begin{solution}[1.1in]
-		The pattern is stated in power, so half power is where
-		\eq{ \cosp{\theta} = 0.5 \quad \rightarrow \quad \theta = 60\mydeg }
-		and the full beamwidth is twice that, $120\mydeg$. A real patch is
-		steeper and measures nearer $105\mydeg$.
+		\eq{ \frac{180\mydeg}{25\ \text{s}} &= 7.2\mydeg\text{/s} \\
+			t &= \frac{13.3\mydeg}{7.2\mydeg\text{/s}} = 1.85\ \text{s} }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$120\mydeg$}
+		$t$ = \ansbox[1.3in]{$1.85$ s}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the directivity of this element, in dBi, integrating over
-			the upper hemisphere only.
-		\begin{solution}[1.4in]
-		The beam solid angle is
-		\eq{ \Omega_A &= \int_0^{2\pi}\!\!\int_0^{\pi/2}
-			\cosp{\theta} \sin\theta \ d\theta \ d\phi \\
-			&= 2\pi \lb \frac{\sin^2\theta}{2} \rb_0^{\pi/2} = \pi }
-		so
-		\eq{ D_e = \frac{4\pi}{\Omega_A} = \frac{4\pi}{\pi} = 4
-			= 6.0\dbi }
-		A real patch rolls off as $\cosp{\theta}^{n}$ with $n$ near 1.3 to 1.5;
-		the same integral gives $D_e = 2(n+1)$, or 6.6 to 7.0 dBi. The steeper
-		element concentrates its power toward broadside, so its directivity is
-		higher even though its gain at wide angles is lower.
+		\part You walk through the main lobe at $70\%$ of your average pace,
+			then convert time to angle at the average pace. What half-power
+			width does the trace report?
+		\begin{solution}[1.1in]
+		The source takes $1/0.7$ times as long to cross the lobe, so the lobe
+		spans $1/0.7$ times as much time:
+		\eq{ \theta_\text{HP} = \frac{13.3\mydeg}{0.7} = 19.0\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$D_e$ = \ansbox[1.3in]{$4$ ($6.0$ dBi)}
+		$\theta_\text{HP}$ = \ansbox[1.3in]{$19.0\mydeg$}
 	\end{minipage}
 
-	\part A sweep shows a lobe at $-20$ dBc near $\theta = 82\mydeg$. Explain
-		what this feature is, and why it cannot be radiation out the back of the
-		array.
-		\begin{solution}[1.2in]
-		The ground plane removes the back hemisphere, and the front-hemisphere
-		element pattern falls monotonically toward the horizon, so the antenna
-		itself cannot produce a lobe there. The feature is energy arriving from
-		a reflection -- a wall, a bench, or a person -- reaching the array from a
-		direction the source is not in. Moving the fixture or the reflector
-		changes the feature, which is the test that identifies it.
+	\part Does the slow pace in part (b) change the level of the main lobe or
+		of the first sidelobes on the trace? Explain in one or two sentences.
+		\begin{solution}[1.1in]
+		No. The level at each instant is the pattern in the direction the
+		source occupies at that instant, whatever its speed, so a slow pace
+		stretches a lobe in time without changing its height.
 		\end{solution}
 
-	\part The projected-aperture rule is a model. State one angular range where
-		you would trust a prediction made with it to about a decibel, and one
-		where you would not, and give the reason.
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Your arm drifts $10$ \text{cm} outward, to $1.3\ \m$, as you walk.
+			By how much does the received level change?
+		\begin{solution}[1.1in]
+		Received power falls as $1/r^2$:
+		\eq{ 20\mylog{\frac{1.3\ \m}{1.2\ \m}} = 0.7\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta L$ = \ansbox[1.3in]{$-0.7\db$}
+	\end{minipage}
+\end{parts}
+
+\newpage
+
+\question \textbf{Comparing the two traces.} A team records a sweep with the
+HB100 at boresight and a walk with the beam held at $0\mydeg$, both at
+$1.2\ \m$. The sweep reads its first sidelobes at $-12.6$ and $-13.4$ dBc.
+The walk reads them at $-11.6$ and $-14.7$ dBc. Each reading carries about
+$\pm 1\db$ from room reflections.
+\begin{parts}
+	\part Do the two methods agree on the first sidelobes? Give the reason,
+		using the uncertainty of a dBc value.
+		\begin{solution}[1.3in]
+		A dBc value is the difference of two readings, each good to about
+		$\pm 1\db$, so it is good to about $\pm 2\db$. Every one of the four
+		values lies within $2\db$ of the array factor's $-12.8\db$, so the two
+		methods agree. The $3.1\db$ spread between the walk's two sidelobes is
+		about what reflections in a classroom produce.
+		\end{solution}
+
+	\part The team reads the walk's main-lobe width as $17\mydeg$ and the
+		sweep's as $13\mydeg$. Which width do you report, and why?
 		\begin{solution}[1.2in]
-		Inside about $\pm 30\mydeg$ the prediction is good to a few tenths of a
-		decibel, because real embedded elements roll off between
-		$\cosp{\theta}$ and $\cosp{\theta}^{1.5}$ in power and the choices
-		barely differ there. Past about $\pm 60\mydeg$ that same spread exceeds
-		a decibel -- the ideal rule gives $-3.0\db$ where a real patch
-		gives about $-4.2\db$ -- and mutual coupling makes each element's
-		embedded pattern differ from the average, so a single-element model
-		should not be trusted to a decibel at wide scan.
+		The sweep's. Its x-axis is the commanded angle, good to about one
+		$0.93\mydeg$ step, while the walk's x-axis is time, which becomes angle
+		only at a constant pace. A slow pace through the main lobe widens it on
+		the walk's trace, as in Question 2(b).
+		\end{solution}
+
+	\part Beyond $\pm 50\mydeg$ the sweep's lobes read about $-17$ dBc and the
+		walk's about $-21$ dBc. Name two reasons the far lobes differ.
+		\begin{solution}[1.3in]
+		The sweep has a floor about $23\db$ below its peak, which adds to
+		sidelobes that sit only a few decibels above it. The walk carries the
+		HB100 across each patch's pattern, which falls toward $\pm 90\mydeg$
+		because the ground plane blocks the back; the sweep holds the HB100 in
+		one direction, so that pattern does not shape its trace. Reflections
+		also matter most where the pattern is weak.
+		\end{solution}
+
+	\part The walk shows a lobe at $-20$ dBc near $+75\mydeg$ that is not in
+		the sweep, and it moves when a classmate steps aside. What is it?
+		\begin{solution}[1.0in]
+		A reflection off the classmate. A feature of the antenna stays put when
+		people move; a feature that moves with them comes from the room.
 		\end{solution}
 \end{parts}
 
 \newpage
 
-\question \textbf{Range, environment, and what a measurement can resolve.} The
-course array measures $D = 98$ \text{mm} between the centers of its outer
-elements. You place the lab source $1.2\ \m$ from the array face.
+\question \textbf{The beam at $\mathbf{30\mydeg}$.} The team now holds the beam
+at $30\mydeg$ for the walk, and places the HB100 at $30\mydeg$ for the sweep.
+For this array $\lambda/(Nd) = 0.260$ at $10.3\ \ghz$.
+\begin{parts}
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the angles of the two first nulls of the $30\mydeg$ beam.
+		\begin{solution}[1.2in]
+		The pattern slides in $\sin\theta$ (Lesson 18):
+		\eq{ \sin\theta_\text{null} &= 0.5 \pm 0.260 = 0.240,\ 0.760 \\
+			\theta_\text{null} &= 13.9\mydeg,\ 49.5\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_\text{null}$ = \ansbox[1.3in]{$13.9\mydeg,\ 49.5\mydeg$}
+	\end{minipage}
+
+	\part Explain why the main lobe reaches farther above its peak than below
+		it, and whether the sweep and the walk should both show this.
+		\begin{solution}[1.3in]
+		The nulls are an equal step of $0.260$ apart in $\sin\theta$, and a step
+		in $\sin\theta$ spans more angle where $\cosp{\theta}$ is small, so the
+		lobe reaches $19.5\mydeg$ above its peak and $16.1\mydeg$ below. Both
+		methods run $\psi$ through the same values, so both show it.
+		\end{solution}
+
+	\part The array factor puts both first sidelobes of this beam at
+		$-12.8$ dBc. The walk reads the outer one, near $60\mydeg$, at about
+		$-15$ dBc, while the sweep reads it near $-12$ dBc. Give the cause, and
+		say whether one walk in a classroom can confirm it.
+		\begin{solution}[1.5in]
+		The walk carries the HB100 out to $60\mydeg$, where each patch receives
+		about $3\db$ less than at broadside; the sweep keeps the HB100 at
+		$30\mydeg$ for every point, so the patch pattern does not change its
+		shape. One walk cannot confirm it: the room alone can make two first
+		sidelobes differ by about $3\db$, as large as the effect. Repeated
+		turns of the kit on its stand, at a fixed distance, are the better test.
+		\end{solution}
+\end{parts}
+
+\newpage
+
+\question \textbf{Source distance.} Lesson 18 takes the course array's aperture as
+$D = Nd = 112$ \text{mm}. You place the HB100 $1.2\ \m$ from the array face.
 \begin{parts}
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Compute the far-field distance for this array at $10.3\ \ghz$
@@ -278,15 +223,14 @@ elements. You place the lab source $1.2\ \m$ from the array face.
 			qualifies.
 		\begin{solution}[1.2in]
 		\eq{ r \ge \frac{2D^2}{\lambda}
-			= \frac{2\lp0.098\ \m\rp^2}{0.0291\ \m} = 0.66\ \m }
-		The $1.2\ \m$ lab range is comfortably beyond this, so the incoming
-		wavefront is flat enough that the edge-to-center phase error stays under
-		the $22.5\mydeg$ the criterion allows.
+			= \frac{2\lp0.112\ \m\rp^2}{0.0291\ \m} = 0.86\ \m }
+		The $1.2\ \m$ range is past this, so the edge-to-center phase error of
+		the incoming wavefront stays under the $22.5\mydeg$ the criterion allows.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$r$ = \ansbox[1.3in]{$0.66\ \m$}
+		$r$ = \ansbox[1.3in]{$0.86\ \m$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -297,8 +241,7 @@ elements. You place the lab source $1.2\ \m$ from the array face.
 		Solve the criterion for $D$:
 		\eq{ D = \sqrt{\frac{r\lambda}{2}}
 			= \sqrt{\frac{\lp1.2\ \m\rp\lp0.0291\ \m\rp}{2}} = 0.132\ \m }
-		so an aperture larger than about $132$ \text{mm} needs a longer range or
-		a near-field correction.
+		so an aperture larger than about $132$ \text{mm} needs a longer range.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -306,29 +249,15 @@ elements. You place the lab source $1.2\ \m$ from the array face.
 		$D$ = \ansbox[1.3in]{$132$ \text{mm}}
 	\end{minipage}
 
-	\part The GUI sweeps the beam by stepping the element-to-element phase one
-		$2.8125\mydeg$ LSB per point, about $0.93\mydeg$ of angle near broadside.
-		Explain how that step size alone can make a measured half-power beamwidth
-		differ from theory by up to about one degree.
+	\part Name two changes to the setup, not the antenna, that make the far
+		sidelobes of either trace more trustworthy.
 		\begin{solution}[1.2in]
-		The trace exists only at grid points, so each half-power crossing is
-		reported at the nearest step rather than at its true angle. Each of the
-		two crossings can be off by up to half a step, and the beamwidth is the
-		difference between them, so the reported width can be off by up to a full
-		step, about $1\mydeg$, before any antenna effect is involved.
-		\end{solution}
-
-	\part Name two things you can change about the measurement setup, not the
-		antenna, to make the far-out sidelobes of a trace more trustworthy.
-		\begin{solution}[1.2in]
-		Reduce what the environment contributes: place absorber on the bench and
-		on nearby reflecting surfaces, keep people and equipment out of the path,
-		and raise the array and source to the same height away from large flat
-		surfaces. Repeat the measurement with the whole fixture moved or rotated;
-		features that move with the room are environmental, and features that
-		stay with the array are the antenna. Increasing the source power raises
-		the trace above the sweep noise floor, which is what limits any reading
-		more than about 23 dB below the peak.
+		Reduce the reflections: put absorber on the bench and nearby surfaces,
+		keep people and equipment out of the path, and set the array and the
+		HB100 at the same height away from large flat surfaces. Then repeat the
+		measurement with the whole setup moved; a feature that moves with the
+		room comes from a reflection, and one that stays with the array comes
+		from the antenna.
 		\end{solution}
 \end{parts}
 
