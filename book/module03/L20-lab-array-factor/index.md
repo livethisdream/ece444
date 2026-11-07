@@ -247,6 +247,10 @@ the array.
    $50\ \text{MHz}$ from the frequency you used in Part 1, recompute your
    calculated columns before you sweep; a smaller change moves no prediction
    by more than about $0.3^\circ$.
+
+   <div class="rec" data-lab="L20">
+   <label>Step 2: Signal Freq <input data-field="f.sig"></label>
+   </div>
 3. **Calibrate the array.** Press **Calibrate** and wait for it to finish, with
    the HB100 still at boresight. An uncalibrated array has amplitude and phase
    errors spread across the row, which fills the nulls and raises the
@@ -264,6 +268,10 @@ the array.
    $1\ \text{dB}$ with the source about $1.2\ \text{m}$ out. A flat-topped
    main lobe on the Rectangular tab means the receiver has clipped, so turn
    the gain down. Leave it there for all four sweeps, so the peaks compare.
+
+   <div class="rec" data-lab="L20">
+   <label>Step 5: Rx Gain (dB) <input data-field="f.gain"></label>
+   </div>
 6. **Check the broadside sweep.** Press **Start**. On the **Rectangular** tab,
    the sweep should peak near $0^\circ$ with a clean pair of first sidelobes.
 ::::
@@ -272,8 +280,8 @@ the array.
 :class: read-only
 
 Before each sweep, check your Part 1 row for it. For each one, press
-**Start**, then **Freeze** to hold the trace, and record four numbers in
-Table A: the Peak Gain readout; the HPBW, between the two angles where the
+**Start**, then **Freeze** to hold the trace, and record four numbers in the
+boxes under the step, which fill Table A: the Peak Gain readout; the HPBW, between the two angles where the
 trace falls $3\ \text{dB}$ below its peak; the FNBW, between the two minima
 that bracket the main lobe; and the first SLL, the tallest sidelobe relative
 to the peak.
@@ -282,20 +290,66 @@ to the peak.
    main lobe at $0^\circ$ and three or four sidelobe pairs on each side, an
    HPBW within a degree of your calculated value, and a first SLL near
    $\pm 22^\circ$ at $-11$ to $-14\ \text{dBc}$.
+
+   <div class="rec" data-lab="L20">
+   <label>Peak Gain (dBFS) <input data-field="a8.peak" data-label="Step 7, 8 elements: Peak Gain (dBFS)"></label>
+   <label>HPBW <input data-field="a8.hpbw" data-label="Step 7, 8 elements: HPBW"></label>
+   <label>FNBW <input data-field="a8.fnbw" data-label="Step 7, 8 elements: FNBW"></label>
+   <label>First SLL (dBc) <input data-field="a8.sll" data-label="Step 7, 8 elements: first SLL (dBc)"></label>
+   </div>
 8. **Four elements, E3 to E6.** Set E1, E2, E7, and E8 to 0, and sweep. The
    main lobe is roughly twice as wide, the sidelobes thin to one pair near
    $\pm 50^\circ$, and the peak drops about $5 \pm 1\ \text{dB}$ against the
    voltage sum's $6.0\ \text{dB}$. A null that fills to the floor reads wide:
    in the dry run this FNBW read about $5^\circ$ wider than the array factor
    gives.
+
+   <div class="rec" data-lab="L20">
+   <label>Peak Gain (dBFS) <input data-field="a4.peak" data-label="Step 8, E3 to E6: Peak Gain (dBFS)"></label>
+   <label>Change from 8 elements (dB) <input data-field="a4.step" data-label="Step 8, E3 to E6: change from 8 elements (dB)"></label>
+   <label>HPBW <input data-field="a4.hpbw" data-label="Step 8, E3 to E6: HPBW"></label>
+   <label>FNBW <input data-field="a4.fnbw" data-label="Step 8, E3 to E6: FNBW"></label>
+   <label>First SLL (dBc) <input data-field="a4.sll" data-label="Step 8, E3 to E6: first SLL (dBc)"></label>
+   </div>
 9. **Two elements, E4 and E5.** Set every element to 0 except E4 and E5, and
    sweep. The peak sits about $10 \pm 2\ \text{dB}$ below the eight-element
    peak against the voltage sum's $12.0\ \text{dB}$. The trace falls about
    $27\ \text{dB}$ toward $\pm 80^\circ$, which is the two-element array
    factor's own roll-off toward endfire, not a fault.
+
+   <div class="rec" data-lab="L20">
+   <label>Peak Gain (dBFS) <input data-field="a2.peak" data-label="Step 9, E4 and E5: Peak Gain (dBFS)"></label>
+   <label>Change from 8 elements (dB) <input data-field="a2.step" data-label="Step 9, E4 and E5: change from 8 elements (dB)"></label>
+   <label>HPBW <input data-field="a2.hpbw" data-label="Step 9, E4 and E5: HPBW"></label>
+   <label>FNBW <input data-field="a2.fnbw" data-label="Step 9, E4 and E5: FNBW"></label>
+   <label>First SLL (dBc) <input data-field="a2.sll" data-label="Step 9, E4 and E5: first SLL (dBc)"></label>
+   </div>
 10. **Two elements, E1 and E8.** Set E4 and E5 to 0 and E1 and E8 to 100, and
     sweep. Record in Table B the peak, the HPBW and FNBW of the lobe at
-    $0^\circ$, and the angle and level of every full-height lobe.
+    $0^\circ$, and the angle and level of every full-height lobe. The lobes
+    are numbered $m = -3$ to $+3$ from the most negative angle, $m = 0$ at
+    $0^\circ$.
+
+    <div class="rec" data-lab="L20">
+    <label>Peak Gain (dBFS) <input data-field="a18.peak" data-label="Step 10, E1 and E8: Peak Gain (dBFS)"></label>
+    <label>Change from 8 elements (dB) <input data-field="a18.step" data-label="Step 10, E1 and E8: change from 8 elements (dB)"></label>
+    <label>HPBW <input data-field="a18.hpbw" data-label="Step 10, E1 and E8: HPBW"></label>
+    <label>FNBW <input data-field="a18.fnbw" data-label="Step 10, E1 and E8: FNBW"></label>
+    <label>First SLL (dBc) <input data-field="a18.sll" data-label="Step 10, E1 and E8: first SLL (dBc)"></label>
+    <label>Angle <input data-field="lobe.m3.angle" data-label="Step 10, lobe −3: angle"></label>
+    <label>Level (dBc) <input data-field="lobe.m3.level" data-label="Step 10, lobe −3: level (dBc)"></label>
+    <label>Angle <input data-field="lobe.m2.angle" data-label="Step 10, lobe −2: angle"></label>
+    <label>Level (dBc) <input data-field="lobe.m2.level" data-label="Step 10, lobe −2: level (dBc)"></label>
+    <label>Angle <input data-field="lobe.m1.angle" data-label="Step 10, lobe −1: angle"></label>
+    <label>Level (dBc) <input data-field="lobe.m1.level" data-label="Step 10, lobe −1: level (dBc)"></label>
+    <label>Angle <input data-field="lobe.0.angle" data-label="Step 10, lobe 0: angle"></label>
+    <label>Angle <input data-field="lobe.p1.angle" data-label="Step 10, lobe +1: angle"></label>
+    <label>Level (dBc) <input data-field="lobe.p1.level" data-label="Step 10, lobe +1: level (dBc)"></label>
+    <label>Angle <input data-field="lobe.p2.angle" data-label="Step 10, lobe +2: angle"></label>
+    <label>Level (dBc) <input data-field="lobe.p2.level" data-label="Step 10, lobe +2: level (dBc)"></label>
+    <label>Angle <input data-field="lobe.p3.angle" data-label="Step 10, lobe +3: angle"></label>
+    <label>Level (dBc) <input data-field="lobe.p3.level" data-label="Step 10, lobe +3: level (dBc)"></label>
+    </div>
 ::::
 
 ::::{frame} Compare and Restore
@@ -314,8 +368,9 @@ to the peak.
     \end{aligned}$$
 
     and the kit reads less: about $5 \pm 1\ \text{dB}$ per halving, where the
-    dry-run kit read $5.1$ and $4.8\ \text{dB}$. Record both steps from your
-    Peak Gain readings; Part 3 of the packet asks about the difference.
+    dry-run kit read $5.1$ and $4.8\ \text{dB}$. Your two steps are the
+    change column of Steps 8 and 9; Part 3 of the packet asks about the
+    difference.
 12. **Restore the array.** Set all eight Element Gains back to 100, so the next
     lab starts from a full uniform aperture.
 ::::
@@ -464,6 +519,23 @@ and it does not model **Rx Gain (dB)**. Record those as your measured column
 and reconcile them against the calculated column exactly as you would with the
 kit.
 ```
+::::
+
+::::{frame} Your Part 2 Entries
+:class: read-only
+
+Every box you filled in on this page, in one place. Your entries stay in this
+browser only, saved as you type. **Download my packet** writes them into Part 2
+of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
+viewer, and upload one PDF to Gradescope. If you have already typed Part 1 into
+the packet PDF, use **Fill my own copy** and choose that file instead: your Part 1
+is kept, and Part 2 is added to it. Either way the result is locked, so finish
+any typing in the PDF first. **Export entries** saves a small backup file you
+can **Import** on another laptop or after clearing your browser. The boxes are
+optional: the blank packet is in the next frame, to fill on paper or in a PDF
+viewer instead.
+
+<div class="rec-summary" data-lab="L20" data-pdf="../../labs/ECE444_Lab_L20_ArrayFactor_blank.pdf" data-file="ECE444_L20_Lab"></div>
 ::::
 
 ::::{frame} Lab Packet
