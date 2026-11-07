@@ -391,9 +391,9 @@ $12.0\ \text{dBi}$ steered to $30^\circ$, $45^\circ$, and $60^\circ$.
 ::::{frame} Practice
 :class: read-only doc-links
 
-- <a class="doc-link" href="../../practice/ECE444_L21_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a class="doc-link doc-key" href="../../practice/ECE444_L21_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+This lesson's problems are the pre-lab for the L21 Lab: Part 1 of its packet, completed on your own before the lab period.
 
+- <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet, Part 1 (PDF)</a>
 ::::
 
 ::::{frame} Looking Ahead
