@@ -96,23 +96,23 @@ Neither column nulls anything on its own; only the eight weights together do.
 ::::{frame} Why the Notch Goes Deep
 :::{present}
 - One-step channel errors allow a notch about $48$ dB below the uniform peak.
-- phaser-00: $46$ to $50$ dB open, $22$ to $24$ dB cramped.
-- A shallow notch points to the bench first: reflections, calibration, or a sign.
+- Expect $46$ to $50$ dB open, $22$ to $24$ dB cramped.
+- A shallow notch points to the room first: reflections, calibration, or a sign.
 :::
 
 <a href="../L24-null-steering/index.html#frame-quantization-and-null-depth">Lesson 24</a>
 estimated the depth that small, independent channel errors allow, about
-$48$ dB below the uniform peak, and the 2026-10-23 dry run on phaser-00 reached
-$46$ to $50$ dB. Rounding the weights to the ADAR1000's $2.8125^\circ$ and 1 %
+$48$ dB below the uniform peak, and phaser-00 reached $46$ to $50$ dB in an open
+room. Rounding the weights to the ADAR1000's $2.8125^\circ$ and 1 %
 steps does not set that limit: the rounded table keeps its mirror symmetry, so
 its null survives and moves only a fraction of a degree. On a freshly
-calibrated kit the notch landed at $+21.7^\circ$. In a cramped space on
-2026-10-25 the same table bottomed out $22$ to $24$ dB down, and so did the
+calibrated kit the notch landed at $+21.7^\circ$. In a cramped space the same
+table bottomed out $22$ to $24$ dB down, and so did the
 difference null of the next frame: the HB100's own tone was still there in the
 null, so a reflection arriving from another direction, about 22 dB below the
 direct path, was filling both.
 
-When a notch reads much shallower than $40$ dB, look at the bench before the
+When a notch reads much shallower than $40$ dB, look at the room before the
 arithmetic. A wall or a person beside the kit fills it, a stale calibration
 fills it, and a sign error on the phase column moves it to $-22.5^\circ$, where
 it is easy to miss.
@@ -136,8 +136,8 @@ elements 5–8. Adding them is the ordinary sum beam. Subtracting them, by
 setting Beam 1 Phase to $180^\circ$, cancels the two halves wherever they
 arrive in phase, which is boresight. The result is a null there with twin
 peaks near $\pm 11^\circ$: the **monopulse difference beam**, which Procedure D
-and Module 4 use for angle measurement. On phaser-00 it measured $-41.5$ dB on
-an open bench and $-22$ dB in a cramped one, centered on boresight, with the
+and Module 4 use for angle measurement. On phaser-00 it measured $-41.5$ dB in
+an open room and $-22$ dB in a cramped one, centered on boresight, with the
 peaks at $\pm 12.0^\circ$. It needs no arithmetic, so its depth is a direct
 reading of what the room lets through.
 
@@ -193,7 +193,7 @@ boresight, and the two channels cannot tell them apart. The digital layer can
 only work on what the analog layer passes it, and only on directions the two
 channels can distinguish.
 
-At $+30^\circ$ both limits act at once, and the bench shows what follows. MVDR
+At $+30^\circ$ both limits act at once, and the measurement shows what follows. MVDR
 still spends its one null on the interferer, but to the two channels the
 interferer looks like the look direction, and the HB100 sits a fraction of a
 degree off it, so the null lands on the target too. On phaser-00 the target
@@ -221,8 +221,8 @@ fell from about 25 dB to under 10.
 The widget is the two-channel digital layer on its own, with the analog
 subarrays parked at boresight. Move the interferer to about $+20^\circ$ and
 watch MVDR place a null on it. Then move it out toward $\pm 30^\circ$ and watch
-the suppression fall away, for the two reasons on the previous frame. On the
-bench you hold the beam on the target in Signal vs Time and read the
+the suppression fall away, for the two reasons on the previous frame. In the
+lab you hold the beam on the target in Signal vs Time and read the
 suppression from the two readout tiles under the plot. A beam-sweep trace is
 the total power at each angle, interferer and target together, so it shows the
 null but does not measure it.
@@ -251,7 +251,7 @@ assumed. MVDR has two degrees of freedom on this board, one constraint and one
 null, and it finds that null itself, from data, several times a second. On an
 array with a digitizer behind every element, adaptive beamforming has both
 advantages at once. On the PHASER we can see what the hybrid architecture
-costs: the analog sums discard the per-element information before the
+loses: the analog sums discard the per-element information before the
 algorithm sees it.
 ::::
 
@@ -307,60 +307,48 @@ $$
 so the trace stays bounded and on screen however strong the target is.
 ::::
 
-::::{frame} Bench Rules
-:::{present}
-- Open **Lab Presets** before you press one; **Calibrate**, then **Find HB100**.
-- Set **Rx Gain** for an FFT peak of $-10 \pm 3$ dBFS.
-- Source $1.2$ m out, at patch height; facing the patches, E1 is on the right.
-:::
-
-The rules come from the Module 3 dry runs. A peak near $-10$ dBFS keeps the
-receiver linear with room above the floor; at Rx Gain 10 dB the FFT peak read
-$+2$ to $+3$ dBFS at these distances and the receiver clipped. Every prediction
-uses the frequency **Find HB100** reports for your kit, not the nominal
-$10.525$ GHz; the kits sit anywhere from $10.41$ to $10.46$ GHz. Level
-comparisons need the source at $1.2$ m or more, because closer in the residual
-curvature across the aperture puts errors of a few tenths of a decibel on every
-peak.
-::::
-
-::::{frame} Before Every Sweep
-:::{present}
-:class: callout
-
-- Keep $\pm 40^\circ$ of the bench clear of walls and people.
-- Recalibrate if the uniform trace is lopsided.
-- **Signal BW** resets after Calibrate, Find HB100, or a preset: check it.
-:::
-
-In the phaser-00 dry run, a wall beside the kit produced a lobe at $-37^\circ$
-to $-41^\circ$ only $9$ dB below the peak, and a person seated beside the kit
-left a $-17$ dBc shelf on that side. Either one fills a notch. A stale
-calibration made the uniform trace's two first sidelobes read unequal, and
-recalibrating fixed it. Signal BW returned to zero after each of Calibrate,
-Find HB100, and the Rectangular preset, so check it before every sweep you
-record.
-::::
-
 ::::{frame} Equipment and Setup
+:::{present}
+- The HB100 at boresight, $1.2$ m out, at patch-row height.
+- Keep $\pm 40^\circ$ of the room clear of walls and people.
+- Bring up the kit, then four procedures; fill Tables A to D as you go.
+:::
+
+Place the HB100 at boresight, $1.2$ m from the array face, at patch-row height
+and aimed at the center of the patch row. The notch and the difference null are
+deeper than anything the earlier labs measured, so anything that reflects the
+HB100's tone in from another direction fills them: keep about $\pm 40^\circ$ on
+each side of boresight clear of walls and people for the whole lab.
+
+The procedure has five parts. Steps 1 to 5 bring up the kit. Steps 6 to 10 are
+Procedure A, the static notch (Table A); Steps 11 to 15 are Procedure B, the
+difference null (Table B); Steps 16 to 22 are Procedure C, MVDR against an
+interferer (Table C); and Steps 23 to 27 are Procedure D, tracking (Table D).
+::::
+
+::::{frame} Bring Up the Kit
 :class: read-only
 
-You need the ADALM-PHASER kit with its Raspberry Pi and Pluto attached, the
-HB100 source and its battery, a laptop on the same network, and a $1.2$ m arc
-taped on the bench with marks every $15^\circ$.
-
-1. Place the HB100 at boresight, $1.2$ m from the array face, at patch-row
-   height and aimed at the center of the patch row. Keep $\pm 40^\circ$ of the
-   bench clear of walls and people.
-2. Power the PHASER, wait for the Pi to boot, and open
-   `http://phaser.local:8080` in a browser.
-3. Press **Calibrate** under Configuration and let it finish. Then press
-   **Find HB100** and record the Signal Freq it reports; Part 1 of the packet
-   uses it.
-4. Set **Rx Gain** so the FFT peak, beam at $0^\circ$ and source at boresight,
-   reads $-10 \pm 3$ dBFS. Leave it there for the whole lab.
-5. Check **Signal BW**, which Calibrate and Find HB100 reset.
-6. Open the **Lab Presets** section before pressing any preset in it.
+1. Browse to your kit's address from Lesson 17 and wait for the pill to read
+   **Connected**.
+2. With the HB100 at boresight, press **Find HB100** and record the Signal Freq
+   it reports and your source distance. Your Part 1 table uses the frequency.
+   <div class="rec" data-lab="L24">
+   <label>Step 2: Signal Freq <input data-field="f.sig"></label>
+   <label>Step 2: distance to the HB100 <input data-field="f.dist"></label>
+   </div>
+3. Press **Calibrate** and wait for it to finish, with the HB100 still at
+   boresight. An uncalibrated array fills a null on its own, and a shallow
+   notch would then measure the calibration rather than your weights. If the
+   uniform sweep in Step 6 shows first sidelobes more than about 2 dB apart,
+   calibrate again.
+4. Set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$ dBFS, beam at $0^\circ$,
+   and record it. Leave it there for the whole lab.
+   <div class="rec" data-lab="L24">
+   <label>Step 4: Rx Gain (dB) <input data-field="f.gain"></label>
+   </div>
+5. Check **Signal BW**. Calibrate, Find HB100, and every preset reset it to
+   zero, so check it again before each sweep you record.
 ::::
 
 ::::{frame} No Hardware?
@@ -378,33 +366,52 @@ also carries a simulated interferer, so procedure C runs there too.
 ::::{frame} Procedure A: The Static Notch
 :class: read-only
 
-1. With the array uniform (Element Gains at 100 %, Phase Control reset), press
+6. With the array uniform (Element Gains at 100 %, Phase Control reset), press
    **Start**. Read **Peak Gain** and **Angle** (set to **Peak**), then press
    **Freeze** to hold the trace as your reference. Record the level of the
    sidelobe nearest $+22.5^\circ$; expect about $-13$ dBc. If the two first
-   sidelobes differ by more than about 2 dB, recalibrate and repeat this step.
-2. Enter your Part 1 gains into **Element Gains** (Rx1 through Rx8). The set is
-   symmetric, so **Enforce Symmetric Taper** makes no difference to it; leave the
-   switch off so that a later edit to one slider is not mirrored onto its
-   partner.
-3. Enter your Part 1 phases into **Phase Control**, each with its sign.
-4. Press **Start** and read the new trace against the frozen one: the new
-   **Peak Gain**, the notch's depth below the frozen peak, and the notch's angle.
-   Fill in Table A of the packet.
-5. Press **Reset** in Phase Control and return Element Gains to Uniform.
+   sidelobes differ by more than about 2 dB, calibrate again and repeat this
+   step.
+   <div class="rec" data-lab="L24">
+   <label>Step 6: uniform sidelobe nearest +22.5° (dBc) <input data-field="a.side"></label>
+   </div>
+7. Enter your Part 1 gains into **Element Gains** (Rx1 through Rx8). Leave
+   **Enforce Symmetric Taper** off: the set is already symmetric, and with the
+   switch on a later edit to one slider is mirrored onto its partner.
+8. Enter your Part 1 phases into **Phase Control**, each with its sign. A sign
+   error moves the notch to $-22.5^\circ$, where it is easy to miss.
+9. Press **Start** and read the new trace against the frozen one: the new
+   **Peak Gain**, the notch's depth below the frozen peak, and the notch's
+   angle. Expect the main lobe about 2 dB down and the notch near
+   $+22^\circ$, 46 to 50 dB down in an open room. A notch much shallower than
+   40 dB points to the room first: a wall or a person beside the kit, or a
+   stale calibration.
+   <div class="rec" data-lab="L24">
+   <label>Step 9: null-steered main-lobe peak (dB) <input data-field="a.peak"></label>
+   <label>Step 9: notch bottom, below the uniform peak (dB) <input data-field="a.depth"></label>
+   <label>Step 9: notch angle <input data-field="a.angle"></label>
+   </div>
+10. Press **Reset** in Phase Control and return Element Gains to Uniform.
 ::::
 
 ::::{frame} Procedure B: The Difference Null
 :class: read-only
 
-1. Open **Digital Beam Forming** and set Mode to **Manual**.
-2. Leave Beam 0 Gain and Phase alone. Set **Beam 1 Phase** to $180^\circ$.
-3. Press **Start**. Nothing in the analog beamformers changed; only one digital
-   channel's sign did.
-4. Record the null's depth and angle, and the angles of the two peaks that
-   replace the main lobe, in Table B. The peaks fall on the sweep's
-   $2.8125^\circ$ grid, so one grid step is the reading tolerance.
-5. Set **Beam 1 Phase** back to $0^\circ$.
+11. Open **Digital Beam Forming** and set Mode to **Manual**.
+12. Leave Beam 0 Gain and Phase alone, and set **Beam 1 Phase** to $180^\circ$.
+13. Press **Start**. Nothing in the analog beamformers changed; only one digital
+    channel's sign did.
+14. Record the null's depth and angle, and the angles of the two peaks that
+    replace the main lobe. The peaks fall on the sweep's $2.8125^\circ$ grid, so
+    one grid step is the reading tolerance. The null needs no arithmetic, so
+    its depth is a direct reading of what the room lets through.
+    <div class="rec" data-lab="L24">
+    <label>Step 14: null depth (dB) <input data-field="b.depth"></label>
+    <label>Step 14: null angle <input data-field="b.angle"></label>
+    <label>Step 14: left peak angle <input data-field="b.left"></label>
+    <label>Step 14: right peak angle <input data-field="b.right"></label>
+    </div>
+15. Set **Beam 1 Phase** back to $0^\circ$.
 ::::
 
 ::::{frame} Procedure C: MVDR Against an Interferer
@@ -413,77 +420,117 @@ also carries a simulated interferer, so procedure C runs there too.
 The interferer in this procedure is simulated: the Phaser software adds a second
 source, at an angle and level you choose, to the real samples the kit receives,
 before the digital beamformer sees them. The target stays your HB100 at
-boresight. Every number in this procedure comes from the two readout tiles
-under the plot, **Interferer vs Target** and **MVDR Suppression**, and from
-**Peak Gain**, with the beam held on the target.
+boresight. Every number comes from the two readout tiles under the plot,
+**Interferer vs Target** and **MVDR Suppression**, and from **Peak Gain**, with
+the beam held on the target.
 
-1. Set **Mode** to **Signal vs Time** with **Steer Angle** at $0^\circ$. This
-   holds the beam on the target, and the readout tiles fill in only while it is
-   held.
-2. Open the **Interferer** pane, below Digital Beam Forming, and press
-   **Inject Interferer**; it changes to *Interferer ON · click to stop*. Set
-   **Angle (deg)** to $+20$ and **Power (dBFS)** to $0$, its maximum, which puts
-   it about 10 dB above a target read at $-10$ dBFS. Leave **Offset from
-   target (kHz)** at $100$ and **Coherent with target** off.
-3. In **Digital Beam Forming**, set Mode to **Manual**. Watch ten updates of
-   **Interferer vs Target** and **Peak Gain** and record the median of each,
-   the middle value once sorted. The readings jump between updates, and the
-   median ignores the odd wild one where an average would not.
-4. Set Mode to **MVDR**, Snapshots to $1024$, and Diagonal Load to $0.1$. Leave
-   Steer Angle at $0^\circ$: it is MVDR's look direction. Record the medians of
-   **Interferer vs Target**, **Peak Gain**, and **MVDR Suppression**. The
-   suppression tile needs a Manual and an MVDR reading at the same Steer Angle;
-   if it shows "--", repeat step 3, then this step.
-5. Open the **Adaptive** tab, which appears with MVDR in Signal vs Time. Record
-   the angle and depth of the null near $+20^\circ$, and the conventional
-   pattern's level at the same angle.
-6. Move the interferer to $+30^\circ$. Record Peak Gain in Manual, then in MVDR
-   at Diagonal Load $0.001$ and at $0.1$.
-7. Press the interferer button to turn it off, and set Mode back to
-   **Manual** and **Beam Sweep**.
-
-On phaser-00, with the interferer at $+20^\circ$: Interferer vs Target read
-about $-2$ dB in Manual and $-18$ dB under MVDR, a suppression near 17 dB
-(single readings from 11 to 20 dB), and the Adaptive tab put the null at
-$19^\circ$ to $20^\circ$, well below the conventional pattern's $-13$ dB.
-Peak Gain under MVDR reads about 2 dB below Manual, because with the
-interferer on Peak Gain is the in-band level, and in Manual it includes an
-interferer only 2 dB below the target. At $+30^\circ$, loading $0.001$ let
-MVDR cut the target by about 10 dB and $0.1$ held the loss near 2 dB; MVDR
-Suppression read negative at every loading there, MVDR doing worse than
-Manual.
+16. Set **Mode** to **Signal vs Time** with **Steer Angle** at $0^\circ$. This
+    holds the beam on the target, and the readout tiles fill in only while it is
+    held.
+17. Open the **Interferer** pane, below Digital Beam Forming, and press
+    **Inject Interferer**; it changes to *Interferer ON · click to stop*. Set
+    **Angle (deg)** to $+20$ and **Power (dBFS)** to $0$, its maximum, which puts
+    it about 10 dB above a target read at $-10$ dBFS. Leave **Offset from
+    target (kHz)** at $100$ and **Coherent with target** off.
+18. In **Digital Beam Forming**, set Mode to **Manual**. Watch ten updates of
+    **Interferer vs Target** and **Peak Gain** and record the median of each,
+    the middle value once sorted. The readings jump between updates, and the
+    median ignores the odd wild one where an average would not. Expect
+    Interferer vs Target near $-2$ dB.
+    <div class="rec" data-lab="L24">
+    <label>Step 18: Manual, Interferer vs Target (dB) <input data-field="c.man.ivt"></label>
+    <label>Step 18: Manual, Peak Gain (dBFS) <input data-field="c.man.peak"></label>
+    </div>
+19. Set Mode to **MVDR**, Snapshots to $1024$, and Diagonal Load to $0.1$. Leave
+    Steer Angle at $0^\circ$: it is MVDR's look direction. Record the medians of
+    **Interferer vs Target**, **Peak Gain**, and **MVDR Suppression**. The
+    suppression tile needs a Manual and an MVDR reading at the same Steer Angle;
+    if it shows "--", repeat Step 18, then this step. Expect Interferer vs Target
+    near $-18$ dB, a suppression near 17 dB. Peak Gain reads about 2 dB below
+    Manual's, because in Manual it includes an interferer only 2 dB below the
+    target.
+    <div class="rec" data-lab="L24">
+    <label>Step 19: MVDR, Interferer vs Target (dB) <input data-field="c.mvdr.ivt"></label>
+    <label>Step 19: MVDR, Peak Gain (dBFS) <input data-field="c.mvdr.peak"></label>
+    <label>Step 19: MVDR Suppression (dB) <input data-field="c.mvdr.supp"></label>
+    </div>
+20. Open the **Adaptive** tab, which appears with MVDR in Signal vs Time. Record
+    the angle and depth of the null near $+20^\circ$, and the conventional
+    pattern's level at the same angle. Expect the null at $19^\circ$ to
+    $20^\circ$, well below the conventional pattern's $-13$ dB.
+    <div class="rec" data-lab="L24">
+    <label>Step 20: Adaptive null angle <input data-field="c.null.angle"></label>
+    <label>Step 20: Adaptive null depth (dB) <input data-field="c.null.depth"></label>
+    <label>Step 20: conventional pattern at the null (dB) <input data-field="c.null.conv"></label>
+    </div>
+21. Move the interferer to $+30^\circ$. Record Peak Gain in Manual, then in MVDR
+    at Diagonal Load $0.001$ and at $0.1$. Expect the target about 10 dB down at
+    $0.001$ and about 2 dB down at $0.1$: there the two channels cannot tell the
+    interferer from the target, and loading keeps the null off it.
+    <div class="rec" data-lab="L24">
+    <label>Step 21: +30°, Manual Peak Gain (dBFS) <input data-field="c.30.man"></label>
+    <label>Step 21: +30°, MVDR load 0.001 Peak Gain (dBFS) <input data-field="c.30.load001"></label>
+    <label>Step 21: +30°, MVDR load 0.1 Peak Gain (dBFS) <input data-field="c.30.load01"></label>
+    </div>
+22. Press the interferer button to turn it off, and set Mode back to
+    **Manual** and **Beam Sweep**.
 ::::
 
 ::::{frame} Procedure D: Watch It Track
 :class: read-only
 
-1. Open **Lab Presets** and load **8 Tracking**. It sets the digital layer up
-   to form both beams at once.
-2. Set the taper to **Uniform** under Element Gains, and check that **Beam 1
-   Phase** reads $0^\circ$ in Digital Beam Forming. The preset resets the phase
-   but not yet the taper, and a leftover taper changes every reading below.
-3. In **Plot Options**, turn on **Show Monopulse Delta Beam** and **Show
-   Monopulse Error Function**.
-4. On the **Rectangular** tab, press **Start**. The sum trace peaks on
-   boresight and the delta trace nulls there. Record the delta null's depth and
-   angle, and the angle where the error trace crosses zero, in Table D.
-5. Open the **Tracking** tab and press **Start**. Its y-axis is the steering
-   angle, plotted against sweep count. Move the HB100 slowly across the front
-   of the array along the $1.2$ m arc. The tracker reads the error function,
-   drives it back toward zero, and follows the source without sweeping. Note in
-   Table D how far it follows and how it fails when it loses the source.
+23. Open **Lab Presets** and choose the **Tracking** preset; its buttons respond
+    only while the section is open. It sets the digital layer up to form both
+    beams at once. Check **Signal BW** again, which the preset resets.
+24. Set the taper to **Uniform** under Element Gains, and check that **Beam 1
+    Phase** reads $0^\circ$ in Digital Beam Forming. The preset resets the phase
+    but not yet the taper, and a leftover taper changes every reading below.
+25. In **Plot Options**, turn on **Show Monopulse Delta Beam** and **Show
+    Monopulse Error Function**.
+26. On the **Rectangular** tab, press **Start**. The sum trace peaks on
+    boresight and the delta trace nulls there. Record the delta null's depth and
+    angle, and the angle where the error trace crosses zero.
+    <div class="rec" data-lab="L24">
+    <label>Step 26: delta null depth (dBc) <input data-field="d.depth"></label>
+    <label>Step 26: delta null angle <input data-field="d.angle"></label>
+    <label>Step 26: error-function zero crossing <input data-field="d.zero"></label>
+    </div>
+27. Open the **Tracking** tab and press **Start**. Its y-axis is the steering
+    angle, plotted against sweep count. Move the HB100 slowly across the front
+    of the array along the $1.2$ m arc. The tracker reads the error function,
+    drives it back toward zero, and follows the source without sweeping. Expect
+    it to follow smoothly to about $\pm 45^\circ$; past about $\pm 48^\circ$ it
+    loses the source and snaps to the $\pm 90^\circ$ limits or to a sidelobe near
+    $+60^\circ$ to $+70^\circ$, rather than drifting, and locks on again within
+    one sweep once the source is back inside $\pm 45^\circ$. Record how far it
+    followed and how it behaved when it lost the source.
+    <div class="rec" data-lab="L24">
+    <label>Step 27: how far it followed, and how it lost the source <input data-field="d.track"></label>
+    </div>
+::::
 
-On phaser-00 the tracker followed smoothly to about $\pm 45^\circ$. Near
-$\pm 48^\circ$ it lost the source and snapped to the $\pm 90^\circ$ limits, or to
-a sidelobe near $+60^\circ$ to $+70^\circ$, rather than drifting; once the source
-came back inside about $\pm 45^\circ$ it locked on again within one sweep.
+::::{frame} Your Part 2 Entries
+:class: read-only
+
+Every box you filled in on this page, in one place. Your entries stay in this
+browser only, saved as you type. **Download my packet** writes them into Part 2
+of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
+viewer, and upload one PDF to Gradescope. If you have already typed Part 1 into
+the packet PDF, use **Fill my own copy** and choose that file instead: your Part 1
+is kept, and Part 2 is added to it. Either way the result is locked, so finish
+any typing in the PDF first. **Export entries** saves a small backup file you
+can **Import** on another laptop or after clearing your browser. The boxes are
+optional: the blank packet is in the next frame, to fill on paper or in a PDF
+viewer instead.
+
+<div class="rec-summary" data-lab="L24" data-pdf="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" data-file="ECE444_L24_Lab"></div>
 ::::
 
 ::::{frame} Lab Packet
 :class: read-only
 
 The packet is the turn-in document for the whole lab: Part 1 before the period,
-Part 2 at the bench, Part 3 after. <a href="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">L24 Lab packet (PDF)</a>.
+Part 2 in class, Part 3 after. <a href="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">L24 Lab packet (PDF)</a>.
 ::::
 
 ::::{frame} Summary
@@ -508,7 +555,7 @@ Lesson 25 derives the radar range equation and asks the question this module
 never had to: how much power comes back from a target that transmits nothing of
 its own. Everything Module 3 built, beamwidth, sidelobes, scan loss, and
 steering, becomes the antenna terms in that equation, and the array you have
-been sweeping becomes the front end of a radar. The monopulse pair of Part D
+been sweeping becomes the front end of a radar. The monopulse pair of Procedure D
 measures a target's angle from a single look, which is what a radar needs to
 track something that moves; the range equation supplies the signal that feeds
 it. Keep your Table D numbers: the slope of the error function near boresight
