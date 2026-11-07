@@ -440,6 +440,86 @@ that thing directly. Build anecdotes, history, and a count with no cause behind
 it are the usual offenders; a measurement from the kit stays when the lesson
 uses the number.
 
+## Lab pages (Neil, 2026-11-07, on the L20 Lab)
+
+A lab page is a procedure a cadet follows with a kit in hand. Neil's notes on
+the L20 Lab cleanup, in his words where quoted, set how every lab reads.
+
+### 27. Say nothing the cadet already knows
+
+> **Before:** a "Per bench" heading over a list of the kit, the source, and
+> the cables, under an Equipment frame that already said "your Phaser kit".
+>
+> **After:** the Equipment frame's "your Phaser kit", and nothing more.
+
+"Of course it's per bench." The kit is the same in every lab; naming it once
+is enough. A heading that states the obvious and a list that repeats the one
+above it both come out.
+
+### 28. Never "bench"
+
+"Bench is something you sit on." Where it matters who does a step, it is
+"each student" or "each team"; usually it does not matter, and the sentence
+needs neither. "Bench time" is "lab time" or "in class".
+
+### 29. Call a control what a person would call it
+
+> **Before:** press **2 Array Factor**.
+>
+> **After:** choose the Array Factor preset.
+
+The number in a GUI's button label is the GUI's, not part of the name.
+
+### 30. A note about a step lives in that step
+
+> **Before:** after the steps, "Step 5 is the L17 Lab's level reference, not
+> a fixed gain. The preset does not set Rx Gain (dB) ..."
+>
+> **After:** that sentence inside Step 5's own frame.
+
+"If you have something to say about step 5, say it in step 5. Don't make me
+go back and read step 5 again to remember what it was."
+
+### 31. Don't teach an earlier lab again
+
+> **Before:** "The HB100 is a free-running DRO and drifts across 10.1 to
+> 10.7 GHz with temperature. The GUI hunts for the tone, ..."
+>
+> **After:** nothing; the L17 Lab covered it.
+
+"We've already talked about the HB100." Each lab assumes the labs before it,
+and links to one only where the cadet needs to look something up.
+
+### 32. A note: the command, why, and what to do if it is wrong
+
+> **After (his wording):** Calibrate the array. An uncalibrated array has
+> amplitude and phase errors spread across the row, which fills the nulls and
+> raises the sidelobes on its own, and you would then be measuring the
+> calibration rather than the array factor. If the broadside sweep does not
+> look right, fix that first.
+
+The command first, then the mechanism and what it would do to the
+measurement, then the check and the fix. Nothing about how it went in a dry
+run unless the cadet needs that number.
+
+### 33. Steps run 1 to N, and the structure stays in sight
+
+> **Before:** Steps 1–6, then A1–A6, with A5 and A6 broken out on their own.
+>
+> **After:** Steps 1–12 straight through, in three frames, and the Equipment
+> frame names the three parts up front.
+
+"Write the steps, say something about it if you need to, but keep it
+simple. Keep the structure of the lab in front of them always. Changing
+numbers and going back and forth to describe every nuance gets so
+confusing."
+
+### 34. Packet boxes line up
+
+Every answer box in a lab packet is either right-justified in one vertically
+aligned column or set in one row along the bottom of its part. "I want a
+consistent look and feel. Not random boxes everywhere."
+
 ## What he does *not* want changed
 
 His voice is direct, and that is deliberate. Do not soften it into hedged
@@ -463,4 +543,6 @@ rewrite each one with its agent named. Then read every sentence and ask
 whether it has a subject and a verb. Then ask whether any sentence is a joke,
 a wink, or a judgment about the reader. Rewrite anything that is. Grep for
 `instructor` and rewrite it in the first person (25). Then ask of each
-sentence what a cadet does differently because of it (26).
+sentence what a cadet does differently because of it (26). On a lab page,
+grep for `bench` and for a numbered control label like `**2 `, and check that
+every note sits in its own step and the steps run 1 to N (27-33).

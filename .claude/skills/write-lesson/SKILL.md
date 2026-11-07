@@ -73,6 +73,21 @@ Every frame:
 - No math in the raw-HTML objectives list, `\vert` not `|` in table math,
   `\ ` not `\,` or `\;`, no thin spaces (CLAUDE.md gotchas).
 
+Every lab page (VOICE.md 27-34, from Neil's L20 Lab notes):
+
+- Steps run 1 to N straight through, a few frames of them, and the opening
+  frame names the parts so the structure stays in sight. No A1, A2.
+- A note about a step goes in that step's frame: the command, why, and
+  what to do if it looks wrong. No later paragraph that says "Step 5 is".
+- Say nothing the cadet already knows: no "per" headings, no second list of
+  the kit, nothing an earlier lab already taught (the HB100's drift).
+- Never "bench". Controls by the name a person would say ("the Array Factor
+  preset"), not the GUI's numbered label.
+- No dry-run anecdotes unless the cadet needs the number.
+- Entry boxes at each step that takes a reading, and a summary frame, as
+  the L17-L20 Labs do; packet boxes right-justified in one column or in one
+  row along the bottom of the part.
+
 Figures and widgets as you go: generators in `scripts/graphics/` through
 `apply_font_stack()`, widgets from `book/extras/viz/reflector-gain.html` as
 the template and inside `check_widget.py`'s budgets; the illustration
