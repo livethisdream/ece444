@@ -42,7 +42,7 @@ with room for notes. Print from read mode for the whole lesson.
 Lesson 21 separated the array factor from the pattern the array radiates and
 predicted where the two part company: the peak drops as $\cos\theta_0$ when the
 beam steers, the two first sidelobes of a steered beam stop matching, and
-nothing comes out the back. Today we test those predictions on the bench. The
+nothing comes out the back. Today we test those predictions. The
 L21 Lab packet starts from them: Part 1, the pre-lab you completed before
 class, works out the patterns at your HB100's frequency and sizes the errors of
 the two methods. Today you measure the pattern twice with the beam held still,
@@ -204,8 +204,7 @@ two, which is fine for a lobe $15^\circ$ wide.
 With the beam held at $30^\circ$, the main lobe appears when the source reaches
 about $30^\circ$ instead of boresight. The peak reads lower than the broadside
 run, by $0.6\ \text{dB}$ for the ideal element and about $0.9\ \text{dB}$ for a
-real patch; the Module 3 dry run measured $0.7\ \text{dB}$ with the source
-$1.2\ \text{m}$ out. The rotation can resolve that difference because the
+real patch. The rotation can resolve that difference because the
 distance never changes. A walk cannot, because the radius drift alone is as
 large as the effect.
 
@@ -241,136 +240,266 @@ trustworthy than either reading alone.
 
 ::::{frame} Equipment and Setup
 :::{present}
-- The kit, cabled to your laptop as in Lesson 17, on its rotating stand, $0^\circ$ toward the source.
+- The kit on its rotating stand, $0^\circ$ toward the source.
 - The HB100 on its tripod, $1.2\ \text{m}$ out at patch-row height, and a taped $1.2\ \text{m}$ arc.
+- Four parts: bring up, check the angle axis, walk the source, turn the kit.
 :::
 
-You need the ADALM-PHASER kit on its rotating stand from
-<a href="../L17-lab-bring-up/index.html#frame-the-rotating-stand">the L17 Lab</a>,
-connected to your laptop by the Ethernet cable as in Lesson 17; the HB100 with a
-fresh battery, on its tripod; and masking tape. Tape the stand's base to the
-bench with its $0^\circ$ mark toward the source, and seat the kit's tripod in
-the platter's grooves with the patches facing the pointer. A kit without a stand
-can use a printed protractor instead, centered under the middle of the array
-between E4 and E5 with $0^\circ$ toward the source, but then mark it so that a
-turn toward E1 reads positive, and turn the tripod carefully about that
-center.
+Tape the stand's base to the table with its $0^\circ$ mark toward the source,
+and seat the kit's tripod in the platter's grooves with the patches facing the
+pointer, as in
+<a href="../L17-lab-bring-up/index.html#frame-the-rotating-stand">the L17 Lab</a>.
+A kit without a stand can use a printed protractor instead, centered under the
+middle of the array between E4 and E5 with $0^\circ$ toward the source; mark it
+so that a turn toward E1 reads positive, and turn the tripod carefully about
+that center.
 
 Set the HB100 $1.2\ \text{m}$ from the array face at the height of the patch
 row, facing the array. Lesson 21 put the far-field distance of this aperture at
 $0.67\ \text{m}$, but level comparisons of under a decibel need more distance:
-in the Module 3 dry run, scan loss read correctly at $1.2\ \text{m}$ and only
-half of it at $1\ \text{m}$. Tape the walk's arc on the floor at the same
-$1.2\ \text{m}$ radius, with marks at $-90^\circ$, $0^\circ$, and $+90^\circ$.
+at $1\ \text{m}$ the scan loss reads only about half its value. Tape the
+walk's arc on the floor at the same $1.2\ \text{m}$ radius, with marks at
+$-90^\circ$, $0^\circ$, and $+90^\circ$.
+
+The procedure has four parts: Steps 1 to 6 bring up the kit, Steps 7 to 9
+check the angle axis, Steps 10 to 15 walk the source by hand, and Steps 16 to
+20 turn the kit on its stand. Each step that takes a reading has boxes for it,
+which fill Part 2 of the packet.
 ::::
 
 ::::{frame} Bring Up the Kit
 :class: read-only
 
-:::{present}
-1. Browse to your kit's address from Lesson 17 and wait for the pill to read **Connected**.
-2. With the HB100 $1.2\ \text{m}$ out at boresight and the kit at $0^\circ$, press **Find HB100** and record the Signal Freq in the packet.
-3. Press **Calibrate** and wait for it to finish.
-4. Open the **Lab Presets** section, then press **2 Array Factor**.
-5. Set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$ dBFS, and record it. Leave it there for the whole lab.
-6. Turn on **Show Peak Angle Marker** under **Plot Options**, press **Start**, and open the **Rectangular** tab.
-:::
+1. **Connect.** Browse to your kit's address from Lesson 17 and wait for the
+   pill to read **Connected**.
+2. **Find the source.** With the HB100 $1.2\ \text{m}$ out at boresight and
+   the kit at $0^\circ$, press **Find HB100** and record the Signal Freq and
+   the source distance.
 
-This is Lesson 17's order, for the same reason: **Calibrate** reads the
-frequency that **Find HB100** stores, and it needs the source at boresight while
-it runs. The preset buttons respond only once the Lab Presets section is open.
-The Rx Gain setting is the L17 Lab's level reference: every level in the packet
-is a difference between two readings taken at that gain, and the difference
-holds only while the receiver stays linear. A main lobe with a flat top means
-the receiver has clipped; turn the gain down and start again.
+   <div class="rec" data-lab="L21">
+   <label>Step 2: Signal Freq <input data-field="f.sig" data-label="Step 2: Signal Freq"></label>
+   <label>Step 2: source distance <input data-field="f.dist" data-label="Step 2: source distance"></label>
+   </div>
+3. **Calibrate the array.** Press **Calibrate** and wait for it to finish,
+   with the HB100 still at boresight. Calibrate uses the frequency Find HB100
+   stored, so it runs second.
+4. **Load the preset.** Open **Lab Presets** and choose the **Array Factor**
+   preset; its buttons respond only while the section is open.
+5. **Set the gain.** Set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$
+   dBFS, and record it. Every level in the packet is a difference between two
+   readings at this gain, so leave it there for the whole lab. A main lobe with
+   a flat top means the receiver has clipped; turn the gain down and start
+   again.
+
+   <div class="rec" data-lab="L21">
+   <label>Step 5: Rx Gain (dB) <input data-field="f.gain" data-label="Step 5: Rx Gain (dB)"></label>
+   </div>
+6. **Start the sweep.** Turn on **Show Peak Angle Marker** under **Plot
+   Options**, press **Start**, and open the **Rectangular** tab.
 ::::
 
 ::::{frame} Run 1: Check the Angle Axis
 :class: read-only
 
-:::{present}
-7. With the beam sweeping, turn the kit until the stand reads $-30$, which puts the source at $+30^\circ$, and record the **Angle** readout, set to **Peak**, in Table A.
-8. Repeat with the stand at $+30$ (source at $-30^\circ$) and at $0$.
-9. At $0^\circ$, record the peak, the half-power beamwidth, and both first sidelobes in Table B.
-:::
+7. **Source at $+30^\circ$.** With the beam sweeping, turn the kit until the
+   stand reads $-30$, which puts the source at $+30^\circ$, and record the
+   **Angle** readout, set to **Peak**. If it reads near $-30^\circ$, the kit
+   is turning the wrong way or the patches face away from the pointer; fix
+   that before going on, because every angle in Tables D and E depends on it.
+8. **Source at $-30^\circ$ and at $0^\circ$.** Repeat with the stand at $+30$
+   (source at $-30^\circ$) and at $0$. A reading within $\pm 2^\circ$ of the
+   source angle confirms the sign and the centering.
 
-If the Angle readout reads near $-30^\circ$ when the source should be at
-$+30^\circ$, the kit is turning the wrong way or the patches face away from the
-pointer; fix that before going on, because every angle in Tables D and E depends
-on it. A reading within $\pm 2^\circ$ of the source angle confirms the sign and
-the centering. Table B is the array factor, the trace you measured in the L20 Lab,
-and the reference for the other two runs.
+   <div class="rec" data-lab="L21">
+   <label>Source at +30°: Angle <input data-field="a.p30" data-label="Step 7, source at +30° (stand −30): Angle"></label>
+   <label>Source at −30°: Angle <input data-field="a.m30" data-label="Step 8, source at −30° (stand +30): Angle"></label>
+   <label>Source at 0°: Angle <input data-field="a.0" data-label="Step 8, source at 0°: Angle"></label>
+   </div>
+9. **The array factor.** At $0^\circ$, record the peak, the half-power
+   beamwidth, and both first sidelobes. This is the trace you measured in the
+   L20 Lab, and the reference for the other two runs.
+
+   <div class="rec" data-lab="L21">
+   <label>Step 9: peak (dBFS) <input data-field="b.peak" data-label="Step 9: peak (dBFS)"></label>
+   <label>Step 9: half-power beamwidth <input data-field="b.hpbw" data-label="Step 9: half-power beamwidth"></label>
+   <label>Step 9: left first sidelobe (dBc) <input data-field="b.left" data-label="Step 9: left first sidelobe (dBc)"></label>
+   <label>Step 9: right first sidelobe (dBc) <input data-field="b.right" data-label="Step 9: right first sidelobe (dBc)"></label>
+   </div>
 ::::
 
 ::::{frame} Run 2: Walk It by Hand
 :class: read-only
 
-:::{present}
-10. Open **Lab Presets** and press **7 Antenna Pattern**.
-11. Set **Steer Angle (deg)** to $0$, and check that the plot title reads "Beam held at 0.0°".
-12. Lift the HB100 off its tripod and stand on the $-90^\circ$ mark, aimed at the array.
-13. Walk the arc to $+90^\circ$ in about 20 to $25\ \text{s}$, keeping the radius and the aim.
-14. Read the main-lobe peak and both first sidelobes off the trace and record them in Table C.
-15. Repeat twice more, then return the HB100 to its tripod at boresight.
-:::
+10. **Load the preset.** Choose the **Antenna Pattern** preset. It sets
+    **Mode**, in the Beam Steering section, to **Signal vs Time**: the beam
+    holds at the Steer Angle, which takes effect as you change it, with no
+    Apply, and the **Tracking** tab plots the peak level in dBFS against time
+    over the last $30\ \text{s}$.
+11. **Hold the beam at broadside.** Set **Steer Angle (deg)** to $0$, check
+    that the plot title reads "Beam held at 0.0°", and record the update rate
+    the title shows.
 
-Preset 7 sets **Mode**, in the Beam Steering section, to **Signal vs Time**: the
-beam holds at the Steer Angle, which takes effect as you change it, with no
-Apply, and the Tracking tab plots the peak level in dBFS against time over the
-last $30\ \text{s}$. The plot's title shows the held angle and the update rate.
-The 30 s counts from when the mode starts, so begin walking promptly: a 20 to
-25 s walk then fits the whole arc. Practice the walk once before
-you record: too fast and each lobe gets only a few updates, too slow and the
-pattern runs off the edge. Read each lobe's
-peak by hovering over the trace. The three walks will not agree exactly, and
-that disagreement is a measurement in its own right: Part 3 compares it with the
-rotation's.
+    <div class="rec" data-lab="L21">
+    <label>Step 11: updates per second <input data-field="f.rate" data-label="Step 11: updates per second"></label>
+    </div>
+12. **Pick up the source.** Lift the HB100 off its tripod and stand on the
+    $-90^\circ$ mark, aimed at the array.
+13. **Walk.** Walk the arc to $+90^\circ$ in about 20 to $25\ \text{s}$,
+    keeping the radius and the aim. The $30\ \text{s}$ window counts from when
+    the mode starts, so begin promptly. Practice the walk once before you
+    record: too fast and each lobe gets only a few updates, too slow and the
+    pattern runs off the edge.
+14. **Read the trace.** Hover over the trace to read the main-lobe peak and
+    both first sidelobes. Expect the room to make the two sidelobes unequal by
+    a few decibels, with their average near $-13$ dBc, and the floor 25 to
+    30 dB below the peak, so both sidelobes stand clear of it.
+15. **Repeat.** Walk twice more, then return the HB100 to its tripod at
+    boresight. The three walks will not agree exactly, and that disagreement
+    is a measurement in its own right: record the spread, largest minus
+    smallest, and Part 3 compares it with the rotation's.
 
-Expect the room to make the two first sidelobes unequal. On phaser-00, two walks
-read the left one about 11.5 dB below the peak and the right one about 15 dB
-below, within half a decibel from walk to walk; their average, 13.2 dB, sat on
-the predicted 13.3. With the source behind the board the trace read about 25 to
-30 dB below the peak, so with the uniform taper both sidelobes stand at least
-10 dB clear of the floor.
+    <div class="rec" data-lab="L21">
+    <label>Walk 1: walk time (s) <input data-field="c.w1.time" data-label="Step 15, walk 1: walk time (s)"></label>
+    <label>Walk 1: peak (dBFS) <input data-field="c.w1.peak" data-label="Step 15, walk 1: peak (dBFS)"></label>
+    <label>Walk 1: left first sidelobe (dBc) <input data-field="c.w1.left" data-label="Step 15, walk 1: left first sidelobe (dBc)"></label>
+    <label>Walk 1: right first sidelobe (dBc) <input data-field="c.w1.right" data-label="Step 15, walk 1: right first sidelobe (dBc)"></label>
+    <label>Walk 2: walk time (s) <input data-field="c.w2.time" data-label="Step 15, walk 2: walk time (s)"></label>
+    <label>Walk 2: peak (dBFS) <input data-field="c.w2.peak" data-label="Step 15, walk 2: peak (dBFS)"></label>
+    <label>Walk 2: left first sidelobe (dBc) <input data-field="c.w2.left" data-label="Step 15, walk 2: left first sidelobe (dBc)"></label>
+    <label>Walk 2: right first sidelobe (dBc) <input data-field="c.w2.right" data-label="Step 15, walk 2: right first sidelobe (dBc)"></label>
+    <label>Walk 3: walk time (s) <input data-field="c.w3.time" data-label="Step 15, walk 3: walk time (s)"></label>
+    <label>Walk 3: peak (dBFS) <input data-field="c.w3.peak" data-label="Step 15, walk 3: peak (dBFS)"></label>
+    <label>Walk 3: left first sidelobe (dBc) <input data-field="c.w3.left" data-label="Step 15, walk 3: left first sidelobe (dBc)"></label>
+    <label>Walk 3: right first sidelobe (dBc) <input data-field="c.w3.right" data-label="Step 15, walk 3: right first sidelobe (dBc)"></label>
+    <label>Spread of the three walks: peak (dB) <input data-field="c.spread.peak" data-label="Step 15, spread of the three walks: peak (dB)"></label>
+    <label>Spread: left sidelobe (dB) <input data-field="c.spread.left" data-label="Step 15, spread of the three walks: left sidelobe (dB)"></label>
+    <label>Spread: right sidelobe (dB) <input data-field="c.spread.right" data-label="Step 15, spread of the three walks: right sidelobe (dB)"></label>
+    </div>
 ::::
 
 ::::{frame} Run 3: Turn the Kit, Both Beams in One Pass
 :class: read-only
 
-:::{present}
-16. Press **1 Steering Angle** so the beam sweeps again, kit at $0^\circ$. Hover over the trace at $0^\circ$ steer and record that level as the reference.
-17. Turn the kit to each $10^\circ$ mark from $-90^\circ$ to $+90^\circ$, every second click of the stand. At each, record the **Angle** readout, the trace at $0^\circ$ (Table D), and the trace at the sample nearest $30^\circ$ (Table E), both relative to Step 16.
-18. Turn slowly through each lobe and null of both beams and record the angle and level of each extreme.
-19. Turn the kit to $180^\circ$, source behind the board, and record the trace nearest $30^\circ$ in Table E.
-20. Turn the kit back to $0^\circ$ before you leave.
-:::
+16. **Sweep again.** Choose the **Steering Angle** preset so the beam sweeps,
+    kit at $0^\circ$. Hover over the trace at $0^\circ$ steer and record that
+    level as the reference; every level in Tables D and E is relative to it.
 
-Each point of a beam sweep is the beam held at that steer angle for an
-instant, so one sweep at one kit position reads both held beams at once: the
-sample at $0^\circ$ is the beam at broadside, and the sample nearest $30^\circ$
-($29.8^\circ$ near $10.44\ \text{GHz}$, on the $2.8125^\circ$ phase grid) is the
-beam at $30^\circ$. One rotation pass therefore fills both tables.
+    <div class="rec" data-lab="L21">
+    <label>Step 16: reference level (dBFS) <input data-field="d.ref" data-label="Step 16: reference level, kit at 0°, trace at 0° steer (dBFS)"></label>
+    </div>
+17. **Turn through the marks.** Turn the kit to each $10^\circ$ mark from
+    $-90^\circ$ to $+90^\circ$, every second click of the stand. At each,
+    record the **Angle** readout, the trace at $0^\circ$ steer (Table D), and
+    the trace at the sample nearest $30^\circ$ (Table E), both relative to
+    Step 16. One sweep reads both held beams at once, because each point of a
+    sweep is the beam held at that steer angle for an instant; the sample
+    nearest $30^\circ$ is $29.8^\circ$ near $10.44\ \text{GHz}$, on the
+    $2.8125^\circ$ phase grid. Plot both tables against the Angle readout, not
+    the stand's scale, because the readout catches a kit that slips; beyond
+    about $\pm 70^\circ$, or near a null of the element pattern, the readout
+    can wander, and there you use the mark. Turn the kit by the platter, not
+    the board, so the tripod stays seated and the array stays on the axis, and
+    keep the cables slack enough to follow it. Referring Table E to the
+    broadside reference makes the scan loss read directly: the $30^\circ$
+    beam's main-lobe level is the drop in peak gain.
 
-The sweep also says where the source really is. Record the Angle readout at
-every stop and plot both tables against it, not against the stand's scale: in
-the dry run, on a paper protractor, the kit slid about $5^\circ$ during the
-pass, and the readout caught it. The stand's detents make a slip much less
-likely, and the readout still catches one. Beyond about $\pm 70^\circ$, or near a null of the
-element pattern, the readout can wander; there, use the mark.
+    <div class="rec" data-lab="L21">
+    <label>Mark −90°: Angle readout <input data-field="d.m90.angle" data-label="Step 17, mark −90°: Angle readout"></label>
+    <label>Mark −90°: level, beam at 0° <input data-field="d.m90.level" data-label="Step 17, mark −90°: level, beam at 0° (Table D)"></label>
+    <label>Mark −90°: level, beam at 30° <input data-field="e.m90.level" data-label="Step 17, mark −90°: level, beam at 30° (Table E)"></label>
+    <label>Mark −80°: Angle readout <input data-field="d.m80.angle" data-label="Step 17, mark −80°: Angle readout"></label>
+    <label>Mark −80°: level, beam at 0° <input data-field="d.m80.level" data-label="Step 17, mark −80°: level, beam at 0° (Table D)"></label>
+    <label>Mark −80°: level, beam at 30° <input data-field="e.m80.level" data-label="Step 17, mark −80°: level, beam at 30° (Table E)"></label>
+    <label>Mark −70°: Angle readout <input data-field="d.m70.angle" data-label="Step 17, mark −70°: Angle readout"></label>
+    <label>Mark −70°: level, beam at 0° <input data-field="d.m70.level" data-label="Step 17, mark −70°: level, beam at 0° (Table D)"></label>
+    <label>Mark −70°: level, beam at 30° <input data-field="e.m70.level" data-label="Step 17, mark −70°: level, beam at 30° (Table E)"></label>
+    <label>Mark −60°: Angle readout <input data-field="d.m60.angle" data-label="Step 17, mark −60°: Angle readout"></label>
+    <label>Mark −60°: level, beam at 0° <input data-field="d.m60.level" data-label="Step 17, mark −60°: level, beam at 0° (Table D)"></label>
+    <label>Mark −60°: level, beam at 30° <input data-field="e.m60.level" data-label="Step 17, mark −60°: level, beam at 30° (Table E)"></label>
+    <label>Mark −50°: Angle readout <input data-field="d.m50.angle" data-label="Step 17, mark −50°: Angle readout"></label>
+    <label>Mark −50°: level, beam at 0° <input data-field="d.m50.level" data-label="Step 17, mark −50°: level, beam at 0° (Table D)"></label>
+    <label>Mark −50°: level, beam at 30° <input data-field="e.m50.level" data-label="Step 17, mark −50°: level, beam at 30° (Table E)"></label>
+    <label>Mark −40°: Angle readout <input data-field="d.m40.angle" data-label="Step 17, mark −40°: Angle readout"></label>
+    <label>Mark −40°: level, beam at 0° <input data-field="d.m40.level" data-label="Step 17, mark −40°: level, beam at 0° (Table D)"></label>
+    <label>Mark −40°: level, beam at 30° <input data-field="e.m40.level" data-label="Step 17, mark −40°: level, beam at 30° (Table E)"></label>
+    <label>Mark −30°: Angle readout <input data-field="d.m30.angle" data-label="Step 17, mark −30°: Angle readout"></label>
+    <label>Mark −30°: level, beam at 0° <input data-field="d.m30.level" data-label="Step 17, mark −30°: level, beam at 0° (Table D)"></label>
+    <label>Mark −30°: level, beam at 30° <input data-field="e.m30.level" data-label="Step 17, mark −30°: level, beam at 30° (Table E)"></label>
+    <label>Mark −20°: Angle readout <input data-field="d.m20.angle" data-label="Step 17, mark −20°: Angle readout"></label>
+    <label>Mark −20°: level, beam at 0° <input data-field="d.m20.level" data-label="Step 17, mark −20°: level, beam at 0° (Table D)"></label>
+    <label>Mark −20°: level, beam at 30° <input data-field="e.m20.level" data-label="Step 17, mark −20°: level, beam at 30° (Table E)"></label>
+    <label>Mark −10°: Angle readout <input data-field="d.m10.angle" data-label="Step 17, mark −10°: Angle readout"></label>
+    <label>Mark −10°: level, beam at 0° <input data-field="d.m10.level" data-label="Step 17, mark −10°: level, beam at 0° (Table D)"></label>
+    <label>Mark −10°: level, beam at 30° <input data-field="e.m10.level" data-label="Step 17, mark −10°: level, beam at 30° (Table E)"></label>
+    <label>Mark 0°: Angle readout <input data-field="d.0.angle" data-label="Step 17, mark 0°: Angle readout"></label>
+    <label>Mark 0°: level, beam at 0° <input data-field="d.0.level" data-label="Step 17, mark 0°: level, beam at 0° (Table D)"></label>
+    <label>Mark 0°: level, beam at 30° <input data-field="e.0.level" data-label="Step 17, mark 0°: level, beam at 30° (Table E)"></label>
+    <label>Mark +10°: Angle readout <input data-field="d.p10.angle" data-label="Step 17, mark +10°: Angle readout"></label>
+    <label>Mark +10°: level, beam at 0° <input data-field="d.p10.level" data-label="Step 17, mark +10°: level, beam at 0° (Table D)"></label>
+    <label>Mark +10°: level, beam at 30° <input data-field="e.p10.level" data-label="Step 17, mark +10°: level, beam at 30° (Table E)"></label>
+    <label>Mark +20°: Angle readout <input data-field="d.p20.angle" data-label="Step 17, mark +20°: Angle readout"></label>
+    <label>Mark +20°: level, beam at 0° <input data-field="d.p20.level" data-label="Step 17, mark +20°: level, beam at 0° (Table D)"></label>
+    <label>Mark +20°: level, beam at 30° <input data-field="e.p20.level" data-label="Step 17, mark +20°: level, beam at 30° (Table E)"></label>
+    <label>Mark +30°: Angle readout <input data-field="d.p30.angle" data-label="Step 17, mark +30°: Angle readout"></label>
+    <label>Mark +30°: level, beam at 0° <input data-field="d.p30.level" data-label="Step 17, mark +30°: level, beam at 0° (Table D)"></label>
+    <label>Mark +30°: level, beam at 30° <input data-field="e.p30.level" data-label="Step 17, mark +30°: level, beam at 30° (Table E)"></label>
+    <label>Mark +40°: Angle readout <input data-field="d.p40.angle" data-label="Step 17, mark +40°: Angle readout"></label>
+    <label>Mark +40°: level, beam at 0° <input data-field="d.p40.level" data-label="Step 17, mark +40°: level, beam at 0° (Table D)"></label>
+    <label>Mark +40°: level, beam at 30° <input data-field="e.p40.level" data-label="Step 17, mark +40°: level, beam at 30° (Table E)"></label>
+    <label>Mark +50°: Angle readout <input data-field="d.p50.angle" data-label="Step 17, mark +50°: Angle readout"></label>
+    <label>Mark +50°: level, beam at 0° <input data-field="d.p50.level" data-label="Step 17, mark +50°: level, beam at 0° (Table D)"></label>
+    <label>Mark +50°: level, beam at 30° <input data-field="e.p50.level" data-label="Step 17, mark +50°: level, beam at 30° (Table E)"></label>
+    <label>Mark +60°: Angle readout <input data-field="d.p60.angle" data-label="Step 17, mark +60°: Angle readout"></label>
+    <label>Mark +60°: level, beam at 0° <input data-field="d.p60.level" data-label="Step 17, mark +60°: level, beam at 0° (Table D)"></label>
+    <label>Mark +60°: level, beam at 30° <input data-field="e.p60.level" data-label="Step 17, mark +60°: level, beam at 30° (Table E)"></label>
+    <label>Mark +70°: Angle readout <input data-field="d.p70.angle" data-label="Step 17, mark +70°: Angle readout"></label>
+    <label>Mark +70°: level, beam at 0° <input data-field="d.p70.level" data-label="Step 17, mark +70°: level, beam at 0° (Table D)"></label>
+    <label>Mark +70°: level, beam at 30° <input data-field="e.p70.level" data-label="Step 17, mark +70°: level, beam at 30° (Table E)"></label>
+    <label>Mark +80°: Angle readout <input data-field="d.p80.angle" data-label="Step 17, mark +80°: Angle readout"></label>
+    <label>Mark +80°: level, beam at 0° <input data-field="d.p80.level" data-label="Step 17, mark +80°: level, beam at 0° (Table D)"></label>
+    <label>Mark +80°: level, beam at 30° <input data-field="e.p80.level" data-label="Step 17, mark +80°: level, beam at 30° (Table E)"></label>
+    <label>Mark +90°: Angle readout <input data-field="d.p90.angle" data-label="Step 17, mark +90°: Angle readout"></label>
+    <label>Mark +90°: level, beam at 0° <input data-field="d.p90.level" data-label="Step 17, mark +90°: level, beam at 0° (Table D)"></label>
+    <label>Mark +90°: level, beam at 30° <input data-field="e.p90.level" data-label="Step 17, mark +90°: level, beam at 30° (Table E)"></label>
+    </div>
+18. **Find each lobe and null.** The $10^\circ$ marks sketch the patterns but
+    miss the sidelobe peaks, which fall between marks. Turn slowly through each
+    lobe and null of both beams and record the angle and level of each
+    extreme, the highest reading for a lobe and the lowest for a null. Where
+    the level stops changing as you turn, write "floor". Take the $30^\circ$
+    main lobe twice, a few minutes apart, if you have time: a drop that repeats
+    is a measurement, and one that does not is a reflection.
 
-Turn the kit by the platter, not by the board, so the tripod stays seated in
-its grooves and the array on the axis, and keep the cables slack enough to
-follow it. The $10^\circ$
-marks sketch the patterns; they cannot give the sidelobe levels, because a
-sidelobe peaks between marks. Turning slowly through a lobe while you watch the
-level and recording its highest reading is how an antenna range finds a lobe
-peak. Where the level stops changing as you turn, write "floor".
+    <div class="rec" data-lab="L21">
+    <label>Beam at 0°, main lobe: angle <input data-field="d.main.angle" data-label="Step 18, beam at 0°, main lobe: angle"></label>
+    <label>Beam at 0°, main lobe: level <input data-field="d.main.level" data-label="Step 18, beam at 0°, main lobe: level"></label>
+    <label>Beam at 0°, left first null: angle <input data-field="d.lnull.angle" data-label="Step 18, beam at 0°, left first null: angle"></label>
+    <label>Beam at 0°, left first null: level <input data-field="d.lnull.level" data-label="Step 18, beam at 0°, left first null: level"></label>
+    <label>Beam at 0°, right first null: angle <input data-field="d.rnull.angle" data-label="Step 18, beam at 0°, right first null: angle"></label>
+    <label>Beam at 0°, right first null: level <input data-field="d.rnull.level" data-label="Step 18, beam at 0°, right first null: level"></label>
+    <label>Beam at 0°, left first sidelobe: angle <input data-field="d.lsl.angle" data-label="Step 18, beam at 0°, left first sidelobe: angle"></label>
+    <label>Beam at 0°, left first sidelobe: level <input data-field="d.lsl.level" data-label="Step 18, beam at 0°, left first sidelobe: level"></label>
+    <label>Beam at 0°, right first sidelobe: angle <input data-field="d.rsl.angle" data-label="Step 18, beam at 0°, right first sidelobe: angle"></label>
+    <label>Beam at 0°, right first sidelobe: level <input data-field="d.rsl.level" data-label="Step 18, beam at 0°, right first sidelobe: level"></label>
+    <label>Beam at 30°, main lobe: angle <input data-field="e.main.angle" data-label="Step 18, beam at 30°, main lobe: angle"></label>
+    <label>Beam at 30°, main lobe: level <input data-field="e.main.level" data-label="Step 18, beam at 30°, main lobe: level"></label>
+    <label>Beam at 30°, inner first null: angle <input data-field="e.inull.angle" data-label="Step 18, beam at 30°, inner first null: angle"></label>
+    <label>Beam at 30°, inner first null: level <input data-field="e.inull.level" data-label="Step 18, beam at 30°, inner first null: level"></label>
+    <label>Beam at 30°, outer first null: angle <input data-field="e.onull.angle" data-label="Step 18, beam at 30°, outer first null: angle"></label>
+    <label>Beam at 30°, outer first null: level <input data-field="e.onull.level" data-label="Step 18, beam at 30°, outer first null: level"></label>
+    <label>Beam at 30°, inner first sidelobe: angle <input data-field="e.isl.angle" data-label="Step 18, beam at 30°, inner first sidelobe: angle"></label>
+    <label>Beam at 30°, inner first sidelobe: level <input data-field="e.isl.level" data-label="Step 18, beam at 30°, inner first sidelobe: level"></label>
+    <label>Beam at 30°, outer first sidelobe: angle <input data-field="e.osl.angle" data-label="Step 18, beam at 30°, outer first sidelobe: angle"></label>
+    <label>Beam at 30°, outer first sidelobe: level <input data-field="e.osl.level" data-label="Step 18, beam at 30°, outer first sidelobe: level"></label>
+    </div>
+19. **Behind the board.** Turn the kit to $180^\circ$, source behind the
+    board, and record the trace nearest $30^\circ$. The patches face away from
+    the source and the ground plane sits between them, so expect the floor.
 
-Referring Table E to the broadside reference makes the scan loss read
-directly: the $30^\circ$ beam's main-lobe level is the drop in peak gain. Take
-it twice, a few minutes apart, if you have time; a drop that repeats is a
-measurement, and one that does not is a reflection. At $180^\circ$ the patches
-face away from the source and the ground plane sits between them.
+    <div class="rec" data-lab="L21">
+    <label>Step 19, kit at 180°: level <input data-field="e.180.level" data-label="Step 19, kit at 180°: level, beam at 30° (Table E)"></label>
+    </div>
+20. **Restore.** Turn the kit back to $0^\circ$ before you leave.
 ::::
 
 ::::{frame} Worked Example: Reading dBc off a Trace
@@ -446,19 +575,36 @@ use the walk widget above to see what a walked trace looks like.
 ```
 ::::
 
+::::{frame} Your Part 2 Entries
+:class: read-only
+
+Every box you filled in on this page, in one place. Your entries stay in this
+browser only, saved as you type. **Download my packet** writes them into Part 2
+of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
+viewer, and upload one PDF to Gradescope. If you have already typed Part 1 into
+the packet PDF, use **Fill my own copy** and choose that file instead: your Part 1
+is kept, and Part 2 is added to it. Either way the result is locked, so finish
+any typing in the PDF first. **Export entries** saves a small backup file you
+can **Import** on another laptop or after clearing your browser. The boxes are
+optional: the blank packet is in the next frame, to fill on paper or in a PDF
+viewer instead.
+
+<div class="rec-summary" data-lab="L21" data-pdf="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" data-file="ECE444_L21_Lab"></div>
+::::
+
 ::::{frame} Lab Packet
 :class: read-only doc-links
 
 The L21 Lab packet is one submission for the whole lab, turned in complete before Lesson 22. It has three parts:
 
-1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it at the bench): the patterns to expect with the beam at $0^\circ$ and $30^\circ$, the error budgets of the walk and the rotation, and reading dBc off a trace.
+1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it in class): the patterns to expect with the beam at $0^\circ$ and $30^\circ$, the error budgets of the walk and the rotation, and reading dBc off a trace.
 2. **Part 2, Measurements** (your own kit's data, recorded in class): the angle check, the electrical sweep, three walks, and two rotations.
 3. **Part 3, Writeup** (individual, after the lab): which model the data support, the walk against the rotation, and a far-field problem.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet (PDF)</a>
 ::::
 
-::::{frame} Summary: The Pattern on the Bench
+::::{frame} Summary: The Antenna Pattern, Measured
 :class: read-only
 
 | Idea | What it is | Number to remember |
