@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Building the beam-sweep trace, one phase step at a time</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:8px; padding:12px; }
+  canvas { display:block; box-sizing:border-box; width:100%; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* Side by side above 620px; below it the two canvases stack and fit()
+     shortens both design boxes, so the stack still fits a phone's frame. */
+  .cv2 { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.25fr); gap:8px; }
+  @media (max-width:619px) { .cv2 { grid-template-columns:1fr; } }
+  .controls { display:flex; align-items:center; gap:8px 14px; flex-wrap:wrap;
+              padding:7px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 260px; min-width:0; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:40px; text-align:right; }
+  .ctl input[type=range] { flex:1 1 auto; min-width:90px; accent-color:var(--mid); }
+  .btns { display:flex; gap:6px; }
+  button { font:inherit; font-size:12px; font-weight:600; padding:3px 10px; border-radius:5px;
+           border:1px solid var(--edge2); background:#fff; color:var(--navy); cursor:pointer; min-width:64px; }
+  button:hover { background:var(--bg); }
+  .readouts { display:grid; gap:6px; grid-template-columns:repeat(3, minmax(0,1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:3px; padding:5px 4px 6px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the space between an inline
+     MathJax symbol and the words after it */
+  .ro .k { display:block; text-align:center; height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.04em; color:var(--ink3); white-space:nowrap; overflow:hidden; max-width:100%; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; color:var(--navy); }
+  .note { margin:0; font-size:12px; color:var(--ink3); line-height:1.4; }
+  @media (max-width:430px) {
+    .app { padding:8px; gap:6px; }
+    .controls { padding:6px 8px; gap:6px 10px; }
+    .ctl { flex:1 1 100%; }
+    .btns { flex:1 1 100%; }
+    .btns button { flex:1 1 0; }
+    .ro .k { letter-spacing:0; }
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="cv2">
+    <canvas id="scene" aria-label="Top view of the eight-element array with the HB100 on the arc. The array's beam swings across the arc one phase step at a time; an inset adds the eight element signals tip to tail for the current step."></canvas>
+    <canvas id="trace" aria-label="The beam-sweep trace being built: each step's received power, in dB, plotted at the angle that step steers to. It peaks at the source angle."></canvas>
+  </div>
+  <div class="controls">
+    <div class="ctl">
+      <label for="src">Source on arc</label>
+      <input type="range" id="src" min="-60" max="60" step="1" value="30">
+      <span class="val" id="src-val">+30°</span>
+    </div>
+    <div class="btns">
+      <button id="play" type="button">pause</button>
+      <button id="step" type="button">step</button>
+    </div>
+  </div>
+  <div class="readouts">
+    <div class="ro"><span class="k">step \(\Delta\phi_s\)</span><span class="v" id="r-dphi">&#8212;</span></div>
+    <div class="ro"><span class="k">plotted at</span><span class="v" id="r-th">&#8212;</span></div>
+    <div class="ro"><span class="k">received</span><span class="v" id="r-p">&#8212;</span></div>
+  </div>
+  <p class="note">N = 8, d = 14 mm, 10.525 GHz. Each step adds one 2.8125° phase-shifter LSB
+  to the ramp, sums the eight signals, and plots the power at the angle that ramp steers to.</p>
+</div>
+<script>
+(function () {
+  'use strict';
+  var SANS = "'Inter',system-ui,-apple-system,sans-serif";
+  var NAVY = '#004a85', MID = '#0067b9', AMB = '#8a5a00', RED = '#b01e24', GRN = '#3f7d34',
+      INK = '#15202b', INK3 = '#5b6573', EDGE = '#cddce9', GRID = '#e6eef6';
+  var RAD = Math.PI / 180;
+
+  // The instrument, as steering-predictor.html models it (phaser_headless.py
+  // do_sweep and ConvertPhaseToSteerAngle): c = 299792458, the truncated
+  // 3.14159, a 2.8125 deg step with Use Bits on, and the plotted angle
+  // computed at Signal Freq - Signal BW (10 MHz in Lab Preset 1).
+  var N = 8, D = 0.014, F = 10.525e9;
+  var CG = 299792458, SPI = 3.14159, LSB = 2.8125, BW = 10e6;
+  var KD = 360 * D * F / CG;             // deg, the real electrical spacing
+  var FLOOR = -23, XMIN = -80, XMAX = 80, YMIN = -30, YMAX = 4;
+  var STEP_MS = 75, HOLD_MS = 1800;
+
+  // the angle the GUI plots sweep step dphi (deg) at
+  function axisOf(dphi) {
+    var v = CG * Math.abs(dphi) * RAD / (2 * SPI * (F - BW) * D);
+    var th = Math.asin(Math.min(1, v)) / RAD;
+    return dphi >= 0 ? th : -th;
+  }
+  // the steps the animation walks: every LSB whose plotted angle is on the axis
+  var STEPS = [];
+  for (var i = -80; i <= 80; i++) {
+    var a = axisOf(i * LSB);
+    if (Math.abs(a) <= XMAX) STEPS.push(i * LSB);
+  }
+
+  // Element n is delayed by n*dphi (the ramp the sweep writes) and leads by
+  // n*kd*sin(src) (the geometry), so its signal arrives with phase n*psi.
+  function psiOf(dphi, src) { return (KD * Math.sin(src * RAD) - dphi) * RAD; }
+  // received power, relative to one source at boresight with the beam on it:
+  // the element pattern at the source (ideal, cos in power) times |AF/N|^2
+  function received(dphi, src) {
+    var p = psiOf(dphi, src), re = 0, im = 0;
+    for (var n = 0; n < N; n++) { re += Math.cos(n * p); im += Math.sin(n * p); }
+    return Math.cos(src * RAD) * (re * re + im * im) / (N * N);
+  }
+  function db(p) { return Math.max(10 * Math.log10(Math.max(p, 1e-12)), FLOOR); }
+  function sgn(v, dp) { return (v > 0.0005 ? '+' : (v < -0.0005 ? '−' : '')) + Math.abs(v).toFixed(dp); }
+
+  var state = { src: 30, k: 0, playing: true, hold: 0 };
+
+  var scene = document.getElementById('scene'), sctx = scene.getContext('2d');
+  var trace = document.getElementById('trace'), tctx = trace.getContext('2d');
+  var SW = 0, SH = 0, TW = 0, TH = 0;
+
+  function text(ctx, s, x, y, px, color, align, base, bold) {
+    ctx.font = (bold ? '700 ' : '') + px + 'px ' + SANS; ctx.fillStyle = color;
+    ctx.textAlign = align || 'left'; ctx.textBaseline = base || 'middle'; ctx.fillText(s, x, y);
+  }
+
+  /* ---------- the scene: array, arc, source, the beam at this step ---------- */
+  function drawScene() {
+    var ctx = sctx, w = SW, h = SH, fs = w < 360 ? 10.5 : 11;
+    ctx.clearRect(0, 0, w, h);
+    var dphi = STEPS[state.k], th0 = axisOf(dphi);
+    // The phasor inset sits top left. Centered, the arc (and its labels, 12px
+    // outside it) must clear the inset's corner; slid right into the space
+    // beside the inset, it need not. Take whichever leaves the larger arc.
+    var cy = h - 24, box = insetBox(w), bx = 6 + box, by = 6 + box + 14;
+    var Rc = Math.min(w / 2 - 34, cy - 16, Math.hypot(w / 2 - bx, cy - by) - 20);
+    var Rs = Math.min((w - bx - 8) / 2 - 30, cy - 16);
+    var cx = Rc >= Rs ? w / 2 : bx + 8 + (w - bx - 8) / 2;
+    var R = Math.max(40, Math.max(Rc, Rs));
+
+    // the arc the source sits on, with its angle ticks
+    ctx.strokeStyle = GRID; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(cx, cy, R, Math.PI, 2 * Math.PI); ctx.stroke();
+    for (var a = -60; a <= 60; a += 30) {
+      var t = a * RAD, x = cx + Math.sin(t) * R, y = cy - Math.cos(t) * R;
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y); ctx.stroke();
+      // the source's own label takes the place of a tick label it sits on
+      if (Math.abs(a - state.src) < 14) continue;
+      text(ctx, (a > 0 ? '+' : (a < 0 ? '−' : '')) + Math.abs(a) + '°',
+           cx + Math.sin(t) * (R + 12), cy - Math.cos(t) * (R + 9), fs, INK3, 'center');
+    }
+
+    // the beam this step makes: |AF|^2 against angle, steered to th0
+    ctx.beginPath();
+    for (var j = 0; j <= 360; j++) {
+      var tt = -90 + 180 * j / 360, r = R * 0.92 * (function () {
+        var p = psiOf(dphi, tt), re = 0, im = 0;
+        for (var n = 0; n < N; n++) { re += Math.cos(n * p); im += Math.sin(n * p); }
+        return (re * re + im * im) / (N * N);
+      })();
+      var px = cx + Math.sin(tt * RAD) * r, py = cy - Math.cos(tt * RAD) * r;
+      if (j) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(0,103,185,0.14)'; ctx.fill();
+    ctx.strokeStyle = MID; ctx.lineWidth = 1.6; ctx.stroke();
+
+    // where this step points
+    ctx.save(); ctx.setLineDash([5, 4]); ctx.strokeStyle = NAVY; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.sin(th0 * RAD) * R, cy - Math.cos(th0 * RAD) * R); ctx.stroke();
+    ctx.restore();
+
+    // the source on the arc
+    var ts = state.src * RAD, sx = cx + Math.sin(ts) * R, sy = cy - Math.cos(ts) * R;
+    ctx.fillStyle = AMB; ctx.beginPath(); ctx.arc(sx, sy, 5.5, 0, 2 * Math.PI); ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+    var right = state.src < 0;
+    text(ctx, 'HB100', sx + (right ? 9 : -9), sy - 9, fs, AMB, right ? 'left' : 'right', 'middle', true);
+
+    // the array: eight elements on the baseline
+    var span = Math.min(R * 0.55, 90), dx = span / (N - 1);
+    for (var n = 0; n < N; n++) {
+      ctx.fillStyle = RED;
+      ctx.fillRect(cx - span / 2 + n * dx - 3, cy - 3, 6, 6);
+    }
+    text(ctx, 'E1', cx - span / 2, cy + 13, fs - 0.5, INK3, 'center');
+    text(ctx, 'E8', cx + span / 2, cy + 13, fs - 0.5, INK3, 'center');
+
+    drawPhasors(ctx, dphi, w, fs);
+  }
+
+  function insetBox(w) { return Math.max(64, Math.min(96, w * 0.24)); }
+
+  // The eight element signals for this step, tip to tail: each turned psi from
+  // the last. A straight chain is a beam on the source; a closed one, a null.
+  function drawPhasors(ctx, dphi, w, fs) {
+    var box = insetBox(w), x0 = 6, y0 = 6;
+    ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.strokeStyle = EDGE; ctx.lineWidth = 1;
+    ctx.fillRect(x0, y0, box, box + 14); ctx.strokeRect(x0 + 0.5, y0 + 0.5, box - 1, box + 13);
+    text(ctx, 'sum of 8', x0 + box / 2, y0 + 9, fs - 1, INK3, 'center');
+    var p = psiOf(dphi, state.src), pts = [[0, 0]], x = 0, y = 0;
+    for (var n = 0; n < N; n++) { x += Math.cos(n * p); y += Math.sin(n * p); pts.push([x, y]); }
+    var xs = pts.map(function (q) { return q[0]; }), ys = pts.map(function (q) { return q[1]; });
+    var mnx = Math.min.apply(null, xs), mxx = Math.max.apply(null, xs),
+        mny = Math.min.apply(null, ys), mxy = Math.max.apply(null, ys);
+    // one scale for every step (a straight chain is N long), centered on its own extent
+    var u = (box - 14) / N, ocx = x0 + box / 2, ocy = y0 + 14 + (box - 14) / 2 + 2;
+    var mx = (mnx + mxx) / 2, my = (mny + mxy) / 2;
+    function P(q) { return [ocx + (q[0] - mx) * u, ocy - (q[1] - my) * u]; }
+    ctx.strokeStyle = MID; ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    pts.forEach(function (q, i) { var r = P(q); if (i) ctx.lineTo(r[0], r[1]); else ctx.moveTo(r[0], r[1]); });
+    ctx.stroke();
+    // the resultant
+    var a = P(pts[0]), b = P(pts[N]);
+    ctx.strokeStyle = AMB; ctx.lineWidth = 2.2;
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+    var ang = Math.atan2(b[1] - a[1], b[0] - a[0]), L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    if (L > 6) {
+      ctx.fillStyle = AMB; ctx.beginPath();
+      ctx.moveTo(b[0], b[1]);
+      ctx.lineTo(b[0] - 6 * Math.cos(ang - 0.45), b[1] - 6 * Math.sin(ang - 0.45));
+      ctx.lineTo(b[0] - 6 * Math.cos(ang + 0.45), b[1] - 6 * Math.sin(ang + 0.45));
+      ctx.closePath(); ctx.fill();
+    }
+  }
+
+  /* ---------- the trace, built step by step ---------- */
+  function drawTrace() {
+    var ctx = tctx, w = TW, h = TH, small = w < 420, fs = small ? 10.5 : 11;
+    var M = { l: small ? 40 : 46, r: 10, t: 14, b: small ? 30 : 32 };
+    var x0 = M.l, x1 = w - M.r, y0 = M.t, y1 = h - M.b;
+    function X(d) { return x0 + (d - XMIN) / (XMAX - XMIN) * (x1 - x0); }
+    function Y(v) { return y1 - (v - YMIN) / (YMAX - YMIN) * (y1 - y0); }
+    ctx.clearRect(0, 0, w, h);
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+
+    ctx.strokeStyle = GRID; ctx.lineWidth = 1;
+    var xt, v;
+    for (xt = XMIN; xt <= XMAX; xt += 20) { ctx.beginPath(); ctx.moveTo(X(xt), y0); ctx.lineTo(X(xt), y1); ctx.stroke(); }
+    for (v = 0; v >= YMIN; v -= 10) { ctx.beginPath(); ctx.moveTo(x0, Y(v)); ctx.lineTo(x1, Y(v)); ctx.stroke(); }
+    ctx.strokeStyle = EDGE; ctx.lineWidth = 1.2; ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+    for (xt = XMIN; xt <= XMAX; xt += 20) {
+      if (small && xt % 40) continue;
+      text(ctx, (xt < 0 ? '−' : '') + Math.abs(xt), X(xt), y1 + 4, fs, INK3, 'center', 'top');
+    }
+    for (v = 0; v >= YMIN; v -= 10) text(ctx, (v < 0 ? '−' : '') + Math.abs(v), x0 - 5, Y(v), fs, INK3, 'right');
+    text(ctx, 'sweep steering angle (deg)', (x0 + x1) / 2, h - 2, fs, INK, 'center', 'bottom');
+    ctx.save(); ctx.translate(2, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2);
+    text(ctx, 'power (dB)', 0, 0, fs, INK, 'center', 'top'); ctx.restore();
+
+    // the noise floor
+    ctx.save(); ctx.setLineDash([5, 4]); ctx.strokeStyle = INK3; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0, Y(FLOOR)); ctx.lineTo(x1, Y(FLOOR)); ctx.stroke(); ctx.restore();
+
+    // the source's angle, marked at the top
+    var xs = X(state.src), yt = y0 + 1;
+    ctx.fillStyle = AMB; ctx.beginPath();
+    ctx.moveTo(xs, yt + 8); ctx.lineTo(xs - 5, yt); ctx.lineTo(xs + 5, yt); ctx.closePath(); ctx.fill();
+
+    // the samples so far, joined as the GUI joins them
+    ctx.strokeStyle = NAVY; ctx.globalAlpha = 0.55; ctx.lineWidth = 1.4; ctx.beginPath();
+    for (var k = 0; k <= state.k; k++) {
+      var d = STEPS[k], X1 = X(axisOf(d)), Y1 = Y(db(received(d, state.src)));
+      if (k) ctx.lineTo(X1, Y1); else ctx.moveTo(X1, Y1);
+    }
+    ctx.stroke(); ctx.globalAlpha = 1;
+    ctx.fillStyle = NAVY;
+    for (k = 0; k < state.k; k++) {
+      d = STEPS[k];
+      ctx.beginPath(); ctx.arc(X(axisOf(d)), Y(db(received(d, state.src))), small ? 1.7 : 2, 0, 2 * Math.PI); ctx.fill();
+    }
+
+    // this step: a cursor at its plotted angle and the new point on it
+    d = STEPS[state.k];
+    var xc = X(axisOf(d)), yc = Y(db(received(d, state.src)));
+    ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = NAVY; ctx.globalAlpha = 0.6; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(xc, y0); ctx.lineTo(xc, y1); ctx.stroke(); ctx.restore();
+    ctx.fillStyle = AMB; ctx.beginPath(); ctx.arc(xc, yc, 4.2, 0, 2 * Math.PI); ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.4; ctx.stroke();
+  }
+
+  function readouts() {
+    var d = STEPS[state.k];
+    document.getElementById('r-dphi').textContent = sgn(d, 1) + '°';
+    document.getElementById('r-th').textContent = sgn(axisOf(d), 1) + '°';
+    var p = 10 * Math.log10(Math.max(received(d, state.src), 1e-12));
+    document.getElementById('r-p').textContent = (p < FLOOR ? 'floor' : sgn(p, 1) + ' dB');
+  }
+
+  function drawAll() { drawScene(); drawTrace(); readouts(); }
+
+  /* ---------- sizing ---------- */
+  function setSize(c, wCss, hCss, ctx) {
+    var dpr = window.devicePixelRatio || 1;
+    c.width = Math.round(wCss * dpr); c.height = Math.round(hCss * dpr); c.style.height = hCss + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  var STACK = window.matchMedia ? window.matchMedia('(max-width:619px)') : null;
+  function fit() {
+    var stacked = STACK && STACK.matches;
+    var sw = Math.max(200, scene.clientWidth), tw = Math.max(200, trace.clientWidth);
+    var h = stacked ? Math.round(Math.min(sw * 0.5, 170)) : Math.round(Math.min(tw * 0.62, 260));
+    var th = stacked ? Math.round(Math.min(tw * 0.55, 180)) : h;
+    setSize(scene, sw, h, sctx); setSize(trace, tw, th, tctx);
+    SW = sw; SH = h; TW = tw; TH = th;
+    drawAll();
+  }
+  window.addEventListener('resize', fit);
+
+  /* ---------- the sweep ---------- */
+  var playBtn = document.getElementById('play'), srcEl = document.getElementById('src');
+  function setPlaying(on) { state.playing = on; playBtn.textContent = on ? 'pause' : 'play'; }
+  function advance() {
+    if (state.k < STEPS.length - 1) state.k++;
+    else { state.k = 0; }
+    drawAll();
+  }
+  var last = 0, visible = true;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) { es.forEach(function (e) { visible = e.isIntersecting; }); }, { threshold: 0.05 }).observe(trace);
+  }
+  function loop(now) {
+    if (state.playing && visible && !document.hidden) {
+      // hold the finished trace a moment before the next sweep starts
+      var wait = state.k === STEPS.length - 1 ? HOLD_MS : STEP_MS;
+      if (now - last > wait) { last = now; advance(); }
+    }
+    requestAnimationFrame(loop);
+  }
+  playBtn.addEventListener('click', function () { setPlaying(!state.playing); });
+  document.getElementById('step').addEventListener('click', function () { setPlaying(false); advance(); });
+  srcEl.addEventListener('input', function () {
+    state.src = +srcEl.value;
+    document.getElementById('src-val').textContent = sgn(state.src, 0) + '°';
+    if (state.playing) state.k = 0;
+    drawAll();
+  });
+
+  // a preset by query string: ?src=0
+  var q = new URLSearchParams(location.search);
+  if (q.has('src')) { var s = Math.max(-60, Math.min(60, Math.round(+q.get('src')))); if (isFinite(s)) state.src = s; }
+  srcEl.value = state.src; document.getElementById('src-val').textContent = sgn(state.src, 0) + '°';
+  // reduced motion: show the finished trace, still, and let the step button walk it
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    state.k = STEPS.length - 1; setPlaying(false);
+  }
+
+  fit();
+  requestAnimationFrame(loop);
+  if (window.MJ) {
+    MJ.setRedraw(drawAll);
+    MJ.onReady(function () { MJ.typeset(document.getElementById('app')).then(drawAll); drawAll(); });
+  }
+})();
+</script>
+</body>
+</html>

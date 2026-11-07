@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grating lobes, beam squint and phase quantization on the 8-element array</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .canvases { display:grid; grid-template-columns:1fr; gap:10px; }
+  @media (min-width:660px) { .canvases { grid-template-columns:1fr 1fr; align-items:start; } }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 230px; min-width:0; flex-wrap:wrap; }
+  .ctl label { min-width:0; font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:62px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:80px; width:0; }
+  .ctl select { flex:1 1 auto; min-width:0; max-width:100%; font:inherit; font-size:13px; color:var(--navy);
+                background:#fff; border:1px solid var(--edge2); border-radius:5px; padding:3px 6px; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  /* Below 330px two 148px cells no longer fit, the grid falls to one column,
+     and four stacked readouts push the widget past the phone budget. */
+  @media (max-width:329px) { .readouts { grid-template-columns:1fr 1fr; gap:6px; } .ro { padding:6px 4px 7px; } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.warn { background:rgba(138,90,0,0.12); border-color:rgba(138,90,0,0.30); }
+  .ro.warn .v { color:var(--amber); }
+  .ro.good { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.good .v { color:var(--grn); }
+  .ro.bad  { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.bad  .v { color:var(--red); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="canvases">
+    <canvas id="pat" aria-label="Array factor in decibels against angle from broadside for the eight-element course array, showing grating lobes, beam squint or phase-quantization sidelobes depending on the selected mode"></canvas>
+    <canvas id="aux" aria-label="The eight element contributions added head to tail at two angles marked on the pattern: the length of each chain is the level at that angle, which shows why a grating lobe is full height, why squint moves the beam, and why rounding makes a lobe"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Departure</label>
+      <select id="mode">
+        <option value="grating" selected>Grating lobes</option>
+        <option value="squint">Beam squint</option>
+        <option value="quant">Phase quantization</option>
+      </select>
+    </div>
+
+    <div class="ctl" id="c-grating">
+      <label>Element spacing</label>
+      <select id="dsel">
+        <option value="14" selected>14 mm (all 8)</option>
+        <option value="28">28 mm (every 2nd)</option>
+        <option value="42">42 mm (every 3rd)</option>
+        <option value="56">56 mm (every 4th)</option>
+      </select>
+    </div>
+
+    <div class="ctl" id="c-squint" style="display:none">
+      <label>Signal offset from \(f_0\)</label>
+      <input type="range" id="foff" min="-1000" max="1000" step="25" value="-500">
+      <span class="val" id="foff-val">&#8722;500 MHz</span>
+    </div>
+
+    <div class="ctl" id="c-quant" style="display:none">
+      <label>Phase-shifter bits \(B\)</label>
+      <input type="range" id="bits" min="2" max="7" step="1" value="2">
+      <span class="val" id="bits-val">2</span>
+    </div>
+
+    <div class="ctl" id="c-steer" style="display:none">
+      <label>Steer to</label>
+      <input type="range" id="steer" min="0" max="60" step="1" value="15">
+      <span class="val" id="steer-val">15°</span>
+    </div>
+  </div>
+
+  <div class="readouts" id="readouts"></div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const FLOOR=-40, DEG=180/Math.PI, C=2.99792458e8;
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+const neg=x=>(Math.abs(x)<0.05?'0.0':x.toFixed(1)).replace('-','−');
+const sgn=x=>(x>=0?'+':'−')+Math.abs(x).toFixed(1);
+
+/* ------------------------------------------------------------------ physics
+   The array is the PHASER row: 8 patches on a 14 mm pitch.  Every mode builds
+   an element list {x (m), phase (rad)} and evaluates the same sum
+
+       AF(theta) = (1/N) | sum_n exp( j k x_n sin(theta) + j alpha_n ) |,
+
+   so grating lobes, squint and quantization all come out of one calculation
+   rather than three formulas.  Grating-lobe angles, the squint shift and the
+   -6B rule are computed separately and shown alongside as predictions.       */
+
+const PITCH=14e-3, NEL=8;
+const F_DESIGN=10.3e9;                 // array design center, lambda = 29.1 mm
+const F0=10.525e9;                     // HB100 source, phases are set here
+const TH0_SQ=45;
+
+const state={ mode:'grating', dmm:14, foff:-500, bits:2, th0q:15 };
+
+function model(){
+  if(state.mode==='grating'){
+    const lam=C/F_DESIGN, d=state.dmm*1e-3, non=Math.ceil(NEL/(state.dmm/14));
+    const el=[];
+    for(let i=0;i<non;i++) el.push({x:i*d, a:0});
+    return { lam:lam, el:el, ref:null, th0:0, f:F_DESIGN };
+  }
+  if(state.mode==='squint'){
+    const f=F0+state.foff*1e6, lam=C/f, lam0=C/F0;
+    const k0=2*Math.PI/lam0, s0=Math.sin(TH0_SQ/DEG);
+    const el=[], ref=[];
+    for(let i=0;i<NEL;i++){ const x=i*PITCH;
+      el.push({x:x, a:-k0*x*s0}); ref.push({x:x, a:-k0*x*s0}); }
+    return { lam:lam, el:el, ref:{lam:lam0, el:ref}, th0:TH0_SQ, f:f };
+  }
+  const lam=C/F0, k=2*Math.PI/lam, s0=Math.sin(state.th0q/DEG);
+  const lsb=2*Math.PI/Math.pow(2,state.bits);
+  const el=[], ref=[];
+  for(let i=0;i<NEL;i++){ const x=i*PITCH, a=-k*x*s0;
+    el.push({x:x, a:Math.round(a/lsb)*lsb}); ref.push({x:x, a:a}); }
+  return { lam:lam, el:el, ref:{lam:lam, el:ref}, th0:state.th0q, f:F0 };
+}
+
+const M=3601;                                   // 0.05 deg steps over +-90
+const degOf=i=>-90+i*180/(M-1);
+
+function sweepOf(lam, el){
+  const k=2*Math.PI/lam, db=new Float64Array(M);
+  let peak=-1e9;
+  for(let i=0;i<M;i++){
+    const s=Math.sin(degOf(i)/DEG);
+    let re=0, im=0;
+    for(const e of el){ const p=k*e.x*s+e.a; re+=Math.cos(p); im+=Math.sin(p); }
+    const v=Math.sqrt(re*re+im*im)/el.length;
+    db[i]=20*Math.log10(Math.max(v,1e-9));
+    if(db[i]>peak) peak=db[i];
+  }
+  return { db:db, peak:peak };
+}
+
+/* parabolic interpolation through the three samples about a local maximum */
+function refine(db,i){
+  if(i<=0||i>=M-1) return { x:degOf(i), y:db[i] };
+  const a=db[i-1], b=db[i], c=db[i+1], den=a-2*b+c;
+  const t=(den===0)?0:0.5*(a-c)/den, step=180/(M-1);
+  return { x:degOf(i)+t*step, y:b-0.25*(a-c)*t };
+}
+function peakOf(db){ let bi=0; for(let i=1;i<M;i++) if(db[i]>db[bi]) bi=i; return refine(db,bi); }
+
+function localMax(db){
+  const out=[];
+  for(let i=1;i<M-1;i++) if(db[i]>=db[i-1] && db[i]>=db[i+1]) out.push(refine(db,i));
+  return out;
+}
+
+/* -------------------------------------------------------------- the numbers */
+function metrics(m){
+  const S=sweepOf(m.lam, m.el), db=S.db;
+  const norm=new Float64Array(M);
+  for(let i=0;i<M;i++) norm[i]=db[i]-S.peak;
+  const out={ norm:norm, peakAbs:S.peak, pk:peakOf(norm) };
+
+  if(m.ref){
+    const R=sweepOf(m.ref.lam, m.ref.el), rn=new Float64Array(M);
+    for(let i=0;i<M;i++) rn[i]=R.db[i]-R.peak;
+    out.refNorm=rn;
+    out.refPk=peakOf(rn);
+    out.lossPeak=S.peak-R.peak;                 // coherent gain lost, dB
+  }
+
+  if(state.mode==='grating'){
+    const d=state.dmm*1e-3, r=m.lam/d, pred=[];
+    for(let q=1;q<=3;q++) for(const s of [-1,1]){
+      const v=s*q*r; if(Math.abs(v)<=1) pred.push(Math.asin(v)*DEG);
+    }
+    pred.sort((a,b)=>a-b);
+    out.pred=pred;
+    out.meas=localMax(norm).filter(p=>p.y>-3 && Math.abs(p.x)>2).map(p=>p.x);
+    out.edge=norm[M-1];
+    out.dlam=d/m.lam;
+  }
+
+  if(state.mode==='squint'){
+    const v=(F0/m.f)*Math.sin(TH0_SQ/DEG);
+    out.pred=(Math.abs(v)<=1)? Math.asin(v)*DEG-TH0_SQ : null;
+    out.meas=out.pk.x-TH0_SQ;
+    const i45=Math.round((TH0_SQ+90)*(M-1)/180);
+    out.lossAim=norm[i45];                      // gain lost at the aimpoint
+    out.approx=-(state.foff*1e6/F0)*Math.tan(TH0_SQ/DEG)*DEG;
+  }
+
+  if(state.mode==='quant'){
+    const lsbDeg=360/Math.pow(2,state.bits);
+    out.lsb=lsbDeg;
+    out.rule=-6*state.bits;
+    out.step=lsbDeg/(360*(PITCH/m.lam))*DEG/Math.cos(state.th0q/DEG); // pointing grid at the steer angle
+    out.perr=out.pk.x-state.th0q;
+    let worst=null;
+    for(const p of localMax(norm))
+      if(Math.abs(p.x-out.pk.x)>15 && (worst===null||p.y>worst.y)) worst=p;
+    out.worst=worst;
+  }
+  return out;
+}
+
+/* ------------------------------------------------------------ pattern panel */
+const cvP=document.getElementById('pat'), cP=cvP.getContext('2d');
+const cvA=document.getElementById('aux'), cA=cvA.getContext('2d');
+
+/* Each header comes longest first; the first that fits the frame is drawn.
+   The quantization header used to run off the right edge of a 340px canvas. */
+function header(m,x){
+  if(state.mode==='grating')
+    return [state.dmm+' mm spacing, '+m.el.length+' elements on, '+(m.f/1e9).toFixed(1)+' GHz',
+            state.dmm+' mm, '+m.el.length+' elements, '+(m.f/1e9).toFixed(1)+' GHz'];
+  if(state.mode==='squint')
+    return ['phases set for 45° at 10.525 GHz, signal at '+(m.f/1e9).toFixed(3)+' GHz',
+            'set for 45° at 10.525 GHz, signal '+(m.f/1e9).toFixed(3)+' GHz',
+            'signal at '+(m.f/1e9).toFixed(3)+' GHz'];
+  return [state.bits+'-bit phase shifter, 8 elements steered to '+state.th0q+'°, 10.525 GHz',
+          state.bits+'-bit phase shifter, steered to '+state.th0q+'°',
+          state.bits+' bits, steered to '+state.th0q+'°'];
+}
+function fitText(ctx, cands, maxW, px, bold){
+  ctx.font=(bold?'700 ':'')+px+'px '+SANS;
+  for(const c of cands) if(ctx.measureText(c).width<=maxW) return c;
+  return cands[cands.length-1];
+}
+
+/* The two angles the phasor panel examines, shared with the pattern markers. */
+function lookAngles(m,x){
+  if(state.mode==='grating'){
+    const g=x.pred.filter(v=>v>0);
+    if(g.length) return [{th:0, role:'main beam'}, {th:g[0], role:'grating lobe'}];
+    let best=null;
+    for(const p of localMax(x.norm)) if(p.x>3 && (best===null||p.y>best.y)) best=p;
+    return [{th:0, role:'main beam'}, {th:best?best.x:30, role:'sidelobe'}];
+  }
+  if(state.mode==='squint')
+    return [{th:TH0_SQ, role:'commanded'}, {th:x.pk.x, role:'beam peak'}];
+  return [{th:x.pk.x, role:'main beam'}, {th:x.worst?x.worst.x:-50, role:'worst lobe'}];
+}
+
+function drawPattern(m,x){
+  const dpr=window.devicePixelRatio||1, w=cvP.width/dpr, h=cvP.height/dpr;
+  cP.clearRect(0,0,w,h);
+  const mL=46, mR=12, mT=42, mB=34, pw=w-mL-mR, ph=h-mT-mB;
+  const xp=d=>mL+(d+90)/180*pw, yp=v=>mT+(v/FLOOR)*ph;
+
+  stext(cP, fitText(cP, header(m,x), pw, 12, true), mL, 14, 12, cssv('--navy'), 'left', true);
+
+  cP.strokeStyle=cssv('--edge'); cP.lineWidth=1;
+  for(let d=0;d>=FLOOR;d-=10){ const y=yp(d);
+    cP.beginPath(); cP.moveTo(mL,y); cP.lineTo(mL+pw,y); cP.stroke();
+    stext(cP,d.toString(), mL-8, y, 10.5, cssv('--ink3'),'right',false); }
+  cP.strokeStyle=cssv('--edge2');
+  for(let d=-90;d<=90;d+=30){ const px=xp(d);
+    cP.beginPath(); cP.moveTo(px,mT); cP.lineTo(px,mT+ph); cP.stroke();
+    stext(cP,d+'°', px, mT+ph+13, 10.5, cssv('--ink3'),'center',false); }
+  cP.strokeStyle=cssv('--edge'); cP.strokeRect(mL,mT,pw,ph);
+
+  // commanded angle marker
+  if(state.mode!=='grating'){
+    cP.strokeStyle='rgba(0,74,133,0.45)'; cP.lineWidth=1.2; cP.setLineDash([3,3]);
+    cP.beginPath(); cP.moveTo(xp(m.th0),mT); cP.lineTo(xp(m.th0),mT+ph); cP.stroke();
+    cP.setLineDash([]);
+    MJ.draw(cP,'\\theta_0', xp(m.th0), mT+ph-11, 13, cssv('--navy'),'center');
+  }
+
+  // grating-lobe predictions, drawn before the trace
+  if(state.mode==='grating'){
+    cP.strokeStyle='rgba(138,90,0,0.75)'; cP.lineWidth=1.3; cP.setLineDash([4,3]);
+    for(const g of x.pred){
+      cP.beginPath(); cP.moveTo(xp(g),mT); cP.lineTo(xp(g),mT+ph); cP.stroke();
+      stext(cP, sgn(g)+'°', xp(g), mT+22, 11.5, cssv('--amber'),'center',true);
+    }
+    cP.setLineDash([]);
+  }
+
+  // reference trace: the ideal pattern this mode departs from
+  const trace=(arr,color,width,dash)=>{
+    cP.strokeStyle=color; cP.lineWidth=width; cP.setLineDash(dash||[]);
+    cP.beginPath();
+    for(let i=0;i<M;i++){ const px=xp(degOf(i)), py=yp(Math.max(arr[i],FLOOR));
+      i?cP.lineTo(px,py):cP.moveTo(px,py); }
+    cP.stroke(); cP.setLineDash([]);
+  };
+  if(x.refNorm) trace(x.refNorm,'rgba(91,101,115,0.75)',1.4,[5,4]);
+  trace(x.norm, cssv('--mid'), 2.2);
+
+  // the one measured number that matters, above the frame
+  let note='', col=cssv('--navy');
+  if(state.mode==='grating'){
+    note=(x.meas.length? 'full-height lobes at '+x.meas.map(v=>sgn(v)+'°').join(', ')
+                       : 'no lobe outside the main beam');
+    col=x.meas.length? cssv('--amber') : cssv('--grn');
+  } else if(state.mode==='squint'){
+    note='beam sits at '+x.pk.x.toFixed(1)+'°, commanded 45°';
+    col=Math.abs(x.meas)>1? cssv('--red') : cssv('--grn');
+  } else {
+    note='worst sidelobe '+neg(x.worst?x.worst.y:FLOOR)+' dB at '+
+         sgn(x.worst?x.worst.x:0)+'°';
+    col=(x.worst && x.worst.y>-11)? cssv('--red') : cssv('--amber');
+  }
+  stext(cP, note, mL, mT-13, 12, col, 'left', true);
+  /* The legend shares the note's line; draw it only where the two cannot touch. */
+  if(x.refNorm){
+    cP.font='700 12px '+SANS; const nw=cP.measureText(note).width;
+    cP.font='11px '+SANS; const lg='dashed = the ideal pattern', lw=cP.measureText(lg).width;
+    if(nw+lw+16<=pw) stext(cP,lg, mL+pw, mT-13, 11, cssv('--ink3'),'right',false);
+  }
+
+  // the two angles the phasor panel adds up, marked on the trace
+  lookAngles(m,x).forEach((L,j)=>{
+    const i=Math.round((L.th+90)*(M-1)/180);
+    if(i<0||i>=M) return;
+    const px=xp(L.th), py=yp(Math.max(x.norm[i],FLOOR));
+    cP.beginPath(); cP.arc(px,py,5,0,2*Math.PI);
+    cP.fillStyle=j?cssv('--amber'):cssv('--navy'); cP.fill();
+    cP.strokeStyle='#fff'; cP.lineWidth=1.5; cP.stroke();
+    /* A grating lobe already carries its predicted angle in amber at the top;
+       the number would sit on that label, so it is left off there. */
+    const labeled=state.mode==='grating' && x.pred.some(g=>Math.abs(g-L.th)<3);
+    if(!labeled)
+      stext(cP,String(j+1), px+(j?10:-10), py+(py<mT+14?8:-8), 11, j?cssv('--amber'):cssv('--navy'), j?'left':'right', true);
+  });
+
+  stext(cP,'angle from broadside (deg)', mL+pw/2, mT+ph+27, 11.5, cssv('--ink3'),'center',false);
+  cP.save(); cP.translate(13, mT+ph/2); cP.rotate(-Math.PI/2);
+  stext(cP,'relative power (dB)', 0, 0, 11.5, cssv('--ink3'),'center',false); cP.restore();
+}
+
+/* ------------------------------------------------------ phasor (why) panel */
+/* The pattern says how much; this panel says why.  At each of two angles it
+   adds the eight element contributions head to tail, exactly the sum the
+   pattern evaluates.  Every arrow is one element, and the chain's length is
+   the level at that angle.  A grating lobe is a chain lined up again because
+   every element is a whole number of turns behind its neighbor; squint is a
+   chain curled by a straight phase ramp at the commanded angle and straight
+   again a few degrees away; a quantization lobe is a chain the repeating
+   rounding error has partly lined up. */
+function drawAux(m,x){
+  const dpr=window.devicePixelRatio||1, w=cvA.width/dpr, h=cvA.height/dpr;
+  cA.clearRect(0,0,w,h);
+  stext(cA, fitText(cA, ['element phasors, added head to tail', 'element phasors, summed'], w-24, 12, true),
+        12, 14, 12, cssv('--navy'), 'left', true);
+  const L=lookAngles(m,x), gap=10, top=28, subW=(w-24-gap)/2;
+  L.forEach((look,j)=>drawChain(m, look, j, 12+j*(subW+gap), top, subW, h-top-8));
+}
+
+function drawChain(m, look, j, X, Y, W, H){
+  const col=j?cssv('--amber'):cssv('--navy');
+  cA.strokeStyle=cssv('--edge'); cA.lineWidth=1; cA.strokeRect(X,Y,W,H);
+
+  // the chain, in units of one element's contribution
+  const k=2*Math.PI/m.lam, sn=Math.sin(look.th/DEG), N=m.el.length;
+  let re=0, im=0; const pts=[[0,0]];
+  for(const e of m.el){ const ph=k*e.x*sn+e.a; re+=Math.cos(ph); im+=Math.sin(ph); pts.push([re,im]); }
+  const mag=Math.hypot(re,im), rot=mag>1e-6? -Math.atan2(im,re) : -Math.atan2(pts[1][1],pts[1][0]);
+  const cr=Math.cos(rot), sr=Math.sin(rot);
+  const P=pts.map(([u,v])=>[u*cr-v*sr, u*sr+v*cr]);
+
+  // fit the chain and the full-length reference (0..N on the axis) in the box
+  let x0=0, x1=N, y0=0, y1=0;
+  for(const [u,v] of P){ x0=Math.min(x0,u); x1=Math.max(x1,u); y0=Math.min(y0,v); y1=Math.max(y1,v); }
+  const head=36, foot=6, aw=W-16, ah=H-head-foot;
+  const sc=Math.min(aw/Math.max(x1-x0,1), ah/Math.max(y1-y0,1.2));
+  const ox=X+8+(aw-(x1-x0)*sc)/2-x0*sc, oy=Y+head+(ah-(y1-y0)*sc)/2+y1*sc;
+  const tx=u=>ox+u*sc, ty=v=>oy-v*sc;
+
+  // the two-line label: which angle, and what the sum comes to
+  const lvl=20*Math.log10(Math.max(mag/N,1e-6));
+  stext(cA, fitText(cA, [String(j+1)+'  '+sgn(look.th)+'°, '+look.role, String(j+1)+'  '+sgn(look.th)+'°'], W-12, 11.5, true),
+        X+6, Y+11, 11.5, col, 'left', true);
+  stext(cA, fitText(cA, [Math.round(100*mag/N)+'% of full length, '+neg(lvl)+' dB', neg(lvl)+' dB'], W-12, 11, false),
+        X+6, Y+26, 11, cssv('--ink3'), 'left', false);
+
+  // full length: what eight elements in step would give
+  cA.strokeStyle=cssv('--edge2'); cA.lineWidth=1.2; cA.setLineDash([4,3]);
+  cA.beginPath(); cA.moveTo(tx(0),ty(0)); cA.lineTo(tx(N),ty(0)); cA.stroke(); cA.setLineDash([]);
+
+  // one arrow per element
+  const hs=Math.max(3, Math.min(6, sc*0.35));
+  const arrow=(a,b,c,lw)=>{
+    const [ax,ay]=[tx(a[0]),ty(a[1])], [bx,by]=[tx(b[0]),ty(b[1])];
+    const t=Math.atan2(by-ay,bx-ax);
+    cA.strokeStyle=c; cA.fillStyle=c; cA.lineWidth=lw;
+    cA.beginPath(); cA.moveTo(ax,ay); cA.lineTo(bx,by); cA.stroke();
+    cA.beginPath(); cA.moveTo(bx,by);
+    cA.lineTo(bx-hs*Math.cos(t-0.45), by-hs*Math.sin(t-0.45));
+    cA.lineTo(bx-hs*Math.cos(t+0.45), by-hs*Math.sin(t+0.45)); cA.closePath(); cA.fill();
+  };
+  for(let i=0;i<N;i++) arrow(P[i],P[i+1], j?'rgba(138,90,0,0.85)':cssv('--mid'), 1.6);
+
+  // the resultant, start to end
+  if(mag/N>0.04){
+    cA.strokeStyle='rgba(21,32,43,0.55)'; cA.lineWidth=1.2; cA.setLineDash([2,2]);
+    cA.beginPath(); cA.moveTo(tx(0),ty(0)); cA.lineTo(tx(P[N][0]),ty(P[N][1])); cA.stroke();
+    cA.setLineDash([]);
+  }
+}
+
+/* --------------------------------------------------------------- readouts */
+/* One instrument-grid cell per row: [variant, short key, value with its unit].
+   The cells are rebuilt per mode, exactly as the row of readouts used to be. */
+function readouts(m,x){
+  const rows=[];
+  if(state.mode==='grating'){
+    rows.push(['','spacing', x.dlam.toFixed(3)+' λ']);
+    rows.push([x.pred.length?'warn':'good', 'predicted lobes', x.pred.length
+      ? x.pred.map(v=>sgn(v)+'°').join(', ')
+      : 'none predicted']);
+    rows.push(['', 'lobes appear past', (m.lam*1e3).toFixed(1)+' mm']);
+    rows.push([x.edge>-6?'bad':'', 'level at horizon', neg(x.edge)+' dB']);
+  } else if(state.mode==='squint'){
+    rows.push(['','signal', (m.f/1e9).toFixed(3)+' GHz']);
+    rows.push([Math.abs(x.pred)>1?'bad':'good', 'predicted squint', sgn(x.pred)+'°']);
+    rows.push(['', '1° of squint at', '±'+Math.round(F0/1e6*(1/DEG)/Math.tan(TH0_SQ/DEG))+' MHz']);
+    rows.push([x.lossAim<-0.5?'warn':'', 'gain lost at 45°', neg(x.lossAim)+' dB']);
+  } else {
+    rows.push(['','LSB', x.lsb.toFixed(4).replace(/0+$/,'').replace(/\.$/,'')+'°']);
+    rows.push(['','pointing step', x.step.toFixed(2)+'°']);
+    rows.push(['warn','rule of thumb −6B', '−'+(6*state.bits)+' dB']);
+    rows.push([x.worst&&x.worst.y>-11?'bad':'', 'worst sidelobe',
+      neg(x.worst?x.worst.y:FLOOR)+' dB']);
+  }
+  document.getElementById('readouts').innerHTML =
+    rows.map(r=>'<div class="ro'+(r[0]?' '+r[0]:'')+'"><span class="k">'+r[1]
+                +'</span><span class="v">'+r[2]+'</span></div>').join('');
+}
+
+/* ------------------------------------------------------------------- glue */
+function drawAll(){
+  const m=model(), x=metrics(m);
+  drawPattern(m,x); drawAux(m,x); readouts(m,x);
+}
+
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wP=Math.round(cvP.getBoundingClientRect().width);
+  const wA=Math.round(cvA.getBoundingClientRect().width);
+/* Narrow: the canvases stack (or the control and readout rows do), so the parts
+   ADD instead of sharing a row -- which puts the widget past the frame budget
+   and makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:659px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.64) : h; }
+  const hP=SQ(Math.round(Math.min(Math.max(wP*(wP<460?0.70:0.48),230), 360)));
+  const hA=SQ(Math.round(Math.min(Math.max(wA*(wA<460?0.70:0.48),230), 360)));
+  for(const [cv,ctx,ww,hh] of [[cvP,cP,wP,hP],[cvA,cA,wA,hA]]){
+    cv.width=ww*dpr; cv.height=hh*dpr; cv.style.height=hh+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+const modeEl=document.getElementById('mode');
+const dEl=document.getElementById('dsel'), fEl=document.getElementById('foff'), bEl=document.getElementById('bits');
+function showCtl(){
+  document.getElementById('c-grating').style.display = state.mode==='grating'?'':'none';
+  document.getElementById('c-squint').style.display  = state.mode==='squint' ?'':'none';
+  document.getElementById('c-quant').style.display   = state.mode==='quant'  ?'':'none';
+  document.getElementById('c-steer').style.display   = state.mode==='quant'  ?'':'none';
+}
+modeEl.addEventListener('change',()=>{ state.mode=modeEl.value; showCtl(); drawAll(); });
+dEl.addEventListener('change',()=>{ state.dmm=+dEl.value; drawAll(); });
+fEl.addEventListener('input',()=>{ state.foff=+fEl.value;
+  document.getElementById('foff-val').textContent=
+    (state.foff<0?'−':'+')+Math.abs(state.foff)+' MHz'; drawAll(); });
+const sEl=document.getElementById('steer');
+sEl.addEventListener('input',()=>{ state.th0q=+sEl.value;
+  document.getElementById('steer-val').textContent=state.th0q+'°'; drawAll(); });
+bEl.addEventListener('input',()=>{ state.bits=+bEl.value;
+  document.getElementById('bits-val').textContent=state.bits; drawAll(); });
+
+showCtl();
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>

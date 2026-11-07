@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The visible region</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; --gl:#b3213a; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* The two canvases always stack: the psi axis above, the angle axis it maps
+     onto below. Each is kept short so the pair fits the frame budget. */
+  .cv2 { display:grid; grid-template-columns:1fr; gap:8px; }
+  .controls { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:6px 14px;
+              padding:7px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:6px; min-width:0; }
+  .ctl label { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:3.6em; text-align:right; font-weight:600; font-size:12px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:36px; width:0; accent-color:var(--mid); }
+  /* Phone: one control per row, still label | slider | value on one line --
+     the labels are short enough, and a row each is 60px cheaper than the
+     template's label-over-slider stack. Labels take a fixed width so the
+     three sliders line up. */
+  @media (max-width:600px) {
+    .controls { grid-template-columns:1fr; gap:4px; }
+    .ctl label { flex:0 0 7.6em; }
+  }
+  .readouts { display:grid; gap:8px; grid-template-columns:minmax(0,0.8fr) minmax(0,1.2fr) minmax(0,1.6fr); }
+  /* Phone: width and span share a row, the grating-lobe list takes the full
+     second row because it can name up to four angles. Never one column. */
+  @media (max-width:600px) {
+    .readouts { grid-template-columns:minmax(0,0.8fr) minmax(0,1.2fr); }
+    #ro-gl { grid-column:1 / -1; }
+  }
+  /* Smallest phones: the keys lose their tracking so "window width" fits. */
+  @media (max-width:360px) {
+    .readouts { grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); }
+    .ro .k { letter-spacing:0; }
+  }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; max-width:100%; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; color:var(--navy); max-width:100%; overflow:hidden; text-overflow:ellipsis; }
+  .ro.gl { background:rgba(179,33,58,0.10); border-color:rgba(179,33,58,0.28); }
+  .ro.gl .v { color:var(--gl); }
+  .ro.ok { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.ok .v { color:var(--grn); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="cv2">
+    <canvas id="psi" aria-label="Array factor in decibels versus psi over several periods, with the visible window shaded"></canvas>
+    <canvas id="ang" aria-label="The same array factor in decibels versus scan angle from minus 90 to plus 90 degrees"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Elements \(N\)</label>
+      <input type="range" id="n" min="2" max="16" step="1" value="8">
+      <span class="val" id="n-val">8</span>
+    </div>
+    <div class="ctl">
+      <label>Spacing \(d/\lambda\)</label>
+      <input type="range" id="dl" min="0.25" max="2" step="0.001" value="0.481">
+      <span class="val" id="dl-val">0.481</span>
+    </div>
+    <div class="ctl">
+      <label>Steer \(\theta_0\)</label>
+      <input type="range" id="th0" min="-60" max="60" step="1" value="0">
+      <span class="val" id="th0-val">0°</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">window width</span><span class="v" id="r-w">&#8212;</span></div>
+    <div class="ro"><span class="k">visible \(\psi\)</span><span class="v" id="r-span">&#8212;</span></div>
+    <div class="ro gl" id="ro-gl"><span class="k">grating lobes</span><span class="v" id="r-gl">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const el = id => document.getElementById(id);
+const MINUS = '−';
+
+// ---- labels: MathJax for symbols, sans UI font for words, units, numbers ----
+function stext(ctx, str, x, y, px, color, align, bold) {
+  ctx.fillStyle = color; ctx.font = (bold ? '700 ' : '') + px + 'px ' + SANS;
+  ctx.textAlign = align || 'left'; ctx.textBaseline = 'middle'; ctx.fillText(str, x, y);
+}
+function mixWidth(ctx, chunks, h, color, bold) {
+  const f = (bold ? '700 ' : '') + (h - 1) + 'px ' + SANS;
+  let tot = 0;
+  for (const c of chunks) {
+    if (c.m) tot += MJ.width(c.m, color, h) || h * 0.6;
+    else { ctx.font = f; tot += ctx.measureText(c.s).width; }
+  }
+  return tot;
+}
+function mixLabel(ctx, chunks, x, yc, h, color, align, bold) {
+  const fpx = h - 1, f = (bold ? '700 ' : '') + fpx + 'px ' + SANS;
+  const tot = mixWidth(ctx, chunks, h, color, bold);
+  let cx = align === 'right' ? x - tot : (align === 'center' ? x - tot / 2 : x);
+  for (const c of chunks) {
+    if (c.m) { MJ.draw(ctx, c.m, cx, yc, h, color, 'left'); cx += MJ.width(c.m, color, h) || h * 0.6; }
+    else { stext(ctx, c.s, cx, yc, fpx, color, 'left', bold); ctx.font = f; cx += ctx.measureText(c.s).width; }
+  }
+  return tot;
+}
+
+// ---------------------------------------------------------------- physics --
+const FLOOR = -40;
+const state = { N: 8, dl: 0.481, th0: 0 };
+const rad = d => d * Math.PI / 180, deg = r => r * 180 / Math.PI;
+const dB = x => 20 * Math.log10(Math.max(x, 1e-6));
+
+// Uniform array factor, normalized to 1 at psi = 0 and every 360-degree repeat.
+function afPsi(psiDeg, N) {
+  const p = rad(psiDeg), s = Math.sin(p / 2);
+  if (Math.abs(s) < 1e-9) return 1;
+  return Math.abs(Math.sin(N * p / 2) / (N * s));
+}
+// psi = kd (sin theta - sin theta0), in degrees: kd = 360 d/lambda.
+const psiOf = (thDeg, st) => 360 * st.dl * (Math.sin(rad(thDeg)) - Math.sin(rad(st.th0)));
+function windowOf(st) {
+  const kd = 360 * st.dl, s0 = Math.sin(rad(st.th0));
+  return { lo: kd * (-1 - s0), hi: kd * (1 - s0) };
+}
+// Grating lobes: sin(theta_g) = sin(theta0) + m lambda/d, m != 0, |sin| <= 1.
+// A lobe landing exactly on +/-90 deg counts as present.
+function gratingLobes(st) {
+  const out = [], s0 = Math.sin(rad(st.th0)), EPS = 1e-9;
+  const mMax = Math.ceil(2 * st.dl) + 1;
+  for (let m = -mMax; m <= mMax; m++) {
+    if (m === 0) continue;
+    const s = s0 + m / st.dl;
+    if (Math.abs(s) <= 1 + EPS) out.push({ m, th: deg(Math.asin(Math.max(-1, Math.min(1, s)))) });
+  }
+  return out.sort((a, b) => a.th - b.th);
+}
+const dMax = st => 1 / (1 + Math.abs(Math.sin(rad(st.th0))));
+
+// Which color a sample of the pattern gets: 'gl' if it sits in the lobe of a
+// repeat that is in the visible window, 'main' otherwise.
+function lobeClass(psiDeg, st, glSet) {
+  const m = Math.round(psiDeg / 360);
+  if (m !== 0 && glSet.has(m) && Math.abs(psiDeg - 360 * m) < 360 / st.N) return 'gl';
+  return 'main';
+}
+
+// ---------------------------------------------------------------- canvases --
+const cvP = el('psi'), cP = cvP.getContext('2d');
+const cvA = el('ang'), cA = cvA.getContext('2d');
+
+/* clientWidth, not the bounding rect (which includes the border), and hand the
+   border back to the height under box-sizing:border-box. Narrower than
+   DESIGN_W, scale the whole drawing down rather than squeezing it. */
+const DESIGN_W = 340;
+const NARROW_MQ = window.matchMedia ? window.matchMedia('(max-width:600px)') : null;
+const isNarrow = () => !!(NARROW_MQ && NARROW_MQ.matches);
+function fitOne(cv, hDesign) {
+  const dpr = window.devicePixelRatio || 1;
+  const wCss = Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
+  const s = Math.min(1, wCss / DESIGN_W);
+  const w = wCss / s, h = hDesign;
+  cv.width = Math.round(wCss * dpr); cv.height = Math.round(h * s * dpr);
+  cv.style.height = (h * s) + 'px';
+  const bh = cv.offsetHeight - cv.clientHeight;
+  if (bh) cv.style.height = (h * s + bh) + 'px';
+  cv.getContext('2d').setTransform(dpr * s, 0, 0, dpr * s, 0, 0);
+  return { w, h };
+}
+
+// Draw a sampled curve, splitting it into runs by color class.
+function runs(ctx, pts, styles) {
+  // round joins: a miter at a sharp null spikes through the axis below
+  ctx.lineJoin = 'round';
+  let i = 0;
+  while (i < pts.length - 1) {
+    const cls = pts[i + 1].c;
+    const st = styles[cls];
+    ctx.strokeStyle = st.color; ctx.lineWidth = st.lw;
+    ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y);
+    let j = i + 1;
+    while (j < pts.length && pts[j].c === cls) { ctx.lineTo(pts[j].x, pts[j].y); j++; }
+    ctx.stroke();
+    i = j - 1;
+  }
+}
+
+function dbGrid(ctx, mL, pw, mT, ph, yFor, narrow) {
+  const step = ph < 110 ? 20 : 10;
+  ctx.strokeStyle = '#e8eef5'; ctx.lineWidth = 1;
+  for (let v = 0; v >= FLOOR; v -= 10) {
+    ctx.beginPath(); ctx.moveTo(mL, yFor(v)); ctx.lineTo(mL + pw, yFor(v)); ctx.stroke();
+  }
+  for (let v = 0; v >= FLOOR; v -= step)
+    stext(ctx, v === 0 ? '0' : MINUS + (-v), mL - 5, yFor(v), narrow ? 10.5 : 11, '#5b6573', 'right');
+  ctx.save(); ctx.translate(11, mT + ph / 2); ctx.rotate(-Math.PI / 2);
+  mixLabel(ctx, [{ m: '|AF|' }, { s: ' (dB)' }], 0, 0, narrow ? 11.5 : 12, '#15202b', 'center');
+  ctx.restore();
+}
+
+// ---------------------------------------------------------- top: psi axis --
+function drawPsi() {
+  const narrow = isNarrow();
+  const { w, h } = fitOne(cvP, narrow ? 180 : 195);
+  const ctx = cP, st = state;
+  ctx.clearRect(0, 0, w, h);
+  const small = w < 470;
+  const mL = 42, mR = 16, mT = 24, mB = 34;
+  const pw = w - mL - mR, ph = h - mT - mB;
+  const win = windowOf(st);
+  const gl = gratingLobes(st), glSet = new Set(gl.map(g => g.m));
+
+  // The axis always holds the window with a quarter period to spare, in
+  // half-period steps, and never less than 1.5 periods each way.
+  const reach = Math.max(Math.abs(win.lo), Math.abs(win.hi));
+  const R = Math.max(540, Math.ceil((reach + 90) / 180) * 180);
+  const xFor = p => mL + (p + R) / (2 * R) * pw;
+  const yFor = v => mT + Math.min(Math.max(-v, 0), -FLOOR) / (-FLOOR) * ph;
+
+  // visible window
+  const xl = xFor(win.lo), xr = xFor(win.hi);
+  ctx.fillStyle = 'rgba(0,103,185,0.09)';
+  ctx.fillRect(xl, mT, xr - xl, ph);
+
+  dbGrid(ctx, mL, pw, mT, ph, yFor, small);
+
+  // period markers: psi = 360 m. A repeat inside the window is a grating lobe.
+  for (let m = -Math.floor(R / 360); m <= Math.floor(R / 360); m++) {
+    const x = xFor(360 * m);
+    const isGl = glSet.has(m);
+    ctx.strokeStyle = m === 0 ? 'rgba(0,74,133,0.55)' : (isGl ? cssVar('--gl') : '#b4bec9');
+    ctx.lineWidth = isGl ? 1.4 : 1;
+    ctx.setLineDash(m === 0 ? [] : [4, 3]);
+    ctx.beginPath(); ctx.moveTo(x, mT); ctx.lineTo(x, mT + ph); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // the curve: faint outside the window, navy inside, red over a grating lobe
+  const n = Math.max(600, Math.round(pw * 4));
+  const pts = [];
+  for (let i = 0; i <= n; i++) {
+    const p = -R + 2 * R * i / n;
+    const inWin = p >= win.lo - 1e-9 && p <= win.hi + 1e-9;
+    pts.push({ x: xFor(p), y: yFor(dB(afPsi(p, st.N))),
+               c: inWin ? lobeClass(p, st, glSet) : 'out' });
+  }
+  runs(ctx, pts, { out: { color: '#b9c1cb', lw: 1.1 },
+                   main: { color: cssVar('--navy'), lw: 2 },
+                   gl: { color: cssVar('--gl'), lw: 2.2 } });
+
+  // window edges
+  ctx.strokeStyle = cssVar('--navy'); ctx.lineWidth = 1.3;
+  for (const x of [xl, xr]) { ctx.beginPath(); ctx.moveTo(x, mT - 5); ctx.lineTo(x, mT + ph); ctx.stroke(); }
+
+  // frame
+  ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.moveTo(mL, mT); ctx.lineTo(mL, mT + ph); ctx.lineTo(mL + pw, mT + ph); ctx.stroke();
+
+  // edge labels: the window edges are theta = -90 and +90. Full form when both
+  // fit apart; the bare angles when they would touch; each kept on the canvas.
+  const lpx = small ? 11 : 11.5, cNavy = cssVar('--navy');
+  const yl = mT - 12;
+  const place = (chunksL, chunksR) => {
+    const wl = mixWidth(ctx, chunksL, lpx, cNavy, true), wr = mixWidth(ctx, chunksR, lpx, cNavy, true);
+    let a = Math.max(2, Math.min(xl - wl / 2, w - 2 - wl));
+    let b = Math.max(2, Math.min(xr - wr / 2, w - 2 - wr));
+    return { a, b, wl, wr, ok: a + wl + 8 <= b };
+  };
+  let L = [{ m: '\\theta' }, { s: ' = ' + MINUS + '90°' }], Rt = [{ m: '\\theta' }, { s: ' = +90°' }];
+  let pl = place(L, Rt);
+  if (!pl.ok) { L = [{ s: MINUS + '90°' }]; Rt = [{ s: '+90°' }]; pl = place(L, Rt); }
+  if (!pl.ok) {                        // still touching: push them apart, outward
+    pl.a = Math.max(2, xl - 3 - pl.wl); pl.b = Math.min(w - 2 - pl.wr, xr + 3);
+  }
+  mixLabel(ctx, L, pl.a, yl, lpx, cNavy, 'left', true);
+  mixLabel(ctx, Rt, pl.b, yl, lpx, cNavy, 'left', true);
+
+  // psi tick labels: the coarsest step that keeps labels about 50px apart
+  const pxPerDeg = pw / (2 * R);
+  const step = [90, 180, 360, 720].find(s => s * pxPerDeg >= 50) || 720;
+  const tpx = small ? 10.5 : 11;
+  for (let p = -Math.floor(R / step) * step; p <= R + 1e-9; p += step) {
+    const lab = (p < 0 ? MINUS : '') + Math.abs(p) + '°';
+    ctx.font = tpx + 'px ' + SANS;
+    const hw = ctx.measureText(lab).width / 2;
+    stext(ctx, lab, Math.max(hw + 2, Math.min(xFor(p), w - hw - 3)), mT + ph + 10, tpx, '#5b6573', 'center');
+  }
+  mixLabel(ctx, [{ m: '\\psi' }, { s: ' (degrees)' }], mL + pw / 2, mT + ph + 25,
+           small ? 11.5 : 12, '#15202b', 'center');
+
+  // tiny key, top-left of the plot when it has room clear of the left edge label
+  const keyTxt = 'outside: no real angle';
+  ctx.font = (small ? 10.5 : 11) + 'px ' + SANS;
+  const kw = ctx.measureText(keyTxt).width + 22;
+  if (mL + 4 + kw < pl.a - 6) {
+    ctx.strokeStyle = '#b9c1cb'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(mL + 4, yl); ctx.lineTo(mL + 18, yl); ctx.stroke();
+    stext(ctx, keyTxt, mL + 22, yl, small ? 10.5 : 11, '#7a8592', 'left');
+  }
+}
+
+// ------------------------------------------------------- bottom: angle axis --
+function drawAng() {
+  const narrow = isNarrow();
+  const { w, h } = fitOne(cvA, narrow ? 170 : 185);
+  const ctx = cA, st = state;
+  ctx.clearRect(0, 0, w, h);
+  const small = w < 470;
+  const mL = 42, mR = 16, mT = 20, mB = 34;
+  const pw = w - mL - mR, ph = h - mT - mB;
+  const xFor = t => mL + (t + 90) / 180 * pw;
+  const yFor = v => mT + Math.min(Math.max(-v, 0), -FLOOR) / (-FLOOR) * ph;
+  const gl = gratingLobes(st), glSet = new Set(gl.map(g => g.m));
+
+  ctx.fillStyle = 'rgba(0,103,185,0.05)';
+  ctx.fillRect(mL, mT, pw, ph);
+  ctx.strokeStyle = '#e8eef5'; ctx.lineWidth = 1;
+  for (let t = -90; t <= 90; t += 30) { ctx.beginPath(); ctx.moveTo(xFor(t), mT); ctx.lineTo(xFor(t), mT + ph); ctx.stroke(); }
+  dbGrid(ctx, mL, pw, mT, ph, yFor, small);
+
+  // steer direction
+  ctx.strokeStyle = 'rgba(0,74,133,0.55)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(xFor(st.th0), mT); ctx.lineTo(xFor(st.th0), mT + ph); ctx.stroke();
+
+  // grating-lobe directions
+  ctx.strokeStyle = cssVar('--gl'); ctx.lineWidth = 1.4; ctx.setLineDash([4, 3]);
+  for (const g of gl) { const x = xFor(g.th); ctx.beginPath(); ctx.moveTo(x, mT); ctx.lineTo(x, mT + ph); ctx.stroke(); }
+  ctx.setLineDash([]);
+
+  const pts = [];
+  for (let t = -90; t <= 90.0001; t += 0.05) {
+    const p = psiOf(t, st);
+    pts.push({ x: xFor(t), y: yFor(dB(afPsi(p, st.N))), c: lobeClass(p, st, glSet) });
+  }
+  runs(ctx, pts, { main: { color: cssVar('--navy'), lw: 2 },
+                   gl: { color: cssVar('--gl'), lw: 2.2 } });
+
+  ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.moveTo(mL, mT); ctx.lineTo(mL, mT + ph); ctx.lineTo(mL + pw, mT + ph); ctx.stroke();
+
+  const tpx = small ? 10.5 : 11;
+  for (let t = -90; t <= 90; t += 30)
+    stext(ctx, (t < 0 ? MINUS : (t > 0 ? '+' : '')) + Math.abs(t) + '°', xFor(t), mT + ph + 10, tpx, '#5b6573', 'center');
+  mixLabel(ctx, [{ s: 'scan angle ' }, { m: '\\theta' }, { s: ' (degrees)' }], mL + pw / 2, mT + ph + 25,
+           small ? 11.5 : 12, '#15202b', 'center');
+
+  // labels in the top margin: "main beam" over the steer line, "grating lobe"
+  // over the first grating lobe; each dropped if it would overprint the other.
+  const ly = mT - 9, lpx = small ? 10.5 : 11;
+  ctx.font = '700 ' + lpx + 'px ' + SANS;
+  const boxAt = (txt, x) => {
+    const tw = ctx.measureText(txt).width;
+    const a = Math.max(mL, Math.min(x - tw / 2, mL + pw - tw));
+    return { a, b: a + tw, txt };
+  };
+  const mb = boxAt('main beam', xFor(st.th0));
+  stext(ctx, mb.txt, mb.a, ly, lpx, cssVar('--navy'), 'left', true);
+  let placed = [mb];
+  for (const g of gl) {
+    const bx = boxAt('grating lobe', xFor(g.th));
+    if (placed.every(q => bx.b + 6 < q.a || bx.a > q.b + 6)) {
+      stext(ctx, bx.txt, bx.a, ly, lpx, cssVar('--gl'), 'left', true);
+      placed.push(bx);
+    }
+  }
+}
+
+// ------------------------------------------------------------- readouts ---
+function fmtAng(v) {
+  let s = Math.abs(v).toFixed(1);
+  if (s.endsWith('.0')) s = s.slice(0, -2);
+  if (s === '0') return '0°';
+  return (v < 0 ? MINUS : '+') + s + '°';
+}
+function updateReadouts() {
+  const st = state, win = windowOf(st), gl = gratingLobes(st);
+  const fd = v => (Math.round(v) === 0 ? '0' : (v < 0 ? MINUS : '+') + Math.abs(Math.round(v))) + '°';
+  el('r-w').textContent = Math.round(win.hi - win.lo) + '°';
+  el('r-span').textContent = fd(win.lo) + ' to ' + fd(win.hi);
+  let txt;
+  if (!gl.length) txt = 'none';
+  else if (st.th0 === 0) {
+    const pos = gl.filter(g => g.th > 0).map(g => fmtAng(g.th).replace('+', '±'));
+    txt = pos.join(', ');
+  } else txt = gl.map(g => fmtAng(g.th)).join(', ');
+  el('r-gl').textContent = txt;
+  el('ro-gl').className = 'ro ' + (gl.length ? 'gl' : 'ok');
+}
+
+function drawAll() { drawPsi(); drawAng(); updateReadouts(); }
+
+// ---------------------------------------------------------------- controls --
+function sync() {
+  state.N = parseInt(el('n').value, 10);
+  state.dl = parseFloat(el('dl').value);
+  state.th0 = parseInt(el('th0').value, 10);
+  el('n-val').textContent = state.N;
+  el('dl-val').textContent = state.dl.toFixed(3);
+  el('th0-val').textContent = (state.th0 < 0 ? MINUS : '') + Math.abs(state.th0) + '°';
+  drawAll();
+}
+['n', 'dl', 'th0'].forEach(id => el(id).addEventListener('input', sync));
+window.addEventListener('resize', drawAll);
+
+// exposed for the verification scripts
+window.VR = { state, windowOf, gratingLobes, dMax, sync };
+
+MJ.setRedraw(drawAll);
+MJ.onReady(() => { MJ.typeset(document.querySelector('.app')).then(drawAll); });
+sync();
+</script>
+</body>
+</html>

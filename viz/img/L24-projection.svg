@@ -1,0 +1,268 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="318.390774pt" height="172.276383pt" viewBox="0 0 318.390774 172.276383" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-25T06:02:13.254908</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 172.276383 
+L 318.390774 172.276383 
+L 318.390774 0 
+L 0 0 
+L 0 172.276383 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 11.401754 157.199892 
+L 145.829027 157.199892 
+L 145.829027 35.375176 
+L 11.401754 35.375176 
+L 11.401754 157.199892 
+z
+" style="fill: none"/>
+   </g>
+   <g id="matplotlib.axis_1"/>
+   <g id="matplotlib.axis_2"/>
+   <g id="line2d_1">
+    <path d="M 11.401754 136.19563 
+L 145.829027 136.19563 
+" clip-path="url(#pea82156cd3)" style="fill: none; stroke: #8a929c; stroke-width: 0.8; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 32.406016 157.199892 
+L 32.406016 35.375176 
+" clip-path="url(#pea82156cd3)" style="fill: none; stroke: #8a929c; stroke-width: 0.8; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 11.401754 136.19563 
+L 145.829027 136.19563 
+" clip-path="url(#pea82156cd3)" style="fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_4">
+    <path d="M 46.232133 136.19563 
+L 46.232133 131.154608 
+L 51.273155 131.154608 
+" clip-path="url(#pea82156cd3)" style="fill: none; stroke: #1d7a4d; stroke-linecap: square"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 34.409138 136.19563 
+Q 84.916909 136.19563 133.859433 136.19563 
+" style="fill: none; stroke-dasharray: 5.18,2.24; stroke-dashoffset: 0; stroke: #5a5a5a; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 128.659433 133.59563 
+L 133.859433 136.19563 
+L 128.659433 138.79563 
+z
+" style="fill: #5a5a5a; stroke-dasharray: 5.18,2.24; stroke-dashoffset: 0; stroke: #5a5a5a; stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 32.855699 134.244293 
+Q 41.839886 95.258722 50.171292 59.105796 
+" style="fill: none; stroke: #004a85; stroke-width: 2.6; stroke-linecap: round"/>
+    <path d="M 46.185251 63.933992 
+L 50.171292 59.105796 
+L 51.642225 65.191546 
+z
+" style="fill: #004a85; stroke: #004a85; stroke-width: 2.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 34.409728 136.19563 
+Q 41.843058 136.19563 46.145892 136.19563 
+" style="fill: none; stroke: #e67e22; stroke-width: 2.8; stroke-linecap: round"/>
+    <path d="M 40.545892 133.39563 
+L 46.145892 136.19563 
+L 40.545892 138.99563 
+z
+" style="fill: #e67e22; stroke: #e67e22; stroke-width: 2.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 51.273155 134.191824 
+Q 51.273155 95.259877 51.273155 59.234819 
+" style="fill: none; stroke: #1d7a4d; stroke-width: 2.6; stroke-linecap: round"/>
+    <path d="M 48.473155 64.834819 
+L 51.273155 59.234819 
+L 54.073155 64.834819 
+z
+" style="fill: #1d7a4d; stroke: #1d7a4d; stroke-width: 2.6; stroke-linecap: round"/>
+   </g>
+   <g id="text_1">
+    <!-- $\mathbf{w}_\mathrm{n}$ -->
+    <g style="fill: #5a5a5a" transform="translate(110.907663 163.132164)">
+     <text>
+      <tspan x="0" y="-0.0625" style="font-weight: 700; font-size: 20px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">w</tspan>
+      <tspan x="18.667969" y="2.93749" style="font-size: 14px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">n</tspan>
+     </text>
+    </g>
+   </g>
+   <g id="text_2">
+    <!-- $\mathbf{w}_\mathrm{d}$ -->
+    <g style="fill: #004a85" transform="translate(8.598563 92.739514)">
+     <text>
+      <tspan x="0" y="-0.0625" style="font-weight: 700; font-size: 20px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #004a85">w</tspan>
+      <tspan x="18.667969" y="2.93749" style="font-size: 14px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #004a85">d</tspan>
+     </text>
+    </g>
+   </g>
+   <g id="text_3">
+    <!-- $r_\mathrm{n}\mathbf{w}_\mathrm{n}$ -->
+    <g style="fill: #e67e22" transform="translate(18.939585 160.611653)">
+     <text>
+      <tspan x="0" y="-0.796875" style="font-style: oblique; font-size: 20px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22">r</tspan>
+      <tspan x="8.222656" y="2.203115" style="font-size: 14px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22">n</tspan>
+      <tspan x="36.310547" y="2.203115" style="font-size: 14px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22">n</tspan>
+      <tspan x="17.642578" y="-0.796875" style="font-weight: 700; font-size: 20px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22">w</tspan>
+     </text>
+    </g>
+   </g>
+   <g id="text_4">
+    <!-- $\mathbf{w}$ -->
+    <g style="fill: #1d7a4d" transform="translate(55.474008 102.535416)">
+     <text>
+      <tspan x="0" y="-0.0625" style="font-weight: 700; font-size: 20px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1d7a4d">w</tspan>
+     </text>
+    </g>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a" transform="translate(42.292461 15.460625)">on a sidelobe</text>
+    <text style="font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a" transform="translate(4.32 29.375176)">projection 0.22, keeps 0.95</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_7">
+    <path d="M 172.714482 157.199892 
+L 307.141754 157.199892 
+L 307.141754 35.375176 
+L 172.714482 35.375176 
+L 172.714482 157.199892 
+z
+" style="fill: none"/>
+   </g>
+   <g id="matplotlib.axis_3"/>
+   <g id="matplotlib.axis_4"/>
+   <g id="line2d_5">
+    <path d="M 172.714482 136.19563 
+L 307.141754 136.19563 
+" clip-path="url(#p3ae96b20f0)" style="fill: none; stroke: #8a929c; stroke-width: 0.8; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_6">
+    <path d="M 193.718743 157.199892 
+L 193.718743 35.375176 
+" clip-path="url(#p3ae96b20f0)" style="fill: none; stroke: #8a929c; stroke-width: 0.8; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_7">
+    <path d="M 172.714482 136.19563 
+L 307.141754 136.19563 
+" clip-path="url(#p3ae96b20f0)" style="fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_8">
+    <path d="M 257.616064 136.19563 
+L 257.616064 131.154608 
+L 262.657086 131.154608 
+" clip-path="url(#p3ae96b20f0)" style="fill: none; stroke: #1d7a4d; stroke-linecap: square"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 195.721865 136.19563 
+Q 246.229636 136.19563 295.17216 136.19563 
+" style="fill: none; stroke-dasharray: 5.18,2.24; stroke-dashoffset: 0; stroke: #5a5a5a; stroke-width: 1.4; stroke-linecap: round"/>
+    <path d="M 289.97216 133.59563 
+L 295.17216 136.19563 
+L 289.97216 138.79563 
+z
+" style="fill: #5a5a5a; stroke-dasharray: 5.18,2.24; stroke-dashoffset: 0; stroke: #5a5a5a; stroke-width: 1.4; stroke-linecap: round"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 195.361835 135.050999 
+Q 228.189012 112.182532 258.631006 90.975659 
+" style="fill: none; stroke: #004a85; stroke-width: 2.6; stroke-linecap: round"/>
+    <path d="M 252.435551 91.879176 
+L 258.631006 90.975659 
+L 255.636546 96.474133 
+z
+" style="fill: #004a85; stroke: #004a85; stroke-width: 2.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 195.717383 136.19563 
+Q 228.188287 136.19563 257.528696 136.19563 
+" style="fill: none; stroke: #e67e22; stroke-width: 2.8; stroke-linecap: round"/>
+    <path d="M 251.928696 133.39563 
+L 257.528696 136.19563 
+L 251.928696 138.99563 
+z
+" style="fill: #e67e22; stroke: #e67e22; stroke-width: 2.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 262.657086 134.193625 
+Q 262.657086 112.180894 262.657086 93.07505 
+" style="fill: none; stroke: #1d7a4d; stroke-width: 2.6; stroke-linecap: round"/>
+    <path d="M 259.857086 98.67505 
+L 262.657086 93.07505 
+L 265.457086 98.67505 
+z
+" style="fill: #1d7a4d; stroke: #1d7a4d; stroke-width: 2.6; stroke-linecap: round"/>
+   </g>
+   <g id="text_6">
+    <!-- $\mathbf{w}_\mathrm{n}$ -->
+    <g style="fill: #5a5a5a" transform="translate(272.220391 163.132164)">
+     <text>
+      <tspan x="0" y="-0.0625" style="font-weight: 700; font-size: 20px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">w</tspan>
+      <tspan x="18.667969" y="2.93749" style="font-size: 14px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">n</tspan>
+     </text>
+    </g>
+   </g>
+   <g id="text_7">
+    <!-- $\mathbf{w}_\mathrm{d}$ -->
+    <g style="fill: #004a85" transform="translate(194.946892 109.662785)">
+     <text>
+      <tspan x="0" y="-0.0625" style="font-weight: 700; font-size: 20px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #004a85">w</tspan>
+      <tspan x="18.667969" y="2.93749" style="font-size: 14px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #004a85">d</tspan>
+     </text>
+    </g>
+   </g>
+   <g id="text_8">
+    <!-- $r_\mathrm{n}\mathbf{w}_\mathrm{n}$ -->
+    <g style="fill: #e67e22" transform="translate(205.287915 160.611653)">
+     <text>
+      <tspan x="0" y="-0.796875" style="font-style: oblique; font-size: 20px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22">r</tspan>
+      <tspan x="8.222656" y="2.203115" style="font-size: 14px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22">n</tspan>
+      <tspan x="36.310547" y="2.203115" style="font-size: 14px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22">n</tspan>
+      <tspan x="17.642578" y="-0.796875" style="font-weight: 700; font-size: 20px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22">w</tspan>
+     </text>
+    </g>
+   </g>
+   <g id="text_9">
+    <!-- $\mathbf{w}$ -->
+    <g style="fill: #1d7a4d" transform="translate(266.857939 119.458687)">
+     <text>
+      <tspan x="0" y="-0.0625" style="font-weight: 700; font-size: 20px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1d7a4d">w</tspan>
+     </text>
+    </g>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a" transform="translate(189.475462 15.460625)">near the main lobe</text>
+    <text style="font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a" transform="translate(165.785462 29.375176)">projection 0.82, keeps 0.33</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pea82156cd3">
+   <rect x="11.401754" y="35.375176" width="134.427273" height="121.824716"/>
+  </clipPath>
+  <clipPath id="p3ae96b20f0">
+   <rect x="172.714482" y="35.375176" width="134.427273" height="121.824716"/>
+  </clipPath>
+ </defs>
+</svg>

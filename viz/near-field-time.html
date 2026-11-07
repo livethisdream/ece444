@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What the phasors hide — E, H and S in time</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --efield:#0067b9; --hfield:#b3213a; --out:#1d7a4d; --back:#b3213a; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:9px; padding:12px; }
+  /* Two panels side by side: the row height is the taller of the two rather
+     than their sum, which is the whole reason this fits a frame. Below 620px
+     there is no room for two useful columns, so stack. */
+  .cv2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:620px) { .cv2 { grid-template-columns:1fr; } }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff;
+           border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 260px; min-width:0; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:90px; accent-color:var(--mid); }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:56px; text-align:right; }
+  .tgl { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; flex:0 0 auto; }
+  .tgl input { position:absolute; opacity:0; pointer-events:none; }
+  .tgl .sw { position:relative; flex:none; width:34px; height:19px; border-radius:999px;
+             background:#dfe8f1; border:1px solid var(--edge2); transition:background .15s, border-color .15s; }
+  .tgl .sw::after { content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; border-radius:50%;
+                    background:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.22); transition:transform .15s; }
+  .tgl input:checked + .sw { background:var(--mid); border-color:var(--mid); }
+  .tgl input:checked + .sw::after { transform:translateX(15px); }
+  .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
+  .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .tgl input:checked ~ .t { color:var(--navy); }
+  /* Readouts as a row of instruments: equal-width cells, labels and values on
+     shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0,1fr)); }
+  @media (max-width:560px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center; height:15px; line-height:15px;
+           font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.045em;
+           color:var(--ink3); white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:7ch; color:var(--navy); }
+  .ro.ph { background:rgba(0,103,185,0.10); border-color:rgba(0,103,185,0.30); }
+  .ro.net { background:rgba(29,122,77,0.10); border-color:rgba(29,122,77,0.30); }
+  .ro.net .v { color:var(--out); }
+  .ro.reac { background:rgba(179,33,58,0.09); border-color:rgba(179,33,58,0.28); }
+  .ro.reac .v { color:var(--hfield); }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="cv2">
+    <canvas id="fields" aria-label="E and H versus time at the chosen radius, showing the phase between them"></canvas>
+    <canvas id="poynt"  aria-label="Instantaneous radial power flow versus time, with its time average"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Distance \(kr\)</label>
+      <input id="kr" type="range" min="-1" max="1.2" step="0.01" value="0">
+      <span class="val" id="kr-v">1.00</span>
+    </div>
+    <label class="tgl"><input id="run" type="checkbox" checked><span class="sw"></span><span class="t">Animate</span></label>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">radius \(r/\lambda\)</span><span class="v" id="p-r">—</span></div>
+    <div class="ro reac"><span class="k">\(\lvert Z_w\rvert = E/H\)</span><span class="v" id="p-z">—</span></div>
+    <div class="ro ph"><span class="k">\(\angle Z_w\)</span><span class="v" id="p-phi">—</span></div>
+    <div class="ro net"><span class="k">power factor</span><span class="v" id="p-net">—</span></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var cF = document.getElementById('fields'), xF = cF.getContext('2d');
+  var cP = document.getElementById('poynt'),  xP = cP.getContext('2d');
+
+  var DW = 360, DH_WIDE = 218, DH_TALL = 138;
+  var DH = DH_WIDE;              // design canvas per panel, set in fit()
+  var CYCLES = 2;                // periods across the x axis
+
+  /* Below the CSS breakpoint the two panels stack, so their heights ADD and a
+     desktop aspect blows the frame budget -- measured 683px at 390 against a
+     555px cap, which the reader sees as the widget scrolling inside its own
+     iframe. Stacked panels get a shorter design box. Keep this number in sync
+     with the .cv2 media query above; they describe the same breakpoint. */
+  var STACK_MQ = window.matchMedia ? window.matchMedia('(max-width: 620px)') : null;
+  function stacked() { return !!(STACK_MQ && STACK_MQ.matches); }
+
+  var krEl = document.getElementById('kr'), krV = document.getElementById('kr-v');
+  var runEl = document.getElementById('run');
+
+  var tPhase = 0, lastT = performance.now(), lastRead = 0;
+
+  function kr() { return Math.pow(10, +krEl.value); }
+  krEl.addEventListener('input', function () {
+    var u = kr();
+    krV.textContent = u < 1 ? u.toFixed(2) : u.toFixed(u < 10 ? 2 : 1);
+  });
+
+  /* The whole widget rests on one angle.
+     For the infinitesimal dipole the bracket terms are
+        B_E = 1 - 1/u^2 - j/u      B_H = 1 - j/u        (u = kr)
+     and the common prefactor and e^{-jkr} cancel out of the relative phase,
+     so the complex radial Poynting vector goes as
+        B_E B_H* = 1 - j/u^3
+     Real part exactly 1 -- genuine outward power, with no near-field term in
+     it at all -- and imaginary part -1/u^3. Put the |A|^2 ~ 1/r^2 prefactor
+     back and those are the lesson's 1/r^2 and 1/(k^3 r^5). So E lags H by
+     psi = atan(1/u^3), which runs 90 degrees close in to 0 far out. */
+  function psi(u) { return Math.atan(1 / (u * u * u)); }
+
+  var ETA0 = 376.73;             // intrinsic impedance of free space, ohms
+  /* The wave impedance IS a load impedance: Z_w = E_theta/H_phi = eta0 B_E/B_H,
+     whose angle is the same psi and whose cosine is therefore a power factor.
+     Far out it settles at 377 ohms with a power factor of 1 -- free space is a
+     resistor. Close in it climbs and swings to -90 degrees: a pure reactance,
+     and negative, which is the same capacitive sign the short dipole shows at
+     its own terminals in Lesson 4. */
+  function zMag(u) {
+    var iu = 1 / u;
+    return ETA0 * Math.hypot(1 - iu * iu, -iu) / Math.hypot(1, -iu);
+  }
+
+  var SANS = 'Inter, system-ui, -apple-system, sans-serif';
+  function stext(ctx, s, x, y, px, color, align, bold) {
+    ctx.fillStyle = color; ctx.font = (bold ? '700 ' : '') + px + 'px ' + SANS;
+    ctx.textAlign = align || 'left'; ctx.textBaseline = 'middle'; ctx.fillText(s, x, y);
+  }
+
+  function cvWidth(cv) { return Math.max(220, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+  function fitOne(cv, ctx) {
+    var dpr = window.devicePixelRatio || 1;
+    var cssW = cvWidth(cv);
+    var sc = Math.min(cssW / DW, 1.0);
+    var cssH = DH * sc;
+    cv.width = Math.round(cssW * dpr);
+    cv.height = Math.round(cssH * dpr);
+    cv.style.height = cssH + 'px';
+    var bh = cv.offsetHeight - cv.clientHeight;
+    if (bh) cv.style.height = (cssH + bh) + 'px';
+    var tx = (cssW - DW * sc) / 2;
+    ctx.setTransform(dpr * sc, 0, 0, dpr * sc, dpr * tx, 0);
+  }
+  /* Each canvas is measured on its OWN width. Measuring one and applying it to
+     both is the aspect-skew bug that bit three widgets in the August rework. */
+  function fit() { DH = stacked() ? DH_TALL : DH_WIDE; fitOne(cF, xF); fitOne(cP, xP); }
+  window.addEventListener('resize', fit);
+
+  var PAD_L = 34, PAD_R = 10, PAD_B = 26;
+  function padTop() { return stacked() ? 18 : 24; }
+  function plotBox() {
+    return { x0: PAD_L, x1: DW - PAD_R, y0: padTop(), y1: DH - PAD_B };
+  }
+  function axes(ctx, yLo, yHi, zeroLabel) {
+    var b = plotBox();
+    var yOf = function (v) { return b.y1 - (v - yLo) / (yHi - yLo) * (b.y1 - b.y0); };
+    // zero line
+    ctx.strokeStyle = '#c5cdd7'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(b.x0, yOf(0)); ctx.lineTo(b.x1, yOf(0)); ctx.stroke();
+    // period gridlines, one per cycle
+    ctx.setLineDash([3, 3]); ctx.strokeStyle = '#e2e8ef';
+    for (var c = 1; c <= CYCLES; c++) {
+      var x = b.x0 + (c / CYCLES) * (b.x1 - b.x0);
+      ctx.beginPath(); ctx.moveTo(x, b.y0); ctx.lineTo(x, b.y1); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    // x labels in periods
+    for (var c2 = 0; c2 <= CYCLES; c2++) {
+      var xx = b.x0 + (c2 / CYCLES) * (b.x1 - b.x0);
+      stext(ctx, c2 === 0 ? '0' : (c2 + 'T'), xx, b.y1 + 11, 10.5, '#8a93a0', 'center');
+    }
+    stext(ctx, zeroLabel, b.x0 - 5, yOf(0), 10.5, '#8a93a0', 'right');
+    return { b: b, yOf: yOf };
+  }
+  function trace(ctx, ax, f, color, width) {
+    var b = ax.b, N = 300;
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath();
+    for (var i = 0; i <= N; i++) {
+      var frac = i / N, x = b.x0 + frac * (b.x1 - b.x0), y = ax.yOf(f(frac * CYCLES));
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  function draw() {
+    var u = kr(), ps = psi(u);
+    var now = performance.now(), dt = Math.min(0.05, (now - lastT) / 1000);
+    lastT = now;
+    if (runEl.checked) tPhase = (tPhase + dt * 0.32) % 1;   // in periods
+
+    // Unit-amplitude normalization: this panel is about PHASE, and both field
+    // magnitudes blow up as u -> 0, so plotting them raw would show nothing else.
+    var e = function (tau) { return Math.cos(2 * Math.PI * tau - ps); };
+    var h = function (tau) { return Math.cos(2 * Math.PI * tau); };
+
+    /* ---------------- panel 1: the two fields in time ---------------- */
+    xF.clearRect(0, 0, DW, DH);
+    var a1 = axes(xF, -1.25, 1.25, '0');
+    /* H is drawn first and thicker. Far out the phase gap goes to zero and the
+       two curves coincide exactly -- at equal weights E simply paints over H
+       and the panel looks like H vanished, which is the opposite of the point.
+       A wider red stroke leaves a visible edge around the blue. */
+    trace(xF, a1, h, '#b3213a', 3.4);
+    trace(xF, a1, e, '#0067b9', 2);
+    // live markers at the animation cursor
+    var b1 = a1.b, xc = b1.x0 + (tPhase * CYCLES / CYCLES) * (b1.x1 - b1.x0);
+    xF.strokeStyle = '#9aa4b0'; xF.lineWidth = 1; xF.setLineDash([2, 3]);
+    xF.beginPath(); xF.moveTo(xc, b1.y0); xF.lineTo(xc, b1.y1); xF.stroke();
+    xF.setLineDash([]);
+    [[e, '#0067b9'], [h, '#b3213a']].forEach(function (p) {
+      var yv = a1.yOf(p[0](tPhase * CYCLES));
+      xF.strokeStyle = p[1]; xF.lineWidth = 2;
+      xF.beginPath(); xF.moveTo(xc, a1.yOf(0)); xF.lineTo(xc, yv); xF.stroke();
+      xF.fillStyle = p[1]; xF.beginPath(); xF.arc(xc, yv, 3.2, 0, 2 * Math.PI); xF.fill();
+    });
+    MJ.draw(xF, '\\mathbf{E}', b1.x0 + 6, padTop() - 11, 13, '#0067b9', 'left');
+    MJ.draw(xF, '\\mathbf{H}', b1.x0 + 32, padTop() - 11, 13, '#b3213a', 'left');
+    stext(xF, 'in time, one radius', b1.x1, padTop() - 11, 10.5, '#8a93a0', 'right');
+
+    /* ---------------- panel 2: what their product does ---------------- */
+    xP.clearRect(0, 0, DW, DH);
+    var a2 = axes(xP, -0.62, 1.08, '0');
+    var b2 = a2.b, s = function (tau) { return e(tau) * h(tau); };
+    // fill: outward above the axis, returning below it
+    var N = 300, zeroY = a2.yOf(0);
+    for (var seg = 0; seg < 2; seg++) {
+      xP.beginPath(); xP.moveTo(b2.x0, zeroY);
+      for (var i = 0; i <= N; i++) {
+        var frac = i / N, x = b2.x0 + frac * (b2.x1 - b2.x0), v = s(frac * CYCLES);
+        var clipped = seg === 0 ? Math.max(0, v) : Math.min(0, v);
+        xP.lineTo(x, a2.yOf(clipped));
+      }
+      xP.lineTo(b2.x1, zeroY); xP.closePath();
+      xP.fillStyle = seg === 0 ? 'rgba(29,122,77,0.24)' : 'rgba(179,33,58,0.22)';
+      xP.fill();
+    }
+    trace(xP, a2, s, '#1d7a4d', 2);
+    // the time average -- this is the real part of the complex Poynting vector
+    var mean = 0.5 * Math.cos(ps), ym = a2.yOf(mean);
+    xP.strokeStyle = '#0f5c39'; xP.lineWidth = 1.5; xP.setLineDash([6, 4]);
+    xP.beginPath(); xP.moveTo(b2.x0, ym); xP.lineTo(b2.x1, ym); xP.stroke();
+    xP.setLineDash([]);
+    var xc2 = b2.x0 + tPhase * (b2.x1 - b2.x0);
+    xP.strokeStyle = '#9aa4b0'; xP.lineWidth = 1; xP.setLineDash([2, 3]);
+    xP.beginPath(); xP.moveTo(xc2, b2.y0); xP.lineTo(xc2, b2.y1); xP.stroke();
+    xP.setLineDash([]);
+    var ys = a2.yOf(s(tPhase * CYCLES));
+    xP.fillStyle = '#1d7a4d'; xP.beginPath(); xP.arc(xc2, ys, 3.2, 0, 2 * Math.PI); xP.fill();
+    MJ.draw(xP, 'S(t) = E(t)\\,H(t)', b2.x0 + 6, padTop() - 11, 13, '#1d7a4d', 'left');
+    MJ.draw(xP, '\\langle S\\rangle', b2.x0 + 7, ym - 10, 12, '#0f5c39', 'left');
+
+    /* ---------------- readouts ---------------- */
+    if (now - lastRead > 100) {
+      lastRead = now;
+      var deg = ps * 180 / Math.PI, z = zMag(u);
+      document.getElementById('p-r').textContent = (u / (2 * Math.PI)).toFixed(3) + ' λ';
+      document.getElementById('p-z').textContent =
+        (z >= 10000 ? (z / 1000).toFixed(1) + ' kΩ' : z.toFixed(0) + ' Ω');
+      // Signed, and negative: Z_w = E/H lags, so the angle reads capacitive.
+      document.getElementById('p-phi').textContent =
+        (deg < 0.05 ? '' : '−') + deg.toFixed(1) + '°';
+      document.getElementById('p-net').textContent = Math.cos(ps).toFixed(2);
+    }
+  }
+
+  function tick() { draw(); requestAnimationFrame(tick); }
+  krEl.dispatchEvent(new Event('input'));
+  MJ.setRedraw(draw);
+  MJ.onReady(function () { MJ.typeset(document.getElementById('app')); draw(); });
+  fit();
+  tick();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Range-Doppler map with MTI</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  *, *::before, *::after { box-sizing:border-box; }
+  .app { max-width:820px; margin:0 auto; padding:10px 10px 12px; }
+  .card { border:1px solid var(--edge); border-radius:6px; background:#fff; padding:6px 8px 2px; }
+  canvas { display:block; width:100%; }
+  .canvases { display:grid; grid-template-columns:1fr; gap:8px; margin-bottom:8px; }
+  @media (min-width:660px) { .canvases { grid-template-columns:3fr 2fr; align-items:start; gap:10px; margin-bottom:10px; } }
+  .controls { display:grid; grid-template-columns:1fr; gap:6px 18px;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px;
+              padding:7px 12px; margin-bottom:8px; }
+  @media (min-width:560px) { .controls { grid-template-columns:1fr 1fr; padding:9px 12px; margin-bottom:10px; } }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; }
+  .ctl label { font-size:13.5px; color:var(--ink); white-space:nowrap; min-width:92px; }
+  .ctl input[type=range] { flex:1 1 80px; min-width:70px; accent-color:var(--navy); }
+  .ctl input[type=checkbox] { accent-color:var(--navy); width:16px; height:16px; margin:0; }
+  .val { font-variant-numeric:tabular-nums; font-size:13.5px; color:var(--navy);
+         font-weight:600; min-width:68px; text-align:right; }
+  .ctl .val.grow { flex:1 1 auto; text-align:left; }
+  .readouts { display:grid; gap:6px; grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 4px 7px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center; height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.04em; color:var(--ink3); white-space:nowrap; overflow:hidden;
+           max-width:100%; text-overflow:ellipsis; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; text-align:center; color:var(--navy); }
+  .ro.dgr { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.dgr .v { color:var(--red); }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <div class="canvases">
+    <div class="card"><canvas id="map"></canvas></div>
+    <div class="card"><canvas id="resp"></canvas></div>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label for="vel">Hand speed</label>
+      <input id="vel" type="range" min="-35" max="35" step="0.5" value="1">
+      <span class="val" id="velv"></span>
+    </div>
+    <div class="ctl">
+      <label for="nc">Chirps</label>
+      <input id="nc" type="range" min="5" max="8" step="1" value="8">
+      <span class="val" id="ncv"></span>
+    </div>
+    <div class="ctl">
+      <label for="mti">MTI</label>
+      <input id="mti" type="range" min="0" max="2" step="1" value="0">
+      <span class="val" id="mtiv"></span>
+    </div>
+    <div class="ctl">
+      <label for="sync">Chirp sync</label>
+      <input id="sync" type="checkbox" checked>
+      <span class="val grow" id="syncv"></span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">velocity res.</span><span class="v" id="rDv"></span></div>
+    <div class="ro"><span class="k">map shows</span><span class="v" id="rShow"></span></div>
+    <div class="ro"><span class="k">MTI gain, hand</span><span class="v" id="rGain"></span></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // The L29 burst (COURSE_SPEC M8): 10 GHz, 0.5 ms PRI, so +/-15 m/s and blind
+  // speeds every 30 m/s. Range cells are c/2B = 0.30 m. Fast time is modeled
+  // with 64 samples whose FFT bins are one range cell each, zero padded to 128;
+  // that keeps the map exact in range and Doppler and cheap to recompute.
+  const LAM = 0.03, PRI = 0.5e-3, DR = 0.30;
+  const VMAX = LAM / (4 * PRI), VBLIND = LAM / (2 * PRI);
+  const NS = 64, NF = 128, RMAX = 4.0;
+  const ROWS = Math.round(RMAX / (DR * NS / NF)) + 1;    // display range bins, 0 to 4 m
+  const $ = id => document.getElementById(id);
+  const mapEl = $('map'), respEl = $('resp');
+  const mx = mapEl.getContext('2d'), rx = respEl.getContext('2d');
+  const velEl = $('vel'), ncEl = $('nc'), mtiEl = $('mti'), syncEl = $('sync');
+  const MTI = ['none', '2-pulse', '3-pulse'];
+
+  // ---- a seeded generator, so the noise does not flicker as a slider moves
+  function rng(seed) {
+    return function () {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function gauss(r) { return Math.sqrt(-2 * Math.log(r() + 1e-12)) * Math.cos(2 * Math.PI * r()); }
+
+  // ---- in-place radix-2 FFT on separate re/im arrays
+  function fft(re, im) {
+    const n = re.length;
+    for (let i = 1, j = 0; i < n; i++) {
+      let bit = n >> 1;
+      for (; j & bit; bit >>= 1) j ^= bit;
+      j ^= bit;
+      if (i < j) { let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; }
+    }
+    for (let len = 2; len <= n; len <<= 1) {
+      const a = -2 * Math.PI / len, wr = Math.cos(a), wi = Math.sin(a);
+      for (let i = 0; i < n; i += len) {
+        let cr = 1, ci = 0;
+        for (let k = 0; k < len / 2; k++) {
+          const p = i + k, q = p + len / 2;
+          const tr = re[q] * cr - im[q] * ci, ti = re[q] * ci + im[q] * cr;
+          re[q] = re[p] - tr; im[q] = im[p] - ti; re[p] += tr; im[p] += ti;
+          const nr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = nr;
+        }
+      }
+    }
+  }
+  const hann = n => Float64Array.from({ length: n }, (_, i) => 0.5 - 0.5 * Math.cos(2 * Math.PI * (i + 0.5) / n));
+
+  // Leakage at 0 m and a wall at 3.0 m stand still; the hand at 1.5 m moves.
+  // Closing speed is positive: the range shrinks, the echo phase -4 pi R / lam
+  // advances, and the hand lands at positive Doppler, as in L26.
+  const SCENE = [{ a: 1.0, R: 0.0, v: 0 }, { a: 0.25, R: 3.0, v: 0 }, { a: 0.03, R: 1.5, v: null }];
+  const SIGMA = 0.02, JITTER = 0.002;
+
+  const st = {};
+  function compute() {
+    const v = +velEl.value, M = 2 ** (+ncEl.value), kind = +mtiEl.value, sync = syncEl.checked;
+    const r = rng(29), wr = hann(NS);
+    // the burst, already range-transformed: one zero-padded FFT per chirp
+    const Rre = [], Rim = [];
+    for (let m = 0; m < M; m++) {
+      const re = new Float64Array(NF), im = new Float64Array(NF);
+      const common = JITTER * gauss(r);
+      for (const t of SCENE) {
+        const vel = t.v === null ? v : t.v;
+        const R = t.R - vel * (m - M / 2) * PRI;           // range at this chirp
+        let ph = -4 * Math.PI * R / LAM + common;
+        if (!sync) ph += 2 * Math.PI * r();                  // the chirp started anywhere in its PRI
+        const cyc = R / (DR * NS);                           // beat, cycles per sample
+        for (let n = 0; n < NS; n++) {
+          const p = 2 * Math.PI * cyc * n + ph;
+          re[n] += t.a * Math.cos(p) * wr[n]; im[n] += t.a * Math.sin(p) * wr[n];
+        }
+      }
+      for (let n = 0; n < NS; n++) { re[n] += SIGMA * gauss(r) * wr[n]; im[n] += SIGMA * gauss(r) * wr[n]; }
+      fft(re, im);
+      Rre.push(re.slice(0, ROWS)); Rim.push(im.slice(0, ROWS));
+    }
+    // MTI across chirps, sample by sample (the range FFT is linear, so per bin is the same)
+    const taps = kind === 0 ? [1] : kind === 1 ? [1, -1] : [1, -2, 1];
+    const K = M - taps.length + 1;
+    // the Doppler FFT is zero padded to M so the velocity axis does not move with MTI
+    const wd = hann(K), P = [];
+    const norm = 1 / ((NS / 2) * (M / 2));                  // Hann coherent gains: leakage at 0 dB
+    for (let b = 0; b < ROWS; b++) {
+      const re = new Float64Array(M), im = new Float64Array(M);
+      for (let k = 0; k < K; k++) {
+        let sr = 0, si = 0;
+        for (let j = 0; j < taps.length; j++) { sr += taps[j] * Rre[k + j][b]; si += taps[j] * Rim[k + j][b]; }
+        re[k] = sr * wd[k]; im[k] = si * wd[k];
+      }
+      fft(re, im);
+      const row = new Float64Array(M);
+      for (let k = 0; k < M; k++) {
+        const s = (k + M / 2) % M;                           // fftshift
+        row[k] = 10 * Math.log10((re[s] * re[s] + im[s] * im[s]) * norm * norm + 1e-20);
+      }
+      P.push(row);
+    }
+    st.v = v; st.M = M; st.kind = kind; st.sync = sync; st.P = P;
+    st.dv = LAM / (2 * M * PRI);
+    st.shown = ((v + VMAX) % (2 * VMAX) + 2 * VMAX) % (2 * VMAX) - VMAX;
+    st.gain = gainDb(v, kind);
+
+    $('velv').textContent = (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(1) + ' m/s';
+    $('ncv').textContent = 'M = ' + M;
+    $('mtiv').textContent = MTI[kind];
+    $('syncv').textContent = sync ? 'on' : 'off';
+    $('rDv').textContent = st.dv.toFixed(2) + ' m/s';
+    $('rShow').textContent = (st.shown > 0.01 ? '+' : st.shown < -0.01 ? '−' : '') + Math.abs(st.shown).toFixed(1) + ' m/s';
+    $('rGain').textContent = kind === 0 ? '0 dB' : (st.gain < -60 ? '< −60 dB'
+      : (st.gain > 0.05 ? '+' : st.gain < -0.05 ? '−' : '') + Math.abs(st.gain).toFixed(1) + ' dB');
+  }
+
+  // power gain of the canceller at velocity v: |1 - z^-1|^2 = 4 sin^2(pi fD PRI)
+  function gainDb(v, kind) {
+    if (kind === 0) return 0;
+    const s2 = Math.sin(Math.PI * (2 * v / LAM) * PRI) ** 2;
+    return 10 * Math.log10((kind === 1 ? 4 * s2 : 16 * s2 * s2) + 1e-12);
+  }
+
+  // ---- canvas plumbing (see null-steering.html for SQ)
+  var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:659px)') : null;
+  function SQ(h) { return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; }
+  function fit(cv, ctx, h) {
+    h = SQ(h);
+    const dpr = window.devicePixelRatio || 1;
+    const w = cv.parentNode.clientWidth - 16;
+    cv.style.height = h + 'px';
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    return { w: w, h: h };
+  }
+  const F = (s, w) => (w || '') + ' ' + s + 'px Inter, system-ui, sans-serif';
+
+  // white through the house blues to near-black navy, -75 to 0 dB
+  const STOPS = [[0, [255, 255, 255]], [0.2, [219, 231, 242]], [0.4, [127, 176, 220]],
+                 [0.6, [0, 103, 185]], [0.8, [0, 74, 133]], [1, [0, 33, 61]]];
+  function color(u) {
+    u = Math.max(0, Math.min(1, u));
+    for (let i = 1; i < STOPS.length; i++) {
+      if (u <= STOPS[i][0]) {
+        const [u0, c0] = STOPS[i - 1], [u1, c1] = STOPS[i], f = (u - u0) / (u1 - u0);
+        return c0.map((c, j) => Math.round(c + f * (c1[j] - c)));
+      }
+    }
+    return STOPS[STOPS.length - 1][1];
+  }
+  const LO = -75;
+
+  const off = document.createElement('canvas'), ox = off.getContext('2d');
+  function drawMap() {
+    const g = fit(mapEl, mx, 270);
+    const L = 30, R = 6, T = 8, B = 32;
+    const pw = g.w - L - R, ph = g.h - T - B;
+    off.width = st.M; off.height = ROWS;
+    const img = ox.createImageData(st.M, ROWS);
+    for (let b = 0; b < ROWS; b++) {
+      const y = ROWS - 1 - b;                              // range up
+      for (let k = 0; k < st.M; k++) {
+        const c = color((st.P[b][k] - LO) / -LO), i = 4 * (y * st.M + k);
+        img.data[i] = c[0]; img.data[i + 1] = c[1]; img.data[i + 2] = c[2]; img.data[i + 3] = 255;
+      }
+    }
+    ox.putImageData(img, 0, 0);
+    mx.imageSmoothingEnabled = false;
+    mx.drawImage(off, L, T, pw, ph);
+    mx.strokeStyle = '#8a929c'; mx.lineWidth = 1; mx.strokeRect(L + 0.5, T + 0.5, pw - 1, ph - 1);
+
+    const xv = v => L + (v + VMAX) / (2 * VMAX) * pw;
+    const yr = r => T + ph - (r + DR * NS / NF / 2) / (RMAX + DR * NS / NF) * ph;
+    mx.fillStyle = '#8792a2'; mx.font = F(11); mx.textAlign = 'center';
+    for (let v = -15; v <= 15; v += 5) mx.fillText((v < 0 ? '−' : '') + Math.abs(v), xv(v), T + ph + 14);
+    mx.textAlign = 'right';
+    for (let r = 0; r <= 4; r++) mx.fillText(r, L - 6, yr(r) + 4);
+    mx.fillStyle = '#5b6573'; mx.font = F(11.5); mx.textAlign = 'center';
+    mx.fillText('velocity (m/s)', L + pw / 2, g.h - 3);
+    mx.save(); mx.translate(10, T + ph / 2); mx.rotate(-Math.PI / 2);
+    mx.fillText('range (m)', 0, 0); mx.restore();
+  }
+
+  function drawResp() {
+    const g = fit(respEl, rx, 270);
+    const L = 30, R = 8, T = 22, B = 32;
+    const V0 = -35, V1 = 35, D0 = -40, D1 = 15;
+    const x = v => L + (v - V0) / (V1 - V0) * (g.w - L - R);
+    const y = d => T + (D1 - Math.max(D0, Math.min(D1, d))) / (D1 - D0) * (g.h - T - B);
+    rx.fillStyle = '#eef4fa'; rx.fillRect(x(-VMAX), T, x(VMAX) - x(-VMAX), g.h - T - B);
+    rx.strokeStyle = '#e6eef6'; rx.lineWidth = 1;
+    rx.fillStyle = '#8792a2'; rx.font = F(11); rx.textAlign = 'right';
+    for (let d = -40; d <= 0; d += 20) {
+      rx.beginPath(); rx.moveTo(L, y(d)); rx.lineTo(g.w - R, y(d)); rx.stroke();
+      rx.fillText(d, L - 5, y(d) + 4);
+    }
+    rx.textAlign = 'center';
+    for (let v = -30; v <= 30; v += 15) rx.fillText((v < 0 ? '−' : '') + Math.abs(v), x(v), g.h - B + 14);
+    rx.save(); rx.setLineDash([4, 3]); rx.strokeStyle = '#b01e24';
+    for (const v of [-VBLIND, 0, VBLIND]) { rx.beginPath(); rx.moveTo(x(v), T); rx.lineTo(x(v), g.h - B); rx.stroke(); }
+    rx.restore();
+    const trace = (kind, color, lw) => {
+      rx.beginPath();
+      for (let i = 0; i <= 700; i++) {
+        const v = V0 + (V1 - V0) * i / 700, P = [x(v), y(gainDb(v, kind))];
+        i ? rx.lineTo(...P) : rx.moveTo(...P);
+      }
+      rx.strokeStyle = color; rx.lineWidth = lw; rx.lineJoin = 'round'; rx.stroke();
+    };
+    const COL = ['#5b6573', '#004a85', '#8a5a00'];
+    for (let k = 0; k < 3; k++) if (k !== st.kind) trace(k, 'rgba(91,101,115,0.30)', 1.2);
+    trace(st.kind, COL[st.kind], 2.4);
+    rx.fillStyle = '#b01e24';
+    rx.beginPath(); rx.arc(x(Math.max(V0, Math.min(V1, st.v))), y(st.gain), 5, 0, 2 * Math.PI); rx.fill();
+    rx.fillStyle = '#5b6573'; rx.font = F(11.5); rx.textAlign = 'center';
+    rx.fillText('velocity (m/s)', (L + g.w - R) / 2, g.h - 3);
+    rx.textAlign = 'left';
+    rx.fillText('MTI gain (dB), ' + MTI[st.kind], L, T - 8);
+  }
+
+  function drawAll() { drawMap(); drawResp(); }
+  function update() { compute(); drawAll(); }
+  [velEl, ncEl, mtiEl].forEach(el => el.addEventListener('input', update));
+  syncEl.addEventListener('change', update);
+  window.addEventListener('resize', drawAll);
+  update();
+  if (window.MJ) { MJ.setRedraw(drawAll); MJ.onReady(function () { drawAll(); }); }
+})();
+</script>
+</body>
+</html>
