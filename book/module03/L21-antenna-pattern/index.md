@@ -388,10 +388,10 @@ $12.0\ \text{dBi}$ steered to $30^\circ$, $45^\circ$, and $60^\circ$.
 
 ::::
 
-::::{frame} Practice
+::::{frame} Preparing for the Lab
 :class: read-only doc-links
 
-This lesson's problems are the pre-lab for the L21 Lab: Part 1 of its packet, completed on your own before the lab period.
+Part 1 of the L21 Lab packet works out what you should see at the bench, so you can tell a good trace from a bad one while you are still at the kit. Complete it before the lab period.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet, Part 1 (PDF)</a>
 ::::
