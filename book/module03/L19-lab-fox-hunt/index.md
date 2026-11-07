@@ -38,7 +38,7 @@ with room for notes. Print from read mode for the whole lesson.
 - Take measurements at different points on the table and determine which box contains the HB100.
 :::
 
-The L19 Lab puts Lesson 19 on the bench as a fox hunt. A taped firing line runs
+The L19 Lab puts Lesson 19 into practice as a fox hunt. A taped firing line runs
 along the table, and numbered boxes sit downrange of it at positions I
 measured and posted. Every box holds an HB100, powered or not, so
 weight gives nothing away; one of them is live.
@@ -53,7 +53,7 @@ crossing is your call. Peak Gain plays a smaller part: when two boxes sit
 close to the crossing, the pattern of levels along the line says which one fits.
 ::::
 
-::::{frame} The Hunt in Five Steps
+::::{frame} The Hunt in Five Stages
 :::{present}
 <picture>
 <source media="(max-width: 600px)" srcset="../../viz/img/L19-lab-sequence-narrow.svg">
@@ -61,11 +61,11 @@ close to the crossing, the pattern of levels along the line says which one fits.
 </picture>
 :::
 
-Steps 1 and 2 happen before the fox goes on: the bring-up on your own HB100,
-then the reference shot that fixes which end of the tape positive Angle points
-to. Steps 3 and 4 are the hunt: the same measurement at every station mark,
-then the fix. Step 5 is mine, and the Part 3 writeup starts
-from it.
+The first two stages happen before the fox goes on: the bring-up on your own
+HB100 (Steps 1 to 6), then the reference shot that fixes which end of the tape
+positive Angle points to (Steps 7 to 11). The next two are the hunt: the same
+measurement at every station mark (Steps 12 to 16), then the fix (Steps 17 to
+20). The reveal is mine, and the Part 3 writeup starts from it.
 ::::
 
 ::::{frame} The Range
@@ -101,8 +101,8 @@ single firing line measures worst.
 
 The Pre-Lab is Part 1 of the packet, done before the lab period and listed at
 the end of
-<a href="../L19-direction-finding/index.html">Lesson 19</a>. What you need at
-the bench is the notebook,
+<a href="../L19-direction-finding/index.html">Lesson 19</a>. What you need in
+class is the notebook,
 <a href="../../notebooks/L19_foxhunt.ipynb" download>`L19_foxhunt.ipynb`</a>:
 it holds the practice set, draws every bearing line over the boxes, and prints
 the results. Write its four functions, run its test cell until every check
@@ -126,7 +126,7 @@ center of every box in the same frame. Place the middle of the array, between E4
 and E5, on the station mark, and square the board's patch face to the tape with
 a straightedge or a square, so broadside points straight downrange.
 
-Because every station faces the same way, there is no heading to work out. Est.
+Because every station faces the same way, there is no heading to work out.
 Angle $\theta_i$ at station $x_i$ says the fox lies on the line
 $x = x_i + y\tan\theta_i$, with $\theta_i$ positive toward the $+x$ end of the
 tape. Whether positive Angle points to $+x$ depends on which way round the
@@ -169,7 +169,7 @@ the level by several dB.
 2. Place your own powered HB100 $1\ \text{m}$ out at boresight, facing the array.
 3. Press **Find HB100** and record the Signal Freq in the packet.
 4. Press **Calibrate** and wait for it to finish.
-5. Open **Lab Presets**, press **1 Steering Angle**, and set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$ dBFS.
+5. Open **Lab Presets**, choose the Steering Angle preset, and set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$ dBFS.
 6. Press **Start**, and check the **FFT** tab for one tone near $0\ \text{MHz}$, at least $20\ \text{dB}$ above the floor.
 :::
 
@@ -265,7 +265,7 @@ Do not change Rx Gain once the hunt starts. The bearings do not care, but the
 amplitude ranking compares levels across stations and assumes one gain for all
 of them.
 
-The plot is your last check before you leave the bench. It draws each station's
+The plot is your last check before you leave the station. It draws each station's
 bearing line over the posted boxes, even before your functions are finished, and
 the lines should cross near one box. A line that misses the crossing is a station
 to retake now, while the kit is still set up; once you leave, a bad bearing can
@@ -278,7 +278,7 @@ only be dropped.
 :::{present}
 17. Type the posted boxes into the notebook, run it, and record the fix, the residuals, and the ranking.
 18. If one residual is far larger than the rest, accept the notebook's drop.
-19. Submit the box you name before the reveal, at the bench or after class.
+19. Submit the box you name before the reveal, in class or after.
 20. Record the live box after the reveal.
 :::
 
@@ -294,8 +294,8 @@ I post the box centers. Your notebook fixes the source from the
 bearings alone, ranks the boxes by distance from the fix, and, when the two
 nearest are within $0.15\ \text{m}$ of each other in distance, uses the amplitude
 pattern to choose between them. The call is your team's, made from your own
-data. The notebook needs only your laptop, so you can make the call at the bench
-or after class, wherever you are; I reveal the live box once every team's call
+data. The notebook needs only your laptop, so you can make the call in class
+or after, wherever you are; I reveal the live box once every team's call
 is in. The Part 3 writeup compares your fix with the live box and asks what
 changes with the baseline and the depth.
 ::::
@@ -314,7 +314,7 @@ amplitude check matter more.
 1. Type your hunt number in **Hunt** and pick the **Boxes** count.
 2. Press **reference shot**, read the mean Angle, and set **s**: $+1$ if it is positive, $-1$ if negative.
 3. Pick a station, or tap its mark on the map, and press **take 10 readings**. Do every station, ends first.
-4. Press **copy for notebook** and paste the boxes and stations into the notebook's bench cell. Run it and make your call.
+4. Press **copy for notebook** and paste the boxes and stations into the notebook's "your hunt" cell. Run it and make your call.
 5. Submit your call with your hunt number and box count. **reveal** is mine: once every call is in, I reveal each live box, and Part 3 starts from it.
 
 <iframe src="../../viz/foxhunt-sim.html"
@@ -327,7 +327,7 @@ amplitude check matter more.
 In the packet, fill Part 2 from the simulator, and write "simulator, hunt"
 with your number and box count in the boxes for your HB100's frequency and Rx Gain, which
 the simulator does not use. A station the simulator marks "no clear tone"
-goes in the table as "none", as it would at the bench.
+goes in the table as "none", as it would in class.
 ::::
 
 ::::{frame} Your Part 2 Entries
@@ -353,7 +353,7 @@ viewer instead.
 The L19 Lab packet is one submission per team for the whole lab, turned in complete before Lesson 20. It has three parts:
 
 1. **Part 1, Pre-Lab** (before the lab period): the bearing budget with a fixed heading, the cross-range and depth errors for this range, a station plan, and the notebook tested on a supplied set of bearings.
-2. **Part 2, Measurements** (your team): the reference shot and the bearings and levels from every station, in class; the call, at the bench or after class, before the reveal.
+2. **Part 2, Measurements** (your team): the reference shot and the bearings and levels from every station, in class; the call, in class or after, before the reveal.
 3. **Part 3, Writeup** (after the reveal): the fix against the live box, the error of each bearing, and what the baseline and the depth did to the fix.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">L19 Lab packet (PDF)</a>
