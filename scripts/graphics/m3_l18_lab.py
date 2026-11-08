@@ -3,10 +3,10 @@
 
   - L18-sweep-compare   : two beam-sweep traces, source at 0 and at +30 deg,
                           sampled where the instrument samples them
-  - L18-expected-sweep  : the same pair, annotated with what the bench measures
+  - L18-expected-sweep  : the same pair, annotated with what the lab measures
   - L18-phase-control      : the 30 deg ramp, unwrapped and wrapped, beside what
                           Phase Control shows after Apply 30
-  - L18-bench-setup     : top view of the bench, 1 m arc, 0 / 30 / 45 deg,
+  - L18-lab-setup       : top view of the setup, 1 m arc, 0 / 30 / 45 deg,
                           and the 1.2 m scan-loss positions on the same lines
   - L18-two-ways        : rotating the array versus sweeping the command
   - L18-error-budget    : the three error sources at 30 deg and their RSS
@@ -295,7 +295,7 @@ def sweep_compare() -> None:
 
 # --------------------------------------------------------------------------- 2
 def expected_sweep() -> None:
-    """The pair again, marked with what the bench reads: the two half-power
+    """The pair again, marked with what the lab reads: the two half-power
     spans, the first sidelobes, the element-pattern drop on the moved trace,
     the sample spacing, and the floor."""
     fig, ax = plt.subplots(figsize=(5.9, 3.5))
@@ -404,7 +404,7 @@ def phase_ramp() -> None:
 
 
 # --------------------------------------------------------------------------- 4
-def bench_setup() -> None:
+def lab_setup() -> None:
     """Top view: the array, the 1 m arc centered between E4 and E5, the
     HB100 positions at 0, +30, +45 deg, and the + side, which is the E8 end
     by the +n dphi convention (L18) -- to be confirmed on the kit. Looking at
@@ -486,7 +486,7 @@ def bench_setup() -> None:
 
     ax.set_xlim(-1.15, 1.9)
     ax.set_ylim(-0.24, 1.60)
-    finalize(fig, "L18-bench-setup")
+    finalize(fig, "L18-lab-setup")
 
 
 # --------------------------------------------------------------------------- 5
@@ -654,7 +654,7 @@ def main() -> int:
     sweep_compare()
     expected_sweep()
     phase_ramp()
-    bench_setup()
+    lab_setup()
     two_ways()
     error_budget()
     return 0
