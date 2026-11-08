@@ -451,7 +451,7 @@ use the azimuth sweep widget above to see what that trace looks like.
 
 The L21 Lab packet is one submission for the whole lab, turned in complete before Lesson 22. It has three parts:
 
-1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it at the bench): the patterns to expect with the beam at $0^\circ$ and $30^\circ$, the error budgets of the two azimuth sweeps, and reading dBc off a trace.
+1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it at the bench): what each trace should show with the beam at $0^\circ$ and $30^\circ$, how to pace the sweep by hand, reading dBc off a trace, and what counts as agreement.
 2. **Part 2, Measurements** (your own kit's data, recorded in class): the angle check, the beam sweep, three azimuth sweeps by hand, and one pass on the stand.
 3. **Part 3, Writeup** (individual, after the lab): where the methods agree on lobe levels, the sweep by hand against the pass on the stand, and a far-field problem.
 
