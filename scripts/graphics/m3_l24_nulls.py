@@ -208,7 +208,7 @@ def quant_depth() -> None:
     rms = 20 * np.log10(eps / np.sqrt(N) * pk / PK)
     fig, ax = plt.subplots(figsize=(8.4, 4.0))
     ax.axhspan(*MEASURED, color=ORANGE, alpha=0.22, lw=0)
-    ax.text(0.8, MEASURED[1] + 1.3, "measured on phaser-00", color=ORANGE, fontsize=12)
+    ax.text(0.8, MEASURED[1] + 1.3, "measured on my kit", color=ORANGE, fontsize=12)
     ax.axhline(rms, color=RED, lw=1.2, ls=(0, (5, 4)))
     ax.text(44.2, rms + 1.3, f"RMS estimate {rms:.0f} dB", color=RED, fontsize=12, ha="right")
     ax.plot(th, rounded, color=NAVY, lw=3.2, label="rounded to the ADAR1000 steps")

@@ -37,6 +37,8 @@ with room for notes. Print from read mode for the whole lesson.
 
 :::{depth}
 Lesson 23 catalogued the three ways a steered pattern breaks on its own: grating lobes when the elements are too far apart, squint when the frequency moves off the design point, and quantization lobes when the phase shifter runs out of bits. Those were accidents, and the work was to avoid them. Today we break the pattern on purpose. We place a deep null exactly where an interferer sits, keep the main beam pointed where it was, and lose a known amount of main-lobe gain doing it.
+
+The lesson builds the four nulls you measure in the L24 Lab. The first is a notch we compute and load into all eight elements. The second is a null at boresight that comes from subtracting the board's two digital channels and needs no computation. The third is the null an adaptive beamformer, MVDR, finds for itself from the received data. The fourth is the monopulse pair, which uses that subtraction to measure a target's angle from a single look. The Pre-Lab at the end lists the predictions you bring to class.
 :::
 ::::
 
@@ -369,7 +371,7 @@ $$
 \text{gain}_n = \frac{100\ \vert w_n\vert}{\max_m \vert w_m\vert}\ \%, \qquad \phi_n = \angle w_n .
 $$
 
-Enter each phase with its sign. A Phase Control offset is the weight's own phase, the same convention **Apply** uses when it writes $-n\Delta\phi$ to steer to $+\theta_0$ (<a href="../L18-lab-beam-steering/index.html#frame-the-sign-in-phase-control">L18 Lab</a>). <a href="../L18-beam-steering/index.html#frame-sign-of-the-compensating-ramp">Lesson 18</a>'s $+n\Delta\phi$ is the backend's delay setting, which carries the opposite sign, so these offsets are entered as computed and not converted to it.
+The table assumes the Element Gains slider is linear in voltage, as it is on current Phaser software. Enter each phase with its sign. A Phase Control offset is the weight's own phase, the same convention **Apply** uses when it writes $-n\Delta\phi$ to steer to $+\theta_0$ (<a href="../L18-lab-beam-steering/index.html#frame-the-sign-in-phase-control">L18 Lab</a>). <a href="../L18-beam-steering/index.html#frame-sign-of-the-compensating-ramp">Lesson 18</a>'s $+n\Delta\phi$ is the backend's delay setting, which carries the opposite sign, so these offsets are entered as computed and not converted to it.
 
 The gains are symmetric and the phases are antisymmetric, and every null placed to one side of a broadside beam produces that pattern. The reason is in $r_\text{n}$. Summing the geometric series gives
 
@@ -386,17 +388,17 @@ a real number times the phase $(N-1)\psi_1/2$, so $w_n = 1 - r_\text{n}e^{-jn\ps
 :::
 :::{present}
 - The response at $+22.5^\circ$ is exactly zero, and the beam stays at broadside.
-- The peak drops 2.0 dB in theory and 1.8 dB on phaser-00.
+- The peak drops 2.0 dB, and the kit reads about 2 dB.
 :::
 
-The response at $+22.5^\circ$ is exactly zero. The main beam stays at broadside and its peak drops 2.0 dB, of which 0.4 dB is the subtraction itself and the rest is the rescaling that keeps every gain at or below 100 %. The measured loss on phaser-00, one of the course kits, was 1.8 dB.
+The response at $+22.5^\circ$ is exactly zero. The main beam stays at broadside and its peak drops 2.0 dB, of which 0.4 dB is the subtraction itself and the rest is the rescaling that keeps every gain at or below 100 %. On my kit the main lobe dropped about 2 dB, as predicted.
 ::::
 
 ::::{frame} Null Steering on the PHASER
 :class: viz-frame
 
 :::{depth}
-The widget below applies the weight-subtraction rule to the course array and draws the result. Drag the null angle and watch three things: where the notch lands, how the eight element gains and phases redistribute, and how the main-lobe loss pill tracks $\vert r_\text{n}\vert$ rather than the null angle itself. Then switch the weights from Ideal to PHASER, which rounds every phase to the ADAR1000's $2.8125^\circ$ step and every gain to 1 %, and adds a floor 48 dB below the uniform peak, where the notch bottomed out on a course kit — the notch is no longer infinitely deep and settles at the depth the hardware showed.
+The widget below applies the weight-subtraction rule to the course array and draws the result. Drag the null angle and watch three things: where the notch lands, how the eight element gains and phases redistribute, and how the main-lobe loss pill tracks $\vert r_\text{n}\vert$ rather than the null angle itself. Then switch the weights from Ideal to PHASER, which rounds every phase to the ADAR1000's $2.8125^\circ$ step and every gain to 1 %, and adds a floor 48 dB below the uniform peak, where the notch bottoms out on the kit, so the notch is no longer infinitely deep and settles at the depth the hardware showed.
 :::
 
 <iframe src="../../viz/null-steering.html"
@@ -434,7 +436,7 @@ L &= -20\log_{10}\frac{1 - \vert r_\text{n}\vert^2}{\max_n \vert w_n\vert} \\
 \end{aligned}
 $$
 
-Walk the null in toward the beam and the subtraction term grows fast: 1.5 dB at $\theta_1 = 10^\circ$, 5.1 dB at $7^\circ$, and 9.7 dB at $5^\circ$. The rescaling term does the opposite. It is 1.4 dB at $10^\circ$ and 0.5 dB at $7^\circ$, and at $5^\circ$ every weight magnitude is below 1, so scaling the largest up to 100 % raises the beam 1.5 dB. The totals are 2.9, 5.6, and 8.2 dB. As $\theta_1$ enters the main lobe $\vert r_\text{n}\vert \to 1$, the eight weights cancel one another, and what is left after rescaling is a split beam with a hole where the target used to be. A null inside the half-power beamwidth is not a null-steering problem, it is a resolution problem, and the answer is to move the beam or wait for the geometry to change.
+Move the null in toward the beam and the subtraction term grows fast: 1.5 dB at $\theta_1 = 10^\circ$, 5.1 dB at $7^\circ$, and 9.7 dB at $5^\circ$. The rescaling term does the opposite. It is 1.4 dB at $10^\circ$ and 0.5 dB at $7^\circ$, and at $5^\circ$ every weight magnitude is below 1, so scaling the largest up to 100 % raises the beam 1.5 dB. The totals are 2.9, 5.6, and 8.2 dB. As $\theta_1$ enters the main lobe $\vert r_\text{n}\vert \to 1$, the eight weights cancel one another, and what is left after rescaling is a split beam with a hole where the target used to be. A null inside the half-power beamwidth is not a null-steering problem, it is a resolution problem, and the answer is to move the beam or wait for the geometry to change.
 ::::
 
 ::::{frame} Quantization and Null Depth
@@ -452,7 +454,7 @@ $$
 :::
 :::{present}
 <img src="../../viz/img/L24-error-phasors.svg"
-     alt="The eight weight errors as phasors at the null angle, referred to the array center. Left, rounding this table: the errors come in mirror pairs whose sums lie on the real axis, so the total stays real. Right, independent channel errors of one step: the eight phasors point in random directions and walk to a point near a dashed circle of radius root N times epsilon"
+     alt="The eight weight errors as phasors at the null angle, referred to the array center. Left, rounding this table: the errors come in mirror pairs whose sums lie on the real axis, so the total stays real. Right, independent channel errors of one step: the eight phasors point in random directions and add up to a point near a dashed circle of radius root N times epsilon"
      style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -470,7 +472,7 @@ The figure draws the eight errors at the null, each turned by its own steering-v
 
 With $\text{LSB} = 2.8125^\circ = 0.0491$ rad and 1 % gain steps, $\epsilon_\text{rms} = 0.0145$, and the residual sits 46 dB below the nulled beam's peak, which is 48 dB below the uniform peak. That is the same $-6B$ scale as the quantization sidelobes of <a href="../L23-beam-squint-quantization/index.html#frame-quantization-sidelobes">Lesson 23</a>, a few decibels deeper because the error is spread over eight elements. Halve the bits and the floor rises fast: a 3-bit phase shifter cannot hold a null deeper than about 22 dB.
 
-Rounding this particular table does less damage than the estimate, as the left half of the figure shows. Rounding keeps the gains symmetric and the phases antisymmetric (the mirror pairs of <a href="#frame-the-phaser-settings">The PHASER Settings</a>), so each pair sums to a real number, the pattern referred to the array center stays real and still passes through zero, and the null only moves a quarter of a degree, to $+22.3^\circ$. What fills a null on the bench is error that does not share that symmetry: each channel's own calibration residue in gain and phase. The estimate is the depth those errors allow when they are about one step in size, and $-48$ dB below the uniform peak is the number to quote.
+Rounding this particular table does less damage than the estimate, as the left half of the figure shows. Rounding keeps the gains symmetric and the phases antisymmetric (the mirror pairs of <a href="#frame-the-phaser-settings">The PHASER Settings</a>), so each pair sums to a real number, the pattern referred to the array center stays real and still passes through zero, and the null only moves a quarter of a degree, to $+22.3^\circ$. What fills a null on the kit is error that does not share that symmetry: each channel's own calibration residue in gain and phase. The estimate is the depth those errors allow when they are about one step in size, and $-48$ dB below the uniform peak is the number to quote.
 ::::
 
 ::::{frame} Measured Null Depth
@@ -478,13 +480,14 @@ Rounding this particular table does less damage than the estimate, as the left h
 <img src="../../viz/img/L24-quant-depth.svg" alt="Exact and ADAR1000-rounded null patterns, the RMS estimate at minus 48 dB, and the band from minus 46 to minus 50 dB measured on a course kit" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- On phaser-00 the notch reached 46 to 50 dB below the uniform peak.
+- In an open room the notch reaches 46 to 50 dB below the uniform peak.
+- In a cramped room reflections fill it to 22 to 24 dB.
 - The interferer ends up about 36 dB below the target, not 3 dB.
 :::
 
-The estimate is what the hardware shows. On phaser-00, a course kit, with the table above loaded, the notch bottomed out 46 to 50 dB below the uniform peak, right on the band the estimate predicts, while the main lobe dropped 1.8 dB. The interferer of the first frame, 10 dB stronger than the target, now arrives $10 - 48 + 2 = -36$ dB relative to it, where the uniform taper left it at $-3$ dB.
+The estimate is what the hardware shows. With the table above loaded, my kit's notch bottomed out 46 to 50 dB below the uniform peak in an open room, on the band the estimate predicts. The interferer of the first frame, 10 dB stronger than the target, now arrives $10 - 48 + 2 = -36$ dB relative to it, where the uniform taper left it at $-3$ dB.
 
-The notch landed at $+25.7^\circ$, about $3^\circ$ from the design angle, which is within what aligning the kit by eye allows.
+The room sets a second limit. In a cramped space the same table bottomed out only 22 to 24 dB down: the HB100's own tone was still there in the notch, because a reflection arriving from another direction, about 22 dB below the direct path, filled it. So when a notch reads much shallower than 40 dB, look at the room before the arithmetic. A wall or a person beside the kit fills it, a stale calibration fills it, and a sign error on the phase column moves it to $-22.5^\circ$, where it is easy to miss.
 ::::
 
 ::::{frame} Up to N−1 Nulls, All Static
@@ -496,7 +499,130 @@ The notch landed at $+25.7^\circ$, about $3^\circ$ from the design angle, which 
 
 An $N$-element array has $N$ complex weights. One holds the main beam, which leaves at most $N-1$ independent nulls. The PHASER can therefore null up to seven directions at once, though long before that the pattern has been so heavily reshaped that the main lobe is barely recognizable. The procedure generalizes by subtracting one term per interferer and solving the resulting small system. Each null lowers the main lobe further: nulls at both $\pm 22.5^\circ$ lower it 3.7 dB, against 2.0 dB for the one at $+22.5^\circ$.
 
-We computed every number in this lesson from an angle we had to know in advance. If the interferer moves, the null stays where it was and someone has to recompute and reload eight gains and eight phases. That is the limitation the L24 Lab confronts.
+We computed every number so far from an angle we had to know in advance. If the interferer moves, the null stays where it was and someone has to recompute and reload eight gains and eight phases. The next two nulls need no such angle: one comes from the array's symmetry, and one from the data the array receives.
+::::
+
+::::{frame} The Difference Beam
+:::{present}
+- **Beam 1 Phase** $= 180^\circ$ subtracts the two subarray channels.
+- Boresight becomes a null at every frequency, with a peak on each side.
+:::
+:::{present}
+:class: callout
+
+A computed null sits where we solved for it; a structural null sits where the two subarrays cancel.
+:::
+
+There is a second null on this board that needs no computation at all. Each ADAR1000 sums its four elements into one RF channel, so the PHASER hands the Pluto two **digital subarray channels**, one for elements 1–4 and one for elements 5–8. Adding them is the ordinary sum beam. Subtracting them, by setting Beam 1 Phase to $180^\circ$, gives the **difference beam**:
+
+$$
+\begin{aligned}
+\Delta(\theta) &= \sum_{n=0}^{3} e^{jn\psi} - \sum_{n=4}^{7} e^{jn\psi} \\
+&= \left(1 - e^{j4\psi}\right) \sum_{n=0}^{3} e^{jn\psi},
+\qquad \psi = kd\sin\theta .
+\end{aligned}
+$$
+
+The first factor is zero at $\psi = 0$, which is boresight, whatever the frequency: the two halves arrive in phase there and cancel. Away from boresight that factor grows while the subarray sum falls, so a peak rises on each side of the null where the two trade off. This is the **monopulse difference beam**, which the last two frames of this lesson use for angle measurement.
+
+The $+22.5^\circ$ notch exists because we solved for eight weights, and it moves only when we solve again. The boresight null exists because the two subarrays are identical, and it stays at boresight no matter what the signal does. With no arithmetic behind it, its depth on the kit is a direct reading of what the room lets through: about 40 dB in an open room, and the same 22 dB or so as the notch in a cramped one.
+::::
+
+::::{frame} MVDR
+:::{present}
+$$
+\mathbf{w}_\text{mvdr} = \frac{\mathbf{R}^{-1}\mathbf{s}}{\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s}}
+$$
+
+- Minimum output power, with unit gain in the look direction $\mathbf{s}$.
+- The beamformer estimates $\mathbf{R}$ from the data, so nobody supplies the interferer's angle.
+:::
+
+The computed notch needed the interferer's angle, and the difference null needed the array's symmetry. The **MVDR** (minimum-variance distortionless-response) beamformer needs neither. It estimates the covariance of what the two channels receive over $K$ snapshots,
+
+$$
+\hat{\mathbf{R}} = \frac{1}{K}\ \mathbf{X}\mathbf{X}^{H},
+$$
+
+and solves for the weights that minimize total output power while holding unit gain in the look direction $\mathbf{s}$. MVDR suppresses whatever is loud and is not in the look direction, and nobody has to tell it where that is.
+
+Unit gain means the two MVDR weights sum to 1 in the look direction, where Manual's two weights of 1 sum to 2. The Phaser multiplies the MVDR output by 2, the number of channels, so a target in the look direction reads the same level under either mode, and we compare the two on one scale.
+::::
+
+::::{frame} Two Limits of Two Channels
+:::{present}
+- Near $\pm 30^\circ$ the subarray pattern already puts the interferer in a null.
+- There the channels' phase difference wraps a full cycle, so MVDR's one null hits the target.
+- Diagonal loading limits that loss; the lab runs MVDR at $+20^\circ$.
+:::
+
+Both limits belong to the architecture rather than to the algorithm. A four-element subarray at $d = 14$ mm has its first null where $\sin\theta = \lambda/4d$, about $31^\circ$, so an interferer there barely reaches either channel and there is little left for the digital layer to remove. The two channels sit four elements apart, so their phase difference, $4kd\sin\theta$, runs through a full cycle across the subarray beam: a source near $+30^\circ$ presents very nearly the same channel phase difference as one on boresight, and the two channels cannot tell them apart. The digital layer can only work on what the analog layer passes it, and only on directions the two channels can distinguish.
+
+At $+30^\circ$ both limits act at once. MVDR still spends its one null on the interferer, but to the two channels the interferer looks like the look direction, and the HB100 sits a fraction of a degree off it, so the null lands on the target too: with almost no loading the target loses about 10 dB. **Diagonal loading** is the guard. The Phaser adds $\delta\ \text{tr}(\hat{\mathbf{R}})/2$ to the diagonal of $\hat{\mathbf{R}}$ before inverting it, which caps how far the weights can move from Manual's. At $\delta = 0.1$ the target loss at $+30^\circ$ falls to about 2 dB while MVDR still suppresses an interferer at $+20^\circ$ by about 17 dB, so the lab uses $\delta = 0.1$. At $\delta = 1$ the weights stay so close to Manual's that the suppression falls to about 5 dB.
+
+The lab also uses $K = 1024$ snapshots rather than 128. At the kit's 3 MSPS, 128 samples span only four cycles of the 100 kHz offset between target and interferer, so the two are partly correlated in each estimate of $\hat{\mathbf{R}}$ and the null wanders from one update to the next. 1024 samples span 34 cycles, which holds the null still.
+::::
+
+::::{frame} What MVDR Chooses
+:class: viz-frame
+
+:::{depth}
+The widget is the two-channel digital layer on its own, with the analog subarrays parked at boresight. Move the interferer to about $+20^\circ$ and watch MVDR place a null on it. Then move it out toward $\pm 30^\circ$ and watch the suppression fall away, for the two reasons on the previous frame. In the lab you hold the beam on the target in Signal vs Time and read the suppression from the two readout tiles under the plot. A beam-sweep trace is the total power at each angle, interferer and target together, so it shows the null but does not measure it.
+:::
+
+<iframe src="../../viz/mvdr-interferer.html"
+        width="100%" height="489"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Two-channel MVDR beamformer against an interferer">
+</iframe>
+::::
+
+::::{frame} Manual Versus Adaptive
+:::{present}
+| | Manual null | MVDR |
+| :-- | :-- | :-- |
+| Needs first | the interferer's angle | nothing |
+| Interferer moves | recompute eight weights | follows it |
+| Nulls on this board | up to seven | one |
+:::
+
+Manual null steering has eight degrees of freedom and can place several nulls at once, but every one of them is our arithmetic, computed for a geometry we assumed. MVDR has two degrees of freedom on this board, one constraint and one null, and it finds that null itself, from data, several times a second. On an array with a digitizer behind every element, adaptive beamforming has both advantages at once. On the PHASER we can see what the hybrid architecture of <a href="../L17-phased-array-hardware/index.html#frame-the-hybrid-beamformer">Lesson 17</a> loses: the analog sums discard the per-element information before the algorithm sees it.
+::::
+
+::::{frame} Sum and Delta
+:::{present}
+<img src="../../viz/img/L24-monopulse.svg"
+     alt="Left: sum and delta channel levels from minus 20 to plus 20 degrees; the sum is flat at its peak while the delta passes through an exact zero on boresight. Right: the error function, zero on boresight and straight within about plus or minus 5 degrees with a slope of 0.11 per degree"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
+- The sum is flat at boresight; the delta climbs out of a zero.
+- Their ratio turns one look into a signed angle.
+:::
+
+Every measurement so far has come from a sweep: the array steps its commanded angle across the field of view and records power at each step. A sweep takes time, and a tracking radar does not have it. **Monopulse** forms both beams at once from the two subarray channels, adding them for $\Sigma$ and subtracting them for $\Delta$, the difference beam above. The sum beam is flat at its peak, so its level barely changes as the target drifts a degree off axis. The delta beam is zero on boresight and climbs steeply out of that zero, so its level changes a great deal over the same degree. Dividing one by the other turns that small angle into a large, readable number.
+::::
+
+::::{frame} The Error Function
+:::{present}
+$$
+\varepsilon(\theta) = -\ \frac{\text{Im}\lbrace \Delta\ \Sigma^{*} \rbrace}{\vert \Sigma \vert^{2}}
+$$
+
+- Zero on boresight, with opposite signs on the two sides.
+- Slope $0.11$ per degree, straight within about $\pm 5^\circ$.
+:::
+
+The two subarrays sit four elements apart, so $\Delta$ arrives in quadrature with $\Sigma$, and the useful quantity is the imaginary part of their product. The error function is zero on boresight, positive on one side and negative on the other, and straight within about $\pm 5^\circ$, well inside the array's $13^\circ$ beamwidth. A target one degree off axis reads about $0.11$, and a tracker that drives that reading back to zero holds the beam on the target far more finely than the beamwidth alone would allow, from one look and with no sweep.
+
+The GUI plots a normalized form of the same comparison, taking its sign from the phase difference between the two channels and its magnitude from the two channel levels in dB,
+
+$$
+\text{sign}(\Delta\phi)\ \frac{\Sigma_{\text{dB}} - \Delta_{\text{dB}}}{\Sigma_{\text{dB}} + \Delta_{\text{dB}}},
+$$
+
+so the trace stays bounded and on screen however strong the target is. The L24 Lab's tracker reads this trace and drives it back to zero as you sweep the HB100 in azimuth.
 ::::
 
 ::::{frame} Summary
@@ -508,28 +634,40 @@ We computed every number in this lesson from an angle we had to know in advance.
 | $\mathbf{w}_\text{d} = \mathbf{v}^{*}(\theta_0)$ | beam-steering weights | the L18 phase ramp, written as a vector |
 | $\mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\mathbf{w}_\text{n}$ | weight-subtraction rule | one division, exact null |
 | $r_\text{n} = \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d} / \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}$ | projection of the null beam on the desired beam | $= $ uniform pattern level at $\theta_1$ |
-| $\vert r_\text{n}\vert$ at a $-13$ dB sidelobe | sets the main-lobe loss | $0.225$ |
-| Main-lobe loss, null at $+22.5^\circ$ | main-lobe loss | 2.0 dB theory, 1.8 dB measured |
-| PHASER settings, null at $+22.5^\circ$ | gains | 75, 65, 82, 100, 100, 82, 65, 75 % |
-| Depth estimate | $\epsilon_\text{rms}/\sqrt{N}$, ADAR1000 steps | $\approx -48$ dB below the uniform peak |
-| Measured notch | phaser-00 | $-46$ to $-50$ dB below the uniform peak |
-| Maximum nulls | one weight holds the beam | $N - 1 = 7$ |
-::::
-
-::::{frame} Preparing for the Lab
-:class: read-only doc-links
-
-This lesson has no problem set. Part 1 of the L24 Lab packet works out the predictions you check against your own kit in the lab. Complete it before the lab period.
-
-- <a class="doc-link" href="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">L24 Lab packet, Part 1 (PDF)</a>
+| Main-lobe loss, null at $+22.5^\circ$ | subtraction plus rescaling | 2.0 dB; the kit reads about 2 dB |
+| PHASER settings, null at $+22.5^\circ$, $10.525$ GHz | gains | 75, 65, 82, 100, 100, 82, 65, 75 % |
+| Notch depth | one-step channel errors, then the room | $\approx -48$ dB estimate; $-46$ to $-50$ dB open, $-22$ to $-24$ dB cramped |
+| Difference beam | Beam 1 Phase $= 180^\circ$ subtracts the two channels | null at boresight, at every frequency |
+| MVDR | $\mathbf{w} = \mathbf{R}^{-1}\mathbf{s} / (\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s})$ from $K$ snapshots | one null from two channels; loading $0.1$, $K = 1024$ |
+| Monopulse error | signed ratio of delta to sum, from one look | zero on boresight, slope $0.11$ per degree |
+| Maximum nulls | one weight holds the beam | $N - 1 = 7$ manual, one adaptive |
 ::::
 
 ::::{frame} Looking Ahead
 :::{present}
-- The **L24 Lab** loads this table, sweeps the beam, and measures the notch.
-- **MVDR** then lets the array compute its own weights from its own data.
-- It runs on the two digital channels, the hybrid architecture of Lesson 17.
+- The **L24 Lab** measures all four nulls on your kit.
+- Lesson 25 begins radar: the range equation puts a power budget behind the monopulse angle measurement.
 :::
 
-The L24 Lab takes these weights to the bench. You will compute the gain and phase table for an interferer angle, type it into the Element Gains and Phase Control sections of the Phaser GUI, sweep the beam, and measure the notch you predicted. Then the lab does the thing this lesson cannot: instead of telling the array where the interferer is, it lets the array estimate the interference from the received data itself and compute its own weights. That is **MVDR**, the minimum-variance distortionless-response beamformer, and it needs the two digital channels rather than the analog element sums — the first lab to use the <a href="../L17-phased-array-hardware/index.html#frame-the-hybrid-beamformer">hybrid architecture of L17</a>. Read the Digital Beam Forming section of the GUI inventory before class so the Mode, Snapshots, and Diagonal Load controls are not new to you.
+In the L24 Lab you load your own gain and phase table and measure the notch, set Beam 1 Phase to $180^\circ$ and measure the difference null, run MVDR against a simulated interferer, and watch the monopulse tracker follow the HB100. Read the Digital Beam Forming section of the GUI inventory before class, so the Mode, Snapshots, and Diagonal Load controls are not new to you.
+
+Lesson 25 derives the radar range equation and asks how much power comes back from a target that transmits nothing of its own. Everything Module 3 built, beamwidth, sidelobes, scan loss, and steering, becomes the antenna terms in that equation, and the array becomes the front end of a radar. The monopulse pair measures a target's angle from a single look, which is what a radar needs to track something that moves.
+::::
+
+::::{frame} Pre-Lab
+:class: read-only doc-links
+
+Part 1 of the L24 Lab packet is the pre-lab. Do it before the lab period, at the HB100 frequency your kit reported in an earlier lab, and bring it to class: you check every reading you take in Part 2 against it.
+
+| Part 1 | You predict | Checked in |
+| :-- | :-- | :-- |
+| Question 1 | $\psi_1$, the gain and phase table, $\vert r_\text{n}\vert$, the main-lobe loss, and what a sign error or a missing phase column does | Steps 6 to 9, Table A |
+| Question 2 | the notch depth that one-step channel errors allow | Step 9, Table A |
+| Question 3 | the difference null and the angles of its two peaks | Step 14, Table B |
+| Question 4 | Manual's Interferer vs Target at $+20^\circ$, the channel phase difference at $+20^\circ$ and $+30^\circ$, and what MVDR does to the target at $+30^\circ$ | Steps 18 to 21, Table C |
+| Question 5 | where the delta null and the error-function zero sit, and how deep the delta null reads | Step 26, Table D |
+
+This lesson's worked example is the nominal $10.525\ \text{GHz}$ case. Work yours at your kit's frequency: the table moves only slightly, but it is the one you type in.
+
+- <a class="doc-link" href="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">L24 Lab packet, Part 1 (PDF)</a>
 ::::

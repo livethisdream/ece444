@@ -669,7 +669,7 @@ L 524.96918 4.32
 " style="fill: none; stroke: #8a929c; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_21">
-    <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #e67e22" x="64.58198" y="150.262054" transform="rotate(-0 64.58198 150.262054)">measured on phaser-00</text>
+    <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #e67e22" x="64.58198" y="150.262054" transform="rotate(-0 64.58198 150.262054)">measured on my kit</text>
    </g>
    <g id="text_22">
     <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #b01e24" x="516.63638" y="155.681162" transform="rotate(-0 516.63638 155.681162)">RMS estimate -48 dB</text>
