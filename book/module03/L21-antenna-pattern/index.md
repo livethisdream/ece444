@@ -134,8 +134,8 @@ same level at every step and the element pattern is a single constant.
 - The x-axis is the source's physical angle.
 :::
 :::{present}
-<img src="../../viz/img/L21-two-methods.svg"
-     alt="Left: the kit steps the beam electronically past a stationary HB100. Right: the kit holds the beam fixed while you carry the HB100 around the array on a 1.2 m arc."
+<img src="../../viz/img/L21-three-methods.svg"
+     alt="Three ways to trace a pattern. Beam sweep: the HB100 stays put and the kit steps the beam past it. By hand: the beam is held and you carry the HB100 around an arc. On the stand: the beam is held, the HB100 stays on its tripod, and the kit turns on its stand."
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -193,8 +193,8 @@ centimeters, which moves the level (next frame).
 - An uneven pace stretches or squeezes a lobe in time; its level stays the same if the lobe gets several updates.
 :::
 :::{present}
-<img src="../../viz/img/L21-time-vs-angle.svg"
-     alt="The same azimuth sweep plotted twice: against elapsed time, where an uneven pace spaces the lobes unevenly, and against source angle, where they are symmetric. The lobe levels are identical on both."
+<img src="../../viz/img/L21-time-axis.svg"
+     alt="One 22 second azimuth sweep by hand plotted twice: against time, where an uneven pace spaces the lobes unevenly, and against source angle, where they are symmetric. A dashed line at the first-sidelobe level touches the same lobes on both."
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 

@@ -22,7 +22,7 @@ from svg_font_stack import apply_font_stack
 OUT = Path(__file__).resolve().parents[2] / "book/extras/viz/img/L21-rotation-setup.svg"
 
 NAVY, MID, RED, GRAY, INK = "#004a85", "#0067b9", "#b01e24", "#5a5a5a", "#1f2a36"
-W, H = 640, 445
+W, H = 640, 520
 CX, CY = 320, 330          # rotation axis = array center
 SY = 62                    # source y (straight up from the axis)
 THETA = 30.0               # drawn rotation, degrees
@@ -58,21 +58,21 @@ def main() -> None:
         xb, yb = pt(r_in, a)
         s.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="{GRAY}" stroke-width="1"/>')
         if a % 30 == 0:
-            xl, yl = pt(R_PRO + 16, a)
+            xl, yl = pt(R_PRO + 26, a)
             lab = "0°" if a == 0 else f"{-a:+d}°".replace("-", "−")
             if a == 0:          # clear of the dashed line of sight
-                xl += 14
-            s.append(f'<text x="{xl:.1f}" y="{yl + 4:.1f}" text-anchor="middle" font-size="12" fill="{GRAY}">{lab}</text>')
+                xl += 22
+            s.append(f'<text x="{xl:.1f}" y="{yl + 4:.1f}" text-anchor="middle" font-size="20" fill="{GRAY}">{lab}</text>')
 
     # line of sight to the fixed source, with the 1.2 m dimension
     s.append(f'<line x1="{CX}" y1="{CY}" x2="{CX}" y2="{SY + 10}" stroke="{RED}" stroke-width="1.4" stroke-dasharray="6 4"/>')
     s.append(f'<circle cx="{CX}" cy="{SY}" r="8" fill="{RED}"/>')
-    s.append(f'<text x="{CX}" y="{SY - 16}" text-anchor="middle" font-size="13" font-weight="700" fill="{RED}">HB100, fixed on its tripod</text>')
+    s.append(f'<text x="{CX}" y="{SY - 16}" text-anchor="middle" font-size="20" font-weight="700" fill="{RED}">HB100, fixed on its tripod</text>')
     dx = CX + 195
     s.append(f'<line x1="{dx}" y1="{SY}" x2="{dx}" y2="{CY}" stroke="{GRAY}" stroke-width="1.2" '
              'marker-start="url(#l21rArr)" marker-end="url(#l21rArr)"/>')
     s.append(f'<line x1="{CX + 12}" y1="{SY}" x2="{dx + 6}" y2="{SY}" stroke="{GRAY}" stroke-width="0.8" stroke-dasharray="2 3"/>')
-    s.append(f'<text x="{dx + 8}" y="{(SY + CY) / 2 - 60:.0f}" font-size="13" fill="{INK}">1.2 m</text>')
+    s.append(f'<text x="{dx + 8}" y="{(SY + CY) / 2 - 60:.0f}" font-size="20" fill="{INK}">1.2 m</text>')
 
     # the kit, turned THETA toward E1 (screen-left): element row perpendicular to its normal
     n = math.radians(THETA)
@@ -84,15 +84,15 @@ def main() -> None:
                  f'transform="rotate({-THETA} {ex:.1f} {ey:.1f})"/>')
     e1x, e1y = CX - 62 * ux, CY - 62 * uy
     e8x, e8y = CX + 62 * ux, CY + 62 * uy
-    s.append(f'<text x="{e1x - 22:.1f}" y="{e1y + 6:.1f}" text-anchor="middle" font-size="13" font-weight="700" fill="{NAVY}">E1</text>')
-    s.append(f'<text x="{e8x + 12:.1f}" y="{e8y + 20:.1f}" text-anchor="middle" font-size="13" font-weight="700" fill="{NAVY}">E8</text>')
+    s.append(f'<text x="{e1x - 26:.1f}" y="{e1y + 6:.1f}" text-anchor="middle" font-size="20" font-weight="700" fill="{NAVY}">E1</text>')
+    s.append(f'<text x="{e8x + 12:.1f}" y="{e8y + 20:.1f}" text-anchor="middle" font-size="20" font-weight="700" fill="{NAVY}">E8</text>')
 
     # the kit's normal, which is also the platter's pointer on the scale
     nx, ny = pt(R_PRO - 2, THETA)
     s.append(f'<line x1="{CX}" y1="{CY}" x2="{nx:.1f}" y2="{ny:.1f}" stroke="{NAVY}" stroke-width="2" marker-end="url(#l21rNav)"/>')
     tx, ty = pt(R_PRO + 34, THETA + 8)
-    s.append(f'<text x="{tx - 6:.1f}" y="{ty:.1f}" text-anchor="end" font-size="12" fill="{NAVY}">array normal</text>')
-    s.append(f'<text x="{tx - 6:.1f}" y="{ty + 15:.1f}" text-anchor="end" font-size="12" fill="{NAVY}">(pointer reads −30°)</text>')
+    s.append(f'<text x="{CX - 70}" y="{CY - 196}" text-anchor="end" font-size="20" fill="{NAVY}">pointer, turns</text>')
+    s.append(f'<text x="{CX - 70}" y="{CY - 172}" text-anchor="end" font-size="20" fill="{NAVY}">with the kit</text>')
 
     # theta between the normal and the line to the source
     ra = 62
@@ -100,11 +100,13 @@ def main() -> None:
     ax1, ay1 = pt(ra, 0)
     s.append(f'<path d="M{ax0:.1f} {ay0:.1f} A{ra} {ra} 0 0 1 {ax1:.1f} {ay1:.1f}" fill="none" stroke="{INK}" stroke-width="1.2"/>')
     lx, ly = pt(ra + 14, THETA / 2)
-    s.append(f'<text x="{lx:.1f}" y="{ly + 4:.1f}" text-anchor="middle" font-size="14" font-style="italic" fill="{INK}">θ</text>')
+    s.append(f'<text x="{lx:.1f}" y="{ly + 4:.1f}" text-anchor="middle" font-size="22" font-style="italic" fill="{INK}">θ</text>')
 
     # rotation axis
     s.append(f'<circle cx="{CX}" cy="{CY}" r="3" fill="#fff" stroke="{INK}" stroke-width="1.2"/>')
-    s.append(f'<text x="{CX}" y="{CY + 92}" text-anchor="middle" font-size="12" fill="{INK}">face toward E1: the source sits at +θ, on the E8 side; the stand reads −θ</text>')
+    s.append(f'<text x="{CX + 150}" y="{CY + 52}" text-anchor="middle" font-size="20" fill="{GRAY}">scale on the fixed base</text>')
+    s.append(f'<text x="{CX}" y="{CY + 92}" text-anchor="middle" font-size="20" fill="{INK}">Face toward E1: the source sits at +θ,</text>')
+    s.append(f'<text x="{CX}" y="{CY + 118}" text-anchor="middle" font-size="20" fill="{INK}">on the E8 side, and the stand reads −θ.</text>')
     s.append('</svg>')
     OUT.write_text(apply_font_stack("\n".join(s)) + "\n")
     print(f"wrote {OUT}")
