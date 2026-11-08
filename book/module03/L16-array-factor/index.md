@@ -547,7 +547,7 @@ D &\approx \frac{2Nd}{\lambda} = 7.7 \\
 :class: viz-frame read-only
 
 :::{depth}
-The L20 Lab sweeps this beam past a fixed source. Expect a $13^\circ$ beam, a first null past $15^\circ$, and sidelobes 11 to 13 dB down. The widget below is the one the L20 Lab uses: pick the 8-element aperture, read the half-power width, first-null width, and first sidelobe off the ideal curve, then switch the measurement effects on. The $2.8125^\circ$ steer grid and the $-23$ dB noise floor fill in the nulls, and the first-null width moves from $30.1^\circ$ to $28.1^\circ$ because the grid no longer lands on the null.
+The L20 Lab sweeps this beam past a fixed source. Expect a $13^\circ$ beam, a first null past $15^\circ$, and sidelobes 11 to 13 dB down. The widget below is the one Lesson 20 uses: pick the 8-element aperture, read the half-power width, first-null width, and first sidelobe off the ideal curve, then switch the measurement effects on. The $2.8125^\circ$ steer grid and the $-23$ dB noise floor fill in the nulls, which read about $-23$ dB instead of falling to zero. The first-null width holds at $30.1^\circ$, because with the source at boresight a sample lands on each first null.
 :::
 
 :::{present}

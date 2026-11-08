@@ -60,9 +60,9 @@ ramp steers to. At $10.3\ \text{GHz}$ one step moves $\sin\theta_0$ by
 $2.8125^\circ/173.2^\circ = 0.0162$, which is $0.93^\circ$ of angle near
 broadside and $1.07^\circ$ at $30^\circ$. Of the 162 steps, 123 fall inside
 $\pm 82^\circ$; the rest ask for more phase than any real angle needs and
-plot at $\pm 90^\circ$. The L20 Lab showed what that grid and the noise floor
+plot at $\pm 90^\circ$. Lesson 20 shows what that grid and the noise floor
 do to the readings
-(<a href="../L20-lab-array-factor/index.html#frame-reading-a-sweep-for-what-it-is">"Reading a Sweep for What It Is"</a>).
+(<a href="../L20-array-factor-beamwidth/index.html#frame-reading-a-sweep-for-what-it-is">"Reading a Sweep for What It Is"</a>).
 ::::
 
 ::::{frame} Beam Sweep, Step by Step

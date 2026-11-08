@@ -90,7 +90,7 @@ const KD  = 2 * Math.PI * DEL / LAM; // k*d  = 3.0225 rad
 const NEL = 8;
 const STEP     = 2.8125;             // sweep step = ADAR1000 phase LSB, deg of phase
 const KD_DEG   = KD * 180 / Math.PI; // 173.2 deg of phase per unit sin(theta)
-const FLOOR_DB = -23.0;              // noise floor, dB below the 8-element peak
+const FLOOR_DB = -23.0;              // noise floor, dB below each trace's own peak (dBc)
 const LOOKS    = 20;                 // power averages the GUI takes per sweep step
 const SEED     = 6618;               // fixed noise realization, so readings repeat
 const YMIN = -40, YMAX = 3;
@@ -103,7 +103,7 @@ const PRESETS = {
 
 const state = { n: 8, meas: false };
 
-// ---------- honest element sum: normalized so the 8-element peak = 1 ----------
+// ---------- element sum: normalized so the 8-element peak = 1 ----------
 function afComplex(thetaDeg, w) {
   const s = Math.sin(thetaDeg * Math.PI / 180);
   let re = 0, im = 0;
@@ -134,8 +134,15 @@ function idealTrace(w) {
   return { xs: xs, ys: ys };
 }
 
+// The floor follows the trace: it sits FLOOR_DB below each trace's own peak,
+// which is 20 log10(active/8) below the 8-element peak (the voltage sum).
+function floorDb(w) {
+  const on = w.reduce(function (a, b) { return a + b; }, 0);
+  return FLOOR_DB + 20 * Math.log10(on / NEL);
+}
+
 function measTrace(w) {
-  const rnd = LCG(SEED), sg = Math.sqrt(Math.pow(10, FLOOR_DB / 10) / 2);
+  const rnd = LCG(SEED), sg = Math.sqrt(Math.pow(10, floorDb(w) / 10) / 2);
   const xs = [], ys = [];
   // With Use Bits on (every lab preset) the GUI steps the element-to-element
   // phase one LSB per point, so the samples are uniform in sin(theta), not in
@@ -301,11 +308,12 @@ function drawAll() {
 
   // --- noise floor line, only when it is part of the measurement ---
   if (state.meas) {
+    const fl = floorDb(w);
     ctx.save();
     ctx.setLineDash([4, 4]); ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(138,90,0,0.55)';
-    ctx.beginPath(); ctx.moveTo(PAD.l, Y(FLOOR_DB)); ctx.lineTo(W - PAD.r, Y(FLOOR_DB)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(PAD.l, Y(fl)); ctx.lineTo(W - PAD.r, Y(fl)); ctx.stroke();
     ctx.restore();
-    stext('noise floor', W - PAD.r - 10, Y(FLOOR_DB) + (narrow ? 8 : 9),
+    stext('noise floor', W - PAD.r - 10, Y(fl) + (narrow ? 8 : 9),
           narrow ? 9 : 10, '#8a5a00', 'right');
   }
 

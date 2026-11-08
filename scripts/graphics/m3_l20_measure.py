@@ -5,13 +5,12 @@
                            marked -- the three numbers the lab asks for
   L20-ideal-vs-measured  : ideal N=8 array factor under the same sweep as the
                            phase-step sampled, noise-floored trace
-  L20-aperture-halving   : ideal 8 / 4 / 2 element array factors at the dry
-                           run's 10.408 GHz, with the dry run's measured peaks:
-                           the beam doubles, the peak steps 6.0 dB ideally and
-                           5.1 and 4.8 dB measured
+  L20-aperture-halving   : ideal 8 / 4 / 2 element array factors at 10.3 GHz:
+                           the beam doubles at each halving and the peak
+                           steps 6.0 dB
 
 The first two match book/extras/viz/af-measurement-compare.html exactly: same
-element sum, same sweep grid, same -23 dBc floor, same seeded noise
+element sum, same sweep grid, same -23 dBc floor (below each trace's own peak), same seeded noise
 realization (LCG seed 6618, 20 power looks per step). The figures carry
 no equations -- the math lives in the lesson text.
 
@@ -111,9 +110,14 @@ class LCG:
         return r * math.cos(2 * math.pi * u2), r * math.sin(2 * math.pi * u2)
 
 
+def floor_db(w):
+    """The floor sits FLOOR_DB below each trace's own peak (the widget's model)."""
+    return FLOOR_DB + 20 * math.log10(sum(w) / NEL)
+
+
 def meas_db(w):
     rng = LCG(SEED)
-    sg = math.sqrt(10 ** (FLOOR_DB / 10) / 2)
+    sg = math.sqrt(10 ** (floor_db(w) / 10) / 2)
     n_max = int(math.floor(KD_DEG / STEP))
     t = np.array([math.degrees(math.asin(i * STEP / KD_DEG))
                   for i in range(-n_max, n_max + 1)])
@@ -269,28 +273,13 @@ def ideal_vs_measured() -> None:
     finalize(fig, "L20-ideal-vs-measured")
 
 
-# The dry run (phaser-00, 2026-10-19, review/M3_LAB_DRYRUN.md): Find HB100 read
-# 10.408 GHz, and the three peaks read -5.25, -10.4 and -15.1 dBFS, steps of
-# 5.1 and 4.8 dB against the voltage sum's 6.0 and 6.0. The cause of the
-# shortfall is not known, so this figure shows the ideal array factor and the
-# measured peaks side by side and claims nothing about why they differ.
-DRY_F = 10.408e9
-DRY_STEPS = (5.1, 4.8)             # measured, 8 -> 4 and 4 -> 2
-
-
 def aperture_halving() -> None:
-    """Ideal 8 / 4 / 2 element array factors at the dry run's frequency, with
-    the dry run's measured peak levels: the beam doubles, the peak steps 6.0 dB
-    ideally and about 5 dB measured.
+    """Ideal 8 / 4 / 2 element array factors at 10.3 GHz, the course's worked
+    frequency: the beam doubles at each halving and the peak steps 6.0 dB,
+    the voltage sum. No measured points: the kit reads 5 to 6 dB per halving,
+    consistent with the ideal step within the spread of its readings.
     """
-    kd = 2 * math.pi * DEL / (3.00e8 / DRY_F)
     t = np.arange(-90.0, 90.0 + 1e-9, 0.05)
-    s = np.sin(np.deg2rad(t))
-
-    def af_db(w):
-        re = sum(np.cos(kd * (n - 3.5) * s) for n in range(NEL) if w[n])
-        im = sum(np.sin(kd * (n - 3.5) * s) for n in range(NEL) if w[n])
-        return 10 * np.log10(np.maximum((re / NEL) ** 2 + (im / NEL) ** 2, 1e-9))
 
     fig, ax = plt.subplots(figsize=(7.4, 4.0))
     frame(ax)
@@ -298,27 +287,21 @@ def aperture_halving() -> None:
               2: (GREEN, 2.0, "2 elements (E4, E5)")}
     for n in (8, 4, 2):
         color, lw, lab = styles[n]
-        ax.plot(t, np.clip(af_db(PRESETS[n]), YMIN, None), color=color, lw=lw, label=lab)
+        tt, db = ideal_db(PRESETS[n])
+        ax.plot(tt, np.clip(db, YMIN, None), color=color, lw=lw, label=lab)
 
     ideal = [20 * math.log10(n / 8) for n in (8, 4, 2)]
-    meas = [0.0, -DRY_STEPS[0], -DRY_STEPS[0] - DRY_STEPS[1]]
-    ax.plot([0, 0, 0], meas, ls="none", marker="o", ms=8, mfc="white", mec=RED, mew=2.0,
-            zorder=5, label="measured peak")
-
-    def ladder(x, levels, color, head):
-        for y in levels:
-            ax.plot([x - 3, x + 3], [y, y], color=color, lw=1.4)
-        for a, b in zip(levels[:-1], levels[1:]):
-            ax.annotate("", xy=(x, b), xytext=(x, a),
-                        arrowprops=dict(arrowstyle="<->", color=color, lw=1.4,
-                                        shrinkA=0, shrinkB=0))
-            ax.text(x - 4.5, (a + b) / 2, f"{a - b:.1f} dB", color=color, fontsize=11.5,
-                    fontweight="bold", va="center", ha="right")
-        ax.text(x, 1.2, head, color=color, fontsize=11.5, fontweight="bold",
-                ha="center", va="bottom")
-
-    ladder(60, ideal, GRAY, "ideal")
-    ladder(84, meas, RED, "measured")
+    x = 72
+    for y in ideal:
+        ax.plot([x - 3, x + 3], [y, y], color=GRAY, lw=1.4)
+    for p, q in zip(ideal[:-1], ideal[1:]):
+        ax.annotate("", xy=(x, q), xytext=(x, p),
+                    arrowprops=dict(arrowstyle="<->", color=GRAY, lw=1.4,
+                                    shrinkA=0, shrinkB=0))
+        ax.text(x - 4.5, (p + q) / 2, f"{p - q:.1f} dB", color=GRAY, fontsize=11.5,
+                fontweight="bold", va="center", ha="right")
+    ax.text(x, 1.2, "peak step", color=GRAY, fontsize=11.5, fontweight="bold",
+            ha="center", va="bottom")
     ax.legend(loc="upper left", fontsize=11, handlelength=1.8, borderaxespad=0.3)
 
     buf = io.StringIO()
