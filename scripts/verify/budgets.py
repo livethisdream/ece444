@@ -23,6 +23,15 @@ History
             lab had an exception, so none was merged.
 2026-10-17  L18 allowed 21 (Neil): the phase-sweep widget frame was added on
             top of a lesson already cut to 20.
+2026-11-08  Module 3 class time is the lab (Neil): cadets read the lesson and
+            do the pre-lab before class, and he presents only the lab's
+            opening ("I might use the intro to lab slides to present the flow
+            of the lab and what the big picture is"). So the L17-L24 lesson
+            pages are reading pages with no beat cap (budget None; the 40-word
+            frame rule still holds), and a restructured lab page gets
+            LAB_BEATS: title, objectives, big picture, flow, setup, and one to
+            spare. A lab is listed here as it is restructured; L20 first. L18's
+            exception of 21 is retired with it: the lesson has no cap now.
 """
 
 # Words a present frame may show (the LO frame is exempt).
@@ -31,6 +40,12 @@ WORDS = 40
 # Beats a lesson may have: shown frames in present mode, title and LO included,
 # read-only frames excluded. One 53-minute period.
 BEATS = 20
+
+# Beats a restructured Module 3 lab page may present: its opening only.
+LAB_BEATS = 6
+
+# Module 3 lessons read before class rather than presented (Neil, 2026-11-08).
+READING_LESSONS = {f"L{n}" for n in range(17, 25)}
 
 # Lessons allowed a different beat budget, with the reason. A lesson cut under
 # an earlier budget is listed here until it is recut; delete its entry when it
@@ -45,13 +60,19 @@ BEAT_EXCEPTIONS = {
     "L12": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L13": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L14": (30, "cut under the 30-beat rule (2026-09); recut pending"),
-    "L18": (21, "phase-sweep widget frame added after the 20-beat cut (Neil, 2026-10-17)"),
+    "L20-lab": (LAB_BEATS, "restructured: lab opening only, procedure read-only (Neil, 2026-11-08)"),
 }
 
 
 def beat_budget(lesson):
-    """The beat budget for a page directory name such as 'L18-beam-steering' or 'L18-lab-beam-steering'."""
-    for prefix, (n, _why) in BEAT_EXCEPTIONS.items():
+    """The beat budget for a page directory name such as 'L18-beam-steering' or 'L18-lab-beam-steering'.
+
+    None means no cap: a Module 3 lesson page, read before class. The longest
+    matching key wins, so "L20-lab" outranks "L20".
+    """
+    for prefix in sorted(BEAT_EXCEPTIONS, key=len, reverse=True):
         if lesson.startswith(prefix + "-") or lesson == prefix:
-            return n
+            return BEAT_EXCEPTIONS[prefix][0]
+    if "-lab-" not in lesson and lesson.split("-")[0] in READING_LESSONS:
+        return None
     return BEATS

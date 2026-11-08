@@ -61,9 +61,10 @@
   <div class="controls">
     <span class="ctl">Active elements</span>
     <select id="preset" aria-label="Active elements">
-      <option value="8" selected>All 8 (Rx1-Rx8)</option>
-      <option value="4">Center 4 (Rx3-Rx6)</option>
-      <option value="2">Center 2 (Rx4, Rx5)</option>
+      <option value="8" selected>E1&ndash;E8</option>
+      <option value="4">E3&ndash;E6</option>
+      <option value="2">E4 and E5</option>
+      <option value="18">E1 and E8</option>
     </select>
     <label class="tog"><input type="checkbox" id="meas"> Measurement effects</label>
     <span class="note">2.8125&deg; phase-step grid, &minus;23 dBc floor, receiver noise.</span>
@@ -84,13 +85,13 @@
 'use strict';
 
 // ---------- array constants (PHASER at the workshop frequency) ----------
-const LAM = 29.1e-3;                 // 10.3 GHz
+const LAM = 3.00e8 / 10.3e9;         // 10.3 GHz, 29.13 mm
 const DEL = 14e-3;                   // element spacing
-const KD  = 2 * Math.PI * DEL / LAM; // k*d  = 3.0225 rad
+const KD  = 2 * Math.PI * DEL / LAM; // k*d  = 3.020 rad
 const NEL = 8;
 const STEP     = 2.8125;             // sweep step = ADAR1000 phase LSB, deg of phase
-const KD_DEG   = KD * 180 / Math.PI; // 173.2 deg of phase per unit sin(theta)
-const FLOOR_DB = -23.0;              // noise floor, dB below the 8-element peak
+const KD_DEG   = KD * 180 / Math.PI; // 173.0 deg of phase per unit sin(theta)
+const FLOOR_DB = -23.0;              // noise floor, dB below each trace's own peak (dBc)
 const LOOKS    = 20;                 // power averages the GUI takes per sweep step
 const SEED     = 6618;               // fixed noise realization, so readings repeat
 const YMIN = -40, YMAX = 3;
@@ -98,12 +99,13 @@ const YMIN = -40, YMAX = 3;
 const PRESETS = {
   8: [1,1,1,1,1,1,1,1],
   4: [0,0,1,1,1,1,0,0],
-  2: [0,0,0,1,1,0,0,0]
+  2: [0,0,0,1,1,0,0,0],
+  18: [1,0,0,0,0,0,0,1]
 };
 
 const state = { n: 8, meas: false };
 
-// ---------- honest element sum: normalized so the 8-element peak = 1 ----------
+// ---------- element sum: normalized so the 8-element peak = 1 ----------
 function afComplex(thetaDeg, w) {
   const s = Math.sin(thetaDeg * Math.PI / 180);
   let re = 0, im = 0;
@@ -134,12 +136,19 @@ function idealTrace(w) {
   return { xs: xs, ys: ys };
 }
 
+// The floor follows the trace: it sits FLOOR_DB below each trace's own peak,
+// which is 20 log10(active/8) below the 8-element peak (the voltage sum).
+function floorDb(w) {
+  const on = w.reduce(function (a, b) { return a + b; }, 0);
+  return FLOOR_DB + 20 * Math.log10(on / NEL);
+}
+
 function measTrace(w) {
-  const rnd = LCG(SEED), sg = Math.sqrt(Math.pow(10, FLOOR_DB / 10) / 2);
+  const rnd = LCG(SEED), sg = Math.sqrt(Math.pow(10, floorDb(w) / 10) / 2);
   const xs = [], ys = [];
   // With Use Bits on (every lab preset) the GUI steps the element-to-element
   // phase one LSB per point, so the samples are uniform in sin(theta), not in
-  // theta: 0.0162 apart at 10.3 GHz, 0.93 deg of angle at broadside, wider
+  // theta: 0.0163 apart at 10.3 GHz, 0.93 deg of angle at broadside, wider
   // toward the edges. Phase steps past kd ask for no real angle; the GUI
   // piles them at +/-90 deg, and they are left out here.
   const nMax = Math.floor(KD_DEG / STEP);
@@ -265,6 +274,7 @@ function drawAll() {
   const meas  = state.meas ? measTrace(w) : null;
   const m = metrics(meas || ideal);
   const narrow = W < 430;
+  const nOn = w.reduce(function (p, q) { return p + q; }, 0);
 
   ctx.clearRect(0, 0, W, H);
 
@@ -301,11 +311,12 @@ function drawAll() {
 
   // --- noise floor line, only when it is part of the measurement ---
   if (state.meas) {
+    const fl = floorDb(w);
     ctx.save();
     ctx.setLineDash([4, 4]); ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(138,90,0,0.55)';
-    ctx.beginPath(); ctx.moveTo(PAD.l, Y(FLOOR_DB)); ctx.lineTo(W - PAD.r, Y(FLOOR_DB)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(PAD.l, Y(fl)); ctx.lineTo(W - PAD.r, Y(fl)); ctx.stroke();
     ctx.restore();
-    stext('noise floor', W - PAD.r - 10, Y(FLOOR_DB) + (narrow ? 8 : 9),
+    stext('noise floor', W - PAD.r - 10, Y(fl) + (narrow ? 8 : 9),
           narrow ? 9 : 10, '#8a5a00', 'right');
   }
 
@@ -366,7 +377,7 @@ function drawAll() {
   const bx = PAD.l + 8, by = PAD.t + 9, bw = narrow ? 7 : 9, gap = narrow ? 3 : 4;
   const lf = narrow ? 9.5 : 10.5;
   ctx.font = "700 " + lf + "px " + SANS;
-  const stripR = bx + NEL * (bw + gap) + 6 + ctx.measureText(state.n + ' of 8 active').width;
+  const stripR = bx + NEL * (bw + gap) + 6 + ctx.measureText(nOn + ' of 8 active').width;
   const stripB = by + bw + 4;
 
   // --- first sidelobe marker ---
@@ -395,7 +406,7 @@ function drawAll() {
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.rect(bx + n * (bw + gap), by, bw, bw); ctx.fill(); ctx.stroke();
   }
-  stext(state.n + ' of 8 active', bx + NEL * (bw + gap) + 6, by + bw / 2,
+  stext(nOn + ' of 8 active', bx + NEL * (bw + gap) + 6, by + bw / 2,
         narrow ? 9.5 : 10.5, '#5b6573', 'left', true);
 
   // --- readouts ---

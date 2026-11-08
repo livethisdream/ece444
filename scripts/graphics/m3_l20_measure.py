@@ -3,21 +3,20 @@
 
   L20-read-the-trace     : one measured sweep with HPBW, FNBW and first SLL
                            marked -- the three numbers the lab asks for
-  L20-ideal-vs-measured  : ideal N=8 array factor under the same sweep as the
-                           phase-step sampled, noise-floored trace
-  L20-aperture-halving   : ideal 8 / 4 / 2 element array factors at the dry
-                           run's 10.408 GHz, with the dry run's measured peaks:
-                           the beam doubles, the peak steps 6.0 dB ideally and
-                           5.1 and 4.8 dB measured
+  L20-ideal-vs-measured  : no longer generated (2026-11-08); the file stays in
+                           book/extras/viz/img, unreferenced
+  L20-aperture-halving   : ideal 8 / 4 / 2 element array factors at 10.3 GHz:
+                           the beam doubles at each halving and the peak
+                           steps 6.0 dB
 
-The first two match book/extras/viz/af-measurement-compare.html exactly: same
-element sum, same sweep grid, same -23 dBc floor, same seeded noise
+L20-read-the-trace matches book/extras/viz/af-measurement-compare.html exactly: same
+element sum, same sweep grid, same -23 dBc floor (below each trace's own peak), same seeded noise
 realization (LCG seed 6618, 20 power looks per step). The figures carry
 no equations -- the math lives in the lesson text.
 
 The sweep grid is the GUI's with Use Bits on, which every lab preset sets: one
 2.8125 deg ADAR1000 phase LSB per point, so the samples are uniform in
-sin(theta) -- 2.8125/173.2 = 0.0162 apart at 10.3 GHz, 0.93 deg of angle at
+sin(theta) -- 2.8125/173.0 = 0.0163 apart at 10.3 GHz, 0.93 deg of angle at
 broadside -- not 2.8125 deg of angle apart. Phase steps past kd ask for no real
 angle (the GUI piles them at +/-90 deg) and are left out.
 
@@ -43,9 +42,9 @@ INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
 IMG = ROOT / "book/extras/viz/img"
 
-LAM, DEL = 29.1e-3, 14e-3          # 10.3 GHz, PHASER element spacing
+LAM, DEL = 3.00e8 / 10.3e9, 14e-3  # 10.3 GHz (29.13 mm), PHASER element spacing
 KD = 2 * math.pi * DEL / LAM
-KD_DEG = math.degrees(KD)          # 173.2 deg of phase per unit sin(theta)
+KD_DEG = math.degrees(KD)          # 173.0 deg of phase per unit sin(theta)
 NEL, STEP, FLOOR_DB, LOOKS, SEED = 8, 2.8125, -23.0, 20, 6618
 YMIN, YMAX = -40.0, 3.0
 
@@ -111,9 +110,14 @@ class LCG:
         return r * math.cos(2 * math.pi * u2), r * math.sin(2 * math.pi * u2)
 
 
+def floor_db(w):
+    """The floor sits FLOOR_DB below each trace's own peak (the widget's model)."""
+    return FLOOR_DB + 20 * math.log10(sum(w) / NEL)
+
+
 def meas_db(w):
     rng = LCG(SEED)
-    sg = math.sqrt(10 ** (FLOOR_DB / 10) / 2)
+    sg = math.sqrt(10 ** (floor_db(w) / 10) / 2)
     n_max = int(math.floor(KD_DEG / STEP))
     t = np.array([math.degrees(math.asin(i * STEP / KD_DEG))
                   for i in range(-n_max, n_max + 1)])
@@ -188,11 +192,11 @@ def read_metrics(t, db):
     }
 
 
-def frame(ax, xlim=(-90, 90)):
+def frame(ax, xlim=(-90, 90), ylabel="Received power  (dB)"):
     ax.set_xlim(*xlim)
     ax.set_ylim(YMIN, YMAX)
     ax.set_xlabel("Steer angle from broadside  (deg)")
-    ax.set_ylabel("Received power  (dB)")
+    ax.set_ylabel(ylabel)
     ax.set_xticks(range(xlim[0], xlim[1] + 1, 30))
     ax.set_yticks(range(-40, 1, 10))
     ax.grid(color=RULE, linewidth=0.8)
@@ -208,7 +212,7 @@ def read_the_trace() -> None:
     m = read_metrics(t, db)
 
     fig, ax = plt.subplots(figsize=(7.4, 4.0))
-    frame(ax)
+    frame(ax, ylabel="Received power  (dBc)")
     ax.axhline(FLOOR_DB, color=AMBER, lw=1.2, ls=(0, (4, 4)))
     ax.text(-86, FLOOR_DB - 1.4, "noise floor", color=AMBER, fontsize=11, va="top")
     ax.plot(t, np.clip(db, YMIN, None), color=BLUE, lw=2.0, marker="o", ms=3.0,
@@ -241,56 +245,13 @@ def read_the_trace() -> None:
     finalize(fig, "L20-read-the-trace")
 
 
-def ideal_vs_measured() -> None:
-    """Where the sweep stops following the array factor: nulls and floor."""
-    w = PRESETS[8]
-    ti, di = ideal_db(w)
-    tm, dm = meas_db(w)
-
-    fig, ax = plt.subplots(figsize=(7.4, 4.0))
-    frame(ax, (-60, 60))
-    ax.axhline(FLOOR_DB, color=AMBER, lw=1.2, ls=(0, (4, 4)))
-    ax.text(34, FLOOR_DB - 1.4, "noise floor", color=AMBER, fontsize=11, va="top")
-    ax.plot(ti, di, color=GRAY, lw=1.5, label="Array factor, 8 elements")
-    ax.plot(tm, np.clip(dm, YMIN, None), color=BLUE, lw=2.2, marker="o", ms=3.6,
-            mfc=NAVY, mec=NAVY, label="Measured sweep, 2.8125° phase steps", zorder=3)
-
-    # the two departures worth naming
-    m = read_metrics(tm, dm)
-    ax.annotate("nulls fill in", xy=(m["nr"] + 0.4, m["nulldb"] - 0.3), xytext=(27, -30.5),
-                color=RED, fontsize=12, fontweight="bold",
-                arrowprops=dict(arrowstyle="->", color=RED, lw=1.3))
-    ax.annotate("outer lobes ride the floor", xy=(-56.5, -17.6), xytext=(-57, -33.0),
-                color=AMBER, fontsize=12, fontweight="bold",
-                arrowprops=dict(arrowstyle="->", color=AMBER, lw=1.3))
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2,
-              fontsize=11.5, handlelength=1.8)
-
-    finalize(fig, "L20-ideal-vs-measured")
-
-
-# The dry run (phaser-00, 2026-10-19, review/M3_LAB_DRYRUN.md): Find HB100 read
-# 10.408 GHz, and the three peaks read -5.25, -10.4 and -15.1 dBFS, steps of
-# 5.1 and 4.8 dB against the voltage sum's 6.0 and 6.0. The cause of the
-# shortfall is not known, so this figure shows the ideal array factor and the
-# measured peaks side by side and claims nothing about why they differ.
-DRY_F = 10.408e9
-DRY_STEPS = (5.1, 4.8)             # measured, 8 -> 4 and 4 -> 2
-
-
 def aperture_halving() -> None:
-    """Ideal 8 / 4 / 2 element array factors at the dry run's frequency, with
-    the dry run's measured peak levels: the beam doubles, the peak steps 6.0 dB
-    ideally and about 5 dB measured.
+    """Ideal 8 / 4 / 2 element array factors at 10.3 GHz, the course's worked
+    frequency: the beam doubles at each halving and the peak steps 6.0 dB,
+    the voltage sum. No measured points: the kit reads 5 to 6 dB per halving,
+    consistent with the ideal step within the spread of its readings.
     """
-    kd = 2 * math.pi * DEL / (3.00e8 / DRY_F)
     t = np.arange(-90.0, 90.0 + 1e-9, 0.05)
-    s = np.sin(np.deg2rad(t))
-
-    def af_db(w):
-        re = sum(np.cos(kd * (n - 3.5) * s) for n in range(NEL) if w[n])
-        im = sum(np.sin(kd * (n - 3.5) * s) for n in range(NEL) if w[n])
-        return 10 * np.log10(np.maximum((re / NEL) ** 2 + (im / NEL) ** 2, 1e-9))
 
     fig, ax = plt.subplots(figsize=(7.4, 4.0))
     frame(ax)
@@ -298,27 +259,21 @@ def aperture_halving() -> None:
               2: (GREEN, 2.0, "2 elements (E4, E5)")}
     for n in (8, 4, 2):
         color, lw, lab = styles[n]
-        ax.plot(t, np.clip(af_db(PRESETS[n]), YMIN, None), color=color, lw=lw, label=lab)
+        tt, db = ideal_db(PRESETS[n])
+        ax.plot(tt, np.clip(db, YMIN, None), color=color, lw=lw, label=lab)
 
     ideal = [20 * math.log10(n / 8) for n in (8, 4, 2)]
-    meas = [0.0, -DRY_STEPS[0], -DRY_STEPS[0] - DRY_STEPS[1]]
-    ax.plot([0, 0, 0], meas, ls="none", marker="o", ms=8, mfc="white", mec=RED, mew=2.0,
-            zorder=5, label="measured peak")
-
-    def ladder(x, levels, color, head):
-        for y in levels:
-            ax.plot([x - 3, x + 3], [y, y], color=color, lw=1.4)
-        for a, b in zip(levels[:-1], levels[1:]):
-            ax.annotate("", xy=(x, b), xytext=(x, a),
-                        arrowprops=dict(arrowstyle="<->", color=color, lw=1.4,
-                                        shrinkA=0, shrinkB=0))
-            ax.text(x - 4.5, (a + b) / 2, f"{a - b:.1f} dB", color=color, fontsize=11.5,
-                    fontweight="bold", va="center", ha="right")
-        ax.text(x, 1.2, head, color=color, fontsize=11.5, fontweight="bold",
-                ha="center", va="bottom")
-
-    ladder(60, ideal, GRAY, "ideal")
-    ladder(84, meas, RED, "measured")
+    x = 72
+    for y in ideal:
+        ax.plot([x - 3, x + 3], [y, y], color=GRAY, lw=1.4)
+    for p, q in zip(ideal[:-1], ideal[1:]):
+        ax.annotate("", xy=(x, q), xytext=(x, p),
+                    arrowprops=dict(arrowstyle="<->", color=GRAY, lw=1.4,
+                                    shrinkA=0, shrinkB=0))
+        ax.text(x - 4.5, (p + q) / 2, f"{p - q:.1f} dB", color=GRAY, fontsize=11.5,
+                fontweight="bold", va="center", ha="right")
+    ax.text(x, 1.2, "peak step", color=GRAY, fontsize=11.5, fontweight="bold",
+            ha="center", va="bottom")
     ax.legend(loc="upper left", fontsize=11, handlelength=1.8, borderaxespad=0.3)
 
     buf = io.StringIO()
@@ -333,7 +288,6 @@ def aperture_halving() -> None:
 if __name__ == "__main__":
     IMG.mkdir(parents=True, exist_ok=True)
     read_the_trace()
-    ideal_vs_measured()
     aperture_halving()
     # print what the first two figures assert (the widget's model), so the
     # prose can be checked against them
