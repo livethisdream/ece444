@@ -50,13 +50,13 @@ bad(){ echo "  FAIL  $1"; fails=$((fails+1)); }
 
 echo "== ${LNN} =="
 
-# Module 4's L28-L31 carry their lab on the lesson page and have no practice
+# L21 (Neil, 2026-11-07) and Module 4's L28-L31 have no practice
 # set: the lab packet replaces it (ROADMAP 4, Neil 2026-10-25). Skip the
 # practice gates for them. The stub gate and the packet-link gate (7) still
 # apply, so a lesson-half pass reports two expected failures until its lab
 # pass adds the procedure and links the packet.
 PRACTICE=1
-case "$NN" in 28|29|30|31) PRACTICE=0 ;; esac
+case "$NN" in 21|28|29|30|31) PRACTICE=0 ;; esac
 
 # Locate the lesson page, and take the module number from where it actually
 # lives rather than assuming a lesson-to-module mapping.
@@ -78,7 +78,7 @@ if [ "$PRACTICE" = 1 ]; then
   [ -s "$tex" ] && ok "practice tex" || bad "practice tex missing"
   [ -s "$b" ] && [ -s "$s" ] && ok "practice PDFs present" || bad "practice PDFs missing"
 else
-  ok "no practice set: the L$NN Lab packet replaces it (Module 4)"
+  ok "no practice set: the L$NN Lab packet replaces it"
 fi
 
 widgets="$(grep -oE 'viz/[a-z0-9-]+\.html' "$page" 2>/dev/null | sed 's|viz/||' | sort -u)"
