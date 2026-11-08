@@ -797,6 +797,19 @@ parts: Part A brings the kit up from a freshly flashed card (flash, name,
 boot, connect by cable, join the Wi-Fi, run `install.sh`, then Find HB100
 and Calibrate), and Part B makes the first measurements on that kit.
 
+**Lesson and lab, one shape** (Neil, 2026-11-08: "Each lab reads like its
+own lesson. The lesson should be preparing them for the lab"; piloted on
+L20, #230). Module 3 class time is the lab: cadets read the lesson and do the
+pre-lab beforehand, and Neil presents only the lab's opening ("the flow of
+the lab and what the big picture is"). The lesson teaches everything the lab
+tests and ends with a read-only Pre-Lab frame that maps each Part 1 question
+to the step that checks it; it is a reading page with no beat cap. The lab
+page presents title, objectives, The Big Picture, The Flow of the Lab, and
+Equipment and Setup (at most six beats, `LAB_BEATS` in `budgets.py`), and
+everything after that is read-only: the steps and their boxes, No Hardware?,
+Your Part 2 Entries, Lab Packet, For Part 3, Looking Ahead. The
+write-lesson skill carries the checklist.
+
 **Lab packet structure** (piloted on L19, 2026-10-10). A lab's practice
 problems fold into its lab packet, `ECE444_Lab_L<NN>_<Short>.tex` (in
 `ECE444-faculty` since 2026-10-23, since the source holds the solutions),
