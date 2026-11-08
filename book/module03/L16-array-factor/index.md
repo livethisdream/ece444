@@ -508,7 +508,7 @@ The spacing decides what repeats. The array samples the current only at multiple
 
 :::{present}
 - At $10.3$ GHz, $d = 14$ mm is $0.481\lambda$, and $Nd = 3.85\lambda$.
-- $\psi$ spans $\pm 173.2^\circ$, and $d < \lambda/2$ rules out grating lobes.
+- $\psi$ spans $\pm 173.0^\circ$, and $d < \lambda/2$ rules out grating lobes.
 - Nulls fall at $\pm 15.1^\circ$, $\pm 31.3^\circ$, and $\pm 51.2^\circ$; the half-power width is $13.2^\circ$ and the first sidelobe $-12.8$ dB.
 :::
 
@@ -519,11 +519,11 @@ The PHASER carries 8 patch elements spaced $d = 14\ \text{mm}$. At $10.3\ \text{
 **Visible region.** At broadside
 
 $$\begin{aligned}
-kd &= 2\pi(0.481) = 3.02\ \text{rad} \\
-&= 173.2^\circ
+kd &= 2\pi(0.4807) = 3.02\ \text{rad} \\
+&= 173.0^\circ
 \end{aligned}$$
 
-so $\psi$ runs over $\pm 173.2^\circ$, a window just under one period wide whose edges stay well clear of the repeats at $\pm 360^\circ$. The window holds no grating lobe. Because $0.481 < 0.5$, the spacing criterion $d < \lambda/(1 + \vert\sin\theta_0\vert)$ holds at every scan angle out to $\pm 90^\circ$.
+so $\psi$ runs over $\pm 173.0^\circ$, a window just under one period wide whose edges stay well clear of the repeats at $\pm 360^\circ$. The window holds no grating lobe. Because $0.481 < 0.5$, the spacing criterion $d < \lambda/(1 + \vert\sin\theta_0\vert)$ holds at every scan angle out to $\pm 90^\circ$.
 
 **Nulls.** $\sin\theta_m = m\lambda/Nd = m/3.85$, giving $\pm 15.1^\circ$, $\pm 31.3^\circ$, and $\pm 51.2^\circ$. The $m = 4$ null would need $\sin\theta = 1.04$, so it never reaches real space, and the array shows 6 sidelobes across the visible region.
 

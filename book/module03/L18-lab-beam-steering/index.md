@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-Two runs put the PHASER's peak at $30^\circ$: move the source, or apply a steer angle.
+Two runs put the PHASER's peak at $30^\circ$ and $45^\circ$: move the source, or apply a steer angle.
 
 L18 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -32,459 +32,250 @@ with room for notes. Print from read mode for the whole lesson.
 </ol>
 ::::
 
-::::{frame} From Prediction to Measurement
+::::{frame} The Big Picture
 :::{present}
-- Part 1, before today: the phase table, the beamwidths, and the error budget.
-- Part 2, today, Steps 1–21: two runs put the peak at $0^\circ$, $30^\circ$, and $45^\circ$.
-- Part 3, after the lab: reconcile each measurement with its prediction.
-:::
-
-In Lesson 18 we derived the steering law and used it to fill in a table of
-element phases for the PHASER's eight-element array. The L18 Lab packet starts from
-that table: Part 1, the pre-lab you completed before class, redoes it at your
-HB100's frequency, predicts the beamwidths, and sizes the error budget. Today,
-after bringing up the kit (Steps 1 to 9), you place the source at measured
-angles on a protractor arc (Run 1, Steps 10 to 15), command the peak to the
-same angles from the GUI (Run 2, Steps 16 to 21), and record where the trace
-peaks, how wide it is, and what the GUI writes into Phase Control. Part 3, on
-your own before Lesson 19, reconciles those numbers with the predictions.
-::::
-
-::::{frame} Part 1: The Steering Prediction
-:::{present}
-$$\begin{aligned}
-\Delta\phi &= kd\sin\theta_0 \\
-&= 360^\circ\ \frac{d}{\lambda}\ \sin\theta_0 \\
-&= 176.8^\circ \sin\theta_0
-\end{aligned}$$
-
-- $N = 8$, $d = 14\ \text{mm}$, and $d/\lambda = 0.491$ at $10.525\ \text{GHz}$.
-:::
-:::{present}
-| $\theta_0$ | $\sin\theta_0$ | $\Delta\phi$ |
-| :-- | :-- | :-- |
-| $0^\circ$ | 0.000 | $0.0^\circ$ |
-| $15^\circ$ | 0.259 | $45.8^\circ$ |
-| $30^\circ$ | 0.500 | $88.4^\circ$ |
-| $45^\circ$ | 0.707 | $125.0^\circ$ |
-:::
-
-The array is fixed: $N = 8$ elements, E1 to E8, on a $d = 14\ \text{mm}$ pitch.
-The source is an HB100 Doppler module at a nominal $10.525\ \text{GHz}$, so
-$\lambda = 28.5\ \text{mm}$ and $d/\lambda = 0.491$, with
-$c = 3.00\times 10^8\ \text{m/s}$. Steering to
-$\theta_0$ takes a **progressive phase** of
-
-$$\Delta\phi = kd\sin\theta_0 = 360^\circ\ \frac{d}{\lambda}\ \sin\theta_0 = 176.8^\circ\sin\theta_0.$$
-
-Lesson 18 worked the same table at the workshop's $10.3\ \text{GHz}$, where
-$kd = 173.2^\circ$ and the $30^\circ$ step is $86.6^\circ$. At $10.525\ \text{GHz}$
-the step is $88.4^\circ$, and Part 1 of the packet redoes the table at the
-frequency your kit reported in Lesson 17, because every phase in the lab depends
-on it.
-::::
-
-::::{frame} Wrapped Element Phases
-:::{present}
-| Element | E1 | E2 | E3 | E4 |
-| :-- | :-- | :-- | :-- | :-- |
-| Wrapped (°) | 0.0 | 88.4 | 176.8 | 265.2 |
-| **Element** | **E5** | **E6** | **E7** | **E8** |
-| Wrapped (°) | 353.6 | 82.0 | 170.5 | 258.9 |
-
-- The $30^\circ$ ramp; E6 to E8 wrap: $442.0^\circ$ becomes $82.0^\circ$.
-:::
-
-The phase shifters produce a value between $0^\circ$ and $360^\circ$, so element
-E$(n+1)$, which is element $n$ in Lesson 18's numbering, gets $n\Delta\phi$
-**wrapped** modulo $360^\circ$. Wrapping changes nothing physically at one
-frequency, because a phase shift of $360^\circ$ is no phase shift at all. For
-$\theta_0 = 30^\circ$ the eight values are these, and E6 through E8 are the ones
-that have wrapped:
-
-| Element | E1 | E2 | E3 | E4 | E5 | E6 | E7 | E8 |
-| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| Unwrapped ramp | $0.0^\circ$ | $88.4^\circ$ | $176.8^\circ$ | $265.2^\circ$ | $353.6^\circ$ | $442.0^\circ$ | $530.5^\circ$ | $618.9^\circ$ |
-| Wrapped | $0.0^\circ$ | $88.4^\circ$ | $176.8^\circ$ | $265.2^\circ$ | $353.6^\circ$ | $82.0^\circ$ | $170.5^\circ$ | $258.9^\circ$ |
-
-Each entry is a multiple of the unrounded step, $88.41^\circ$.
-::::
-
-::::{frame} The Beam-Sweep Trace
-:::{present}
-- The sweep steps the beam past a fixed source and plots power against steered angle.
-- The array factor depends on $\sin\theta - \sin\theta_0$: the trace peaks at the source.
-- It records the array factor, scaled by the element pattern at the source.
-:::
-:::{present}
-<img src="../../viz/img/L18-two-ways.svg"
-     alt="Two ways to measure a pattern. Left: the array turns past a fixed HB100, recording element pattern times array factor. Right: the array stays fixed and the beam is swept electronically past the source, recording the array factor at the source's element-pattern level."
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
-:::
-
-The x-axis of the PHASER's Rectangular plot is the angle the sweep steers to, not
-a measured arrival angle. With Lab Preset 1 loaded, the instrument steps the
-element-to-element phase one phase-shifter LSB, $2.8125^\circ$, at a time, and
-plots each step at the angle that phase steers to; the steps past endfire collect
-at $\pm 90^\circ$, which is why the edges of the trace look crowded.
-
-The trace is a picture of the pattern because of Lesson 18's "The Steered
-Pattern": the array factor depends only on $\sin\theta - \sin\theta_0$, and its
-magnitude is even, so power received from a source at $\theta_{\text{src}}$ as
-the beam steps across $\theta_0$ traces the same curve as the pattern of a beam
-steered at the source. It peaks where the steered angle equals the source angle.
-
-Rotating the array in front of a fixed source would record a different quantity.
-Turning the array moves the source across the element pattern as well, so the
-rotation records the element pattern times the array factor (Lesson 16). The
-sweep holds the element pattern fixed at the source's direction, so it records the
-array factor alone, scaled by the element pattern's value there. That scale factor
-is what a peak-level comparison between two source positions measures. Every
-point of the sweep also uses a different set of element phases, so the
-beamformer's own errors, phase quantization and gain imbalance, shape the trace.
-::::
-
-::::{frame} The Sweep, Step by Step
-:class: viz-frame
-
-:::{depth}
-This is the sweep the PHASER runs, slowed down. Each step adds one phase-shifter
-LSB, $2.8125^\circ$, to the element-to-element phase $\Delta\phi_s$ and writes
-the ramp $+n\ \Delta\phi_s$ to the eight channels. The left panel shows the
-beam that ramp makes and, in the inset, the eight element signals from the
-HB100 added tip to tail: each one turned $kd\sin\theta_{\text{src}} -
-\Delta\phi_s$ from the last. The instrument plots the power of that sum at the
-angle the ramp steers to, $\sin\theta_0 = \Delta\phi_s/kd$, which is the
-right panel. Away from the source the chain curls up and the point lands in a
-sidelobe or on the noise floor; as the beam reaches the source the chain
-straightens and the trace climbs to its peak, at the source's angle. Move the
-source and the peak follows it, lower by the element pattern at its new angle; press
-**step** to advance the sweep one LSB at a time.
-:::
-
-:::{present}
-<iframe src="../../viz/sweep-trace.html"
-        width="100%" height="441"
-        style="border: 1px solid #cddce9; border-radius: 6px;"
-        loading="lazy"
-        title="The beam-sweep trace built one phase step at a time: the beam swinging past the HB100, the eight element signals summed, and each step's power plotted at the angle it steers to">
-</iframe>
-:::
-::::
-
-::::{frame} Two Ways to Steer the Peak
-:::{present}
-- **Physical run:** Phase Control at zero; the source moves to $30^\circ$.
-- **Commanded run:** the source stays at boresight; **Apply** $30$.
-- Both peak near $30^\circ$, equally wide; only the physical run loses peak level.
+- The sweep trace peaks where the beam meets the source.
+- Run 1 moves the source; Run 2 applies a steer angle.
+- Both put the peak at $45^\circ$ with the same width; only the moved source loses level, about $1.5\ \text{dB}$.
 :::
 :::{present}
 <img src="../../viz/img/L18-sweep-compare.svg"
-     alt="Two beam-sweep traces: the boresight trace peaking at 0 degrees and 13.0 degrees wide, and the 30-degree trace peaking near 30 degrees, 15.1 degrees wide and 0.6 dB lower"
+     alt="Three beam-sweep traces: the source at 0 degrees; the source moved to 45 degrees, peaking there 1.5 dB lower; and Apply 45 with the source at boresight, peaking at 45 degrees at full level"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-The lab puts the peak at the same angles two ways. In the physical run, Phase
-Control holds zero, the sweep's own ramp is the only steering, and the trace peaks
-at the source's angle on the arc. In the commanded run, the source stays at
-boresight and **Apply** in the Beam Steering section loads per-element offsets
-that shift the trace: Apply $30$ puts a boresight source's peak at $+30^\circ$.
-
-The two traces have the same width, because both shift the same function of
-$\sin\theta - \sin\theta_0$ to the same place. Their peak levels differ. In the
-physical run the source sits $30^\circ$ off each element's own boresight, and the
-element pattern lowers the whole trace by its roll-off at $30^\circ$. In the
-commanded run the source never leaves the elements' boresight, so the peak level
-matches the $0^\circ$ trace. That difference is the measurement of scan loss
-(Lesson 18, "Scan Loss").
+Lesson 18 showed that the beam-sweep trace is the array factor seen from the
+source, so it peaks at the angle where the steered beam meets the source.
+Today you put that peak at the same angles two ways. In Run 1, Phase Control
+holds zero and you move the HB100 along an arc, so the trace follows the
+source. In Run 2, the source stays at boresight and **Apply** in the Beam
+Steering section writes per-element offsets that shift the trace to the angle
+you type. At each angle you read the peak's angle and its half-power width
+and check both against your Part 1 predictions. The two runs differ in one
+reading you can see: a source moved to $45^\circ$ sits off each element's own
+boresight, so its trace comes out about $1.5\ \text{dB}$ lower, and a
+commanded beam does not.
 ::::
 
-::::{frame} The Sign in Phase Control
+::::{frame} The Flow of the Lab
 :::{present}
-| Element | E1 | E2 | E3 | E4 |
-| :-- | :-- | :-- | :-- | :-- |
-| Phase Control | 0 | −88 | −177 | −265 |
-| **Element** | **E5** | **E6** | **E7** | **E8** |
-| Phase Control | −354 | −442 | −531 | −619 |
-
-- Apply $30$ writes $-n\Delta\phi$, whole degrees, unwrapped.
-- The sweep adds $+n\Delta\phi_s$; the sum vanishes at $+30^\circ$.
+| Steps | Task | From Part 1 |
+| :-- | :-- | :-- |
+| 1 to 9 | Bring up the kit | your frequency |
+| 10 to 15 | Run 1: move the source | HPBW, pass standard |
+| 16 to 21 | Run 2: Apply 15, 30, 45 | Phase Control row |
 :::
 :::{present}
-<img src="../../viz/img/L18-phase-control.svg"
-     alt="The 30-degree ramp at 10.525 GHz: the unwrapped ramp rising to 618.9 degrees, the wrapped settings, and the falling whole-degree offsets Phase Control shows after Apply 30, from 0 to minus 619"
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L18-lab-sequence.svg"
+     alt="The four stages of the L18 Lab, seen from above. Steps 1 to 9: the HB100 at 0 degrees on the 1 m arc for Find HB100 and Calibrate. Steps 10 to 14: Phase Control at zero, the source moved to 0, 30, and 45 degrees on the arc. Step 15: the same three lines 1.2 m out, Peak Gain on each. Steps 16 to 21: the source back at 0 degrees and the beam commanded to 15, 30, and 45 degrees with Apply."
+     style="max-width: 100%; display: block; margin: 0 auto;">
 :::
 
-When you type $30$ into **Steer Angle (deg)** and press **Apply**, the GUI
-computes $\Delta\phi$ from the Signal Freq on screen and writes $-n\Delta\phi$ into
-the Phase Control boxes, rounded to whole degrees and not wrapped. At
-$10.525\ \text{GHz}$ the boxes read 0, −88, −177, −265, −354, −442, −531, and
-−619. The sliders beside the boxes stop at $\pm 180^\circ$; read the boxes.
-
-The minus sign is deliberate. During a sweep the backend adds its own ramp,
-$+n\Delta\phi_s$, to whatever Phase Control holds, so element $n$ carries
-$n(\Delta\phi_s - \Delta\phi_0)$. A boresight source needs no ramp at all, so the
-array points at it where $\Delta\phi_s = \Delta\phi_0$, which is the plotted
-angle $+30^\circ$. Apply is therefore the offset that makes a boresight source
-look like a source at $+\theta_0$ on the sweep plot. On their own, with no sweep
-ramp added, the offsets would point the beam to $-30^\circ$. To compare the
-read-back with the wrapped ramp, reduce it modulo $360^\circ$: E6's
-$-442^\circ$ is $278^\circ$, which is $360^\circ - 82.0^\circ$.
-
-The GUI computes $\Delta\phi$ with $c = 299792458\ \text{m/s}$, not the
-$3.00\times 10^8\ \text{m/s}$ of our prediction, so one element can differ by
-$1^\circ$ after rounding: our $-n(88.41^\circ)$ gives $-530$ for E7, and the GUI's
-$-n(88.47^\circ)$ gives $-531$.
+Run 1 fills Table A in Part 2 of the packet, and Run 2 fills Table B and the
+Phase Control row. Keep the sweep running throughout: the trace redraws on
+its own after you move the source or press Apply. Lesson 18's "Reading the
+Trace" lists what to expect in each reading, and "How Close Is Close Enough"
+explains the pass standard you sized in Part 1.
 ::::
 
-::::{frame} Predicted Sweep
-:class: viz-frame
-
-:::{depth}
-The widget below is the prediction tool for today's lab. Set the frequency to
-$10.525\ \text{GHz}$, or in class to the value **Find HB100** reports, and
-the knob to the source's angle on the arc, which is where the trace should peak.
-Then read $\Delta\phi$, the predicted half-power beamwidth, and the peak drop,
-and two rows of phases: the beam ramp $+n\Delta\phi$ wrapped to $0^\circ$ to
-$360^\circ$, and what Phase Control shows after Apply at the same angle, the
-falling whole-degree offsets. Two things to notice before class: the dots
-mark the angles the sweep samples, one $2.8125^\circ$ phase step apart, about
-$1^\circ$ near broadside and wider toward endfire; and the beam widens as the
-peak moves away from broadside while the sidelobe structure stretches with it.
-:::
-
+::::{frame} Equipment and Setup
 :::{present}
-<iframe src="../../viz/steering-predictor.html"
-        width="100%" height="538"
-        style="border: 1px solid #cddce9; border-radius: 6px;"
-        loading="lazy"
-        title="Predicted beam-sweep trace and element phases for the PHASER array">
-</iframe>
-:::
-::::
-
-::::{frame} Part 2: Equipment and Setup
-:::{present}
-- The kit, cabled to your laptop as in Lesson 17.
-- The HB100 at patch-row height, $1\ \text{m}$ out; $1.2\ \text{m}$ for scan loss.
-- A protractor arc centered on the array; facing the patches, $+\theta$ is to your left, toward E8.
+- The kit on its stand, cabled to your laptop as in Lesson 17.
+- The HB100 at patch-row height on a $1\ \text{m}$ arc centered between E4 and E5.
+- Facing the patches, $+\theta$ is to your left, toward E8.
 :::
 :::{present}
 <img src="../../viz/img/L18-lab-setup.svg"
-     alt="The setup from above: the eight-element array, a 1 m protractor arc centered between E4 and E5, and the HB100 positions at 0, 30, and 45 degrees on the plus side, toward E8, filled on the 1 m arc for the angle readings and hollow 1.2 m out on the same lines for the scan-loss levels; confirm the plus side with the Angle readout"
+     alt="The setup from above: the eight-element array, a 1 m protractor arc centered between E4 and E5, and the HB100 positions at 0, 30, and 45 degrees on the plus side, toward E8, filled on the 1 m arc for the angle readings and hollow 1.2 m out on the same lines for the levels; confirm the plus side with the Angle readout"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-You need the ADALM-PHASER kit on its stand, connected to your laptop by the
-Ethernet cable as in Lesson 17; the HB100 on a tripod about $1\ \text{m}$ from the
-array face, at the height of the patch row; and a protractor arc of
-$1\ \text{m}$ radius centered under the middle of the array, between E4 and E5.
+Set up the HB100 on a tripod about $1\ \text{m}$ from the array face, at the
+height of the patch row, and lay a protractor arc of $1\ \text{m}$ radius
+centered under the middle of the array, between E4 and E5. One meter clears
+Lesson 17's far-field distance for this array, $0.88\ \text{m}$, which is
+enough for the angles and beamwidths. Center the arc on the array, not on the
+board's edge: an arc centered $10\ \text{mm}$ off the middle shifts the
+reference angle by about $0.5^\circ$.
 
-One meter is Lesson 17's far-field distance for this array,
-$2D^2/\lambda = 0.88\ \text{m}$ with $D = Nd = 112\ \text{mm}$. Center the arc on
-the array, not on the board's edge: an arc centered $10\ \text{mm}$ off the middle
-of the array shifts the reference angle by about $0.5^\circ$. The arc serves
-the angle readings. The scan-loss levels need more distance, $1.2\ \text{m}$
-(4 ft) or more on the same three lines, for the reason given at Step 15.
-
-Lesson 18's sign convention puts $+\theta$ on the E8 end of the array, the end the
-wave reaches first. Looking at the front of the array, the patch face, E1 is at
-the right end of the row and E8 at the left, as in the L17 Lab, so $+\theta$ is
-to your left as you face the patches. In the figure, which looks down on the
-setup from above, that puts E8 on the right. Confirm the sign on your kit before
-you record anything: with the source on the $+$ side, **Angle** reads
-positive.
+Lesson 18's sign convention puts $+\theta$ on the E8 end of the array. Facing
+the patch side, E1 is at the right end of the row and E8 at the left, as in
+the L17 Lab, so $+\theta$ is to your left. The figure looks down from above,
+which puts E8 on the right. Step 11 confirms the sign on your kit.
 ::::
 
 ::::{frame} Bring Up the Kit
 :class: read-only
 
-:::{present}
-1. Browse to your kit's address from Lesson 17 (kit 03: `http://192.168.7.13:8080`) and wait for the pill to read **Connected**.
-2. Place the powered HB100 $1\ \text{m}$ out at $0^\circ$ on the arc, facing the array.
-3. Press **Find HB100** and record the Signal Freq it reports in the packet.
-4. Press **Calibrate** and wait for it to finish.
-5. Open the **Lab Presets** section and choose the Steering Angle preset.
-6. Set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$ dBFS, as in the L17 Lab.
-7. Turn on **Show Peak Angle Marker** under **Plot Options**.
-8. Press **Start**, and check the **FFT** tab for one tone near $0\ \text{MHz}$, at least $20\ \text{dB}$ above the floor.
-9. Open the **Rectangular** tab.
-:::
+1. **Connect.** Browse to your kit's address from Lesson 17 and wait for the
+   pill to read **Connected**.
+2. **Place the source.** Set the powered HB100 $1\ \text{m}$ out at $0^\circ$
+   on the arc, facing the array.
+3. **Find the source.** Press **Find HB100** and record the Signal Freq. If it
+   is more than $25\ \text{MHz}$ from the frequency you used in Part 1, redo
+   your Phase Control row before Run 2: a $25\ \text{MHz}$ difference moves
+   E8's value by about $1.5^\circ$.
 
-<div class="rec" data-lab="L18">
-<label>Step 3: Signal Freq after <b>Find HB100</b> <input data-field="freq"></label>
-</div>
-
-Keep the source at boresight while **Calibrate** runs, as in the L17 Lab, or it
-bakes a steering ramp into the calibration offsets.
-
-The preset loads a uniform taper on E1 to E8, zeros Phase Control, sets 7 phase
-bits with **Use Bits** on and **Signal BW** at $10\ \text{MHz}$, and opens the FFT
-tab. It leaves **Signal Freq** at the value Find HB100 stored, and it does not set
-**Rx Gain (dB)**: Step 6 sets the same $-10$ dBFS level as the L17 Lab.
-
-On the FFT tab, one narrow tone stands well above the noise near $0\ \text{MHz}$,
-within about $\pm 1\ \text{MHz}$. If it is buried, re-aim the HB100 or press
-**Find HB100** again.
+   <div class="rec" data-lab="L18">
+   <label>Step 3: Signal Freq after <b>Find HB100</b> <input data-field="freq"></label>
+   </div>
+4. **Calibrate the array.** Press **Calibrate** and wait for it to finish,
+   with the source still at boresight. A source off boresight while
+   Calibrate runs bakes a steering ramp into the calibration offsets, and
+   every trace after it peaks in the wrong place.
+5. **Load the preset.** Open the **Lab Presets** section and choose the
+   Steering Angle preset. It loads a uniform taper on E1 to E8, zeros Phase
+   Control, turns **Use Bits** on, and sets **Signal BW** to
+   $10\ \text{MHz}$, so each sweep point is one $2.8125^\circ$ phase step. It
+   keeps the Signal Freq that Find HB100 stored and opens the **FFT** tab.
+6. **Set the gain.** Set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$ dBFS,
+   as in the L17 Lab; the preset does not set it.
+7. **Mark the peak.** Turn on **Show Peak Angle Marker** under
+   **Plot Options**.
+8. **Check the tone.** Press **Start**. The **FFT** tab should show one narrow
+   tone within about $\pm 1\ \text{MHz}$ of $0\ \text{MHz}$, at least
+   $20\ \text{dB}$ above the floor. If the noise buries it, re-aim the HB100 or press
+   **Find HB100** again.
+9. **Open the trace.** Open the **Rectangular** tab. The sweep keeps running
+   from here on, and the button reads **Stop**.
 ::::
 
 ::::{frame} Run 1: Move the Source
 :class: read-only
 
-:::{present}
-10. Press **Reset** under **Phase Control**.
-11. With the source at $0^\circ$, record **Angle** and the half-power beamwidth in Table A.
-12. Press **Freeze** to hold the boresight trace.
-13. Move the HB100 along the arc to $+30^\circ$, still $1\ \text{m}$ out and facing the array, and record the same two.
-14. Move it to $+45^\circ$ and record the same two. If **Angle** jumps to about $-90^\circ$, read the main lobe's angle off the trace and record that.
-15. Move the HB100 straight out to $1.2\ \text{m}$ (4 ft) or more on the $+45^\circ$ line and record **Peak Gain**; repeat on the $+30^\circ$ and $0^\circ$ lines at the same distance.
-:::
+Read every half-power beamwidth as the distance between the two angles where
+the trace falls $3\ \text{dB}$ below its own peak. The difference box is
+**Angle** minus the arc angle; compare it with the pass standard you sized in
+Part 1.
 
-<div class="rec" data-lab="L18">
-<label>Table A, source at 0°: Angle <input data-field="a.0.angle"></label>
-<label>Table A, source at 0°: difference from the arc angle <input data-field="a.0.diff"></label>
-<label>Table A, source at 0°: half-power beamwidth <input data-field="a.0.hpbw"></label>
-<label>Table A, source at 0°: Peak Gain <input data-field="a.0.gain"></label>
-<label>Table A, source at 30°: Angle <input data-field="a.30.angle"></label>
-<label>Table A, source at 30°: difference from the arc angle <input data-field="a.30.diff"></label>
-<label>Table A, source at 30°: half-power beamwidth <input data-field="a.30.hpbw"></label>
-<label>Table A, source at 30°: Peak Gain <input data-field="a.30.gain"></label>
-<label>Table A, source at 45°: Angle <input data-field="a.45.angle"></label>
-<label>Table A, source at 45°: difference from the arc angle <input data-field="a.45.diff"></label>
-<label>Table A, source at 45°: half-power beamwidth <input data-field="a.45.hpbw"></label>
-<label>Table A, source at 45°: Peak Gain <input data-field="a.45.gain"></label>
-<label>Table A: distance for the Peak Gain column <input data-field="a.dist"></label>
-</div>
+10. **Zero the offsets.** Press **Reset** under **Phase Control**.
+11. **Source at $0^\circ$.** Record **Angle** and the half-power beamwidth,
+    then press **Freeze** to hold this trace. Expect the peak within your pass
+    standard of $0^\circ$ and the width within a degree of your Part 1 value.
+    If **Angle** reads near $-30^\circ$ when you later move the source, the
+    source is on the negative side of the arc; move it across.
 
-Read the half-power beamwidth as the distance between the two angles where the
-trace falls $3\ \text{dB}$ below its own peak. The sweep runs continuously and
-the button now reads **Stop**, so leave it running: the trace redraws on its own
-after you move the source. If Angle reads near $-30^\circ$, the source is on
-the negative side of the arc; move it across.
+    <div class="rec" data-lab="L18">
+    <label>Table A, source at 0°: Angle <input data-field="a.0.angle"></label>
+    <label>Table A, source at 0°: difference from the arc angle <input data-field="a.0.diff"></label>
+    <label>Table A, source at 0°: half-power beamwidth <input data-field="a.0.hpbw"></label>
+    </div>
+12. **Watch the move.** Keep the frozen trace on the plot for the next two
+    positions, so you see the peak travel and the beam widen.
+13. **Source at $+30^\circ$.** Move the HB100 along the arc to $+30^\circ$,
+    still $1\ \text{m}$ out and facing the array, and record the same three
+    boxes. The beam is wider than at $0^\circ$, by the $1/\cos\theta_0$ of
+    Lesson 18.
 
-At $45^\circ$ the GUI's peak readout can jump to about $-90^\circ$, because the
-crowded sweep points at the plot's edge briefly read higher than the main lobe.
-The sweep's last steps take the element-to-element phase past $-180^\circ$, out
-to $-227.8^\circ$, which is the same ramp as $+132.2^\circ$ and points the beam
-within a few degrees of a $45^\circ$ source; the GUI plots every one of those
-steps at $-90^\circ$, so they read within about half a dB of the main lobe, and
-noise can lift one above it. The main lobe is the trace's peak near $45^\circ$:
-read its angle off the trace, and record that.
+    <div class="rec" data-lab="L18">
+    <label>Table A, source at 30°: Angle <input data-field="a.30.angle"></label>
+    <label>Table A, source at 30°: difference from the arc angle <input data-field="a.30.diff"></label>
+    <label>Table A, source at 30°: half-power beamwidth <input data-field="a.30.hpbw"></label>
+    </div>
+14. **Source at $+45^\circ$.** Move it to $+45^\circ$ and record the same
+    three. If **Angle** jumps to about $-90^\circ$, read the main lobe's angle
+    off the trace and record that. The sweep's last steps take the
+    element-to-element phase out to $-227.8^\circ$, the same ramp as
+    $+132.2^\circ$, which points within a few degrees of a $45^\circ$ source;
+    the GUI plots all of them at $-90^\circ$, so they read almost as high as
+    the main lobe, and noise can lift one above it.
 
-:::{admonition} Scan loss needs distance
-:class: tip
+    <div class="rec" data-lab="L18">
+    <label>Table A, source at 45°: Angle <input data-field="a.45.angle"></label>
+    <label>Table A, source at 45°: difference from the arc angle <input data-field="a.45.diff"></label>
+    <label>Table A, source at 45°: half-power beamwidth <input data-field="a.45.hpbw"></label>
+    </div>
+15. **Levels, $1.2\ \text{m}$ out.** Move the HB100 straight out to
+    $1.2\ \text{m}$ (4 ft) or more on the $+45^\circ$ line and record **Peak
+    Gain**; repeat on the $+30^\circ$ and $0^\circ$ lines at the same
+    distance, and record the distance. At $1\ \text{m}$ the level differences
+    read smaller than the element pattern gives, so take them farther out; if
+    the room will not allow it, record the distance you used. Expect the
+    $45^\circ$ level 1 to 2 dB below the $0^\circ$ level. The $30^\circ$ level
+    should sit within about a dB of the $0^\circ$ level: its $0.6\ \text{dB}$
+    drop is smaller than the ripple a reflection puts on the main lobe, so
+    one reading cannot show it.
 
-Take the scan-loss positions, Step 15, at $1.2\ \text{m}$ (4 ft) or more, where
-the drop at $30^\circ$ reads about $-0.7$ dB, against $-0.6$ dB for an ideal
-element and $-0.8$ to $-0.9$ dB for a patch; at $1\ \text{m}$ the same drop reads
-only $-0.2$ to $-0.4$ dB. One meter clears the far-field boundary, $0.88\ \text{m}$, which is enough for the pattern's shape,
-its angles and beamwidths, but only marginal for a level difference of under a
-dB.
-
-If the room forces you closer, take the levels where you can, record the
-distance, and expect the drop to come out smaller than theory, a few tenths of a
-dB at $1\ \text{m}$. Say so in the writeup rather than forcing the numbers to
-agree. Treat the $45^\circ$ row as limited by reflections at any distance: expect
-about $-1.0$ dB there, less than even the ideal $-1.5$ dB.
-:::
+    <div class="rec" data-lab="L18">
+    <label>Table A, source at 0°: Peak Gain <input data-field="a.0.gain"></label>
+    <label>Table A, source at 30°: Peak Gain <input data-field="a.30.gain"></label>
+    <label>Table A, source at 45°: Peak Gain <input data-field="a.45.gain"></label>
+    <label>Table A: distance for the Peak Gain column <input data-field="a.dist"></label>
+    </div>
 ::::
 
 ::::{frame} Run 2: Apply the Steer Angle
 :class: read-only
 
-:::{present}
-16. Move the HB100 back to $0^\circ$ on the arc.
-17. In **Beam Steering**, leave **Taper** on Uniform, enter 15 in **Steer Angle (deg)**, and press **Apply**.
-18. Record **Angle**, **Peak Gain**, and the beamwidth in Table B.
-19. Repeat for 30, and copy the eight **Phase Control** boxes into Table B.
-20. Repeat for 45; if **Angle** jumps to about $-90^\circ$, record the main lobe's angle off the trace.
-21. Press **Reset** under **Phase Control** before you leave the station.
-:::
+16. **Source back to boresight.** Move the HB100 back to $0^\circ$ on the arc,
+    $1\ \text{m}$ out.
+17. **Apply 15.** In **Beam Steering**, leave **Taper** on Uniform, enter 15 in
+    **Steer Angle (deg)**, and press **Apply**. Apply also rewrites
+    **Element Gains** with the chosen taper, which is why it stays on Uniform.
+18. **Record.** Record **Angle**, **Peak Gain**, and the half-power
+    beamwidth. The trace peaks near $15^\circ$ with a boresight source,
+    because the sweep's own ramp cancels the offsets there. The difference
+    box is **Angle** minus the Apply value.
 
-<div class="rec" data-lab="L18">
-<label>Table B, Apply 15: Angle <input data-field="b.15.angle"></label>
-<label>Table B, Apply 15: difference from the Apply value <input data-field="b.15.diff"></label>
-<label>Table B, Apply 15: half-power beamwidth <input data-field="b.15.hpbw"></label>
-<label>Table B, Apply 15: Peak Gain <input data-field="b.15.gain"></label>
-<label>Table B, Apply 30: Angle <input data-field="b.30.angle"></label>
-<label>Table B, Apply 30: difference from the Apply value <input data-field="b.30.diff"></label>
-<label>Table B, Apply 30: half-power beamwidth <input data-field="b.30.hpbw"></label>
-<label>Table B, Apply 30: Peak Gain <input data-field="b.30.gain"></label>
-<label>Table B, Apply 45: Angle <input data-field="b.45.angle"></label>
-<label>Table B, Apply 45: difference from the Apply value <input data-field="b.45.diff"></label>
-<label>Table B, Apply 45: half-power beamwidth <input data-field="b.45.hpbw"></label>
-<label>Table B, Apply 45: Peak Gain <input data-field="b.45.gain"></label>
-<label>Phase Control, E1: predicted (your Question 2(a)) <input data-field="pc.pred.1"></label>
-<label>Phase Control, E2: predicted (your Question 2(a)) <input data-field="pc.pred.2"></label>
-<label>Phase Control, E3: predicted (your Question 2(a)) <input data-field="pc.pred.3"></label>
-<label>Phase Control, E4: predicted (your Question 2(a)) <input data-field="pc.pred.4"></label>
-<label>Phase Control, E5: predicted (your Question 2(a)) <input data-field="pc.pred.5"></label>
-<label>Phase Control, E6: predicted (your Question 2(a)) <input data-field="pc.pred.6"></label>
-<label>Phase Control, E7: predicted (your Question 2(a)) <input data-field="pc.pred.7"></label>
-<label>Phase Control, E8: predicted (your Question 2(a)) <input data-field="pc.pred.8"></label>
-<label>Phase Control, E1: read back <input data-field="pc.read.1"></label>
-<label>Phase Control, E2: read back <input data-field="pc.read.2"></label>
-<label>Phase Control, E3: read back <input data-field="pc.read.3"></label>
-<label>Phase Control, E4: read back <input data-field="pc.read.4"></label>
-<label>Phase Control, E5: read back <input data-field="pc.read.5"></label>
-<label>Phase Control, E6: read back <input data-field="pc.read.6"></label>
-<label>Phase Control, E7: read back <input data-field="pc.read.7"></label>
-<label>Phase Control, E8: read back <input data-field="pc.read.8"></label>
-<label>Phase Control, E1: difference <input data-field="pc.diff.1"></label>
-<label>Phase Control, E2: difference <input data-field="pc.diff.2"></label>
-<label>Phase Control, E3: difference <input data-field="pc.diff.3"></label>
-<label>Phase Control, E4: difference <input data-field="pc.diff.4"></label>
-<label>Phase Control, E5: difference <input data-field="pc.diff.5"></label>
-<label>Phase Control, E6: difference <input data-field="pc.diff.6"></label>
-<label>Phase Control, E7: difference <input data-field="pc.diff.7"></label>
-<label>Phase Control, E8: difference <input data-field="pc.diff.8"></label>
-</div>
+    <div class="rec" data-lab="L18">
+    <label>Table B, Apply 15: Angle <input data-field="b.15.angle"></label>
+    <label>Table B, Apply 15: difference from the Apply value <input data-field="b.15.diff"></label>
+    <label>Table B, Apply 15: half-power beamwidth <input data-field="b.15.hpbw"></label>
+    <label>Table B, Apply 15: Peak Gain <input data-field="b.15.gain"></label>
+    </div>
+19. **Apply 30.** Repeat for 30, then copy the eight **Phase Control** boxes
+    beside your Part 1 prediction. Read the boxes, not the sliders: the
+    sliders stop at $\pm 180^\circ$, and Apply writes unwrapped values. The
+    read-back should match your prediction to within $1^\circ$ on every
+    element; a difference that grows with element number means your Part 1
+    frequency differs from the Signal Freq on screen.
 
-Apply also rewrites **Element Gains** with the chosen taper, so leave it on
-Uniform. The offsets stay loaded until you press Reset, and they add to every
-sweep: with Apply $30$ still loaded and the source moved to $+30^\circ$, the trace
-would peak at $90^\circ$. Step 21 leaves the kit at zero for the next lab.
-::::
+    <div class="rec" data-lab="L18">
+    <label>Table B, Apply 30: Angle <input data-field="b.30.angle"></label>
+    <label>Table B, Apply 30: difference from the Apply value <input data-field="b.30.diff"></label>
+    <label>Table B, Apply 30: half-power beamwidth <input data-field="b.30.hpbw"></label>
+    <label>Table B, Apply 30: Peak Gain <input data-field="b.30.gain"></label>
+    <label>Phase Control, E1: predicted (your Question 2(a)) <input data-field="pc.pred.1"></label>
+    <label>Phase Control, E2: predicted (your Question 2(a)) <input data-field="pc.pred.2"></label>
+    <label>Phase Control, E3: predicted (your Question 2(a)) <input data-field="pc.pred.3"></label>
+    <label>Phase Control, E4: predicted (your Question 2(a)) <input data-field="pc.pred.4"></label>
+    <label>Phase Control, E5: predicted (your Question 2(a)) <input data-field="pc.pred.5"></label>
+    <label>Phase Control, E6: predicted (your Question 2(a)) <input data-field="pc.pred.6"></label>
+    <label>Phase Control, E7: predicted (your Question 2(a)) <input data-field="pc.pred.7"></label>
+    <label>Phase Control, E8: predicted (your Question 2(a)) <input data-field="pc.pred.8"></label>
+    <label>Phase Control, E1: read back <input data-field="pc.read.1"></label>
+    <label>Phase Control, E2: read back <input data-field="pc.read.2"></label>
+    <label>Phase Control, E3: read back <input data-field="pc.read.3"></label>
+    <label>Phase Control, E4: read back <input data-field="pc.read.4"></label>
+    <label>Phase Control, E5: read back <input data-field="pc.read.5"></label>
+    <label>Phase Control, E6: read back <input data-field="pc.read.6"></label>
+    <label>Phase Control, E7: read back <input data-field="pc.read.7"></label>
+    <label>Phase Control, E8: read back <input data-field="pc.read.8"></label>
+    <label>Phase Control, E1: difference <input data-field="pc.diff.1"></label>
+    <label>Phase Control, E2: difference <input data-field="pc.diff.2"></label>
+    <label>Phase Control, E3: difference <input data-field="pc.diff.3"></label>
+    <label>Phase Control, E4: difference <input data-field="pc.diff.4"></label>
+    <label>Phase Control, E5: difference <input data-field="pc.diff.5"></label>
+    <label>Phase Control, E6: difference <input data-field="pc.diff.6"></label>
+    <label>Phase Control, E7: difference <input data-field="pc.diff.7"></label>
+    <label>Phase Control, E8: difference <input data-field="pc.diff.8"></label>
+    </div>
+20. **Apply 45.** Repeat for 45. If **Angle** jumps to about $-90^\circ$,
+    record the main lobe's angle off the trace, as in Step 14. Compare the
+    Peak Gain with the $0^\circ$ row of Table A: the commanded beam keeps the
+    source on the elements' boresight, so it does not lose the
+    $1.5\ \text{dB}$ the moved source did.
 
-::::{frame} Expected Numbers
-:::{present}
-| Quantity | Calculated | Expect |
-| :-- | :-- | :-- |
-| HPBW at $0^\circ$, $30^\circ$, $45^\circ$ | $13.0^\circ$, $15.1^\circ$, $18.7^\circ$ | each $\pm 1^\circ$ |
-| Drop, source at $30^\circ$ | $-0.6$ dB | $-0.6$ to $-0.9$ dB at $1.2\ \text{m}$ |
-| Drop, Apply $30$ | 0 dB | 0 dB |
-| First sidelobe | $-12.8$ dB | $-11$ to $-13$ dBc |
-:::
-:::{present}
-<img src="../../viz/img/L18-expected-sweep.svg"
-     alt="The expected Rectangular-tab traces for a source at 0 and at 30 degrees, sampled about 1 degree apart, with the 13.0 and 15.1 degree half-power spans, the 0.6 dB lower peak at 30 degrees, and the first sidelobes 12.8 dB down"
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
-:::
-
-The calculated column comes from the array factor for $N = 8$ at
-$d/\lambda = 0.491$. The $1/\cos\theta_0$ broadening of Lesson 18 gives
-$12.9^\circ/\cos 30^\circ = 14.9^\circ$ from the rule's broadside width, and the
-exact array factor gives $13.0^\circ$, $15.1^\circ$, and $18.7^\circ$. A sweep
-sampled about a degree apart reads each width to about a degree. dBc is dB
-relative to the main-lobe peak: subtract the trace's peak from a reading, and
-the result no longer depends on Rx Gain or the source's distance, so a
-sidelobe compares directly with the array factor's $-12.8$ dB. The sweep's floor sits about $23\ \text{dB}$ below
-the peak, and the first sidelobes come up out of it at $-11$ to $-13$ dBc.
-
-The peak drop is the element pattern's roll-off, the scan loss of Lesson 18. Its
-ideal-element bound is
-
-$$\Delta G = 10\log_{10}(\cos 30^\circ) = -0.6\ \text{dB},$$
-
-and $-1.5\ \text{dB}$ at $45^\circ$. A patch element rolls off faster, closer to
-$\cos^{1.3}\theta$ to $\cos^{1.5}\theta$ in power, so expect $-0.8$ to
-$-0.9\ \text{dB}$ at $30^\circ$; Lesson 21 derives the element pattern. These
-values hold with the source at $1.2\ \text{m}$ or more; a level taken at
-$1\ \text{m}$ comes out smaller than theory, and the $45^\circ$ row is limited by
-reflections from the room, so treat it as an estimate (Step 15). The commanded run keeps the source on the elements' boresight, so its peak does not
-drop. The peak-drop rows are hardware measurements: the simulator has no element
-pattern and reads $0.0\ \text{dB}$ in both runs.
+    <div class="rec" data-lab="L18">
+    <label>Table B, Apply 45: Angle <input data-field="b.45.angle"></label>
+    <label>Table B, Apply 45: difference from the Apply value <input data-field="b.45.diff"></label>
+    <label>Table B, Apply 45: half-power beamwidth <input data-field="b.45.hpbw"></label>
+    <label>Table B, Apply 45: Peak Gain <input data-field="b.45.gain"></label>
+    </div>
+21. **Reset.** Press **Reset** under **Phase Control** before you leave the
+    station. The offsets stay loaded until you do, and they add to every
+    sweep: with Apply 30 still loaded and the source moved to $+30^\circ$, the
+    trace would peak at $90^\circ$.
 ::::
 
 ::::{frame} No Hardware?
@@ -500,70 +291,20 @@ add `?sim=1` to the station's URL or turn on **Simulator Mode** under
 checkout of the Phaser repository, `python phaser_headless.py --sim` serves the
 same page at `http://localhost:8080`.
 
-The simulated source is fixed at boresight, so Run 1's moves have no simulated
-version. Run 2 works as written, and it is the rehearsal in Part 1 of the packet:
-Apply $30$ gives the trace a source at $+30^\circ$ would, with **Angle**
-$29.6^\circ$ and a $15^\circ$ beamwidth, and Phase Control shows the same
-offsets as the hardware. The simulator has no element pattern, so **Peak Array
-Gain** does not drop; it does not model **Rx Gain (dB)**; its tone sits at
-$-1\ \text{MHz}$; and **Find HB100** and **Calibrate** run scripted scans.
+The simulator holds its source at boresight, so Run 1's moves have no
+simulated version. Run 2 works as written, and it is the rehearsal in Part 1 of the
+packet: Apply 30 gives the trace a source at $+30^\circ$ would, and Phase
+Control shows the same offsets as the hardware. The simulator has no element
+pattern, so Peak Gain does not drop in either run; it does not model
+**Rx Gain (dB)**; its tone sits at $-1\ \text{MHz}$; and **Find HB100** and
+**Calibrate** run scripted scans.
 :::
-::::
-
-::::{frame} Part 3: The Peak-Angle Error Budget
-:::{present}
-- Sweep grid, half a step at $30^\circ$: $0.53^\circ$.
-- Arc placement and aim: $1.5^\circ$.
-- Room multipath: $1.0^\circ$.
-- Root sum of squares $1.9^\circ$: a peak within $\pm 2^\circ$ passes.
-:::
-:::{present}
-<img src="../../viz/img/L18-error-budget.svg"
-     alt="Bar chart of the peak-angle error sources at 30 degrees in degrees: sweep grid 0.53, arc placement and aim 1.5, multipath 1.0, and their root sum of squares 1.9"
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
-:::
-
-The measured peak angle will not equal the arc angle exactly, and the
-beamwidths will not equal $13.0^\circ$ and $15.1^\circ$ exactly. Three
-independent effects account for the difference, and Part 1 of the packet sized
-all three before the measurement.
-
-Sweep grid. With Use Bits on, the sweep steps the element phase one
-$2.8125^\circ$ LSB at a time. One step moves $\sin\theta$ by
-$2.8125^\circ/176.8^\circ = 0.0159$, which is $0.91^\circ$ of angle at broadside
-and $1.05^\circ$ at $30^\circ$, widening as $1/\cos\theta$. The trace holds no
-information between samples, so a peak read off it can be wrong by half a step,
-$0.53^\circ$ at $30^\circ$.
-
-Arc placement and aim. At $1\ \text{m}$, one degree of arc is
-$17.5\ \text{mm}$, so a tripod placed by eye to within $25\ \text{mm}$ gives a
-$1.4^\circ$ error in the reference angle; centering the arc and pointing the
-module bring the budget figure to $1.5^\circ$. This error is in the reference,
-not in the array.
-
-Multipath. The table, the walls, and the people nearby return copies of the
-tone. A reflection $20\ \text{dB}$ below the direct path has an amplitude ratio of
-0.1, so, depending on its phase, it raises or lowers the level by
-
-$$20\log_{10}(1 \pm 0.1) = +0.8\ \text{dB}\ \text{or}\ -0.9\ \text{dB},$$
-
-a ripple on the main lobe that moves the apparent peak by up to about a degree.
-Absorber behind the array and a clear arc both reduce it.
-
-Because the three are independent, they combine as a root sum of squares:
-
-$$\sqrt{0.53^2 + 1.5^2 + 1.0^2} = 1.9^\circ.$$
-
-A peak within $\pm 2^\circ$ of the reference meets the standard, and agreement to
-$0.1^\circ$ would point to a mistake in the comparison rather than an unusually
-good measurement.
-
 ::::
 
 ::::{frame} Your Part 2 Entries
 :class: read-only
 
-Every box you filled in on this page, in one place. Your entries stay in this
+This frame collects every box you filled in on this page. Your entries stay in this
 browser only, saved as you type. **Download my packet** writes them into Part 2
 of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
 viewer, and upload one PDF to Gradescope. If you have already typed Part 1 into
@@ -582,57 +323,41 @@ viewer instead.
 
 The L18 Lab packet is one submission for the whole lab, turned in complete before Lesson 19. It has three parts:
 
-1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it in class): the prediction table at your kit's frequency, what Phase Control will show, the beamwidths and the error budget, and a rehearsal of Run 2 on the hosted simulator.
-2. **Part 2, Measurements** (your own kit's data, recorded in class): Tables A and B, from Run 1 and Run 2.
-3. **Part 3, Writeup** (individual, after the lab): reconcile the measurements with the predictions, and three analysis problems.
+1. Part 1, Pre-Lab (individual, before the lab period, because you need it in class): the phase table at your kit's frequency, what Phase Control will show, the beamwidths, the pass standard, and a rehearsal of Run 2 on the hosted simulator.
+2. Part 2, Measurements (your own kit's data, recorded in class): Tables A and B, from Run 1 and Run 2.
+3. Part 3, Writeup (individual, after the lab): reconcile the measurements with the predictions, and three analysis problems.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">L18 Lab packet (PDF)</a>
 ::::
 
-::::{frame} Summary: The Steering Law
+::::{frame} For Part 3
 :class: read-only
 
-| Symbol / idea | What it is | Number to remember |
-| :-- | :-- | :-- |
-| $\Delta\phi = kd\sin\theta_0$ | progressive element phase for a beam at $\theta_0$ | $176.8^\circ\sin\theta_0$ at $10.525\ \text{GHz}$ |
-| Wrapped phase | $n\Delta\phi$ modulo $360^\circ$, what the shifter can produce | E8 at $30^\circ$: $258.9^\circ$ |
-| Phase Control after Apply | $-n\Delta\phi$, whole degrees, unwrapped | E8 at $30^\circ$: $-619$ |
-::::
+Part 3 of the packet is the writeup, done after class with your Part 2
+entries beside you. Its first question asks four things:
 
-::::{frame} Summary: The Trace
-:class: read-only
+1. Does every peak in Table A fall within your pass standard? For a row
+   outside it, name the error source most likely responsible.
+2. Compare the $45^\circ$ rows of Tables A and B. Why do the angle and width
+   agree while only the moved source loses level? Why does the packet not
+   ask you to compare the $30^\circ$ levels?
+3. Does the Phase Control read-back match your prediction? Explain the sign,
+   and any difference.
+4. Do the beamwidths match your predictions, and why does the lab quote them
+   to the nearest degree?
 
-| Symbol / idea | What it is | Number to remember |
-| :-- | :-- | :-- |
-| Beam-sweep trace | power against steered angle, source fixed | peaks at the source angle, or at the Apply angle for a boresight source |
-| Sweep grid | one $2.8125^\circ$ phase LSB per step | $0.91^\circ$ at $0^\circ$, $1.05^\circ$ at $30^\circ$ |
-| HPBW | half-power width, broadens off broadside | $13.0^\circ$ at $0^\circ$, $15.1^\circ$ at $30^\circ$ |
-| Scan loss | element-pattern roll-off, physical run only | $-0.6\ \text{dB}$ bound at $30^\circ$; measure at $1.2\ \text{m}$ or more |
-| Peak-angle budget | grid, aim, multipath, root sum of squares | $1.9^\circ$; pass within $\pm 2^\circ$ |
+Lesson 18's
+<a href="../L18-beam-steering/index.html#frame-two-ways-to-steer-the-peak">"Two Ways to Steer the Peak"</a>,
+<a href="../L18-beam-steering/index.html#frame-the-sign-in-phase-control">"The Sign in Phase Control"</a>,
+and
+<a href="../L18-beam-steering/index.html#frame-how-close-is-close-enough">"How Close Is Close Enough"</a>
+give the reasoning. The three analysis problems that follow read a classmate's
+sweep, recover a steer angle from Phase Control, and compare two frozen traces.
 ::::
 
 ::::{frame} Looking Ahead
-:::{present}
-- The L19 Lab uses today's bearing skill: find the live HB100 among numbered boxes.
-- Lesson 20 derives the trace's features: nulls, the $-12.8$ dB sidelobe, and the beamwidth.
-- Keep Tables A and B; that derivation starts from them.
-:::
+:class: read-only
 
-Lesson 19 and the fox hunt put today's skill to work while it is fresh: the peak
-of the sweep is a bearing, and bearings from several stations cross at the
-source.
-
-Today we compared measured beamwidths and sidelobes with values from Lesson 16's
-closed form and Lesson 18's broadening rule. Lesson 20 takes the closed form
-
-$$AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}$$
-
-and extracts every feature of the trace you just recorded from it: where the
-nulls fall, why the first sidelobe sits $12.8\ \text{dB}$ down, how the beamwidth
-follows
-
-$$\theta_{\text{HP}} \approx \frac{0.886\ \lambda}{Nd\cos\theta_0},$$
-
-and what changes when elements are switched off. Bring today's traces to that
-lesson; the derivation is easier to trust with the measurement in front of you.
+The L19 Lab uses today's skill: the peak of a sweep is a bearing, and bearings
+from several stations cross at the hidden HB100.
 ::::

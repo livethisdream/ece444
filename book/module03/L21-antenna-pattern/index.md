@@ -51,8 +51,8 @@ noise floor, and the room decide the level.
 - One trace is 162 steps.
 :::
 
-You built this trace step by step in the L18 Lab
-(<a href="../L18-lab-beam-steering/index.html#frame-the-beam-sweep-trace">"The Beam-Sweep Trace"</a>).
+You built this trace step by step in Lesson 18
+(<a href="../L18-beam-steering/index.html#frame-the-beam-sweep-trace">"The Beam-Sweep Trace"</a>).
 With Use Bits on, as in every lab preset, the kit adds one phase-shifter LSB,
 $2.8125^\circ$, to the element-to-element phase, writes that ramp to the eight
 channels, reads the peak of the FFT, and plots the reading at the angle the
