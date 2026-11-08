@@ -89,8 +89,10 @@
     <div class="ro amber" id="roSLL"><span class="k">highest sidelobe</span><span class="v" id="pSLL">—</span></div>
   </div>
 
-  <p class="note">Sweep grid 2.8125° (the ADAR1000 phase LSB), noise floor 23 dB below the
-  uniform-taper peak. The thin gray trace is the frozen uniform reference.</p>
+  <p class="note">10.0 GHz. The sweep steps one 2.8125° phase LSB a point, about 1° of
+  angle near broadside. The floor is drawn 23 dB below the uniform peak as an example;
+  a kit's floor sits 17 to 31 dB down. Peak drop and \(\eta_t\) read out on Custom; the
+  presets are Part 1 of the lab packet. The thin gray trace is the frozen uniform reference.</p>
 
 </div>
 
@@ -100,9 +102,11 @@
 
   // ---- array model ------------------------------------------------------
   const N = 8;                 // elements
-  const DL = 0.481;            // d / lambda  (d = 14 mm at 10.3 GHz)
-  const STEP = 2.8125;         // sweep step = phase LSB as a steer resolution
-  const FLOOR = -23;           // noise floor, dB below the uniform-taper peak
+  // 10.0 GHz, well away from any kit's HB100, so the widget never shows a
+  // number the L22-L23 Lab's Part 1 asks for (Neil, 2026-11-08).
+  const DL = 0.4667;           // d / lambda  (d = 14 mm at 10.0 GHz)
+  const STEP = 2.8125;         // sweep step: one phase LSB of steering phase per point
+  const FLOOR = -23;           // example floor, dB below the uniform peak; kits read 17-31 dB
   const VIEW = 60;             // plotted angle range, +/- deg
   const DBMIN = -30, DBMAX = 3;
 
@@ -124,8 +128,12 @@
     return g;
   }
 
+  // The kit steps the steering phase, not the angle: point k commands a
+  // progressive phase of k LSBs, so sin(theta) = k STEP / (360 d/lambda).
+  // That is about 1 deg of angle a point near broadside, wider toward endfire.
   const grid = [];
-  for (let k = 0; k * STEP <= 180 + 1e-9; k++) grid.push(-90 + k * STEP);
+  const KMAX = Math.floor(360 * DL / STEP);
+  for (let k = -KMAX; k <= KMAX; k++) grid.push(Math.asin(k * STEP / (360 * DL)) * 180 / Math.PI);
 
   // |AF| of the 8-element line array at one steer angle, weights a_n (linear)
   function afMag(a, thDeg) {
@@ -344,8 +352,8 @@ function SQBARS(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.90) :
     pctx.fillStyle = "#3f7d34";
     pctx.fillText(" = " + lab, bx + symW, y3 + 4);
 
-    // peak drop marker
-    if (state.drop < -0.2) {
+    // peak drop marker, labeled on Custom only (the presets are Part 1's)
+    if (state.drop < -0.2 && state.custom) {
       pctx.strokeStyle = "#8a5a00"; pctx.lineWidth = 1.4; pctx.setLineDash([3, 3]);
       pctx.beginPath(); pctx.moveTo(X(0), Y(0)); pctx.lineTo(X(0), Y(state.drop)); pctx.stroke();
       pctx.setLineDash([]);
@@ -377,21 +385,23 @@ function SQBARS(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.90) :
     const eta = taperEff(gains);
     // peak drop is read at the peak sample, which sits far above the floor
     const drop = cur.clean[m.idx];
-    const state = { cur: cur, ref: refTrace, hp: m, sl: sl, drop: drop };
+    const custom = selEl.value === "custom";
+    const hideSL = selEl.value === "blackman" || selEl.value === "cheby";
+    const state = { cur: cur, ref: refTrace, hp: m, sl: sl, drop: drop, custom: custom };
 
     drawBars(gains);
     drawPlot(state);
 
     document.getElementById("pHP").textContent = m.hp.toFixed(1) + "°";
-    document.getElementById("pPk").textContent =
+    document.getElementById("pPk").textContent = !custom ? "—" :
       neg((drop > -0.05 ? "0.0" : drop.toFixed(1))) + " dB";
-    document.getElementById("pEta").textContent =
+    document.getElementById("pEta").textContent = !custom ? "—" :
       neg((eta > 0.999 ? "0.0" : (10 * Math.log10(eta)).toFixed(1))) + " dB";
-    document.getElementById("pSLL").textContent =
-      sl.buried ? "below floor" : neg(sl.rel.toFixed(1)) + " dBc";
+    document.getElementById("pSLL").textContent = hideSL ? "—" :
+      (sl.buried ? "below floor" : neg(sl.rel.toFixed(1)) + " dBc");
     const roSLL = document.getElementById("roSLL");
-    roSLL.classList.toggle("good", !!sl.buried);
-    roSLL.classList.toggle("amber", !sl.buried);
+    roSLL.classList.toggle("good", !hideSL && !!sl.buried);
+    roSLL.classList.toggle("amber", !hideSL && !sl.buried);
     edgeCtl.classList.toggle("off", selEl.value !== "custom");
     edgeEl.disabled = selEl.value !== "custom";
     document.getElementById("edgeVal").textContent = edgeEl.value + "%";

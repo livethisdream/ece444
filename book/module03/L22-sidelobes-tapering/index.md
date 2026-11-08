@@ -183,7 +183,7 @@ renormalized, as the last row of the table in the next frame shows.
 :::{present}
 | Pedestal $P$ | First sidelobe (dB) | HPBW | $\eta_t$ |
 | :-- | :-- | :-- | :-- |
-| 1.00 (uniform) | $-12.8$ | $13.2^\circ$ | 1.000 |
+| 1.00 (uniform) | $-12.8$ | $13.3^\circ$ | 1.000 |
 | 0.50 | $-18.8$ | $14.8^\circ$ | 0.959 |
 | 0.25 | $-25.8$ | $16.2^\circ$ | 0.884 |
 | 0.08 (Hamming) | $-33.0$ | $17.9^\circ$ | 0.800 |
@@ -328,29 +328,30 @@ fall away.
 :::{present}
 | Taper | Sidelobe | HPBW | $\eta_t$ |
 | :-- | :-- | :-- | :-- |
-| Uniform | $-12.8$ | $13.2^\circ$ | 1.000 |
+| Uniform | $-12.8$ | $13.3^\circ$ | 1.000 |
 | Chebyshev $-20$ | $-20.0$ | $14.8^\circ$ | 0.956 |
 | Chebyshev $-30$ | $-30.0$ | $17.1^\circ$ | 0.841 |
 | Chebyshev $-40$ | $-40.0$ | $18.8^\circ$ | 0.761 |
 | Taylor $-30$, $\bar{n} = 4$ | $-28.3$ | $16.8^\circ$ | 0.853 |
 | Hann | $-31.8$ | $19.1^\circ$ | 0.750 |
-| Blackman | $-50.5$ | $21.7^\circ$ | 0.655 |
+| Blackman | $-50.5$ | $21.7^\circ$ | Part 1 |
 :::
 
 All eight elements at $d/\lambda = 0.481$; sidelobe levels are the highest
 sidelobe in dB relative to the peak, and the Chebyshev and Taylor designs are
-named by their design level in dB. The amplitudes and the beam broadening factor
+named by their design level in dB. Blackman's $\eta_t$ is a Part 1 question
+in the L22–L23 Lab packet. The amplitudes and the beam broadening factor
 (HPBW relative to uniform) for each:
 
 | Taper | $a_n$ (%) | Broadening |
 | :-- | :-- | :-- |
 | Uniform | 100, 100, 100, 100 | 1.00 |
-| Chebyshev $-20$ dB | 58, 66, 88, 100 | 1.12 |
-| Chebyshev $-30$ dB | 26, 52, 81, 100 | 1.30 |
+| Chebyshev $-20$ dB | 58, 66, 88, 100 | 1.11 |
+| Chebyshev $-30$ dB | 26, 52, 81, 100 | 1.29 |
 | Chebyshev $-40$ dB | 15, 42, 76, 100 | 1.42 |
 | Taylor $-30$ dB, $\bar{n} = 4$ | 29, 53, 82, 100 | 1.27 |
-| Hann | 12, 43, 77, 100 | 1.45 |
-| Blackman | 6, 27, 66, 100 | 1.64 |
+| Hann | 12, 43, 77, 100 | 1.44 |
+| Blackman | 6, 27, 66, 100 | 1.63 |
 
 The Taylor row shows both sides of the compromise. On only eight elements the
 sampled Taylor distribution does not hold its sidelobes exactly on the design
@@ -413,10 +414,7 @@ $$\theta_\text{HP} \approx 0.886\ \frac{\lambda}{N d},$$
 and a taper multiplies that by a **beam broadening factor** between about 1.1 and 1.7. The
 broadening column in the table above is that factor. Deeper sidelobes always need
 more broadening, and the widget's beamwidth readout is the direct measurement of
-it. The uniform $13.2^\circ$ in the tables is the rule's value; the exact
-eight-element pattern gives $13.3^\circ$. Every other beamwidth in the tables
-comes from its exact pattern, so each broadening factor, taken against the
-rule's $13.2^\circ$, reads about 1% high.
+it. The uniform $13.3^\circ$ in the tables is the exact eight-element pattern; the rule gives $13.2^\circ$.
 
 ::::
 
@@ -607,10 +605,10 @@ $$
 $$
 
 **Beamwidth.** The pattern measures $17.1^\circ$ at half power against
-$13.2^\circ$ uniform, a broadening factor of 1.30.
+$13.3^\circ$ uniform, a broadening factor of 1.29.
 
 **Result.** Sidelobes drop from $-12.8$ to $-30$ dB,
-a 17 dB improvement. The beam widens from $13.2^\circ$ to $17.1^\circ$, the array
+a 17 dB improvement. The beam widens from $13.3^\circ$ to $17.1^\circ$, the array
 loses $0.75\ \text{dB}$ of directivity, and the displayed peak falls
 $3.8\ \text{dB}$.
 
@@ -692,8 +690,9 @@ What limits a deeper design is not the curve but the hardware and the
 instrument. The $-50\ \text{dB}$ design puts its outer elements at 9% of full
 scale, where the gain word's 1% step is an 11% error on that element, and the
 sidelobes it was designed for will not survive that. The beam sweep's noise floor
-sits about 23 dB below the uniform peak, so the kit cannot confirm a design deeper than roughly
-$-20\ \text{dB}$ relative to its own peak. Specifying $-50\ \text{dB}$ when
+sits 17 to 31 dB below the uniform peak, depending on the setup, so the kit
+cannot confirm a design deeper than somewhere between $-15$ and $-30\ \text{dB}$
+relative to its own peak. Specifying $-50\ \text{dB}$ when
 $-30\ \text{dB}$ would do gains nothing we can measure and gives up beamwidth, directivity, and setting accuracy.
 The figure shows both effects of the 1% step: rounding the $-50\ \text{dB}$
 design to whole percent lifts its highest sidelobe to $-44.3\ \text{dB}$, and
@@ -704,25 +703,25 @@ $-100\ \text{dB}$, fills in every one of its nulls.
 
 ::::{frame} The Four GUI Presets
 :::{present}
-| Preset | HPBW, 10.3 GHz | First sidelobe |
-| :-- | :-- | :-- |
-| Uniform | $13.3^\circ$ | $-11$ to $-13$ dBc |
-| Hann | $19.1^\circ$ | below the floor |
-| Blackman | $21.7^\circ$ | below the floor |
-| Chebyshev | $22.9^\circ$ | none |
+| Preset | HPBW, 10.3 GHz |
+| :-- | :-- |
+| Uniform | $13.3^\circ$ |
+| Hann | $19.1^\circ$ |
+| Blackman | $21.7^\circ$ |
+| Chebyshev | $22.9^\circ$ |
 :::
 :::{present}
 <img src="../../viz/img/L22-preset-traces.svg"
-     alt="Theory patterns of the four GUI presets on the uniform peak's scale, floored at the sweep's minus 23 dB noise floor: uniform peaks at 0 dB with sidelobes near minus 13 dB; each tapered trace is wider, peaks lower, and shows no sidelobe above the floor"
+     alt="Theory patterns of the uniform and Hann presets on the uniform peak's scale, floored at an example noise floor of minus 23 dB: uniform peaks at 0 dB with sidelobes near minus 13 dB; the Hann trace is wider and peaks lower"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 The GUI ships four presets. Their gain lists are below, from the end element
 inward; the beamwidths in the table above are the exact patterns at
 $10.3\ \text{GHz}$. Part 1 of the L22–L23 Lab packet turns this into your own
-predictions: the beamwidths at your kit's frequency, and each preset's peak
-drop and taper efficiency, worked the way Peak Drop Versus Directivity Loss
-works the Hann preset.
+predictions: the beamwidths at your kit's frequency, and the Blackman and
+Chebyshev presets' peak drop and taper efficiency, worked the way Peak Drop
+Versus Directivity Loss works the Hann preset.
 
 | Preset | $a_n$ (%) |
 | :-- | :-- |
@@ -731,16 +730,11 @@ works the Hann preset.
 | Blackman | 6, 27, 66, 100 |
 | Chebyshev | 4, 23, 62, 100 |
 
-Two things matter when the lab compares a sweep against this table. First, the
-sweep steps one $2.8125^\circ$ phase LSB per point, which is about $0.9^\circ$
-of angle near broadside (L20 Lab), so a measured beamwidth reads to about a
-degree. Second, the sidelobe column says "below the noise floor" rather than
-giving a number. The sweep's floor sits about 23 dB
-below the uniform peak, and every tapered preset here pushes its sidelobes under
-that. The figure draws the four predictions as the sweep would show them: theory
-patterns on the uniform peak's scale, so each taper's peak drop shows, floored at
-$-23\ \text{dB}$. You will be able to state an upper bound on the sidelobes in the L22–L23 Lab,
-not a value.
+The sweep steps one $2.8125^\circ$ phase LSB per point, which is about
+$0.9^\circ$ of angle near broadside (L20 Lab), so a measured beamwidth reads to
+about a degree. The figure draws the uniform and Hann presets as the sweep would
+show them: theory patterns on the uniform peak's scale, so the taper's peak drop
+shows, floored at an example noise floor of $-23\ \text{dB}$.
 
 ```{note}
 The GUI's Chebyshev preset is not the $-30\ \text{dB}$ design worked above. Its
@@ -760,7 +754,7 @@ can show, which widens the beam by 72%.
 :::{present}
 - Read every level in dBc, below its own trace's peak.
 - Read each peak drop against a frozen uniform trace.
-- A sidelobe under the noise floor: write "below the floor" and the floor's level.
+- The noise floor sits 17 to 31 dB below the peak: read your own first.
 :::
 
 The lab records two kinds of number off the sweep, and each has its own
@@ -771,25 +765,22 @@ sidelobe level mean the same thing on every trace. A **peak drop** is read
 the other way, against a uniform trace frozen on the plot, because the drop
 is the difference between two traces' peaks.
 
-One reading will refuse to give a number. Every tapered preset pushes its
-first sidelobe below the noise floor of the sweep, so the correct entry is
-"below the floor", with the floor's level beside it, not a value read off
-the noise. Quoting $-28$ dBc from a trace whose floor sits at $-25$ dBc
-reports the receiver, not the antenna. The floor is not one fixed number:
-on my kit it sat anywhere from 17 to 31 dB below the peak, depending on the
-setup, so you read your own before you record anything.
+The noise floor is not one fixed number. On my kit it sat anywhere from 17 to
+31 dB below the peak, depending on the setup, so you read your own floor and
+record it before anything else.
 ::::
 
 ::::{frame} The Measured Sweep for Each Preset
 :class: viz-frame
 
 :::{depth}
-The widget runs the lab's sweep in the browser. Start on Uniform and note the
-first sidelobe near $-13$ dBc, then step through the presets and watch two
-things happen at once: the main lobe widens and its peak drops, while the
-sidelobes drop into the noise floor. The $\eta_t$ pill is the directivity
-loss, so compare it against the peak drop pill each time: the two never
-agree.
+The widget runs the lab's sweep in the browser at $10.0\ \text{GHz}$, away from
+any kit. Start on Uniform and note the first sidelobe near $-13$ dBc, then step
+through the presets and watch the main lobe widen and its peak drop. Then choose
+Custom and drag the edge attenuation: the $\eta_t$ readout is the directivity
+loss, so compare it with the peak drop each time; the two never agree. The
+presets' peak drops and $\eta_t$ are Part 1 of the lab packet, so the widget
+reads them out on Custom only.
 :::
 
 :::{present}
@@ -812,7 +803,7 @@ agree.
 | Cosine on pedestal | $a(p) = P + (1-P)\cos^2(\pi p)$ | Hann ($P = 0$): $-31.8$ dB, $19.1^\circ$ |
 | Chebyshev (Dolph) | Equal ripple; narrowest beam for a stated sidelobe level | $-30$ dB on 8 elements: 26, 52, 81, 100 (%) |
 | Taylor $\bar{n}$ | Chebyshev's buildable cousin; first $\bar{n}-1$ lobes held, rest decay | $-30$ dB, $\bar{n} = 4$: 29, 53, 82, 100 (%) |
-| Beam broadening | HPBW multiplier relative to uniform | 1.12 at $-20$ dB, 1.30 at $-30$ dB, 1.42 at $-40$ dB |
+| Beam broadening | HPBW multiplier relative to uniform | 1.11 at $-20$ dB, 1.29 at $-30$ dB, 1.42 at $-40$ dB |
 | Taper efficiency $\eta_t$ | $(\sum a_n)^2 / (N \sum a_n^2)$; the directivity you keep | $-30$ dB Chebyshev: $0.841$, i.e. $-0.75$ dB |
 | Peak drop | $20\log_{10}(\sum a_n / N)$; the coherent loss on the trace | Hann preset: $-4.7$ dB, of which only $-1.2$ dB is directivity |
 | PHASER conversion | $\text{Rx}_n\ (\%) = 100\ a_n / \max a_n$ | Sliders cap at 100%, resolve to about 1% |
@@ -831,10 +822,9 @@ to class: you check every reading you take in Part 2 against it.
 | :-- | :-- | :-- |
 | Question 1 | $\lambda$, $d/\lambda$, and the far-field distance | Steps 1 and 3 |
 | Question 2 | the peak drop and $\eta_t$ of a starting taper, and which one the plot shows | Step 12, Table B |
-| Question 3 | each preset's peak drop and $\eta_t$, and what the sweep shows at a sidelobe under the floor | Steps 7 to 11, Table A |
+| Question 3 | Blackman's and Chebyshev's peak drop and $\eta_t$, and what the sweep shows at a sidelobe under the floor | Steps 7 to 11, Table A |
 
-Peak Drop Versus Directivity Loss works the Hann row, and Reading a Tapered
-Sweep sets up the sidelobe column.
+Peak Drop Versus Directivity Loss works the Hann row, the model for Question 3.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet, Part 1 (PDF)</a>
 ::::

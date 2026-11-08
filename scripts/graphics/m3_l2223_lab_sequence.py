@@ -8,8 +8,9 @@ Steps 19-21  Quantization    beam held at 15 deg, Blackman taper; 7 bits against
 
 Each panel shows the eight-element row (shaded by amplitude, or lit where an
 element is on) and a thumbnail of the trace to expect, computed from the
-array factor at 10.3 GHz and clipped at the noise floor 23 dB down. The
-thumbnails are computed, not drawn by eye.
+array factor at 10.0 GHz, well away from any kit, and clipped at an example
+noise floor 23 dB down. The thumbnails are computed, not drawn by eye; they
+show each run's shape, never a number Part 1 of the packet asks for.
 
 Two layouts, served through <picture> as the L20 Lab sequence is: a 2-by-2
 grid for the half column beside the flow table on a laptop, and a shorter
@@ -31,9 +32,9 @@ OUT = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 
 NAVY, BLUE, AMBER, GRAY, INK, LIGHT = "#004a85", "#0067b9", "#8a5a00", "#5a5a5a", "#1f2a36", "#c7d2e0"
 
-F, DEL = 10.3e9, 14e-3                      # 10.3 GHz, element pitch
+F, DEL = 10.0e9, 14e-3                      # 10.0 GHz, element pitch
 LAM = 3.00e8 / F
-FLOOR = -23.0                               # dB, the sweep's noise floor
+FLOOR = -23.0                               # dB, an example noise floor
 YMIN = -30.0
 
 PW, PH = 220, 200                           # one panel
@@ -154,8 +155,8 @@ def build(cols: int, ph: int = PH) -> str:
          f'than the uniform trace and its peak sits lower. Steps 14 to 16, grating lobes: with Rx1, Rx4 and '
          f'Rx7 on, three full-height lobes. Steps 17 to 18, squint: with the source at 45 degrees, the 500 MHz '
          f'trace peaks a few degrees past the 10 MHz trace. Steps 19 to 21, quantization: a Blackman beam held '
-         f'at 15 degrees; at 2 bits a lobe rises near minus 51 degrees. Each thumbnail is the array factor at '
-         f'10.3 GHz, clipped at the noise floor.">']
+         f'at 15 degrees; at 2 bits a lobe rises out of the floor. Each thumbnail is the array factor at '
+         f'10.0 GHz, clipped at an example noise floor.">']
     for k in range(len(RUNS)):
         r, c = divmod(k, cols)
         panel(s, c * PW, r * ph, k, ph)

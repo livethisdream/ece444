@@ -40,9 +40,10 @@ with room for notes. Print from read mode for the whole lesson.
 - Today you measure all of them on your kit.
 :::
 :::{present}
-<img src="../../viz/img/L22-preset-traces.svg"
-     alt="The four GUI presets as the sweep draws them, on the uniform peak's scale and clipped at the noise floor: each taper's trace is wider than the uniform trace and peaks lower, and none shows a sidelobe above the floor"
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<picture>
+<source media="(max-width: 600px)" srcset="../../viz/img/L22-L23-lab-sequence-narrow.svg">
+<img src="../../viz/img/L22-L23-lab-sequence.svg" alt="The four runs of the L22 to L23 Lab, each with the eight-element row and a thumbnail of the expected trace, computed at 10.0 GHz. Steps 7 to 13, tapers: the Hann trace is wider than the uniform trace and its peak sits lower. Steps 14 to 16, grating lobes: Rx1, Rx4 and Rx7 on, 42 mm apart, three full-height lobes. Steps 17 to 18, squint: source at 45 degrees, the 500 MHz trace peaks a few degrees past the 10 MHz trace. Steps 19 to 21, quantization: a Blackman beam held at 15 degrees, with a lobe rising out of the floor at 2 bits." style="max-width: 100%; display: block; margin: 0 auto;">
+</picture>
 :::
 
 Lesson 22 showed that tapering the element amplitudes trades beamwidth and
@@ -64,12 +65,6 @@ prediction you made in Part 1 of the packet.
 | 14–16 | Grating lobes | Q4(a) |
 | 17–18 | Squint | Q4(b) |
 | 19–22 | Quantization, restore | Q4(c) |
-:::
-:::{present}
-<picture>
-<source media="(max-width: 600px)" srcset="../../viz/img/L22-L23-lab-sequence-narrow.svg">
-<img src="../../viz/img/L22-L23-lab-sequence.svg" alt="The four runs of the L22 to L23 Lab, each with the eight-element row and a thumbnail of the expected trace. Steps 7 to 13, tapers: the Hann trace is wider than the uniform trace and its peak sits lower. Steps 14 to 16, grating lobes: Rx1, Rx4 and Rx7 on, 42 mm apart, three full-height lobes. Steps 17 to 18, squint: source at 45 degrees, the 500 MHz trace peaks a few degrees past the 10 MHz trace. Steps 19 to 21, quantization: a Blackman beam held at 15 degrees, with a lobe near minus 51 degrees at 2 bits." style="max-width: 100%; display: block; margin: 0 auto;">
-</picture>
 :::
 
 The taper runs fill Tables A and B in Part 2 of the packet, the grating-lobe
@@ -108,8 +103,8 @@ so keep $\pm 40^\circ$ either side clear of both.
 2. **Connect.** Browse to your kit's address and wait for the pill to read
    **Connected**.
 3. **Find the source.** Press **Find HB100** and record the Signal Freq it
-   reports. If it is more than $50\ \text{MHz}$ from the frequency you used
-   in Part 1, rework your predictions before you sweep.
+   reports. If it differs by more than about 1% ($100\ \text{MHz}$) from the
+   frequency you used in Part 1, rework your predictions before you sweep.
 
    <div class="rec" data-lab="L22-L23">
    <label>Step 3: Signal Freq <input data-field="f.sig"></label>
@@ -174,10 +169,9 @@ read against the frozen uniform trace.
 9. **Load Hann.** Choose the **Hann** taper and check the eight sliders read
    12, 43, 77, 100, 100, 77, 43, 12. Check your Part 1 row for it.
 10. **Sweep Hann.** Press **Start** and record the HPBW, the peak drop against
-    the frozen uniform trace, and the first sidelobe, written "below the floor"
-    with the floor's level if it is under the noise floor. Expect the main lobe
-    to widen and the peak to fall by about your Part 1 drop, with the first
-    sidelobes gone into the floor. On a kit without the gain-slider fix, the
+    the frozen uniform trace, and the first sidelobe, entered the way your
+    Part 1, Question 3(b) answer says. Expect the main lobe to widen and the
+    peak to fall by about the Hann drop Lesson 22 works out. On a kit without the gain-slider fix, the
     slider is not linear in voltage and every taper comes out milder: Hann
     reads about $17^\circ$ and $-3.7$ dB. Record what you measure; Part 3 asks
     you to name the cause of any difference.
@@ -188,9 +182,8 @@ read against the frozen uniform trace.
     <label>Step 10, Hann: first sidelobe <input data-field="a.hann.sll"></label>
     </div>
 11. **Blackman and Chebyshev (optional).** Repeat Steps 9 and 10 for each, if
-    time allows. Their sidelobes were already below the floor after Hann, so
-    the sweep shows only the wider beam and the larger peak drop: the
-    diminishing returns of Lesson 22.
+    time allows, and compare with your Part 1 rows. Part 3's question on
+    Blackman against Hann uses these rows.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 11, Blackman: HPBW <input data-field="a.black.hpbw"></label>
@@ -201,12 +194,13 @@ read against the frozen uniform trace.
     <label>Step 11, Chebyshev: first sidelobe <input data-field="a.cheb.sll"></label>
     </div>
 12. **Design your own taper.** With Enforce Symmetric Taper on, meet this
-    specification: HPBW no wider than $17^\circ$, with the first sidelobe
+    specification: HPBW no wider than $16^\circ$, with the first sidelobe
     below $-20$ dBc. Start from the taper you worked in Part 1, Question 2,
-    30, 60, 90, 100, which predicts about $16.5^\circ$ and a first sidelobe
-    near $-23$ dBc. Set the sliders, sweep, read the HPBW and sidelobe, and
-    adjust; pull the end elements down if the sidelobe is too high, up if the
-    beam is too wide. Record your final gains and the result.
+    30, 60, 90, 100: at $10.443\ \text{GHz}$ it predicts $16.4^\circ$ and a
+    first sidelobe near $-23$ dBc, so it meets the sidelobe specification but
+    not the beam. Set the sliders, sweep, read the HPBW and sidelobe, and
+    adjust: raise the end elements to narrow the beam, lower them if the
+    sidelobe rises past $-20$ dBc. Record your final gains and the result.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 12: Rx1, Rx8 (%) <input data-field="b.g1"></label>
@@ -243,9 +237,9 @@ read against the frozen uniform trace.
     </div>
 16. **Every fourth element.** Set Rx4 and Rx7 to 0% and Rx5 to 100%, so only
     Rx1 and Rx5 are on, $4d = 56\ \text{mm}$ apart, and sweep again. Record the
-    same three. Expect the pair of lobes to move in, and the trace to climb to
-    full height at both ends of the plot: the $m = 2$ solution needs
-    $\sin\theta$ just past 1, so you see its shoulder rather than its peak.
+    same three. Expect the pair of lobes to move in toward your Part 1 angles,
+    and check both ends of the plot against your Part 1 answer for the $m = 2$
+    lobes.
     The measured peak drops in Steps 15 and 16 run about 1 dB short of the
     element count, even with elements fully on or off, for a reason that is
     still open, so I grade these two steps on the lobe angles.
@@ -289,8 +283,8 @@ read against the frozen uniform trace.
     7, then sweep the HB100 in azimuth from $-90^\circ$ to $+90^\circ$ along the
     $1.2$ m arc, aimed at the array, in about 20 s. Record the strongest lobe
     outside the main lobe, in dBc, and where it is; write "floor" where nothing
-    rises out of it. The trace keeps the last 30 s, counted from when the mode
-    starts, so begin the sweep promptly; a slower sweep runs off its end.
+    rises out of it. Signal vs Time records 30 s from when the mode starts, so
+    begin the sweep promptly; a slower sweep runs off its end.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 20, 7 bits: strongest lobe (dBc) <input data-field="e.7.lobe"></label>
