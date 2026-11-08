@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Generate the L24 Lab (null steering) lesson-page figures as inline SVG.
 
-  - L24-element-settings : the eight gain percentages and phase offsets that
-                           the course example asks students to type into the
-                           GUI's Element Gains and Phase Control panels
+  - L24-element-settings : (retired; not generated) the eight gain
+                           percentages and phase offsets of the dry-run table
   - L24-monopulse        : sum and delta together, and the signed error function
                            their ratio produces across boresight
 
@@ -179,7 +178,9 @@ def monopulse() -> None:
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    element_settings()
+    # element_settings() is no longer generated: its table at 10.443 GHz is a
+    # Part 1 answer, and no page shows it now. The SVG stays (house rule on
+    # old figures); the function stays for reference.
     monopulse()
 
 

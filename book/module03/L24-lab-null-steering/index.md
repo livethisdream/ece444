@@ -39,7 +39,7 @@ with room for notes. Print from read mode for the whole lesson.
 :::
 :::{present}
 <img src="../../viz/img/L24-pattern-null.svg"
-     alt="Uniform pattern and null-steered pattern for the 8-element array: the null-steered pattern keeps its beam at broadside, about 2 dB lower, and drops to an exact null at plus 22.5 degrees"
+     alt="Uniform and null-steered patterns of the 8-element array at 10.0 GHz: the null-steered beam stays at broadside, 2.1 dB lower, and drops to an exact null at plus 22.5 degrees"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -50,7 +50,7 @@ Lesson 24 showed that eight complex weights can hold the beam on a target and pu
 :::{present}
 | Steps | Task | From Part 1 |
 | :-- | :-- | :-- |
-| 1 to 5 | Bring up | frequency |
+| 1 to 5 | Bring up | Q1(a) |
 | 6 to 10 | A: notch | Q1, Q2 |
 | 11 to 15 | B: difference null | Q3 |
 | 16 to 22 | C: MVDR | Q4 |
@@ -63,7 +63,7 @@ Lesson 24 showed that eight complex weights can hold the beam on a target and pu
 </picture>
 :::
 
-Each procedure fills one table in Part 2 of the packet, A through D, and the last column names the Part 1 question that predicts it: your frequency and gain and phase table for the bring-up and the notch, the difference null's peaks for B, Manual's Interferer vs Target and the channel phase differences for C, and the delta null for D. Step 6 freezes the uniform trace, and every level in Procedures A and B reads against its peak. Procedure C reads its numbers from the readout tiles with the beam held on the target, not from a sweep.
+Step 6 freezes the uniform trace, and every level in Procedures A and B reads against its peak.
 ::::
 
 ::::{frame} Equipment and Setup
@@ -87,16 +87,15 @@ each side of boresight clear of walls and people for the whole lab. Lesson 24's
 1. Browse to your kit's address from Lesson 17 and wait for the pill to read
    **Connected**.
 2. With the HB100 at boresight, press **Find HB100** and record the Signal Freq
-   it reports and your source distance. Your Part 1 table uses the frequency.
+   it reports and your source distance. Compare it with your Part 1 frequency:
+   a change of $0.08$ GHz moves the notch only about $0.2^\circ$, so keep your table.
    <div class="rec" data-lab="L24">
    <label>Step 2: Signal Freq <input data-field="f.sig"></label>
    <label>Step 2: distance to the HB100 <input data-field="f.dist"></label>
    </div>
 3. Press **Calibrate** and wait for it to finish, with the HB100 still at
    boresight. An uncalibrated array fills a null on its own, and a shallow
-   notch would then measure the calibration rather than your weights. If the
-   uniform sweep in Step 6 shows first sidelobes more than about 2 dB apart,
-   calibrate again.
+   notch would then measure the calibration rather than your weights.
 4. Set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$ dBFS, beam at $0^\circ$,
    and record it. Leave it there for the whole lab.
    <div class="rec" data-lab="L24">
@@ -127,8 +126,8 @@ each side of boresight clear of walls and people for the whole lab. Lesson 24's
    error moves the notch to $-22.5^\circ$, where it is easy to miss.
 9. Press **Start** and read the new trace against the frozen one: the new
    **Peak Gain**, the notch's depth below the frozen peak, and the notch's
-   angle. Expect the main lobe about 2 dB down and the notch near
-   $+22^\circ$, 46 to 50 dB down in an open room. A notch much shallower than
+   angle. Expect the main lobe about 2 dB down and the notch at
+   $+22.5^\circ$, within one step, 46 to 50 dB down in an open room. A notch much shallower than
    40 dB points to the room first: a wall or a person beside the kit, or a
    stale calibration.
    <div class="rec" data-lab="L24">
@@ -309,8 +308,13 @@ entries beside you. Its first three questions ask:
 Lesson 24's
 <a href="../L24-null-steering/index.html#frame-measured-null-depth">"Measured Null Depth"</a>
 and <a href="../L24-null-steering/index.html#frame-two-limits-of-two-channels">"Two Limits of Two Channels"</a>
-give the mechanisms. The two analysis problems that follow choose between
-manual and adaptive nulling, and read the monopulse pair.
+give the mechanisms. For the notch angle, and for the boresight offset the
+monopulse question asks about, Lesson 19's
+<a href="../L19-direction-finding/index.html#frame-the-bearing-error-budget">"The Bearing Error Budget"</a>
+sizes the error of aligning a kit by eye, and the L19 Lab's
+<a href="../L19-lab-fox-hunt/index.html#frame-reference-shot">"Reference Shot"</a>
+checks a setup against a known angle. The two analysis problems that follow
+choose between manual and adaptive nulling, and read the monopulse pair.
 ::::
 
 ::::{frame} Looking Ahead
