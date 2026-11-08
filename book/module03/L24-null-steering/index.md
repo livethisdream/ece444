@@ -138,7 +138,7 @@ $$
 
 - That is the L18 phase ramp $\Delta\phi = kd\sin\theta_0$, written as a vector.
 - The weight carries the **negative** of the arrival phase.
-- Flip the sign and the null lands at $-\theta_1$.
+- The sign of every weight's phase follows one course-wide convention.
 :::
 
 Now read the beam-steering result of <a href="../L18-beam-steering/index.html#frame-sign-of-the-compensating-ramp">Lesson 18</a> in this language. To point the beam at $\theta_0$ we want all $N$ terms of the sum to add in phase when $\theta = \theta_0$, which happens when each weight cancels its own steering-vector phase:
@@ -153,7 +153,7 @@ $$
 The conjugate steering vector *is* the progressive phase ramp $\Delta\phi = kd\sin\theta_0$ you have been programming into the ADAR1000s since the L18 Lab. With $\mathbf{w}_\text{d}$ applied, $y(\theta_0) = N$ — every element contributes a unit phasor pointing the same way — and that is the peak of the pattern.
 
 :::{note}
-Two conventions matter and both are course-wide. We measure angles $\theta$ from broadside, and the weight that steers to $\theta_0$ carries $e^{-jnkd\sin\theta_0}$, the *negative* of the arrival phase. Getting the sign backwards puts the beam, or the null, at $-\theta_0$. On the PHASER that shows up as a notch on the wrong side of the sweep, which is the most common error in the L24 Lab.
+Two conventions matter and both are course-wide. We measure angles $\theta$ from broadside, and the weight that steers to $\theta_0$ carries $e^{-jnkd\sin\theta_0}$, the negative of the arrival phase. Enter every phase with that sign; Part 1 of the L24 Lab packet has you work out what a sign error does to the notch.
 :::
 ::::
 
@@ -462,7 +462,7 @@ $$
 \qquad \psi = kd\sin\theta .
 $$
 
-Wherever the two halves arrive in phase they cancel, and on each side of that null a peak rises. Part 1 of the lab packet has you show where the null sits and find the two peaks. This is the **monopulse difference beam**, which the last two frames of this lesson use for angle measurement.
+Wherever the two halves arrive in phase they cancel, and on each side of that null a peak rises. Part 1 of the lab packet has you show where the null sits and find the two peaks. This is the **monopulse difference beam**, which the monopulse frames at the end of this lesson use for angle measurement.
 
 The $+22.5^\circ$ notch exists because we solved for eight weights, and it moves only when we solve again. The difference null exists because the two subarrays are identical, and it stays put no matter what the signal does. With no arithmetic behind it, its depth on the kit is a direct reading of what the room lets through: about 40 dB in an open room, and the same 22 dB or so as the notch in a cramped one.
 ::::
@@ -532,36 +532,46 @@ Manual null steering has eight degrees of freedom and can place several nulls at
 ::::{frame} Sum and Delta
 :::{present}
 <img src="../../viz/img/L24-monopulse.svg"
-     alt="Left: sum and delta channel levels from minus 20 to plus 20 degrees; the sum is flat at its peak while the delta passes through an exact zero on boresight. Right: the error function, zero on boresight and straight within about plus or minus 5 degrees with a slope of 0.11 per degree"
-     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+     alt="Top: sum and delta beam levels from minus 20 to plus 20 degrees at 10.0 GHz; the sum is flat at its peak while the delta passes through a zero on the target. Bottom: the error the GUI plots, the delta over sum ratio signed by side, zero on the target, close to a straight line of slope 0.10 per degree near it, clamped at plus and minus 1, and flipping sign past the sum beam's first nulls"
+     style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- The sum is flat at boresight; the delta climbs out of a zero.
-- Their ratio turns one look into a signed angle.
+- The sum is flat on the target; the delta climbs out of a zero.
+- Their ratio, signed by side, turns one look into an angle.
 :::
 
-Every measurement so far has come from a sweep: the array steps its commanded angle across the field of view and records power at each step. A sweep takes time, and a tracking radar does not have it. **Monopulse** forms both beams at once from the two subarray channels, adding them for $\Sigma$ and subtracting them for $\Delta$, the difference beam above. The sum beam is flat at its peak, so its level barely changes as the target drifts a degree off axis. The delta beam is zero on boresight and climbs steeply out of that zero, so its level changes a great deal over the same degree. Dividing one by the other turns that small angle into a large, readable number.
+Every measurement so far has come from a sweep: the array steps its commanded angle across the field of view and records power at each step. A sweep takes time, and a tracking radar does not have it. **Monopulse** forms two beams at once from the two subarray channels: their sum, $\Sigma$, and their difference, $\Delta$, the channel of elements 5–8 subtracted from the channel of elements 1–4. The sum beam is flat at its peak, so its level barely changes as the target drifts a degree off the beam. The delta beam is zero where the two channels arrive in phase and climbs steeply out of that zero, so its level changes a great deal over the same degree. Dividing one by the other turns that small angle into a large, readable number.
 ::::
 
 ::::{frame} The Error Function
 :::{present}
 $$
-\varepsilon(\theta) = -\ \frac{\text{Im}\lbrace \Delta\ \Sigma^{*} \rbrace}{\vert \Sigma \vert^{2}}
+\begin{aligned}
+\varepsilon &= \text{sign}\left(\angle\ \Sigma\Delta^{*}\right) \frac{\vert\Delta\vert}{\vert\Sigma\vert} \\
+&= \pm\ \vert\tan 2\psi\vert \\
+&\approx 2kd\ \theta
+\end{aligned}
 $$
 
-- Zero on boresight, with opposite signs on the two sides.
-- Slope $0.11$ per degree, straight within about $\pm 5^\circ$.
+- Its sign says which side of the beam the target is on.
+- At $10.0$ GHz the slope is $0.10$ per degree, straight within about $\pm 5^\circ$.
 :::
 
-The two subarrays sit four elements apart, so $\Delta$ arrives in quadrature with $\Sigma$, and the useful quantity is the imaginary part of their product. The error function is zero on boresight, positive on one side and negative on the other, and straight within about $\pm 5^\circ$, well inside the array's $13^\circ$ beamwidth. A target one degree off axis reads about $0.11$, and a tracker that drives that reading back to zero holds the beam on the target far more finely than the beamwidth alone would allow, from one look and with no sweep.
+With each subarray summing four elements, the two channels differ only by the phase $4\psi$ between their centers, so $\Sigma \propto 1 + e^{j4\psi}$ and $\Delta \propto 1 - e^{j4\psi}$. Their ratio has magnitude $\vert\tan 2\psi\vert$, which is zero on the target and, for a small offset, close to $2\psi = 2kd\sin\theta \approx 2kd\ \theta$, with $\theta$ the target's angle from the beam in radians. The magnitude alone cannot say which side the target is on. The phase can: $\Sigma\Delta^{*}$ is purely imaginary, $\Delta$ arriving a quarter cycle ahead of $\Sigma$ on one side of the beam and a quarter cycle behind on the other, so the sign of that phase is the side. The kit reads a positive error when the target sits on the $+\theta$ side of the beam.
 
-The GUI plots a normalized form of the same comparison, taking its sign from the phase difference between the two channels and its magnitude from the two channel levels in dB,
+At $10.0$ GHz, $kd = 2.932$ rad, so the slope is $2kd = 5.86$ per radian, or $0.10$ per degree. The ratio does not depend on the signal level, because both beams scale together. The GUI clamps the plotted error at $\pm 1$, which it reaches about $8^\circ$ off the beam here. Past the sum beam's first nulls the sign flips, so the error points the wrong way once the target is more than a beamwidth off.
+::::
 
-$$
-\text{sign}(\Delta\phi)\ \frac{\Sigma_{\text{dB}} - \Delta_{\text{dB}}}{\Sigma_{\text{dB}} + \Delta_{\text{dB}}},
-$$
+::::{frame} Closing the Loop
+:::{present}
+- One sweep finds the target; after that the beam holds and reads $\varepsilon$.
+- Each update steps the steering phase one LSB, about $1^\circ$, toward the side $\varepsilon$ points.
+- A radar steps in proportion to $\varepsilon$, so it closes faster.
+:::
 
-so the trace stays bounded and on screen however strong the target is. The L24 Lab's tracker reads this trace and drives it back to zero as you sweep the HB100 in azimuth.
+A tracker turns the error into motion. On the PHASER, choosing Tracking from the Mode menu runs ADI's monopulse loop. The first update is an ordinary sweep that locks the beam on the strongest return. Every update after that holds the beam at its current steering phase, forms $\Sigma$ and $\Delta$ there, and moves the steering phase one $2.8125^\circ$ LSB, about $1^\circ$ of angle near boresight, toward the side the sign of $\varepsilon$ points. On the target the sign dithers, and the beam settles within one step of it. The loop keeps running until the mode changes.
+
+Stepping by the sign alone is the simplest loop that works: it needs no slope, and a level change cannot upset it. It is also slow: a source that moves more than about one step per update outruns it, and one that moves past the sum beam's first null, where the sign flips, is lost. A tracking radar steps in proportion to the error, a large correction when the target is far off and a small one near it, which is why the slope matters: it converts the reading into degrees. The loop uses the two digital channels as the manual beamformer forms them, with both digital beams at $0^\circ$; MVDR forms no delta beam, so there is no error to track under it.
 ::::
 
 ::::{frame} Summary
@@ -578,7 +588,8 @@ so the trace stays bounded and on screen however strong the target is. The L24 L
 | Notch depth | one-step channel errors, then the room | $-46$ to $-50$ dB open, $-22$ to $-24$ dB cramped |
 | Difference beam | Beam 1 Phase $= 180^\circ$ subtracts the two channels | a structural null, no computed weight |
 | MVDR | $\mathbf{w} = \mathbf{R}^{-1}\mathbf{s} / (\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s})$ from $K$ snapshots | one null from two channels; loading $0.1$, $K = 1024$ |
-| Monopulse error | signed ratio of delta to sum, from one look | zero on boresight, slope $0.11$ per degree |
+| Monopulse error | $\vert\Delta\vert/\vert\Sigma\vert$, signed by side, from one look | zero on the target, slope $2kd$ per radian; $0.10$ per degree at $10.0$ GHz |
+| Tracking | one LSB per update, by the error's sign | settles within one step of the target |
 | Maximum nulls | one weight holds the beam | $N - 1 = 7$ manual, one adaptive |
 ::::
 
@@ -604,7 +615,7 @@ Part 1 of the L24 Lab packet is the pre-lab. Do it before the lab period, at the
 | Question 2 | the notch depth that one-step channel errors allow | Step 9, Table A |
 | Question 3 | the difference null and the angles of its two peaks | Step 14, Table B |
 | Question 4 | Manual's Interferer vs Target at $+20^\circ$, the channel phase difference at $+20^\circ$ and $+30^\circ$, and what MVDR does to the target at $+30^\circ$ | Steps 18 to 21, Table C |
-| Question 5 | where the delta null and the error-function zero sit, and how deep the delta null reads | Step 26, Table D |
+| Question 5 | where the delta null and the error's zero sit, which side reads positive, the error's slope at your frequency, and how deep the delta null reads | Steps 25 to 27, Table D |
 
 This lesson works its examples at $10.0\ \text{GHz}$, well away from any kit's HB100, so it shows the method without giving your answers. Work yours at your kit's frequency: that is the table you type in.
 

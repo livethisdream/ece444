@@ -224,33 +224,50 @@ the beam held on the target.
 ::::{frame} Procedure D: Watch It Track
 :class: read-only
 
+% Steps 26-27 need livethisdream/phaser PR #97 (closed-loop Tracking, the
+% linear |delta|/|sum| error) installed on the kit; before it, Tracking was a
+% plain beam sweep and the error a dB ratio.
+
 23. Open **Lab Presets** and choose the **Tracking** preset; its buttons respond
-    only while the section is open. It sets the digital layer up to form both
-    beams at once. Check **Signal BW** again, which the preset resets.
-24. Set the taper to **Uniform** under Element Gains, and check that **Beam 1
-    Phase** reads $0^\circ$ in Digital Beam Forming. The preset resets the phase
-    but not yet the taper, and a leftover taper changes every reading below.
-25. In **Plot Options**, turn on **Show Monopulse Delta Beam** and **Show
-    Monopulse Error Function**.
-26. On the **Rectangular** tab, press **Start**. The sum trace peaks on
+    only while the section is open. It turns on the delta and error traces,
+    sets both digital beams to $0^\circ$, and leaves the beam sweeping. Check
+    **Signal BW** again, which the preset resets.
+24. Check that the taper is **Uniform** under Element Gains, and that Digital
+    Beam Forming reads Mode **Manual** with **Beam 0 Phase** and **Beam 1
+    Phase** at $0^\circ$. MVDR forms no delta beam, so the tracker holds still
+    under it.
+25. On the **Rectangular** tab, press **Start**. The sum trace peaks on
     boresight and the delta trace nulls there. Record the delta null's depth in
-    dBc, below the sum trace's peak, and its angle, and the angle where the error trace crosses zero.
+    dBc, below the sum trace's peak, and its angle.
     <div class="rec" data-lab="L24">
-    <label>Step 26: delta null depth (dBc) <input data-field="d.depth"></label>
-    <label>Step 26: delta null angle <input data-field="d.angle"></label>
-    <label>Step 26: error-function zero crossing <input data-field="d.zero"></label>
+    <label>Step 25: delta null depth (dBc) <input data-field="d.depth"></label>
+    <label>Step 25: delta null angle <input data-field="d.angle"></label>
     </div>
-27. Open the **Tracking** tab and press **Start**. Its y-axis is the steering
-    angle, plotted against sweep count. Sweep the HB100 slowly in azimuth along
-    the $1.2$ m arc. The tracker reads the error function,
-    drives it back toward zero, and follows the source without sweeping. Expect
-    it to follow smoothly to about $\pm 45^\circ$; past about $\pm 48^\circ$ it
-    loses the source and snaps to the $\pm 90^\circ$ limits or to a sidelobe near
-    $+60^\circ$ to $+70^\circ$, rather than drifting, and locks on again within
-    one sweep once the source is back inside $\pm 45^\circ$. Record how far it
-    followed and how it behaved when it lost the source.
+26. Read the **Error** trace. It crosses zero once near boresight, where the
+    beam points at the HB100. Record that angle, and the sign of the error on
+    each side of it: the kit reads a positive error when the source sits on the
+    $+\theta$ side of the beam, so expect it positive at negative steer angles
+    and negative at positive ones.
     <div class="rec" data-lab="L24">
-    <label>Step 27: how far it followed, and how it lost the source <input data-field="d.track"></label>
+    <label>Step 26: error zero crossing <input data-field="d.zero"></label>
+    <label>Step 26: sign below and above the crossing <input data-field="d.sign"></label>
+    </div>
+27. Choose **Tracking** from the **Mode** menu and open the **Tracking** tab,
+    which plots the tracked steering angle against update number. The first
+    update sweeps and locks on the HB100; after that each update holds the beam
+    and steps it one phase LSB toward the side the error points, and the
+    Rectangular plot marks where the beam sits. Move the HB100 slowly in
+    azimuth along the $1.2$ m arc and watch the tracked angle follow it. If the
+    beam walks away from the source instead, the kit's direction setting is
+    reversed: stop and tell me. Then bring the HB100 back to boresight, turn
+    the kit on its stand to $10^\circ$ and $20^\circ$ each way by the stand's
+    scale, and record the tracked angle at each, once it settles.
+    <div class="rec" data-lab="L24">
+    <label>Step 27: how far it followed the moving HB100 <input data-field="d.track"></label>
+    <label>Step 27: stand at −20°, tracked angle <input data-field="d.t.m20"></label>
+    <label>Step 27: stand at −10°, tracked angle <input data-field="d.t.m10"></label>
+    <label>Step 27: stand at +10°, tracked angle <input data-field="d.t.p10"></label>
+    <label>Step 27: stand at +20°, tracked angle <input data-field="d.t.p20"></label>
     </div>
 ::::
 
@@ -308,7 +325,9 @@ entries beside you. Its first three questions ask:
 Lesson 24's
 <a href="../L24-null-steering/index.html#frame-measured-null-depth">"Measured Null Depth"</a>
 and <a href="../L24-null-steering/index.html#frame-two-limits-of-two-channels">"Two Limits of Two Channels"</a>
-give the mechanisms. For the notch angle, and for the boresight offset the
+give the mechanisms; "Closing the Loop" explains the tracker. Procedure D's
+tracking needs the current Phaser software, with closed-loop Tracking,
+installed on your kit. For the notch angle, and for the boresight offset the
 monopulse question asks about, Lesson 19's
 <a href="../L19-direction-finding/index.html#frame-the-bearing-error-budget">"The Bearing Error Budget"</a>
 sizes the error of aligning a kit by eye, and the L19 Lab's

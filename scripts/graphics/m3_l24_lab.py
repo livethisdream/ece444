@@ -3,8 +3,8 @@
 
   - L24-element-settings : (retired; not generated) the eight gain
                            percentages and phase offsets of the dry-run table
-  - L24-monopulse        : sum and delta together, and the signed error function
-                           their ratio produces across boresight
+  - L24-monopulse        : sum and delta together, and the error the GUI plots
+                           (phaser #97): |delta|/|sum| signed by side, at 10.0 GHz
 
 Array is the PHASER's: N = 8, d = 14 mm, worked at 10.443 GHz, the Find HB100
 frequency of phaser-00 in the 2026-10-23 dry run (d/lambda = 0.487), with the
@@ -120,60 +120,85 @@ def element_settings() -> None:
 
 # ------------------------------------------------------------------ figure 4
 def monopulse() -> None:
-    """Sum and delta together, and the error function their ratio produces."""
-    th = np.linspace(-20, 20, 4001)
-    A = np.exp(1j * np.outer(np.sin(np.deg2rad(th)), NIDX) * KD)
+    """Sum and delta, and the error the GUI plots, as house-style SVG.
+
+    Worked at 10.0 GHz, the lesson's frequency (no kit's, so no Part 1
+    answer). The error is the kit's since livethisdream/phaser #97:
+    sign(phase(sum * conj(delta))) * |delta| / |sum|, clamped to +/-1,
+    positive when the source sits on the +theta side of the beam. With the
+    two subarrays four elements apart, |delta| / |sum| = |tan(2 psi)|, so
+    near the beam the error is about 2 kd theta: 0.10 per degree here.
+    """
+    from svg_font_stack import apply_font_stack as _afs
+    kd = 2 * np.pi * 0.014 * 10.0e9 / 3.00e8
+    th = np.linspace(-20, 20, 1601)
+    A = np.exp(1j * np.outer(np.sin(np.deg2rad(th)), NIDX) * kd)
     sig = A @ np.ones(N)
     dlt = A @ np.r_[np.ones(4), -np.ones(4)]
-    ps = 20 * np.log10(np.maximum(np.abs(sig), 1e-9) / N)
-    pd = 20 * np.log10(np.maximum(np.abs(dlt), 1e-9) / N)
+    ps = np.maximum(20 * np.log10(np.maximum(np.abs(sig), 1e-9) / N), -40)
+    pd = np.maximum(20 * np.log10(np.maximum(np.abs(dlt), 1e-9) / N), -40)
+    side = np.sign(np.angle(sig * np.conj(dlt)))
+    side *= np.sign(side[np.argmin(np.abs(th - 3))])     # the kit's convention: + on the +theta side
+    err = np.clip(side * np.abs(dlt) / np.maximum(np.abs(sig), 1e-12), -1, 1)
+    slope = 2 * kd * np.pi / 180
 
-    # the two subarrays are displaced, so delta sits in quadrature with sum:
-    # the error signal is Im(delta * conj(sum)) / |sum|^2
-    err = -np.imag(dlt * np.conj(sig)) / np.abs(sig) ** 2
+    W, PH, GAP = 560, 250, 34
+    L, R, T = 72, 16, 12
+    pw = W - L - R
+    ph = PH - 44
+    H = T + PH + GAP + ph + 58
 
-    fig, (a1, a2) = plt.subplots(2, 1, figsize=(4.8, 5.6))
+    def X(a):
+        return L + (a + 20) / 40 * pw
 
-    a1.set_xlim(-20, 20)
-    a1.set_ylim(-40, 3)
-    a1.set_xticks(range(-20, 21, 10))
-    a1.set_xlabel("angle from broadside (deg)")
-    a1.set_ylabel("channel level (dB)")
-    a1.grid(color=RULE, linewidth=0.8)
-    a1.plot(th, ps, color=GRAY, linewidth=1.6, label="sum")
-    a1.plot(th, pd, color=NAVY, linewidth=2.6, label="delta")
-    a1.annotate("delta: exact zero\non boresight", xy=(0.3, -38), xytext=(4.0, -36),
-                fontsize=11.5, color=RED, va="bottom",
-                arrowprops=dict(arrowstyle="->", color=RED, linewidth=1.2))
-    a1.annotate("sum is flat here", xy=(0.5, -0.2), xytext=(2.0, -23.0),
-                fontsize=11.5, color=GRAY,
-                arrowprops=dict(arrowstyle="->", color=GRAY, linewidth=1.2))
-    a1.legend(loc="lower left", fontsize=11.5, bbox_to_anchor=(0.2, 0.0))   # between the sum null and the delta zero
+    out = [f'<svg viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Top: sum and '
+           f'delta beam levels from minus 20 to plus 20 degrees at 10.0 GHz; the sum is flat at its peak while the '
+           f'delta passes through a zero on the target. Bottom: the error the GUI plots, the delta over sum ratio '
+           f'signed by side, zero on the target, close to a straight line of slope {slope:.2f} per degree near it, '
+           f'clamped at plus and minus 1, and flipping sign past the sum beam\'s first nulls.">']
 
-    win = np.abs(th) <= 12
-    a2.set_xlim(-12, 12)
-    a2.set_ylim(-2.2, 2.2)
-    a2.set_xticks(range(-12, 13, 4))
-    a2.set_xlabel("angle from broadside (deg)")
-    a2.set_ylabel("error function")
-    a2.grid(color=RULE, linewidth=0.8)
-    a2.axhline(0, color="#8a929c", linewidth=1.0)
-    a2.axvline(0, color="#8a929c", linewidth=1.0)
-    lin = np.abs(th) <= 5
-    a2.plot(th[win], err[win], color=NAVY, linewidth=2.6)
-    a2.plot(th[lin], err[lin], color=GREEN, linewidth=3.4)
-    a2.text(-11.4, 1.82, "slope 0.11 per degree", fontsize=11.5, color=INK)
-    a2.annotate("straight within +/-5 deg",
-                xy=(-3.6, err[np.argmin(np.abs(th + 3.6))]), xytext=(-11.4, 1.18),
-                fontsize=11.5, color=GREEN,
-                arrowprops=dict(arrowstyle="->", color=GREEN, linewidth=1.2))
-    a2.annotate("zero on boresight", xy=(0.15, 0.02), xytext=(2.2, -1.85),
-                fontsize=11.5, color=RED,
-                arrowprops=dict(arrowstyle="->", color=RED, linewidth=1.2))
+    def frame(y0, ylo, yhi, ticks, ylab):
+        Y = lambda v: y0 + (yhi - v) / (yhi - ylo) * ph
+        out.append(f'<rect x="{L}" y="{y0}" width="{pw}" height="{ph}" fill="#f6f9fc" stroke="{RULE}" stroke-width="1"/>')
+        for v in ticks:
+            out.append(f'<line x1="{L}" y1="{Y(v):.1f}" x2="{L + pw}" y2="{Y(v):.1f}" stroke="{RULE}" stroke-width="0.8"/>')
+            lab = f"{v:g}".replace("-", "−")
+            out.append(f'<text x="{L - 8}" y="{Y(v) + 6:.1f}" text-anchor="end" font-size="16" fill="{GRAY}">{lab}</text>')
+        for a in (-20, -10, 0, 10, 20):
+            out.append(f'<line x1="{X(a):.1f}" y1="{y0}" x2="{X(a):.1f}" y2="{y0 + ph}" stroke="{RULE}" stroke-width="0.8"/>')
+            lab = f"{a}°" if a >= 0 else f"−{-a}°"
+            out.append(f'<text x="{X(a):.1f}" y="{y0 + ph + 22}" text-anchor="middle" font-size="16" fill="{GRAY}">{lab}</text>')
+        out.append(f'<text x="20" y="{y0 + ph / 2}" text-anchor="middle" font-size="17" fill="{INK}" '
+                   f'transform="rotate(-90 20 {y0 + ph / 2})">{ylab}</text>')
+        return Y
 
-    fig.tight_layout()
-    finalize(fig, "L24-monopulse")
+    def line(xs, ys, Y, col, lw):
+        pts = " ".join(f"{X(a):.1f},{Y(v):.1f}" for a, v in zip(xs, ys))
+        out.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="{lw}" stroke-linejoin="round"/>')
 
+    # top: the two beams
+    Y1 = frame(T, -40, 0, (0, -10, -20, -30, -40), "level (dB)")
+    line(th, ps, Y1, "#9aa3ad", 2.0)
+    line(th, pd, Y1, NAVY, 2.8)
+    for k, (col, lw, lab) in enumerate((("#9aa3ad", 2.0, "Σ, sum"), (NAVY, 2.8, "Δ, difference"))):
+        yy = Y1(-27 - 8 * k)
+        out.append(f'<line x1="{X(4.0):.1f}" y1="{yy:.1f}" x2="{X(6.4):.1f}" y2="{yy:.1f}" stroke="{col}" stroke-width="{lw + 0.6}"/>')
+        out.append(f'<text x="{X(6.9):.1f}" y="{yy + 6:.1f}" font-size="17" fill="{INK}">{lab}</text>')
+    out.append(f'<text x="{X(-1.4):.1f}" y="{Y1(-36) + 6:.1f}" text-anchor="end" font-size="17" font-weight="700" fill="{NAVY}">zero on target</text>')
+    # bottom: the error
+    y2 = T + PH + GAP
+    Y2 = frame(y2, -1.2, 1.2, (-1, 0, 1), "error")
+    lin = np.abs(th) <= 6
+    line(th[lin], slope * th[lin], Y2, GREEN, 6.0)
+    line(th, err, Y2, NAVY, 2.6)
+    out.append(f'<text x="{X(-19):.1f}" y="{Y2(0.62) + 6:.1f}" font-size="16" fill="{GREEN}" font-weight="700">'
+               f'slope {slope:.2f} per degree</text>')
+    out.append(f'<text x="{X(1.5):.1f}" y="{Y2(-0.62) + 6:.1f}" font-size="16" fill="{INK}">+θ side reads +</text>')
+    out.append(f'<text x="{L + pw / 2}" y="{H - 12}" text-anchor="middle" font-size="17" fill="{INK}">'
+               f'target angle from the beam</text>')
+    out.append("</svg>")
+    (OUT / "L24-monopulse.svg").write_text(_afs("\n".join(out)) + "\n", encoding="utf-8")
+    print(f"wrote {OUT / 'L24-monopulse.svg'}")
 
 
 def main() -> None:
