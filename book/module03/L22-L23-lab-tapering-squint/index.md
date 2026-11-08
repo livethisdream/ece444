@@ -44,7 +44,9 @@ the **directivity loss** the array suffers, and the gap between them
 is several decibels.
 
 The second half of the lab keeps the same kit for the three departures Lesson
-23 derived and no taper can fix: grating lobes, beam squint, and phase quantization. You
+23 derived: grating lobes, beam squint, and phase quantization. No taper can
+fix them, because they come from the element spacing, the frequency, and the
+phase shifter's resolution, not from the amplitudes a taper sets. You
 measure each one against the number that lesson gave you for it.
 :::
 ::::
@@ -109,19 +111,22 @@ from.
 
 ::::{frame} The Floor Sets What You Can Report
 :::{present}
-- Tapered sidelobes sit below the sweep's floor: write "below the floor" and its level.
-- We first estimated the floor at $-23$ dBc.
-- My kit read floors from $-17$ to $-31$ dBc, setup to setup.
+- Tapered sidelobes drop below the noise floor: write "below the floor" and its level.
+- My kit read floors from $-17$ to $-31$ dBc, setup to setup: read your own.
 :::
 
-One measurement will refuse to give you a number. Every tapered preset pushes
-its first sidelobe below the floor of the sweep, so the correct table entry in
-those rows is "below the floor", with the floor's level beside it, not a
-value read off the grass. Quoting $-27$ dBc from a trace whose floor is at
-$-23$ dBc reports the noise, not the antenna.
+Every level on this page is in **dBc**, decibels below the main-lobe peak of
+the same trace: the plot reads dBFS, and subtracting the peak's reading from
+each value, as in the L21 Lab, makes a sidelobe level mean the same thing on
+every trace whatever its peak.
 
-The floor itself is not one fixed number. We first estimated it at about
-$23$ dB under the uniform-taper peak. My test run read floors from
+One measurement will refuse to give you a number. Every tapered preset pushes
+its first sidelobe below the noise floor of the sweep, so the correct table
+entry in those rows is "below the floor", with the floor's level beside it,
+not a value read off the noise. Quoting $-28$ dBc from a trace whose floor is
+at $-25$ dBc reports the noise, not the antenna.
+
+The floor itself is not one fixed number. My test run read floors from
 $-17$ to $-31$ dBc on the same kit, depending on the setup, and a wall beside
 the kit raised a false lobe to $-9$ dBc. Read your own floor before you
 record anything, and write it at the top of Part 2.
@@ -135,7 +140,7 @@ record anything, and write it at the top of Part 2.
 The widget below runs the same sweep in the browser. Start on Uniform and note
 the first sidelobe near $-13$ dBc, then step through the presets and watch two
 things happen at once: the main lobe widens and its peak drops, while the
-sidelobes sink into the grass. The $\eta_t$ pill is the directivity loss, so
+sidelobes drop into the noise floor. The $\eta_t$ pill is the directivity loss, so
 compare it against the peak drop pill each time — the two never agree.
 :::
 
@@ -158,7 +163,9 @@ compare it against the peak drop pill each time — the two never agree.
 :::
 
 The taper runs measure the defect a taper can fix. Lesson 23 derived the three
-that it cannot: **grating lobes**, **beam squint**, and **phase quantization**.
+that it cannot, because they come from the spacing, the frequency, and the
+phase shifter's resolution rather than the amplitudes: **grating lobes**,
+**beam squint**, and **phase quantization**.
 The rest of the lab measures all three on the same kit, each the same way as
 the tapers: predict, sweep, record. The predictions above are at $10.443\ \text{GHz}$; work yours at your
 kit's own frequency.
@@ -189,7 +196,7 @@ sweep.
 ::::
 
 
-::::{frame} Quantization: Hold the Beam, Move the Source
+::::{frame} Quantization: Hold the Beam, Sweep the Source
 :::{present}
 - The Quantization preset: beam held at $15^\circ$, Blackman taper, Signal vs Time.
 - A $15^\circ$ ramp steps $45.4^\circ$: almost on the 3- and 4-bit grids.
@@ -198,14 +205,16 @@ sweep.
 
 The Quantization preset holds the beam at $15^\circ$ with the Blackman taper, so every true
 sidelobe is below the floor and anything that appears is the phase shifter's
-doing. You move the HB100 across the arc and read the level against time, at
+doing. You sweep the HB100 in azimuth across the arc and read the level against time, at
 7, 4, 3, and 2 bits. Lesson 23's widget shows why the answer depends on the
 angle: a $15^\circ$ ramp steps $45.4^\circ$ per element, which rounds to the
 $22.5^\circ$ and $45^\circ$ grids with errors of $3^\circ$ or less, while at
 2 bits every other element is off by about $44^\circ$ and the array factor puts
-a lobe near $-51^\circ$ at about $-8$ dBc. Expect the 7-, 4-, and 3-bit moves
-to read the floor, 17 to 19 dB below the peak, and the 2-bit move to put a lobe
-about 10 dB down near $-53^\circ$. If lobes appear at 3 or 4 bits on your
+a lobe near $-51^\circ$ at about $-8$ dBc. Expect the 7-, 4-, and 3-bit sweeps
+to read the floor, 17 to 19 dB below the peak, and the 2-bit sweep to show that
+lobe near $-51^\circ$ at about $-10$ dBc, a few dB under the array factor
+because a source swept in azimuth also crosses each patch's pattern, as in the
+L21 Lab. If lobes appear at 3 or 4 bits on your
 kit, it is rounding more than the steering ramp; record what you see.
 ::::
 
@@ -220,10 +229,10 @@ kit, it is rounding more than the steering ramp; record what you see.
 
 Place the HB100 at boresight, $1.2$ m from the array face, at patch-row height
 and aimed at the center of the patch row. Every taper number is a comparison
-between sweeps, so the source stays put until Step 17. Level comparisons need
-the $1.2$ m: closer in, the curvature across the aperture and the reflections
-from the room put a few tenths of a decibel on every peak drop, the size of
-the effects you are measuring. A wall beside the kit put a false lobe only
+between sweeps, so the source stays put until Step 17. The $1.2$ m puts the
+source beyond the array's far-field distance, $2D^2/\lambda$ with
+$D = 8d = 112$ mm, which is $0.87$ m at $10.443$ GHz; closer in, the pattern
+itself changes with distance. A wall beside the kit put a false lobe only
 $9$ dB below the peak, and a person seated beside it left a $-17$ dBc shelf,
 so keep $\pm 40^\circ$ either side clear of both.
 
@@ -308,7 +317,7 @@ simulator equivalent; use the expectation tables.
 10. **Sweep Hann.** Press **Start** and record the HPBW, the peak drop against
     the frozen uniform trace, and the first sidelobe, written "below the floor"
     if it is. Expect the main lobe to widen to about $19^\circ$ and the peak to
-    sit about 4.7 dB down, with the first sidelobes gone into the floor; on an
+    fall about 4.7 dB, with the first sidelobes gone into the floor; on an
     older install, without the gain-slider fix, expect about $17^\circ$ and
     $-3.7$ dB.
 
@@ -393,7 +402,7 @@ simulator equivalent; use the expectation tables.
     The measured peak drops run about 1 dB short of these, even with elements
     fully on or off, for a reason that is still open, so this step is graded
     on the lobe angles.
-17. **Squint reference.** Move the HB100 to $45^\circ$ on the $1.2$ m arc and
+17. **Squint reference.** Place the HB100 at $45^\circ$ on the $1.2$ m arc and
     choose the **Uniform** taper. Set **Signal BW** to 10 MHz, press
     **Start**, record **Angle** (set to **Peak**; about $45^\circ$, the
     source), and press **Freeze**.
@@ -429,19 +438,19 @@ simulator equivalent; use the expectation tables.
 19. **Load the preset.** Put the HB100 at the arc's $-90^\circ$ end and choose
     the Quantization preset. It holds the beam at $15^\circ$ with the Blackman
     taper and opens **Signal vs Time** on the Tracking tab.
-20. **Move at 7 bits.** With **Use Bits** checked, set **Phase Shift Bits** to
-    7, then move the HB100 from $-90^\circ$ to $+90^\circ$ along the $1.2$ m arc,
+20. **Sweep at 7 bits.** With **Use Bits** checked, set **Phase Shift Bits** to
+    7, then sweep the HB100 in azimuth from $-90^\circ$ to $+90^\circ$ along the $1.2$ m arc,
     aimed at the array, in about 20 s. Record the strongest lobe outside the
     main lobe, and where it is; write "floor" where nothing rises out of it.
     The trace keeps the last 30 s, counted from when the mode starts, so begin
-    moving promptly; a slower move runs off its end.
+    the sweep promptly; a slower sweep runs off its end.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 20, 7 bits: strongest lobe (dBc) <input data-field="e.7.lobe"></label>
     <label>Step 20, 7 bits: where <input data-field="e.7.where"></label>
     </div>
-21. **Move at 4, 3, and 2 bits.** Repeat Step 20 at each, checking the bit
-    count and the box before each move. Lobes at 3 or 4 bits would point to
+21. **Sweep at 4, 3, and 2 bits.** Repeat Step 20 at each, checking the bit
+    count and the box before each sweep. Lobes at 3 or 4 bits would point to
     the kit rounding more than the steering ramp; record what you see.
 
     <div class="rec" data-lab="L22-L23">
@@ -458,7 +467,7 @@ simulator equivalent; use the expectation tables.
     | 7 | $2.8^\circ$ | $-42$ | the floor, $-17$ to $-19$ dBc |
     | 4 | $22.5^\circ$ | $-24$ | the floor, as at 7 bits |
     | 3 | $45^\circ$ | $-18$ | the floor, as at 7 bits |
-    | 2 | $90^\circ$ | $-12$ | about $-10$ dBc, near $-50^\circ$ |
+    | 2 | $90^\circ$ | $-12$ | about $-10$ dBc, near $-51^\circ$ |
 22. **Restore.** Before you leave: **Use Bits** on, Phase Shift Bits 7, Signal
     BW 10 MHz, and the **Uniform** taper.
 ::::
@@ -546,7 +555,7 @@ Part 2 in class, Part 3 after. <a href="../../labs/ECE444_Lab_L22_L23_TaperSquin
 | $\sum a_n / N$ | coherent receive-voltage fraction at broadside | Hann: $4.64/8 \rightarrow -4.7$ dB |
 | $\eta_t = (\sum a_n)^2/(N\sum a_n^2)$ | taper efficiency — the directivity the array loses | Hann: 0.75, or $-1.2$ dB |
 | HPBW with taper | broadens as the aperture is de-weighted | $13.1^\circ$ uniform, $18.9^\circ$ Hann, $22.6^\circ$ Chebyshev |
-| Floor | the limit on any sidelobe reading | $-17$ to $-31$ dBc on my kit; tapered sidelobes sit below it |
+| Floor | the limit on any sidelobe reading | $-17$ to $-31$ dBc on my kit; tapered sidelobes drop below it |
 | Mild taper | most of the sidelobe benefit, little directivity lost | ends at 30%: $16.5^\circ$, $-0.7$ dB of $\eta_t$ |
 ::::
 
