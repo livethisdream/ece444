@@ -85,7 +85,7 @@ def pattern_db(theta_deg, steer_deg):
 def warp(u, coeffs=(0.45, 0.30, -0.18)):
     """Monotone time warp on [0,1]: g(0)=0, g(1)=1, g' = 1 + sum c_k sin(2 pi k u).
 
-    Models a hand that speeds up and slows down during the walk. With
+    Models a hand that speeds up and slows down during the sweep. With
     sum|c_k| < 1 the map stays monotone, so no angle is visited twice.
     """
     u = np.asarray(u, dtype=float)
@@ -125,7 +125,7 @@ def time_vs_angle() -> None:
     """One hand-rotation run, drawn twice: against elapsed time and against
     the true source angle. Same peaks, different spacing."""
     rng = np.random.default_rng(444)
-    T = 7.4                                    # seconds for the -90 -> +90 walk
+    T = 7.4                                    # seconds for the -90 -> +90 azimuth sweep
     u = np.linspace(0.0, 1.0, 3000)
     t = u * T
     theta = -90.0 + 180.0 * warp(u)            # hand-like: angle vs time
@@ -149,7 +149,7 @@ def time_vs_angle() -> None:
     ax_t.set_axisbelow(True)
 
     # tick marks at the instants the source crossed each 30 deg: under a
-    # hand-like walk these land unevenly, which is the whole point.
+    # hand-like pace these land unevenly, which is the whole point.
     marks = np.arange(-60, 61, 30)
     tm = T * warp_inverse((marks + 90.0) / 180.0)
     for ang, tt in zip(marks, tm):
@@ -227,9 +227,49 @@ def steer_compare() -> None:
     finalize(fig, "L21-steer-compare")
 
 
+# ------------------------------------- fig 3: the time axis, lab version ----
+def time_axis_lab() -> None:
+    """The same idea as time_vs_angle, drawn for the lab and lesson pages:
+    a 22 s sweep by hand against time and against source angle, with no dB
+    values and no angle grid, so it gives none of the Part 1 answers. A
+    dashed guide at the first-sidelobe level shows the levels match."""
+    rng = np.random.default_rng(444)
+    T = 22.0                                   # seconds, as Run 2 asks
+    u = np.linspace(0.0, 1.0, 3000)
+    t = u * T
+    theta = -90.0 + 180.0 * warp(u)
+    trace = np.maximum(pattern_db(theta, 0.0), -34.0)
+    trace = trace + rng.normal(0.0, 0.18, trace.size)
+    sl = first_sidelobes(0.0)[0][1]
+
+    fig, (ax_t, ax_a) = plt.subplots(2, 1, figsize=(4.8, 4.9))
+    YLO, YHI = -34, 3
+    for ax in (ax_t, ax_a):
+        ax.set_ylim(YLO, YHI)
+        ax.set_yticks([])
+        ax.set_ylabel("level", fontsize=13)
+        ax.axhline(sl, color=ORANGE, lw=1.3, ls=(0, (4, 3)), zorder=1)
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.tick_params(labelsize=12.5)
+    ax_t.plot(t, trace, color=NAVY, lw=1.4, zorder=2)
+    ax_t.set_xlim(0, T)
+    ax_t.set_xticks([0, 5, 10, 15, 20])
+    ax_t.set_xlabel("time (s)", fontsize=13)
+    ax_a.plot(theta, trace, color=NAVY, lw=1.4, zorder=2)
+    ax_a.set_xlim(-90, 90)
+    ax_a.set_xticks([-90, 0, 90])
+    ax_a.set_xticklabels(["−90°", "0°", "+90°"])
+    ax_a.set_xlabel("source angle", fontsize=13)
+    ax_t.text(T * 0.99, sl + 1.2, "first sidelobe", color=ORANGE, fontsize=12.5,
+              ha="right", va="bottom")
+    fig.tight_layout(h_pad=1.2)
+    finalize(fig, "L21-time-axis")
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     time_vs_angle()
     steer_compare()
+    time_axis_lab()
     print("first sidelobes, broadside:", first_sidelobes(0.0))
     print("first sidelobes, 30 deg   :", first_sidelobes(30.0))
