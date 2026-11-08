@@ -196,11 +196,6 @@ two, which is fine for a lobe $15^\circ$ wide.
 - With the beam held at $30^\circ$, the lobe is wider on the outside: nulls at $14.2^\circ$ and $49.0^\circ$.
 - The outer first sidelobe should read about $-15$ dBc against the inner one's $-12$; the room can move either by 2 dB.
 :::
-:::{present}
-<img src="../../viz/img/L21-steer-compare.svg"
-     alt="Broadside and 30-degree steered patterns on a true-angle axis, showing the 0.6 dB scan loss and the unequal first sidelobes of the steered beam."
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
-:::
 
 With the beam held at $30^\circ$, the main lobe appears when the source reaches
 about $30^\circ$ instead of boresight. The array factor slides in $\sin\theta$,
