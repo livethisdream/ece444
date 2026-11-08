@@ -370,7 +370,7 @@ sliders.
 
 ::::{frame} Classroom Against Chamber
 :::{present}
-- The stand reads angle to about $\pm 2^\circ$; a range's encoder, to a fraction of a degree.
+- The stand reads angle to $\pm 2^\circ$; a range's encoder reads far finer.
 - The stand and a range both fix the distance.
 - A chamber absorbs reflections; a room adds them.
 - Either must be longer than the far-field distance.
