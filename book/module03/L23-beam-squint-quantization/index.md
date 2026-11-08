@@ -38,7 +38,7 @@ with room for notes. Print from read mode for the whole lesson.
 :::{depth}
 In Lesson 22 we controlled the sidelobes with amplitude weights. Three things can still put energy where we did not ask for it, and a taper fixes none of them: the **element spacing**, the **signal bandwidth**, and the **finite resolution of the phase shifters**. Each one produces a specific, predictable defect — a second full-height beam, a beam that moves with frequency, and a floor of sidelobes you cannot get below. This lesson gives you the number for each.
 The L22–L23 Lab then measures all three on your own kit, against the numbers this
-lesson derives, after its Part 1 has measured Lesson 22's tapers.
+lesson derives, after it has measured Lesson 22's tapers.
 :::
 ::::
 
@@ -100,7 +100,7 @@ $$
 for integer $m = 1, 2, \ldots$ Any solution with $\vert \sin\theta_g \vert \le 1$ is a real angle, and the array radiates a second beam there. The thinning example's figure shows why from the elements' side: at $43.9^\circ$ the fed elements of the $42\ \text{mm}$ row sit exactly one wavelength of path apart, so their phases read $0^\circ$, $360^\circ$ and $720^\circ$ and add exactly as they do at broadside.
 
 :::{callout}
-A grating lobe is not a sidelobe. At $\theta_g$ every element is back in phase — one full wavelength of path difference per element instead of zero — so the grating lobe is **exactly as tall as the main lobe**. Tapering does not reduce it, because the taper controls the sidelobe skirts of one beam and this is a second beam. Full height is an array-factor statement: <a href="../L21-antenna-pattern/index.html#frame-gain-of-the-course-array">Lesson 21</a>'s element factor scales the lobe by $EF(\theta_g)$, which the $\cos\theta$ model puts $1.4$ dB down at $\pm 43^\circ$. The phaser-00 test run still read the lobes at full height.
+A grating lobe is not a sidelobe. At $\theta_g$ every element is back in phase — one full wavelength of path difference per element instead of zero — so the grating lobe is **exactly as tall as the main lobe**. Tapering does not reduce it, because the taper controls the sidelobe skirts of one beam and this is a second beam. Full height is an array-factor statement: <a href="../L21-antenna-pattern/index.html#frame-gain-of-the-course-array">Lesson 21</a>'s element factor scales the lobe by $EF(\theta_g)$, which the $\cos\theta$ model puts $1.4$ dB down at $\pm 43^\circ$. On my kit the lobes still read at full height.
 :::
 ::::
 
@@ -130,9 +130,9 @@ $$
 \end{aligned}
 $$
 
-The $m = 2$ solutions need $\vert \sin\theta_g \vert = 1.386$, which is not a real angle, so there are exactly three full-height beams: $0^\circ$ and $\pm 44^\circ$. In the L22–L23 Lab, repeat the arithmetic at your own kit's Find HB100 frequency. On phaser-00, one of the course kits, a test run of the lab at $10.443\ \text{GHz}$ predicts $\pm 43.1^\circ$ and measured $-43.6^\circ$ and $+42.3^\circ$.
+The $m = 2$ solutions need $\vert \sin\theta_g \vert = 1.386$, which is not a real angle, so there are exactly three full-height beams: $0^\circ$ and $\pm 44^\circ$. Part 1 of the L22–L23 Lab packet repeats the arithmetic at your own kit's Find HB100 frequency.
 
-Feed every fourth element instead ($56\ \text{mm}$, $\lambda/d = 0.520$) and the pair moves in to $\pm 31.3^\circ$ ($\pm 30.8^\circ$ at $10.443\ \text{GHz}$, where phaser-00 measured $-33.0^\circ$ and $+29.8^\circ$), with the $m = 2$ repeat just past the horizon, at $\sin\theta = \pm 1.04$ — the pattern comes back to within a fraction of a dB of full height at $\pm 90^\circ$.
+Feed every fourth element instead ($56\ \text{mm}$, $\lambda/d = 0.520$) and the pair moves in to $\pm 31.3^\circ$, with the $m = 2$ repeat just past the horizon, at $\sin\theta = \pm 1.04$ — the pattern comes back to within a fraction of a dB of full height at $\pm 90^\circ$.
 :::
 
 Thinning has two effects. The three fed elements still span an $84\ \text{mm}$ aperture, so the main beam stays narrow, but with three elements instead of eight the array collects less signal and the pattern between the beams is poorly controlled. Each fed element adds the same voltage at the peak, so the peak falls by the fraction of elements fed, every third element and then every fourth:
@@ -144,7 +144,7 @@ $$
 \end{aligned}
 $$
 
-The phaser-00 test run measured $-7.8$ and $-10.9$ dB, about $1$ dB short of both. The same shortfall appears when the full array is compared with its single elements, and its cause is still open. The narrow beam of a large aperture with the ambiguity of a sparse one is the classic thinned-array trade.
+The narrow beam of a large aperture with the ambiguity of a sparse one is the classic thinned-array trade.
 ::::
 
 ::::{frame} Keeping Grating Lobes Out
@@ -279,7 +279,7 @@ The beam has squinted $\Delta\theta = +2.9^\circ$. The small-offset form, with $
 
 $$\Delta\theta \approx 0.0475\ \text{rad} = 2.7^\circ,$$
 
-close enough for a budget. This is the $+3^\circ$ your **Angle** readout will move in the L22–L23 Lab when the Signal BW goes from 10 to 500 MHz: the GUI sets the phases 500 MHz below the signal, so the sweep has to command $47.9^\circ$ to land on a source at $45^\circ$. The phaser-00 test run agreed: with the source at $41.1^\circ$, the prediction is $+2.6^\circ$ and phaser-00 measured $+2.5^\circ$.
+close enough for a budget. This is the $+3^\circ$ your **Angle** readout will move in the L22–L23 Lab when the Signal BW goes from 10 to 500 MHz: the GUI sets the phases 500 MHz below the signal, so the sweep has to command $47.9^\circ$ to land on a source at $45^\circ$.
 
 At $45^\circ$ the beam is $18.7^\circ$ wide (Lesson 20's $13.2^\circ/\cos 45^\circ$), so $2.9^\circ$ of squint loses only $0.25\ \text{dB}$ at the aimpoint. That loss is the array factor evaluated at the aimpoint, which now sits off the beam's peak. At $10.025\ \text{GHz}$, $kd = 2.94$ rad, and the aimpoint's $\sin\theta$ sits $\sin 45^\circ - \sin 47.9^\circ = -0.0353$ from the peak's:
 
@@ -377,7 +377,7 @@ $$
 
 - Rounding leaves a periodic sawtooth phase error, and it radiates a lobe.
 - Rule: 2 bits $-12$ dB, 3 bits $-18$, 4 bits $-24$.
-- Phaser-00 measured $-8.5$, $-12.0$, and $-15.5$ dBc: above the rule.
+- On eight elements the worst lobe sits about 4 dB above the rule.
 :::
 :::{present}
 <img src="../../viz/img/L23-quant-staircase.svg"
@@ -399,13 +399,13 @@ $$
 
 Each extra bit halves the error, which halves the lobe's field and lowers the **quantization sidelobe level (QSLL)** by $6$ dB. That gives the rule of thumb, so 2 bits puts a lobe near $-12$ dB, 3 bits near $-18$ dB, and the ADAR1000's 7 bits near $-42$ dB. Treat this as an RMS estimate for a large array. On an aperture as short as eight elements there are only a couple of sawtooth periods, so individual lobes scatter several dB either side of the rule. Taken at face value, the rule says that from 3 bits up the quantization lobes drop below the array's own $-13$ dB sidelobes and no longer set the sidelobe level.
 
-The hardware disagrees. In the phaser-00 test run, with the source fixed, the kit read the strongest lobe beyond $\pm 35^\circ$ at $-8.5$ dBc with 2 bits, $-12.0$ dBc with 3, $-15.5$ dBc with 4, and $-17.4$ dBc, the floor of that sweep, with 7. Every reading sits above the rule, by $3.5$ dB at 2 bits and by $6$ to $8.5$ dB at 3 and 4 bits, so on this kit 3 bits is not enough to hide the quantization lobes under the $-13$ dB sidelobes. The **Angle** readout moved too: it read $+8.4^\circ$ at 4, 3, and 2 bits against $+1.8^\circ$ at 7, several times the pointing step derived above. The cause of the extra error has not been confirmed. At low bit counts, read the lobe levels on the sweep rather than the Angle readout.
+Whether a given beam shows a quantization lobe at all depends on how its ramp falls on the grid, not only on the bit count. The L22–L23 Lab is built around that. It holds the beam at $15^\circ$ with the Blackman taper, so every true sidelobe sits under the noise floor and any lobe that rises comes from rounding. It sweeps the source in azimuth on **Signal vs Time** instead of sweeping the beam, so the rounded weights stay fixed while you read the pattern they make. Part 1 of the packet rounds the $15^\circ$ ramp onto each grid and predicts which bit counts change the trace. A lobe the azimuth sweep shows reads a few dB under the array factor's value, because a source swept in azimuth also crosses each patch's own pattern, as in the L21 Lab.
 
 <img src="../../viz/img/L23-qsll-vs-bits.svg"
-     alt="Worst lobe in dB below the beam against phase-shifter bits from 2 to 7: the minus 6B rule; the simulated worst quantization lobe on the course array over steer angles 0 to 50 degrees, about 4 dB above the rule at every bit count; the uniform array's own sidelobes at minus 13.3 dB; and the phaser-00 readings, minus 8.5, minus 12.0 and minus 15.5 dBc at 2, 3 and 4 bits, with the sweep floor at 7 bits"
+     alt="Worst lobe in dB below the beam against phase-shifter bits from 2 to 7: the minus 6B rule; the simulated worst quantization lobe on the course array over steer angles 0 to 50 degrees, about 4 dB above the rule at every bit count; and the uniform array's own sidelobes at minus 13.3 dB"
      style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 
-The figure adds a third curve: the worst quantization lobe the course array can produce at any steer angle up to $50^\circ$, computed from the field the rounding error radiates on its own. It sits about $4$ dB above the rule at every bit count, because the rule is an average for a large array and eight elements leave room for a worst case. That accounts for the 2-bit reading, $-8.3$ dB simulated against $-8.5$ dBc measured. The 3- and 4-bit readings still sit $2.5$ and $4.7$ dB above even the worst case, so rounding the steering ramp does not explain them by itself.
+The figure adds a second curve: the worst quantization lobe the course array can produce at any steer angle up to $50^\circ$, computed from the field the rounding error radiates on its own. It sits about $4$ dB above the rule at every bit count, because the rule is an average for a large array and eight elements leave room for a worst case: at 2 bits the worst lobe reaches $-8.3$ dB.
 
 More bits improve two things: finer pointing, which scales as the LSB, and a lower sidelobe floor, which scales as $6$ dB per bit. Seven bits is the standard choice because it puts the quantization floor far below every other error in the array.
 ::::
@@ -432,11 +432,11 @@ The effect needs a longer aperture than eight elements to see, so the figure use
 
 - One-step channel errors still allow a $-48$ dB null.
 - Our sweep-floor estimate capped measured nulls near $21$ dB.
-- Phaser-00 measured $-40$ to $-50$ dB nulls in L24, but sweep floors from $-17$ to $-31$ dBc.
+- My kit measured $-40$ to $-50$ dB nulls in L24, but sweep floors from $-17$ to $-31$ dBc.
 :::
 :::{present}
 <img src="../../viz/img/L23-null-depth-levels.svg"
-     alt="Null depths in dB below the uniform peak. Predicted: one-step channel errors, minus 48 dB; the first estimate from the sweep floor, minus 21 dB. Measured on phaser-00: the L24 notch at minus 46 to minus 50 dB, the difference null at minus 41.5 dB, the delta null at minus 39.7 dB, and the L22 to L23 sweep floors from minus 17 to minus 31 dB"
+     alt="Null depths in dB below the uniform peak. Predicted: one-step channel errors, minus 48 dB; the first estimate from the sweep floor, minus 21 dB. Measured on my kit: the L24 notch at minus 46 to minus 50 dB, the difference null at minus 41.5 dB, the delta null at minus 39.7 dB, and the L22 to L23 sweep floors from minus 17 to minus 31 dB"
      style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -444,10 +444,10 @@ One thing quantization does *not* set is how deep a null can go. It is tempting 
 
 Our first estimate of the measured limit came from the receiver. Earlier sweeps on the PHASER showed a noise floor about $23$ dB below the uniform-taper peak, and the weights that create a null reduce the main-lobe gain by about $2$ dB, so we expected a sweep to show nothing deeper than about $21$ dB below the new peak.
 
-The phaser-00 test run did not bear that out. In the L24 Lab the notch reached $-46$ to $-50$ dB below the uniform peak, the difference null $-41.5$ dB, and the delta null $-39.7$ dBc. The deepest of these sits close to the $-48$ dB that one-step channel errors allow, so on that kit the sweep followed the pattern most of the way down. The same session's L22–L23 Lab sweeps, however, read floors between $-17$ and $-31$ dBc, and a wall or a person beside the kit raised lobes as high as $-9$ dBc. The floor a sweep shows is therefore not one fixed number: it changed from lab to lab on the same kit, and the bench around the kit changed it further.
+My test run did not bear that out. In the L24 Lab the notch reached $-46$ to $-50$ dB below the uniform peak, the difference null $-41.5$ dB, and the delta null $-39.7$ dBc. The deepest of these sits close to the $-48$ dB that one-step channel errors allow, so on that kit the sweep followed the pattern most of the way down. The same session's L22–L23 Lab sweeps, however, read floors between $-17$ and $-31$ dBc, and a wall or a person beside the kit raised lobes as high as $-9$ dBc. The floor a sweep shows is therefore not one fixed number: it changed from lab to lab on the same kit, and the room around the kit changed it further.
 
 :::{callout}
-Separate the two limits. **Quantization** sets a sidelobe floor at roughly $-6B$ dB and a pointing granularity of about one LSB, and on the course array one-step channel errors still allow a $-48$ dB null. The **floor of the measurement** sets what you can observe. We predicted that floor would cap a measured null near $21$ dB; on phaser-00 the L24 nulls reached $-40$ to $-50$ dB, while the L22–L23 sweeps on the same kit read floors from $-17$ to $-31$ dBc. A shallow measured null points to the bench first, not to the phase shifter.
+Separate the two limits. **Quantization** sets a sidelobe floor at roughly $-6B$ dB and a pointing granularity of about one LSB, and on the course array one-step channel errors still allow a $-48$ dB null. The **floor of the measurement** sets what you can observe. We predicted that floor would cap a measured null near $21$ dB; on my kit the L24 nulls reached $-40$ to $-50$ dB, while the L22–L23 sweeps on the same kit read floors from $-17$ to $-31$ dBc. A shallow measured null points to the setup first, not to the phase shifter.
 :::
 ::::
 
@@ -516,13 +516,24 @@ The three failures look different on a sweep and a designer fixes each one in a 
 | :-- | :-- | :-- |
 | $\text{LSB} = 360^\circ/2^B$ | Phase step of a $B$-bit shifter | ADAR1000: $B = 7$, LSB $= 2.8125^\circ$ |
 | $\Delta\theta_0 \approx \text{LSB}/(360^\circ d/\lambda)$ | Pointing granularity near broadside | $0.91^\circ$ on the PHASER, one-fourteenth of a beam |
-| $\text{QSLL} \approx -6B$ dB | Quantization sidelobe rule of thumb | 2 bits gives $-12$ dB; 7 bits gives $-42$ dB; phaser-00 read $-8.5$ dBc at 2 bits and $-12.0$ at 3 |
+| $\text{QSLL} \approx -6B$ dB | Quantization sidelobe rule of thumb | 2 bits gives $-12$ dB; 7 bits gives $-42$ dB; the worst 2-bit lobe on eight elements, $-8.3$ dB |
 ::::
 
-::::{frame} Preparing for the Lab
+::::{frame} Pre-Lab
 :class: read-only doc-links
 
-This lesson has no problem set. Part 1 of the L22–L23 Lab packet works out the predictions you check against your own kit in the lab. Complete it before the lab period.
+Question 4 of Part 1 in the L22–L23 Lab packet is this lesson's share of the
+pre-lab; Questions 1 to 3 go with Lesson 22. Do it at the same frequency, before
+the lab period, and bring it to class.
+
+| Part 1 | You predict | Checked in |
+| :-- | :-- | :-- |
+| Question 4(a) | the grating-lobe angles and peak drops for 42 and 56 mm | Steps 15 and 16, Table C |
+| Question 4(b) | the commanded angle and Angle shift with Signal BW at 500 MHz | Steps 17 and 18, Table D |
+| Question 4(c) | the $15^\circ$ ramp, its rounding at 7, 4, 3, and 2 bits, and which bit counts change the trace | Steps 19 to 21, Table E |
+
+The three worked examples above, Thinning the PHASER Row, Squint on the PHASER,
+and Quantization Sidelobes, are the models at $10.3$ and $10.525\ \text{GHz}$.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet, Part 1 (PDF)</a>
 ::::
@@ -530,11 +541,11 @@ This lesson has no problem set. Part 1 of the L22–L23 Lab packet works out the
 ::::{frame} Looking Ahead
 :::{present}
 - The L22–L23 Lab measures all three departures on your own kit.
-- L24 places a null: quantization nudges it; phaser-00 measured $-40$ to $-50$ dB.
+- L24 places a null: quantization nudges it; my kit measured $-40$ to $-50$ dB.
 - Bring the LSB of a $B$-bit shifter, its pointing step, and the weights $w_n$.
 :::
 
-Part 2 of the [L22–L23 Lab](../L22-L23-lab-tapering-squint/index.md) measures all three of today's departures on your own kit. Lesson 24 then extends pattern control from the whole beam to one chosen angle. So far you have shaped the beam and the sidelobes as a whole; next you will place a null at a chosen angle on purpose, which is what an array does when a jammer or an interfering transmitter sits somewhere you know about. The weights come from subtracting one steering vector from another, and the arithmetic is short.
+The second half of the [L22–L23 Lab](../L22-L23-lab-tapering-squint/index.md) measures all three of today's departures on your own kit. Lesson 24 then extends pattern control from the whole beam to one chosen angle. So far you have shaped the beam and the sidelobes as a whole; next you will place a null at a chosen angle on purpose, which is what an array does when a jammer or an interfering transmitter sits somewhere you know about. The weights come from subtracting one steering vector from another, and the arithmetic is short.
 
-Both of today's floors appear again in L24. Quantization moves the notch slightly off its commanded angle without filling it, and the floor of the sweep decides how much of the notch you can see. We predicted a measured depth near $21$ dB; phaser-00 reached $-40$ to $-50$ dB, so in the L24 Lab compare your own notch against both numbers. Before Lesson 24, be able to state the LSB of a $B$-bit shifter and the pointing step it implies on the course array, and review the complex element weights $w_n$ from Lesson 22 — the null-steering result is written entirely in that notation.
+Both of today's floors appear again in L24. Quantization moves the notch slightly off its commanded angle without filling it, and the floor of the sweep decides how much of the notch you can see. We predicted a measured depth near $21$ dB; my kit reached $-40$ to $-50$ dB, so in the L24 Lab compare your own notch against both numbers. Before Lesson 24, be able to state the LSB of a $B$-bit shifter and the pointing step it implies on the course array, and review the complex element weights $w_n$ from Lesson 22 — the null-steering result is written entirely in that notation.
 ::::

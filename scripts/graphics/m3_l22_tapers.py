@@ -453,13 +453,14 @@ FLOOR_DB = -23.0
 def preset_traces() -> None:
     """The four presets as a sweep would draw them, from theory: the pattern on
     the uniform peak's scale (so the taper's peak drop shows), floored at the
-    sweep's noise floor."""
+    sweep's noise floor. The legend names the presets only: the peak drops are
+    Part 1 of the L22-L23 Lab packet."""
     fig, ax = plt.subplots(figsize=(7.6, 4.0))
     m = np.abs(TH) <= 60
     for name, a, col in GUI_PRESETS:
         y = pattern_db(a) + 20 * np.log10(a.sum() / len(a))
         ax.plot(TH[m], np.maximum(y[m], FLOOR_DB), color=col, lw=2.0,
-                label=mn(f"{name}, peak {20 * np.log10(a.sum() / len(a)):+.1f} dB").replace("+0.0", "0.0"))
+                label=name)
     ax.axhline(FLOOR_DB, color=GRAY, lw=1.1, ls=(0, (5, 3)))
     ax.text(-59, FLOOR_DB - 0.8, "noise floor, −23 dB", color=GRAY, ha="left", va="top", fontsize=11)
     ax.set_xlim(-60, 60); ax.set_ylim(-28, 2)
