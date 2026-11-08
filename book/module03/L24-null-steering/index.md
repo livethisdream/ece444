@@ -516,11 +516,12 @@ We computed every number in this lesson from an angle we had to know in advance.
 | Maximum nulls | one weight holds the beam | $N - 1 = 7$ |
 ::::
 
-::::{frame} Practice
+::::{frame} Preparing for the Lab
 :class: read-only doc-links
 
-- <a class="doc-link" href="../../practice/ECE444_L24_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a class="doc-link doc-key" href="../../practice/ECE444_L24_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+This lesson has no problem set. Part 1 of the L24 Lab packet works out the predictions you check against your own kit in the lab. Complete it before the lab period.
+
+- <a class="doc-link" href="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">L24 Lab packet, Part 1 (PDF)</a>
 ::::
 
 ::::{frame} Looking Ahead

@@ -50,9 +50,9 @@ copy. The same links appear on each lesson page.
 
 ### Module 3: Arrays and ADALM-PHASER Beamforming
 
-L17, L18, and L19 have no separate problem set: their problems are in their
-lab packets, linked here and under Lab Sheets below. Each Module 3 lab's own
-problems are in its packet.
+From L17 on, no lesson has a separate problem set. Each lesson's homework
+is the pre-lab, Part 1 of its lab packet, linked here and under Lab Sheets
+below.
 
 | Lesson | Problem set | Solutions |
 | :-- | :-- | :-- |
@@ -61,10 +61,10 @@ problems are in its packet.
 | L17 — Introduction to Phased Array Hardware | <a class="doc-link" href="labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">L17 Lab packet</a> | graded as the lab |
 | L18 — Beam Steering | <a class="doc-link" href="labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">L18 Lab packet</a> | graded as the lab |
 | L19 — Direction Finding | <a class="doc-link" href="labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">L19 Lab packet</a> | graded as the lab |
-| L20 — Array Factor and Beamwidth | <a class="doc-link" href="practice/ECE444_L20_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L20_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L22 — Sidelobes and Tapering | <a class="doc-link" href="practice/ECE444_L22_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L22_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L23 — Beam Squint and Quantization | <a class="doc-link" href="practice/ECE444_L23_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L23_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L24 — Null Steering | <a class="doc-link" href="practice/ECE444_L24_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L24_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L20 — Array Factor and Beamwidth | <a class="doc-link" href="labs/ECE444_Lab_L20_ArrayFactor_blank.pdf" target="_blank" rel="noopener">L20 Lab packet</a> | graded as the lab |
+| L22 — Sidelobes and Tapering | <a class="doc-link" href="labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet</a> | graded as the lab |
+| L23 — Beam Squint and Quantization | <a class="doc-link" href="labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet</a> | graded as the lab |
+| L24 — Null Steering | <a class="doc-link" href="labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">L24 Lab packet</a> | graded as the lab |
 
 Practice sets for Modules 4–5 are published here as those lessons are
 authored.

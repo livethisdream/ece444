@@ -35,16 +35,17 @@ with room for notes. Print from read mode for the whole lesson.
 ::::{frame} From Prediction to Measurement
 :::{present}
 - Part 1, before today: the phase table, the beamwidths, and the error budget.
-- Part 2, today: two runs put the peak at $0^\circ$, $30^\circ$, and $45^\circ$.
+- Part 2, today, Steps 1–21: two runs put the peak at $0^\circ$, $30^\circ$, and $45^\circ$.
 - Part 3, after the lab: reconcile each measurement with its prediction.
 :::
 
 In Lesson 18 we derived the steering law and used it to fill in a table of
 element phases for the PHASER's eight-element array. The L18 Lab packet starts from
 that table: Part 1, the pre-lab you completed before class, redoes it at your
-HB100's frequency, predicts the beamwidths, and sizes the error budget. Today
-you place the source at measured angles on a protractor arc, and also
-commands the peak to the same angles from the GUI, and records where the trace
+HB100's frequency, predicts the beamwidths, and sizes the error budget. Today,
+after bringing up the kit (Steps 1 to 9), you place the source at measured
+angles on a protractor arc (Run 1, Steps 10 to 15), command the peak to the
+same angles from the GUI (Run 2, Steps 16 to 21), and record where the trace
 peaks, how wide it is, and what the GUI writes into Phase Control. Part 3, on
 your own before Lesson 19, reconciles those numbers with the predictions.
 ::::
@@ -158,7 +159,7 @@ right panel. Away from the source the chain curls up and the point lands in a
 sidelobe or on the noise floor; as the beam reaches the source the chain
 straightens and the trace climbs to its peak, at the source's angle. Move the
 source and the peak follows it, lower by the element pattern at its new angle; press
-**step** to walk the sweep one LSB at a time.
+**step** to advance the sweep one LSB at a time.
 :::
 
 :::{present}
@@ -183,7 +184,7 @@ source and the peak follows it, lower by the element pattern at its new angle; p
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-The bench puts the peak at the same angles two ways. In the physical run, Phase
+The lab puts the peak at the same angles two ways. In the physical run, Phase
 Control holds zero, the sweep's own ramp is the only steering, and the trace peaks
 at the source's angle on the arc. In the commanded run, the source stays at
 boresight and **Apply** in the Beam Steering section loads per-element offsets
@@ -242,12 +243,12 @@ $-n(88.47^\circ)$ gives $-531$.
 
 :::{depth}
 The widget below is the prediction tool for today's lab. Set the frequency to
-$10.525\ \text{GHz}$, or at the bench to the value **Find HB100** reports, and
+$10.525\ \text{GHz}$, or in class to the value **Find HB100** reports, and
 the knob to the source's angle on the arc, which is where the trace should peak.
 Then read $\Delta\phi$, the predicted half-power beamwidth, and the peak drop,
 and two rows of phases: the beam ramp $+n\Delta\phi$ wrapped to $0^\circ$ to
 $360^\circ$, and what Phase Control shows after Apply at the same angle, the
-falling whole-degree offsets. Two things to notice before the bench: the dots
+falling whole-degree offsets. Two things to notice before class: the dots
 mark the angles the sweep samples, one $2.8125^\circ$ phase step apart, about
 $1^\circ$ near broadside and wider toward endfire; and the beam widens as the
 peak moves away from broadside while the sidelobe structure stretches with it.
@@ -270,8 +271,8 @@ peak moves away from broadside while the sidelobe structure stretches with it.
 - A protractor arc centered on the array; facing the patches, $+\theta$ is to your left, toward E8.
 :::
 :::{present}
-<img src="../../viz/img/L18-bench-setup.svg"
-     alt="Bench geometry from above: the eight-element array, a 1 m protractor arc centered between E4 and E5, and the HB100 positions at 0, 30, and 45 degrees on the plus side, toward E8, filled on the 1 m arc for the angle readings and hollow 1.2 m out on the same lines for the scan-loss levels; confirm the plus side with the Angle readout"
+<img src="../../viz/img/L18-lab-setup.svg"
+     alt="The setup from above: the eight-element array, a 1 m protractor arc centered between E4 and E5, and the HB100 positions at 0, 30, and 45 degrees on the plus side, toward E8, filled on the 1 m arc for the angle readings and hollow 1.2 m out on the same lines for the scan-loss levels; confirm the plus side with the Angle readout"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -285,13 +286,13 @@ $2D^2/\lambda = 0.88\ \text{m}$ with $D = Nd = 112\ \text{mm}$. Center the arc o
 the array, not on the board's edge: an arc centered $10\ \text{mm}$ off the middle
 of the array shifts the reference angle by about $0.5^\circ$. The arc serves
 the angle readings. The scan-loss levels need more distance, $1.2\ \text{m}$
-(4 ft) or more on the same three lines, for the reason given in Run 1.
+(4 ft) or more on the same three lines, for the reason given at Step 15.
 
 Lesson 18's sign convention puts $+\theta$ on the E8 end of the array, the end the
 wave reaches first. Looking at the front of the array, the patch face, E1 is at
 the right end of the row and E8 at the left, as in the L17 Lab, so $+\theta$ is
 to your left as you face the patches. In the figure, which looks down on the
-bench from above, that puts E8 on the right. Confirm the sign on your kit before
+setup from above, that puts E8 on the right. Confirm the sign on your kit before
 you record anything: with the source on the $+$ side, **Angle** reads
 positive.
 ::::
@@ -304,7 +305,7 @@ positive.
 2. Place the powered HB100 $1\ \text{m}$ out at $0^\circ$ on the arc, facing the array.
 3. Press **Find HB100** and record the Signal Freq it reports in the packet.
 4. Press **Calibrate** and wait for it to finish.
-5. Open the **Lab Presets** section and press **1 Steering Angle**.
+5. Open the **Lab Presets** section and choose the Steering Angle preset.
 6. Set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$ dBFS, as in the L17 Lab.
 7. Turn on **Show Peak Angle Marker** under **Plot Options**.
 8. Press **Start**, and check the **FFT** tab for one tone near $0\ \text{MHz}$, at least $20\ \text{dB}$ above the floor.
@@ -315,20 +316,13 @@ positive.
 <label>Step 3: Signal Freq after <b>Find HB100</b> <input data-field="freq"></label>
 </div>
 
-This is Lesson 17's order, for the same reason: **Calibrate** reads the frequency
-that **Find HB100** stores, and it needs the source at boresight while it runs,
-or it bakes a steering ramp into the calibration offsets. The pill sits at the
-bottom right and changes from **Checking...** to **Connected**; **Start** stays
-grayed out until the backend is ready, and nothing plots until you press it.
+Keep the source at boresight while **Calibrate** runs, as in the L17 Lab, or it
+bakes a steering ramp into the calibration offsets.
 
 The preset loads a uniform taper on E1 to E8, zeros Phase Control, sets 7 phase
 bits with **Use Bits** on and **Signal BW** at $10\ \text{MHz}$, and opens the FFT
 tab. It leaves **Signal Freq** at the value Find HB100 stored, and it does not set
-**Rx Gain (dB)**; the Pi starts at 30 dB, where Lesson 17 measured the receiver
-compressing. Step 6 sets the L17 Lab's level reference, not a fixed gain: the
-gain that reaches $-10$ dBFS depends on your source and on where on the bench
-your $1\ \text{m}$ really is. A main lobe with a flat top means the receiver
-has clipped; turn the gain down.
+**Rx Gain (dB)**: Step 6 sets the same $-10$ dBFS level as the L17 Lab.
 
 On the FFT tab, one narrow tone stands well above the noise near $0\ \text{MHz}$,
 within about $\pm 1\ \text{MHz}$. If it is buried, re-aim the HB100 or press
@@ -381,19 +375,18 @@ read its angle off the trace, and record that.
 :::{admonition} Scan loss needs distance
 :class: tip
 
-Take the scan-loss positions, Step 15, at $1.2\ \text{m}$ (4 ft) or more. On my
-kit at $1.2\ \text{m}$ the drop at $30^\circ$ read $-0.7$ dB,
-against $-0.6$ dB for an ideal element and $-0.8$ to $-0.9$ dB for a patch; at
-$1\ \text{m}$ the same drop read only $-0.2$ to $-0.4$ dB. One meter clears the
-far-field boundary, $0.88\ \text{m}$, which is enough for the pattern's shape,
+Take the scan-loss positions, Step 15, at $1.2\ \text{m}$ (4 ft) or more, where
+the drop at $30^\circ$ reads about $-0.7$ dB, against $-0.6$ dB for an ideal
+element and $-0.8$ to $-0.9$ dB for a patch; at $1\ \text{m}$ the same drop reads
+only $-0.2$ to $-0.4$ dB. One meter clears the far-field boundary, $0.88\ \text{m}$, which is enough for the pattern's shape,
 its angles and beamwidths, but only marginal for a level difference of under a
 dB.
 
 If the room forces you closer, take the levels where you can, record the
 distance, and expect the drop to come out smaller than theory, a few tenths of a
 dB at $1\ \text{m}$. Say so in the writeup rather than forcing the numbers to
-agree. Treat the $45^\circ$ row as limited by reflections at any distance: the
-same kit read $-1.0$ dB there, less than even the ideal $-1.5$ dB.
+agree. Treat the $45^\circ$ row as limited by reflections at any distance: expect
+about $-1.0$ dB there, less than even the ideal $-1.5$ dB.
 :::
 ::::
 
@@ -405,7 +398,7 @@ same kit read $-1.0$ dB there, less than even the ideal $-1.5$ dB.
 17. In **Beam Steering**, leave **Taper** on Uniform, enter 15 in **Steer Angle (deg)**, and press **Apply**.
 18. Record **Angle**, **Peak Gain**, and the beamwidth in Table B.
 19. Repeat for 30, and copy the eight **Phase Control** boxes into Table B.
-20. Repeat for 45; if **Angle** jumps to about $-90^\circ$, record the main lobe's angle off the trace, as in Step 14.
+20. Repeat for 45; if **Angle** jumps to about $-90^\circ$, record the main lobe's angle off the trace.
 21. Press **Reset** under **Phase Control** before you leave the station.
 :::
 
@@ -474,7 +467,9 @@ $d/\lambda = 0.491$. The $1/\cos\theta_0$ broadening of Lesson 18 gives
 $12.9^\circ/\cos 30^\circ = 14.9^\circ$ from the rule's broadside width, and the
 exact array factor gives $13.0^\circ$, $15.1^\circ$, and $18.7^\circ$. A sweep
 sampled about a degree apart reads each width to about a degree. dBc is dB
-relative to the main-lobe peak; the sweep's floor sits about $23\ \text{dB}$ below
+relative to the main-lobe peak: subtract the trace's peak from a reading, and
+the result no longer depends on Rx Gain or the source's distance, so a
+sidelobe compares directly with the array factor's $-12.8$ dB. The sweep's floor sits about $23\ \text{dB}$ below
 the peak, and the first sidelobes come up out of it at $-11$ to $-13$ dBc.
 
 The peak drop is the element pattern's roll-off, the scan loss of Lesson 18. Its
@@ -485,13 +480,9 @@ $$\Delta G = 10\log_{10}(\cos 30^\circ) = -0.6\ \text{dB},$$
 and $-1.5\ \text{dB}$ at $45^\circ$. A patch element rolls off faster, closer to
 $\cos^{1.3}\theta$ to $\cos^{1.5}\theta$ in power, so expect $-0.8$ to
 $-0.9\ \text{dB}$ at $30^\circ$; Lesson 21 derives the element pattern. These
-values hold with the source at $1.2\ \text{m}$ or more, where my
-kit read $-0.7\ \text{dB}$ at $30^\circ$. At $1\ \text{m}$ the same kit read only
-$-0.2$ to $-0.4\ \text{dB}$, so a level taken that close comes out smaller than
-theory. The $45^\circ$ drop is limited by reflections from the room: the kit
-read $-1.0\ \text{dB}$ there, less than the ideal bound, so treat that row as
-an estimate. The
-commanded run keeps the source on the elements' boresight, so its peak does not
+values hold with the source at $1.2\ \text{m}$ or more; a level taken at
+$1\ \text{m}$ comes out smaller than theory, and the $45^\circ$ row is limited by
+reflections from the room, so treat it as an estimate (Step 15). The commanded run keeps the source on the elements' boresight, so its peak does not
 drop. The peak-drop rows are hardware measurements: the simulator has no element
 pattern and reads $0.0\ \text{dB}$ in both runs.
 ::::
@@ -537,20 +528,20 @@ beamwidths will not equal $13.0^\circ$ and $15.1^\circ$ exactly. Three
 independent effects account for the difference, and Part 1 of the packet sized
 all three before the measurement.
 
-**Sweep grid.** With Use Bits on, the sweep steps the element phase one
+Sweep grid. With Use Bits on, the sweep steps the element phase one
 $2.8125^\circ$ LSB at a time. One step moves $\sin\theta$ by
 $2.8125^\circ/176.8^\circ = 0.0159$, which is $0.91^\circ$ of angle at broadside
 and $1.05^\circ$ at $30^\circ$, widening as $1/\cos\theta$. The trace holds no
 information between samples, so a peak read off it can be wrong by half a step,
 $0.53^\circ$ at $30^\circ$.
 
-**Arc placement and aim.** At $1\ \text{m}$, one degree of arc is
+Arc placement and aim. At $1\ \text{m}$, one degree of arc is
 $17.5\ \text{mm}$, so a tripod placed by eye to within $25\ \text{mm}$ gives a
 $1.4^\circ$ error in the reference angle; centering the arc and pointing the
 module bring the budget figure to $1.5^\circ$. This error is in the reference,
 not in the array.
 
-**Multipath.** The bench, the walls, and the people nearby return copies of the
+Multipath. The table, the walls, and the people nearby return copies of the
 tone. A reflection $20\ \text{dB}$ below the direct path has an amplitude ratio of
 0.1, so, depending on its phase, it raises or lowers the level by
 
@@ -567,16 +558,6 @@ A peak within $\pm 2^\circ$ of the reference meets the standard, and agreement t
 $0.1^\circ$ would point to a mistake in the comparison rather than an unusually
 good measurement.
 
-:::{depth}
-**Why HB100 drift is not in the budget.** The GUI sets the receiver from Signal
-Freq, and the SDR sees only a $3\ \text{MHz}$ window. A source that drifts far
-enough to steer the beam measurably leaves the window and the tone disappears;
-**Find HB100** finds it again. A drift that keeps the tone in view, under
-$1.5\ \text{MHz}$, moves the beam by less than $0.01^\circ$. The arithmetic is
-worth seeing once as a preview of Lesson 23's beam squint: phases set for
-$10.525\ \text{GHz}$ and observed at $10.325\ \text{GHz}$ point a $30^\circ$ beam
-$0.6^\circ$ farther out, and a $45^\circ$ beam $1.1^\circ$ farther.
-:::
 ::::
 
 ::::{frame} Your Part 2 Entries
@@ -601,7 +582,7 @@ viewer instead.
 
 The L18 Lab packet is one submission for the whole lab, turned in complete before Lesson 19. It has three parts:
 
-1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it at the bench): the prediction table at your kit's frequency, what Phase Control will show, the beamwidths and the error budget, and a rehearsal of Run 2 on the hosted simulator.
+1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it in class): the prediction table at your kit's frequency, what Phase Control will show, the beamwidths and the error budget, and a rehearsal of Run 2 on the hosted simulator.
 2. **Part 2, Measurements** (your own kit's data, recorded in class): Tables A and B, from Run 1 and Run 2.
 3. **Part 3, Writeup** (individual, after the lab): reconcile the measurements with the predictions, and three analysis problems.
 

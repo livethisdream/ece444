@@ -25,7 +25,7 @@ L17 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 
 :::{depth}
-This lab is the bench half of Lesson 17. The lesson walked the receive chain
+This lab is the hands-on half of Lesson 17. The lesson traced the receive chain
 block by block; here you bring up that hardware yourself, from a blank card to
 a beam sweep that follows the source. The lab packet records both: that the kit
 came up, and that it works.
@@ -34,7 +34,8 @@ came up, and that it works.
 
 ::::{frame} Part A: Build Your PHASER
 :::{present}
-- Each cadet builds their own kit from a stock Linux image: flash, connect, set the clock, join the Wi-Fi, provision, calibrate.
+- Part A, Steps 1–25: build your kit from a stock Linux image.
+- Part B, Steps 26–32: its first measurements.
 - The Ethernet cable carries ssh and the browser; the Wi-Fi only connects the Pi to the internet.
 :::
 :::{present}
@@ -44,10 +45,10 @@ came up, and that it works.
 Each cadet starts with their own PHASER kit and a microSD card and builds the
 kit up from the operating system: you flash ADI's stock Kuiper Linux image onto
 the card, connect to the Pi over a cable, set its clock, put it on the Wi-Fi,
-run the Phaser provisioning script, and calibrate the array. These are the
-steps that bring up any embedded Linux device, and each one fails in a way
-that teaches you something about the device. Part B then makes the first
-measurements on the kit you built.
+run the Phaser provisioning script, and calibrate the array, Steps 1 to 25.
+These are the steps that bring up any embedded Linux device, and each one fails
+in a way that teaches you something about the device. Part B, Steps 26 to 32,
+makes the first measurements on the kit you built.
 
 The laptop and the kit use two connections for two different jobs. A direct
 Ethernet cable from the laptop to the Pi carries ssh and the browser interface.
@@ -227,15 +228,12 @@ Power only through the PHASER's USB-C, never the Pi's.
 Mount the board with its patch face vertical
 and its row of patches horizontal: the array steers in the plane of that row,
 so a board mounted on its side steers in elevation, while every later lab
-sweeps the beam in azimuth. Looking at the front of the array, the patch face,
-E1 is the element at the right end of the row and E8 the one at the left end.
-Step 6 of Part B asks which of the two the source moved toward.
+sweeps the beam in azimuth.
 
 :::{depth}
 The PHASER board supplies the Pi through its own connector, and powering the
 Pi directly bypasses the board's supply. Unplugging the kit while Linux is
-running can also corrupt the card; see the last frame of Part A for the safe
-way to power down.
+running can also corrupt the card; Step 25 powers it down safely.
 :::
 ::::
 
@@ -270,8 +268,7 @@ the Pi and the laptop each give themselves a link-local address, one in
 `169.254.x.x` that only the cable can carry, and the laptop finds the Pi by
 name with multicast DNS, the `.local` lookup. That is why a direct cable works
 with no setup on either end, and why the first minute after power-on shows
-nothing. On my kit, `hostname -I` showed exactly one address at
-this point, `169.254.210.227`.
+nothing.
 :::
 ::::
 
@@ -301,9 +298,9 @@ EOF
 
 
 The classroom Wi-Fi is the open guest network `AF_ACADEMY_GUEST`. The reboot in
-Step 13 is not optional: on my kit, asking the Wi-Fi client to reread
-its settings without a reboot left it offline, and the ping failed until the
-Pi restarted. If the ping fails after the reboot, tell me.
+Step 13 is not optional: asking the Wi-Fi client to reread its settings
+without one can leave it offline, and the ping fails until the Pi restarts. If
+the ping fails after the reboot, tell me.
 
 :::{depth}
 Kuiper 2021_R2 is based on Raspberry Pi OS bullseye, where `wpa_supplicant`
@@ -477,7 +474,7 @@ lessons; today only a few matter.
 | Quantization | Steer Resolution (deg), Phase Shift Bits, Use Bits (ignore Steer Res) |
 | Digital Beam Forming | Mode for the two digital channels: Manual (Reset, Beam 0/1 Gain and Phase) or MVDR (Snapshots (K), Diagonal Load) |
 | Plot Options | Show Peak Gain Marker, Show Peak Angle Marker, Show Beam Squint Info, Show Logs Tab, Show Monopulse Delta Beam, Show Monopulse Error Function; X Min, X Max, Y Min, Y Max |
-| Lab Presets | buttons 1 Steering Angle through 8 Tracking, one per workshop lab |
+| Lab Presets | one preset per workshop lab, from Steering Angle to Tracking |
 
 Each sidebar section opens and closes when you click its header, and only
 **Configuration** starts open. A closed section hides its controls, so open
@@ -535,10 +532,7 @@ curves the arriving wavefront enough to distort the patterns of later labs.
 One meter clears that boundary, so the angles and beamwidths measured there
 are the far-field values. It clears it by only 12%, though, which is marginal
 for comparing peak levels between two source positions, a difference of under
-a dB. On my kit, the drop with the source moved to $30^\circ$
-read only 0.2 to 0.4 dB at $1\ \text{m}$ and 0.7 dB at $1.2\ \text{m}$,
-against a predicted 0.6 to 0.9 dB, so the L18 Lab takes its scan-loss levels
-at $1.2\ \text{m}$ (4 ft) or more.
+a dB.
 :::
 
 **Find HB100** sweeps the band for the source and records its frequency; expect
@@ -564,15 +558,11 @@ stops and says so rather than calibrating against nothing.
 :::{depth}
 Each step needs the one before it. Characterizing the IF needs a tone at a
 known frequency, and calibrating needs the kit tuned to the source at an IF it
-can hear. On my kit, calibration first ran at the IF that ships in
-the configuration file, $2.2\ \text{GHz}$, and heard nothing: on/off contrast
-$0.93\ \text{dB}$. That kit receives cleanly only from $1.2$ to
-$2.175\ \text{GHz}$, while a second kit works at $2.2\ \text{GHz}$; the usable
-IF differs by about $200\ \text{MHz}$ between two kits built alike, which is
-why every kit measures its own. At the IF it measured, $1.69\ \text{GHz}$,
-the same calibration ran to completion with $32.7\ \text{dB}$ of contrast.
-On a kit that has never been characterized, **Calibrate Phaser** runs the
-characterization first, or stops and says so.
+can hear. The usable IF differs by about $200\ \text{MHz}$ between two kits
+built alike, so the IF that ships in the configuration file, $2.2\ \text{GHz}$,
+can leave one kit hearing nothing while its neighbor works; that is why every
+kit measures its own. On a kit that has never been characterized,
+**Calibrate Phaser** runs the characterization first, or stops and says so.
 
 The frequency matters downstream because the steering phase depends on it.
 Lesson 18 derives the progressive phase
@@ -632,26 +622,25 @@ the next connection asks about the new one.
 
 ::::{frame} Part B: First Measurements
 :::{present}
-1. Open the **Lab Presets** section, press **1 Steering Angle**, then **Start**.
-2. Set **Rx Gain** for a $-10 \pm 3$ dBFS FFT peak; record it.
-3. Record the peak's position, level, and floor.
+26. Open **Lab Presets**, choose the Steering Angle preset, and press **Start**.
+27. Set **Rx Gain** for a $-10 \pm 3$ dBFS FFT peak; record it.
+28. Record the peak's position, level, and floor.
 
 Expect 20 dB or more above the floor.
 :::
 
 <div class="rec" data-lab="L17">
-<label>Part B, step 2: Rx Gain used (dB) <input data-field="c.rxgain"></label>
+<label>Step 27: Rx Gain used (dB) <input data-field="c.rxgain"></label>
 <label>Source distance (m) <input data-field="c.distance"></label>
-<label>Part B, step 3: peak position (MHz) <input data-field="c.fft.pos"></label>
-<label>Part B, step 3: peak (dBFS) <input data-field="c.fft.peak"></label>
-<label>Part B, step 3: floor (dBFS) <input data-field="c.fft.floor"></label>
-<label>Part B, step 3: separation, peak minus floor (dB) <input data-field="c.fft.sep"></label>
+<label>Step 28: peak position (MHz) <input data-field="c.fft.pos"></label>
+<label>Step 28: peak (dBFS) <input data-field="c.fft.peak"></label>
+<label>Step 28: floor (dBFS) <input data-field="c.fft.floor"></label>
+<label>Step 28: separation, peak minus floor (dB) <input data-field="c.fft.sep"></label>
 </div>
 
 
 Part B runs on the kit you brought up in Part A and records the observations
-any working kit produces, for Part 2 of the lab packet. Work through the steps
-in order.
+any working kit produces, for Part 2 of the lab packet.
 
 The preset loads the workshop's initial state, with a uniform taper, Phase
 Control at zero, and the beam commanded to broadside, and opens the FFT tab;
@@ -660,9 +649,9 @@ full-scale input. The presets do not set Rx Gain, whose start-up value, 30 dB,
 comes from the Pi's configuration file and is far too much for a source a
 meter away.
 
-Step 2 sets a level, not a gain, and every later lab starts from the same
+Step 27 sets a level, not a gain, and every later lab starts from the same
 $-10$ dBFS. The gain that gets there depends on how far out the HB100 is, how
-well it is aimed, and its battery, and no two benches put it at exactly
+well it is aimed, and its battery, and no two kits put it at exactly
 $1\ \text{m}$; a fixed gain that suits one kit clips the next. The two
 channels add in phase, so the Sum clips near $+6$ dBFS, and $-10$ dBFS leaves
 about 16 dB of headroom below that while staying far above the floor. A
@@ -672,8 +661,8 @@ clipped: turn the gain down. If the peak still reads above $-7$ dBFS at
 
 In the FFT tab, a single narrow peak should stand well above a flat noise
 floor, near $0\ \text{MHz}$, and its separation from the floor, in dB, should
-be unambiguous: at least 20 dB with the source at $1\ \text{m}$, the smallest
-separation seen on the bench at that distance. Less than that points to a
+be unambiguous: at least 20 dB with the source at $1\ \text{m}$. Less than
+that points to a
 misaimed or distant source, or a weak battery in the HB100.
 
 :::{depth}
@@ -702,15 +691,15 @@ lowers the floor, and raises the separation with no change at the antenna.
 
 ::::{frame} The Sweep at Boresight
 :::{present}
-4. Open the **Rectangular** tab; turn on **Show Peak Angle Marker** under **Plot Options**.
-5. Record the **Angle** readout, set to **Peak**, and **Peak Gain** with the source at boresight.
+29. Open the **Rectangular** tab; turn on **Show Peak Angle Marker** under **Plot Options**.
+30. Record the **Angle** readout, set to **Peak**, and **Peak Gain** with the source at boresight.
 
 Expect Angle within $2^\circ$ of $0^\circ$.
 :::
 
 <div class="rec" data-lab="L17">
-<label>Part B, step 5: Angle at boresight <input data-field="c.rect.bore.angle"></label>
-<label>Part B, step 5: Peak Gain at boresight (dB) <input data-field="c.rect.bore.gain"></label>
+<label>Step 30: Angle at boresight <input data-field="c.rect.bore.angle"></label>
+<label>Step 30: Peak Gain at boresight (dB) <input data-field="c.rect.bore.gain"></label>
 </div>
 
 
@@ -721,16 +710,16 @@ each step, so the trace peaks where the beam points at the source.
 
 ::::{frame} The Sweep Follows the Source
 :::{present}
-6. Carry the HB100 $30^\circ$ to one side, same distance, facing the array. Record both, and which end, E1 or E8, it moved toward. Facing the patches, E1 is on your right.
-7. Return it to boresight; record both again.
+31. Carry the HB100 $30^\circ$ to one side, same distance, facing the array. Record both, and which end, E1 or E8, it moved toward. Facing the patches, E1 is on your right.
+32. Return it to boresight; record both again.
 :::
 
 <div class="rec" data-lab="L17">
-<label>Part B, step 6: the end it moved toward, E1 or E8 <input data-field="c.rect.side"></label>
-<label>Part B, step 6: Angle, moved <input data-field="c.rect.side.angle"></label>
-<label>Part B, step 6: Peak Gain, moved (dB) <input data-field="c.rect.side.gain"></label>
-<label>Part B, step 7: Angle, back at boresight <input data-field="c.rect.back.angle"></label>
-<label>Part B, step 7: Peak Gain, back at boresight (dB) <input data-field="c.rect.back.gain"></label>
+<label>Step 31: the end it moved toward, E1 or E8 <input data-field="c.rect.side"></label>
+<label>Step 31: Angle, moved <input data-field="c.rect.side.angle"></label>
+<label>Step 31: Peak Gain, moved (dB) <input data-field="c.rect.side.gain"></label>
+<label>Step 32: Angle, back at boresight <input data-field="c.rect.back.angle"></label>
+<label>Step 32: Peak Gain, back at boresight (dB) <input data-field="c.rect.back.gain"></label>
 </div>
 
 
@@ -765,8 +754,8 @@ the same dashboard with no install. At a station whose hardware has failed, add
 `?sim=1` to the station's URL or turn on **Simulator Mode** under
 **Configuration**. An orange **SIMULATION** pill marks simulated data.
 
-Steps 1 to 5 of Part B behave as described, except that the tone appears at
-$-1\ \text{MHz}$ and the simulator does not model Rx Gain. Steps 6 and 7
+Steps 26 to 30 behave as described, except that the tone appears at
+$-1\ \text{MHz}$ and the simulator does not model Rx Gain. Steps 31 and 32
 cannot be done, because the simulated source is fixed at boresight. Find
 HB100 and Calibrate Phaser run scripted scans.
 :::
@@ -802,7 +791,7 @@ The L17 Lab packet is one submission for the whole lab, turned in complete befor
 
 1. **Part 1, Pre-Lab** (individual, before the lab period): the receive chain in order, the phase shifter's step, the element and channel counts, and how a kit number sets the kit's name.
 2. **Part 2, Measurements** (your own kit's data, recorded in class): the bring-up record from Part A, and the kit check from Part B, the FFT peak and the sweep with the source at boresight, moved, and back.
-3. **Part 3, Writeup** (individual, after the lab): a labeled block diagram, two bench diagnoses, and two written answers.
+3. **Part 3, Writeup** (individual, after the lab): a labeled block diagram, two troubleshooting problems, and two written answers.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">L17 Lab packet (PDF)</a>
 ::::

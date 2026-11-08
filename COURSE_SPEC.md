@@ -813,11 +813,14 @@ next lesson, so one Gradescope assignment per lab. A short grading statement
 on the first page says the packet counts toward engagement and is graded as a
 genuine, documented attempt; timing is relative ("before Lesson 19"), never a
 date. The packet replaces the lab's practice
-problems, and its lesson's too when the pre-lab draws on them (the L18 Lab's
-does, from L18; the L17 Lab's does not, so L16 keeps its practice set). The lab page
+problems, and **no lesson after L16 has a practice set** (Neil, 2026-11-08:
+"No practice sets after L17 - just prelabs (predictions) as a part of the lab
+packet"). The pre-lab is the predictions the cadet checks in Part 2, not
+problems for their own sake. The lab page
 replaces its Practice frame with a read-only **Lab Packet** frame that links
-the blank PDF and names the three parts; where the pre-lab draws on the
-lesson, the lesson's Practice frame points at Part 1 as its homework. Until a
+the blank PDF and names the three parts, and each lesson's Practice frame
+becomes a read-only **Preparing for the Lab** frame that points at Part 1 of
+its lab's packet. Until a
 lab is converted to a packet, its own practice set stays on the lab page,
 named `ECE444_Practice_L<NN>Lab.tex` (header "L<NN> Lab Practice"). The superseded practice sources and PDFs stay in
 the repo, unlinked.

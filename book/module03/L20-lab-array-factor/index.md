@@ -149,7 +149,7 @@ arbitrary linear array" in the objective asks for. Work out where
 $\psi = 2\pi m$ lands in visible space, and how wide the lobe at $0^\circ$ is,
 before you sweep. Compare both with the E4 and E5 row: the two pairs add the
 same two voltages, so their peaks should agree, and their beams should not.
-Lesson 23 names what you will see.
+The extra full-height lobes are grating lobes, which Lesson 23 treats.
 ::::
 
 ::::{frame} Reading a Sweep for What It Is
@@ -178,7 +178,11 @@ $0.93^\circ$ of angle at broadside and $1.32^\circ$ at $45^\circ$, widening as
 $1/\cos\theta$. A sweep is 162 points: 123 of them span $\pm 82^\circ$, and
 the other 39 ask for more phase than any real angle needs and plot at
 $\pm 90^\circ$. A feature narrower than one step can fall between samples
-entirely. The trace has a floor. With all eight elements on, the trace stops
+entirely. Levels on this page are in **dBc**: a reading minus its own
+trace's peak, so 0 dB is the peak. Peak Gain reads in dBFS and drops each time
+you switch elements off, so only a level taken relative to its own peak lets
+the eight-, four-, and two-element traces share one axis with the array factor.
+The trace has a floor. With all eight elements on, the trace stops
 following the array factor about $23\ \text{dB}$ below the peak of the uniform
 beam, and anything the array factor puts below that line reads as the floor
 instead. The floor is not one fixed level for every trace. In the dry run the
@@ -568,15 +572,15 @@ The L20 Lab packet is one submission for the whole lab, turned in complete befor
 ::::{frame} Looking Ahead
 :::{present}
 - Today's traces are the array factor, read against a commanded angle.
-- Lesson 21 adds the element pattern: what the patches do to the beam.
-- The L21 Lab holds the beam still and sweeps the source in azimuth around it.
+- Lesson 21 compares this beam sweep with an azimuth sweep: one beam held still.
+- The L21 Lab takes both and compares their lobe levels in dBc.
 :::
 
 Every trace you took today plots received power against the angle you asked
 the beamformer for, with the source fixed, so the element pattern contributed
-the same constant to every point and dropped out of the shape. Lesson 21 puts
-it back: the patches have their own pattern, and the array radiates the element
-pattern times the array factor. Keep your three frozen traces. The L21 Lab
-measures the full pattern by moving the source instead of the beam, and the
-far edges of today's eight-element trace are where the two part company.
+the same constant to every point and dropped out of the shape. Lesson 21 holds
+one beam still and sweeps the source around it in azimuth, the way an antenna
+range measures a pattern. Keep your three frozen traces. The L21 Lab takes both
+sweeps; they agree on the main lobe and the first sidelobes, and the far edges
+of today's eight-element trace are where they part company.
 ::::

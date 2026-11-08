@@ -95,8 +95,9 @@ That is the one shared file it may change.
   - *Part 1, Pre-Lab*: individual, before the period.
   - *Part 2, Measurements*: your own kit, in class.
   - *Part 3, Writeup*: after the lab.
-  - The packet replaces the lab's own practice set, and its lesson's when the
-    pre-lab draws on it. A **Module 3** packet counts toward engagement as a
+  - The packet replaces the lab's own practice set, and no lesson after L16
+    has one (Neil, 2026-11-08: "No practice sets after L17 - just prelabs
+    (predictions) as a part of the lab packet"). A **Module 3** packet counts toward engagement as a
     genuine, documented attempt.
   - **The Module 4 packets (L28–L31 Labs) are the scaffolding for the final
     project** (Neil, 2026-10-15): one report, in the cadet's own words, on
@@ -117,6 +118,11 @@ That is the one shared file it may change.
     call them labs?"). No new `LNNLab` practice sets. The existing ones (L20,
     L21, L22 for the L22–L23 Lab, L24) fold into their packet's Pre-Lab and
     Writeup in that lab's lesson pass, and then come off the site.
+  - **The pre-lab prepares the cadet for the lab** (Neil, 2026-11-07, on
+    L21: "I don't want practice problems just to give them something to
+    do, I want them to be prepared for the lab"). Each Part 1 problem sets
+    up a prediction, a setting, or a step the cadet uses in Part 2; a
+    problem that does neither comes out.
 - **Objectives** are the syllabus's two-level course objectives, quoted word for
   word.
 - **No receiver-course vocabulary** for cadets (mixer, LO, IF, VCO,
@@ -150,14 +156,14 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L18 Lab | Beam Steering | **L18 Lab** packet | 14/21; dry run 2026-10-19, fixes merged (#110, #121): E1 side, 45° marker, scan loss at 1.2 m | ready |
 | L19 | Direction Finding | none (L19 Lab packet) | rewritten (#103), 19/20, fix widget (#123); voice, why and illustration sweeps (#151) | ready |
 | L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | firing range: 3.0 m line, 5 stations 0.75 m apart (Neil, 10-25), 2.0 m × 1.0–2.0 m box field; starter script; 8/20 | hardware-day checks |
-| L20 | Array Factor and Beamwidth | practice | 18/20, sweeps done (#128) | ready |
+| L20 | Array Factor and Beamwidth | L20 Lab pre-lab | 18/20, sweeps done (#128) | ready |
 | L20 Lab | Array Factor | **L20 Lab** packet (`68f9454`, 2026-10-22); L20Lab practice set retired | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | ready |
-| L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
+| L21 | Antenna Pattern | L21 Lab pre-lab | cut 20/20, sweeps done (#127) | ready |
 | L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23; walk validated 2026-10-25 (sidelobes 11.5 / 14.8 dBc, floor 25–30 dBc) | ready |
-| L22 | Sidelobes and Tapering | practice | cut 20/20; voice, why and illustration sweeps done (#132, #137, #142) | ready |
-| L23 | Beam Squint and Quantization | practice | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
+| L22 | Sidelobes and Tapering | L22–L23 Lab pre-lab | cut 20/20; voice, why and illustration sweeps done (#132, #137, #142) | ready |
+| L23 | Beam Squint and Quantization | L22–L23 Lab pre-lab | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20; preset-6 walk validated on phaser-00 2026-10-25 | ready |
-| L24 | Null Steering | practice | cut 20/20 (#148), voice, why and illustration sweeps (#149) | ready |
+| L24 | Null Steering | L24 Lab pre-lab | cut 20/20 (#148), voice, why and illustration sweeps (#149) | ready |
 | L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | all four procedures run on phaser-00 2026-10-25 (A, B, D angles and loss validated; nulls room-limited to about −22 dB in a cramped space) | ready |
 
 **Module 4: radar (L25–L31) and the final project.** Placeholder pages.
@@ -324,7 +330,14 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
 
 ## 6. Work queue, in order
 
-1. **Lesson passes in teaching order:** L22–L24 with the L22–L23 and L24
+1. **Lab pages follow VOICE.md 27-34** (Neil, 2026-11-07, from his L20 Lab
+   notes): steps 1 to N, each note in its own step, nothing an earlier lab
+   taught, never "bench", controls by name not numbered label, no dry-run
+   anecdotes, packet boxes aligned. The Integrator applies them to the
+   L17-L19 and L21-L24 Labs; **the Module 4 thread applies them to the
+   L28-L31 Labs** (about 23 "bench" between them). `check_voice.py` reports
+   "bench" as WARN until those are clean, then it becomes a FAIL.
+2. **Lesson passes in teaching order:** L22–L24 with the L22–L23 and L24
    Labs, each before it is taught. **A new lesson or lab page (the Module 4
    thread's L25-L31 included) is written with the `write-lesson` skill**
    (Neil, 2026-11-04): the three sweeps' rules apply while it is written, one
@@ -349,7 +362,7 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
      +20° only, against Neil's software interferer, with the expected
      suppression filled in from his first run, and its "No hardware?" note
      updated.
-2. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
+3. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
    with a measured lookup table (amplitude goes as (%/100)^0.68 today, the
    ADAR1000 register response; Neil, 2026-10-23: fix it in software, not in
    the labs); preset 8 loads uniform and resets Beam 1
@@ -372,7 +385,7 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
    elements fully on or off; whether each channel's phase moves with its
    gain setting; whether recalibrating with the source exactly at boresight
    removes the +1–2° offset.
-3. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
+4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
 3b. **Phaser (Neil's Phaser thread), for Module 4:** the labs are GUI
    first, so the FMCW mode needs a range spectrum with a frequency/range
@@ -384,7 +397,7 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
    calibration entry and a frequency/range axis toggle, and can record
    several seconds of continuous chirps for L31. L28 assumes these and says
    so where the app's behavior is unknown.
-4. **Module 4 build-out**, now, assuming the radar mode works (Neil,
+5. **Module 4 build-out**, now, assuming the radar mode works (Neil,
    2026-10-25); hardware numbers are reconciled when it runs: L25–L27
    taught in class, then the L28–L31 Labs as the final project's scaffolding,
    each packet built to start from the lab before it, plus the report rubric.

@@ -58,7 +58,14 @@ Every sentence, as you write it:
   write it, not afterwards. Past sweeps found 0.01λ that should have been
   0.15λ, and 20 dB that should have been 23.
 - **Agrees with the rest of the lesson.** One value per quantity, everywhere
-  it appears.
+  it appears; a change of unit or reference (dBFS to dBc) says what and why
+  (VOICE.md 40).
+- **Serves the story.** The opening frame states the lesson's one story as a
+  plain outline, taken from what the cadet will see on the kit; no slogan,
+  no teaser, no "cannot" without its reason, and no build-up for an effect
+  smaller than the kit's own spread (VOICE.md 36-38). Antenna words for
+  antenna things: an azimuth sweep, a null that drops to the noise floor
+  (VOICE.md 39).
 
 Every frame:
 
@@ -72,6 +79,23 @@ Every frame:
   inside), and the frame fits one screen in present mode.
 - No math in the raw-HTML objectives list, `\vert` not `|` in table math,
   `\ ` not `\,` or `\;`, no thin spaces (CLAUDE.md gotchas).
+
+Every lab page (VOICE.md 27-34, from Neil's L20 Lab notes):
+
+- Steps run 1 to N straight through, a few frames of them, and the opening
+  frame names the parts so the structure stays in sight. No A1, A2.
+- A note about a step goes in that step's frame: the command, why, and
+  what to do if it looks wrong. No later paragraph that says "Step 5 is".
+- Say nothing the cadet already knows: no "per" headings, no second list of
+  the kit, nothing an earlier lab already taught (the HB100's drift).
+- Never "bench". Controls by the name a person would say ("the Array Factor
+  preset"), not the GUI's numbered label.
+- No dry-run anecdotes unless the cadet needs the number.
+- Entry boxes at each step that takes a reading, and a summary frame, as
+  the L17-L20 Labs do; packet boxes 1.5 in, right-justified in the 0.42
+  answer column or in one row along the bottom of the part.
+- Bold for control names, defined terms and step leads only; italics almost
+  never (VOICE.md 35).
 
 Figures and widgets as you go: generators in `scripts/graphics/` through
 `apply_font_stack()`, widgets from `book/extras/viz/reflector-gain.html` as
