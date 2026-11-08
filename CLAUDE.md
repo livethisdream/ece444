@@ -251,7 +251,9 @@ Every page is chrome-free: no sidebar, no header, one centerd bar at the bottom
 
 - **Per-lesson bundle** = lesson page + practice set + solutions
   (+ the lab page and its packet, where the lesson has a lab) + interactives
-  where they earn their place.
+  where they earn their place. **No practice set after L16** (Neil,
+  2026-11-08): from L17 on, a lesson's homework is the pre-lab, Part 1 of its
+  lab packet.
 - **Learning objectives are the course objectives only** (Neil, 2026-10-08:
   the lesson-level 3rd tier was "too granular and too wordy"; assessments and
   practice sets are keyed at the 2nd level anyway). A lesson's objectives

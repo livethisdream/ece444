@@ -519,11 +519,12 @@ The three failures look different on a sweep and a designer fixes each one in a 
 | $\text{QSLL} \approx -6B$ dB | Quantization sidelobe rule of thumb | 2 bits gives $-12$ dB; 7 bits gives $-42$ dB; phaser-00 read $-8.5$ dBc at 2 bits and $-12.0$ at 3 |
 ::::
 
-::::{frame} Practice
+::::{frame} Preparing for the Lab
 :class: read-only doc-links
 
-- <a class="doc-link" href="../../practice/ECE444_L23_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a class="doc-link doc-key" href="../../practice/ECE444_L23_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+This lesson has no problem set. Part 1 of the L22–L23 Lab packet works out the predictions you check against your own kit in the lab. Complete it before the lab period.
+
+- <a class="doc-link" href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet, Part 1 (PDF)</a>
 ::::
 
 ::::{frame} Looking Ahead

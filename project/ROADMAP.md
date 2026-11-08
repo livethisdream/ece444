@@ -95,8 +95,9 @@ That is the one shared file it may change.
   - *Part 1, Pre-Lab*: individual, before the period.
   - *Part 2, Measurements*: your own kit, in class.
   - *Part 3, Writeup*: after the lab.
-  - The packet replaces the lab's own practice set, and its lesson's when the
-    pre-lab draws on it. A **Module 3** packet counts toward engagement as a
+  - The packet replaces the lab's own practice set, and no lesson after L16
+    has one (Neil, 2026-11-08: "No practice sets after L17 - just prelabs
+    (predictions) as a part of the lab packet"). A **Module 3** packet counts toward engagement as a
     genuine, documented attempt.
   - **The Module 4 packets (L28–L31 Labs) are the scaffolding for the final
     project** (Neil, 2026-10-15): one report, in the cadet's own words, on
@@ -150,14 +151,14 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L18 Lab | Beam Steering | **L18 Lab** packet | 14/21; dry run 2026-10-19, fixes merged (#110, #121): E1 side, 45° marker, scan loss at 1.2 m | ready |
 | L19 | Direction Finding | none (L19 Lab packet) | rewritten (#103), 19/20, fix widget (#123); voice, why and illustration sweeps (#151) | ready |
 | L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | firing range: 3.0 m line, 5 stations 0.75 m apart (Neil, 10-25), 2.0 m × 1.0–2.0 m box field; starter script; 8/20 | hardware-day checks |
-| L20 | Array Factor and Beamwidth | practice | 18/20, sweeps done (#128) | ready |
+| L20 | Array Factor and Beamwidth | L20 Lab pre-lab | 18/20, sweeps done (#128) | ready |
 | L20 Lab | Array Factor | **L20 Lab** packet (`68f9454`, 2026-10-22); L20Lab practice set retired | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | ready |
-| L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
+| L21 | Antenna Pattern | L21 Lab pre-lab | cut 20/20, sweeps done (#127) | ready |
 | L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23; walk validated 2026-10-25 (sidelobes 11.5 / 14.8 dBc, floor 25–30 dBc) | ready |
-| L22 | Sidelobes and Tapering | practice | cut 20/20; voice, why and illustration sweeps done (#132, #137, #142) | ready |
-| L23 | Beam Squint and Quantization | practice | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
+| L22 | Sidelobes and Tapering | L22–L23 Lab pre-lab | cut 20/20; voice, why and illustration sweeps done (#132, #137, #142) | ready |
+| L23 | Beam Squint and Quantization | L22–L23 Lab pre-lab | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20; preset-6 walk validated on phaser-00 2026-10-25 | ready |
-| L24 | Null Steering | practice | cut 20/20 (#148), voice, why and illustration sweeps (#149) | ready |
+| L24 | Null Steering | L24 Lab pre-lab | cut 20/20 (#148), voice, why and illustration sweeps (#149) | ready |
 | L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | all four procedures run on phaser-00 2026-10-25 (A, B, D angles and loss validated; nulls room-limited to about −22 dB in a cramped space) | ready |
 
 **Module 4: radar (L25–L31) and the final project.** Placeholder pages.
