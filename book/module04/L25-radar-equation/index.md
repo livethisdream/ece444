@@ -411,7 +411,7 @@ Here is the whole budget for the lab setup: a corner reflector with 10 cm edges 
 
 - **$P_t = -16$ dBm**, or 25 µW, is the transmit tone ADI measured at the transmit output on its <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/hardware/" target="_blank" rel="noopener">hardware page</a>.
 - **$G_t = 6$ dBi** is an assumed small printed transmit antenna. Substitute the gain of the antenna on your bench.
-- **$G_r = 15.0$ dBi** is the course array at broadside from <a href="../../module03/L21-antenna-pattern/index.html#frame-gain-bookkeeping">Lesson 21</a>: 6.0 dBi per element plus $10\log_{10}8 = 9.0$ dB. Each element on the board is a column of patches with more gain than the course model's ideal element, so this term errs low.
+- **$G_r = 15.0$ dBi** is the course array at broadside from <a href="../../module03/L21-antenna-pattern/index.html#frame-gain-of-the-course-array">Lesson 21</a>: 6.0 dBi per element plus $10\log_{10}8 = 9.0$ dB. Each element on the board is a column of patches with more gain than the course model's ideal element, so this term errs low.
 - **$\sigma = -3.3$ dBsm** is the corner of the previous frames, facing the radar within $\pm 19^\circ$. The 10 cm edge is a provisional size; the lab has one or two commercial corner reflectors, and a larger one scales as $a^4$.
 
 Summing the terms gives
