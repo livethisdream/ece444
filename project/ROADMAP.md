@@ -93,6 +93,9 @@ That is the one shared file it may change.
   Picture, Flow, and Equipment and Setup, then read-only steps, entries,
   packet, and For Part 3. COURSE_SPEC "Lesson and lab, one shape" and the
   write-lesson skill have the details; L18, L21, L22-L23 and L24 follow.
+- **No lab reading past ±90°** (Neil, 2026-11-08): behind the board is
+  not a measurement the kit makes accurately, so no step or packet
+  question asks for one.
 - **Labs are named by lesson**: "L17 Lab", "L18 Lab", never a running lab number.
   One lab serves two lessons: the **L22–L23 Lab** (tapering, then grating
   lobes, squint, and quantization) runs after L23 and hangs off it

@@ -810,6 +810,12 @@ everything after that is read-only: the steps and their boxes, No Hardware?,
 Your Part 2 Entries, Lab Packet, For Part 3, Looking Ahead. The
 write-lesson skill carries the checklist.
 
+**No measurement past ±90°** (Neil, 2026-11-08, on L21's back-pattern
+reading: "we shouldn't be measuring past +/-90 and expect to be
+accurate"). A lab asks for, and a packet grades, readings inside the
+front half-plane only; behind the board the kit's patches, the stand and
+the room set what you read, not the array.
+
 **Lab packet structure** (piloted on L19, 2026-10-10). A lab's practice
 problems fold into its lab packet, `ECE444_Lab_L<NN>_<Short>.tex` (in
 `ECE444-faculty` since 2026-10-23, since the source holds the solutions),
