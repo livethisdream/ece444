@@ -36,7 +36,12 @@ with room for notes. Print from read mode for the whole lesson.
 :::{present}
 - Lesson 20: the aperture in wavelengths, $Nd/\lambda$, sets the beamwidth.
 - Today you halve the active aperture twice and watch the beam double.
-- Then E1 and E8 alone: two elements spanning the whole row.
+- Then you sweep E1 and E8 alone, two elements that span the whole row.
+:::
+:::{present}
+<img src="../../viz/img/L20-aperture-halving.svg"
+     alt="Ideal array factors at 10.3 GHz for 8, 4, and 2 active elements: the beam doubles in width at each halving, and the peak steps down 6.0 dB each time"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Lesson 20 showed that the beamwidth of a uniform array depends on the array
@@ -58,6 +63,12 @@ against the prediction you made in Part 1 of the packet.
 | 10 | Sweep E1 and E8 | lobe angles, widths |
 | 11 and 12 | Compare and restore | |
 :::
+:::{present}
+<picture>
+<source media="(max-width: 600px)" srcset="../../viz/img/L20-lab-sequence-narrow.svg">
+<img src="../../viz/img/L20-lab-sequence.svg" alt="The four sweeps of the L20 Lab, each an eight-element row with the active elements lit and a thumbnail of the expected trace. Step 7: E1 to E8, Nd 112 mm, a 13 degree beam with three sidelobe pairs. Step 8: E3 to E6, Nd 56 mm, a beam twice as wide with one sidelobe pair. Step 9: E4 and E5, Nd 28 mm, one broad lobe with no null. Step 10: E1 and E8, 98 mm apart, a narrow lobe at 0 degrees repeated at full height." style="max-width: 100%; display: block; margin: 0 auto;">
+</picture>
+:::
 
 Each sweep fills one row of Table A in Part 2 of the packet, and the E1 and
 E8 sweep also fills Table B. Freeze each trace before you start the next, so
@@ -67,7 +78,7 @@ lists the differences to expect between a trace and the array factor.
 
 ::::{frame} Equipment and Setup
 :::{present}
-- The HB100 at boresight, $1\ \text{m}$ out, at patch-row height.
+- Set the HB100 at boresight, $1\ \text{m}$ out, at patch-row height.
 - Leave it there for all four sweeps.
 - Fill Tables A and B in Part 2 as you go.
 :::
@@ -89,7 +100,7 @@ you compare the four traces against each other at the end.
    record the Signal Freq in Part 2 of the packet. If it is more than
    $50\ \text{MHz}$ from the frequency you used in Part 1, recompute your
    calculated columns before you sweep; a smaller change moves no prediction
-   by more than about $0.3^\circ$.
+   by more than about $0.5^\circ$.
 
    <div class="rec" data-lab="L20">
    <label>Step 2: Signal Freq <input data-field="f.sig"></label>
@@ -116,7 +127,10 @@ you compare the four traces against each other at the end.
    <label>Step 5: Rx Gain (dB) <input data-field="f.gain"></label>
    </div>
 6. **Check the broadside sweep.** Press **Start**. On the **Rectangular** tab,
-   the sweep should peak near $0^\circ$ with a clean pair of first sidelobes.
+   the sweep should peak near $0^\circ$, with its first sidelobes near
+   $\pm 22^\circ$ and 11 to 14 dB below the peak. If they are higher than
+   that, or differ from each other by more than a few dB, run **Calibrate**
+   again before you go on.
 ::::
 
 ::::{frame} Sweep Four Apertures
@@ -126,11 +140,18 @@ Before each sweep, check your Part 1 row for it. For each one, press
 **Start**, then **Freeze** to hold the trace, and record four numbers in the
 boxes under the step, which fill Table A: the Peak Gain readout; the HPBW, between the two angles where the
 trace falls $3\ \text{dB}$ below its peak; the FNBW, between the two minima
-that bracket the main lobe; and the first SLL, the tallest sidelobe relative
-to the peak.
+that bracket the main lobe; and the first SLL, the tallest sidelobe.
+
+Read every level in **dBc**: subtract the trace's own peak from the reading,
+so the peak is 0 dBc. Peak Gain reads in dBFS and drops each time you switch
+elements off, so only a level taken from its own trace's peak compares with
+the array factor and with the other traces. The last 39 points of every sweep
+ask for more phase than any real angle needs, and all of them plot at
+$\pm 90^\circ$, so the trace stands up in that column. That column is the
+array factor at the extra phase, not a lobe: leave it out of Steps 7 to 10.
 
 7. **Eight elements.** With all eight Element Gains at 100, sweep. Expect one
-   main lobe at $0^\circ$ and three or four sidelobe pairs on each side, an
+   main lobe at $0^\circ$ and three sidelobe pairs on each side, an
    HPBW within a degree of your calculated value, and a first SLL near
    $\pm 22^\circ$ at $-11$ to $-14\ \text{dBc}$.
 
@@ -143,7 +164,7 @@ to the peak.
 8. **Four elements, E3 to E6.** Set E1, E2, E7, and E8 to 0, and sweep. The
    main lobe is roughly twice as wide, the sidelobes thin to one pair near
    $\pm 50^\circ$, and the peak drops about $6\ \text{dB}$, which the kit
-   reads as 5 to 6 dB. A null that fills to the floor reads wide, so this FNBW
+   reads as 4.5 to 6 dB. A null that fills to the noise floor reads wide, so this FNBW
    can come out a few degrees wider than your prediction.
 
    <div class="rec" data-lab="L20">
@@ -155,7 +176,7 @@ to the peak.
    </div>
 9. **Two elements, E4 and E5.** Set every element to 0 except E4 and E5, and
    sweep. The peak sits about $12\ \text{dB}$ below the eight-element peak,
-   which the kit reads as 10 to 12 dB. The trace falls about $20\ \text{dB}$
+   which the kit reads as 9 to 12 dB. The trace falls about $20\ \text{dB}$
    toward $\pm 80^\circ$: that is the two-element array factor's own roll-off
    toward endfire, not a fault.
 
@@ -167,17 +188,20 @@ to the peak.
    <label>First SLL (dBc) <input data-field="a2.sll" data-label="Step 9, E4 and E5: first SLL (dBc)"></label>
    </div>
 10. **Two elements, E1 and E8.** Set E4 and E5 to 0 and E1 and E8 to 100, and
-    sweep. Record in Table B the peak, the HPBW and FNBW of the lobe at
-    $0^\circ$, and the angle and level of every full-height lobe. The lobes
-    are numbered $m = -3$ to $+3$ from the most negative angle, $m = 0$ at
-    $0^\circ$.
+    sweep. Record in Table A the peak, the change from eight elements, and the
+    HPBW and FNBW of the lobe at $0^\circ$, and in its First SLL box the level
+    of the lobe near $\pm 17^\circ$. Record in Table B the angle and level of
+    every full-height lobe, numbered $m = -3$ to $+3$ from the most negative
+    angle, $m = 0$ at $0^\circ$. The $m = \pm 4$ lobes need more phase than any
+    real angle and stand at full height in the $\pm 90^\circ$ column; leave
+    them out.
 
     <div class="rec" data-lab="L20">
     <label>Peak Gain (dBFS) <input data-field="a18.peak" data-label="Step 10, E1 and E8: Peak Gain (dBFS)"></label>
     <label>Change from 8 elements (dB) <input data-field="a18.step" data-label="Step 10, E1 and E8: change from 8 elements (dB)"></label>
     <label>HPBW <input data-field="a18.hpbw" data-label="Step 10, E1 and E8: HPBW"></label>
     <label>FNBW <input data-field="a18.fnbw" data-label="Step 10, E1 and E8: FNBW"></label>
-    <label>First SLL (dBc) <input data-field="a18.sll" data-label="Step 10, E1 and E8: first SLL (dBc)"></label>
+    <label>Level of the ±17° lobe (dBc) <input data-field="a18.sll" data-label="Step 10, E1 and E8: level of the ±17° lobe (dBc)"></label>
     <label>Angle <input data-field="lobe.m3.angle" data-label="Step 10, lobe −3: angle"></label>
     <label>Level (dBc) <input data-field="lobe.m3.level" data-label="Step 10, lobe −3: level (dBc)"></label>
     <label>Angle <input data-field="lobe.m2.angle" data-label="Step 10, lobe −2: angle"></label>
@@ -199,19 +223,13 @@ to the peak.
 
 11. **Compare the frozen traces.** The three uniform apertures are on the plot
     together. The beamwidth doubles at each halving, because $Nd$ halves and
-    both beamwidth formulas scale as $1/Nd$; this is the main result of the
-    lab. The peak steps down at each halving, because the elements add in
-    voltage at boresight. The ideal steps are
-
-    $$\begin{aligned}
-    \Delta P &= 20\log_{10}\!\left(\frac{N_{\text{active}}}{8}\right) \\
-    &= -6.0\ \text{dB} \quad (N = 4) \\
-    &= -12.0\ \text{dB} \quad (N = 2)
-    \end{aligned}$$
-
-    and the kit reads about 5 to 6 dB per halving, consistent with the ideal
-    within the spread of its readings. Your two steps are the change column of
-    Steps 8 and 9.
+    both beamwidth formulas scale as $1/Nd$. The peak steps down at each
+    halving, because the elements add in voltage at boresight: the voltage
+    sum in Lesson 20's
+    <a href="../L20-array-factor-beamwidth/index.html#frame-halving-the-active-aperture">"Halving the Active Aperture"</a>
+    puts each step at $6.0\ \text{dB}$, and the kit reads about 4.5 to 6 dB
+    per halving, 9 to 12 dB over both, consistent with it within the spread
+    of its readings. Your two steps are the change column of Steps 8 and 9.
 12. **Restore the array.** Set all eight Element Gains back to 100, so the next
     lab starts from a full uniform aperture.
 ::::
@@ -224,7 +242,7 @@ Run `python phaser_headless.py --sim` and open the same URL. The lab reproduces
 step for step in simulation, because the simulated source already sits at
 boresight and nothing in the procedure requires moving it. Its Signal Freq is
 $10.525\ \text{GHz}$, so compute the calculated columns there. It adds the element signals exactly in voltage, so its peak steps
-come out at the ideal $6.0\ \text{dB}$ rather than the kit's 5 to 6 dB,
+come out at the ideal $6.0\ \text{dB}$ rather than the kit's 4.5 to 6 dB,
 and it does not model **Rx Gain (dB)**. Record those as your measured column
 and reconcile them against the calculated column exactly as you would with the
 kit.
@@ -234,7 +252,7 @@ kit.
 ::::{frame} Your Part 2 Entries
 :class: read-only
 
-Every box you filled in on this page, in one place. Your entries stay in this
+This frame collects every box you filled in on this page. Your entries stay in this
 browser only, saved as you type. **Download my packet** writes them into Part 2
 of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
 viewer, and upload one PDF to Gradescope. If you have already typed Part 1 into
@@ -253,9 +271,9 @@ viewer instead.
 
 The L20 Lab packet is one submission for the whole lab, turned in complete before Lesson 21. It has three parts:
 
-1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it in class): your kit's frequency, the prediction table for the three uniform apertures, the array factor and lobe angles for E1 and E8, and a rehearsal of the E1 and E8 sweep on the hosted simulator.
-2. **Part 2, Measurements** (your own kit's data, recorded in class): Table A, one row per sweep, and Table B, the E1 and E8 lobes.
-3. **Part 3, Writeup** (individual, after the lab): reconcile the measurements with the predictions, and two analysis problems.
+1. Part 1, Pre-Lab (individual, before the lab period, because you need it in class): your kit's frequency, the prediction table for the three uniform apertures, the array factor and lobe angles for E1 and E8, and a rehearsal of the E1 and E8 sweep on the hosted simulator.
+2. Part 2, Measurements (your own kit's data, recorded in class): Table A, one row per sweep, and Table B, the E1 and E8 lobes.
+3. Part 3, Writeup (individual, after the lab): reconcile the measurements with the predictions, and two analysis problems.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L20_ArrayFactor_blank.pdf" target="_blank" rel="noopener">L20 Lab packet (PDF)</a>
 ::::
@@ -270,14 +288,15 @@ entries beside you. Its first question asks three things:
    HPBW within about a degree of your Part 1 values, and the two-element HPBW
    within several degrees. Name the cause of any larger difference.
 2. Why do the E1 and E8 peak and the E4 and E5 peak agree while their beams
-   do not? Use the span of each pair in wavelengths.
+   do not? Use where each pair puts its weight along the row.
 3. How do your two peak changes compare with the $6.0\ \text{dB}$ voltage sum,
    given the spread of your readings?
 
 Lesson 20's
 <a href="../L20-array-factor-beamwidth/index.html#frame-what-the-sweep-shows">"What the Sweep Shows"</a>
 gives the expected size of each difference. The two analysis problems that
-follow work from Lesson 20 alone.
+follow use Lesson 20's results, and the last part of the second compares a
+Hann taper, from Lesson 22, with switching elements off.
 ::::
 
 ::::{frame} Looking Ahead

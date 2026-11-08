@@ -59,7 +59,9 @@ def lesson_label(page: Path, text: str) -> str:
 
 
 def entries():
-    out = {}
+    # A widget a lesson and its lab both iframe is listed once, under the
+    # first page that carries it (the lesson sorts before LNN-lab-*).
+    out, seen = {}, set()
     for page in sorted(BOOK.glob("module0*/*/index.md")):
         text = page.read_text()
         mod = int(page.parts[-3][-2:])
@@ -72,6 +74,10 @@ def entries():
             names += [(h.start(), h.group(1)) for h in HEADING.finditer(before)]
             name = max(names)[1].strip() if names else widget
             rel = page.relative_to(BOOK).with_suffix(".html").as_posix()
+            key = (lesson_label(page, text), widget)
+            if key in seen:
+                continue
+            seen.add(key)
             out.setdefault(mod, []).append((lesson_label(page, text), name, desc, widget, rel))
     return out
 
