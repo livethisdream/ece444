@@ -128,9 +128,10 @@ def report(path, rows, verbose, strict, beats=None):
     legacy = [r for r in shown if r["kind"] == "legacy"]
     name = path.relative_to(BOOK).parts[1] if len(path.relative_to(BOOK).parts) > 2 else path.parent.name
     FRAMES = beats if beats is not None else beat_budget(name)
-    fail = (opted or strict) and (over or len(shown) > FRAMES)
+    capped = FRAMES is not None
+    fail = (opted or strict) and (over or (capped and len(shown) > FRAMES))
     flag = "FAIL" if fail else ("ok  " if opted else "uncut")
-    line = (f"{flag} {name:<34} beats {len(shown):>3}/{FRAMES}  cut {len(cut):>3}  "
+    line = (f"{flag} {name:<34} beats {len(shown):>3}/{FRAMES if capped else '-':<2}  cut {len(cut):>3}  "
             f"legacy {len(legacy):>3}  over-{WORDS}w {len(over):>3}")
     print(line)
     if verbose:
@@ -139,7 +140,7 @@ def report(path, rows, verbose, strict, beats=None):
             if r.get("exempt") and r["words"] > WORDS:
                 mark = "LO"
             print(f"   {mark} {i:>2} {r['kind']:<9} {r['words']:>3}w  {r['title'][:56]}")
-        if len(shown) > FRAMES:
+        if capped and len(shown) > FRAMES:
             print(f"   !! {len(shown)} present frames; the budget is {FRAMES}")
     return not fail
 
