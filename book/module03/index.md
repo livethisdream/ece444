@@ -174,7 +174,7 @@ factor, and a null is placed with complex weights.
   <a class="mt-card mt-practice mt-lab" href="L21-lab-antenna-pattern/index.html">
     <span class="mt-kind">L21 Lab</span>
     <h4>Antenna Pattern</h4>
-    <p>Walk the source around a fixed beam to see the element pattern.</p>
+    <p>Sweep the source in azimuth around a held beam, and compare with the beam sweep.</p>
   </a>
 </div>
 ::::

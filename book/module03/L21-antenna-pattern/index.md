@@ -329,7 +329,7 @@ from the room.
 :::
 
 **Room reflections.** The lab is not an anechoic chamber. Signals from the
-HB100 also reach the array off the floor, the ceiling, the benches, and the
+HB100 also reach the array off the floor, the ceiling, the tables, and the
 people nearby, and they add to the direct signal in and out of phase. A
 reflection $18\ \text{dB}$ below the level being read moves that reading by
 about a decibel, and the same reflection moves a weaker lobe by more. The
@@ -460,7 +460,7 @@ in place of $10\log_{10} 8$; the two agree within $0.2\ \text{dB}$.
 ::::{frame} Preparing for the Lab
 :class: read-only doc-links
 
-Part 1 of the L21 Lab packet works out what you should see at the bench, so you can tell a good trace from a bad one while you are still at the kit. Complete it before the lab period.
+Part 1 of the L21 Lab packet works out what you should see in class, so you can tell a good trace from a bad one while you are still at the kit. Complete it before the lab period.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet, Part 1 (PDF)</a>
 ::::

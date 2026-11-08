@@ -4,7 +4,7 @@
   - L21-three-methods   : the three ways to trace a pattern -- the beam sweep,
                           the azimuth sweep by hand, the azimuth sweep on the
                           stand -- one panel each.
-  - L21-bench-layout    : the bench from above: the kit on its stand, the HB100
+  - L21-lab-layout     : the setup from above: the kit on its stand, the HB100
                           on its tripod 1.2 m out, the taped 1.2 m arc with its
                           -90/0/+90 marks and the start end, E1/E8, the laptop.
   - L21-range-artifacts : a classroom (direct path plus floor and wall
@@ -143,8 +143,8 @@ def three_methods():
           "the beam is held, the HB100 stays on its tripod, and the kit turns on its stand.")
 
 
-# --------------------------------------------------------------- bench layout
-def bench_layout():
+# ----------------------------------------------------------------- lab layout
+def lab_layout():
     W, H, F = 560, 560, 18
     cx, cy, R = 280, 400, 230
     s = [defs(("G", GRAY), ("R", RED), ("N", NAVY))]
@@ -185,8 +185,8 @@ def bench_layout():
     s.append(text(cx, cy + 124, "laptop", F, GRAY))
     s.append(f'<path d="M{cx + 22} {cy + 36} C{cx + 60} {cy + 70}, {cx + 50} {cy + 90}, {cx + 30} {cy + 98}" '
              f'fill="none" stroke="{GRAY}" stroke-width="1.5"/>')
-    write("L21-bench-layout", "".join(s), W, H,
-          "The bench seen from above: the kit on its stand at the center, its patches toward the HB100, "
+    write("L21-lab-layout", "".join(s), W, H,
+          "The setup seen from above: the kit on its stand at the center, its patches toward the HB100, "
           "E1 on the left and E8 on the right; the HB100 on its tripod 1.2 m out at 0 degrees; a taped "
           "1.2 m arc from minus 90 degrees on the E1 side, where the sweep by hand starts, to plus 90 "
           "degrees on the E8 side; the laptop behind the kit.")
@@ -335,7 +335,7 @@ def tracking_tab():
 
 if __name__ == "__main__":
     three_methods()
-    bench_layout()
+    lab_layout()
     range_artifacts()
     run3_reading()
     tracking_tab()
