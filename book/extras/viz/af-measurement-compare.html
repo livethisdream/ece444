@@ -67,7 +67,7 @@
       <option value="18">E1 and E8</option>
     </select>
     <label class="tog"><input type="checkbox" id="meas"> Measurement effects</label>
-    <span class="note">2.8125&deg; phase-step grid, &minus;23 dBc floor, receiver noise.</span>
+    <span class="note">2.8125&deg; phase-step grid, &minus;23 dBc floor, receiver noise; drawn at <span id="fghz">10.0</span> GHz.</span>
   </div>
 
   <div class="readouts">
@@ -84,13 +84,19 @@
 <script>
 'use strict';
 
-// ---------- array constants (PHASER at the workshop frequency) ----------
-const LAM = 3.00e8 / 10.3e9;         // 10.3 GHz, 29.13 mm
+// ---------- array constants ----------
+// Drawn at 10.0 GHz by default, below every HB100 kit, so no readout equals a
+// Part 1 answer (Neil, 2026-11-08). ?f=10.3 (GHz) draws another frequency.
+const F_GHZ = (function () {
+  const v = parseFloat(new URLSearchParams(location.search).get('f'));
+  return (v >= 8 && v <= 12) ? v : 10.0;
+})();
+const LAM = 3.00e8 / (F_GHZ * 1e9);  // 30.0 mm at 10.0 GHz
 const DEL = 14e-3;                   // element spacing
-const KD  = 2 * Math.PI * DEL / LAM; // k*d  = 3.020 rad
+const KD  = 2 * Math.PI * DEL / LAM; // k*d  = 2.932 rad at 10.0 GHz
 const NEL = 8;
 const STEP     = 2.8125;             // sweep step = ADAR1000 phase LSB, deg of phase
-const KD_DEG   = KD * 180 / Math.PI; // 173.0 deg of phase per unit sin(theta)
+const KD_DEG   = KD * 180 / Math.PI; // 168.0 deg of phase per unit sin(theta) at 10.0 GHz
 const FLOOR_DB = -23.0;              // noise floor, dB below each trace's own peak (dBc)
 const LOOKS    = 20;                 // power averages the GUI takes per sweep step
 const SEED     = 6618;               // fixed noise realization, so readings repeat
@@ -148,7 +154,7 @@ function measTrace(w) {
   const xs = [], ys = [];
   // With Use Bits on (every lab preset) the GUI steps the element-to-element
   // phase one LSB per point, so the samples are uniform in sin(theta), not in
-  // theta: 0.0163 apart at 10.3 GHz, 0.93 deg of angle at broadside, wider
+  // theta: 0.0167 apart at 10.0 GHz, 0.93 deg of angle at broadside, wider
   // toward the edges. Phase steps past kd ask for no real angle; the GUI
   // piles them at +/-90 deg, and they are left out here.
   const nMax = Math.floor(KD_DEG / STEP);
@@ -426,6 +432,7 @@ document.getElementById('meas').addEventListener('change', function (e) {
 });
 window.addEventListener('resize', drawAll);
 
+document.getElementById('fghz').textContent = F_GHZ.toFixed(1);
 drawAll();
 MJ.setRedraw(drawAll);
 MJ.onReady(function () { drawAll(); });

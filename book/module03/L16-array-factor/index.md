@@ -551,7 +551,7 @@ The L20 Lab sweeps this beam past a fixed source. Expect a $13^\circ$ beam, a fi
 :::
 
 :::{present}
-<iframe src="../../viz/af-measurement-compare.html"
+<iframe src="../../viz/af-measurement-compare.html?f=10.3"
         width="100%" height="463"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
