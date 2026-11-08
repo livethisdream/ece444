@@ -88,27 +88,23 @@ pattern again, but every reading carries a real angle, and the distance to the
 source never changes.
 ::::
 
-::::{frame} What Lesson 21 Predicts
+::::{frame} Bring Your Predictions
 :::{present}
-| At $10.525\ \text{GHz}$ | Beam at $0^\circ$ | Beam at $30^\circ$ |
-| :-- | :-- | :-- |
-| Peak | $0^\circ$, reference | $29.6^\circ$, $-0.6$ dB |
-| First nulls | $\pm 14.7^\circ$ | $14.2^\circ$, $49.0^\circ$ |
-| First sidelobes | $\pm 21.4^\circ$, $-13.1$ dBc | $-12.2$, $-15.1$ dBc |
-| Behind the board | noise floor, $-25$ to $-30$ dBc | noise floor |
+- Part 1 gives the nulls and first sidelobes at your kit's frequency.
+- At broadside, all three traces should agree on the first sidelobes.
+- At $30^\circ$, the azimuth sweep's outer sidelobe should read lower than the beam sweep's.
 :::
 
-Part 1 of the packet works these out at your own kit's frequency; the dBc values
-barely move with frequency, and the angles move by about $0.15^\circ$ per
-$100\ \text{MHz}$, less than you can read off the stand's scale. The table
-includes each patch's own pattern, which both azimuth sweeps see and the beam
-sweep does not. At $0^\circ$ the patch pattern changes the first sidelobes by
-only $0.3\ \text{dB}$. At $30^\circ$ it lowers the outer first sidelobe, near
-$59^\circ$, about $2\ \text{dB}$ below the $-12.8$ dBc the beam sweep would
-show. The room moves a dBc value by up to about $2\ \text{dB}$, as much as that
-difference, so treat it as the direction to expect, not a number to match. The
-ground plane blocks everything behind the board, so the reading with the source
-behind it should drop to the noise floor.
+Work Part 1 at your own kit's frequency and bring the numbers to the bench,
+so you can tell a good trace from a bad one while you can still repeat it.
+The angles move by about $0.15^\circ$ per $100\ \text{MHz}$, less than the
+stand's scale reads, and the dBc values barely move. Both azimuth sweeps
+carry each patch's own pattern and the beam sweep does not, which matters
+only where the source is far off broadside. The room moves a dBc value by up
+to about $2\ \text{dB}$, so treat a predicted difference of that size as a
+direction to look for, not a number to match. With the source behind the
+board, the ground plane blocks the signal and the reading should drop to the
+noise floor.
 ::::
 
 ::::{frame} Azimuth Sweep Simulator
@@ -193,25 +189,22 @@ two, which is fine for a lobe $15^\circ$ wide.
 
 ::::{frame} The Steered Pattern
 :::{present}
-- With the beam held at $30^\circ$, the lobe is wider on the outside: nulls at $14.2^\circ$ and $49.0^\circ$.
-- The outer first sidelobe should read about $-15$ dBc against the inner one's $-12$; the room can move either by 2 dB.
+- With the beam held at $30^\circ$, the main lobe appears near $30^\circ$ and reaches farther above its peak than below it.
+- The outer first sidelobe should read lower than the inner one; Part 1 says by how much.
 :::
 
 With the beam held at $30^\circ$, the main lobe appears when the source reaches
 about $30^\circ$ instead of boresight. The array factor slides in $\sin\theta$,
-so the first nulls fall at $14.2^\circ$ and $49.0^\circ$, and the lobe reaches
-farther above its peak than below it. The peak should read about
-$0.6\ \text{dB}$ below the broadside beam, the scan loss of Lesson 18; only the
+not in $\theta$ (Lesson 18), so the lobe is wider on its outside. The peak also
+reads a little below the broadside beam, the scan loss of Lesson 18; only the
 pass on the stand, at a fixed distance, can resolve a drop that small, and only
 if the reading repeats.
 
-The first sidelobe on the inside of the beam, near $+8^\circ$, should read about
-$-12.2$ dBc, and the one on the outside, near $+59^\circ$, about $-15.1$ dBc,
-because the patch pattern is about $2.4\ \text{dB}$ lower at $59^\circ$ than at
-the $30^\circ$ peak. The room made the two first sidelobes of a broadside sweep
-by hand differ by
-about $3\ \text{dB}$ on my kit, so compare your $30^\circ$ difference with your
-own broadside difference before you credit it to the patches.
+The patch pattern falls toward the horizon, so the outer first sidelobe, far
+off broadside, reads lower than the inner one, which sits near broadside where
+the patch pattern is flat. Compare the difference you measure with your own
+broadside difference before you credit it to the patches: on my kit the room
+alone made the two broadside first sidelobes differ by about $3\ \text{dB}$.
 ::::
 
 ::::{frame} Two Error Budgets
@@ -327,7 +320,7 @@ rotation's.
 Expect the room to make the two first sidelobes unequal. On phaser-00, two
 sweeps by hand read the left one about 11.5 dB below the peak and the right one
 about 14.8 dB below, within half a decibel from sweep to sweep; their average,
-13.2 dB, sat on the predicted 13.1. With the source behind the board the trace
+13.2 dB, sat close to the prediction. With the source behind the board the trace
 read about 25 to 30 dB below the peak, so with the uniform taper both sidelobes
 stand at least 10 dB clear of the noise floor.
 ::::
