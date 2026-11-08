@@ -50,13 +50,15 @@ bad(){ echo "  FAIL  $1"; fails=$((fails+1)); }
 
 echo "== ${LNN} =="
 
-# L21 (Neil, 2026-11-07) and Module 4's L28-L31 have no practice
-# set: the lab packet replaces it (ROADMAP 4, Neil 2026-10-25). Skip the
+# No lesson after L16 has a practice set (Neil, 2026-11-08: "No practice
+# sets after L17 - just prelabs (predictions) as a part of the lab
+# packet"), and Module 4's L28-L31 have none: the lab packet replaces it
+# (ROADMAP 4, Neil 2026-10-25). Skip the
 # practice gates for them. The stub gate and the packet-link gate (7) still
 # apply, so a lesson-half pass reports two expected failures until its lab
 # pass adds the procedure and links the packet.
 PRACTICE=1
-case "$NN" in 21|28|29|30|31) PRACTICE=0 ;; esac
+case "$NN" in 17|18|19|20|21|22|23|24|28|29|30|31) PRACTICE=0 ;; esac
 
 # Locate the lesson page, and take the module number from where it actually
 # lives rather than assuming a lesson-to-module mapping.
