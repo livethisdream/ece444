@@ -90,7 +90,9 @@ against the predicted 2.0.
 The gains are symmetric about the array center and the phases are
 antisymmetric, the conjugate mirror pairs of
 <a href="../L24-null-steering/index.html#frame-weights-on-a-circle">Lesson 24's weight circle</a>.
-Neither column nulls anything on its own; only the eight weights together do.
+Neither column nulls anything on its own: the eight contributions have to
+cancel in amplitude and in phase at $+22.5^\circ$, so the null needs both
+columns together.
 ::::
 
 ::::{frame} Why the Notch Goes Deep
@@ -138,7 +140,8 @@ arrive in phase, which is boresight. The result is a null there with twin
 peaks near $\pm 11^\circ$: the **monopulse difference beam**, which Procedure D
 and Module 4 use for angle measurement. On my kit it measured $-41.5$ dB in
 an open room and $-22$ dB in a cramped one, centered on boresight, with the
-peaks at $\pm 12.0^\circ$. It needs no arithmetic, so its depth is a direct
+peaks at $\pm 12.0^\circ$, one sweep step outside the predicted
+$\pm 11.1^\circ$. It needs no arithmetic, so its depth is a direct
 reading of what the room lets through.
 
 The $+22.5^\circ$ notch exists because we solved for eight weights, and it moves
@@ -178,7 +181,7 @@ under either mode and the two are compared on one scale.
 ::::{frame} Two Limits of Two Channels
 :::{present}
 - Near $\pm 30^\circ$ the subarray pattern already puts the interferer 20 dB down.
-- There the two channels cannot tell it from boresight, so MVDR's one null hits the target.
+- There the channels' phase difference wraps a full cycle, so MVDR's one null hits the target.
 - Diagonal loading limits that loss; Procedure C runs at $+20^\circ$.
 :::
 
@@ -369,7 +372,9 @@ also carries a simulated interferer, so procedure C runs there too.
 6. With the array uniform (Element Gains at 100 %, Phase Control reset), press
    **Start**. Read **Peak Gain** and **Angle** (set to **Peak**), then press
    **Freeze** to hold the trace as your reference. Record the level of the
-   sidelobe nearest $+22.5^\circ$; expect about $-13$ dBc. If the two first
+   sidelobe nearest $+22.5^\circ$ in dBc, its reading minus the uniform peak,
+   so the frozen peak is 0 dB for every level in Procedures A and B; expect
+   about $-13$ dBc. If the two first
    sidelobes differ by more than about 2 dB, calibrate again and repeat this
    step.
    <div class="rec" data-lab="L24">
@@ -401,9 +406,10 @@ also carries a simulated interferer, so procedure C runs there too.
 12. Leave Beam 0 Gain and Phase alone, and set **Beam 1 Phase** to $180^\circ$.
 13. Press **Start**. Nothing in the analog beamformers changed; only one digital
     channel's sign did.
-14. Record the null's depth and angle, and the angles of the two peaks that
-    replace the main lobe. The peaks fall on the sweep's $2.8125^\circ$ grid, so
-    one grid step is the reading tolerance. The null needs no arithmetic, so
+14. Record the null's depth below the frozen uniform peak and its angle, and
+    the angles of the two peaks that replace the main lobe. The sweep steps the
+    phase by one $2.8125^\circ$ LSB, about $1^\circ$ of angle here, so one
+    step is the reading tolerance. The null needs no arithmetic, so
     its depth is a direct reading of what the room lets through.
     <div class="rec" data-lab="L24">
     <label>Step 14: null depth (dB) <input data-field="b.depth"></label>
@@ -488,16 +494,16 @@ the beam held on the target.
 25. In **Plot Options**, turn on **Show Monopulse Delta Beam** and **Show
     Monopulse Error Function**.
 26. On the **Rectangular** tab, press **Start**. The sum trace peaks on
-    boresight and the delta trace nulls there. Record the delta null's depth and
-    angle, and the angle where the error trace crosses zero.
+    boresight and the delta trace nulls there. Record the delta null's depth in
+    dBc, below the sum trace's peak, and its angle, and the angle where the error trace crosses zero.
     <div class="rec" data-lab="L24">
     <label>Step 26: delta null depth (dBc) <input data-field="d.depth"></label>
     <label>Step 26: delta null angle <input data-field="d.angle"></label>
     <label>Step 26: error-function zero crossing <input data-field="d.zero"></label>
     </div>
 27. Open the **Tracking** tab and press **Start**. Its y-axis is the steering
-    angle, plotted against sweep count. Move the HB100 slowly across the front
-    of the array along the $1.2$ m arc. The tracker reads the error function,
+    angle, plotted against sweep count. Sweep the HB100 slowly in azimuth along
+    the $1.2$ m arc. The tracker reads the error function,
     drives it back toward zero, and follows the source without sweeping. Expect
     it to follow smoothly to about $\pm 45^\circ$; past about $\pm 48^\circ$ it
     loses the source and snaps to the $\pm 90^\circ$ limits or to a sidelobe near
