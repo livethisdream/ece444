@@ -3,8 +3,8 @@
 
 1-9    bring up      the HB100 at 0 deg on the 1 m arc; Find HB100, Calibrate
 10-14  Run 1         Phase Control at zero; move the source to 0, 30, 45 deg
-15     Run 1 levels  the same three lines, 1.2 m out; Peak Gain on each
-16-21  Run 2         the source back at 0 deg; Apply 15, 30, 45
+15-19  Run 2         the source back at 0 deg; Apply 15, 30, 45
+20     reset         Phase Control back to zero for the next lab
 
 Each panel is a top view: the eight-element row at the bottom, the arc
 centered between E4 and E5, and the source positions. The view is from
@@ -30,14 +30,13 @@ NAVY, BLUE, AMBER, GRAY, INK, LIGHT = "#004a85", "#0067b9", "#8a5a00", "#5a5a5a"
 
 PW, PH = 220, 200                 # one panel
 R1 = 92                           # the 1 m arc, in units
-R12 = 1.2 * R1                    # 1.2 m
 SQ, GAP = 9, 3                    # element squares
 
 STAGES = [
     ("1–9", "Bring up", "Find HB100, Calibrate"),
     ("10–14", "Run 1: move", "Phase Control at 0"),
-    ("15", "Run 1: levels", "1.2 m, Peak Gain"),
-    ("16–21", "Run 2: Apply", "source back at 0°"),
+    ("15–19", "Run 2: Apply", "source back at 0°"),
+    ("20", "Reset", "Phase Control to 0"),
 ]
 
 
@@ -73,7 +72,7 @@ def panel(s, ox, oy, k):
     x1, y1 = pos(cx, cy, R1, 60)
     s.append(f'<path d="M {x0:.1f} {y0:.1f} A {R1} {R1} 0 0 1 {x1:.1f} {y1:.1f}" fill="none" '
              f'stroke="{LIGHT}" stroke-width="2"/>')
-    xb, yb = pos(cx, cy, R12 + 4, 0)
+    xb, yb = pos(cx, cy, R1 + 12, 0)
     s.append(f'<line x1="{cx:.1f}" y1="{cy:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="{LIGHT}" '
              f'stroke-width="1" stroke-dasharray="3 3"/>')
     # the array: eight elements, E1 on the left, E8 on the right (view from above)
@@ -91,13 +90,8 @@ def panel(s, ox, oy, k):
             xl, yl = pos(cx, cy, R1 + 19, d)
             s.append(f'<text x="{xl:.1f}" y="{yl + 5:.1f}" text-anchor="middle" font-size="15.5" '
                      f'fill="{AMBER}">{d}°</text>')
-    elif k == 2:
-        for d in (0, 30, 45):
-            xa, ya = pos(cx, cy, R1, d)
-            xb2, yb2 = pos(cx, cy, R12, d)
-            s.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb2:.1f}" y2="{yb2:.1f}" stroke="{AMBER}" '
-                     f'stroke-width="1.2" stroke-dasharray="2 2"/>')
-            source(s, xb2, yb2, filled=False)
+    elif k == 3:
+        source(s, *pos(cx, cy, R1, 0))
     else:
         for d in (15, 30, 45):
             xe, ye = pos(cx, cy, R1 - 10, d)
@@ -114,9 +108,8 @@ def build() -> str:
     s = [f'<svg viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" role="img" '
          f'aria-label="The four stages of the L18 Lab, seen from above. Steps 1 to 9: the HB100 at 0 degrees '
          f'on the 1 m arc for Find HB100 and Calibrate. Steps 10 to 14: Phase Control at zero, the source '
-         f'moved to 0, 30, and 45 degrees on the arc. Step 15: the same three lines 1.2 m out, Peak Gain on '
-         f'each. Steps 16 to 21: the source back at 0 degrees and the beam commanded to 15, 30, and 45 '
-         f'degrees with Apply.">']
+         f'moved to 0, 30, and 45 degrees on the arc. Steps 15 to 19: the source back at 0 degrees and the '
+         f'beam commanded to 15, 30, and 45 degrees with Apply. Step 20: Phase Control reset to zero.">']
     for k in range(len(STAGES)):
         r, c = divmod(k, 2)
         panel(s, c * PW, r * PH, k)

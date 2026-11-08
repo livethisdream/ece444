@@ -43,7 +43,10 @@ sweep sets that ramp, and Phase Control adds per-element offsets on top of it. N
 element-to-element phase from the arrival geometry, turn it into the eight
 settings the hardware accepts, predict what the steered pattern looks like, and
 then read the process backwards — given a set of phases, find the angle the
-array is pointing.
+array is pointing. The second half turns to what the L18 Lab measures: the
+beam-sweep trace, the two ways to put its peak at an angle, what Phase Control
+shows after Apply, and how close a measured peak has to land. The Pre-Lab
+frame at the end lists the predictions to bring to the lab.
 :::
 ::::
 
@@ -58,10 +61,6 @@ array is pointing.
         title="A plane wave crossing the eight-element array, the commanded delays that align it, and the two ADAR1000 sums">
 </iframe>
 :::
-
-- Eight elements in a row, $d = 14\ \text{mm}$ apart, with no phase applied.
-- A plane wave from $\theta_0$ off broadside reaches them one after another, not all at once.
-- Undoing those arrival differences makes all eight signals add in phase.
 
 Eight elements sit in a row with no phase applied, spaced
 $d = 14\ \text{mm}$ apart, and a plane wave arrives from an angle $\theta_0$
@@ -217,7 +216,7 @@ reaches 8. Clear the lock and move $\theta_0$: the shifted waves fan out and the
 sums shrink. Turn on the **2nd** source and a second wave, from $\theta_2$,
 reaches the same elements; each line carries both, drawn apart in two colors.
 The same delays that line up the first scramble the second, so the total keeps
-one and loses the other: at the default settings, 8 against 0.72, or
+one and loses the other: at the default settings, 8 against 0.71, or
 $-21.0\ \text{dB}$. That is the receive pattern, built by the delays, not by
 anything in space. **Step** walks the chain one stage at a time. The gain stage
 is where L22 applies a taper; leave it at uniform for now, or pick Hann to see
@@ -277,9 +276,6 @@ For the course array at the workshop frequency, $\lambda = c/f = 29.13\ \text{mm
 $d/\lambda = 0.4807$, and
 
 $$kd = 2\pi(0.4807) = 3.02\ \text{rad} = 173.0^\circ.$$
-
-Carry the extra digit in $d/\lambda$: rounded to $0.481$ first, it gives
-$173.2^\circ$, and every phase in the table comes out a little high.
 
 Multiplying $kd$ by $\sin\theta_0$ gives $\Delta\phi$ for any steer angle on
 this array.
@@ -343,10 +339,8 @@ same field from that element.
 - So wideband systems use time-delay units instead of, or alongside, phase shifters.
 :::
 
-Wrapping discards whole turns. At a single frequency a phase of $360^\circ$ is
-the same as $0^\circ$, so nothing is lost: element 5 set to $72.6^\circ$ radiates
-exactly as it would at $432.6^\circ$. What the wrapped table
-does lose is the record of the true delay, which is the reason a wideband system
+Wrapping discards whole turns, and at one frequency that loses nothing. What
+the wrapped table does lose is the record of the true delay, which is the reason a wideband system
 uses time-delay units instead of, or alongside, phase shifters.
 ::::
 
@@ -410,7 +404,7 @@ point is a grating lobe, not a null. L16's "Grating Lobes" puts the first one at
 $\sin\theta_g = \sin\theta_0 - \lambda/d$ and keeps it out of real space while
 $d < \lambda/(1 + \vert\sin\theta_0\vert)$. Steered to $30^\circ$, the course array
 would need $d > 19.4\ \text{mm}$ for one to appear, and a full $90^\circ$ scan
-needs only $d < 14.55\ \text{mm}$, so the PHASER's $14\ \text{mm}$ never shows
+needs only $d < 14.56\ \text{mm}$, so the PHASER's $14\ \text{mm}$ never shows
 one: at $30^\circ$ the lobe would sit at $\sin\theta = -1.58$.
 
 For the course array, $\lambda/Nd = 29.1/112 = 0.260$. Steered to $30^\circ$, the
@@ -793,8 +787,9 @@ rounding.
 :class: viz-frame
 
 :::{depth}
-The widget predicts the trace. Set the frequency and the source's angle on
-the arc, which is where the trace should peak, and read $\Delta\phi$, the
+The widget predicts the trace, here at $10.0\ \text{GHz}$, away from every
+kit's frequency, so it shows the method rather than your Part 1 answers. Set
+the source's angle on the arc, which is where the trace should peak, and read $\Delta\phi$, the
 predicted half-power beamwidth, and the peak drop, and two rows of phases: the
 beam ramp $+n\Delta\phi$ wrapped to $0^\circ$ to $360^\circ$, and what Phase
 Control shows after Apply at the same angle, the falling whole-degree offsets.
@@ -805,7 +800,7 @@ while the sidelobe structure stretches with it.
 :::
 
 :::{present}
-<iframe src="../../viz/steering-predictor.html"
+<iframe src="../../viz/steering-predictor.html?f=10.0&lock=1"
         width="100%" height="538"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
@@ -819,13 +814,13 @@ while the sidelobe structure stretches with it.
 | Reading | Expect |
 | :-- | :-- |
 | Peak angle | within the pass standard |
-| HPBW | within $1^\circ$ of the prediction |
+| HPBW | within $1^\circ$ of the rule ($1.5^\circ$ at $45^\circ$) |
 | First sidelobes | $-11$ to $-13$ dBc |
 | Floor | about $-23$ dBc |
 :::
 :::{present}
 <img src="../../viz/img/L18-expected-sweep.svg"
-     alt="The expected Rectangular-tab traces for beams at 0 and 30 degrees, sampled about 1 degree apart, with the 13.0 and 15.1 degree half-power spans, the first sidelobes 12.8 dB down, and the noise floor 23 dB down"
+     alt="The expected Rectangular-tab traces at 10.0 GHz for beams at 0 and 30 degrees, sampled about 1 degree apart, with their half-power spans, the first sidelobes 12.8 dB down, and the noise floor 23 dB down"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -833,9 +828,12 @@ The sweep samples the trace at discrete steps. Each dot is one $2.8125^\circ$ ph
 step, which moves $\sin\theta$ by $2.8125^\circ/kd$: at $10.3\ \text{GHz}$,
 $2.8125/173.0 = 0.0163$, or $0.93^\circ$ of angle at broadside, widening as
 $1/\cos\theta$ toward endfire. A half-power crossing falls between two dots,
-so a beamwidth read off the trace is good to about a degree. The figure is
-drawn at the HB100's nominal $10.525\ \text{GHz}$, where the steps are a
-little smaller and the beams a little narrower.
+so a beamwidth read off the trace is good to about a degree. The lab compares
+each width with the $0.886\lambda/(Nd\cos\theta_0)$ rule of "Beam Broadening";
+the exact pattern reads a few tenths wider, up to about half a degree at
+$45^\circ$, which is why the tolerance grows there. The figure is drawn at
+$10.0\ \text{GHz}$, away from every kit, so its widths and spacings are not
+your Part 1 answers.
 
 Read every level in **dBc**, dB relative to the trace's own peak: subtract the
 peak from the reading. A level in dBc no longer depends on Rx Gain or on the
@@ -877,8 +875,10 @@ lowers the level by
 
 $$20\log_{10}(1 \pm \rho),$$
 
-depending on its phase, which puts a ripple on the main lobe and moves the
-apparent peak by up to about a degree.
+depending on its phase. The reflection's phase relative to the direct path
+changes across the sweep, so the ripple rises on one side of the main lobe and
+falls on the other. That tilts the flat top of the lobe, and its maximum
+slides toward the raised side, by up to about a degree.
 
 Because the three are independent, they combine as a root sum of squares,
 $\sqrt{a^2 + b^2 + c^2}$, and a peak within that of its reference passes;
@@ -963,12 +963,12 @@ Part 1 of the L18 Lab packet is the pre-lab. Do it before the lab period, at the
 
 | Part 1 | You predict | Checked in |
 | :-- | :-- | :-- |
-| Question 1 | $\lambda$, $d/\lambda$, $kd$, the $\Delta\phi$ table, and the $30^\circ$ ramp at your frequency | Step 3, Run 2 |
-| Question 2 | the eight Phase Control values after Apply 30, and the sign | Step 19, Table B |
-| Question 3 | the HPBW and level drop at $0^\circ$, $30^\circ$, and $45^\circ$, and the pass standard | Steps 11 to 15 and 18 to 20, Tables A and B |
-| Question 4 | Run 2, rehearsed on the hosted simulator | Steps 16 to 21 |
+| Question 1 | your frequency, $\lambda$, $d/\lambda$, $kd$, and $\Delta\phi$ at $30^\circ$ | Step 3, and Step 18 through Question 2 |
+| Question 2 | the eight Phase Control values after Apply 30, and the sign | Step 18, Table B |
+| Question 3 | the HPBW at $0^\circ$, $15^\circ$, $30^\circ$, and $45^\circ$, the level drop, and the pass standard | Steps 11 to 14 and 16 to 19, Tables A and B |
+| Question 4 | Run 2, rehearsed on the hosted simulator | Steps 15 to 20 |
 
-Question 1 is this lesson's worked example at your kit's frequency, and Question 2 is "The Sign in Phase Control" at the same frequency. "How Close Is Close Enough" sets up Question 3.
+Question 1 redoes this lesson's worked example at your kit's frequency, and Question 2 does the same for "The Sign in Phase Control". "Beam Broadening" and "How Close Is Close Enough" set up Question 3.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">L18 Lab packet, Part 1 (PDF)</a>
 ::::

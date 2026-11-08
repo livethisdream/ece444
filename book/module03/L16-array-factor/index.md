@@ -507,14 +507,14 @@ The spacing decides what repeats. The array samples the current only at multiple
 :class: read-only
 
 :::{present}
-- At $10.3$ GHz, $d = 14$ mm is $0.481\lambda$, and $Nd = 3.85\lambda$.
+- At $10.3$ GHz, $d = 14$ mm is $0.4807\lambda$, and $Nd = 3.85\lambda$.
 - $\psi$ spans $\pm 173.0^\circ$, and $d < \lambda/2$ rules out grating lobes.
 - Nulls fall at $\pm 15.1^\circ$, $\pm 31.3^\circ$, and $\pm 51.2^\circ$; the half-power width is $13.2^\circ$ and the first sidelobe $-12.8$ dB.
 :::
 
 :::{admonition} Worked example — the course 8-element array
 :class: tip
-The PHASER carries 8 patch elements spaced $d = 14\ \text{mm}$. At $10.3\ \text{GHz}$, $\lambda = 29.1\ \text{mm}$, so $d/\lambda = 0.481$ and the array is $Nd = 112\ \text{mm} = 3.85\lambda$ long.
+The PHASER carries 8 patch elements spaced $d = 14\ \text{mm}$. At $10.3\ \text{GHz}$, $\lambda = 29.13\ \text{mm}$, so $d/\lambda = 0.4807$ and the array is $Nd = 112\ \text{mm} = 3.85\lambda$ long.
 
 **Visible region.** At broadside
 

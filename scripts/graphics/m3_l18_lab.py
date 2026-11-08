@@ -6,13 +6,13 @@
                           Apply 45 with the source at boresight (commanded
                           run, no drop), sampled where the instrument samples
   - L18-expected-sweep  : the 0 and 30 deg beams as the angle and width
-                          readings see them, annotated with what the lab reads
+                          readings see them, annotated with what the lab
+                          reads, at 10.0 GHz (away from every kit)
   - L18-phase-control   : the 30 deg ramp at the lesson's 10.3 GHz,
                           unwrapped and wrapped, beside what Phase Control
                           shows after Apply 30 (not the lab's 10.525 GHz, so
                           the page does not print the Part 1 key)
-  - L18-lab-setup       : top view of the setup, 1 m arc, 0 / 30 / 45 deg,
-                          and the 1.2 m scan-loss positions on the same lines
+  - L18-lab-setup       : top view of the setup, 1 m arc, 0 / 30 / 45 deg
   - L18-two-ways        : rotating the array versus sweeping the command
   - L18-error-budget    : the three error sources at 30 deg and their RSS
                           (no longer generated: those are the Part 1 key, and
@@ -340,6 +340,18 @@ def sweep_compare() -> None:
 
 # --------------------------------------------------------------------------- 2
 def expected_sweep() -> None:
+    """Drawn at 10.0 GHz, away from every kit (Neil, 2026-11-08: no Part 1
+    answers on the pages), so its widths and sample spacings are not a
+    cadet's Part 1 key."""
+    global FREQ
+    saved, FREQ = FREQ, 10.0e9
+    try:
+        _expected_sweep()
+    finally:
+        FREQ = saved
+
+
+def _expected_sweep() -> None:
     """The 0 and 30 deg beams as the angle and width readings see them,
     marked with what the lab reads: the two half-power spans, the first
     sidelobes, the sample spacing, and the floor. Both are drawn at full
@@ -448,12 +460,8 @@ def lab_setup() -> None:
     left (Neil, 2026-10-20); from above, with boresight up the page, that puts
     E1 at the page's left.
 
-    The angle runs use the 1 m arc. The scan-loss levels are taken farther
-    out, at 1.2 m (4 ft) or more on the same three lines: in the 2026-10-19
-    dry run the 30 deg drop read only 0.2-0.4 dB at 1 m and 0.7 dB at 1.2 m
-    (theory 0.6 ideal, 0.8-0.9 for a patch). Hollow markers show those
-    positions."""
-    R, R2 = 1.0, 1.2
+    Every reading, angles and levels, is taken on the 1 m arc."""
+    R = 1.0
     fig, ax = plt.subplots(figsize=(5.9, 4.4))
     ax.set_aspect("equal")
     ax.axis("off")
@@ -469,15 +477,7 @@ def lab_setup() -> None:
     ax.text(xs[0] - 0.06, -0.045, "E1", color=NAVY, fontsize=13, ha="right", va="center")
     ax.text(0, -0.10, "array", color=GRAY, fontsize=13, ha="center",
             va="top")
-    ax.text(-1.15, 1.58, "top view", color=GRAY, fontsize=13, ha="left", va="top")
-
-    # the key: filled for the 1 m angle positions, hollow for the 1.2 m levels
-    ax.add_patch(Rectangle((-1.13, 0.255), 0.07, 0.05, facecolor=INK, edgecolor="none"))
-    ax.text(-1.02, 0.28, "1 m: angles", color=INK, fontsize=13, ha="left", va="center")
-    ax.add_patch(Rectangle((-1.13, 0.115), 0.07, 0.05, facecolor="white", edgecolor=INK,
-                           lw=1.3))
-    ax.text(-1.02, 0.14, "1.2 m: scan loss", color=INK, fontsize=13, ha="left",
-            va="center")
+    ax.text(-1.15, 1.36, "top view", color=GRAY, fontsize=13, ha="left", va="top")
 
     # the arc and its ticks every 15 deg
     a = np.radians(np.linspace(-60, 60, 400))
@@ -491,25 +491,19 @@ def lab_setup() -> None:
     ax.plot([0, 0], [0.02, R], color=GRAY, lw=1.0, ls=(0, (2, 3)), zorder=1)
     ax.text(-0.03, 0.5 * R, "1 m", color=INK, fontsize=13, ha="right", va="center")
 
-    # the three source positions: on the arc, and 1.2 m out on the same line
+    # the three source positions on the arc
     for t, col in ((0, GREEN), (30, AMBER), (45, AMBER)):
         ar = np.radians(t)
         px, py = R * np.sin(ar), R * np.cos(ar)
-        qx, qy = R2 * np.sin(ar), R2 * np.cos(ar)
         if t:
             ax.plot([0, px], [0.02, py], color=col, lw=1.2, alpha=0.7, zorder=1)
-        ax.plot([px, qx], [py, qy], color=col, lw=1.2, alpha=0.7, ls=(0, (2, 2)),
-                zorder=1)
         ax.add_patch(Rectangle((px - 0.035, py - 0.025), 0.07, 0.05, angle=-t,
                                rotation_point="center", facecolor=col, edgecolor="none",
                                zorder=4))
-        ax.add_patch(Rectangle((qx - 0.035, qy - 0.025), 0.07, 0.05, angle=-t,
-                               rotation_point="center", facecolor="white", edgecolor=col,
-                               lw=1.3, zorder=4))
         lab = f"{t}°" if t == 0 else f"+{t}°"
-        ax.text(1.33 * np.sin(ar), 1.33 * np.cos(ar), lab, color=col, fontsize=13,
+        ax.text(1.15 * np.sin(ar), 1.15 * np.cos(ar), lab, color=col, fontsize=13,
                 ha="center", va="center")
-    ax.text(0, 1.42 * R, "HB100", color=GREEN, fontsize=13, ha="center", va="bottom")
+    ax.text(0, 1.24 * R, "HB100", color=GREEN, fontsize=13, ha="center", va="bottom")
 
     # the + side
     ax.text(xs[-1] + 0.06, -0.045, "E8", color=NAVY, fontsize=13, ha="left", va="center")
@@ -517,7 +511,7 @@ def lab_setup() -> None:
                 arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.3))
     ax.text(0.72, 0.0, "+ side: toward E8", color=INK, fontsize=13, ha="left",
             va="bottom")
-    ax.text(0.72, -0.07, "confirm with Est. Angle", color=GRAY, fontsize=13, ha="left",
+    ax.text(0.72, -0.07, "confirm with Angle", color=GRAY, fontsize=13, ha="left",
             va="top")
 
     ax.set_xlim(-1.15, 1.9)
