@@ -117,6 +117,11 @@ That is the one shared file it may change.
     call them labs?"). No new `LNNLab` practice sets. The existing ones (L20,
     L21, L22 for the L22–L23 Lab, L24) fold into their packet's Pre-Lab and
     Writeup in that lab's lesson pass, and then come off the site.
+  - **The pre-lab prepares the cadet for the lab** (Neil, 2026-11-07, on
+    L21: "I don't want practice problems just to give them something to
+    do, I want them to be prepared for the lab"). Each Part 1 problem sets
+    up a prediction, a setting, or a step the cadet uses in Part 2; a
+    problem that does neither comes out.
 - **Objectives** are the syllabus's two-level course objectives, quoted word for
   word.
 - **No receiver-course vocabulary** for cadets (mixer, LO, IF, VCO,

@@ -531,6 +531,84 @@ of a numbered step, and little else (rule 14: never a claim). Italics are
 rarer still. A list's labels, a sentence's emphasis, and an expected result
 are plain text.
 
+## A lesson's story (Neil, 2026-11-07, on L21)
+
+### 36. One story, said plainly at the start
+
+> **Before:** The array factor is not the antenna pattern.
+>
+> **After:** L18 steered the beam and measured the array factor. This lesson
+> measures the pattern two ways, a beam sweep and an azimuth sweep, and shows
+> where they agree and where they differ.
+
+Neil: "This is not using plain language. What you really mean is 'there's
+more to the story than what you measured in L18 - this is the rest of the
+story.' Layout the outline of the lesson and call it good. Speaking of which,
+what is the story of the lesson, it isn't clear." Every lesson has one story,
+and the opening frame says it as an outline in ordinary words, not as a
+slogan the cadet has to decode. Find the story in what the cadet will see on
+the kit; for a lab lesson, start from the original lab's intent (on L21, that
+the Rectangular plot is the kit building its pattern from a sweep).
+
+### 37. No promised payoffs, and no "cannot" without its reason
+
+> **Before:** It shows a lobe the array factor says cannot exist.
+>
+> **After:** At 30° the outer first sidelobe reads about 2 dB lower on the
+> azimuth sweep, because only the azimuth sweep moves the source across each
+> patch's pattern.
+
+Neil: "the intro tries to tease the reader with language that hints at or
+promises payoffs later. It also uses language like 'the array factor says
+cannot exist'. But it doesn't say why." Rule 23 holds in the prose as well
+as on the slides: no "as we will see", no build-up toward a reveal. A
+sentence that says something cannot happen, or must, carries the reason in
+the same sentence.
+
+### 38. Size a claim to what the cadet can see
+
+> **Before:** A frame titled "A Real Patch Is Steeper", whose point is 0.3 dB
+> more scan loss than the cosine model.
+>
+> **After:** No frame. 0.3 dB is inside the spread of any reading on this kit.
+
+Neil: "That's a laughable difference - on this antenna, with all the other
+factors, you'd never know the difference." And on the rewrite: "we don't want
+to argue about fractions of a dB and derivations, we want to build intuition
+about what we can actually see." An effect smaller than the spread of the
+cadet's own readings gets no frame and no build-up. Say it once in depth if
+the lesson needs it, or cut it. The emphasis a page gives an effect matches
+the size of that effect on the kit.
+
+### 39. Antenna language, not everyday images
+
+> **Before:** The nulls sit on the floor. Walk the source around the kit.
+>
+> **After:** The nulls drop to the noise floor. Sweep the source in azimuth.
+
+Neil: "a null can only drop to the floor. But the language of 'sitting on
+the floor' isn't antenna language." And: "we're not walking anything ... We
+are sweeping around the azimuth." Name the motion and the result the way an
+antenna engineer would: an azimuth sweep, a beam sweep, a null, the noise
+floor. "Walk" is for the radar labs, where a person walks downrange (rule 6:
+the right word for the place).
+
+### 40. Say why the reference changed, and which number is right
+
+> **Before:** The first sidelobe reads −13 dBc.
+>
+> **After:** Subtract the main-lobe peak from every reading, so 0 dB is the
+> peak. A reading in dB below the peak is in **dBc**, and it lets two traces
+> taken at different gains share one axis.
+
+Neil: "why switch from dBfs to dBc? Not sure they're going to understand what
+that means or why you do it without being explicit about it." A change of
+unit or reference is a step the cadet takes, so the page says what it is and
+why, where it happens. The same note asked of two values for one null, "What's
+the difference between the -27dBc and -23dBc? Which one is correct? Does it
+matter?": when two numbers for one quantity appear, the page gives one, or
+says which applies where and whether the difference matters.
+
 ## What he does *not* want changed
 
 His voice is direct, and that is deliberate. Do not soften it into hedged
@@ -556,4 +634,8 @@ a wink, or a judgment about the reader. Rewrite anything that is. Grep for
 `instructor` and rewrite it in the first person (25). Then ask of each
 sentence what a cadet does differently because of it (26). On a lab page,
 grep for `bench` and for a numbered control label like `**2 `, and check that
-every note sits in its own step and the steps run 1 to N (27-33).
+every note sits in its own step and the steps run 1 to N (27-33). Then
+read the opening frame and say the lesson's story in one sentence; if you
+cannot, neither can a cadet (36). Find every "cannot" and "must" and check
+that its reason is beside it (37), and every effect under a dB or so and ask
+whether a cadet could see it on the kit (38).

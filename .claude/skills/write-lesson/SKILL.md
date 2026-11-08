@@ -58,7 +58,14 @@ Every sentence, as you write it:
   write it, not afterwards. Past sweeps found 0.01λ that should have been
   0.15λ, and 20 dB that should have been 23.
 - **Agrees with the rest of the lesson.** One value per quantity, everywhere
-  it appears.
+  it appears; a change of unit or reference (dBFS to dBc) says what and why
+  (VOICE.md 40).
+- **Serves the story.** The opening frame states the lesson's one story as a
+  plain outline, taken from what the cadet will see on the kit; no slogan,
+  no teaser, no "cannot" without its reason, and no build-up for an effect
+  smaller than the kit's own spread (VOICE.md 36-38). Antenna words for
+  antenna things: an azimuth sweep, a null that drops to the noise floor
+  (VOICE.md 39).
 
 Every frame:
 
