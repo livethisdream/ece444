@@ -15,8 +15,8 @@ L21:
                              theta_0 past a fixed source and moving theta_src
                              past a fixed beam land on the same curve.
 
-Model, matching the lesson text: N = 8 uniform, d = 14 mm, 10.3 GHz
-(lambda = 29.1 mm). The beam sweep steps the element-to-element phase one
+Model, matching the lesson text: N = 8 uniform, d = 14 mm, 10.0 GHz (off every kit's HB100, so no figure gives a Part 1 answer)
+(lambda = 30.0 mm). The beam sweep steps the element-to-element phase one
 2.8125 deg LSB per point and reads |AF|^2 at a fixed source, so the element
 pattern is one constant and drops out in dBc. The azimuth sweep reads
 EF x AF with the ideal cos(theta) element power pattern. Both carry the same
@@ -42,7 +42,7 @@ INK, RULE = "#1a1a1a", "#c7d2e0"
 OUT = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 
 C = 299792458.0
-FREQ = 10.3e9
+FREQ = 10.0e9
 LAM = C / FREQ
 D = 0.014
 N = 8

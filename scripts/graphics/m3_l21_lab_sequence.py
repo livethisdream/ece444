@@ -3,7 +3,7 @@
 
 Run 1  Steps 7-9    the HB100 fixed, the kit steps the beam: a beam sweep
 Run 2  Steps 10-15  the beam held at 0 deg, the HB100 carried along the arc
-Run 3  Steps 16-20  the HB100 fixed, the kit turned on its stand: the 0 and
+Run 3  Steps 16-19  the HB100 fixed, the kit turned on its stand: the 0 and
                     30 deg beams read at the stand's 10 deg marks
 
 Each panel pairs a top-view sketch of what moves with a thumbnail of the trace
@@ -41,7 +41,7 @@ PW, PH = 420, 150                           # one panel (a row)
 RUNS = [
     ("1", "Run 1: beam sweep", "Steps 7 to 9", "steer angle"),
     ("2", "Run 2: sweeps by hand", "Steps 10 to 15", "elapsed time"),
-    ("3", "Run 3: pass on the stand", "Steps 16 to 20", "source angle"),
+    ("3", "Run 3: pass on the stand", "Steps 16 to 19", "source angle"),
 ]
 
 
@@ -155,7 +155,7 @@ def build(ph: int) -> str:
          f'aria-label="The three runs of the L21 Lab. Run 1, Steps 7 to 9: the HB100 fixed while the kit steps '
          f'the beam, a broadside beam-sweep trace against steer angle. Run 2, Steps 10 to 15: the beam held at '
          f'0 degrees while you carry the HB100 along the arc, the same pattern against elapsed time. Run 3, '
-         f'Steps 16 to 20: the HB100 fixed and the kit turned on its stand, the 0 and 30 degree beams read at '
+         f'Steps 16 to 19: the HB100 fixed and the kit turned on its stand, the 0 and 30 degree beams read at '
          f'the stand\'s 10 degree marks. Each thumbnail is in dBc at 10.3 GHz, clipped at the noise floor.">']
     s.append(f'<defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" '
              f'orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="{AMBER}"/></marker></defs>')

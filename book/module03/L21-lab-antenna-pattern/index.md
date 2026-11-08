@@ -36,11 +36,11 @@ with room for notes. Print from read mode for the whole lesson.
 :::{present}
 - Lesson 21: beam and azimuth sweeps match out to the first sidelobes.
 - Today you take both on your kit and compare lobe levels in dBc.
-- At $30^\circ$, the azimuth sweep's outer first sidelobe reads about 2 dB lower.
+- At $30^\circ$, the azimuth sweep's outer first sidelobe reads lower than the inner one.
 :::
 :::{present}
-<img src="../../viz/img/L21-beam-vs-azimuth-0.svg"
-     alt="Predicted beam sweep and azimuth sweep at broadside, in dBc: the main lobes and first sidelobes coincide near minus 13 dBc and every null drops to a dashed noise floor at minus 23 dBc; the outer lobes read about minus 17 dBc on the beam sweep and minus 19 dBc on the azimuth sweep."
+<img src="../../viz/img/L21-beam-vs-azimuth-30.svg"
+     alt="Predicted beam sweep and azimuth sweep for a 30 degree beam, worked at 10.0 GHz, in dBc: both peak near 30 degrees and match on the main lobe and the inner first sidelobe, while the outer first sidelobe near 61 degrees reads lower on the azimuth sweep, which carries the source across each patch's pattern."
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -51,9 +51,9 @@ peak on both. Today you take both on your own kit: a beam sweep, three
 azimuth sweeps by hand, and one pass of the kit on its stand that reads a
 beam held at $0^\circ$ and one held at $30^\circ$ together. You compare the lobe
 levels in dBc against the predictions you made in Part 1 of the packet. The
-two methods should agree on the broadside first sidelobes within the room's
-$2\ \text{dB}$, and at $30^\circ$ the azimuth sweep's outer first sidelobe should
-read lower, because only the azimuth sweep carries the source across each
+two methods should agree on the broadside first sidelobes within the window
+you found in Part 1, and at $30^\circ$ the azimuth sweep's outer first sidelobe
+should read lower than its inner one, because only the azimuth sweep carries the source across each
 patch's pattern.
 ::::
 
@@ -64,12 +64,12 @@ patch's pattern.
 | 1 to 6 | Bring up the kit | Q1 |
 | 7 to 9 | Run 1: beam sweep | Q2, Q3 |
 | 10 to 15 | Run 2: by hand | Q3, Q5 |
-| 16 to 20 | Run 3: on the stand | Q3, Q4 |
+| 16 to 19 | Run 3: on the stand | Q3, Q4 |
 :::
 :::{present}
 <picture>
 <source media="(max-width: 600px)" srcset="../../viz/img/L21-lab-sequence-narrow.svg">
-<img src="../../viz/img/L21-lab-sequence.svg" alt="The three runs of the L21 Lab, each with a sketch of the setup and a thumbnail of the trace to expect. Run 1, Steps 7 to 9: the HB100 fixed, the kit steps the beam, a broadside beam-sweep trace against steer angle. Run 2, Steps 10 to 15: the beam held at 0 degrees while you carry the HB100 along the arc, the same pattern against elapsed time. Run 3, Steps 16 to 20: the HB100 fixed and the kit turned on its stand, the 0 and 30 degree beams read at the stand's 10 degree marks." style="max-width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L21-lab-sequence.svg" alt="The three runs of the L21 Lab, each with a sketch of the setup and a thumbnail of the trace to expect. Run 1, Steps 7 to 9: the HB100 fixed, the kit steps the beam, a broadside beam-sweep trace against steer angle. Run 2, Steps 10 to 15: the beam held at 0 degrees while you carry the HB100 along the arc, the same pattern against elapsed time. Run 3, Steps 16 to 19: the HB100 fixed and the kit turned on its stand, the 0 and 30 degree beams read at the stand's 10 degree marks." style="max-width: 100%; display: block; margin: 0 auto;">
 </picture>
 :::
 
@@ -79,7 +79,7 @@ packet. Run 2 holds the beam at $0^\circ$ and has you carry the HB100 around
 the arc three times, Table C. Run 3 sweeps the beam again while you turn the
 kit through the stand's marks, so one pass fills Table D, the beam held at
 $0^\circ$, and Table E, the beam held at $30^\circ$. Lesson 21's
-<a href="../L21-antenna-pattern/index.html#frame-reading-your-two-traces">"Reading Your Two Traces"</a>
+<a href="../L21-antenna-pattern/index.html#frame-reading-your-traces">"Reading Your Traces"</a>
 lists what each comparison should show.
 ::::
 
@@ -110,8 +110,9 @@ Set the HB100 $1.2\ \text{m}$ from the array face at the height of the patch
 row, facing the array: past the far-field distance you found in Part 1, even
 with a hand-carried source drifting in and out. Tape the arc on the floor at
 the same $1.2\ \text{m}$ radius, with marks at $-90^\circ$, $0^\circ$, and
-$+90^\circ$. The $-90^\circ$ end is on the E1 side of the array, the right end
-of the row as you face the patches.
+$+90^\circ$. The $-90^\circ$ end is on the E1 side of the array: on your left
+as you stand at the laptop behind the kit, as the figure shows from above,
+and on the right as seen from the HB100.
 ::::
 
 ::::{frame} Bring Up the Kit
@@ -195,8 +196,8 @@ of the row as you face the patches.
 12. **Pick up the source.** Press **Stop**. Lift the HB100 off its tripod and
     hold it over the $-90^\circ$ mark, on the E1 side, aimed at the array.
 13. **Sweep.** Press **Start**, which clears the trace and begins at $t = 0$,
-    then carry the HB100 along the arc to $+90^\circ$ in about 20 to
-    $25\ \text{s}$, keeping the radius and the aim. Practice the arc once
+    then carry the HB100 along the arc to $+90^\circ$ in about
+    $22\ \text{s}$, keeping the radius and the aim. Practice the arc once
     before you record: too fast and each lobe gets only a few updates, too
     slow and the pattern runs off the edge.
 14. **Read the trace.** Press **Stop** at $+90^\circ$; the window scrolls while
@@ -247,9 +248,10 @@ of the row as you face the patches.
     $-90^\circ$ to $+90^\circ$, every second click of the stand. At each,
     record the trace at $0^\circ$ steer (Table D) and at the sample nearest
     $30^\circ$ (Table E), both relative to Step 16, at the source angle: the
-    stand reading with its sign flipped, as in Table A. Each point of a beam
-    sweep is the beam held at that steer angle for an instant, so one sweep
-    reads both held beams at once. Turn the kit by the platter, not by the
+    stand reading with its sign flipped, as in Table A. One pass reads both
+    held beams, as Lesson 21's
+    <a href="../L21-antenna-pattern/index.html#frame-turning-the-kit-on-its-stand">"Turning the Kit on Its Stand"</a>
+    shows. Turn the kit by the platter, not by the
     board, so the tripod stays seated in its grooves and the array on the axis,
     and keep the cables slack enough to follow it.
 
@@ -300,6 +302,10 @@ of the row as you face the patches.
     level relative to Step 16 as in Step 17; Part 3 converts the lobes to dBc.
     An antenna range finds a lobe peak the same way. Where the level stops
     changing as you turn, it has reached the noise floor: write "floor".
+    Last, turn back to the main lobe of the beam held at $0^\circ$ and to its
+    right first sidelobe, and read each again: the change from your first
+    reading is the stand's repeatability, which Part 3 compares with the spread
+    of your sweeps by hand.
 
     <div class="rec" data-lab="L21">
     <label>Beam at 0°, main lobe: angle <input data-field="d.main.angle" data-label="Step 18, Beam at 0°, main lobe: source angle"></label>
@@ -322,18 +328,10 @@ of the row as you face the patches.
     <label>Beam at 30°, inner first sidelobe: level <input data-field="e.isl.level" data-label="Step 18, Beam at 30°, inner first sidelobe: level"></label>
     <label>Beam at 30°, outer first sidelobe: angle <input data-field="e.osl.angle" data-label="Step 18, Beam at 30°, outer first sidelobe: source angle"></label>
     <label>Beam at 30°, outer first sidelobe: level <input data-field="e.osl.level" data-label="Step 18, Beam at 30°, outer first sidelobe: level"></label>
+    <label>Main lobe, read again: level <input data-field="d.rep.main" data-label="Step 18, Beam at 0°, main lobe read again: level"></label>
+    <label>Right first sidelobe, read again: level <input data-field="d.rep.rsl" data-label="Step 18, Beam at 0°, right first sidelobe read again: level"></label>
     </div>
-19. **Behind the board.** Turn the kit to $180^\circ$, source behind the
-    board, and record the trace nearest $30^\circ$.
-
-    <div class="rec" data-lab="L21">
-    <label>Step 19, kit at 180°: level <input data-field="e.180.level" data-label="Step 19, kit at 180°: level, beam at 30° (Table E)"></label>
-    </div>
-20. **Restore.** Turn the kit back to $0^\circ$ before you leave.
-
-<img src="../../viz/img/L21-run3-reading.svg"
-     alt="One beam sweep at one kit position, against steer angle, with an unnumbered level axis. The sample at 0 degrees steer goes in Table D and the sample nearest 30 degrees goes in Table E."
-     style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
+19. **Restore.** Turn the kit back to $0^\circ$ before you leave.
 ::::
 
 ::::{frame} No Hardware?
@@ -387,13 +385,13 @@ entries beside you. Convert the lobe levels of Tables D and E to dBc first:
 subtract each table's main-lobe level. Then it asks three things:
 
 1. Do the three methods agree on the broadside first sidelobes, within the
-   $\pm 2\ \text{dB}$ window of Part 1? At $30^\circ$, is the outer first sidelobe
+   window you found in Part 1? At $30^\circ$, is the outer first sidelobe
    lower than the inner, in the predicted direction, and by more than your
-   own broadside pair differ? What does the reading behind the board show,
-   and why can a beam sweep never show the patch pattern?
+   own broadside pair differ?
 2. How does the spread of your three sweeps by hand compare with the stand's
-   repeatability, and what does an uneven pace move: the lobe positions, the
-   levels, or both? Could either method certify a sidelobe below
+   repeatability from Step 18? Convert a sweep's peak time to an angle at a
+   steady pace, and say what an uneven pace moves: the lobe positions, the
+   levels, or both. Could either method certify a sidelobe below
    $-25$ dBc?
 3. A far-field problem for a larger panel at a higher frequency.
 
