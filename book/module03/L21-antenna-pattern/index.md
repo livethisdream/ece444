@@ -129,9 +129,11 @@ same level at every step and the element pattern is a single constant.
 
 ::::{frame} The Antenna-Range Method
 :::{present}
-- An antenna range holds the beam still and moves the source, or turns the antenna.
-- Every point comes from the same beam.
-- The x-axis is the source's physical angle.
+| | Beam sweep | Azimuth sweep, by hand | Azimuth sweep, on the stand |
+| :-- | :-- | :-- | :-- |
+| x-axis | steer angle | elapsed time | stand angle |
+| Measures | array factor | element $\times$ array | element $\times$ array |
+| Distance | fixed | your arm | fixed |
 :::
 :::{present}
 <img src="../../viz/img/L21-three-methods.svg"
@@ -145,8 +147,11 @@ The antenna under test sits on a turntable with its beam fixed, a source
 stands at a fixed distance, and the turntable records the received level
 against the angle between the two. Every reading comes from the same beam,
 and each one carries a physical angle. The L21 Lab takes this azimuth sweep
-twice: once with you carrying the HB100 around the kit on a taped arc, and
-once with the kit turning on its stand in front of the HB100.
+twice. By hand, you carry the HB100 around the kit on a taped arc; the kit
+plots the level against elapsed time, which maps to azimuth only at a steady
+pace, and the level holds only while you hold the radius. On the stand, the
+HB100 stays on its tripod and you turn the kit in front of it; every reading
+carries an angle off the stand's scale, and the distance never changes.
 ::::
 
 ::::{frame} Signal vs Time Mode
@@ -156,7 +161,7 @@ once with the kit turning on its stand in front of the HB100.
 - The trace is one beam's pattern across azimuth.
 :::
 
-Lab Preset 7, **Antenna Pattern**, sets **Mode** to **Signal vs Time**. In
+The **Antenna Pattern** preset sets **Mode** to **Signal vs Time**. In
 that mode the kit stops stepping the beam: it holds every element at the
 phase for the **Steer Angle** you set, and the Tracking tab plots the FFT
 peak against elapsed time. As you carry the HB100 around the arc, the level
@@ -222,6 +227,38 @@ $$
 
 Turning the kit on its stand holds the distance fixed, which is why the L21
 Lab does both.
+::::
+
+::::{frame} Turning the Kit on Its Stand
+:::{present}
+- The HB100 stays on its tripod, $1.2\ \text{m}$ out; the stand turns the kit about the array's center.
+- Facing the patches, E1 is on the right. Turning the face toward E1 puts the source at $+\theta$.
+- The stand's scale reads $-\theta$.
+:::
+:::{present}
+<img src="../../viz/img/L21-rotation-setup.svg"
+     alt="Top view of the stand setup: the HB100 fixed 1.2 m from the array, and the kit turned 30 degrees about the array center on its stand, its face toward E1, which puts the source at plus 30 degrees on the E8 side while the pointer, which turns with the kit, reads minus 30 on the scale on the fixed base"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+Turning the kit in front of a fixed source records the same pattern as
+carrying the source around a fixed kit, because only the angle between the
+array normal and the source matters. The setup changes in three ways: the
+distance stays fixed, so you can compare levels from one reading to the next;
+the HB100 stays aimed at the array without effort; and you take each reading
+at an angle you read off the stand's scale, with a click every $5^\circ$.
+
+A stand reading of $-30$ means the source is at $+30^\circ$. Lesson 18 put
+$+\theta$ on the E8 end of the array, and turning the kit's face toward E1, as
+seen from the source, puts the source on that side. The scale sits on
+the fixed base and counts clockwise as seen from above, while that turn is
+counterclockwise, so the pointer reads the opposite sign. Part 2 starts by
+confirming the sign with a beam sweep, whose **Angle** readout, set to
+**Peak**, reads the source's angle (Run 1 of the L21 Lab).
+
+The stand puts the array's center on its turning axis, so the distance stays
+fixed as you turn. The scale reads to about $\pm 2^\circ$, which is fine for a
+lobe about $15^\circ$ wide.
 ::::
 
 ::::{frame} Levels in dBc
@@ -324,7 +361,8 @@ from the room.
 | Room reflections | $\pm 1$ dB a reading | both |
 | Radius drift, $10\ \text{cm}$ | $0.7$ dB | azimuth |
 | Uneven pace | stretches lobes in time | azimuth |
-| Phase grid | beamwidth off by up to $1^\circ$ | beam |
+| Phase grid | beamwidth $\pm 1^\circ$ | beam |
+| Stand's scale | $\pm 2^\circ$ | stand |
 | Noise floor | about $-23$ dBc | both |
 :::
 
@@ -339,11 +377,52 @@ lobe that moves when you move the kit or a person comes from the room. Lesson
 (<a href="../../module02/L09-pattern-measurement-theory/index.html#frame-the-nulls-fill-first">"The Nulls Fill First"</a>).
 
 **Radius drift and pace** belong to the azimuth sweep by hand, for the reasons
-in "The Time Axis." **The phase grid** places each beam-sweep point one step
+in "The Time Axis." On the stand both go away, and what remains is the
+scale, read to about $2^\circ$. The stand cannot remove the room either, but
+the reflections sit in fixed places, so a reading you repeat at the same
+angle comes back to the same value; that repeatability is the stand's
+advantage. **The phase grid** places each beam-sweep point one step
 apart, so each half-power crossing can be off by half a step and a beamwidth
 by up to a step, about $1^\circ$. **The noise floor** is the level the nulls
 drop to; the L20 Lab found it about $23\ \text{dB}$ below the peak of each
 trace.
+::::
+
+::::{frame} Classroom Against Chamber
+:::{present}
+- The stand reads angle to $\pm 2^\circ$; a range's encoder reads far finer.
+- The stand and a range both fix the distance.
+- A chamber absorbs reflections; a room adds them.
+- Closer than the far-field distance, the nulls fill in.
+:::
+:::{present}
+<img src="../../viz/img/L21-range-artifacts.svg"
+     alt="Left, a classroom seen from the side: the direct path from the HB100 to the kit, plus reflections off the floor and a wall that add to it. Right, an anechoic chamber: absorber on every wall, a turntable under the antenna, and only the direct path."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+The azimuth sweep on the stand is the measurement an antenna range makes,
+without the range's encoder or its absorber. Comparing the two shows what the
+classroom still leaves in your data.
+
+A range turns the antenna on a turntable with a shaft encoder, so
+every sample carries its angle to a fraction of a degree. The stand's scale
+gives each stop's angle to about $\pm 2^\circ$; the time axis of a sweep by
+hand gives it only as well as you hold a steady pace.
+
+A range bolts the source at a fixed distance. So does the stand;
+a sweep by hand does not.
+
+The direct path is not the only path from the HB100 to the
+array. Reflections off the floor, the walls, and the whiteboard arrive too and
+add to the direct signal in and out of phase, in both of your azimuth sweeps.
+An anechoic chamber lines every surface with absorber so only the direct path
+survives.
+
+The far-field distance is set by the antenna's size and the
+wavelength, not by the room. A chamber, like a classroom, works only if it is
+long enough to reach that distance for the antenna and frequency being
+measured.
 ::::
 
 ::::{frame} Source Distance
@@ -457,14 +536,6 @@ in place of $10\log_{10} 8$; the two agree within $0.2\ \text{dB}$.
 
 ::::
 
-::::{frame} Preparing for the Lab
-:class: read-only doc-links
-
-Part 1 of the L21 Lab packet works out what you should see in class, so you can tell a good trace from a bad one while you are still at the kit. Complete it before the lab period.
-
-- <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet, Part 1 (PDF)</a>
-::::
-
 ::::{frame} Looking Ahead
 :::{present}
 - The L21 Lab: a beam sweep, an azimuth sweep by hand, and one on the stand; compare lobe levels.
@@ -477,4 +548,23 @@ agree. Every trace so far has had uniform illumination, which fixes the
 first sidelobes near $-13$ dBc. Lesson 22 feeds the eight elements
 unequally, with more power in the middle and less at the edges, which pushes
 the sidelobes down and widens the main lobe.
+::::
+
+::::{frame} Pre-Lab
+:class: read-only doc-links
+
+Part 1 of the L21 Lab packet is the pre-lab. Do it before the lab period, at the HB100 frequency your kit reported in the L18 Lab, and bring it to class: you check every trace you take in Part 2 against it. This lesson's figures use $10.3\ \text{GHz}$, so their angles differ from yours by a few tenths of a degree.
+
+| Part 1 | You predict | Checked in |
+| :-- | :-- | :-- |
+| Question 1 | $\lambda$, $d/\lambda$, $kd$, and the far-field distance at your frequency | Step 2 |
+| Question 2 | a sidelobe in dBc from two dBFS readings, and why Rx Gain cancels | Steps 9 and 14 |
+| Question 3 | the broadside nulls and first sidelobes, the same on all three traces | Steps 9, 14, and 18; Tables B to D |
+| Question 4 | the $30^\circ$ nulls, which first sidelobe reads lower and by how much, and the reading behind the board | Steps 18 and 19; Table E |
+| Question 5 | your pace and the slowest update rate that puts five readings on a first sidelobe | Steps 11 and 13 |
+| Question 6 | the window two traces must agree within | Part 3 |
+
+"Levels in dBc," the two "Beam Sweep and Azimuth Sweep" frames, and "Measurement Errors" above set up Questions 2 to 6.
+
+- <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet, Part 1 (PDF)</a>
 ::::
