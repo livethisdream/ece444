@@ -117,6 +117,11 @@ That is the one shared file it may change.
     call them labs?"). No new `LNNLab` practice sets. The existing ones (L20,
     L21, L22 for the L22–L23 Lab, L24) fold into their packet's Pre-Lab and
     Writeup in that lab's lesson pass, and then come off the site.
+  - **The pre-lab prepares the cadet for the lab** (Neil, 2026-11-07, on
+    L21: "I don't want practice problems just to give them something to
+    do, I want them to be prepared for the lab"). Each Part 1 problem sets
+    up a prediction, a setting, or a step the cadet uses in Part 2; a
+    problem that does neither comes out.
 - **Objectives** are the syllabus's two-level course objectives, quoted word for
   word.
 - **No receiver-course vocabulary** for cadets (mixer, LO, IF, VCO,
@@ -324,7 +329,14 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
 
 ## 6. Work queue, in order
 
-1. **Lesson passes in teaching order:** L22–L24 with the L22–L23 and L24
+1. **Lab pages follow VOICE.md 27-34** (Neil, 2026-11-07, from his L20 Lab
+   notes): steps 1 to N, each note in its own step, nothing an earlier lab
+   taught, never "bench", controls by name not numbered label, no dry-run
+   anecdotes, packet boxes aligned. The Integrator applies them to the
+   L17-L19 and L21-L24 Labs; **the Module 4 thread applies them to the
+   L28-L31 Labs** (about 23 "bench" between them). `check_voice.py` reports
+   "bench" as WARN until those are clean, then it becomes a FAIL.
+2. **Lesson passes in teaching order:** L22–L24 with the L22–L23 and L24
    Labs, each before it is taught. **A new lesson or lab page (the Module 4
    thread's L25-L31 included) is written with the `write-lesson` skill**
    (Neil, 2026-11-04): the three sweeps' rules apply while it is written, one
@@ -349,7 +361,7 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
      +20° only, against Neil's software interferer, with the expected
      suppression filled in from his first run, and its "No hardware?" note
      updated.
-2. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
+3. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
    with a measured lookup table (amplitude goes as (%/100)^0.68 today, the
    ADAR1000 register response; Neil, 2026-10-23: fix it in software, not in
    the labs); preset 8 loads uniform and resets Beam 1
@@ -372,7 +384,7 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
    elements fully on or off; whether each channel's phase moves with its
    gain setting; whether recalibrating with the source exactly at boresight
    removes the +1–2° offset.
-3. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
+4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
 3b. **Phaser (Neil's Phaser thread), for Module 4:** the labs are GUI
    first, so the FMCW mode needs a range spectrum with a frequency/range
@@ -384,7 +396,7 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
    calibration entry and a frequency/range axis toggle, and can record
    several seconds of continuous chirps for L31. L28 assumes these and says
    so where the app's behavior is unknown.
-4. **Module 4 build-out**, now, assuming the radar mode works (Neil,
+5. **Module 4 build-out**, now, assuming the radar mode works (Neil,
    2026-10-25); hardware numbers are reconciled when it runs: L25–L27
    taught in class, then the L28–L31 Labs as the final project's scaffolding,
    each packet built to start from the lab before it, plus the report rubric.

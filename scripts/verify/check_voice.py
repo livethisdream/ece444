@@ -22,6 +22,11 @@ FAIL (each one a rule Neil has stated):
 WARN (read each one; a regex cannot decide them):
   passive      VOICE 9's passive tells
   money        VOICE 20's money metaphors (buys, costs, pays, price, ...)
+  bench        VOICE 28, never "bench" (Neil, 2026-11-07). WARN, not FAIL, only
+               until the Module 4 pages (L28-L31) are clean; then FAIL
+  preset-label VOICE 29, a GUI's numbered label in bold (**2 Array Factor**)
+  dry-run      VOICE 32, a dry-run anecdote on a page; keep it only if the
+               cadet needs the number
 
     check_voice.py L18                     every page and practice set of L18
     check_voice.py book/module03/L18-beam-steering/index.md
@@ -64,6 +69,9 @@ MD_ONLY = {"math-space": re.compile(r"\\[,;](?![A-Za-z])")}
 WARN = {
     "passive": re.compile(r"\b(is|are|was|were|be|been) +\w+(ed|en)\b"),
     "money": re.compile(r"\b(buy|buys|bought|pay|pays|price|costs?|spend|cheap|free lunch|for free)\b", re.I),
+    "bench": re.compile(r"\bbench(es)?\b", re.I),
+    "preset-label": re.compile(r"\*\*\d+ [A-Z][\w ]*\*\*"),
+    "dry-run": re.compile(r"\bdry[- ]run\b", re.I),
 }
 _CFG = Path(__file__).with_name("voice_rules.json")
 WARN_ONLY = set(json.loads(_CFG.read_text())["warn_only"]) if _CFG.is_file() else set()

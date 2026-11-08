@@ -440,6 +440,175 @@ that thing directly. Build anecdotes, history, and a count with no cause behind
 it are the usual offenders; a measurement from the kit stays when the lesson
 uses the number.
 
+## Lab pages (Neil, 2026-11-07, on the L20 Lab)
+
+A lab page is a procedure a cadet follows with a kit in hand. Neil's notes on
+the L20 Lab cleanup, in his words where quoted, set how every lab reads.
+
+### 27. Say nothing the cadet already knows
+
+> **Before:** a "Per bench" heading over a list of the kit, the source, and
+> the cables, under an Equipment frame that already said "your Phaser kit".
+>
+> **After:** the Equipment frame's "your Phaser kit", and nothing more.
+
+"Of course it's per bench." The kit is the same in every lab; naming it once
+is enough. A heading that states the obvious and a list that repeats the one
+above it both come out.
+
+### 28. Never "bench"
+
+"Bench is something you sit on." Where it matters who does a step, it is
+"each student" or "each team"; usually it does not matter, and the sentence
+needs neither. "Bench time" is "lab time" or "in class".
+
+### 29. Call a control what a person would call it
+
+> **Before:** press **2 Array Factor**.
+>
+> **After:** choose the Array Factor preset.
+
+The number in a GUI's button label is the GUI's, not part of the name.
+
+### 30. A note about a step lives in that step
+
+> **Before:** after the steps, "Step 5 is the L17 Lab's level reference, not
+> a fixed gain. The preset does not set Rx Gain (dB) ..."
+>
+> **After:** that sentence inside Step 5's own frame.
+
+"If you have something to say about step 5, say it in step 5. Don't make me
+go back and read step 5 again to remember what it was."
+
+### 31. Don't teach an earlier lab again
+
+> **Before:** "The HB100 is a free-running DRO and drifts across 10.1 to
+> 10.7 GHz with temperature. The GUI hunts for the tone, ..."
+>
+> **After:** nothing; the L17 Lab covered it.
+
+"We've already talked about the HB100." Each lab assumes the labs before it,
+and links to one only where the cadet needs to look something up.
+
+### 32. A note: the command, why, and what to do if it is wrong
+
+> **After (his wording):** Calibrate the array. An uncalibrated array has
+> amplitude and phase errors spread across the row, which fills the nulls and
+> raises the sidelobes on its own, and you would then be measuring the
+> calibration rather than the array factor. If the broadside sweep does not
+> look right, fix that first.
+
+The command first, then the mechanism and what it would do to the
+measurement, then the check and the fix. Nothing about how it went in a dry
+run unless the cadet needs that number.
+
+### 33. Steps run 1 to N, and the structure stays in sight
+
+> **Before:** Steps 1–6, then A1–A6, with A5 and A6 broken out on their own.
+>
+> **After:** Steps 1–12 straight through, in three frames, and the Equipment
+> frame names the three parts up front.
+
+"Write the steps, say something about it if you need to, but keep it
+simple. Keep the structure of the lab in front of them always. Changing
+numbers and going back and forth to describe every nuance gets so
+confusing."
+
+### 34. Packet boxes line up
+
+Every answer box in a lab packet is either right-justified in one vertically
+aligned column or set in one row along the bottom of its part. "I want a
+consistent look and feel. Not random boxes everywhere." Every packet uses the
+same numbers: boxes 1.5 in wide (`\boxw`), and a worked part in a 0.55
+column with its boxes in a 0.42 column (`anscol`). A row that does not fit
+at that width goes into the column instead of wrapping.
+
+### 35. Bold and italics, rarely
+
+Neil, 2026-11-07: "don't randomly sprinkle bold and italics. Use it in rare
+instances." Bold marks a control's name, a term where it is defined, the lead
+of a numbered step, and little else (rule 14: never a claim). Italics are
+rarer still. A list's labels, a sentence's emphasis, and an expected result
+are plain text.
+
+## A lesson's story (Neil, 2026-11-07, on L21)
+
+### 36. One story, said plainly at the start
+
+> **Before:** The array factor is not the antenna pattern.
+>
+> **After:** L18 steered the beam and measured the array factor. This lesson
+> measures the pattern two ways, a beam sweep and an azimuth sweep, and shows
+> where they agree and where they differ.
+
+Neil: "This is not using plain language. What you really mean is 'there's
+more to the story than what you measured in L18 - this is the rest of the
+story.' Layout the outline of the lesson and call it good. Speaking of which,
+what is the story of the lesson, it isn't clear." Every lesson has one story,
+and the opening frame says it as an outline in ordinary words, not as a
+slogan the cadet has to decode. Find the story in what the cadet will see on
+the kit; for a lab lesson, start from the original lab's intent (on L21, that
+the Rectangular plot is the kit building its pattern from a sweep).
+
+### 37. No promised payoffs, and no "cannot" without its reason
+
+> **Before:** It shows a lobe the array factor says cannot exist.
+>
+> **After:** At 30° the outer first sidelobe reads about 2 dB lower on the
+> azimuth sweep, because only the azimuth sweep moves the source across each
+> patch's pattern.
+
+Neil: "the intro tries to tease the reader with language that hints at or
+promises payoffs later. It also uses language like 'the array factor says
+cannot exist'. But it doesn't say why." Rule 23 holds in the prose as well
+as on the slides: no "as we will see", no build-up toward a reveal. A
+sentence that says something cannot happen, or must, carries the reason in
+the same sentence.
+
+### 38. Size a claim to what the cadet can see
+
+> **Before:** A frame titled "A Real Patch Is Steeper", whose point is 0.3 dB
+> more scan loss than the cosine model.
+>
+> **After:** No frame. 0.3 dB is inside the spread of any reading on this kit.
+
+Neil: "That's a laughable difference - on this antenna, with all the other
+factors, you'd never know the difference." And on the rewrite: "we don't want
+to argue about fractions of a dB and derivations, we want to build intuition
+about what we can actually see." An effect smaller than the spread of the
+cadet's own readings gets no frame and no build-up. Say it once in depth if
+the lesson needs it, or cut it. The emphasis a page gives an effect matches
+the size of that effect on the kit.
+
+### 39. Antenna language, not everyday images
+
+> **Before:** The nulls sit on the floor. Walk the source around the kit.
+>
+> **After:** The nulls drop to the noise floor. Sweep the source in azimuth.
+
+Neil: "a null can only drop to the floor. But the language of 'sitting on
+the floor' isn't antenna language." And: "we're not walking anything ... We
+are sweeping around the azimuth." Name the motion and the result the way an
+antenna engineer would: an azimuth sweep, a beam sweep, a null, the noise
+floor. "Walk" is for the radar labs, where a person walks downrange (rule 6:
+the right word for the place).
+
+### 40. Say why the reference changed, and which number is right
+
+> **Before:** The first sidelobe reads −13 dBc.
+>
+> **After:** Subtract the main-lobe peak from every reading, so 0 dB is the
+> peak. A reading in dB below the peak is in **dBc**, and it lets two traces
+> taken at different gains share one axis.
+
+Neil: "why switch from dBfs to dBc? Not sure they're going to understand what
+that means or why you do it without being explicit about it." A change of
+unit or reference is a step the cadet takes, so the page says what it is and
+why, where it happens. The same note asked of two values for one null, "What's
+the difference between the -27dBc and -23dBc? Which one is correct? Does it
+matter?": when two numbers for one quantity appear, the page gives one, or
+says which applies where and whether the difference matters.
+
 ## What he does *not* want changed
 
 His voice is direct, and that is deliberate. Do not soften it into hedged
@@ -463,4 +632,10 @@ rewrite each one with its agent named. Then read every sentence and ask
 whether it has a subject and a verb. Then ask whether any sentence is a joke,
 a wink, or a judgment about the reader. Rewrite anything that is. Grep for
 `instructor` and rewrite it in the first person (25). Then ask of each
-sentence what a cadet does differently because of it (26).
+sentence what a cadet does differently because of it (26). On a lab page,
+grep for `bench` and for a numbered control label like `**2 `, and check that
+every note sits in its own step and the steps run 1 to N (27-33). Then
+read the opening frame and say the lesson's story in one sentence; if you
+cannot, neither can a cadet (36). Find every "cannot" and "must" and check
+that its reason is beside it (37), and every effect under a dB or so and ask
+whether a cadet could see it on the kit (38).
