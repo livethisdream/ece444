@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-The array factor is not the antenna pattern.
+The kit builds its pattern plot from many beams. Today we measure one beam directly and compare the two.
 
 Lesson 21 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -32,546 +32,449 @@ with room for notes. Print from read mode for the whole lesson.
 </ol>
 
 :::{depth}
-In the L18 Lab you measured the array's beam, and Lesson 20 showed that most of
-the numbers landed where the array factor said they would: a half-power beamwidth near $13^\circ$, a first null
-about $15^\circ$ off the peak, and first sidelobes roughly 13 dB down. The parts
-that did not match are the subject of this lesson. Your steered peaks were a
-little low and a little short of the commanded angle, the sidelobes on the two
-sides of the beam were not the same height, and there was structure behind the
-array that the array factor says cannot exist. Each of those comes from the
-element pattern, the hardware, or the room, and each of them is predictable.
+Every pattern you have read since the L18 Lab came from the PHASER's
+Rectangular plot, the **beam sweep**: the kit holds the HB100 still, steps the
+beam past it, and plots the level it receives at each commanded angle, so each
+point comes from a different beam. An antenna range measures a pattern the
+other way. It holds one beam still and moves the source around it in azimuth.
+Today we take that **azimuth sweep** with the kit's Signal vs Time mode and
+compare it with the beam sweep. The two agree on the main lobe and the first
+sidelobes, and they part farther out, where each patch's own pattern, the
+noise floor, and the room decide the level.
 :::
-
 ::::
 
-::::{frame} The Pattern Is a Product
+::::{frame} The Rectangular Plot
 :::{present}
-$$
-F(\theta) = EF(\theta)\ AF(\theta)
-$$
-
-- $AF$: element positions and phases. $EF$: one element's own pattern.
-- Near broadside a patch is nearly uniform, $EF \approx 1$, so $AF$ alone held.
-:::
-:::{present}
-:class: callout
-
-Everything the array factor gets wrong off broadside comes from the element factor.
+- The HB100 stays put while the kit steps the element-to-element phase, $2.8125^\circ$ at a time.
+- Each step makes a different beam; the plot puts the level received through it at that beam's commanded angle.
+- One trace is 162 steps.
 :::
 
-Every trace you have recorded on the PHASER is a **received-power sweep**: the
-software steps the commanded steer angle across the scan range, applies the
-phase ramp for each step, and records the power out of the beamformer while the
-HB100 source sits still. By reciprocity that trace follows the array's pattern,
-but the x-axis is the commanded steer angle, not a measured arrival angle. What
-the array does with the incoming wave at each step is exactly what it would do
-to a transmitted wave, so the sweep is a legitimate way to read a pattern.
-
-The quantity that sweep traces out is the full **antenna pattern**, and the
-array factor is only half of it. Lesson 16 established pattern multiplication
-for an array of identical elements,
-
-$$
-F(\theta) = EF(\theta)\ AF(\theta),
-$$
-
-where $AF(\theta)$ carries the geometry and the phasing of the array and
-$EF(\theta)$ carries the pattern of one element sitting in that array. Up to now
-we have compared measurements against $AF(\theta)$ alone, and it held, because
-near broadside a patch radiates almost uniformly and $EF \approx 1$ across the
-main lobe. Once we steer the beam off broadside, that approximation no longer
-holds.
-
-:::{callout}
-The array factor is not the antenna pattern. The array factor is what the
-element *positions and phases* contribute; the pattern is that product with the
-element's own pattern. Everything the array factor gets wrong off broadside
-comes from the element factor.
-:::
-
+You built this trace step by step in the L18 Lab
+(<a href="../L18-lab-beam-steering/index.html#frame-the-beam-sweep-trace">"The Beam-Sweep Trace"</a>).
+With Use Bits on, as in every lab preset, the kit adds one phase-shifter LSB,
+$2.8125^\circ$, to the element-to-element phase, writes that ramp to the eight
+channels, reads the peak of the FFT, and plots the reading at the angle the
+ramp steers to. At $10.3\ \text{GHz}$ one step moves $\sin\theta_0$ by
+$2.8125^\circ/173.2^\circ = 0.0162$, which is $0.93^\circ$ of angle near
+broadside and $1.07^\circ$ at $30^\circ$. Of the 162 steps, 123 fall inside
+$\pm 82^\circ$; the rest ask for more phase than any real angle needs and
+plot at $\pm 90^\circ$. The L20 Lab showed what that grid and the noise floor
+do to the readings
+(<a href="../L20-lab-array-factor/index.html#frame-reading-a-sweep-for-what-it-is">"Reading a Sweep for What It Is"</a>).
 ::::
 
-::::{frame} The Ideal Element
-:::{present}
-$$
-\begin{aligned}
-A_\text{proj} &= A\cos\theta \\
-G_e(\theta) &= G_e(0)\cos\theta \qquad (\text{power})
-\end{aligned}
-$$
-
-- Field pattern $\sqrt{\cos\theta}$; half power at $\pm 60^\circ$, a $120^\circ$ beam.
-- $D_e = 4$, or 6.0 dBi: the course's scan-loss model.
-:::
-
-The eight radiators on the PHASER are **microstrip patches** over a continuous
-ground plane. A patch is a half-wavelength resonant cavity radiating from the
-two open edges, and the ground plane underneath it is large enough that almost
-nothing reaches the back. Two consequences follow, and both are visible in your
-data.
-
-First, the element radiates into one hemisphere with a broad, smooth pattern
-whose peak is at broadside. Start with the **ideal element**, the one that
-collects exactly its share of the array's aperture. Lesson 2 tied gain to
-effective aperture for every antenna, $G = 4\pi A_e/\lambda^2$. Seen from an
-angle $\theta$ off broadside, that share of aperture presents its projected
-area $A\cos\theta$, so the element gain follows the projected area:
-
-$$
-G_e(\theta) = G_e(0)\cos\theta \qquad (\text{power}),
-$$
-
-which is a field pattern of $\sqrt{\cos\theta}$. This is the
-**projected-aperture rule**, and it is the model the course uses for scan-loss
-numbers. It puts the element half-power points at $\pm 60^\circ$ for a
-$120^\circ$ beamwidth. The directivity follows from Lesson 2's
-$D = 4\pi U_\text{max}/P_\text{rad}$, with $U = U_0\cos\theta$ over the front
-hemisphere only:
-
-$$
-\begin{aligned}
-P_\text{rad} &= \int_0^{2\pi}\!\!\int_0^{\pi/2} U_0\cos\theta\ \sin\theta\ d\theta\ d\phi \\
-&= \pi U_0 \\
-D_e &= \frac{4\pi U_0}{\pi U_0} = 4 = 6.0\ \text{dBi}
-\end{aligned}
-$$
-
-::::
-
-::::{frame} A Real Patch Is Steeper
-:::{present}
-<img src="../../viz/img/L21-patch-element.svg"
-     alt="Ideal and steeper element power patterns over a ground plane, one hemisphere"
-     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
-
-- Measured patches: $\cos^{1.3}\theta$ to $\cos^{1.5}\theta$, about $105^\circ$.
-- Versus ideal: 0.3 dB more loss at $30^\circ$, 1.2 dB at $60^\circ$.
-:::
-
-A real patch is steeper than the ideal element. Measured embedded elements roll
-off roughly as $\cos^{1.3}\theta$ to $\cos^{1.5}\theta$ in power, for
-beamwidths near $105^\circ$. The same integral with $\cos^n\theta$ gives
-$D_e = 2(n+1)$, or 6.6 to 7.0 dBi: a steeper element concentrates its power
-toward broadside, so its directivity rises even as its wide-angle gain falls.
-In practice that means about 1 dB of extra loss at wide scan and a negligible
-difference near broadside: the ideal rule and a $\cos^{1.4}\theta$ element differ by
-0.3 dB at $30^\circ$ and by about 1.2 dB at $60^\circ$. Use the ideal rule for
-predictions and expect measurements to sit between it and the steeper curve.
-
-::::
-
-::::{frame} The Ground Plane Removes the Back
-:::{present}
-- No pattern behind the board, so the scan stops at $\pm 90^\circ$.
-- The patch pattern falls steadily toward the horizon.
-- A bump at $\pm 80^\circ$ is a wall, a bench, or a person.
-:::
-
-Second, the ground plane removes the back hemisphere. That is why the PHASER
-scans over $\pm 90^\circ$ and no further: there is no pattern behind the array
-to steer a beam into, and a commanded angle beyond $\pm 90^\circ$ has no
-physical meaning for this aperture. It is also why any structure your sweep
-shows at large angles deserves suspicion. The pattern of a patch over a ground
-plane falls monotonically toward the horizon, so a bump at $\pm 80^\circ$ is
-almost always energy arriving from a wall, a bench, or a person, not radiation
-out the back of the board.
-
-::::
-
-::::{frame} Scan Loss
-:::{present}
-- The phase ramp moves the array factor; the element envelope stays put.
-- $AF = 1$ at the commanded angle, so the delivered gain is the envelope there.
-- The gain lost is **scan loss**.
-:::
-
-Steering does not move the element pattern. The phase ramp moves the array
-factor, and the array factor is then multiplied by a fixed element envelope. The array
-factor peaks at the commanded angle with a value of exactly 1, so the gain the
-array delivers in that direction is the element envelope evaluated there. The
-gain lost this way is called **scan loss**.
-
-::::
-
-::::{frame} Gain Bookkeeping
-:::{present}
-$$
-\begin{aligned}
-G(\theta_0) &= G_e(\theta_0) + 10\log_{10} N \\
-&= G_e(0) + 10\log_{10}(\cos\theta_0) \\
-&\quad + 10\log_{10} N
-\end{aligned}
-$$
-
-- All in dB; uniform excitation, $N$ identical elements.
-- Only the element term depends on scan.
-:::
-
-The bookkeeping is a sum in decibels. For $N$ identical elements with uniform
-excitation, the $N$ fields add in phase at the beam peak, so the peak intensity
-is $N^2$ times one element's, while the total radiated power is only $N$ times
-one element's. The ratio, the array's peak gain, is the gain of one element
-times $N$:
-
-$$
-G(\theta_0)\ [\text{dBi}] = G_e(\theta_0)\ [\text{dBi}] + 10\log_{10} N ,
-$$
-
-and the element term carries the scan dependence. The projected-aperture rule is
-a power law, so it enters with a factor of ten:
-
-$$
-G_e(\theta_0) = G_e(0) + 10\log_{10}(\cos\theta_0) .
-$$
-
-::::
-
-::::{frame} The Course Array at 60°
-:::{present}
-| Term | Broadside | Steered to $60^\circ$ |
-| :-- | :-- | :-- |
-| Element | 6.0 dBi | $6.0 - 3.0 = 3.0$ dBi |
-| Array, $10\log_{10} 8$ | 9.0 dB | 9.0 dB |
-| Total | 15.0 dBi | 12.0 dBi |
-
-- Elements still add in phase; all the loss comes from the element.
-:::
-
-Put the two together for the course array. The element contributes 6.0 dBi at
-broadside, the eight-element coherent sum contributes
-$10\log_{10} 8 = 9.0\ \text{dB}$, and the broadside gain is 15.0 dBi. Steer to
-$\theta_0 = 60^\circ$ and the element term drops by
-$10\log_{10}(\cos 60^\circ) = -3.0\ \text{dB}$, leaving 12.0 dBi. The array
-gain term never changes, because the elements still add in phase; all of the
-loss comes from the element pattern.
-
-```{note}
-This 9.0 dB of coherent array gain is not the 8.9 dB array-factor directivity
-from Lesson 20. That number measured the beam solid angle of the array factor
-alone, with isotropic elements; today's $10\log_{10} N$ counts the coherent
-sum over one real element. For elements that tile the aperture the two
-accountings agree to within about 0.2 dB (9.03 against 8.86 dB here), which is why both appear in practice.
-```
-
-::::
-
-::::{frame} Worked Example: Steered to 45°
-:::{present}
-| Quantity | Work | Result |
-| :-- | :-- | :-- |
-| Element, broadside | $D_e = 4$ | 6.0 dBi |
-| Element penalty | $10\log_{10}(\cos 45^\circ)$ | $-1.5$ dB |
-| Array gain | $10\log_{10} 8$ | $+9.0$ dB |
-| Steered peak | $6.0 - 1.5 + 9.0$ | 13.5 dBi |
-| Relative to broadside | $13.5 - 15.0$ | $-1.5$ dB |
-:::
-
-:::{admonition} Worked example — gain of the PHASER array steered to 45°
-:class: tip
-| Quantity | Work | Result |
-| :-- | :-- | :-- |
-| Element gain, broadside | $D_e = 4$ for the ideal element | $6.0\ \text{dBi}$ |
-| Element penalty at $45^\circ$ | $10\log_{10}(\cos 45^\circ)$ | $-1.5\ \text{dB}$ |
-| Array gain | $10\log_{10} 8$ | $+9.0\ \text{dB}$ |
-| Steered peak gain | $6.0 - 1.5 + 9.0$ | $13.5\ \text{dBi}$ |
-| Peak relative to broadside | $13.5 - 15.0$ | $-1.5\ \text{dB}$ |
-
-A real patch element, steeper than the ideal, loses about 0.6 dB more at this
-angle, so a measured peak near $-2$ dBc is the expected result.
-:::
-
-::::
-
-::::{frame} Three Numbers to Remember
-:::{present}
-:class: callout
-
-Steering to $30^\circ$, $45^\circ$, $60^\circ$ loses 0.6, 1.5, 3.0 dB. At $60^\circ$ the array factor's beam also widens from $13.2^\circ$ to $30.5^\circ$, which sets the $\pm 60^\circ$ practical scan limit.
-:::
-
-We should memorize three numbers, and they are the same three for any array
-built from aperture-like elements: steering to $30^\circ$ loses 0.6 dB, to
-$45^\circ$ loses 1.5 dB, and to $60^\circ$ loses 3.0 dB. Lesson 20 gave us
-the beamwidth,
-
-$$
-\theta_\text{HP} \approx \frac{0.886\ \lambda}{Nd\cos\theta_0},
-$$
-
-which gives $13.2^\circ$ at broadside and $26.4^\circ$ at $60^\circ$; the
-array-factor pattern itself is $30.5^\circ$ wide there, since the rule
-underestimates a wide-scanned beam. Gain and beam shape degrade together: by $\pm 60^\circ$ the array
-has lost 3 dB of gain for an ideal element, closer to 4 dB for a real patch, and
-more than half of its angular resolution. Those two losses together set the
-**$\pm 60^\circ$ practical scan limit** that designers quote for patch arrays.
-
-::::
-
-::::{frame} The Beam Pulls Inboard
-:::{present}
-- The envelope falls faster on the outboard side, so the lobe tilts toward broadside.
-- Commanded $60^\circ$: peak at $56.8^\circ$, width $22.9^\circ$ against the array factor's $30.5^\circ$.
-- We quote scan loss at the commanded angle.
-:::
-
-The beam shape degrades in a second way that the array factor alone does not
-predict. The envelope falls faster on the outboard side of the beam than on the
-inboard side, so the steered lobe becomes asymmetric, its peak pulls a few
-degrees toward broadside, and its half-power width comes out narrower than the
-array factor's. A $60^\circ$ command on this array peaks at $56.8^\circ$ with a
-$22.9^\circ$ width, against the $30.5^\circ$ of the array factor alone (Lesson
-20). The gain at that pulled-in peak is 0.2 dB higher than the gain at the
-commanded angle, so we quote scan loss at the commanded angle, the more
-conservative of the two.
-
-::::
-
-::::{frame} Element Times Array
+::::{frame} Beam Sweep, Step by Step
 :class: viz-frame
 
 :::{depth}
-The widget below multiplies the two curves for you. Set the element factor to
-isotropic and sweep the steer angle: the scan loss stays at 0 dB and the peak
-lands exactly on the commanded angle, which is the array factor you measured in
-the L18 Lab. Switch to the ideal element and sweep again, and watch three things —
-the scan loss reading $-0.6$, $-1.5$, and $-3.0$ dB at $30^\circ$, $45^\circ$,
-and $60^\circ$, the peak angle lagging the command, and the sidelobes on the far
-side of broadside dropping below their mirror images on the near side. The third
-setting is a real patch, steeper by about a decibel at wide scan.
+This is the beam sweep the kit runs, slowed down. Press **step** to add one
+phase LSB at a time and watch the left panel: the beam swings past the HB100,
+and the inset adds the eight element signals tip to tail. Away from the
+source the element signals arrive out of phase and their sum is small, so the
+point lands in a sidelobe or near the noise floor; as the beam reaches the
+source the signals line up and the trace rises to its peak. Each point on the
+right panel comes from the beam on the left at that moment, never from one
+beam held still.
 :::
 
 :::{present}
-<iframe src="../../viz/element-pattern-multiplication.html"
-        width="100%" height="517"
+<iframe src="../../viz/sweep-trace.html"
+        width="100%" height="441"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
-        title="Element factor times array factor for the eight-element course array">
+        title="The beam-sweep trace built one phase step at a time: the beam swinging past the HB100, the eight element signals summed, and each step's power plotted at the angle it steers to">
 </iframe>
 :::
-
 ::::
 
-::::{frame} The Inboard Sidelobe Reads Higher
-:::{present}
-- Commanded $30^\circ$: the array factor says $-12.8$ dB on both sides.
-- Inboard reads $-12.2$ dBc: the peak fell 0.6 dB, the sidelobe did not.
-- Outboard, at $59.6^\circ$: $-15.2$ dBc.
-:::
-
-```{note}
-We quote sidelobe levels relative to the peak, and the element factor moves
-the peak. With the beam commanded to $30^\circ$, the array factor predicts
-$-12.8$ dB for the first sidelobe on either side. The product puts the inboard
-sidelobe at $-12.2$ dBc, higher than predicted, because the peak itself fell
-0.6 dB while that sidelobe sits near broadside where the envelope is flat. The
-outboard sidelobe at $59.6^\circ$ lands at $-15.2$ dBc. The array factor is
-unchanged in both cases; only the reference level moved.
-```
-
-::::
-
-::::{frame} Four Effects Multiplication Misses
-:::{present}
-| Effect | Result |
-| :-- | :-- |
-| Mutual coupling | fills nulls, shifts far sidelobes 1-2 dB |
-| Edge elements | two halves of the pattern differ |
-| Phase and gain errors | raise the sidelobe floor, limit null depth |
-| The room | false lobes where the pattern is weak |
-:::
-
-Pattern multiplication assumes every element has the same pattern and the same
-excitation. Four effects break that assumption, in roughly this order of size on
-an eight-element array.
-
-
-**Mutual coupling.** Each patch is a few tenths of a wavelength from its
-neighbors, close enough that the field radiated by one element induces current
-on the others. The element therefore does not radiate the pattern it would in
-isolation, and it does not present the same input impedance either. The practical
-result is that the eight elements have slightly different embedded patterns and
-slightly different effective gains, which fills in nulls and raises far-out
-sidelobes by a decibel or two. Pattern multiplication uses one average element
-pattern for all eight and cannot represent the difference.
-
-
-**Edge effects.** Coupling is not the same for every element, because the two
-end elements have a neighbor on one side only. On an eight-element array that is
-a quarter of the aperture behaving differently from the middle, which is enough
-to make the two halves of a measured pattern unequal even with a perfectly
-symmetric taper. On a large array the end elements are a small fraction of
-the aperture, so the effect is much smaller.
-
-
-**Amplitude and phase errors.** The ADAR1000 sets phase in $2.8125^\circ$ steps
-and gain in finite steps, the cables and traces are not identical lengths, and
-the calibration is only as good as the day it was run. Random errors of a few
-degrees and a few tenths of a decibel raise the sidelobe floor and limit how
-deep a null can be made. Lesson 23 treats the quantization and squint parts of
-this quantitatively.
-
-
-**The measurement environment.** The lab is not an anechoic chamber. Energy
-reflects off benches, walls, and people, arrives at the array from directions
-the source is not in, and adds to whatever the pattern is doing there. The
-effect is largest where the true pattern is weakest, which is why far-out
-sidelobes and any apparent backlobe are the least trustworthy parts of a trace.
-
-::::
-
-::::{frame} The Range Must Be Long Enough
+::::{frame} Why the Beam Sweep Traces a Pattern
 :::{present}
 $$
+\psi = kd\left(\sin\theta_\text{src} - \sin\theta_0\right)
+$$
+
+- $\vert AF\vert$ depends only on $\psi$, and it is even in $\psi$.
+- Stepping $\theta_0$ or moving $\theta_\text{src}$ visits the same curve.
+:::
+:::{present}
+<img src="../../viz/img/L21-psi-two-ways.svg"
+     alt="The array factor in decibels against psi from minus 180 to 180 degrees. Open orange circles, the beam sweep stepping theta zero with the source fixed, and small navy dots, the azimuth sweep moving the source with the beam fixed, both fall on the same curve."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+Lesson 18 ("The Steered Pattern") showed that steering replaces the
+array-factor argument with
+
+$$
+\psi = kd\left(\sin\theta_\text{src} - \sin\theta_0\right),
+$$
+
+where $\theta_\text{src}$ is the direction the signal arrives from and
+$\theta_0$ is the angle the phase ramp steers to. The beam sweep holds
+$\theta_\text{src}$ and steps $\theta_0$; the azimuth sweep holds $\theta_0$
+and moves $\theta_\text{src}$. Both run $\psi$ through the same values, and
+$\vert AF\vert$ is the same for $\psi$ and $-\psi$, so both trace the same
+curve. That is why a trace built from 162 different beams looks like the
+pattern of one beam.
+
+The two differ only in what the array factor leaves out. The azimuth sweep
+carries the source across each patch's own pattern, so it records the
+product of the element pattern and the array factor that Lesson 16 derived
+(<a href="../L16-array-factor/index.html#frame-from-two-patterns-to-one">"From Two Patterns to One"</a>).
+The beam sweep keeps the source in one direction, so each patch receives the
+same level at every step and the element pattern is a single constant.
+::::
+
+::::{frame} The Antenna-Range Method
+:::{present}
+- An antenna range holds the beam still and moves the source, or turns the antenna.
+- Every point comes from the same beam.
+- The x-axis is the source's physical angle.
+:::
+:::{present}
+<img src="../../viz/img/L21-three-methods.svg"
+     alt="Three ways to trace a pattern. Beam sweep: the HB100 stays put and the kit steps the beam past it. By hand: the beam is held and you carry the HB100 around an arc. On the stand: the beam is held, the HB100 stays on its tripod, and the kit turns on its stand."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+Lesson 9 described how an antenna range measures a pattern
+(<a href="../../module02/L09-pattern-measurement-theory/index.html#frame-two-measurements-one-question">"Two Measurements, One Question"</a>).
+The antenna under test sits on a turntable with its beam fixed, a source
+stands at a fixed distance, and the turntable records the received level
+against the angle between the two. Every reading comes from the same beam,
+and each one carries a physical angle. The L21 Lab takes this azimuth sweep
+twice: once with you carrying the HB100 around the kit on a taped arc, and
+once with the kit turning on its stand in front of the HB100.
+::::
+
+::::{frame} Signal vs Time Mode
+:::{present}
+- The kit holds the beam at the Steer Angle and plots the peak level against time.
+- You carry the HB100 from $-90^\circ$ to $+90^\circ$ on a $1.2\ \text{m}$ arc.
+- The trace is one beam's pattern across azimuth.
+:::
+
+Lab Preset 7, **Antenna Pattern**, sets **Mode** to **Signal vs Time**. In
+that mode the kit stops stepping the beam: it holds every element at the
+phase for the **Steer Angle** you set, and the Tracking tab plots the FFT
+peak against elapsed time. As you carry the HB100 around the arc, the level
+at each instant is the held beam's response in the direction of the HB100 at
+that instant. This is the measurement in ADI's PHASER workshop, "Measuring
+the Actual Antenna Pattern."
+::::
+
+::::{frame} Azimuth Sweep Simulator
+:class: viz-frame
+
+:::{depth}
+The widget runs the azimuth sweep in simulation. Choose a steer angle and a
+speed profile, then watch the trace paint as the source moves around the arc.
+Run it once with the uniform profile and once with the hand-like profile, and
+compare the readouts: the lobe spacing changes and the lobe levels do not.
+The simulation holds the radius fixed; a hand-carried source drifts by a few
+centimeters, which moves the level (next frame).
+:::
+
+:::{present}
+<iframe src="../../viz/pattern-measurement-sim.html"
+        width="100%" height="461"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Simulated azimuth sweep: a source moves around an arc in front of a fixed beam while the level-versus-time trace paints below">
+</iframe>
+:::
+::::
+
+::::{frame} The Time Axis
+:::{present}
+- At a steady pace, time on the plot maps directly to azimuth.
+- An uneven pace stretches or squeezes a lobe in time; its level stays the same if the lobe gets several updates.
+:::
+:::{present}
+<img src="../../viz/img/L21-time-axis.svg"
+     alt="One 22 second azimuth sweep by hand plotted twice: against time, where an uneven pace spaces the lobes unevenly, and against source angle, where they are symmetric. A dashed line at the first-sidelobe level touches the same lobes on both."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+The Signal vs Time plot puts time on its x-axis, and at a steady pace time
+and azimuth are the same axis with a scale factor: a $180^\circ$ arc in
+$25\ \text{s}$ is $7.2^\circ$ per second. A hand is not perfectly steady.
+Moving slowly through a lobe draws it wider on the plot and hurrying draws it
+narrower, but the level at each instant is still the pattern in the source's
+direction, so the lobe levels come through. The one limit is the update
+rate, which the plot's title shows: a lobe crossed in a fraction of a second
+gets only a few readings, and its peak can fall between them. For angles
+read to a degree or two, the L21 Lab turns the kit on its stand and reads
+the stand's scale.
+
+A drift in the arc's radius changes the level. Received power falls as
+$1/r^2$, so drifting $10\ \text{cm}$ in or out at $1.2\ \text{m}$ changes a
+reading by
+
+$$
 \begin{aligned}
-r &\ge \frac{2D^2}{\lambda} = \frac{2(0.098\ \text{m})^2}{0.0291\ \text{m}} \\
-&= 0.66\ \text{m}
+20\log_{10}\frac{1.3\ \text{m}}{1.2\ \text{m}} &= 0.7\ \text{dB} \\
+20\log_{10}\frac{1.2\ \text{m}}{1.1\ \text{m}} &= 0.8\ \text{dB} .
 \end{aligned}
 $$
 
-- $D = 98$ mm between the outer element centers, at 10.3 GHz.
-- Level comparisons, such as scan loss, need 1.2 m or more.
-:::
-
-The range also has to be long enough. From Lesson 5, the far-field distance is
-$r \ge 2D^2/\lambda$ with $D$ the largest aperture dimension; for the course
-array, $D = 98\ \text{mm}$ between the outer element centers and
-$\lambda = 29.1\ \text{mm}$ at 10.3 GHz, so
-
-$$
-r \ge \frac{2(0.098\ \text{m})^2}{0.0291\ \text{m}} = 0.66\ \text{m} .
-$$
-
-A 1.2 m separation clears that with room to spare, so the
-curvature of the incoming wavefront produces less than the $22.5^\circ$
-($\lambda/16$ of path) of edge phase error the criterion allows. Clearing the far field is not the same as
-reading levels cleanly, though: in the Module 3 dry run a 1 m range showed
-only 0.2 to 0.4 dB of scan loss at $30^\circ$ and $45^\circ$, while about
-1.2 m gave $-0.7$ dB at $30^\circ$, on the prediction. Take any level
-comparison at 1.2 m or more.
-
+Turning the kit on its stand holds the distance fixed, which is why the L21
+Lab does both.
 ::::
 
-::::{frame} Predicted vs. Measured
+::::{frame} Levels in dBc
 :::{present}
-<img src="../../viz/img/L21-measured-vs-predicted.svg"
-     alt="Predicted element-times-array pattern compared with the sweep a measurement is expected to produce"
-     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
+$$
+L_\text{dBc} = L_\text{dBFS} - L_\text{dBFS,\ peak}
+$$
 
-- Commanded $30^\circ$. Main lobe and first sidelobes match; the rest drifts.
+- dBFS: level relative to the receiver's full scale, which the kit plots.
+- dBc: level relative to the trace's own main-lobe peak.
+- The subtraction removes Rx Gain, distance, and source power.
 :::
 
-In the L21 Lab you hold the beam fixed and carry the source around the array on
-a taped arc, which records the pattern against a physical angle, then compare
-that trace to the electronic sweep. Both traces should show
-the same main lobe, and both will disagree with the array-factor prediction in
-the same places. The figure below is what to expect for a beam commanded to
-$30^\circ$.
+The kit reports every level in **dBFS**, decibels relative to the full scale
+of the receiver's analog-to-digital converter. A dBFS reading depends on
+everything between the HB100 and the converter: the Rx Gain setting, the
+distance, the HB100's battery, and the direction of the source. Two traces
+taken at different gains or distances therefore sit at different dBFS
+levels even when the patterns are identical.
 
+**dBc** removes that. Subtract the main-lobe peak of the same trace from
+every reading, and each level becomes a ratio to the peak: a first sidelobe
+at $-31.2$ dBFS under a main lobe at $-18.4$ dBFS reads
+$-31.2 - (-18.4) = -12.8$ dBc. Everything common to the two readings cancels,
+which is what lets us lay a beam sweep and an azimuth sweep on the same axes.
+The lesson and the L21 Lab quote every lobe level in dBc.
 ::::
 
-::::{frame} Three Zones to Read
+::::{frame} Beam Sweep and Azimuth Sweep at Broadside
 :::{present}
-| Zone | What to expect |
+- The main lobe and first sidelobes match: about $-13$ dBc on both.
+- The nulls drop to the noise floor, about $-23$ dBc, on both.
+- Past $\pm 50^\circ$ the azimuth sweep reads lower.
+:::
+:::{present}
+<img src="../../viz/img/L21-beam-vs-azimuth-0.svg"
+     alt="Predicted beam sweep and azimuth sweep at broadside, in dBc: the main lobes and first sidelobes coincide near minus 13 dBc and every null drops to a dashed noise floor at minus 23 dBc; the outer lobes read about minus 17 dBc on the beam sweep and minus 19 dBc on the azimuth sweep."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+The figure predicts both traces for a beam at broadside. The beam sweep
+holds the HB100 at boresight and steps the beam; the azimuth sweep holds the
+beam at $0^\circ$ and moves the HB100. Out to the first sidelobes, at
+$\pm 21.9^\circ$, the two lie on top of each other, and both put the first
+sidelobes about 13 dB below the peak. That comparison is the one the L21 Lab
+asks for, because the main lobe and first sidelobes stand well above the
+noise floor and the room's reflections.
+
+Every null drops to the noise floor, about $23\ \text{dB}$ below the peak,
+which the L20 Lab measured. The floor also lifts the outer sidelobes, which
+the array factor puts at $-16$ to $-18$ dB, by a decibel or two on both
+traces. The difference between the traces near $\pm 63^\circ$, about
+$2.5\ \text{dB}$, comes from each patch's own pattern. A patch over a ground plane radiates nothing
+behind the board and less and less toward the horizon; the course models it
+as the ideal element of "Gain of the Course Array" below, whose power falls
+as $\cos\theta$, $3.4\ \text{dB}$ down at $63^\circ$. The azimuth sweep moves
+the HB100 out there, and the beam sweep never does. A real patch falls off
+faster than the ideal element, so expect the outer lobes of your azimuth
+sweep to read lower still. At the first sidelobes the patch pattern changes
+the level by only $0.3\ \text{dB}$.
+::::
+
+::::{frame} Beam Sweep and Azimuth Sweep at 30°
+:::{present}
+- Both put the nulls at $13.9^\circ$ and $49.5^\circ$: the lobe is wider outside.
+- The outer first sidelobe reads about 2 dB lower on the azimuth sweep.
+:::
+:::{present}
+<img src="../../viz/img/L21-beam-vs-azimuth-30.svg"
+     alt="Predicted beam sweep and azimuth sweep for a 30 degree beam, in dBc: both peak near 30 degrees with nulls at 13.9 and 49.5 degrees on the dashed noise floor; the inner first sidelobes match near minus 12 dBc, while the outer one near 60 degrees reads about minus 12 dBc on the beam sweep and minus 14.5 dBc on the azimuth sweep."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+Steering does not change the agreement. For the azimuth sweep, set the Steer
+Angle to $30^\circ$ and carry the HB100 around the arc; for the beam sweep,
+put the HB100 at $30^\circ$ and let the kit step the beam past it. The array
+factor slides in $\sin\theta$, not in $\theta$ (Lesson 18, "Rigid Shift in
+Sine Space"), so at $10.3\ \text{GHz}$ the first nulls fall at
+$\sin\theta = 0.5 \pm 0.260$, which is $13.9^\circ$ and $49.5^\circ$. The main
+lobe reaches $16.1^\circ$ below its peak and $19.5^\circ$ above it, on both
+traces.
+
+The outer first sidelobe, near $60^\circ$, reads about $-12$ dBc on the beam
+sweep and about $-14.5$ dBc on the azimuth sweep. The patch pattern causes
+that difference. The azimuth sweep reads in dBc of its own peak at
+$30^\circ$, where the ideal element is down $0.6\ \text{dB}$, and carries the
+HB100 out to $60^\circ$, where it is down $3.0\ \text{dB}$; the sidelobe
+therefore drops by the difference, about $2.4\ \text{dB}$, which the noise
+floor trims to about $2\ \text{dB}$. The beam sweep keeps the HB100 at
+$30^\circ$ for every step. On my kit the room alone made the two first
+sidelobes of a broadside azimuth sweep differ by about $3\ \text{dB}$ (11.5
+and 14.8 dBc), so a single azimuth sweep cannot separate the patch pattern
+from the room.
+::::
+
+::::{frame} Measurement Errors
+:::{present}
+| Error | Size | Trace |
+| :-- | :-- | :-- |
+| Room reflections | $\pm 1$ dB a reading | both |
+| Radius drift, $10\ \text{cm}$ | $0.7$ dB | azimuth |
+| Uneven pace | stretches lobes in time | azimuth |
+| Phase grid | beamwidth off by up to $1^\circ$ | beam |
+| Noise floor | about $-23$ dBc | both |
+:::
+
+**Room reflections.** The lab is not an anechoic chamber. Signals from the
+HB100 also reach the array off the floor, the ceiling, the benches, and the
+people nearby, and they add to the direct signal in and out of phase. A
+reflection $18\ \text{dB}$ below the level being read moves that reading by
+about a decibel, and the same reflection moves a weaker lobe by more. The
+far sidelobes are therefore the least trustworthy part of either trace, and a
+lobe that moves when you move the kit or a person comes from the room. Lesson
+9 shows why the nulls feel this first
+(<a href="../../module02/L09-pattern-measurement-theory/index.html#frame-the-nulls-fill-first">"The Nulls Fill First"</a>).
+
+**Radius drift and pace** belong to the azimuth sweep by hand, for the reasons
+in "The Time Axis." **The phase grid** places each beam-sweep point one step
+apart, so each half-power crossing can be off by half a step and a beamwidth
+by up to a step, about $1^\circ$. **The noise floor** is the level the nulls
+drop to; the L20 Lab found it about $23\ \text{dB}$ below the peak of each
+trace.
+::::
+
+::::{frame} Source Distance
+:::{present}
+$$
+\begin{aligned}
+r &\ge \frac{2D^2}{\lambda} = \frac{2(0.112\ \text{m})^2}{0.0291\ \text{m}} \\
+&= 0.86\ \text{m}
+\end{aligned}
+$$
+
+- $D = Nd = 112\ \text{mm}$, as in Lesson 18.
+- The L21 Lab sets the HB100 $1.2\ \text{m}$ out, clear of the far-field distance.
+:::
+
+The HB100 must sit past Lesson 5's far-field distance, or the wavefront
+curves across the array and the edge elements see more than the
+$22.5^\circ$ ($\lambda/16$ of path) of phase error the criterion allows,
+which fills the nulls and raises the sidelobes (Lesson 9,
+<a href="../../module02/L09-pattern-measurement-theory/index.html#frame-where-2d-comes-from">"Where 2D²/λ Comes From"</a>).
+Lesson 18 took the aperture as $D = Nd = 112\ \text{mm}$, since each element
+accounts for one spacing of aperture, which puts the boundary at
+$0.86\ \text{m}$ at $10.3\ \text{GHz}$ and $0.88\ \text{m}$ at
+$10.525\ \text{GHz}$. The L21 Lab uses $1.2\ \text{m}$, which stays past the
+boundary even with a hand-carried source drifting in and out.
+::::
+
+::::{frame} Reading Your Two Traces
+:::{present}
+| Feature | What to expect |
 | :-- | :-- |
-| Main lobe, first sidelobes | peak within $2^\circ$, sidelobes within 1 dB |
-| Middle sidelobes | recognizable, not quantitative |
-| Below about $-23$ dBc | noise floor; a null only reads "deeper" |
+| Main lobe | same level on both |
+| First sidelobes, broadside | $-13$ dBc on both, $\pm 2$ dB |
+| Outer sidelobe at $30^\circ$ | 2 dB lower on the azimuth sweep |
+| Farther sidelobes | qualitative only |
+| Nulls | noise floor, about $-23$ dBc |
 :::
 
-Read it in three zones. The main lobe and the first sidelobes on either side are
-where the prediction holds: peak angle within a couple of degrees,
-half-power width within a degree or two of theory, and first sidelobes within
-about 1 dB. The middle sidelobes are recognizable but not quantitative, since
-coupling and element differences have moved them around. Everything below about
-23 dB down is the sweep's noise floor, the level the L20 Lab nulls filled to, and a null that reads $-24$ dBc tells you
-only that the null is deeper than the floor.
-
+The L21 Lab gives you a beam sweep, three azimuth sweeps by hand, and one
+pass of the kit on its stand that reads the $0^\circ$ and $30^\circ$ beams
+together. Compare them lobe by lobe, in dBc. The main lobe and the first
+sidelobes are where the methods should agree: a first sidelobe of a
+broadside beam reads about 13 dB below the peak on every trace, and the room
+moves each dBc value by up to about $2\ \text{dB}$, since a dBc value is the
+difference of two readings that each carry about $\pm 1\ \text{dB}$. The
+farther sidelobes are recognizable but not quantitative, because the noise
+floor, the room, and the patch pattern all act there. Read angles from the
+stand's scale.
 ::::
 
-::::{frame} Grid Steps and Angle Offsets
-:::{present}
-- One $2.8125^\circ$ phase step is about $0.9^\circ$: beamwidth reads up to $1^\circ$ off.
-- An offset in the angle axis slides the whole trace without changing its shape.
-- Right shape, peak at $31.8^\circ$ for a $30^\circ$ command: check the setup.
-:::
-
-Two mechanical facts also show up. The sweep steps the element-to-element
-phase one $2.8125^\circ$ LSB per point (Lesson 18), which moves $\sin\theta$ by
-$0.0163$, about $0.93^\circ$ of angle near broadside and $1.08^\circ$ at
-$30^\circ$. The sweep can place a peak or a null only at the nearest grid
-point, and each half-power crossing can be off by half a step, so the
-beamwidth can read up to about $1^\circ$ off from the grid alone. And when you
-carry the source by hand, the angle axis is only as good as the taped marks
-and where the source sat at boresight: a uniform offset of a degree or two
-shifts the whole trace sideways without changing its shape. The Module 3 dry
-run found commanded peaks reading $1.8^\circ$ to $2.7^\circ$ high for exactly
-this reason. A trace whose shape matches theory but whose peak sits at
-$31.8^\circ$ for a $30^\circ$ command points to the setup, not the antenna.
-
-::::
-
-::::{frame} Summary: Pattern and Element
+::::{frame} Gain of the Course Array
 :class: read-only
 
-| Symbol / idea | What it is | Number to remember |
-| :-- | :-- | :-- |
-| $F(\theta) = EF(\theta)\ AF(\theta)$ | pattern multiplication | the pattern is the product, never the array factor alone |
-| $G_e(\theta) = G_e(0)\cos\theta$ | ideal element, projected-aperture rule | $120^\circ$ beamwidth, $D_e = 4$ (6.0 dBi) |
-| Ground plane | removes the back hemisphere | scan range $\pm 90^\circ$; a backlobe in the trace is the room |
+Later lessons use one gain figure for the course array, which we get by
+modeling each patch as an ideal element that collects its share of the
+aperture. Lesson 2 tied gain to effective aperture,
 
+$$
+G = \frac{4\pi A_e}{\lambda^2} ,
+$$
+
+and seen from $\theta$ off broadside that share presents its projected area
+$A\cos\theta$, so the element's power pattern is
+
+$$
+G_e(\theta) = G_e(0)\cos\theta ,
+$$
+
+the same projection that sets scan loss in Lesson 18 ("Scan Loss"). The
+ground plane blocks the back hemisphere, so with $U = U_0\cos\theta$ over the
+front hemisphere only, Lesson 2's directivity gives
+
+$$
+\begin{aligned}
+D_e &= \frac{4\pi U_\text{max}}{P_\text{rad}} \\
+P_\text{rad} &= \int_0^{2\pi}\!\!\int_0^{\pi/2} U_0\cos\theta\ \sin\theta\ d\theta\ d\phi \\
+&= \pi U_0 \\
+D_e &= \frac{4\pi U_0}{\pi U_0} = 4 = 6.0\ \text{dBi} .
+\end{aligned}
+$$
+
+Eight such elements tile the aperture, so the array collects eight times one
+element's share and adds $10\log_{10} 8 = 9.0\ \text{dB}$:
+
+$$
+\begin{aligned}
+G(\theta_0) &= G_e(0) + 10\log_{10} N \\
+&\quad + 10\log_{10}(\cos\theta_0) \\
+&= 15.0 + 10\log_{10}(\cos\theta_0)\ \text{dBi} ,
+\end{aligned}
+$$
+
+which is $15.0\ \text{dBi}$ at broadside and $14.4$, $13.5$, and
+$12.0\ \text{dBi}$ steered to $30^\circ$, $45^\circ$, and $60^\circ$. Lesson
+20 wrote the same sum with the array factor's directivity, $8.9\ \text{dB}$,
+in place of $10\log_{10} 8$; the two agree within $0.2\ \text{dB}$.
 ::::
 
-::::{frame} Summary: Scan Loss and Gain Bookkeeping
+::::{frame} Summary
 :class: read-only
 
-| Symbol / idea | What it is | Number to remember |
+| Idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| Scan loss | gain at the commanded angle, rel. broadside | $-0.6$, $-1.5$, $-3.0$ dB at $30^\circ$, $45^\circ$, $60^\circ$; about 1 dB more for a real patch |
-| dB bookkeeping | element gain plus array gain | $6.0 + 9.0 = 15.0$ dBi at broadside |
-| Beam pulling | product peak sits inboard of the command | $56.8^\circ$ predicted for a $60^\circ$ command |
+| Beam sweep | the Rectangular plot: beam stepped past a fixed source, one point from each beam | 162 steps of $2.8125^\circ$; $0.93^\circ$ near broadside |
+| Why it traces a pattern | $\vert AF\vert$ depends only on $\sin\theta_\text{src} - \sin\theta_0$ | stepping the beam or moving the source visits the same curve |
+| Azimuth sweep | one beam held, source moved in azimuth or antenna turned | Signal vs Time by hand; the stand's scale for angles |
+| dBc | level relative to the trace's own main-lobe peak | removes Rx Gain, distance, and source power |
+| Agreement | main lobe and first sidelobes | about $-13$ dBc at broadside, $\pm 2$ dB |
+| Patch pattern | seen by the azimuth sweep, not by the beam sweep | outer sidelobe of a $30^\circ$ beam about 2 dB lower; the room adds as much |
+| Source distance | $r \ge 2D^2/\lambda$, $D = Nd = 112\ \text{mm}$ | $0.86\ \text{m}$; measure at $1.2\ \text{m}$ |
 
 ::::
 
-::::{frame} Summary: Errors and the Range
-:class: read-only
-
-| Symbol / idea | What it is | Number to remember |
-| :-- | :-- | :-- |
-| Coupling and edges | elements are not identical in-array | fills nulls, moves far sidelobes 1-2 dB |
-| $r \ge 2D^2/\lambda$ | far-field distance, $D = 98\ \text{mm}$ | 0.66 m at 10.3 GHz; level comparisons need 1.2 m |
-| Sweep noise floor | where the prediction stops being testable | about 23 dB below the peak |
-
-::::
-
-::::{frame} Practice
+::::{frame} Preparing for the Lab
 :class: read-only doc-links
 
-- <a class="doc-link" href="../../practice/ECE444_L21_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a class="doc-link doc-key" href="../../practice/ECE444_L21_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+Part 1 of the L21 Lab packet works out what you should see at the bench, so you can tell a good trace from a bad one while you are still at the kit. Complete it before the lab period.
 
+- <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet, Part 1 (PDF)</a>
 ::::
 
 ::::{frame} Looking Ahead
 :::{present}
-- The L21 Lab: measure the pattern two ways, electronic sweep and a walked source.
-- Compare both to $AF$ alone and to $EF \cdot AF$; bring today's numbers.
-- L22: design the sidelobes with a taper.
+- The L21 Lab: a beam sweep, an azimuth sweep by hand, and one on the stand; compare lobe levels.
+- Lesson 22: taper the Element Gains to push the first sidelobes below $-13$ dBc.
 :::
 
-In the L21 Lab you will measure the array's pattern two ways —
-the electronic sweep you already know, and a fixed beam with the source carried
-around it on an arc — and compare both against an array-factor
-prediction and an element-times-array prediction. The scan loss, the peak
-pulling, and the asymmetric sidelobes in this lesson are the specific things
-that separate the two predictions, so bring the numbers with you.
-
-:::{depth}
-After that, Lesson 22 stops treating the sidelobes as something to explain and
-starts treating them as something to design. Tapering the element amplitudes
-trades beamwidth and peak gain for sidelobe suppression, and the trade is
-quantitative. Before the next class, review your L18 Lab measurement tables and
-mark every place where a measured number sat outside the tolerance you expected,
-since those are the rows this lesson has now explained.
-:::
-
+In the L21 Lab you take the same pattern three ways and compare the lobe
+levels in dBc, using the error table above to judge whether two values
+agree. Every trace so far has had uniform illumination, which fixes the
+first sidelobes near $-13$ dBc. Lesson 22 feeds the eight elements
+unequally, with more power in the middle and less at the edges, which pushes
+the sidelobes down and widens the main lobe.
 ::::
