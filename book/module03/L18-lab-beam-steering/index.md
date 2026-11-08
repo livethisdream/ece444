@@ -159,7 +159,7 @@ right panel. Away from the source the chain curls up and the point lands in a
 sidelobe or on the noise floor; as the beam reaches the source the chain
 straightens and the trace climbs to its peak, at the source's angle. Move the
 source and the peak follows it, lower by the element pattern at its new angle; press
-**step** to walk the sweep one LSB at a time.
+**step** to advance the sweep one LSB at a time.
 :::
 
 :::{present}
@@ -467,7 +467,9 @@ $d/\lambda = 0.491$. The $1/\cos\theta_0$ broadening of Lesson 18 gives
 $12.9^\circ/\cos 30^\circ = 14.9^\circ$ from the rule's broadside width, and the
 exact array factor gives $13.0^\circ$, $15.1^\circ$, and $18.7^\circ$. A sweep
 sampled about a degree apart reads each width to about a degree. dBc is dB
-relative to the main-lobe peak; the sweep's floor sits about $23\ \text{dB}$ below
+relative to the main-lobe peak: subtract the trace's peak from a reading, and
+the result no longer depends on Rx Gain or the source's distance, so a
+sidelobe compares directly with the array factor's $-12.8$ dB. The sweep's floor sits about $23\ \text{dB}$ below
 the peak, and the first sidelobes come up out of it at $-11$ to $-13$ dBc.
 
 The peak drop is the element pattern's roll-off, the scan loss of Lesson 18. Its

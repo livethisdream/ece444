@@ -25,7 +25,7 @@ L17 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 
 :::{depth}
-This lab is the hands-on half of Lesson 17. The lesson walked the receive chain
+This lab is the hands-on half of Lesson 17. The lesson traced the receive chain
 block by block; here you bring up that hardware yourself, from a blank card to
 a beam sweep that follows the source. The lab packet records both: that the kit
 came up, and that it works.
