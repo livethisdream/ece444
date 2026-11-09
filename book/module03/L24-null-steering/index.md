@@ -369,7 +369,7 @@ $$
 \text{gain}_n = \frac{100\ \vert w_n\vert}{\max_m \vert w_m\vert}\ \%, \qquad \phi_n = \angle w_n .
 $$
 
-Enter each phase with its sign. A Phase Control offset is the weight's own phase, the same convention **Apply** uses when it writes $-n\Delta\phi$ to steer to $+\theta_0$ (<a href="../L18-lab-beam-steering/index.html#frame-the-sign-in-phase-control">L18 Lab</a>). <a href="../L18-beam-steering/index.html#frame-sign-of-the-compensating-ramp">Lesson 18</a>'s $+n\Delta\phi$ is the backend's delay setting, which carries the opposite sign, so these offsets are entered as computed and not converted to it.
+Enter each phase with its sign. A Phase Control offset is the weight's own phase, the same convention **Apply** uses when it writes $-n\Delta\phi$ to steer to $+\theta_0$ (<a href="../L18-beam-steering/index.html#frame-the-sign-in-phase-control">Lesson 18</a>). <a href="../L18-beam-steering/index.html#frame-sign-of-the-compensating-ramp">Lesson 18</a>'s $+n\Delta\phi$ is the backend's delay setting, which carries the opposite sign, so these offsets are entered as computed and not converted to it.
 
 The gains are symmetric and the phases are antisymmetric, and every null placed to one side of a broadside beam produces that pattern. The reason is in $r_\text{n}$. Summing the geometric series gives
 

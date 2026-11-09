@@ -104,8 +104,7 @@
 <script>
 (function () {
   "use strict";
-  // Course constants: the prediction rows use c = 3e8 (lambda = 28.50 mm, 88.4 deg
-  // per element at 30 deg), as the lesson does.
+  // Course constants: the prediction rows use c = 3e8, as the lesson does.
   var C = 3e8, N = 8, D = 0.014;
   // The instrument's own constants (phaser_headless.py do_sweep and
   // ConvertPhaseToSteerAngle; main.js btn-apply-steer): c = 299792458, the
@@ -121,6 +120,20 @@
   var ptab = document.getElementById('ptab');
   var pd = document.getElementById('pdphi'), ph = document.getElementById('php'),
       pdrop = document.getElementById('pdrop');
+
+  // ?f=10.0 sets the frequency (GHz); &lock=1 hides its slider. The lesson
+  // embeds it locked at 10.0 GHz, away from any kit, so the page shows the
+  // method without printing the Part 1 key at a cadet's own frequency.
+  var q = new URLSearchParams(location.search);
+  if (q.has('f')) {
+    var fq = parseFloat(q.get('f'));
+    if (isFinite(fq)) {
+      if (fq < parseFloat(fIn.min)) fIn.min = String(fq);
+      if (fq > parseFloat(fIn.max)) fIn.max = String(fq);
+      fIn.value = String(fq);
+    }
+  }
+  if (q.get('lock') === '1') fIn.closest('.ctl').style.display = 'none';
 
   var NAVY = '#004a85', MID = '#0067b9', GRN = '#3f7d34', AMB = '#8a5a00', RED = '#b01e24',
       INK = '#15202b', INK3 = '#5b6573', EDGE = '#cddce9', GRID = '#e6eef6';
