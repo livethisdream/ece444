@@ -25,222 +25,71 @@ To print the slides, switch to present mode and print: one slide a sheet,
 with room for notes. Print from read mode for the whole lesson.
 ::::
 
-
 ::::{frame} Learning Objectives
 
 <ol class="lo-list" style="--module: '3'; counter-reset: lo 6">
   <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
   <li>I can identify grating lobes, beam squint, and quantization effects in a phased array and describe their impact on system performance.</li>
 </ol>
-
-:::{depth}
-Lesson 22 ended with a table of what each taper family does: sidelobes come
-down, the beam broadens, and the aperture gives up some efficiency. Today that
-table goes on your kit. You will load each preset on the PHASER, sweep the
-beam past the HB100, and check the measured beamwidth and peak level against
-the numbers you predicted. The measurement also forces a distinction that is
-easy to lose on paper — the **peak drop** you watch happen on the plot is not
-the **directivity loss** the array suffers, and the gap between them
-is several decibels.
-
-The second half of the lab keeps the same kit for the three departures Lesson
-23 derived: grating lobes, beam squint, and phase quantization. No taper can
-fix them, because they come from the element spacing, the frequency, and the
-phase shifter's resolution, not from the amplitudes a taper sets. You
-measure each one against the number that lesson gave you for it.
-:::
 ::::
 
-
-::::{frame} What Lesson 22 Predicts
+::::{frame} The Big Picture
 :::{present}
-| Preset | HPBW | Peak drop | $\eta_t$ |
-| :-- | :-- | :-- | :-- |
-| Uniform | $13.1^\circ$ | 0 dB | 0 dB |
-| Hann | $18.9^\circ$ | $-4.7$ dB | $-1.2$ dB |
-| Blackman | $21.4^\circ$ | $-6.1$ dB | $-1.8$ dB |
-| Chebyshev | $22.6^\circ$ | $-6.5$ dB | $-2.1$ dB |
+- Lesson 22: a taper lowers the sidelobes and widens the beam.
+- Lesson 23: spacing, frequency, and phase steps cause three defects no taper fixes.
+- Today you measure all of them on your kit.
 :::
-
-The expectation table is the prediction column for every taper measurement.
-The GUI writes these amplitudes to the eight Element Gains sliders when you
-press a preset button; everything else is what the sweep reads relative to a
-uniform-taper reference. The beamwidths are the array factor's at
-$10.443\ \text{GHz}$, the frequency of my test run; repeat them at
-your own kit's Find HB100 frequency in the packet's Part 1.
-
-| Preset | $a_n$ (%) |
-| :-- | :-- |
-| Uniform | 100 × 8 |
-| Hann | 12, 43, 77, 100, 100, 77, 43, 12 |
-| Blackman | 6, 27, 66, 100, 100, 66, 27, 6 |
-| Chebyshev | 4, 23, 62, 100, 100, 62, 23, 4 |
-
-The predictions assume each slider is linear in voltage, which the Phaser
-software provides once the kit has the gain-slider fix. On an older install the
-slider follows the ADAR1000's register curve, about $(\%/100)^{0.68}$ in
-voltage, and every taper comes out milder: my test run read Hann at
-$17.2^\circ$ and $-3.7$ dB against $18.9^\circ$ and $-4.7$ dB predicted.
-::::
-
-
-::::{frame} Two Numbers: Peak Drop and Taper Efficiency
 :::{present}
-$$
-\begin{aligned}
-\text{peak drop} &= 20\log_{10}\frac{\sum a_n}{N} \\
-\eta_t &= \frac{\left(\sum a_n\right)^2}{N \sum a_n^2}
-\end{aligned}
-$$
-
-- Hann: the plot falls $4.7$ dB; directivity falls $1.2$ dB.
-- Record both, in separate columns.
+<picture>
+<source media="(max-width: 600px)" srcset="../../viz/img/L22-L23-lab-sequence-narrow.svg">
+<img src="../../viz/img/L22-L23-lab-sequence.svg" alt="The four runs of the L22 to L23 Lab, each with the eight-element row and a thumbnail of the expected trace, computed at 10.0 GHz. Steps 7 to 13, tapers: the Hann trace is wider than the uniform trace and its peak sits lower. Steps 14 to 16, grating lobes: Rx1, Rx4 and Rx7 on, 42 mm apart, three full-height lobes. Steps 17 to 18, squint: source at 45 degrees, the 500 MHz trace peaks a few degrees past the 10 MHz trace. Steps 19 to 21, quantization: a Blackman beam held at 15 degrees, with a lobe rising out of the floor at 2 bits." style="max-width: 100%; display: block; margin: 0 auto;">
+</picture>
 :::
 
-The peak drop is the **coherent receive-voltage loss**: at broadside the eight
-element signals add in phase, so the summed voltage is proportional to
-$\sum a_n$ instead of $N$, and the plotted peak falls by
-$20\log_{10}(\sum a_n / N)$. That is the number the Rectangular plot shows you.
-The directivity loss is the **taper efficiency**, which for the Hann preset is
-$-1.2$ dB, not $-4.7$ dB. Both numbers are real and both belong in your table,
-so record them in separate columns and never let one stand in for the other.
-The worked Hann numbers after the steps show where the difference comes
-from.
+Lesson 22 showed that tapering the element amplitudes trades beamwidth and
+directivity for lower sidelobes, and that the peak drop the sweep plots is not
+the directivity the array loses. Lesson 23 derived three defects a taper
+cannot touch, because they come from the element spacing, the signal
+frequency, and the phase shifter's resolution rather than from the
+amplitudes: grating lobes, beam squint, and phase quantization. Today you
+measure each of them on your own kit and check every reading against the
+prediction you made in Part 1 of the packet.
 ::::
 
-
-::::{frame} The Floor Sets What You Can Report
+::::{frame} The Flow of the Lab
 :::{present}
-- Tapered sidelobes drop below the noise floor: write "below the floor" and its level.
-- My kit read floors from $-17$ to $-31$ dBc, setup to setup: read your own.
+| Steps | Task | Part 1 |
+| :-- | :-- | :-- |
+| 1–6 | Bring up the kit | Q1 |
+| 7–13 | Tapers, then your own | Q2, Q3 |
+| 14–16 | Grating lobes | Q4(a) |
+| 17–18 | Squint | Q4(b) |
+| 19–22 | Quantization, restore | Q4(c) |
 :::
 
-Every level on this page is in **dBc**, decibels below the main-lobe peak of
-the same trace: the plot reads dBFS, and subtracting the peak's reading from
-each value, as in the L21 Lab, makes a sidelobe level mean the same thing on
-every trace whatever its peak.
-
-One measurement will refuse to give you a number. Every tapered preset pushes
-its first sidelobe below the noise floor of the sweep, so the correct table
-entry in those rows is "below the floor", with the floor's level beside it,
-not a value read off the noise. Quoting $-28$ dBc from a trace whose floor is
-at $-25$ dBc reports the noise, not the antenna.
-
-The floor itself is not one fixed number. My test run read floors from
-$-17$ to $-31$ dBc on the same kit, depending on the setup, and a wall beside
-the kit raised a false lobe to $-9$ dBc. Read your own floor before you
-record anything, and write it at the top of Part 2.
+The taper runs fill Tables A and B in Part 2 of the packet, the grating-lobe
+run Table C, the squint run Table D, and the quantization run Table E. The
+HB100 stays at boresight through Step 16; it moves to $45^\circ$ for the
+squint run and is swept in azimuth for the quantization run. Freeze the
+uniform trace in Step 7 and keep it on the plot through Step 16: every peak
+drop is read against it.
 ::::
-
-
-::::{frame} The Measured Sweep for Each Preset
-:class: viz-frame
-
-:::{depth}
-The widget below runs the same sweep in the browser. Start on Uniform and note
-the first sidelobe near $-13$ dBc, then step through the presets and watch two
-things happen at once: the main lobe widens and its peak drops, while the
-sidelobes drop into the noise floor. The $\eta_t$ pill is the directivity loss, so
-compare it against the peak drop pill each time — the two never agree.
-:::
-
-:::{present}
-<iframe src="../../viz/taper-measurement.html"
-        width="100%" height="500"
-        style="border: 1px solid #cddce9; border-radius: 6px;"
-        loading="lazy"
-        title="Measured beam sweep for the PHASER taper presets, with element gains, HPBW, peak drop and taper efficiency">
-</iframe>
-:::
-::::
-
-
-::::{frame} Grating Lobes, Measured
-:::{present}
-- Every third element on, $42$ mm: lobes at $\pm 43.2^\circ$, peak $-8.5$ dB.
-- Every fourth, $56$ mm: lobes at $\pm 30.9^\circ$, peak $-12.0$ dB.
-- My kit: $-43.6^\circ$ and $+42.3^\circ$; $-33.0^\circ$ and $+29.8^\circ$.
-:::
-
-The taper runs measure the defect a taper can fix. Lesson 23 derived the three
-that it cannot, because they come from the spacing, the frequency, and the
-phase shifter's resolution rather than the amplitudes: **grating lobes**,
-**beam squint**, and **phase quantization**.
-The rest of the lab measures all three on the same kit, each the same way as
-the tapers: predict, sweep, record. The predictions above are at $10.443\ \text{GHz}$; work yours at your
-kit's own frequency.
-
-The peak drops on hardware run about $1$ dB short of the element count
-($-7.8$ and $-10.9$ dB on my kit), even with elements fully on or off. That
-shortfall also shows up when the whole array is compared with its single
-elements, and its cause is still open, so this step is graded on the lobe
-angles.
-::::
-
-
-::::{frame} Squint, Measured
-:::{present}
-- Signal BW $500$ MHz: the GUI sets the phases $500$ MHz below the signal.
-- Source at $45^\circ$: the sweep finds it at $48.0^\circ$, a $+3.0^\circ$ shift.
-- My kit, source at $41.1^\circ$: $+2.5^\circ$ measured, $+2.6^\circ$ predicted.
-:::
-
-The Beam Squint preset sets **Signal BW** to $500\ \text{MHz}$, which tells the GUI to
-compute the steering phases for a frequency $500\ \text{MHz}$ below the
-Signal Freq and receive at the Signal Freq. That is what a signal at the edge
-of a $500\ \text{MHz}$ band sees. The same phases are a slightly different
-steer at the real frequency, so the whole beam moves and the sweep has to
-command a larger angle to land on the source. Signal BW resets to 0 after
-Calibrate, Find HB100, and the Rect preset, so check it before every squint
-sweep.
-::::
-
-
-::::{frame} Quantization: Hold the Beam, Sweep the Source
-:::{present}
-- The Quantization preset: beam held at $15^\circ$, Blackman taper, Signal vs Time.
-- A $15^\circ$ ramp steps $45.4^\circ$: almost on the 3- and 4-bit grids.
-- So 7, 4, and 3 bits should match; 2 bits puts a lobe near $-51^\circ$.
-:::
-
-The Quantization preset holds the beam at $15^\circ$ with the Blackman taper, so every true
-sidelobe is below the floor and anything that appears is the phase shifter's
-doing. You sweep the HB100 in azimuth across the arc and read the level against time, at
-7, 4, 3, and 2 bits. Lesson 23's widget shows why the answer depends on the
-angle: a $15^\circ$ ramp steps $45.4^\circ$ per element, which rounds to the
-$22.5^\circ$ and $45^\circ$ grids with errors of $3^\circ$ or less, while at
-2 bits every other element is off by about $44^\circ$ and the array factor puts
-a lobe near $-51^\circ$ at about $-8$ dBc. Expect the 7-, 4-, and 3-bit sweeps
-to read the floor, 17 to 19 dB below the peak, and the 2-bit sweep to show that
-lobe near $-51^\circ$ at about $-10$ dBc, a few dB under the array factor
-because a source swept in azimuth also crosses each patch's pattern, as in the
-L21 Lab. If lobes appear at 3 or 4 bits on your
-kit, it is rounding more than the steering ramp; record what you see.
-::::
-
 
 ::::{frame} Equipment and Setup
 :::{present}
-- The HB100 at boresight, $1.2$ m out, at patch-row height.
-- Keep $\pm 40^\circ$ clear: a wall made a false lobe at $-9$ dBc.
-- Bring up the kit, then tapers, grating lobes, squint, and quantization.
-- Record in Tables A to E.
+- Set the HB100 at boresight, $1.2$ m out, at patch-row height.
+- Keep $\pm 40^\circ$ either side clear of walls and people.
+- Fill Tables A to E in Part 2 as you go.
 :::
 
 Place the HB100 at boresight, $1.2$ m from the array face, at patch-row height
-and aimed at the center of the patch row. Every taper number is a comparison
-between sweeps, so the source stays put until Step 17. The $1.2$ m puts the
-source beyond the array's far-field distance, $2D^2/\lambda$ with
-$D = 8d = 112$ mm, which is $0.87$ m at $10.443$ GHz; closer in, the pattern
-itself changes with distance. A wall beside the kit put a false lobe only
+and aimed at the center of the patch row. The $1.2$ m clears the far-field
+distance you found in Part 1, Question 1, so the sweep reads the far-field
+pattern. Every taper number is a comparison between sweeps, so the source
+stays put until Step 17. A wall beside the kit raised a false lobe only
 $9$ dB below the peak, and a person seated beside it left a $-17$ dBc shelf,
 so keep $\pm 40^\circ$ either side clear of both.
-
-The procedure has four parts: Steps 1 to 6 bring up the kit, Steps 7 to 13
-sweep the tapers, Steps 14 to 18 measure grating lobes and squint, and Steps 19
-to 22 measure quantization and restore the kit.
 ::::
-
 
 ::::{frame} Bring Up the Kit
 :class: read-only
@@ -253,17 +102,18 @@ to 22 measure quantization and restore the kit.
    </div>
 2. **Connect.** Browse to your kit's address and wait for the pill to read
    **Connected**.
-3. **Calibrate the array.** Press **Calibrate** and wait for it to finish. An
+3. **Find the source.** Press **Find HB100** and record the Signal Freq it
+   reports. If it differs by more than about 1% ($100\ \text{MHz}$) from the
+   frequency you used in Part 1, rework your predictions before you sweep.
+
+   <div class="rec" data-lab="L22-L23">
+   <label>Step 3: Signal Freq <input data-field="f.sig"></label>
+   </div>
+4. **Calibrate the array.** Press **Calibrate** and wait for it to finish, with
+   the HB100 still at boresight; it uses the frequency Find HB100 stored. An
    uncalibrated array carries element-to-element gain and phase errors that
    look exactly like a taper you did not ask for. If the uniform trace's two
    first sidelobes differ by more than about 2 dB in Step 8, calibrate again.
-4. **Find the source.** Press **Find HB100** and record the Signal Freq it
-   reports. Every prediction uses this frequency, not the nominal
-   $10.525\ \text{GHz}$.
-
-   <div class="rec" data-lab="L22-L23">
-   <label>Step 4: Signal Freq <input data-field="f.sig"></label>
-   </div>
 5. **Set the gain.** Set **Rx Gain** so the FFT peak, beam at $0^\circ$ and
    source at boresight, reads $-10 \pm 3$ dBFS, and record it. Leave it there
    for the whole lab, so every peak compares.
@@ -277,59 +127,63 @@ to 22 measure quantization and restore the kit.
    moves its mirror-image partner.
 ::::
 
-
 ::::{frame} No Hardware?
 :class: read-only
 
 ```{note}
 Run the backend in simulation mode with
 `python phaser_headless.py --sim` and open the same URL. The simulator places
-a target at boresight, which is where the taper runs need it, so Steps 7 to 16
-work unchanged. Steps 17 to 21 need a source that moves, so they have no
-simulator equivalent; use the expectation tables.
+a target at boresight, which is where the taper and grating-lobe runs need it,
+so Steps 7 to 16 work unchanged; its Signal Freq is $10.525\ \text{GHz}$, so
+work your predictions there. Steps 17 to 21 need a source that moves, so they
+have no simulator equivalent; use your Part 1 predictions in their place.
 ```
 ::::
 
-
 ::::{frame} Taper Runs
 :class: read-only
+
+Read every level in **dBc**: subtract the trace's own peak from the reading,
+so the peak is 0 dBc. The plot reads dBFS, and a tapered trace peaks lower
+than the uniform one, so only a level taken from its own trace's peak means
+the same thing on every trace. The one exception is the peak drop, which you
+read against the frozen uniform trace.
 
 7. **Freeze the reference.** Choose the **Uniform** taper, check that all eight
    sliders read 100%, press **Start**, and read **Peak Gain** and **Angle**
    (set to **Peak**). Press **Freeze**: this trace stays on the plot as the
    reference every peak drop is read against.
 8. **Read the uniform trace.** Record the HPBW, the angles where the trace
-   falls 3 dB below its own peak, the first sidelobe, and the floor. Expect
-   about $13^\circ$, within a degree of the $13.1^\circ$ prediction: the sweep
-   steps in $2.8125^\circ$, so the 3 dB crossings land between samples. If the
-   two first sidelobes, near $\pm 22^\circ$, differ by more than about 2 dB,
-   calibrate again and repeat Steps 7 and 8.
+   falls 3 dB below its own peak, the first sidelobe, and the noise floor.
+   Expect the HPBW within about a degree of your Part 1 value: the sweep steps
+   one $2.8125^\circ$ phase step a point, about $0.9^\circ$ of angle near
+   broadside, so the 3 dB crossings land between samples. If the two first
+   sidelobes, near $\pm 22^\circ$, differ by more than about 2 dB, calibrate
+   again and repeat Steps 7 and 8.
 
    <div class="rec" data-lab="L22-L23">
    <label>Step 8, Uniform: HPBW <input data-field="a.uni.hpbw"></label>
    <label>Step 8, Uniform: first sidelobe (dBc) <input data-field="a.uni.sll"></label>
-   <label>Step 8: floor (dBc) <input data-field="f.floor"></label>
+   <label>Step 8: noise floor (dBc) <input data-field="f.floor"></label>
    </div>
-9. **Predict Hann.** Choose the **Hann** taper and copy the eight slider values:
-   12, 43, 77, 100, 100, 77, 43, 12. Predict the peak drop from
-   $20\log_{10}(\sum a_n/N)$ and the HPBW, $18.9^\circ$ at
-   $10.443\ \text{GHz}$ or your own from Part 1 of the packet.
+9. **Load Hann.** Choose the **Hann** taper and check the eight sliders read
+   12, 43, 77, 100, 100, 77, 43, 12. Check your Part 1 row for it.
 10. **Sweep Hann.** Press **Start** and record the HPBW, the peak drop against
-    the frozen uniform trace, and the first sidelobe, written "below the floor"
-    if it is. Expect the main lobe to widen to about $19^\circ$ and the peak to
-    fall about 4.7 dB, with the first sidelobes gone into the floor; on an
-    older install, without the gain-slider fix, expect about $17^\circ$ and
-    $-3.7$ dB.
+    the frozen uniform trace, and the first sidelobe, entered the way your
+    Part 1, Question 3(b) answer says. Expect the main lobe to widen and the
+    peak to fall by about the Hann drop Lesson 22 works out. On a kit without the gain-slider fix, the
+    slider is not linear in voltage and every taper comes out milder: Hann
+    reads about $17^\circ$ and $-3.7$ dB. Record what you measure; Part 3 asks
+    you to name the cause of any difference.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 10, Hann: HPBW <input data-field="a.hann.hpbw"></label>
     <label>Step 10, Hann: peak drop (dB) <input data-field="a.hann.drop"></label>
     <label>Step 10, Hann: first sidelobe <input data-field="a.hann.sll"></label>
     </div>
-11. **Blackman and Chebyshev.** Repeat Steps 9 and 10 for each, predicting
-    before each sweep. Their end elements sit at 6% and 4%, so the beam widens
-    past $21^\circ$ and the peak drops past 6 dB, for sidelobes that were
-    already below the floor after Hann: the diminishing returns of Lesson 22.
+11. **Blackman and Chebyshev (optional).** Repeat Steps 9 and 10 for each, if
+    time allows, and compare with your Part 1 rows. Part 3's question on
+    Blackman against Hann uses these rows.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 11, Blackman: HPBW <input data-field="a.black.hpbw"></label>
@@ -340,13 +194,13 @@ simulator equivalent; use the expectation tables.
     <label>Step 11, Chebyshev: first sidelobe <input data-field="a.cheb.sll"></label>
     </div>
 12. **Design your own taper.** With Enforce Symmetric Taper on, meet this
-    specification: HPBW no wider than $17^\circ$, with the first sidelobe
-    below $-20$ dBc. Start from Uniform, pull the end elements down to about
-    25% to 30%, and step smoothly up to 100% in the middle; 30, 55, 90, 100 is
-    a good start, and with a linear slider it predicts $16.5^\circ$, a
-    $-3.3$ dB peak drop, and a first sidelobe at $-25$ dBc. Set the sliders,
-    sweep, read the HPBW and sidelobe, and adjust; two or three passes get
-    there. Record your final gains and the result.
+    specification: HPBW no wider than $16^\circ$, with the first sidelobe
+    below $-20$ dBc. Start from the taper you worked in Part 1, Question 2,
+    30, 60, 90, 100: at $10.443\ \text{GHz}$ it predicts $16.4^\circ$ and a
+    first sidelobe near $-23$ dBc, so it meets the sidelobe specification but
+    not the beam. Set the sliders, sweep, read the HPBW and sidelobe, and
+    adjust: raise the end elements to narrow the beam, lower them if the
+    sidelobe rises past $-20$ dBc. Record your final gains and the result.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 12: Rx1, Rx8 (%) <input data-field="b.g1"></label>
@@ -361,7 +215,6 @@ simulator equivalent; use the expectation tables.
     from a known state.
 ::::
 
-
 ::::{frame} Grating Lobes and Squint
 :class: read-only
 
@@ -375,7 +228,7 @@ simulator equivalent; use the expectation tables.
     elements sit $3d = 42\ \text{mm}$ apart. Press **Start** and record the
     lobe angles, their heights against the $0^\circ$ lobe, and the peak drop
     against the frozen uniform trace. Expect three lobes of the same height:
-    the main lobe at $0^\circ$ and two copies near $\pm 43^\circ$.
+    the main lobe at $0^\circ$ and two copies at your Part 1 angles.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 15, Rx1, Rx4, Rx7: lobe angles <input data-field="c.147.lobes"></label>
@@ -384,24 +237,18 @@ simulator equivalent; use the expectation tables.
     </div>
 16. **Every fourth element.** Set Rx4 and Rx7 to 0% and Rx5 to 100%, so only
     Rx1 and Rx5 are on, $4d = 56\ \text{mm}$ apart, and sweep again. Record the
-    same three. Expect lobes near $\pm 31^\circ$, and the trace climbing to
-    full height at both ends of the plot: the $m = 2$ solution needs
-    $\sin\theta$ just past 1, so you see its shoulder rather than its peak.
+    same three. Expect the pair of lobes to move in toward your Part 1 angles,
+    and check both ends of the plot against your Part 1 answer for the $m = 2$
+    lobes.
+    The measured peak drops in Steps 15 and 16 run about 1 dB short of the
+    element count, even with elements fully on or off, for a reason that is
+    still open, so I grade these two steps on the lobe angles.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 16, Rx1, Rx5: lobe angles <input data-field="c.15.lobes"></label>
     <label>Step 16, Rx1, Rx5: height against the 0° lobe <input data-field="c.15.height"></label>
     <label>Step 16, Rx1, Rx5: peak drop (dB) <input data-field="c.15.drop"></label>
     </div>
-
-    | Elements on | $d_\text{eff}$ | Lobes at 10.443 GHz | Peak drop |
-    | :-- | :-- | :-- | :-- |
-    | Rx1, Rx4, Rx7 | 42 mm | $\pm 43.2^\circ$ | $-8.5$ dB |
-    | Rx1, Rx5 | 56 mm | $\pm 30.9^\circ$, both ends | $-12.0$ dB |
-
-    The measured peak drops run about 1 dB short of these, even with elements
-    fully on or off, for a reason that is still open, so this step is graded
-    on the lobe angles.
 17. **Squint reference.** Place the HB100 at $45^\circ$ on the $1.2$ m arc and
     choose the **Uniform** taper. Set **Signal BW** to 10 MHz, press
     **Start**, record **Angle** (set to **Peak**; about $45^\circ$, the
@@ -411,47 +258,42 @@ simulator equivalent; use the expectation tables.
     <label>Step 17, Signal BW 10 MHz: Angle <input data-field="d.10.angle"></label>
     </div>
 18. **Squint.** Choose the Beam Squint preset, check that **Signal BW** reads
-    500 MHz, and sweep again. Record **Angle** and its shift from Step 17. The
-    peak moves even though the source did not: a beam commanded to
-    $\theta_c$ with its phases set at $f_0$ points at
-    $\sin^{-1}[(f_0/f)\sin\theta_c]$ when the signal is at $f$, so with
-    $f = 10.443$ GHz and $f_0 = 9.943$ GHz the sweep lands on a source at
-    $45^\circ$ only when it commands $48.0^\circ$. Calibrate, Find HB100, and
-    the Rect preset all reset Signal BW to 0, so check it before every squint
-    sweep.
+    500 MHz, and sweep again. Record **Angle** and its shift from Step 17.
+    Expect the peak to move by about your Part 1 shift even though the source
+    did not: the GUI now sets the phases for a frequency 500 MHz below the
+    signal, so the sweep has to command a larger angle to land on the source.
+    Calibrate, Find HB100, and the Rect preset all reset Signal BW to 0, so
+    check it before every squint sweep.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 18, Signal BW 500 MHz: Angle <input data-field="d.500.angle"></label>
     <label>Step 18: shift <input data-field="d.shift"></label>
     </div>
-
-    | Signal BW | Angle (Peak) | Shift, calculated | Shift, measured |
-    | :-- | :-- | :-- | :-- |
-    | 10 MHz | $\approx 45^\circ$ | $0.05^\circ$ | reference |
-    | 500 MHz | $\approx 48^\circ$ | $+3.0^\circ$ | $+2.5$ to $+3.5^\circ$ |
 ::::
-
 
 ::::{frame} Quantization and Restore
 :class: read-only
 
 19. **Load the preset.** Put the HB100 at the arc's $-90^\circ$ end and choose
     the Quantization preset. It holds the beam at $15^\circ$ with the Blackman
-    taper and opens **Signal vs Time** on the Tracking tab.
+    taper, so every true sidelobe sits under the noise floor and any lobe that
+    rises comes from rounding, and it opens **Signal vs Time** on the Tracking
+    tab.
 20. **Sweep at 7 bits.** With **Use Bits** checked, set **Phase Shift Bits** to
-    7, then sweep the HB100 in azimuth from $-90^\circ$ to $+90^\circ$ along the $1.2$ m arc,
-    aimed at the array, in about 20 s. Record the strongest lobe outside the
-    main lobe, and where it is; write "floor" where nothing rises out of it.
-    The trace keeps the last 30 s, counted from when the mode starts, so begin
-    the sweep promptly; a slower sweep runs off its end.
+    7, then sweep the HB100 in azimuth from $-90^\circ$ to $+90^\circ$ along the
+    $1.2$ m arc, aimed at the array, in about 20 s. Record the strongest lobe
+    outside the main lobe, in dBc, and where it is; write "floor" where nothing
+    rises out of it. Signal vs Time records 30 s from when the mode starts, so
+    begin the sweep promptly; a slower sweep runs off its end.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 20, 7 bits: strongest lobe (dBc) <input data-field="e.7.lobe"></label>
     <label>Step 20, 7 bits: where <input data-field="e.7.where"></label>
     </div>
 21. **Sweep at 4, 3, and 2 bits.** Repeat Step 20 at each, checking the bit
-    count and the box before each sweep. Lobes at 3 or 4 bits would point to
-    the kit rounding more than the steering ramp; record what you see.
+    count and the box before each sweep, and compare each trace with your
+    Part 1 prediction. Lobes at 3 or 4 bits would point to the kit rounding
+    more than the steering ramp; record what you see.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 21, 4 bits: strongest lobe (dBc) <input data-field="e.4.lobe"></label>
@@ -461,128 +303,67 @@ simulator equivalent; use the expectation tables.
     <label>Step 21, 2 bits: strongest lobe (dBc) <input data-field="e.2.lobe"></label>
     <label>Step 21, 2 bits: where <input data-field="e.2.where"></label>
     </div>
-
-    | Bits | LSB | Rule of thumb, $-6B$ dB | Expected strongest lobe outside the main lobe |
-    | :-- | :-- | :-- | :-- |
-    | 7 | $2.8^\circ$ | $-42$ | the floor, $-17$ to $-19$ dBc |
-    | 4 | $22.5^\circ$ | $-24$ | the floor, as at 7 bits |
-    | 3 | $45^\circ$ | $-18$ | the floor, as at 7 bits |
-    | 2 | $90^\circ$ | $-12$ | about $-10$ dBc, near $-51^\circ$ |
 22. **Restore.** Before you leave: **Use Bits** on, Phase Shift Bits 7, Signal
     BW 10 MHz, and the **Uniform** taper.
 ::::
 
-
-::::{frame} Working the Hann Numbers
-:class: read-only
-
-Work the Hann preset all the way through. The eight amplitudes are
-$a_n = 0.12,\ 0.43,\ 0.77,\ 1.00,\ 1.00,\ 0.77,\ 0.43,\ 0.12$, giving
-
-$$\sum a_n = 4.64, \qquad \sum a_n^2 = 3.584 .$$
-
-The plotted peak drop follows from the first sum alone:
-
-$$
-\begin{aligned}
-20\log_{10}\!\left(\frac{4.64}{8}\right) &= 20\log_{10}(0.580) \\
-&= -4.7\ \text{dB}.
-\end{aligned}
-$$
-
-The directivity loss follows from both sums:
-
-$$
-\begin{aligned}
-\eta_t &= \frac{\left(\sum a_n\right)^2}{N \sum a_n^2} = \frac{21.53}{8 \times 3.584} \\
-&= 0.751 \quad \rightarrow \quad -1.2\ \text{dB}.
-\end{aligned}
-$$
-
-<img src="../../viz/img/L22-two-numbers.svg"
-     alt="Bar comparison: the plotted peak falls 4.7 dB while directivity falls 1.2 dB, a 3.5 dB difference"
-     style="max-width: 620px; width: 100%; display: block; margin: 1em auto;">
-
-So the trace drops 4.7 dB and the antenna loses 1.2 dB of directivity. The
-remaining 3.5 dB did not go anywhere, because it was never a loss. The sweep
-plots received power normalized to full scale, and the tapered array collects
-less signal voltage from the source — that part is real and it is the 4.7 dB.
-But the tapered array also responds to less of everything else arriving from
-off-boresight, and the noise-equivalent aperture shrinks along with the signal
-sum. Directivity is the ratio of on-axis intensity to the average over all
-angles, and that ratio only falls by $\eta_t$. If you re-normalized each trace
-to its own peak instead of to the uniform peak, the 4.7 dB would vanish from
-the plot entirely and the beam shape would be unchanged.
-
-The practical statement is short. The peak drop is a plot artifact of a
-common reference; the taper efficiency is the antenna's actual loss. A system
-budget that debits 4.7 dB for the taper overstates the loss by a factor of two
-in power.
-::::
-
-
 ::::{frame} Your Part 2 Entries
 :class: read-only
 
-Every box you filled in on this page, in one place. Your entries stay in this
-browser only, saved as you type. **Download my packet** writes them into Part 2
-of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
-viewer, and upload one PDF to Gradescope. If you have already typed Part 1 into
-the packet PDF, use **Fill my own copy** and choose that file instead: your Part 1
-is kept, and Part 2 is added to it. Either way the result is locked, so finish
-any typing in the PDF first. **Export entries** saves a small backup file you
-can **Import** on another laptop or after clearing your browser. The boxes are
-optional: the blank packet is in the next frame, to fill on paper or in a PDF
-viewer instead.
+This frame collects every box you filled in on this page. Your entries stay in
+this browser only, saved as you type. **Download my packet** writes them into
+Part 2 of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in
+the PDF viewer, and upload one PDF to Gradescope. If you have already typed
+Part 1 into the packet PDF, use **Fill my own copy** and choose that file
+instead: your Part 1 is kept, and Part 2 is added to it. Either way the result
+is locked, so finish any typing in the PDF first. **Export entries** saves a
+small backup file you can **Import** on another laptop or after clearing your
+browser. The boxes are optional: the blank packet is in the next frame, to fill
+on paper or in a PDF viewer instead.
 
 <div class="rec-summary" data-lab="L22-L23" data-pdf="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" data-file="ECE444_L22_L23_Lab"></div>
 ::::
 
-
 ::::{frame} Lab Packet
-:class: read-only
+:class: read-only doc-links
 
-The packet is the turn-in document for the whole lab: Part 1 before the period,
-Part 2 in class, Part 3 after. <a href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet (PDF)</a>.
+The L22–L23 Lab packet is one submission for the whole lab, turned in complete before Lesson 24. It has three parts:
+
+1. Part 1, Pre-Lab (individual, before the lab period, because you need it in class): your frequency and the far-field distance, the peak drop and taper efficiency of a starting taper, the predicted columns of Table A, and the grating-lobe angles, squint shift, and quantization prediction for Tables C to E.
+2. Part 2, Measurements (your own kit's data, recorded in class): Tables A to E.
+3. Part 3, Writeup (individual, after the lab): reconcile the measurements with the predictions, a measurement that disagrees, and the three departures.
+
+- <a class="doc-link" href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet (PDF)</a>
 ::::
 
-
-::::{frame} Summary: Tapering
+::::{frame} For Part 3
 :class: read-only
 
-| Symbol / idea | What it is | Number to remember |
-| :-- | :-- | :-- |
-| $\sum a_n / N$ | coherent receive-voltage fraction at broadside | Hann: $4.64/8 \rightarrow -4.7$ dB |
-| $\eta_t = (\sum a_n)^2/(N\sum a_n^2)$ | taper efficiency — the directivity the array loses | Hann: 0.75, or $-1.2$ dB |
-| HPBW with taper | broadens as the aperture is de-weighted | $13.1^\circ$ uniform, $18.9^\circ$ Hann, $22.6^\circ$ Chebyshev |
-| Floor | the limit on any sidelobe reading | $-17$ to $-31$ dBc on my kit; tapered sidelobes drop below it |
-| Mild taper | most of the sidelobe benefit, little directivity lost | ends at 30%: $16.5^\circ$, $-0.7$ dB of $\eta_t$ |
+Part 3 of the packet is the writeup, done after class with your Part 2
+entries beside you. It asks three things:
+
+1. **The two numbers and the floor.** Why the sweep gives a beamwidth for every
+   taper but no sidelobe level; why the peak drop is not the directivity the
+   array lost; how your Table A compares with your predictions; and whether
+   Blackman beats Hann on anything this sweep can show.
+2. **A measurement that disagrees.** A Hann sweep whose peak falls too far:
+   run the peak-drop formula backwards to find the fault.
+3. **The three departures.** Your grating-lobe angles and why a grating lobe
+   stands as tall as the main lobe; what moved between the two squint sweeps;
+   and your Table E against the $-6B$ rule and your Part 1 prediction.
+
+Lesson 22's
+<a href="../L22-sidelobes-tapering/index.html#frame-peak-drop-versus-directivity-loss">"Peak Drop Versus Directivity Loss"</a>
+and
+<a href="../L22-sidelobes-tapering/index.html#frame-reading-a-tapered-sweep">"Reading a Tapered Sweep"</a>
+cover the first question, and Lesson 23's worked examples and
+<a href="../L23-beam-squint-quantization/index.html#frame-quantization-sidelobes">"Quantization Sidelobes"</a>
+cover the third.
 ::::
-
-
-::::{frame} Summary: The Three Departures
-:class: read-only
-
-| Symbol / idea | What it is | Number to remember |
-| :-- | :-- | :-- |
-| Grating lobe | a full-height copy of the beam where $\sin\theta = m\lambda/d_\text{eff}$ is real | every third element on: $\pm 43^\circ$ |
-| Beam squint | the beam moves when the signal is off the phase-set frequency | 500 MHz at $45^\circ$: $3^\circ$ |
-| Phase quantization | lobes that appear when the ramp falls between grid points | 2 bits at $15^\circ$: a lobe near $-10$ dBc; 3 and 4 bits at the floor |
-::::
-
 
 ::::{frame} Looking Ahead
-:::{present}
-- Turn in the packet, all three parts, before Lesson 24.
-- L24 places a null on purpose; my kit measured nulls $-40$ to $-50$ dB deep.
-:::
+:class: read-only
 
-The taper runs measured the defect a taper can fix: the sidelobes came down,
-and the beam widened, with a peak drop that is not the directivity you lost.
-The rest of the lab measured the three it cannot. Grating lobes are the array factor doing exactly
-what the geometry tells it to, squint is what setting the phases at one
-frequency and receiving at another does to the beam, and quantization lobes
-appear when the steering ramp falls between the shifter's grid points.
-Lesson 24 turns from pattern defects to pattern control: placing a null at a
-chosen angle on purpose, with weights that change both amplitude and phase.
+Lesson 24 places a null at a chosen angle on purpose, with weights that set
+both the amplitude and the phase of each element.
 ::::

@@ -27,7 +27,9 @@ things happen", not what the kit shows).
   - L23-qsll-vs-bits       : when quantization matters. The -6B rule, the
                              simulated worst lobe on the course array over
                              steer angles 0 to 50 deg, the uniform array's own
-                             -13 dB sidelobes, and the phaser-00 test run.
+                             -13 dB sidelobes. The lab's Part 1 predicts the
+                             kit's own reading at a 15 deg beam, so no measured
+                             points go here.
 
 Every plotted number is computed here and matches the lesson text.
 
@@ -240,7 +242,6 @@ def qsll_vs_bits():
             worst = max(worst, 20 * np.log10(diff.max()))
         sim.append(worst)
     sim = np.array(sim)
-    meas_b, meas_v = [2, 3, 4], [-8.5, -12.0, -15.5]
     fig, ax = plt.subplots(figsize=(5.4, 3.4))
     ax.axhline(-13.3, color=GRAY, lw=1.2, ls=(0, (5, 4)))
     ax.text(7.05, -13.3 + 0.6, "uniform array's own sidelobes", ha="right", va="bottom",
@@ -251,11 +252,6 @@ def qsll_vs_bits():
     ax.plot(B, sim, "o-", color=BLUE, lw=1.8, ms=5)
     ax.text(B[-1] + 0.1, sim[-1] - 1.2, "simulated,\nworst steer", color=BLUE, fontsize=9.5,
             ha="right", va="top", fontweight="bold")
-    ax.plot(meas_b, meas_v, "s", color=RED, ms=7)
-    ax.plot([7], [-17.4], "s", ms=7, mfc="white", mec=RED, mew=1.5)
-    ax.text(4.12, -15.5, "phaser-00", color=RED, fontsize=10, fontweight="bold",
-            ha="left", va="center")
-    ax.text(6.92, -17.4, "floor", color=RED, fontsize=9.5, ha="right", va="center")
     ax.set_xlabel("phase-shifter bits B")
     ax.set_ylabel("worst lobe (dB below the beam)")
     ax.set_xticks(B)
@@ -411,7 +407,7 @@ def null_depth_levels():
     ax.set_xlim(0, 2.45)
     ax.set_ylim(-55, 0)
     ax.set_xticks([0.5, 1.7])
-    ax.set_xticklabels(["predicted", "measured, phaser-00"])
+    ax.set_xticklabels(["predicted", "measured, my kit"])
     ax.tick_params(axis="x", length=0)
     ax.set_ylabel("dB below the uniform peak")
     ax.grid(axis="y", color=RULE, lw=0.8)
