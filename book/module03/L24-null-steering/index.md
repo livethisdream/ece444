@@ -474,7 +474,8 @@ $$
 $$
 
 - Minimum output power, with unit gain in the look direction $\mathbf{s}$.
-- The beamformer estimates $\mathbf{R}$ from the data, so nobody supplies the interferer's angle.
+- It estimates $\mathbf{R}$ from the data; nobody supplies the interferer's angle.
+- Two channels leave one null, and the target must sit where the beam points.
 :::
 
 The computed notch needed the interferer's angle, and the difference null needed the array's symmetry. The **MVDR** (minimum-variance distortionless-response) beamformer needs neither. It estimates the covariance of what the two channels receive over $K$ snapshots,
@@ -483,7 +484,7 @@ $$
 \hat{\mathbf{R}} = \frac{1}{K}\ \mathbf{X}\mathbf{X}^{H},
 $$
 
-and solves for the weights that minimize total output power while holding unit gain in the look direction $\mathbf{s}$. MVDR suppresses whatever is loud and is not in the look direction, and nobody has to tell it where that is.
+and solves for the weights that minimize total output power while holding unit gain in the look direction $\mathbf{s}$. MVDR suppresses whatever is loud and is not in the look direction, and nobody has to tell it where that is. With two digital channels it has two weights: one holds the look direction and the other places one null, so it can place one null. The Phaser measures $\mathbf{s}$ from the target itself, from the samples taken before the interferer is added, so MVDR protects the HB100 as the two channels actually receive it. That works only when the target sits where the beam points.
 
 Unit gain means the two MVDR weights sum to 1 in the look direction, where Manual's two weights of 1 sum to 2. The Phaser multiplies the MVDR output by 2, the number of channels, so a target in the look direction reads the same level under either mode, and we compare the two on one scale.
 ::::
@@ -491,13 +492,13 @@ Unit gain means the two MVDR weights sum to 1 in the look direction, where Manua
 ::::{frame} Two Limits of Two Channels
 :::{present}
 - Near $\pm 30^\circ$ the subarray pattern already puts the interferer in a null.
-- There the channels' phase difference wraps a full cycle, so MVDR's one null hits the target.
-- Diagonal loading limits that loss; the lab runs MVDR at $+20^\circ$.
+- There the channel phase difference wraps a full cycle: nulling the interferer would null the target.
+- The lab runs MVDR at $+20^\circ$.
 :::
 
 Both limits belong to the architecture rather than to the algorithm. A four-element subarray at $d = 14$ mm has its first null where $\sin\theta = \lambda/4d$, about $31^\circ$, so an interferer there barely reaches either channel and there is little left for the digital layer to remove. The two channels sit four elements apart, so their phase difference, $4kd\sin\theta$, runs through a full cycle across the subarray beam: a source near $+30^\circ$ presents very nearly the same channel phase difference as one on boresight, and the two channels cannot tell them apart. The digital layer can only work on what the analog layer passes it, and only on directions the two channels can distinguish.
 
-At $+30^\circ$ both limits act at once. MVDR still spends its one null on the interferer, but to the two channels the interferer looks like the look direction, and the HB100 sits a fraction of a degree off it, so the null lands on the target too. **Diagonal loading** is the guard. The Phaser adds $\delta\ \text{tr}(\hat{\mathbf{R}})/2$ to the diagonal of $\hat{\mathbf{R}}$ before inverting it, which caps how far the weights can move from Manual's. At $\delta = 0.1$ the weights move far enough to suppress an interferer at $+20^\circ$ by about 17 dB and not so far that the null takes the target with it at $+30^\circ$, so the lab uses $\delta = 0.1$. At $\delta = 1$ the weights stay so close to Manual's that the suppression falls to about 5 dB.
+At $+30^\circ$ both limits act at once. To the two channels the interferer looks almost like the target, so a null on it would land on the target too, and MVDR keeps the target it measured: it leaves the interferer where the subarray pattern put it. **Diagonal loading** guards the weights. The Phaser adds $\delta\ \text{tr}(\hat{\mathbf{R}})/2$ to the diagonal of $\hat{\mathbf{R}}$ before inverting it, which caps how far the weights can move from Manual's and keeps a source near the look direction from driving them to large values that amplify the noise. At $\delta = 0.1$ the weights still move far enough to suppress an interferer at $+20^\circ$ by 10 dB or more on a kit, so the lab uses $\delta = 0.1$. At $\delta = 1$ the weights barely move from Manual's and the suppression mostly disappears.
 
 The lab also uses $K = 1024$ snapshots rather than 128. At the kit's 3 MSPS, 128 samples span only four cycles of the 100 kHz offset between target and interferer, so the two are partly correlated in each estimate of $\hat{\mathbf{R}}$ and the null wanders from one update to the next. 1024 samples span 34 cycles, which holds the null still.
 ::::
@@ -506,7 +507,7 @@ The lab also uses $K = 1024$ snapshots rather than 128. At the kit's 3 MSPS, 128
 :class: viz-frame
 
 :::{depth}
-The widget is the two-channel digital layer on its own, with the analog subarrays parked at boresight. Move the interferer to about $+20^\circ$ and watch MVDR place a null on it. Then move it out toward $\pm 30^\circ$ and watch the suppression fall away, for the two reasons on the previous frame. In the lab you hold the beam on the target in Signal vs Time and read the suppression from the two readout tiles under the plot. A beam-sweep trace is the total power at each angle, interferer and target together, so it shows the null but does not measure it.
+The widget is the two-channel digital layer on its own, with the analog subarrays parked at boresight. Move the interferer to about $+20^\circ$ and watch MVDR place a null on it. Then move it out toward $\pm 30^\circ$ and watch the suppression fall away, for the two reasons on the previous frame. Watch what the null takes from the rest of the pattern, too: the sidelobes rise elsewhere, and the null repeats, because two channels four elements apart respond the same to directions $\lambda/4d$ apart in $\sin\theta$. In the lab you hold the beam on the target in Signal vs Time: the readout tiles give the suppression, and the Rectangular tab draws the held beam's pattern with the interferer marked. A beam-sweep trace is the total power at each angle, interferer and target together, so it shows the null but does not measure it.
 :::
 
 <iframe src="../../viz/mvdr-interferer.html"
@@ -599,7 +600,7 @@ Stepping by the sign alone is the simplest loop that works: it needs no slope, a
 - Lesson 25 begins radar: the range equation puts a power budget behind the monopulse angle measurement.
 :::
 
-In the L24 Lab you load your own gain and phase table and measure the notch, set Beam 1 Phase to $180^\circ$ and measure the difference null, run MVDR against a simulated interferer, and watch the monopulse tracker follow the HB100. Read the Digital Beam Forming section of the GUI inventory before class, so the Mode, Snapshots, and Diagonal Load controls are not new to you.
+In the L24 Lab you load your own gain and phase table and measure the notch, set Beam 1 Phase to $180^\circ$ and measure the difference null, run MVDR against a simulated interferer and watch its null on the held beam's pattern, and watch the monopulse tracker follow the HB100. Read the Digital Beam Forming section of the GUI inventory before class, so the Mode, Snapshots, and Diagonal Load controls are not new to you.
 
 Lesson 25 derives the radar range equation and asks how much power comes back from a target that transmits nothing of its own. Everything Module 3 built, beamwidth, sidelobes, scan loss, and steering, becomes the antenna terms in that equation, and the array becomes the front end of a radar. The monopulse pair measures a target's angle from a single look, which is what a radar needs to track something that moves.
 ::::
@@ -614,7 +615,7 @@ Part 1 of the L24 Lab packet is the pre-lab. Do it before the lab period, at the
 | Question 1 | $\psi_1$, the gain and phase table, $\vert r_\text{n}\vert$, the main-lobe loss, and what a sign error or a missing phase column does | Steps 6 to 9, Table A |
 | Question 2 | the notch depth that one-step channel errors allow | Step 9, Table A |
 | Question 3 | the difference null and the angles of its two peaks | Step 14, Table B |
-| Question 4 | Manual's Interferer vs Target at $+20^\circ$, the channel phase difference at $+20^\circ$ and $+30^\circ$, and what MVDR does to the target at $+30^\circ$ | Steps 18 to 21, Table C |
+| Question 4 | Manual's Interferer vs Target at $+20^\circ$, the channel phase difference at $+20^\circ$ and $+30^\circ$, and whether MVDR can remove an interferer at $+30^\circ$ | Steps 18 to 21, Table C |
 | Question 5 | where the delta null and the error's zero sit, which side reads positive, the error's slope at your frequency, and how deep the delta null reads | Steps 25 to 27, Table D |
 
 This lesson works its examples at $10.0\ \text{GHz}$, well away from any kit's HB100, so it shows the method without giving your answers. Work yours at your kit's frequency: that is the table you type in.

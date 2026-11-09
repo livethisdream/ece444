@@ -162,56 +162,72 @@ each side of boresight clear of walls and people for the whole lab. Lesson 24's
 ::::{frame} Procedure C: MVDR Against an Interferer
 :class: read-only
 
-The interferer in this procedure is simulated: the Phaser software adds a second
-source, at an angle and level you choose, to the real samples the kit receives,
-before the digital beamformer sees them. The target stays your HB100 at
-boresight. Every number comes from the two readout tiles under the plot,
-**Interferer vs Target** and **MVDR Suppression**, and from **Peak Gain**, with
-the beam held on the target.
+% Procedure C needs livethisdream/phaser PR #98 (MVDR measures its look
+% vector; the held pattern on the Rectangular tab) and #97 on the kit. Its
+% expectations at +30 deg come from that PR's simulator until a kit run.
+
+The interferer in this procedure is simulated: the Phaser software adds a
+second source, at an angle and level you choose, to the real samples the kit
+receives, before the digital beamformer sees them. The target stays your HB100
+at boresight. In Signal vs Time the beam is held still. The **Tracking** tab
+plots the held beam's level against time, the two readout tiles under the plot,
+**Interferer vs Target** and **MVDR Suppression**, give the numbers, and the
+**Rectangular** tab draws the held beam's pattern against arrival angle: the
+conventional pattern dashed, the weighted pattern solid, and lines at the look
+direction and the interferer. Procedure C needs the current Phaser software on
+your kit.
 
 16. Set **Mode** to **Signal vs Time** with **Steer Angle** at $0^\circ$. This
     holds the beam on the target, and the readout tiles fill in only while it is
     held.
 17. Open the **Interferer** pane, below Digital Beam Forming, and press
-    **Inject Interferer**; it changes to *Interferer ON · click to stop*. Set
+    **Inject Interferer**; the plot shows an *Interferer ON* badge. Set
     **Angle (deg)** to $+20$ and **Power (dBFS)** to $0$, its maximum, which puts
     it about 10 dB above a target read at $-10$ dBFS. Leave **Offset from
     target (kHz)** at $100$ and **Coherent with target** off.
-18. In **Digital Beam Forming**, set Mode to **Manual**. Watch ten updates of
-    **Interferer vs Target** and **Peak Gain** and record the median of each,
-    the middle value once sorted. The readings jump between updates, and the
-    median ignores the odd wild one where an average would not. Expect
-    Interferer vs Target near $-2$ dB.
+18. In **Digital Beam Forming**, set Mode to **Manual**. In Manual the
+    interferer only adds signal, and the Rectangular plot shows its line sitting
+    on a sidelobe of the pattern. Watch ten updates of **Interferer vs Target**
+    and **Peak Gain** and record the median of each, the middle value once
+    sorted. The readings jump between updates, and the median ignores the odd
+    wild one where an average would not. Expect Interferer vs Target near
+    $-2$ dB.
     <div class="rec" data-lab="L24">
     <label>Step 18: Manual, Interferer vs Target (dB) <input data-field="c.man.ivt"></label>
     <label>Step 18: Manual, Peak Gain (dBFS) <input data-field="c.man.peak"></label>
     </div>
 19. Set Mode to **MVDR**, Snapshots to $1024$, and Diagonal Load to $0.1$. Leave
-    Steer Angle at $0^\circ$: it is MVDR's look direction. Record the medians of
+    Steer Angle at $0^\circ$: it is MVDR's look direction. MVDR has one null to
+    place, because the board has two digital channels. It places it on the
+    interferer while protecting the target it measures in the look direction,
+    so the target must be where the beam points. Record the medians of
     **Interferer vs Target**, **Peak Gain**, and **MVDR Suppression**. The
     suppression tile needs a Manual and an MVDR reading at the same Steer Angle;
-    if it shows "--", repeat Step 18, then this step. Expect Interferer vs Target
-    near $-18$ dB, a suppression near 17 dB. Peak Gain reads about 2 dB below
-    Manual's, because in Manual it includes an interferer only 2 dB below the
-    target.
+    if it shows "--", repeat Step 18, then this step. Expect a suppression of
+    10 dB or more, and Peak Gain close to Manual's, since MVDR keeps the target.
     <div class="rec" data-lab="L24">
     <label>Step 19: MVDR, Interferer vs Target (dB) <input data-field="c.mvdr.ivt"></label>
     <label>Step 19: MVDR, Peak Gain (dBFS) <input data-field="c.mvdr.peak"></label>
     <label>Step 19: MVDR Suppression (dB) <input data-field="c.mvdr.supp"></label>
     </div>
-20. Open the **Adaptive** tab, which appears with MVDR in Signal vs Time. Record
-    the angle and depth of the null near $+20^\circ$, and the conventional
-    pattern's level at the same angle. Expect the null at $19^\circ$ to
-    $20^\circ$, well below the conventional pattern's $-13$ dB.
+20. Open the **Rectangular** tab. Record the angle and depth of the solid
+    weighted pattern's null near $+20^\circ$, and the dashed conventional
+    pattern's level at the same angle. Expect the null within a degree of
+    $+20^\circ$, well below the conventional pattern's $-13$ dB. The null is
+    not the only change: the weighted pattern's sidelobes rise elsewhere, and
+    the null repeats every $\lambda/4d$ in $\sin\theta$, about $0.51$ at the
+    kit's frequency, because the two channels sit four elements apart.
     <div class="rec" data-lab="L24">
-    <label>Step 20: Adaptive null angle <input data-field="c.null.angle"></label>
-    <label>Step 20: Adaptive null depth (dB) <input data-field="c.null.depth"></label>
+    <label>Step 20: MVDR null angle <input data-field="c.null.angle"></label>
+    <label>Step 20: MVDR null depth (dB) <input data-field="c.null.depth"></label>
     <label>Step 20: conventional pattern at the null (dB) <input data-field="c.null.conv"></label>
     </div>
 21. Move the interferer to $+30^\circ$. Record Peak Gain in Manual, then in MVDR
-    at Diagonal Load $0.001$ and at $0.1$. Expect the target about 10 dB down at
-    $0.001$ and about 2 dB down at $0.1$: there the two channels cannot tell the
-    interferer from the target, and loading keeps the null off it.
+    at Diagonal Load $0.001$ and at $0.1$, and watch Interferer vs Target. Expect
+    Peak Gain to hold in all three and Interferer vs Target to change little.
+    The subarray pattern already puts $+30^\circ$ near a null, and the two
+    channels see the interferer with nearly the target's phase difference, so
+    MVDR cannot null it without nulling the target it protects.
     <div class="rec" data-lab="L24">
     <label>Step 21: +30°, Manual Peak Gain (dBFS) <input data-field="c.30.man"></label>
     <label>Step 21: +30°, MVDR load 0.001 Peak Gain (dBFS) <input data-field="c.30.load001"></label>
@@ -320,14 +336,15 @@ entries beside you. Its first three questions ask:
 
 1. How does your notch depth compare with the Part 1 estimate, and what set it on your kit?
 2. Reading a null-steered sweep: the notch depth against the null-steered peak, a notch on the wrong side, and which error is large enough to move a notch $3^\circ$.
-3. How did Manual and MVDR compare at $+20^\circ$, and why did the target drop at $+30^\circ$ with almost no loading?
+3. How did Manual and MVDR compare at $+20^\circ$, and why could MVDR do little at $+30^\circ$?
 
 Lesson 24's
 <a href="../L24-null-steering/index.html#frame-measured-null-depth">"Measured Null Depth"</a>
 and <a href="../L24-null-steering/index.html#frame-two-limits-of-two-channels">"Two Limits of Two Channels"</a>
-give the mechanisms; "Closing the Loop" explains the tracker. Procedure D's
-tracking needs the current Phaser software, with closed-loop Tracking,
-installed on your kit. For the notch angle, and for the boresight offset the
+give the mechanisms; "Closing the Loop" explains the tracker. Procedures C
+and D need the current Phaser software installed on your kit: MVDR that
+measures its look direction, the held pattern on the Rectangular tab, and
+closed-loop Tracking. For the notch angle, and for the boresight offset the
 monopulse question asks about, Lesson 19's
 <a href="../L19-direction-finding/index.html#frame-the-bearing-error-budget">"The Bearing Error Budget"</a>
 sizes the error of aligning a kit by eye, and the L19 Lab's
