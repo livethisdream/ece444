@@ -34,27 +34,24 @@ with room for notes. Print from read mode for the whole lesson.
 
 ::::{frame} The Big Picture
 :::{present}
-- Lesson 21: beam and azimuth sweeps match out to the first sidelobes.
+- The beam sweep steps beams past a fixed HB100; an azimuth sweep moves the HB100 past one beam.
 - Today you take both on your kit and compare lobe levels in dBc.
-- At $30^\circ$, the azimuth sweep's outer first sidelobe reads lower than the inner one.
+- Part 1 predicts what each trace shows.
 :::
 :::{present}
-<img src="../../viz/img/L21-beam-vs-azimuth-30.svg"
-     alt="Predicted beam sweep and azimuth sweep for a 30 degree beam, worked at 10.0 GHz, in dBc: both peak near 30 degrees and match on the main lobe and the inner first sidelobe, while the outer first sidelobe near 61 degrees reads lower on the azimuth sweep, which carries the source across each patch's pattern."
+<img src="../../viz/img/L21-three-methods.svg"
+     alt="Three ways to trace a pattern. Beam sweep: the HB100 stays put and the kit steps the beam past it. By hand: the beam is held and you carry the HB100 around an arc. On the stand: the beam is held, the HB100 stays on its tripod, and the kit turns on its stand."
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Lesson 21 showed that the kit's beam sweep, which steps the beam past a fixed
-HB100, and an azimuth sweep, which holds one beam and moves the source, trace
-the same curve out to the first sidelobes, about $13\ \text{dB}$ below the
-peak on both. Today you take both on your own kit: a beam sweep, three
-azimuth sweeps by hand, and one pass of the kit on its stand that reads a
-beam held at $0^\circ$ and one held at $30^\circ$ together. You compare the lobe
-levels in dBc against the predictions you made in Part 1 of the packet. The
-two methods should agree on the broadside first sidelobes within the window
-you found in Part 1, and at $30^\circ$ the azimuth sweep's outer first sidelobe
-should read lower than its inner one, because only the azimuth sweep carries the source across each
-patch's pattern.
+Lesson 21 compared the kit's beam sweep, which steps the beam past a fixed
+HB100, with an azimuth sweep, which holds one beam and moves the source.
+Today you take both on your own kit: a beam sweep, three azimuth sweeps by
+hand, and one pass of the kit on its stand that reads a beam held at
+$0^\circ$ and one held at $30^\circ$ together. You compare the lobe levels in
+dBc against the predictions you made in Part 1 of the packet, which say where
+the two methods should agree, where they should not, and how closely two
+traces must match before you call them the same.
 ::::
 
 ::::{frame} The Flow of the Lab
@@ -385,9 +382,9 @@ entries beside you. Convert the lobe levels of Tables D and E to dBc first:
 subtract each table's main-lobe level. Then it asks three things:
 
 1. Do the three methods agree on the broadside first sidelobes, within the
-   window you found in Part 1? At $30^\circ$, is the outer first sidelobe
-   lower than the inner, in the predicted direction, and by more than your
-   own broadside pair differ?
+   window you found in Part 1? At $30^\circ$, do the two first sidelobes
+   differ in the direction you predicted, and by more than your own
+   broadside pair?
 2. How does the spread of your three sweeps by hand compare with the stand's
    repeatability from Step 18? Convert a sweep's peak time to an angle at a
    steady pace, and say what an uneven pace moves: the lobe positions, the
@@ -406,5 +403,5 @@ give the size of each effect.
 :class: read-only
 
 Lesson 22 tapers the Element Gains to push the first sidelobes below the
-$-13$ dBc you measured today, which widens the main lobe.
+level you measured today, which widens the main lobe.
 ::::
