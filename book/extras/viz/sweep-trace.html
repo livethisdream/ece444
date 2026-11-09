@@ -69,7 +69,7 @@
     <div class="ro"><span class="k">plotted at</span><span class="v" id="r-th">&#8212;</span></div>
     <div class="ro"><span class="k">received</span><span class="v" id="r-p">&#8212;</span></div>
   </div>
-  <p class="note">N = 8, d = 14 mm, 10.525 GHz. Each step adds one 2.8125° phase-shifter LSB
+  <p class="note">N = 8, d = 14 mm, <span id="f-note">10.525</span> GHz. Each step adds one 2.8125° phase-shifter LSB
   to the ramp, sums the eight signals, and plots the power at the angle that ramp steers to.</p>
 </div>
 <script>
@@ -85,6 +85,12 @@
   // 3.14159, a 2.8125 deg step with Use Bits on, and the plotted angle
   // computed at Signal Freq - Signal BW (10 MHz in Lab Preset 1).
   var N = 8, D = 0.014, F = 10.525e9;
+  // a frequency by query string, in GHz (?f=10.0), so a lesson can work its
+  // example away from every kit's HB100; the default is unchanged
+  (function () {
+    var g = parseFloat(new URLSearchParams(location.search).get('f'));
+    if (g >= 8 && g <= 12) { F = g * 1e9; document.getElementById('f-note').textContent = g.toFixed(1); }
+  })();
   var CG = 299792458, SPI = 3.14159, LSB = 2.8125, BW = 10e6;
   var KD = 360 * D * F / CG;             // deg, the real electrical spacing
   var FLOOR = -23, XMIN = -80, XMAX = 80, YMIN = -30, YMAX = 4;

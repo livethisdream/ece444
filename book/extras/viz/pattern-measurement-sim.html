@@ -85,7 +85,7 @@
     <div class="ro"><span class="k">source angle</span><span class="v" id="pAng">&minus;90&deg;</span></div>
   </div>
 
-  <div class="note">N = 8, d = 14 mm, HB100 at 10.525 GHz, ideal element power
+  <div class="note">N = 8, d = 14 mm, source at 10.0 GHz, ideal element power
   \(\cos\theta\). The main-lobe readout is referenced to the broadside peak, so the
   30&deg; run reads the scan loss. Orange ticks under the trace mark the instants
   the source passed each 30&deg;: at a hand-like pace they land unevenly, and
@@ -95,8 +95,10 @@
 <script>
 (function () {
   "use strict";
-  var C = 3e8, F = 10.525e9, LAM = C / F, D = 0.014, N = 8;
-  var DL = D / LAM;                         // 0.4912
+  // 10.0 GHz, away from every kit's HB100, so the widget's readouts give no
+  // Part 1 answer (Neil, 2026-11-08); the cadet works those at their own frequency.
+  var C = 3e8, F = 10.0e9, LAM = C / F, D = 0.014, N = 8;
+  var DL = D / LAM;                         // 0.4667
   var FLOOR = -34, TOP = 4;                 // trace dB window
   var SWEEP_MS = 7400;                       // one -90 -> +90 azimuth sweep
 
