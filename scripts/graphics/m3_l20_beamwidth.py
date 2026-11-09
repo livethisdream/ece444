@@ -36,7 +36,7 @@ SLIDE_BG = "#fafaf7"
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "book/extras/viz/img"
 
-LAM = 3e8 / 10.3e9 * 1000.0      # mm, the worked example's 10.3 GHz
+LAM = 3e8 / 10.0e9 * 1000.0      # mm, the worked example's 10.0 GHz (below every kit)
 DEL = 14.0 / LAM                 # PHASER element spacing in wavelengths
 
 plt.rcParams.update({
@@ -102,24 +102,25 @@ def beamwidth_anatomy() -> None:
     for sp in ("top", "right"):
         ax.spines[sp].set_visible(False)
 
-    hp = 13.2 / 2
+    hpw = hpbw_exact(N, dl)
+    hp = hpw / 2
     ax.fill_between([-hp, hp], -40, 12, color=GREEN, alpha=0.10, zorder=1)
     ax.annotate("", xy=(hp, -3), xytext=(-hp, -3),
                 arrowprops=dict(arrowstyle="<->", color=GREEN, lw=1.6))
-    ax.text(0, 1.0, "half-power width  13.2°", color=GREEN, ha="center", va="bottom",
+    ax.text(0, 1.0, f"half-power width  {hpw:.1f}°", color=GREEN, ha="center", va="bottom",
             fontsize=12.5, fontweight="bold")
 
     nulls = [np.degrees(np.arcsin(m / (N * dl))) for m in (1, 2, 3)]
     for s in (+1, -1):
         for x in nulls:
             ax.plot([s * x, s * x], [-40, -35.5], color=RED, lw=1.8, zorder=5)
-    ax.annotate("first null  15.1°", xy=(nulls[0], -35.5), xytext=(24, -30.5),
+    ax.annotate(f"first null  {nulls[0]:.1f}°", xy=(nulls[0], -35.5), xytext=(24, -30.5),
                 color=RED, fontsize=12, fontweight="bold", ha="left",
                 bbox=dict(boxstyle="round,pad=0.18", fc=SLIDE_BG, ec="none", alpha=0.92),
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.2))
     ax.annotate("", xy=(nulls[0], -24.5), xytext=(-nulls[0], -24.5),
                 arrowprops=dict(arrowstyle="<->", color=RED, lw=1.4))
-    ax.text(0, -23.8, "null-to-null  30.1°", color=RED, ha="center", va="bottom",
+    ax.text(0, -23.8, f"null-to-null  {2 * nulls[0]:.1f}°", color=RED, ha="center", va="bottom",
             fontsize=12, fontweight="bold",
             bbox=dict(boxstyle="round,pad=0.16", fc=SLIDE_BG, ec="none", alpha=0.92))
 
@@ -129,7 +130,7 @@ def beamwidth_anatomy() -> None:
                 bbox=dict(boxstyle="round,pad=0.18", fc=SLIDE_BG, ec="none", alpha=0.92),
                 arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.2))
 
-    ax.text(-88, 11.0, "8 elements, d = 0.481 wavelength, broadside",
+    ax.text(-88, 11.0, f"8 elements, d = {dl:.3f} wavelength, broadside",
             color=GRAY, fontsize=12, ha="left", va="top")
     finalize(fig, "L20-beamwidth-anatomy")
 
@@ -186,8 +187,10 @@ def aperture_vs_beamwidth() -> None:
     for sp in ("top", "right"):
         ax.spines[sp].set_visible(False)
 
-    ax.plot([3.85], [13.2], marker="o", ms=7, color=NAVY, zorder=6)
-    ax.annotate("PHASER, 8 elements\n3.9 wavelengths, 13.2°", xy=(3.85, 13.2), xytext=(1.75, 3.1),
+    L8 = 8 * DEL
+    hp8 = np.degrees(0.886 / L8)
+    ax.plot([L8], [hp8], marker="o", ms=7, color=NAVY, zorder=6)
+    ax.annotate(f"PHASER, 8 elements\n{L8:.1f} wavelengths, {hp8:.1f}°", xy=(L8, hp8), xytext=(1.75, 3.1),
                 color=NAVY, fontsize=11.5, fontweight="bold", ha="left",
                 bbox=dict(boxstyle="round,pad=0.18", fc=SLIDE_BG, ec="none", alpha=0.92),
                 arrowprops=dict(arrowstyle="->", color=NAVY, lw=1.2))

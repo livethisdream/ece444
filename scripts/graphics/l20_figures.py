@@ -3,16 +3,17 @@
 
   L20-null-comb.svg       the broadside course-array pattern on a sin(theta)
                           axis, where the nulls are a comb with teeth every
-                          lambda/Nd = 0.260 and the fourth falls outside the
+                          lambda/Nd = 0.268 and the fourth falls outside the
                           visible region, and on a theta axis, where the same
-                          nulls land at 15.1, 31.3, and 51.2 degrees
+                          nulls land at 15.5, 32.4, and 53.5 degrees
   L20-steering-cone.svg   the main lobe of a linear array as a band about the
                           array axis, at broadside and steered to 60 degrees:
                           the band thickens by 1/cos(theta0) and its
                           circumference shrinks by cos(theta0), so the
                           array-factor directivity barely moves
 
-Course array: N = 8, d = 14 mm, worked at 10.3 GHz. Every number on a label
+Course array: N = 8, d = 14 mm, worked at 10.0 GHz, below every HB100 kit,
+so no label equals a Part 1 answer (Neil, 2026-11-08). Every number on a label
 is computed here. Labels only; the equations are in the lesson text.
 
     python3 scripts/graphics/l20_figures.py
@@ -34,11 +35,11 @@ INK, RULE, SHADE = "#1a1a1a", "#c7d2e0", "#eef1f5"
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "book/extras/viz/img"
 
-C = 299792458.0
-LAM = C / 10.3e9 * 1000.0          # mm, the worked example's 10.3 GHz
+C = 3.00e8
+LAM = C / 10.0e9 * 1000.0          # mm, the worked example's 10.0 GHz (below every kit)
 N, D_MM = 8, 14.0
-DL = D_MM / LAM                     # 0.481
-SPACING = 1 / (N * DL)              # lambda/Nd = 0.260
+DL = D_MM / LAM                     # 0.467
+SPACING = 1 / (N * DL)              # lambda/Nd = 0.268
 
 plt.rcParams.update({
     "svg.fonttype": "none", "font.size": 12, "text.color": INK,
@@ -103,7 +104,7 @@ def null_comb() -> None:
     nulls_s = SPACING * np.arange(1, 5)                   # 0.260 ... 1.040
     vis = nulls_s[nulls_s <= 1]
     nulls_deg = np.rad2deg(np.arcsin(vis))
-    assert np.allclose(np.round(nulls_deg, 1), [15.1, 31.3, 51.2]), nulls_deg
+    assert np.allclose(np.round(nulls_deg, 1), [15.5, 32.4, 53.5]), nulls_deg
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(5.4, 3.05),
                                    gridspec_kw=dict(hspace=0.55))
@@ -183,7 +184,7 @@ def band(ax, th0_deg: float, width_deg: float, color: str, label: bool) -> None:
 def steering_cone() -> None:
     w0, w60 = hpbw_exact(0), hpbw_exact(60)
     d0, d60 = 10 * np.log10(directivity(0)), 10 * np.log10(directivity(60))
-    assert abs(d0 - 8.86) < 0.01 and abs(d60 - 9.12) < 0.01, (d0, d60)
+    assert abs(d0 - 8.74) < 0.01 and abs(d60 - 9.03) < 0.01, (d0, d60)
     fig = plt.figure(figsize=(7.0, 3.4))
     ax1 = fig.add_subplot(1, 2, 1, projection="3d")
     ax2 = fig.add_subplot(1, 2, 2, projection="3d")

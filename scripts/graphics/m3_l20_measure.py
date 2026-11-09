@@ -5,9 +5,10 @@
                            marked -- the three numbers the lab asks for
   L20-ideal-vs-measured  : no longer generated (2026-11-08); the file stays in
                            book/extras/viz/img, unreferenced
-  L20-aperture-halving   : ideal 8 / 4 / 2 element array factors at 10.3 GHz:
+  L20-aperture-halving   : ideal 8 / 4 / 2 element array factors at 10.0 GHz:
                            the beam doubles at each halving and the peak
-                           steps 6.0 dB
+                           steps down; the step is a Part 1 answer, so the
+                           figure does not print it
 
 L20-read-the-trace matches book/extras/viz/af-measurement-compare.html exactly: same
 element sum, same sweep grid, same -23 dBc floor (below each trace's own peak), same seeded noise
@@ -16,7 +17,7 @@ no equations -- the math lives in the lesson text.
 
 The sweep grid is the GUI's with Use Bits on, which every lab preset sets: one
 2.8125 deg ADAR1000 phase LSB per point, so the samples are uniform in
-sin(theta) -- 2.8125/173.0 = 0.0163 apart at 10.3 GHz, 0.93 deg of angle at
+sin(theta) -- 2.8125/168.0 = 0.0167 apart at 10.0 GHz, 0.96 deg of angle at
 broadside -- not 2.8125 deg of angle apart. Phase steps past kd ask for no real
 angle (the GUI piles them at +/-90 deg) and are left out.
 
@@ -42,9 +43,9 @@ INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
 IMG = ROOT / "book/extras/viz/img"
 
-LAM, DEL = 3.00e8 / 10.3e9, 14e-3  # 10.3 GHz (29.13 mm), PHASER element spacing
+LAM, DEL = 3.00e8 / 10.0e9, 14e-3  # 10.0 GHz (30.0 mm), below every kit; PHASER spacing
 KD = 2 * math.pi * DEL / LAM
-KD_DEG = math.degrees(KD)          # 173.0 deg of phase per unit sin(theta)
+KD_DEG = math.degrees(KD)          # 168.0 deg of phase per unit sin(theta)
 NEL, STEP, FLOOR_DB, LOOKS, SEED = 8, 2.8125, -23.0, 20, 6618
 YMIN, YMAX = -40.0, 3.0
 
@@ -246,10 +247,9 @@ def read_the_trace() -> None:
 
 
 def aperture_halving() -> None:
-    """Ideal 8 / 4 / 2 element array factors at 10.3 GHz, the course's worked
-    frequency: the beam doubles at each halving and the peak steps 6.0 dB,
-    the voltage sum. No measured points: the kit reads 5 to 6 dB per halving,
-    consistent with the ideal step within the spread of its readings.
+    """Ideal 8 / 4 / 2 element array factors at 10.0 GHz, below every kit: the
+    beam doubles at each halving and the peak steps down by the voltage sum.
+    No measured points, and no printed step size: the step is a Part 1 answer.
     """
     t = np.arange(-90.0, 90.0 + 1e-9, 0.05)
 
@@ -270,8 +270,6 @@ def aperture_halving() -> None:
         ax.annotate("", xy=(x, q), xytext=(x, p),
                     arrowprops=dict(arrowstyle="<->", color=GRAY, lw=1.4,
                                     shrinkA=0, shrinkB=0))
-        ax.text(x - 4.5, (p + q) / 2, f"{p - q:.1f} dB", color=GRAY, fontsize=11.5,
-                fontweight="bold", va="center", ha="right")
     ax.text(x, 1.2, "peak step", color=GRAY, fontsize=11.5, fontweight="bold",
             ha="center", va="bottom")
     ax.legend(loc="upper left", fontsize=11, handlelength=1.8, borderaxespad=0.3)

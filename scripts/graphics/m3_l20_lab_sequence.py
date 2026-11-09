@@ -7,7 +7,7 @@
 10 E1, E8    D = 98 mm     two elements spread across the row
 
 Each panel shows the eight-element row with the active elements lit and a
-thumbnail of the trace to expect: the array factor at 10.3 GHz in dBc,
+thumbnail of the trace to expect: the array factor at 10.0 GHz in dBc,
 clipped at the noise floor 23 dB below its own peak, over the real angles
 of the sweep. The thumbnails are computed, not drawn by eye.
 
@@ -31,7 +31,7 @@ OUT = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 
 NAVY, BLUE, AMBER, GRAY, INK, LIGHT = "#004a85", "#0067b9", "#8a5a00", "#5a5a5a", "#1f2a36", "#c7d2e0"
 
-LAM, DEL = 3.00e8 / 10.3e9, 14e-3          # 10.3 GHz, element pitch
+LAM, DEL = 3.00e8 / 10.0e9, 14e-3          # 10.0 GHz, below every kit; element pitch
 FLOOR = -23.0                               # dBc, below each trace's own peak
 YMIN = -30.0
 
@@ -47,7 +47,7 @@ STEPS = [
 
 
 def trace_dbc(w):
-    """Array factor in dBc at 10.3 GHz over -90..90 deg, clipped at the floor."""
+    """Array factor in dBc at 10.0 GHz over -90..90 deg, clipped at the floor."""
     t = np.linspace(-90.0, 90.0, 721)
     s = np.sin(np.deg2rad(t))
     kd = 2 * math.pi * DEL / LAM
@@ -97,7 +97,7 @@ def build(cols: int, ph: int = PH) -> str:
          f'aria-label="The four sweeps of the L20 Lab. Step 7: E1 to E8 lit, Nd 112 mm, a narrow beam with '
          f'three sidelobe pairs. Step 8: E3 to E6, Nd 56 mm, a beam twice as wide. Step 9: E4 and E5, Nd 28 mm, '
          f'one broad lobe with no null. Step 10: E1 and E8, 98 mm apart, a narrow lobe repeated at full height. '
-         f'Each thumbnail is the array factor at 10.3 GHz in dBc, clipped at the noise floor.">']
+         f'Each thumbnail is the array factor at 10.0 GHz in dBc, clipped at the noise floor.">']
     for k in range(len(STEPS)):
         r, c = divmod(k, cols)
         panel(s, c * PW, r * ph, k, ph)
