@@ -323,6 +323,22 @@ $$
 \text{gain}_n = \frac{100\ \vert w_n\vert}{\max_m \vert w_m\vert}\ \%, \qquad \phi_n = \angle w_n .
 $$
 
+A few lines of NumPy do the whole calculation. This script prints the table above for the $10.0$ GHz example; change `psi` to your own $\psi_1$ and it prints yours:
+
+```python
+import numpy as np
+
+n = np.arange(8)                          # elements 1 to 8 are n = 0 to 7
+psi = np.radians(64.3)                    # psi_1 = kd sin(theta_1) at 10.0 GHz
+r = np.exp(1j * n * psi).mean()           # r_n, the uniform pattern at theta_1
+w = 1 - r * np.exp(-1j * n * psi)         # the null-steering weights
+gain = 100 * np.abs(w) / np.abs(w).max()  # percent of the largest weight
+phase = np.degrees(np.angle(w))           # degrees, with their signs
+print(np.round(gain), np.round(phase, 1))
+```
+
+Its two printed rows are the table's two columns: gains of 71, 66, 83, 100, 100, 83, 66, and 71 %, and phases of $-10.9$, $+5.5$, $+13.1$, $+5.8$, $-5.8$, $-13.1$, $-5.5$, and $+10.9^\circ$.
+
 The table assumes the Element Gains slider is linear in voltage, as it is on current Phaser software. Enter each phase with its sign. A Phase Control offset is the weight's own phase, the same convention **Apply** uses when it writes $-n\Delta\phi$ to steer to $+\theta_0$ (<a href="../L18-beam-steering/index.html#frame-the-sign-in-phase-control">Lesson 18</a>). <a href="../L18-beam-steering/index.html#frame-sign-of-the-compensating-ramp">Lesson 18</a>'s $+n\Delta\phi$ is the backend's delay setting, which carries the opposite sign, so these offsets are entered as computed and not converted to it.
 
 The gains are symmetric and the phases are antisymmetric, and every null placed to one side of a broadside beam produces that pattern. The reason is in $r_\text{n}$. Summing the geometric series gives
@@ -331,7 +347,11 @@ $$
 r_\text{n} = e^{j(N-1)\psi_1/2}\ \frac{\sin(N\psi_1/2)}{N\sin(\psi_1/2)},
 $$
 
-a real number times the phase $(N-1)\psi_1/2$, so $w_n = 1 - r_\text{n}e^{-jn\psi_1}$ carries the phase $(N-1-2n)\psi_1/2$ in its second term. Replacing $n$ with $N-1-n$ flips the sign of that phase, so $w_{N-1-n} = w_n^{*}$: elements mirrored about the center have equal gains and opposite phases. Note how small the phase offsets are: the largest is 13 degrees. Null steering is not a large change to the array's settings, and that is precisely why it is so easy to get wrong by a sign.
+a real number times the phase $(N-1)\psi_1/2$, so $w_n = 1 - r_\text{n}e^{-jn\psi_1}$ carries the phase $(N-1-2n)\psi_1/2$ in its second term. Replacing $n$ with $N-1-n$ flips the sign of that phase, so $w_{N-1-n} = w_n^{*}$: elements mirrored about the center have equal gains and opposite phases.
+
+That symmetry tells us what the two easy entry mistakes do. Flip the sign of every phase and each weight becomes its conjugate, $w_n^{*} = w_{N-1-n}$, which is the same table read from the other end of the array: the pattern mirrors about broadside, and the null moves from $+\theta_1$ to $-\theta_1$. Enter the gains and leave every phase at $0^\circ$, and the weights are real and symmetric, a mild amplitude taper whose pattern is symmetric about broadside and has no null at $\theta_1$; in the $10.0$ GHz example it reads $-20.7$ dB at $+22.5^\circ$. Eight contributions cancel at one angle only when the gains and the phases are both set.
+
+Note how small the phase offsets are: the largest is 13 degrees. Null steering is not a large change to the array's settings, and that is precisely why it is so easy to get wrong by a sign.
 ::::
 
 ::::{frame} The Notch on the Pattern
@@ -412,7 +432,17 @@ $$
 
 The weights above are exact real numbers, and the ADAR1000 accepts neither. Each element's phase lands on a $2.8125^\circ$ grid and each gain on a 1 % grid, so each weight carries a small error $\delta w_n$. If those errors are independent, at the null angle they add in RMS rather than coherently, and the residual response relative to the beam peak is the estimate on the slide. The figure draws the eight errors at the null, each turned by its own steering-vector phase. Each piece of that estimate has a mechanism. Rounding to the nearest step leaves an error spread evenly between $-\text{LSB}/2$ and $+\text{LSB}/2$, and a uniform spread of width LSB has an RMS value of $\text{LSB}/\sqrt{12}$. A small phase error $\delta\phi$ moves a weight of magnitude near 1 by about $\delta\phi$, so the phase and gain errors both count as fractions of a unit weight and add in quadrature to $\epsilon_\text{rms}$. At the null the exact weights sum to zero, so the response is the sum of the eight errors alone, each turned by its own steering-vector phase. Independent errors add in power, not in voltage, so their sum has an RMS size of $\sqrt{N}\ \epsilon_\text{rms}$, and dividing by the beam peak $N$ gives $\epsilon_\text{rms}/\sqrt{N}$.
 
-Part 1 of the L24 Lab packet puts the ADAR1000's numbers into this estimate: its $2.8125^\circ$ phase step and 1 % gain step. The result sits on the same $-6B$ scale as the quantization sidelobes of <a href="../L23-beam-squint-quantization/index.html#frame-quantization-sidelobes">Lesson 23</a>, a few decibels deeper because the error is spread over eight elements. Halve the bits and the floor rises fast: a 3-bit phase shifter cannot hold a null deeper than about 22 dB.
+Work it once for a coarse array that is not the kit's: a 3-bit phase shifter, whose step is $360^\circ/2^3 = 45^\circ = 0.785$ rad, and gain steps of 5 % of a unit weight. Both errors are fractions of a unit weight, the phase error in radians:
+
+$$
+\begin{aligned}
+\sigma_\phi &= \frac{0.785}{\sqrt{12}} = 0.227, \qquad \sigma_a = \frac{0.05}{\sqrt{12}} = 0.014 \\
+\epsilon_\text{rms} &= \sqrt{0.227^2 + 0.014^2} = 0.227 \\
+20\log_{10}\frac{\epsilon_\text{rms}}{\sqrt{N}} &= 20\log_{10}\frac{0.227}{\sqrt{8}} = -21.9\ \text{dB}.
+\end{aligned}
+$$
+
+That level is relative to the null-steered peak, because $N$ in the estimate is that beam's own peak. Table A in the lab reads every level against the frozen uniform peak, which sits higher by the main-lobe loss, 2.1 dB in the $10.0$ GHz example, so the same notch reads $-21.9 - 2.1 = -24.0$ dB on that scale. The phase step dominates: the 5 % gain step adds almost nothing to $\epsilon_\text{rms}$. Part 1 of the L24 Lab packet puts the ADAR1000's numbers through the same two steps: its $2.8125^\circ$ phase step and 1 % gain step. The result sits on the same $-6B$ scale as the quantization sidelobes of <a href="../L23-beam-squint-quantization/index.html#frame-quantization-sidelobes">Lesson 23</a>, a few decibels deeper because the error is spread over eight elements.
 
 Rounding this particular table does less damage than the estimate, as the left half of the figure shows. Rounding keeps the gains symmetric and the phases antisymmetric (the mirror pairs of <a href="#frame-the-phaser-settings">The PHASER Settings</a>), so each pair sums to a real number, the pattern referred to the array center stays real and still passes through zero, and the null only moves a fraction of a degree. What fills a null on the kit is error that does not share that symmetry: each channel's own calibration residue in gain and phase. The estimate is the depth those errors allow when they are about one step in size.
 ::::
@@ -462,7 +492,22 @@ $$
 \qquad \psi = kd\sin\theta .
 $$
 
-Wherever the two halves arrive in phase they cancel, and on each side of that null a peak rises. Part 1 of the lab packet has you show where the null sits and find the two peaks. This is the **monopulse difference beam**, which the monopulse frames at the end of this lesson use for angle measurement.
+Wherever the two halves arrive in phase they cancel, and on each side of that null a peak rises. To find the peaks, factor out the second half's four-element shift:
+
+$$
+\begin{aligned}
+\Delta(\theta) &= \left(1 - e^{j4\psi}\right)\sum_{n=0}^{3} e^{jn\psi} \\
+\vert\Delta(\theta)\vert &= 2\ \vert\sin 2\psi\vert\ \frac{\vert\sin 2\psi\vert}{\vert\sin(\psi/2)\vert}.
+\end{aligned}
+$$
+
+The first factor, $1 - e^{j4\psi}$, is zero where $\psi = 0$ and grows away from it. The second, the four-element subarray's own pattern, starts at 4 and falls. Each peak sits where the two trade off. Evaluate $\vert\Delta\vert$ on a fine grid of angles in Python and take the largest value on each side of the null, or set the derivative to zero, which gives $\tan 2\psi = 8\tan(\psi/2)$. At $10.0$ GHz, $kd = 168.0^\circ$, the root is $\psi = 33.8^\circ$, and
+
+$$
+\theta = \pm\sin^{-1}\frac{33.8^\circ}{168.0^\circ} = \pm 11.6^\circ,
+$$
+
+where the difference beam reaches $2.7$ dB below the uniform peak. This is the **monopulse difference beam**, which the monopulse frames at the end of this lesson use for angle measurement.
 
 The $+22.5^\circ$ notch exists because we solved for eight weights, and it moves only when we solve again. The difference null exists because the two subarrays are identical, and it stays put no matter what the signal does. With no arithmetic behind it, its depth on the kit is a direct reading of what the room lets through: about 40 dB in an open room, and the same 22 dB or so as the notch in a cramped one.
 ::::
@@ -487,6 +532,18 @@ $$
 and solves for the weights that minimize total output power while holding unit gain in the look direction $\mathbf{s}$. MVDR suppresses whatever is loud and is not in the look direction, and nobody has to tell it where that is. With two digital channels it has two weights: one holds the look direction and the other places one null, so it can place one null. The Phaser measures $\mathbf{s}$ from the target itself, from the samples taken before the interferer is added, so MVDR protects the HB100 as the two channels actually receive it. That works only when the target sits where the beam points.
 
 Unit gain means the two MVDR weights sum to 1 in the look direction, where Manual's two weights of 1 sum to 2. The Phaser multiplies the MVDR output by 2, the number of channels, so a target in the look direction reads the same level under either mode, and we compare the two on one scale.
+
+We judge MVDR against Manual. In Manual the beam is the uniform sum beam at broadside, so the interferer's level in the output relative to the target's, the **Interferer vs Target** readout, is its power advantage at the aperture plus the uniform pattern's level at its angle. The first frame worked that at the sidelobe peak; off the peak we evaluate the array factor. At $10.0$ GHz, for an interferer 10 dB stronger at $+18^\circ$:
+
+$$
+\begin{aligned}
+\psi &= kd\sin\theta = 168.0^\circ\ \sin 18^\circ = 51.9^\circ \\
+\frac{\vert y(\theta)\vert}{N} &= \left\vert\frac{\sin(N\psi/2)}{N\sin(\psi/2)}\right\vert = \frac{\vert\sin 207.7^\circ\vert}{8\sin 25.96^\circ} = 0.133 \\
+20\log_{10}(0.133) &= -17.6\ \text{dB},
+\end{aligned}
+$$
+
+so Interferer vs Target is $10 - 17.6 = -7.6$ dB. The angle sits between the first null near $15.5^\circ$ and the sidelobe peak, which is why it reads well below the $-13$ dB of the peak.
 ::::
 
 ::::{frame} Two Limits of Two Channels
@@ -496,7 +553,16 @@ Unit gain means the two MVDR weights sum to 1 in the look direction, where Manua
 - The lab runs MVDR at $+20^\circ$.
 :::
 
-Both limits belong to the architecture rather than to the algorithm. A four-element subarray at $d = 14$ mm has its first null where $\sin\theta = \lambda/4d$, about $31^\circ$, so an interferer there barely reaches either channel and there is little left for the digital layer to remove. The two channels sit four elements apart, so their phase difference, $4kd\sin\theta$, runs through a full cycle across the subarray beam: a source near $+30^\circ$ presents very nearly the same channel phase difference as one on boresight, and the two channels cannot tell them apart. The digital layer can only work on what the analog layer passes it, and only on directions the two channels can distinguish.
+Both limits belong to the architecture rather than to the algorithm. A four-element subarray at $d = 14$ mm has its first null where $\sin\theta = \lambda/4d$, which at $10.0$ GHz is $30.0/56 = 0.536$, or $32.4^\circ$, so an interferer near there barely reaches either channel and there is little left for the digital layer to remove. The two channels sit four elements apart, so their phase difference, $4kd\sin\theta$, runs through a full cycle across the subarray beam. At $10.0$ GHz, with $kd = 168.0^\circ$:
+
+$$
+\begin{aligned}
+4kd\sin 20^\circ &= 4(168.0^\circ)(0.342) = 229.8^\circ \\
+4kd\sin 30^\circ &= 4(168.0^\circ)(0.500) = 336.0^\circ .
+\end{aligned}
+$$
+
+The target on boresight presents $0^\circ$. At $+20^\circ$ the interferer is $130^\circ$ from that, which the two channels tell apart easily. At $+30^\circ$ it is only $24^\circ$ short of a full cycle, very nearly the target's own phase difference, and the two channels can barely tell them apart. The digital layer can only work on what the analog layer passes it, and only on directions the two channels can distinguish.
 
 At $+30^\circ$ both limits act at once. To the two channels the interferer looks almost like the target, so a null on it would land on the target too, and MVDR keeps the target it measured: it leaves the interferer where the subarray pattern put it. **Diagonal loading** guards the weights. The Phaser adds $\delta\ \text{tr}(\hat{\mathbf{R}})/2$ to the diagonal of $\hat{\mathbf{R}}$ before inverting it, which caps how far the weights can move from Manual's and keeps a source near the look direction from driving them to large values that amplify the noise. At $\delta = 0.1$ the weights still move far enough to suppress an interferer at $+20^\circ$ by 10 dB or more on a kit, so the lab uses $\delta = 0.1$. At $\delta = 1$ the weights barely move from Manual's and the suppression mostly disappears.
 
@@ -558,7 +624,7 @@ $$
 - At $10.0$ GHz the slope is $0.10$ per degree, straight within about $\pm 5^\circ$.
 :::
 
-With each subarray summing four elements, the two channels differ only by the phase $4\psi$ between their centers, so $\Sigma \propto 1 + e^{j4\psi}$ and $\Delta \propto 1 - e^{j4\psi}$. Their ratio has magnitude $\vert\tan 2\psi\vert$, which is zero on the target and, for a small offset, close to $2\psi = 2kd\sin\theta \approx 2kd\ \theta$, with $\theta$ the target's angle from the beam in radians. The magnitude alone cannot say which side the target is on. The phase can: $\Sigma\Delta^{*}$ is purely imaginary, $\Delta$ arriving a quarter cycle ahead of $\Sigma$ on one side of the beam and a quarter cycle behind on the other, so the sign of that phase is the side. The kit reads a positive error when the target sits on the $+\theta$ side of the beam.
+With each subarray summing four elements, the two channels differ only by the phase $4\psi$ between their centers, so $\Sigma \propto 1 + e^{j4\psi}$ and $\Delta \propto 1 - e^{j4\psi}$. Their ratio has magnitude $\vert\tan 2\psi\vert$, which is zero on the target and, for a small offset, close to $2\psi = 2kd\sin\theta \approx 2kd\ \theta$, with $\theta$ the target's angle from the beam in radians. The magnitude alone cannot say which side the target is on. The phase can: $\Sigma\Delta^{*}$ is purely imaginary, $\Delta$ arriving a quarter cycle ahead of $\Sigma$ on one side of the beam and a quarter cycle behind on the other, so the sign of that phase is the side. The kit reads a positive error when the target sits on the $+\theta$ side of the beam. In a beam sweep the target stays put and the beam moves, so for a target at $+10^\circ$ every steer angle below $+10^\circ$ leaves the target on the beam's $+\theta$ side and reads positive, and every steer angle above it reads negative.
 
 At $10.0$ GHz, $kd = 2.932$ rad, so the slope is $2kd = 5.86$ per radian, or $0.10$ per degree. The ratio does not depend on the signal level, because both beams scale together. The GUI clamps the plotted error at $\pm 1$, which it reaches about $8^\circ$ off the beam here. Past the sum beam's first nulls the sign flips, so the error points the wrong way once the target is more than a beamwidth off.
 ::::

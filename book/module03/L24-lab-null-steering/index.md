@@ -34,43 +34,50 @@ with room for notes. Print from read mode for the whole lesson.
 
 ::::{frame} The Big Picture
 :::{present}
-- Lesson 24: a small change to the weights puts a deep null on an interferer.
-- Today you measure four nulls: your computed notch, the difference null, MVDR's null, and the monopulse pair.
+- Each block of steps checks your Part 1.
 :::
 :::{present}
-<img src="../../viz/img/L24-pattern-null.svg"
-     alt="Uniform and null-steered patterns of the 8-element array at 10.0 GHz: the null-steered beam stays at broadside, 2.1 dB lower, and drops to an exact null at plus 22.5 degrees"
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+| Steps | You set |
+| :-- | :-- |
+| 1–5 | HB100, Calibrate, Rx Gain |
+| 6–10 | A: your gains and phases |
+| 11–15 | B: Beam 1 Phase |
+| 16–22 | C: interferer, Manual, MVDR |
+| 23–27 | D: Tracking preset, mode |
 :::
 
-Lesson 24 showed that eight complex weights can hold the beam on a target and put a pattern null on an interferer, for about 2 dB of main-lobe gain. Today you load your own table and measure that notch, then three more nulls in increasing order of how much the array does for itself: a null at boresight that comes from subtracting the two digital channels, an adaptive null that MVDR finds from the received data, and the same subtraction put to work measuring a target's angle from a single look. You check every reading against the prediction you made in Part 1 of the packet.
+Lesson 24 built four nulls, and today you measure each one on your kit. In Procedure A you load the gain and phase table you computed in Part 1 and sweep it. In Procedure B you subtract the two digital channels with Beam 1 Phase. In Procedure C the Phaser software adds a simulated interferer, first at $+20^\circ$ and then at $+30^\circ$, and you compare Manual with MVDR on a beam held at boresight. In Procedure D the Tracking preset forms the sum and delta beams together, and Tracking mode follows the HB100 as it moves. Step 6 freezes the uniform trace, and every level in Procedures A and B reads against its peak. Each block's readings fill one table in Part 2 of the packet, and you check each against your Part 1 prediction.
 ::::
 
-::::{frame} The Flow of the Lab
-:::{present}
-| Steps | Task | From Part 1 |
-| :-- | :-- | :-- |
-| 1 to 5 | Bring up | Q1(a) |
-| 6 to 10 | A: notch | Q1, Q2 |
-| 11 to 15 | B: difference null | Q3 |
-| 16 to 22 | C: MVDR | Q4 |
-| 23 to 27 | D: monopulse | Q5 |
-:::
-:::{present}
-<picture>
-<source media="(max-width: 600px)" srcset="../../viz/img/L24-lab-sequence-narrow.svg">
-<img src="../../viz/img/L24-lab-sequence.svg" alt="The four procedures of the L24 Lab, each with the trace to expect against the uniform pattern. A, Steps 6 to 10: your eight computed weights put a notch at plus 22.5 degrees. B, Steps 11 to 15: Beam 1 Phase at 180 degrees puts a null at boresight with a peak on each side. C, Steps 16 to 22: MVDR puts its one null on an interferer at plus 20 degrees. D, Steps 23 to 27: the sum and delta beams together, the delta zero on boresight." style="max-width: 100%; display: block; margin: 0 auto;">
-</picture>
+::::{frame} Predict First
+:class: viz-frame
+
+:::{depth}
+Before you sweep, predict each trace, then check yourself. Choose a setting
+from the list and decide, before you press **Show**, what the trace does next
+to the dashed uniform pattern: where its nulls and peaks sit, how far the main
+lobe drops, and, for the error trace, which side reads positive. Then show it.
+Choosing another setting hides the trace again, so each guess comes first. The
+widget draws the ideal array at 10.0 GHz, not at your kit's frequency, so its
+numbers are close to your Part 1 values but not equal to them, and it has no
+room reflections or calibration residue, so its nulls go deeper than any kit's.
 :::
 
-Step 6 freezes the uniform trace, and every level in Procedures A and B reads against its peak.
+:::{present}
+<iframe src="../../viz/null-predict.html"
+        width="100%" height="473"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Choose a setting from the L24 Lab, predict its pattern or error trace, then show it">
+</iframe>
+:::
 ::::
 
-::::{frame} Equipment and Setup
+::::{frame} Bring Up the Kit
 :::{present}
-- Set the HB100 at boresight, $1.2$ m out, at patch-row height.
+- HB100 at boresight, $1.2$ m out, at patch-row height.
 - Keep $\pm 40^\circ$ of the room clear of walls and people.
-- Fill Tables A to D in Part 2 as you go.
+- Find HB100, Calibrate, then set Rx Gain for a $-10$ dBFS peak.
 :::
 
 Place the HB100 at boresight, $1.2$ m from the array face, at patch-row height
@@ -78,11 +85,8 @@ and aimed at the center of the patch row. The notch and the difference null are
 deeper than anything the earlier labs measured, so anything that reflects the
 HB100's tone in from another direction fills them: keep about $\pm 40^\circ$ on
 each side of boresight clear of walls and people for the whole lab. Lesson 24's
-"Measured Null Depth" gives the depth a cramped room allows.
-::::
-
-::::{frame} Bring Up the Kit
-:class: read-only
+<a href="../L24-null-steering/index.html#frame-measured-null-depth">"Measured Null Depth"</a>
+gives the depth a cramped room allows.
 
 1. Browse to your kit's address from Lesson 17 and wait for the pill to read
    **Connected**.
@@ -106,14 +110,18 @@ each side of boresight clear of walls and people for the whole lab. Lesson 24's
 ::::
 
 ::::{frame} Procedure A: The Static Notch
-:class: read-only
+:::{present}
+- Sweep the uniform array and freeze it as the reference.
+- Type in your Part 1 gains and phases, each phase with its sign.
+- Sweep again, and read the peak and the notch's depth and angle.
+:::
 
 6. With the array uniform (Element Gains at 100 %, Phase Control reset), press
    **Start**. Read **Peak Gain** and **Angle** (set to **Peak**), then press
    **Freeze** to hold the trace as your reference. Record the level of the
    sidelobe nearest $+22.5^\circ$ in dBc, its reading minus the uniform peak,
-   so the frozen peak is 0 dB for every level in Procedures A and B; expect
-   about $-13$ dBc. If the two first
+   so the frozen peak is 0 dB for every level in Procedures A and B. Compare
+   it with your Part 1 $\vert r_\text{n}\vert$. If the two first
    sidelobes differ by more than about 2 dB, calibrate again and repeat this
    step.
    <div class="rec" data-lab="L24">
@@ -122,13 +130,14 @@ each side of boresight clear of walls and people for the whole lab. Lesson 24's
 7. Enter your Part 1 gains into **Element Gains** (Rx1 through Rx8). Leave
    **Enforce Symmetric Taper** off: the set is already symmetric, and with the
    switch on a later edit to one slider is mirrored onto its partner.
-8. Enter your Part 1 phases into **Phase Control**, each with its sign. A sign
-   error moves the notch to $-22.5^\circ$, where it is easy to miss.
+8. Enter your Part 1 phases into **Phase Control**, each with its sign, and
+   check every sign before you sweep. Your Part 1 answer to Question 1(d) says
+   where a sign error puts the notch, so look there too if Step 9 shows no notch
+   where you expect it.
 9. Press **Start** and read the new trace against the frozen one: the new
    **Peak Gain**, the notch's depth below the frozen peak, and the notch's
-   angle. Expect the main lobe about 2 dB down and the notch at
-   $+22.5^\circ$, within one step, 46 to 50 dB down in an open room. A notch much shallower than
-   40 dB points to the room first: a wall or a person beside the kit, or a
+   angle, and compare each with your Part 1 prediction. A notch much shallower
+   than 40 dB points to the room first: a wall or a person beside the kit, or a
    stale calibration.
    <div class="rec" data-lab="L24">
    <label>Step 9: null-steered main-lobe peak (dB) <input data-field="a.peak"></label>
@@ -139,7 +148,11 @@ each side of boresight clear of walls and people for the whole lab. Lesson 24's
 ::::
 
 ::::{frame} Procedure B: The Difference Null
-:class: read-only
+:::{present}
+- Set Mode to Manual and Beam 1 Phase to $180^\circ$.
+- Sweep, and read the null and the two peaks beside it.
+- Set Beam 1 Phase back to $0^\circ$.
+:::
 
 11. Open **Digital Beam Forming** and set Mode to **Manual**.
 12. Leave Beam 0 Gain and Phase alone, and set **Beam 1 Phase** to $180^\circ$.
@@ -148,8 +161,8 @@ each side of boresight clear of walls and people for the whole lab. Lesson 24's
 14. Record the null's depth below the frozen uniform peak and its angle, and
     the angles of the two peaks that replace the main lobe. The sweep steps the
     phase by one $2.8125^\circ$ LSB, about $1^\circ$ of angle here, so one
-    step is the reading tolerance. The null needs no arithmetic, so
-    its depth is a direct reading of what the room lets through.
+    step is the reading tolerance. Compare the peak angles with your Part 1
+    answer to Question 3.
     <div class="rec" data-lab="L24">
     <label>Step 14: null depth (dB) <input data-field="b.depth"></label>
     <label>Step 14: null angle <input data-field="b.angle"></label>
@@ -160,7 +173,11 @@ each side of boresight clear of walls and people for the whole lab. Lesson 24's
 ::::
 
 ::::{frame} Procedure C: MVDR Against an Interferer
-:class: read-only
+:::{present}
+- Hold the beam on the HB100 at boresight in Signal vs Time.
+- Inject a simulated interferer at $+20^\circ$; read Manual, then MVDR.
+- Read the held pattern on the Rectangular tab, then repeat at $+30^\circ$.
+:::
 
 % Procedure C needs livethisdream/phaser PR #98 (MVDR measures its look
 % vector; the held pattern on the Rectangular tab) and #97 on the kit. Its
@@ -190,8 +207,8 @@ your kit.
     on a sidelobe of the pattern. Watch ten updates of **Interferer vs Target**
     and **Peak Gain** and record the median of each, the middle value once
     sorted. The readings jump between updates, and the median ignores the odd
-    wild one where an average would not. Expect Interferer vs Target near
-    $-2$ dB.
+    wild one where an average would not. Compare Interferer vs Target with
+    your Part 1 prediction.
     <div class="rec" data-lab="L24">
     <label>Step 18: Manual, Interferer vs Target (dB) <input data-field="c.man.ivt"></label>
     <label>Step 18: Manual, Peak Gain (dBFS) <input data-field="c.man.peak"></label>
@@ -203,8 +220,9 @@ your kit.
     so the target must be where the beam points. Record the medians of
     **Interferer vs Target**, **Peak Gain**, and **MVDR Suppression**. The
     suppression tile needs a Manual and an MVDR reading at the same Steer Angle;
-    if it shows "--", repeat Step 18, then this step. Expect a suppression of
-    10 dB or more, and Peak Gain close to Manual's, since MVDR keeps the target.
+    if it shows "--", repeat Step 18, then this step. A suppression well under
+    10 dB at $+20^\circ$ points to the beam first: check that Steer Angle is
+    $0^\circ$ and the HB100 still sits at boresight.
     <div class="rec" data-lab="L24">
     <label>Step 19: MVDR, Interferer vs Target (dB) <input data-field="c.mvdr.ivt"></label>
     <label>Step 19: MVDR, Peak Gain (dBFS) <input data-field="c.mvdr.peak"></label>
@@ -212,22 +230,18 @@ your kit.
     </div>
 20. Open the **Rectangular** tab. Record the angle and depth of the solid
     weighted pattern's null near $+20^\circ$, and the dashed conventional
-    pattern's level at the same angle. Expect the null within a degree of
-    $+20^\circ$, well below the conventional pattern's $-13$ dB. The null is
-    not the only change: the weighted pattern's sidelobes rise elsewhere, and
-    the null repeats every $\lambda/4d$ in $\sin\theta$, about $0.51$ at the
-    kit's frequency, because the two channels sit four elements apart.
+    pattern's level at the same angle. The weighted pattern changes elsewhere
+    too; Lesson 24's
+    <a href="../L24-null-steering/index.html#frame-what-mvdr-chooses">"What MVDR Chooses"</a>
+    says what to look for.
     <div class="rec" data-lab="L24">
     <label>Step 20: MVDR null angle <input data-field="c.null.angle"></label>
     <label>Step 20: MVDR null depth (dB) <input data-field="c.null.depth"></label>
     <label>Step 20: conventional pattern at the null (dB) <input data-field="c.null.conv"></label>
     </div>
 21. Move the interferer to $+30^\circ$. Record Peak Gain in Manual, then in MVDR
-    at Diagonal Load $0.001$ and at $0.1$, and watch Interferer vs Target. Expect
-    Peak Gain to hold in all three and Interferer vs Target to change little.
-    The subarray pattern already puts $+30^\circ$ near a null, and the two
-    channels see the interferer with nearly the target's phase difference, so
-    MVDR cannot null it without nulling the target it protects.
+    at Diagonal Load $0.001$ and at $0.1$, and watch Interferer vs Target. Compare
+    both with your Part 1 answer to Question 4(c).
     <div class="rec" data-lab="L24">
     <label>Step 21: +30°, Manual Peak Gain (dBFS) <input data-field="c.30.man"></label>
     <label>Step 21: +30°, MVDR load 0.001 Peak Gain (dBFS) <input data-field="c.30.load001"></label>
@@ -238,7 +252,11 @@ your kit.
 ::::
 
 ::::{frame} Procedure D: Watch It Track
-:class: read-only
+:::{present}
+- Choose the Tracking preset and sweep the sum, delta, and error traces.
+- Read the delta null, the error's zero, and its sign on each side.
+- Choose Tracking mode, then move the HB100 and turn the kit.
+:::
 
 % Steps 26-27 need livethisdream/phaser PR #97 (closed-loop Tracking, the
 % linear |delta|/|sum| error) installed on the kit; before it, Tracking was a
@@ -261,9 +279,7 @@ your kit.
     </div>
 26. Read the **Error** trace. It crosses zero once near boresight, where the
     beam points at the HB100. Record that angle, and the sign of the error on
-    each side of it: the kit reads a positive error when the source sits on the
-    $+\theta$ side of the beam, so expect it positive at negative steer angles
-    and negative at positive ones.
+    each side of it, and compare both with your Part 1 answers to Question 5.
     <div class="rec" data-lab="L24">
     <label>Step 26: error zero crossing <input data-field="d.zero"></label>
     <label>Step 26: sign below and above the crossing <input data-field="d.sign"></label>
@@ -274,7 +290,7 @@ your kit.
     and steps it one phase LSB toward the side the error points, and the
     Rectangular plot marks where the beam sits. Move the HB100 slowly in
     azimuth along the $1.2$ m arc and watch the tracked angle follow it. If the
-    beam walks away from the source instead, the kit's direction setting is
+    beam moves away from the source instead, the kit's direction setting is
     reversed: stop and tell me. Then bring the HB100 back to boresight, turn
     the kit on its stand to $10^\circ$ and $20^\circ$ each way by the stand's
     scale, and record the tracked angle at each, once it settles.

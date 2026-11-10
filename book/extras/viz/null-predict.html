@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predict the null</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573; --ref:#9aa3ad; --red:#b01e24; --grn:#1d7a4d; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  *, *::before, *::after { box-sizing:border-box; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; justify-content:space-between;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 280px; min-width:0; }
+  .ctl label { font-size:13.5px; white-space:nowrap; }
+  .ctl select { font:inherit; font-size:13px; padding:4px 6px; border:1px solid var(--edge2);
+                border-radius:4px; background:#fff; color:var(--ink); flex:1 1 160px; min-width:0; }
+  .show { font:700 12px 'Inter',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.05em;
+          height:30px; padding:0 14px; border-radius:5px; cursor:pointer;
+          border:1px solid var(--navy); background:var(--navy); color:#fff; }
+  .show[aria-pressed="true"] { background:#fff; color:var(--navy); }
+  .show:focus-visible, select:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:4px; padding:7px 6px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { height:15px; line-height:15px; font-size:10.5px; font-weight:700; text-transform:uppercase;
+           letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; max-width:100%; }
+  .ro .v { height:19px; line-height:19px; font-size:14px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; color:var(--navy); overflow:hidden; max-width:100%; }
+  @media (max-width: 430px) { .app { padding:10px; gap:8px; } .ro .k { font-size:10.5px; letter-spacing:0.02em; }
+                              .ro .v { font-size:13px; } }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <canvas id="plot" width="1000" height="400" aria-label="The chosen setting's pattern, or the monopulse error, against angle; hidden until Show"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label for="case">Setting</label>
+      <select id="case">
+        <option value="table" selected>A: your gains and phases</option>
+        <option value="flip">A: every phase with the wrong sign</option>
+        <option value="gains">A: gains only, phases at 0°</option>
+        <option value="diff">B: Beam 1 Phase at 180°</option>
+        <option value="mv20">C: MVDR, interferer at +20°</option>
+        <option value="mv30">C: MVDR, interferer at +30°</option>
+        <option value="err">D: error trace, beam sweep</option>
+      </select>
+    </div>
+    <button class="show" id="show" aria-pressed="false">Show</button>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k" id="k1"></span><span class="v" id="v1">?</span></div>
+    <div class="ro"><span class="k" id="k2"></span><span class="v" id="v2">?</span></div>
+    <div class="ro"><span class="k" id="k3"></span><span class="v" id="v3">?</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+// The kit's row: eight patches 14 mm apart, two ADAR1000 subarrays (E1-E4 and
+// E5-E8) as the two digital channels. Drawn at 10.0 GHz by default, below every
+// HB100 kit, so no readout equals a Part 1 answer. ?f=10.2 (GHz) draws another.
+// Prediction first: the trace and the readouts stay hidden until Show, and any
+// change of setting hides them again, so each guess is made before it is checked.
+const F_GHZ = (() => {
+  const v = parseFloat(new URLSearchParams(location.search).get('f'));
+  return (v >= 8 && v <= 12) ? v : 10.0;
+})();
+const N = 8, KD = 2*Math.PI*0.014/(3.00e8/(F_GHZ*1e9));
+const TH1 = 22.5;                      // the lab's null direction
+const FLOOR = -50, XMIN = -60, XMAX = 60;
+const LOAD = 0.1, SIG2 = 1e-3, PINT = 10;   // the lab's Diagonal Load; interferer 10 dB up
+const DEG = Math.PI/180, SANS = 'Inter, system-ui, -apple-system, sans-serif';
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+// ---- complex helpers, [re, im] ----
+const C = (r, i) => [r, i];
+const add = (a, b) => [a[0]+b[0], a[1]+b[1]];
+const mul = (a, b) => [a[0]*b[0]-a[1]*b[1], a[0]*b[1]+a[1]*b[0]];
+const cj = a => [a[0], -a[1]];
+const sc = (a, s) => [a[0]*s, a[1]*s];
+const ab = a => Math.hypot(a[0], a[1]);
+const ex = t => [Math.cos(t), Math.sin(t)];
+
+// ---- the eight-element weights: w^T v(theta), v_n = e^{j n kd sin theta} ----
+function af(w, th){
+  const u = KD*Math.sin(th*DEG); let s = C(0, 0);
+  for (let n = 0; n < N; n++) s = add(s, mul(w[n], ex(n*u)));
+  return s;
+}
+const UNI = Array.from({length: N}, () => C(1, 0));
+function nullTable(){                  // w = 1 - r e^{-j n psi}, largest to 100 %
+  const p = KD*Math.sin(TH1*DEG); let r = C(0, 0);
+  for (let n = 0; n < N; n++) r = add(r, sc(ex(n*p), 1/N));
+  const w = []; for (let n = 0; n < N; n++) w.push(add(C(1, 0), sc(mul(r, ex(-n*p)), -1)));
+  const m = Math.max(...w.map(ab));
+  return w.map(z => sc(z, 1/m));
+}
+const TABLE = nullTable();
+const FLIP = TABLE.map(cj);
+const GAINS = TABLE.map(z => C(ab(z), 0));
+const DIFF = [1,1,1,1,-1,-1,-1,-1].map(v => C(v, 0));
+
+// ---- the two digital channels and MVDR, as the lesson's MVDR frame runs it ----
+function chan(th){
+  const u = KD*Math.sin(th*DEG); let g = C(0, 0);
+  for (let m = 0; m < 4; m++) g = add(g, ex(m*u));
+  return [g, mul(g, ex(4*u))];
+}
+function mvdr(thI){                    // w = R^-1 s / (s^H R^-1 s), with diagonal loading
+  const s = chan(0), v = chan(thI), R = [[0,0],[0,0]];
+  for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++)
+    R[i][j] = add(mul(s[i], cj(s[j])), sc(mul(v[i], cj(v[j])), PINT));
+  const dl = SIG2 + LOAD*(R[0][0][0] + R[1][1][0])/2;
+  R[0][0] = add(R[0][0], C(dl, 0)); R[1][1] = add(R[1][1], C(dl, 0));
+  const det = add(mul(R[0][0], R[1][1]), sc(mul(R[0][1], R[1][0]), -1));
+  const id = sc(cj(det), 1/(ab(det)**2));
+  const y = [mul(add(mul(R[1][1], s[0]), sc(mul(R[0][1], s[1]), -1)), id),
+             mul(add(sc(mul(R[1][0], s[0]), -1), mul(R[0][0], s[1])), id)];
+  return y;                            // the scale cancels: patterns are read against the look direction
+}
+const chResp = (w, th) => { const a = chan(th); return ab(add(mul(cj(w[0]), a[0]), mul(cj(w[1]), a[1]))); };
+const MV = { mv20: mvdr(20), mv30: mvdr(30) };
+const dB = x => 20*Math.log10(Math.max(x, 1e-9));
+
+// the level of a setting at angle th, in dB relative to the uniform peak
+function level(cs, th){
+  if (cs === 'mv20' || cs === 'mv30') { const w = MV[cs]; return dB(chResp(w, th)/chResp(w, 0)); }
+  const w = { table: TABLE, flip: FLIP, gains: GAINS, diff: DIFF }[cs];
+  return dB(ab(af(w, th))/N);
+}
+// the monopulse error with the source at boresight and the beam steered to ths
+function err(ths){
+  const p = -KD*Math.sin(ths*DEG);     // the source's phase step seen from the beam
+  const s = Math.sin(4*p), m = Math.abs(Math.tan(2*p));
+  return Math.max(-1, Math.min(1, (s >= 0 ? 1 : -1)*m));
+}
+
+// ---- readouts per setting ----
+const sgnDeg = t => (t > 0.05 ? '+' : t < -0.05 ? '−' : '') + Math.abs(t).toFixed(1) + '°';
+const fmtDb = v => v < FLOOR ? 'below ' + FLOOR + ' dB' : (v < -0.05 ? '−' : '') + Math.abs(v).toFixed(1) + ' dB';
+function argExt(fn, a, b, max){
+  let best = a, bv = fn(a);
+  for (let t = a; t <= b + 1e-9; t += 0.01){ const v = fn(t); if (max ? v > bv : v < bv){ bv = v; best = t; } }
+  return [best, bv];
+}
+function readouts(cs){
+  if (cs === 'table' || cs === 'flip' || cs === 'gains'){
+    const pk = argExt(t => level(cs, t), -10, 10, true);
+    return [['main lobe', fmtDb(pk[1])], ['at +22.5°', fmtDb(level(cs, TH1))], ['at −22.5°', fmtDb(level(cs, -TH1))]];
+  }
+  if (cs === 'diff'){
+    const nl = argExt(t => level(cs, t), -5, 5, false);
+    const l = argExt(t => level(cs, t), -30, -1, true), r = argExt(t => level(cs, t), 1, 30, true);
+    return [['null at', sgnDeg(nl[0])], ['left peak', sgnDeg(l[0])], ['right peak', sgnDeg(r[0])]];
+  }
+  if (cs === 'mv20' || cs === 'mv30'){
+    const th = cs === 'mv20' ? 20 : 30;
+    const man = dB(ab(af(UNI, th))/N), mv = level(cs, th);
+    return [['Manual there', fmtDb(man)], ['MVDR there', fmtDb(mv)], ['suppression', (man - mv).toFixed(1) + ' dB']];
+  }
+  const z = argExt(t => Math.abs(err(t)), -3, 3, false);
+  const f = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2);
+  return [['error zero', sgnDeg(z[0])], ['steer −5°', f(err(-5))], ['steer +5°', f(err(5))]];
+}
+
+// ---- drawing ----
+function stext(ctx, str, x, y, px, color, align, bold){ ctx.fillStyle = color; ctx.font = (bold ? '700 ' : '') + px + 'px ' + SANS; ctx.textAlign = align || 'left'; ctx.textBaseline = 'middle'; ctx.fillText(str, x, y); }
+const canvas = document.getElementById('plot'), ctx = canvas.getContext('2d');
+function resizeCanvas(){
+  const w = canvas.getBoundingClientRect().width, dpr = window.devicePixelRatio || 1;
+  const h = Math.max(220, Math.min(w*0.42, 310));
+  canvas.width = w*dpr; canvas.height = h*dpr; canvas.style.height = h + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+window.addEventListener('resize', resizeCanvas);
+
+const state = { cs: 'table', shown: false };
+
+function draw(){
+  const dpr = window.devicePixelRatio || 1, w = canvas.width/dpr, h = canvas.height/dpr;
+  ctx.clearRect(0, 0, w, h);
+  const narrow = w < 470, fs = narrow ? 10.5 : 11.5;
+  const isErr = state.cs === 'err', isMv = state.cs === 'mv20' || state.cs === 'mv30';
+  const mL = narrow ? 40 : 54, mR = 14, mT = 28, mB = narrow ? 40 : 46;
+  const pw = w - mL - mR, ph = h - mT - mB;
+  const xFor = t => mL + (t - XMIN)/(XMAX - XMIN)*pw;
+  const yMin = isErr ? -1.2 : FLOOR, yMax = isErr ? 1.2 : 0;
+  const yFor = v => mT + (yMax - Math.min(Math.max(v, yMin), yMax))/(yMax - yMin)*ph;
+  const yTicks = isErr ? [1, 0.5, 0, -0.5, -1] : [0, -10, -20, -30, -40, -50];
+
+  ctx.strokeStyle = '#e6eef6'; ctx.lineWidth = 1;
+  for (let t = XMIN; t <= XMAX; t += 20){ ctx.beginPath(); ctx.moveTo(xFor(t), mT); ctx.lineTo(xFor(t), mT + ph); ctx.stroke(); }
+  for (const v of yTicks){ ctx.beginPath(); ctx.moveTo(mL, yFor(v)); ctx.lineTo(mL + pw, yFor(v)); ctx.stroke(); }
+  ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.moveTo(mL, mT); ctx.lineTo(mL, mT + ph); ctx.lineTo(mL + pw, mT + ph); ctx.stroke();
+  for (let t = XMIN; t <= XMAX; t += 20) stext(ctx, (t < 0 ? '−' : '') + Math.abs(t), xFor(t), mT + ph + 13, fs, '#5b6573', 'center');
+  for (const v of yTicks) stext(ctx, (v < 0 ? '−' : '') + Math.abs(v), mL - 7, yFor(v), fs, '#5b6573', 'right');
+  const xl = isErr ? 'Steer angle, source at boresight (degrees)' : 'Angle from broadside (degrees)';
+  stext(ctx, xl, mL + pw/2, mT + ph + (narrow ? 29 : 33), narrow ? 11 : 12.5, '#15202b', 'center');
+  ctx.save(); ctx.translate(narrow ? 11 : 14, mT + ph/2); ctx.rotate(-Math.PI/2);
+  stext(ctx, isErr ? 'error' : (narrow ? 'dB re uniform' : 'dB relative to uniform peak'), 0, 0, narrow ? 11 : 12.5, '#15202b', 'center');
+  ctx.restore();
+
+  const plot = (fn, color, lw, dash) => {
+    ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash || []); ctx.lineJoin = 'round';
+    ctx.beginPath();
+    for (let t = XMIN, s = false; t <= XMAX + 1e-9; t += 0.1){
+      const x = xFor(t), y = yFor(fn(t));
+      if (!s){ ctx.moveTo(x, y); s = true; } else ctx.lineTo(x, y);
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+  };
+  const vline = (t, color, lab) => {
+    ctx.save(); ctx.setLineDash([4, 4]); ctx.strokeStyle = color; ctx.lineWidth = 1.3;
+    ctx.beginPath(); ctx.moveTo(xFor(t), mT); ctx.lineTo(xFor(t), mT + ph); ctx.stroke(); ctx.restore();
+    stext(ctx, lab, xFor(t) + 5, mT + 9, fs, color, 'left', true);
+  };
+
+  // legend strip and the reference every guess is made against
+  const ly = mT - 14;
+  let lx = mL + 6;
+  if (!isErr){
+    plot(t => dB(ab(af(UNI, t))/N), css('--ref'), 1.4, [5, 4]);
+    ctx.strokeStyle = css('--ref'); ctx.lineWidth = 1.6; ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + 18, ly); ctx.stroke(); ctx.setLineDash([]);
+    const rl = isMv ? 'Manual' : 'uniform';
+    stext(ctx, rl, lx + 23, ly, fs, '#5b6573', 'left');
+    ctx.font = fs + 'px ' + SANS; lx += 23 + ctx.measureText(rl).width + 16;
+  } else {
+    ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(mL, yFor(0)); ctx.lineTo(mL + pw, yFor(0)); ctx.stroke();
+  }
+  if (['table', 'flip', 'gains'].includes(state.cs)) vline(TH1, css('--red'), '+22.5°');
+  if (isMv) vline(state.cs === 'mv20' ? 20 : 30, css('--red'), 'interferer');
+
+  if (!state.shown){
+    const msg = narrow ? 'Predict, then show' : 'Predict the trace, then show it', mpx = narrow ? 12 : 13.5;
+    ctx.font = '700 ' + mpx + 'px ' + SANS;
+    const mw = Math.min(ctx.measureText(msg).width + 20, pw - 8), mx = mL + pw*0.5, my = mT + ph*0.62;
+    ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.strokeStyle = css('--edge2'); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(mx - mw/2, my - mpx, mw, 2*mpx, 5); ctx.fill(); ctx.stroke();
+    stext(ctx, msg, mx, my, mpx, css('--navy'), 'center', true);
+    return;
+  }
+  const name = isErr ? 'error' : isMv ? 'MVDR' : state.cs === 'diff' ? 'difference' : 'your setting';
+  ctx.strokeStyle = css('--navy'); ctx.lineWidth = 2.2;
+  ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + 18, ly); ctx.stroke();
+  stext(ctx, name, lx + 23, ly, fs, '#5b6573', 'left');
+  plot(isErr ? err : (t => level(state.cs, t)), css('--navy'), 2.2);
+}
+
+const LABELS = { table: ['main lobe', 'at +22.5°', 'at −22.5°'], flip: ['main lobe', 'at +22.5°', 'at −22.5°'],
+                 gains: ['main lobe', 'at +22.5°', 'at −22.5°'], diff: ['null at', 'left peak', 'right peak'],
+                 mv20: ['Manual there', 'MVDR there', 'suppression'], mv30: ['Manual there', 'MVDR there', 'suppression'],
+                 err: ['error zero', 'steer −5°', 'steer +5°'] };
+const caseEl = document.getElementById('case'), showBtn = document.getElementById('show');
+function sync(){
+  showBtn.setAttribute('aria-pressed', state.shown ? 'true' : 'false');
+  showBtn.textContent = state.shown ? 'Hide' : 'Show';
+  const ro = state.shown ? readouts(state.cs) : null;
+  for (let i = 0; i < 3; i++){
+    document.getElementById('k' + (i + 1)).textContent = LABELS[state.cs][i];
+    document.getElementById('v' + (i + 1)).textContent = ro ? ro[i][1] : '?';
+  }
+  draw();
+}
+caseEl.addEventListener('change', () => { state.cs = caseEl.value; state.shown = false; sync(); });
+showBtn.addEventListener('click', () => { state.shown = !state.shown; sync(); });
+
+resizeCanvas(); sync();
+if (window.MJ){ MJ.setRedraw(() => draw()); MJ.onReady(() => draw()); }
+</script>
+</body>
+</html>
