@@ -35,11 +35,9 @@ with room for notes. Print from read mode for the whole lesson.
 
 ::::{frame} The Big Picture
 :::{present}
-- Four runs, each against Part 1.
-:::
-:::{present}
 | Steps | Run | Set |
 | :-- | :-- | :-- |
+| 1–6 | Bring up | HB100 at boresight |
 | 7–13 | Tapers | Four presets, then yours |
 | 14–16 | Grating lobes | Rx1, Rx4, Rx7; then Rx1, Rx5 |
 | 17–18 | Squint | Signal BW 10, 500 MHz |
