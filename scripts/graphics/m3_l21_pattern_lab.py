@@ -9,8 +9,8 @@ L21:
                          a broadside beam and a 30 deg steered beam, on the
                          true-angle axis: scan loss and sidelobe asymmetry.
 
-Pattern model: N = 8 uniform array, d = 14 mm, HB100 at 10.525 GHz
-(lambda = 28.5 mm, d/lambda = 0.491), ideal element power pattern cos(theta)
+Pattern model: N = 8 uniform array, d = 14 mm, at 10.0 GHz, away from every
+kit (lambda = 30.0 mm, d/lambda = 0.467), ideal element power pattern cos(theta)
 -- the projected-aperture scan-loss canon. Broadside first sidelobe lands at
 -13.1 dBc; the 30 deg steered peak sits 0.6 dB down.
 
@@ -37,8 +37,8 @@ INK, RULE = "#1a1a1a", "#c7d2e0"
 OUT = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 
 C = 3.0e8
-FREQ = 10.525e9          # HB100 nominal
-LAM = C / FREQ           # 28.50 mm
+FREQ = 10.0e9            # away from every kit, so no figure shows a Part 1 answer
+LAM = C / FREQ           # 30.0 mm
 D = 0.014                # element spacing
 N = 8
 
@@ -230,11 +230,11 @@ def steer_compare() -> None:
 # ------------------------------------- fig 3: the time axis, lab version ----
 def time_axis_lab() -> None:
     """The same idea as time_vs_angle, drawn for the lab and lesson pages:
-    a 22 s sweep by hand against time and against source angle, with no dB
+    a 30 s sweep by hand against time and against source angle, with no dB
     values and no angle grid, so it gives none of the Part 1 answers. A
     dashed guide at the first-sidelobe level shows the levels match."""
     rng = np.random.default_rng(444)
-    T = 22.0                                   # seconds, as Run 2 asks
+    T = 30.0                                   # seconds: the lesson's worked pace, not the lab's
     u = np.linspace(0.0, 1.0, 3000)
     t = u * T
     theta = -90.0 + 180.0 * warp(u)
@@ -253,7 +253,7 @@ def time_axis_lab() -> None:
         ax.tick_params(labelsize=12.5)
     ax_t.plot(t, trace, color=NAVY, lw=1.4, zorder=2)
     ax_t.set_xlim(0, T)
-    ax_t.set_xticks([0, 5, 10, 15, 20])
+    ax_t.set_xticks([0, 10, 20, 30])
     ax_t.set_xlabel("time (s)", fontsize=13)
     ax_a.plot(theta, trace, color=NAVY, lw=1.4, zorder=2)
     ax_a.set_xlim(-90, 90)

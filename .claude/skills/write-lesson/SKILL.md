@@ -81,21 +81,35 @@ Every frame:
   `\ ` not `\,` or `\;`, no thin spaces (CLAUDE.md gotchas).
 
 Every Module 3 lesson and lab pair has one shape (Neil, 2026-11-08: "The
-lesson should be preparing them for the lab"; L20 is the worked example,
-#230). Class time is the lab; cadets read the lesson and do the pre-lab first.
+lesson should be preparing them for the lab"; the L20 pair is the worked
+example, lab page as approved in #239). Class time is the lab; cadets read
+the lesson and do the pre-lab first.
 
 - **The lesson** teaches everything the lab tests and how to read what the
   cadet will see. It is a reading page with no beat cap (`budgets.py`), and
   it ends with a read-only **Pre-Lab** frame that maps each Part 1 question
   to the step and table that checks it, linking the packet.
-- **The lab page** presents only its opening, at most `LAB_BEATS` (6): title,
-  objectives, **The Big Picture** (the story of what we test, with a figure),
-  **The Flow of the Lab** (the runs with their step ranges, with a strip
-  figure), and **Equipment and Setup**. Everything after is read-only: the
-  steps with their boxes, No Hardware?, Your Part 2 Entries, Lab Packet,
-  **For Part 3** (only what the writeup asks for), and a one-line Looking
-  Ahead. No teaching on the lab page: a frame that explains goes in the
-  lesson, or goes.
+- **Every Part 1 method is worked on the lesson page, and no Part 1 answer
+  is** (Neil, 2026-11-10). Go down Part 1 question by question: each needs a
+  worked example of its method, or a one-line recap linking the lesson that
+  worked it. Worked examples, figures and widget defaults use **10.0 GHz**;
+  the kits run 10.1 to 10.7 GHz, so 10.3 and 10.525 GHz give answers away.
+  No page prints a value that equals an answer-key value.
+- **The lab page has cadets predict first** (Neil, 2026-11-10: the opening
+  gave the answers away). It presents, within `LAB_BEATS` (10): title;
+  objectives; **The Big Picture**, listing what is measured by what is set
+  or switched, with step ranges and no outcomes, expected traces or
+  predicted numbers; **Predict First**, a widget that hides its answer until
+  the cadet commits and asks, and hides it again on any change
+  (`af-element-predict.html` is the model); then **one beat per procedure
+  block**, each presenting three or four bullets of what the cadet does,
+  with its steps and entry boxes in the frame's read-mode text. Equipment
+  and Setup folds into Bring Up the Kit. No step states a value Part 1
+  predicts; it says to compare with the prediction. Read-only after the
+  procedure: No Hardware?, Your Part 2 Entries, Lab Packet, **For Part 3**
+  (only what the writeup asks for), and a one-line Looking Ahead. No
+  teaching on the lab page: a frame that explains goes in the lesson, or
+  goes.
 - **The packet's** Part 1 produces exactly the predictions Part 2 compares
   against, and Part 3 matches For Part 3. No practice set after L16.
 

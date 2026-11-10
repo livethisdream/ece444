@@ -100,7 +100,11 @@
   // Eight elements, d = 14 mm, at the workshop's 10.3 GHz. Everything below is
   // computed from f, d and c with real pi: this is a lesson widget, not the
   // GUI's legacy sweep (which uses a truncated 2*3.14159).
-  const N = 8, D_MM = 14, F_HZ = 10.3e9;
+  // ?f=10.0 (GHz, 8 to 12) draws another frequency; the default stays
+  // 10.3 GHz, which the self-test below asserts. L18 embeds it at 10.0 GHz,
+  // away from every kit, so no phase it shows is a Part 1 answer.
+  const F_Q = parseFloat(new URLSearchParams(location.search).get('f'));
+  const N = 8, D_MM = 14, F_HZ = (F_Q >= 8 && F_Q <= 12) ? F_Q * 1e9 : 10.3e9;
   const C_MM_PS = 0.299792458;                    // c in mm per ps
   const LAMBDA_MM = 299792458e3 / F_HZ;           // 29.11 mm
   const KD_DEG = 360 * D_MM / LAMBDA_MM;          // kd = 173.16 deg (173.2 on the page)

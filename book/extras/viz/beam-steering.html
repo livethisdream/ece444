@@ -78,7 +78,7 @@
     <div class="ro"><span class="k">pattern peak</span><span class="v" id="ppeak">+30.0°</span></div>
   </div>
 
-  <p class="note">N = 8, d = 14 mm, 10.3 GHz (d/&lambda; = 0.4807). The HPBW readout is the
+  <p class="note">N = 8, d = 14 mm, <span id="fnote">10.3 GHz (d/&lambda; = 0.4807)</span>. The HPBW readout is the
     rule of thumb 0.886&lambda;/(Nd cos &theta;<sub>0</sub>); the width read off the
     plotted pattern is printed on the graph and runs wider past about 50°.</p>
 </div>
@@ -88,7 +88,13 @@
   "use strict";
 
   // ---- the course array -------------------------------------------------
-  var N = 8, DL = 14.0 / (3e11 / 10.3e9); // spacing in wavelengths: lambda = 29.126 mm, kd = 173.0 deg
+  // ?f=10.0 (GHz, 8 to 12) draws another frequency; the default stays 10.3 GHz.
+  // L18 embeds it at 10.0 GHz, away from every kit (no Part 1 answer on the page).
+  var F_Q = parseFloat(new URLSearchParams(location.search).get("f"));
+  var F_GHZ = (F_Q >= 8 && F_Q <= 12) ? F_Q : 10.3;
+  var N = 8, DL = 14.0 / (3e11 / (F_GHZ * 1e9)); // spacing in wavelengths: at 10.3 GHz lambda = 29.126 mm, kd = 173.0 deg
+  if (F_GHZ !== 10.3) document.getElementById("fnote").innerHTML =
+    (Math.round(F_GHZ * 10) === F_GHZ * 10 ? F_GHZ.toFixed(1) : String(F_GHZ)) + " GHz (d/&lambda; = " + DL.toFixed(4) + ")";
   var KD = 2 * Math.PI * DL;            // kd, radians
   var KD_DEG = 360 * DL;                // kd in degrees = phase step per unit sin
   var FLOOR = -40;

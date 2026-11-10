@@ -34,9 +34,12 @@ with room for notes. Print from read mode for the whole lesson.
 
 ::::{frame} The Big Picture
 :::{present}
-- The beam sweep steps beams past a fixed HB100; an azimuth sweep moves the HB100 past one beam.
-- Today you take both on your kit and compare lobe levels in dBc.
-- Part 1 predicts what each trace shows.
+| Steps | Run | Beam | Moves |
+| :-- | :-- | :-- | :-- |
+| 1 to 6 | Bring up | | |
+| 7 to 9 | 1: beam sweep | stepped | kit |
+| 10 to 15 | 2: by hand | held at $0^\circ$ | HB100 |
+| 16 to 19 | 3: on the stand | read at $0^\circ$, $30^\circ$ | kit |
 :::
 :::{present}
 <img src="../../viz/img/L21-three-methods.svg"
@@ -46,45 +49,50 @@ with room for notes. Print from read mode for the whole lesson.
 
 Lesson 21 compared the kit's beam sweep, which steps the beam past a fixed
 HB100, with an azimuth sweep, which holds one beam and moves the source.
-Today you take both on your own kit: a beam sweep, three azimuth sweeps by
-hand, and one pass of the kit on its stand that reads a beam held at
-$0^\circ$ and one held at $30^\circ$ together. You compare the lobe levels in
-dBc against the predictions you made in Part 1 of the packet, which say where
-the two methods should agree, where they should not, and how closely two
-traces must match before you call them the same.
-::::
-
-::::{frame} The Flow of the Lab
-:::{present}
-| Steps | Run | Part 1 |
-| :-- | :-- | :-- |
-| 1 to 6 | Bring up the kit | Q1 |
-| 7 to 9 | Run 1: beam sweep | Q2, Q3 |
-| 10 to 15 | Run 2: by hand | Q3, Q5 |
-| 16 to 19 | Run 3: on the stand | Q3, Q4 |
-:::
-:::{present}
-<picture>
-<source media="(max-width: 600px)" srcset="../../viz/img/L21-lab-sequence-narrow.svg">
-<img src="../../viz/img/L21-lab-sequence.svg" alt="The three runs of the L21 Lab, each with a sketch of the setup and a thumbnail of the trace to expect. Run 1, Steps 7 to 9: the HB100 fixed, the kit steps the beam, a broadside beam-sweep trace against steer angle. Run 2, Steps 10 to 15: the beam held at 0 degrees while you carry the HB100 along the arc, the same pattern against elapsed time. Run 3, Steps 16 to 19: the HB100 fixed and the kit turned on its stand, the 0 and 30 degree beams read at the stand's 10 degree marks." style="max-width: 100%; display: block; margin: 0 auto;">
-</picture>
-:::
+Today you take both on your own kit and compare the lobe levels in dBc
+against the predictions you made in Part 1 of the packet.
 
 Run 1 confirms that the stand's scale and the kit agree on the sign of the
-source angle and takes the beam sweep, Table A and Table B in Part 2 of the
-packet. Run 2 holds the beam at $0^\circ$ and has you carry the HB100 around
-the arc three times, Table C. Run 3 sweeps the beam again while you turn the
-kit through the stand's marks, so one pass fills Table D, the beam held at
-$0^\circ$, and Table E, the beam held at $30^\circ$. Lesson 21's
-<a href="../L21-antenna-pattern/index.html#frame-reading-your-traces">"Reading Your Traces"</a>
-lists what each comparison should show.
+source angle, then takes the beam sweep: Tables A and B in Part 2 of the
+packet. Run 2 holds the beam at $0^\circ$ while you carry the HB100 along the
+arc three times: Table C. Run 3 sweeps the beam again while you turn the kit
+through the stand's marks, so one pass fills Table D, the beam held at
+$0^\circ$, and Table E, the beam held at $30^\circ$.
 ::::
 
-::::{frame} Equipment and Setup
+::::{frame} Predict First
+:class: viz-frame
+
+:::{depth}
+Before you take a trace, predict it, then check yourself. Choose a beam angle
+and decide, before you press **Show azimuth sweep**, how the azimuth sweep
+compares with the dashed beam sweep: where its peak and first nulls fall,
+whether its first sidelobes read at the beam sweep's level, and which lobes
+read lower. Then show it. Choosing another angle hides the azimuth sweep
+again, so each guess comes first. Both traces are in dBc of their own peak,
+with the noise floor about $23\ \text{dB}$ down. The widget draws the course
+model at $10.0\ \text{GHz}$, not at your kit's frequency, so its numbers are
+close to your Part 1 values but not equal to them; Lesson 21's
+<a href="../L21-antenna-pattern/index.html#frame-reading-your-traces">"Reading Your Traces"</a>
+says which features the room and the floor leave you able to compare.
+:::
+
 :::{present}
-- Seat the kit on its stand, $0^\circ$ toward the HB100.
-- Set the HB100 on its tripod at patch-row height, $1.2\ \text{m}$ out.
-- Tape a $1.2\ \text{m}$ arc. Its $-90^\circ$ end is on the E1 side, where each sweep by hand starts.
+<iframe src="../../viz/azimuth-predict.html"
+        width="100%" height="485"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Choose a beam angle, predict the azimuth sweep against the beam sweep, then show it">
+</iframe>
+:::
+::::
+
+::::{frame} Bring Up the Kit
+:::{present}
+- Kit on its stand at $0^\circ$; HB100 at patch-row height, $1.2\ \text{m}$ out.
+- Tape a $1.2\ \text{m}$ arc with its $-90^\circ$ end on the E1 side.
+- Find HB100, Calibrate, then the Array Factor preset.
+- Set Rx Gain for a $-10$ dBFS peak.
 :::
 :::{present}
 <img src="../../viz/img/L21-lab-layout.svg"
@@ -110,10 +118,6 @@ the same $1.2\ \text{m}$ radius, with marks at $-90^\circ$, $0^\circ$, and
 $+90^\circ$. The $-90^\circ$ end is on the E1 side of the array: on your left
 as you stand at the laptop behind the kit, as the figure shows from above,
 and on the right as seen from the HB100.
-::::
-
-::::{frame} Bring Up the Kit
-:class: read-only
 
 1. **Connect.** Browse to your kit's address from Lesson 17 and wait for the
    pill to read **Connected**.
@@ -146,7 +150,10 @@ and on the right as seen from the HB100.
 ::::
 
 ::::{frame} Run 1: Check the Angle Axis
-:class: read-only
+:::{present}
+- Turn the kit to $-30$, $+30$, and $0$ on the stand, and read the **Angle** readout, set to **Peak**, at each.
+- Back at $0^\circ$, read the beam sweep: the peak, the half-power beamwidth, and both first sidelobes.
+:::
 
 7. **Source at $+30^\circ$.** With the beam sweeping, turn the kit until the
    stand reads $-30$, which puts the source at $+30^\circ$ (Lesson 21,
@@ -164,8 +171,9 @@ and on the right as seen from the HB100.
    <label>Source at 0°: Angle <input data-field="a.0" data-label="Step 8, source at 0°: Angle"></label>
    </div>
 9. **The beam sweep.** At $0^\circ$, record the peak, the half-power
-   beamwidth, and both first sidelobes. This is the trace you measured in the
-   L20 Lab, and the reference for the other two runs.
+   beamwidth, and both first sidelobes, and compare them with your Part 1
+   predictions. This is the trace you measured in the L20 Lab, and the
+   reference for the other two runs.
 
    <div class="rec" data-lab="L21">
    <label>Step 9: peak (dBFS) <input data-field="b.peak" data-label="Step 9: peak (dBFS)"></label>
@@ -176,7 +184,11 @@ and on the right as seen from the HB100.
 ::::
 
 ::::{frame} Run 2: Azimuth Sweep by Hand
-:class: read-only
+:::{present}
+- Choose the Antenna Pattern preset and hold the beam at $0^\circ$.
+- Carry the HB100 along the arc from $-90^\circ$ to $+90^\circ$, three times.
+- Read each sweep's peak and both first sidelobes in dBc.
+:::
 
 10. **Load the preset.** Open **Lab Presets** and choose the **Antenna
     Pattern** preset. It sets **Mode**, in the Beam Steering section, to
@@ -200,8 +212,9 @@ and on the right as seen from the HB100.
 14. **Read the trace.** Press **Stop** at $+90^\circ$; the window scrolls while
     the kit runs, and Stop freezes it. Hover over each lobe's peak to read the
     main-lobe peak in dBFS and both first sidelobes, and convert the sidelobes
-    to dBc by subtracting the main-lobe peak. Expect the room to make the two
-    first sidelobes unequal by a few decibels, so record both.
+    to dBc by subtracting the main-lobe peak, and compare them with your Part 1
+    predictions. The room can make the two first sidelobes unequal by a few
+    decibels, so record both.
 15. **Repeat.** Sweep twice more, pressing **Start** at $-90^\circ$ each time,
     then return the HB100 to its tripod at boresight. The three sweeps will not
     agree exactly: record the spread, largest minus smallest, and Part 3
@@ -231,7 +244,11 @@ and on the right as seen from the HB100.
 ::::
 
 ::::{frame} Run 3: Turn the Kit, Both Beams in One Pass
-:class: read-only
+:::{present}
+- Choose the Array Factor preset again, kit at $0^\circ$, and read the reference level.
+- Turn the kit through every $10^\circ$ mark; read the beam at $0^\circ$ and at $30^\circ$.
+- Turn slowly through each lobe and null for its extreme.
+:::
 
 16. **Sweep the beam again.** Choose the **Array Factor** preset and press
     **Start**, so the beam sweeps again on the Rectangular tab, kit at
@@ -292,12 +309,11 @@ and on the right as seen from the HB100.
     <label>Source at +90°: beam at 0° <input data-field="d.p90.level" data-label="Step 17, source at +90°: level, beam at 0° (Table D)"></label>
     <label>beam at 30° <input data-field="e.p90.level" data-label="Step 17, source at +90°: level, beam at 30° (Table E)"></label>
     </div>
-18. **Find each lobe and null.** The $10^\circ$ marks sketch the patterns but
-    miss the sidelobe peaks, which fall between marks. Turn slowly through each
-    lobe and null of both beams and record the source angle and level of each
-    extreme, the highest reading for a lobe and the lowest for a null, every
-    level relative to Step 16 as in Step 17; Part 3 converts the lobes to dBc.
-    An antenna range finds a lobe peak the same way. Where the level stops
+18. **Find each lobe and null.** Turn slowly through each lobe and null of
+    both beams and record the source angle and level of each extreme, the
+    highest reading for a lobe and the lowest for a null, every level relative
+    to Step 16 as in Step 17, and compare each with your Part 1 predictions;
+    Part 3 converts the lobes to dBc. Where the level stops
     changing as you turn, it has reached the noise floor: write "floor".
     Last, turn back to the main lobe of the beam held at $0^\circ$ and to its
     right first sidelobe, and read each again: the change from your first

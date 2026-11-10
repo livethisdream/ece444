@@ -21,7 +21,9 @@
                          peak's scale, floored at the -23 dB sweep floor
 
 Every number here is computed from the same formulas the lesson page and the
-taper-explorer widget use: N = 8, d/lambda = 0.481 (10.3 GHz, d = 14 mm).
+taper-explorer widget use (as embedded on L22, ?f=10.0): N = 8, d/lambda = 14/30
+= 0.467 (10.0 GHz, d = 14 mm), below every kit's HB100, so no figure shows a
+number the L22-L23 Lab's Part 1 asks for.
 The figures carry no equations -- words, numbers and axis labels only.
 
     python3 scripts/graphics/m3_l22_tapers.py
@@ -41,7 +43,7 @@ NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d
 INK, RULE = "#1a1a1a", "#c7d2e0"
 OUT = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 
-N, DL = 8, 0.481
+N, DL = 8, 14.0 / 30.0     # d/lambda at 10.0 GHz (lambda = 30.0 mm, c = 3.00e8)
 
 plt.rcParams.update({
     "svg.fonttype": "none",

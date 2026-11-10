@@ -87,12 +87,16 @@ That is the one shared file it may change.
   are individual, with one exception: the **L19 Lab fox hunt runs in teams of
   two**, one packet per team, run as a firing range (2026-10-23): one kit per
   team on a taped firing line, bearings from its station marks. The **final project is individual** (Neil, 2026-10-13).
-- **A lesson prepares for its lab; the lab page presents only its opening**
-  (Neil, 2026-11-08; L20 pilot #230). The lesson, read before class, teaches
-  what the lab tests and ends with the Pre-Lab; the lab page presents Big
-  Picture, Flow, and Equipment and Setup, then read-only steps, entries,
-  packet, and For Part 3. COURSE_SPEC "Lesson and lab, one shape" and the
-  write-lesson skill have the details; L18, L21, L22-L23 and L24 follow.
+- **A lesson prepares for its lab; the lab page has cadets predict first**
+  (Neil, 2026-11-08 and 2026-11-10; the approved L20 Lab is #239). The
+  lesson, read before class, works every method Part 1 needs at 10.0 GHz,
+  gives no Part 1 answer, and ends with the Pre-Lab. The lab page presents
+  the Big Picture with no outcomes, a Predict First widget that hides its
+  answer, and then the procedure as beats; nothing in its opening or steps
+  states what Part 1 predicts. COURSE_SPEC "Lesson and lab, one shape" and
+  the write-lesson skill have the details. L18, L21, L22-L23 and L24 are
+  being brought to this shape (2026-11-10); L17 and L19 keep theirs (a
+  setup lab, and a hunt whose answer is already hidden).
 - **No lab reading past ±90°** (Neil, 2026-11-08): behind the board is
   not a measurement the kit makes accurately, so no step or packet
   question asks for one.
