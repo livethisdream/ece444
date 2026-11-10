@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predict the steered sweep</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573; --ref:#9aa3ad;
+          --tr:#004a85; --hpbw:#1d7a4d; --lvl:#8a5a00; --pc:#b01e24; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; justify-content:space-between;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .row { display:flex; gap:5px; flex-wrap:nowrap; }
+  .opt { font:700 12px 'Inter',system-ui,sans-serif; height:30px; padding:0 9px; border-radius:5px; cursor:pointer;
+         border:1px solid var(--edge2); background:#fff; color:var(--ink3); white-space:nowrap; }
+  .opt.ang { width:40px; padding:0; }
+  .opt[aria-pressed="true"] { background:var(--mid); border-color:var(--mid); color:#fff; }
+  .opt:focus-visible, .show:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  .show { font:700 12px 'Inter',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.05em;
+          height:30px; padding:0 14px; border-radius:5px; cursor:pointer;
+          border:1px solid var(--navy); background:var(--navy); color:#fff; }
+  .show[aria-pressed="true"] { background:#fff; color:var(--navy); }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 560px) { .readouts { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+                              .opt.ang { width:36px; } .opt { padding:0 7px; } }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:4px; padding:7px 6px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { height:15px; line-height:15px; font-size:10.5px; font-weight:700; text-transform:uppercase;
+           letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; color:var(--navy); overflow:hidden; max-width:100%; }
+  .ro.hp .v { color:var(--hpbw); }
+  .ro.lv .v { color:var(--lvl); }
+  .ro.pc .v { color:var(--pc); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" width="1000" height="400" aria-label="Beam-sweep trace for the chosen run and angle, relative to the boresight peak"></canvas>
+
+  <div class="controls">
+    <div class="row" id="runs" role="group" aria-label="Run"></div>
+    <div class="row" id="angs" role="group" aria-label="Angle"></div>
+    <button class="show" id="show" aria-pressed="false">Show trace</button>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">peak at</span><span class="v" id="r-pk">?</span></div>
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="r-hp">?</span></div>
+    <div class="ro lv"><span class="k">level vs 0°</span><span class="v" id="r-lv">?</span></div>
+    <div class="ro pc"><span class="k">E8 Phase Control</span><span class="v" id="r-pc">?</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+// The L18 Lab's two runs on the kit's row: eight patches 14 mm apart, uniform.
+// Run 1 moves the source to the angle with Phase Control at zero; Run 2 keeps
+// the source at boresight and Applies the angle. The trace is the beam-sweep
+// trace of L18 "The Beam-Sweep Trace": |AF|^2 against the steered angle, scaled
+// by the element pattern at the source, drawn at the ideal-element bound
+// cos(theta) (L18 "Scan Loss").
+// Drawn at 10.0 GHz by default, below every HB100 kit, so no readout equals a
+// Part 1 answer (the af-element-predict rule). ?f=10.3 (GHz) draws another.
+const F_GHZ = (() => {
+  const v = parseFloat(new URLSearchParams(location.search).get('f'));
+  return (v >= 8 && v <= 12) ? v : 10.0;
+})();
+const C = 3.00e8, C_GUI = 299792458, D = 14e-3, N = 8;
+const KD = 2*Math.PI*D*F_GHZ*1e9/C;                 // rad per unit of sin(theta)
+const KD_DEG = KD*180/Math.PI;
+const LSB = 2.8125;                                 // one sweep step of phase
+const FLOOR = -30;
+const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+const rad = d => d*Math.PI/180, deg = r => r*180/Math.PI;
+
+// Prediction first: the trace stays hidden until "Show trace", and any change
+// to the run or the angle hides it again, so each guess is made before it is checked.
+const RUNS = [{ id:'move', label:'Move the source' }, { id:'apply', label:'Apply' }];
+const ANGS = [0, 15, 30, 45];
+const state = { run:'move', ang:30, shown:false };
+
+function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+function mixLabel(ctx,chunks,x,yc,h,color,align){
+  const fpx=h-1, f=fpx+'px '+SANS; let tot=0;
+  for(const c of chunks){ if(c.m) tot+=MJ.width(c.m,color,h); else { ctx.font=f; tot+=ctx.measureText(c.s).width; } }
+  let cx = align==='center' ? x-tot/2 : x;
+  for(const c of chunks){
+    if(c.m){ MJ.draw(ctx,c.m,cx,yc,h,color,'left'); cx+=MJ.width(c.m,color,h); }
+    else { stext(ctx,c.s,cx,yc,fpx,color,'left'); ctx.font=f; cx+=ctx.measureText(c.s).width; }
+  }
+}
+
+// Array factor (field, peak 1) between the steered angle t0 and the arrival angle ts.
+function af(t0, ts){
+  const psi = KD*(Math.sin(rad(ts)) - Math.sin(rad(t0)));
+  const den = N*Math.sin(psi/2);
+  return Math.abs(den) < 1e-12 ? 1 : Math.sin(N*psi/2)/den;
+}
+// The trace, in dB relative to the boresight peak. Run 1: the source at ang,
+// lowered by the element pattern there. Run 2: Apply shifts the trace of a
+// boresight source to ang, at full level (L18 "The Sign in Phase Control"):
+// the boresight array factor at sin(t0) - sin(ang).
+function traceDb(t0, run, ang){
+  let p;
+  if (run === 'move') p = Math.cos(rad(ang))*af(t0, ang)**2;
+  else {
+    const psi = KD*(Math.sin(rad(t0)) - Math.sin(rad(ang))), den = N*Math.sin(psi/2);
+    const a = Math.abs(den) < 1e-12 ? 1 : Math.sin(N*psi/2)/den;
+    p = a*a;
+  }
+  return 10*Math.log10(Math.max(p, 1e-9));
+}
+// The half-power crossings about the peak, by bisection on each side; both
+// runs have the same width, that of a beam steered to ang.
+function edges(ang){
+  const e = s => { let lo = ang, hi = Math.max(-90, Math.min(90, ang + s*40));
+    for (let i = 0; i < 70; i++){ const m = (lo+hi)/2; if (af(m, ang)**2 > 0.5) lo = m; else hi = m; }
+    return (lo+hi)/2; };
+  return [e(-1), e(1)];
+}
+const hpbw = ang => { const [lo, hi] = edges(ang); return hi - lo; };
+function e8(ang){            // what Apply writes into E8 (main.js: Math.round, c = 299792458)
+  if (state.run !== 'apply') return 0;
+  const ph = -(360*D*Math.sin(rad(ang))*F_GHZ*1e9/C_GUI);
+  return Math.floor(7*ph + 0.5);
+}
+
+const canvas = document.getElementById('plot'), ctx = canvas.getContext('2d');
+function resizeCanvas(){
+  const w = canvas.getBoundingClientRect().width, dpr = window.devicePixelRatio || 1;
+  const h = Math.max(210, Math.min(w*0.42, 320));
+  canvas.width = w*dpr; canvas.height = h*dpr; canvas.style.height = h+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  draw();
+}
+window.addEventListener('resize', resizeCanvas);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function draw(){
+  const dpr = window.devicePixelRatio || 1, w = canvas.width/dpr, h = canvas.height/dpr;
+  ctx.clearRect(0,0,w,h);
+  const narrow = w < 470, fs = narrow ? 10.5 : 11.5;
+  const mL = narrow ? 46 : 54, mR = 14, mT = 28, mB = narrow ? 40 : 46;
+  const pw = w-mL-mR, ph = h-mT-mB;
+  const TOP = 0, xFor = t => mL + (t+90)/180*pw;
+  const yFor = v => mT + Math.min(Math.max(TOP-v,0),TOP-FLOOR)/(TOP-FLOOR)*ph;
+
+  ctx.strokeStyle = '#e6eef6'; ctx.lineWidth = 1;
+  for (let t=-90;t<=90;t+=30){ ctx.beginPath(); ctx.moveTo(xFor(t),mT); ctx.lineTo(xFor(t),mT+ph); ctx.stroke(); }
+  for (let v=0;v>=FLOOR;v-=10){ ctx.beginPath(); ctx.moveTo(mL,yFor(v)); ctx.lineTo(mL+pw,yFor(v)); ctx.stroke(); }
+  ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.moveTo(mL,mT); ctx.lineTo(mL,mT+ph); ctx.lineTo(mL+pw,mT+ph); ctx.stroke();
+  for (let t=-90;t<=90;t+=30) stext(ctx,`${t}`.replace('-','−'),xFor(t),mT+ph+13,fs,'#5b6573','center');
+  for (let v=0;v>=FLOOR;v-=10) stext(ctx,`${v}`.replace('-','−'),mL-7,yFor(v),fs,'#5b6573','right');
+  mixLabel(ctx,[{s:'Sweep steering angle '},{m:'\\theta_0'},{s:' (degrees)'}],mL+pw/2,mT+ph+(narrow?30:34),narrow?11:12.5,'#15202b','center');
+  ctx.save(); ctx.translate(narrow?9:14, mT+ph/2); ctx.rotate(-Math.PI/2);
+  stext(ctx, narrow ? 'dB re boresight' : 'dB relative to boresight peak', 0, 0, narrow?11:12.5, '#15202b', 'center');
+  ctx.restore();
+
+  const plot = (run, ang, color, lw, dash) => {
+    ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash||[]);
+    ctx.beginPath();
+    for (let t=-89.9, s=false; t<=89.9001; t+=0.1){
+      const x = xFor(t), y = yFor(traceDb(t, run, ang));
+      if (!s){ ctx.moveTo(x,y); s=true; } else ctx.lineTo(x,y);
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+  };
+  // The boresight trace is the reference every guess is made against.
+  plot('move', 0, css('--ref'), 1.4, [5,4]);
+
+  const ly = mT-14;
+  ctx.strokeStyle = css('--ref'); ctx.lineWidth = 1.6; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(mL+6,ly); ctx.lineTo(mL+24,ly); ctx.stroke(); ctx.setLineDash([]);
+  stext(ctx,'source at 0°',mL+29,ly,fs,'#5b6573','left');
+  ctx.font = fs+'px '+SANS;
+  const lx = mL+29+ctx.measureText('source at 0°').width+16;
+
+  const name = state.run === 'move' ? `Source at ${state.ang}°` : `Apply ${state.ang}`;
+  if (!state.shown){
+    const msg = `${name}: predict the trace, then show it`, mpx = narrow ? 12 : 13.5;
+    ctx.font = '700 '+mpx+'px '+SANS;
+    const mw = Math.min(ctx.measureText(msg).width + 20, pw - 8), my = mT + ph*0.62;
+    ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.strokeStyle = css('--edge2'); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(mL+pw/2-mw/2, my-mpx, mw, 2*mpx, 5); ctx.fill(); ctx.stroke();
+    stext(ctx, msg, mL+pw/2, my, mpx, css('--navy'), 'center', true);
+    return;
+  }
+  ctx.strokeStyle = css('--tr'); ctx.lineWidth = 2.2;
+  ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+18,ly); ctx.stroke();
+  stext(ctx,name,lx+23,ly,fs,'#5b6573','left');
+  plot(state.run, state.ang, css('--tr'), 2.2);
+  // one dot per 2.8125 deg phase step, where the sweep samples the trace
+  ctx.fillStyle = css('--tr');
+  for (let m = -80; m <= 80; m++){
+    const u = m*rad(LSB)/KD; if (Math.abs(u) >= 1) continue;
+    const t = deg(Math.asin(u)), v = traceDb(t, state.run, state.ang);
+    if (v < FLOOR) continue;
+    ctx.beginPath(); ctx.arc(xFor(t), yFor(v), narrow ? 1.8 : 2.2, 0, 2*Math.PI); ctx.fill();
+  }
+  // the half-power span, 3 dB below this trace's own peak
+  const pk = traceDb(state.ang, state.run, state.ang), [elo, ehi] = edges(state.ang);
+  const y3 = yFor(pk-3.0103), xl = xFor(elo), xr = xFor(ehi);
+  ctx.strokeStyle = css('--hpbw'); ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.moveTo(xl,y3); ctx.lineTo(xr,y3); ctx.stroke();
+  for (const x of [xl,xr]){ ctx.beginPath(); ctx.moveTo(x,y3-5); ctx.lineTo(x,y3+5); ctx.stroke(); }
+}
+
+function readouts(){
+  const set = (id, s) => document.getElementById(id).textContent = s;
+  if (!state.shown){ ['r-pk','r-hp','r-lv','r-pc'].forEach(id => set(id, '?')); return; }
+  const m = '−', a = state.ang;
+  set('r-pk', `${a === 0 ? '' : '+'}${a.toFixed(1)}°`);
+  set('r-hp', `${hpbw(a).toFixed(1)}°`);
+  const lv = state.run === 'move' ? 10*Math.log10(Math.cos(rad(a))) : 0;
+  set('r-lv', lv > -0.05 ? '0.0 dB' : `${m}${(-lv).toFixed(1)} dB`);
+  const p = e8(a);
+  set('r-pc', p === 0 ? '0' : `${m}${-p}`);
+}
+
+const runs = document.getElementById('runs'), angs = document.getElementById('angs'),
+      showBtn = document.getElementById('show');
+const runBtns = RUNS.map(r => {
+  const b = document.createElement('button');
+  b.className = 'opt'; b.textContent = r.label;
+  b.addEventListener('click', () => { state.run = r.id; state.shown = false; sync(); });
+  runs.appendChild(b); return b;
+});
+const angBtns = ANGS.map(a => {
+  const b = document.createElement('button');
+  b.className = 'opt ang'; b.textContent = a + '°';
+  b.addEventListener('click', () => { state.ang = a; state.shown = false; sync(); });
+  angs.appendChild(b); return b;
+});
+showBtn.addEventListener('click', () => { state.shown = !state.shown; sync(); });
+function sync(){
+  runBtns.forEach((b, i) => b.setAttribute('aria-pressed', RUNS[i].id === state.run ? 'true' : 'false'));
+  angBtns.forEach((b, i) => b.setAttribute('aria-pressed', ANGS[i] === state.ang ? 'true' : 'false'));
+  showBtn.setAttribute('aria-pressed', state.shown ? 'true' : 'false');
+  showBtn.textContent = state.shown ? 'Hide trace' : 'Show trace';
+  readouts(); draw();
+}
+
+resizeCanvas(); sync();
+MJ.setRedraw(() => draw());
+MJ.onReady(() => draw());
+</script>
+</body>
+</html>
