@@ -56,8 +56,11 @@ You built this trace step by step in Lesson 18
 With Use Bits on, as in every lab preset, the kit adds one phase-shifter LSB,
 $2.8125^\circ$, to the element-to-element phase, writes that ramp to the eight
 channels, reads the peak of the FFT, and plots the reading at the angle the
-ramp steers to. At $10.0\ \text{GHz}$, where this lesson works its examples,
-one step moves $\sin\theta_0$ by $2.8125^\circ/168.0^\circ = 0.0167$, which is
+ramp steers to. This lesson works its examples at $10.0\ \text{GHz}$, where
+$\lambda = c/f = 30.0\ \text{mm}$, $d/\lambda = 14/30.0 = 0.467$, and
+$kd = 360^\circ\ d/\lambda = 168.0^\circ$, by the steps of Lesson 18's
+<a href="../L18-beam-steering/index.html#frame-the-phaser-kit-cn0566">"The Phaser Kit (CN0566)"</a>.
+One step moves $\sin\theta_0$ by $2.8125^\circ/168.0^\circ = 0.0167$, which is
 $0.96^\circ$ of angle near broadside and $1.11^\circ$ at $30^\circ$. Of the
 162 steps, 119 fall inside $\pm 81^\circ$; the rest ask for more phase than any real angle needs and
 plot at $\pm 90^\circ$. Lesson 20 shows what that grid and the noise floor
@@ -199,20 +202,50 @@ centimeters, which moves the level (next frame).
 :::
 :::{present}
 <img src="../../viz/img/L21-time-axis.svg"
-     alt="One 22 second azimuth sweep by hand plotted twice: against time, where an uneven pace spaces the lobes unevenly, and against source angle, where they are symmetric. A dashed line at the first-sidelobe level touches the same lobes on both."
+     alt="One 30 second azimuth sweep by hand plotted twice: against time, where an uneven pace spaces the lobes unevenly, and against source angle, where they are symmetric. A dashed line at the first-sidelobe level touches the same lobes on both."
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 The Signal vs Time plot puts time on its x-axis, and at a steady pace time
-and azimuth are the same axis with a fixed scale factor, set by covering the
-$180^\circ$ arc in the lab's $22\ \text{s}$. A hand is not perfectly steady.
-Moving slowly through a lobe draws it wider on the plot and hurrying draws it
-narrower, but the level at each instant is still the pattern in the source's
-direction, so the lobe levels come through. The one limit is the update
-rate, which the plot's title shows: a lobe crossed in a fraction of a second
-gets only a few readings, and its peak can fall between them. For angles
-read to a degree or two, the L21 Lab turns the kit on its stand and reads
-the stand's scale.
+and azimuth are the same axis with a fixed scale factor: the $180^\circ$ arc
+divided by the time the sweep takes. The figure shows a $30\ \text{s}$ sweep.
+
+The pace sets how long the source spends in each lobe, and the plot's update
+rate, which its title shows, sets how many readings land there. A lobe
+crossed in a fraction of a second gets only a few readings, and its peak can
+fall between them. Worked for a $30\ \text{s}$ sweep at $10.0\ \text{GHz}$,
+where Lesson 20 found the half-power width to be $13.7^\circ$ and the first
+sidelobe runs from the first null at $15.5^\circ$ to the second at
+$32.4^\circ$:
+
+$$
+\begin{aligned}
+\text{pace} &= \frac{180^\circ}{30\ \text{s}} = 6.0^\circ/\text{s} \\
+t_\text{main} &= \frac{13.7^\circ}{6.0^\circ/\text{s}} = 2.3\ \text{s} \\
+t_\text{SL} &= \frac{32.4^\circ - 15.5^\circ}{6.0^\circ/\text{s}} = 2.8\ \text{s} \\
+\text{rate} &\ge \frac{5\ \text{readings}}{2.8\ \text{s}} = 1.8\ \text{updates/s} .
+\end{aligned}
+$$
+
+A kit that updates more slowly than that puts fewer than five readings on the
+first sidelobe, and the fix is a slower sweep.
+
+A hand is not perfectly steady. Moving slowly through a lobe draws it wider
+on the plot and hurrying draws it narrower, but the level at each instant is
+still the pattern in the source's direction, so the lobe levels come through.
+The angles do not. Convert time to angle at the average pace, and a hand
+$20\%$ fast through the main lobe spends $1/1.2$ of the steady time in it,
+while one $20\%$ slow spends $1/0.8$ of it, so the conversion reports
+
+$$
+\begin{aligned}
+\theta_\text{fast} &= \frac{13.7^\circ}{1.2} = 11.4^\circ \\
+\theta_\text{slow} &= \frac{13.7^\circ}{0.8} = 17.1^\circ
+\end{aligned}
+$$
+
+for a true $13.7^\circ$ beam. For angles read to a degree or two, the L21 Lab
+turns the kit on its stand and reads the stand's scale.
 
 A drift in the arc's radius changes the level. Received power falls as
 $1/r^2$, so drifting $5\ \text{cm}$ in or out at $1.2\ \text{m}$ changes a
@@ -322,6 +355,23 @@ sidelobes about 13 dB below the peak. That comparison is the one the L21 Lab
 asks for, because the main lobe and first sidelobes stand well above the
 noise floor and the room's reflections.
 
+The nulls fall where Lesson 20's
+<a href="../L20-array-factor-beamwidth/index.html#frame-null-locations">"Null Locations"</a>
+puts them, $\sin\theta_m = \pm m\lambda/(Nd)$: at $10.0\ \text{GHz}$,
+$\lambda/(Nd) = 0.268$, which puts them at $\pm 15.5^\circ$, $\pm 32.4^\circ$,
+and $\pm 53.5^\circ$.
+
+Run 3 of the L21 Lab reads the stand at its $10^\circ$ marks, and a mark reads
+at the noise floor only if it sits within a degree or two of a null, because
+the level climbs steeply on either side of one. To find those marks, subtract
+each null angle from the nearest mark. At $10.0\ \text{GHz}$ the first null,
+at $15.5^\circ$, is $4.5^\circ$ from the $20^\circ$ mark, and there the array
+factor is already back up to $-14.0$ dB, so no mark sees that null. The same
+steepness keeps the marks off the sidelobe peaks: the first sidelobe peaks at
+$22.7^\circ$, and the $20^\circ$ mark, $2.7^\circ$ away, reads $1.2$ dB below
+it. A lobe peak lands on a mark only by chance, which is why Run 3 has you
+turn the kit slowly through each lobe for its highest reading.
+
 Every null drops to the noise floor, about $23\ \text{dB}$ below the peak,
 which the L20 Lab measured. The floor also lifts the outer sidelobes, which
 the array factor puts at $-16$ to $-18$ dB, by a decibel or two on both
@@ -365,7 +415,28 @@ therefore drops by the difference, about $2.5\ \text{dB}$, which the noise
 floor trims to about $2\ \text{dB}$. The inner first sidelobe sits near
 broadside on both, where the patch pattern is nearly flat, so on the azimuth
 sweep the outer one reads lower than the inner. The beam sweep keeps the HB100 at
-$30^\circ$ for every step. On my kit the room alone made the two first
+$30^\circ$ for every step.
+
+The same two subtractions size the gap between the two first sidelobes at any
+steer angle: each lobe moves by the element pattern at its own angle, relative
+to the element pattern at the peak. Worked for a beam steered to $20^\circ$ at
+$10.0\ \text{GHz}$, the array factor puts both first sidelobes $12.8$ dB below
+the peak, the inner one near $-2.5^\circ$ and the outer one near $46.7^\circ$,
+and the ideal element gives
+
+$$
+\begin{aligned}
+\text{inner: } 10\log_{10}\frac{\cos 2.5^\circ}{\cos 20^\circ} &= +0.3\ \text{dB} \\
+\text{outer: } 10\log_{10}\frac{\cos 46.7^\circ}{\cos 20^\circ} &= -1.4\ \text{dB} ,
+\end{aligned}
+$$
+
+so the inner lobe reads about $-12.5$ dBc and the outer about $-14.2$ dBc, the
+outer $1.7\ \text{dB}$ lower. Farther from broadside the outer lobe sits lower
+on the element pattern, so the gap grows with the steer angle; Part 1 works it
+for $30^\circ$ at your frequency.
+
+On my kit the room alone made the two first
 sidelobes of a broadside azimuth sweep differ by about $3\ \text{dB}$ ($-11.5$
 and $-14.8$ dBc), so a single azimuth sweep cannot separate the patch pattern
 from the room.
@@ -392,6 +463,20 @@ far sidelobes are therefore the least trustworthy part of either trace, and a
 lobe that moves when you move the kit or a person comes from the room. Lesson
 9 shows why the nulls feel this first
 (<a href="../../module02/L09-pattern-measurement-theory/index.html#frame-the-nulls-fill-first">"The Nulls Fill First"</a>).
+
+A level in dBc is the difference of two readings, the lobe and the main-lobe
+peak, and each carries its own error from the room. In the worst case the
+room raises one and lowers the other, so the two errors add. Worked with
+smaller errors than the lab's: a reflection $24\ \text{dB}$ below the
+main-lobe peak moves it by about $0.5\ \text{dB}$, and if the sidelobe reading
+carries $1.0\ \text{dB}$,
+
+$$
+\Delta L_\text{dBc} = \pm(0.5 + 1.0)\ \text{dB} = \pm 1.5\ \text{dB} ,
+$$
+
+so a true $-20$ dBc lobe can read anywhere from $-18.5$ to $-21.5$ dBc.
+Part 1 finds the window for the errors in the table.
 
 Radius drift and pace belong to the azimuth sweep by hand, for the reasons
 in "The Time Axis." On the stand both go away, and what remains is the
@@ -582,7 +667,7 @@ Part 1 of the L21 Lab packet is the pre-lab. Do it before the lab period, at the
 | Question 5 | your pace and the slowest update rate that puts five readings on a first sidelobe | Steps 11 and 13 |
 | Question 6 | the window two traces must agree within | Part 3 |
 
-"Levels in dBc," the two "Beam Sweep and Azimuth Sweep" frames, and "Measurement Errors" above set up Questions 2 to 6.
+Every question has a worked example above, at $10.0\ \text{GHz}$: Question 1 in "The Rectangular Plot" and "Source Distance," Question 2 in "Levels in dBc," Questions 3 and 4 in the two "Beam Sweep and Azimuth Sweep" frames, and Questions 5 and 6 in "The Time Axis" and "Measurement Errors."
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet, Part 1 (PDF)</a>
 ::::
