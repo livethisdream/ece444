@@ -68,9 +68,9 @@ BEAT_EXCEPTIONS = {
     "L13": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L14": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L20-lab": (LAB_BEATS, "predict first, then the procedure as beats (Neil, 2026-11-10; #239)"),
-    "L18-lab": (LAB_BEATS, "L20 shape (#234); predict-first pass in progress"),
-    "L21-lab": (LAB_BEATS, "L20 shape (#233); predict-first pass in progress"),
-    "L22-L23-lab": (LAB_BEATS, "L20 shape (#235); predict-first pass in progress"),
+    "L18-lab": (LAB_BEATS, "predict first, then the procedure as beats (#243)"),
+    "L21-lab": (LAB_BEATS, "predict first, then the procedure as beats (#242)"),
+    "L22-L23-lab": (LAB_BEATS, "predict first, then the procedure as beats (#244)"),
 }
 
 

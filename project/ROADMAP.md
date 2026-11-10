@@ -94,9 +94,10 @@ That is the one shared file it may change.
   the Big Picture with no outcomes, a Predict First widget that hides its
   answer, and then the procedure as beats; nothing in its opening or steps
   states what Part 1 predicts. COURSE_SPEC "Lesson and lab, one shape" and
-  the write-lesson skill have the details. L18, L21, L22-L23 and L24 are
-  being brought to this shape (2026-11-10); L17 and L19 keep theirs (a
-  setup lab, and a hunt whose answer is already hidden).
+  the write-lesson skill have the details. L18, L20, L21 and L22-L23 have
+  this shape (#239, #242, #243, #244); L24 follows once phaser #98 is
+  tested on a kit (#236). L17 and L19 keep theirs (a setup lab, and a hunt
+  whose answer is already hidden).
 - **No lab reading past ±90°** (Neil, 2026-11-08): behind the board is
   not a measurement the kit makes accurately, so no step or packet
   question asks for one.

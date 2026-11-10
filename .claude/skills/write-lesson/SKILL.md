@@ -96,7 +96,9 @@ the lesson and do the pre-lab first.
   the kits run 10.1 to 10.7 GHz, so 10.3 and 10.525 GHz give answers away.
   No page prints a value that equals an answer-key value.
 - **The lab page has cadets predict first** (Neil, 2026-11-10: the opening
-  gave the answers away). It presents, within `LAB_BEATS` (10): title;
+  gave the answers away). Keep it as short as it can be, and prefer a figure
+  or a widget to bullets ("Visuals are always better"); `LAB_BEATS` (10) is
+  a ceiling. It presents: title;
   objectives; **The Big Picture**, listing what is measured by what is set
   or switched, with step ranges and no outcomes, expected traces or
   predicted numbers; **Predict First**, a widget that hides its answer until
