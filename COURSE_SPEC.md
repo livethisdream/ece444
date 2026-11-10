@@ -822,6 +822,10 @@ Bring Up the Kit. No step states a value Part 1 predicts; it says to compare
 with the prediction. After the procedure, read-only: No Hardware?, Your Part
 2 Entries, Lab Packet, For Part 3, Looking Ahead. The budget is `LAB_BEATS`
 in `budgets.py`, ten: four opening beats and up to six procedure blocks.
+Ten is a ceiling, not a target (Neil, 2026-11-10: "Want to keep it as short
+as possible. Visuals are always better"): a lab presents no more beats than
+its procedure has blocks, and where a figure or a widget can carry a beat,
+it does, in place of bullets.
 
 **The lesson works every method Part 1 needs, and gives no Part 1 answer**
 (Neil, 2026-11-08 and 2026-11-10: "Do the lessons give them what they need
