@@ -121,7 +121,7 @@ with the second line evaluated at $N\psi = 3\pi$.
      style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 
 For $N = 8$ that is $0.225$, or $-13.0\ \text{dB}$; the exact peak, $-12.8\ \text{dB}$
-at $21.9^\circ$, sits slightly short of $3\pi$. As $N$ grows, $N\sin(3\pi/2N)$
+at $22.7^\circ$ at $10.0\ \text{GHz}$, sits slightly short of $3\pi$. As $N$ grows, $N\sin(3\pi/2N)$
 approaches $3\pi/2$, and the estimate approaches $2/(3\pi) = 0.212$, or
 $-13.5\ \text{dB}$, close to the continuous aperture's $-13.3\ \text{dB}$. The
 element count enters only through that slow limit, so the sidelobe level is a
@@ -183,11 +183,11 @@ renormalized, as the last row of the table in the next frame shows.
 :::{present}
 | Pedestal $P$ | First sidelobe (dB) | HPBW | $\eta_t$ |
 | :-- | :-- | :-- | :-- |
-| 1.00 (uniform) | $-12.8$ | $13.3^\circ$ | 1.000 |
-| 0.50 | $-18.8$ | $14.8^\circ$ | 0.959 |
-| 0.25 | $-25.8$ | $16.2^\circ$ | 0.884 |
-| 0.08 (Hamming) | $-33.0$ | $17.9^\circ$ | 0.800 |
-| 0.00 (Hann) | $-31.8$ | $19.1^\circ$ | 0.750 |
+| 1.00 (uniform) | $-12.8$ | $13.7^\circ$ | 1.000 |
+| 0.50 | $-18.8$ | $15.2^\circ$ | 0.959 |
+| 0.25 | $-25.8$ | $16.7^\circ$ | 0.884 |
+| 0.08 (Hamming) | $-33.0$ | $18.5^\circ$ | 0.800 |
+| 0.00 (Hann) | $-31.8$ | $19.7^\circ$ | 0.750 |
 :::
 :::{present}
 <img src="../../viz/img/L22-pedestal-trade.svg"
@@ -195,7 +195,8 @@ renormalized, as the last row of the table in the next frame shows.
      style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-The element amplitudes behind each row, in percent:
+The beamwidths are the exact eight-element patterns at $10.0\ \text{GHz}$, where
+$d/\lambda = 14/30 = 0.467$. The element amplitudes behind each row, in percent:
 
 | Pedestal $P$ | $a_n$ (%) |
 | :-- | :-- |
@@ -275,11 +276,11 @@ lets a sidelobe rise above the specification or reaches the peak more slowly
 and widens the beam.
 
 <img src="../../viz/img/L22-cheb-map.svg"
-     alt="The minus 30 dB Chebyshev polynomial T7 in decibels against x: seven equal ripples at minus 30 dB for x between minus 1 and 1, the main lobe rising to its peak at x0 equals 1.181, and the stretch from 0.07 to 1.181 that visible space covers"
+     alt="The minus 30 dB Chebyshev polynomial T7 in decibels against x: seven equal ripples at minus 30 dB for x between minus 1 and 1, the main lobe rising to its peak at x0 equals 1.181, and the stretch from 0.12 to 1.181 that visible space covers"
      style="max-width: 720px; width: 100%; display: block; margin: 1em auto;">
 
 The substitution $x = x_0\cos(\psi/2)$ puts broadside, $\psi = 0$, at $x_0$ and
-endfire, $\psi = kd = 173^\circ$, at $x_0\cos(86.5^\circ) = 0.07$. Visible space
+endfire, $\psi = kd = 168^\circ$ at $10.0\ \text{GHz}$, at $x_0\cos(84^\circ) = 0.12$. Visible space
 covers only that stretch of $x$, so the PHASER sees the main lobe and the three
 ripples to its left, each at exactly $-30\ \text{dB}$.
 
@@ -328,16 +329,16 @@ fall away.
 :::{present}
 | Taper | Sidelobe | HPBW | $\eta_t$ |
 | :-- | :-- | :-- | :-- |
-| Uniform | $-12.8$ | $13.3^\circ$ | 1.000 |
-| Chebyshev $-20$ | $-20.0$ | $14.8^\circ$ | 0.956 |
-| Chebyshev $-30$ | $-30.0$ | $17.1^\circ$ | 0.841 |
-| Chebyshev $-40$ | $-40.0$ | $18.8^\circ$ | 0.761 |
-| Taylor $-30$, $\bar{n} = 4$ | $-28.3$ | $16.8^\circ$ | 0.853 |
-| Hann | $-31.8$ | $19.1^\circ$ | 0.750 |
-| Blackman | $-50.5$ | $21.7^\circ$ | Part 1 |
+| Uniform | $-12.8$ | $13.7^\circ$ | 1.000 |
+| Chebyshev $-20$ | $-20.0$ | $15.2^\circ$ | 0.956 |
+| Chebyshev $-30$ | $-30.0$ | $17.6^\circ$ | 0.841 |
+| Chebyshev $-40$ | $-40.0$ | $19.4^\circ$ | 0.761 |
+| Taylor $-30$, $\bar{n} = 4$ | $-28.3$ | $17.4^\circ$ | 0.853 |
+| Hann | $-31.8$ | $19.7^\circ$ | 0.750 |
+| Blackman | $-50.5$ | $22.4^\circ$ | Part 1 |
 :::
 
-All eight elements at $d/\lambda = 0.481$; sidelobe levels are the highest
+All eight elements at $d/\lambda = 0.467$, the $14\ \text{mm}$ pitch at $10.0\ \text{GHz}$; sidelobe levels are the highest
 sidelobe in dB relative to the peak, and the Chebyshev and Taylor designs are
 named by their design level in dB. Blackman's $\eta_t$ is a Part 1 question
 in the L22–L23 Lab packet. The amplitudes and the beam broadening factor
@@ -347,7 +348,7 @@ in the L22–L23 Lab packet. The amplitudes and the beam broadening factor
 | :-- | :-- | :-- |
 | Uniform | 100, 100, 100, 100 | 1.00 |
 | Chebyshev $-20$ dB | 58, 66, 88, 100 | 1.11 |
-| Chebyshev $-30$ dB | 26, 52, 81, 100 | 1.29 |
+| Chebyshev $-30$ dB | 26, 52, 81, 100 | 1.28 |
 | Chebyshev $-40$ dB | 15, 42, 76, 100 | 1.42 |
 | Taylor $-30$ dB, $\bar{n} = 4$ | 29, 53, 82, 100 | 1.27 |
 | Hann | 12, 43, 77, 100 | 1.44 |
@@ -356,9 +357,9 @@ in the L22–L23 Lab packet. The amplitudes and the beam broadening factor
 The Taylor row shows both sides of the compromise. On only eight elements the
 sampled Taylor distribution does not hold its sidelobes exactly on the design
 line — the highest one lands at $-28.3\ \text{dB}$ rather than $-30$. Its beam
-and efficiency, $16.8^\circ$ and 0.853, beat the $-30\ \text{dB}$ Chebyshev row
+and efficiency, $17.4^\circ$ and 0.853, beat the $-30\ \text{dB}$ Chebyshev row
 only because it stops short of $-30\ \text{dB}$. A Chebyshev design for the same
-$-28.3\ \text{dB}$ gives $16.7^\circ$ and 0.859, better on both counts, as Dolph
+$-28.3\ \text{dB}$ gives $17.2^\circ$ and 0.859, better on both counts, as Dolph
 optimality requires. On eight elements Taylor gains nothing over Chebyshev; its
 advantage is on a large aperture, where it avoids the edge spikes. Sample a
 Taylor distribution on a 64-element array and the sidelobes land where they were
@@ -386,8 +387,8 @@ $-39.2\ \text{dB}$, a first look at the setting-accuracy limit in Loading a
 Taper into the PHASER.
 :::
 
-<iframe src="../../viz/taper-explorer.html"
-        width="100%" height="470"
+<iframe src="../../viz/taper-explorer.html?f=10.0"
+        width="100%" height="439"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Element amplitudes, pattern, sidelobe level, beamwidth, taper efficiency and peak drop for uniform, Hann, Chebyshev, and cosine-on-pedestal tapers on the eight-element PHASER array, with optional rounding to 1%">
@@ -414,7 +415,7 @@ $$\theta_\text{HP} \approx 0.886\ \frac{\lambda}{N d},$$
 and a taper multiplies that by a **beam broadening factor** between about 1.1 and 1.7. The
 broadening column in the table above is that factor. Deeper sidelobes always need
 more broadening, and the widget's beamwidth readout is the direct measurement of
-it. The uniform $13.3^\circ$ in the tables is the exact eight-element pattern; the rule gives $13.2^\circ$.
+it. The uniform $13.7^\circ$ in the tables is the exact eight-element pattern at $10.0\ \text{GHz}$; the rule gives $13.6^\circ$.
 
 ::::
 
@@ -537,14 +538,14 @@ factor. It does not, because 100% is already full scale.
 | $N = 8$, broadside | Chebyshev $-30$ dB | Hann |
 | :-- | :-- | :-- |
 | Highest sidelobe | $-30.0$ dB | $-31.8$ dB |
-| HPBW | $17.1^\circ$ | $19.1^\circ$ |
+| HPBW | $17.6^\circ$ | $19.7^\circ$ |
 | $\eta_t$ | $0.841$ | $0.750$ |
 | Peak drop | $-3.8$ dB | $-4.7$ |
 :::
 :::{present}
 :class: callout
 
-Chebyshev matches Hann's suppression with a $2^\circ$ narrower beam and 0.5 dB more directivity.
+Chebyshev matches Hann's suppression with a $2.1^\circ$ narrower beam and 0.5 dB more directivity.
 :::
 
 The design problem is stated the way a customer states it: hold the sidelobes
@@ -563,7 +564,7 @@ below some level, and tell me what it does to the beam. The procedure is short.
 :::{admonition} Worked example — a $-30$ dB design on the eight-element array
 :class: tip
 **Specification.** No sidelobe above $-30\ \text{dB}$ relative to the peak, on
-$N = 8$ elements at $d/\lambda = 0.481$, broadside.
+$N = 8$ elements at $d/\lambda = 0.467$ ($10.0\ \text{GHz}$), broadside.
 
 **Amplitudes.** The voltage ratio and the Chebyshev stretch factor are
 
@@ -604,24 +605,24 @@ $$
 \end{aligned}
 $$
 
-**Beamwidth.** The pattern measures $17.1^\circ$ at half power against
-$13.3^\circ$ uniform, a broadening factor of 1.29.
+**Beamwidth.** The pattern measures $17.6^\circ$ at half power against
+$13.7^\circ$ uniform, a broadening factor of 1.28.
 
 **Result.** Sidelobes drop from $-12.8$ to $-30$ dB,
-a 17 dB improvement. The beam widens from $13.3^\circ$ to $17.1^\circ$, the array
+a 17 dB improvement. The beam widens from $13.7^\circ$ to $17.6^\circ$, the array
 loses $0.75\ \text{dB}$ of directivity, and the displayed peak falls
 $3.8\ \text{dB}$.
 
 **Compare against the obvious alternative.** The Hann window reaches a similar
-$-31.8\ \text{dB}$, but its beam is $19.1^\circ$ and its efficiency is 0.750.
-The Chebyshev design gets the same sidelobe suppression with a $2^\circ$
+$-31.8\ \text{dB}$, but its beam is $19.7^\circ$ and its efficiency is 0.750.
+The Chebyshev design gets the same sidelobe suppression with a $2.1^\circ$
 narrower beam and $0.5\ \text{dB}$ more directivity. This result is Dolph optimality:
 for a stated sidelobe level, no other set of amplitudes gives a
 narrower main lobe.
 :::
 
 <img src="../../viz/img/L22-cheb-vs-hann.svg"
-     alt="The minus 30 dB Chebyshev and Hann patterns on the eight-element array overlaid: the Chebyshev sidelobes all touch the minus 30 dB line and its beam is 17.1 degrees wide; the Hann sidelobes start near minus 32 dB and decay, and its beam is 19.1 degrees wide"
+     alt="The minus 30 dB Chebyshev and Hann patterns on the eight-element array overlaid: the Chebyshev sidelobes all touch the minus 30 dB line and its beam is 17.6 degrees wide; the Hann sidelobes start near minus 32 dB and decay, and its beam is 19.7 degrees wide"
      style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 
 The overlay shows where the two designs differ. Hann reaches its sidelobe level
@@ -640,16 +641,17 @@ $-30\ \text{dB}$ and uses the margin to keep its main lobe narrower.
 :::{present}
 - Chebyshev runs the curve; windows sit above it.
 - About $0.2^\circ$ of beam per dB of suppression.
-- $\eta_t$ falls from 1.00 to 0.71.
+- $\eta_t$ falls from 1.00 to 0.69.
 :::
 
 The curve is the whole design space for this array. Chebyshev designs run along
 it and the window functions sit above it, which is the geometric statement of
-Dolph optimality: Blackman reaches $-50\ \text{dB}$ with a $21.7^\circ$ beam,
-where the Chebyshev design at the same sidelobe level needs only $20.2^\circ$.
+Dolph optimality: Blackman reaches $-50\ \text{dB}$ with a $22.4^\circ$ beam,
+where the Chebyshev design at the same sidelobe level needs only $20.8^\circ$.
 The slope of the solid curve is the beamwidth a decibel of suppression takes. On
 eight elements the beam widens about $0.2^\circ$ per decibel of suppression across the
-whole range, and the efficiency falls from 1.00 to 0.71 over the same span.
+whole range, and the efficiency falls from 1.00 to 0.69 at $-55\ \text{dB}$. The
+beamwidths here are at $10.0\ \text{GHz}$.
 
 ::::
 
@@ -662,7 +664,7 @@ $$\text{Rx}_n\ (\%) = 100 \times \frac{a_n}{\max a_n}$$
 :::
 :::{present}
 <img src="../../viz/img/L22-rounding.svg"
-     alt="Exact and 1 percent rounded patterns. Top: the minus 50 dB Chebyshev design; rounding lifts its highest sidelobe from minus 50.0 to minus 44.3 dB. Bottom: the GUI Chebyshev preset, a design of about minus 100 dB; rounded, its pattern has no null and no sidelobe and falls steadily to about minus 70 dB at endfire"
+     alt="Exact and 1 percent rounded patterns. Top: the minus 50 dB Chebyshev design; rounding lifts its highest sidelobe from minus 50.0 to minus 44.3 dB. Bottom: the GUI Chebyshev preset, a design of about minus 100 dB; rounded, its pattern has no null and no sidelobe and falls steadily to about minus 64 dB at endfire"
      style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -703,12 +705,12 @@ $-100\ \text{dB}$, fills in every one of its nulls.
 
 ::::{frame} The Four GUI Presets
 :::{present}
-| Preset | HPBW, 10.3 GHz |
+| Preset | HPBW, 10.0 GHz |
 | :-- | :-- |
-| Uniform | $13.3^\circ$ |
-| Hann | $19.1^\circ$ |
-| Blackman | $21.7^\circ$ |
-| Chebyshev | $22.9^\circ$ |
+| Uniform | $13.7^\circ$ |
+| Hann | $19.7^\circ$ |
+| Blackman | $22.4^\circ$ |
+| Chebyshev | $23.6^\circ$ |
 :::
 :::{present}
 <img src="../../viz/img/L22-preset-traces.svg"
@@ -718,7 +720,7 @@ $-100\ \text{dB}$, fills in every one of its nulls.
 
 The GUI ships four presets. Their gain lists are below, from the end element
 inward; the beamwidths in the table above are the exact patterns at
-$10.3\ \text{GHz}$. Part 1 of the L22–L23 Lab packet turns this into your own
+$10.0\ \text{GHz}$, below every kit's HB100. Part 1 of the L22–L23 Lab packet turns this into your own
 predictions: the beamwidths at your kit's frequency, and the Blackman and
 Chebyshev presets' peak drop and taper efficiency, worked the way Peak Drop
 Versus Directivity Loss works the Hann preset.
@@ -741,9 +743,9 @@ The GUI's Chebyshev preset is not the $-30\ \text{dB}$ design worked above. Its
 gain list of 4, 23, 62, 100 matches a Dolph design for about $-100\ \text{dB}$,
 and rounding that design to whole percent fills in its nulls: the pattern has no
 null and no sidelobe anywhere in visible space. Its main lobe falls steadily,
-through $-48\ \text{dB}$ at $50^\circ$, to $-70\ \text{dB}$ at endfire. With no
-sidelobe to measure, the useful prediction for it is its beamwidth, $22.9^\circ$,
-1.72 times the uniform pattern's $13.3^\circ$. It is a working example of the over-specification described
+through $-46\ \text{dB}$ at $50^\circ$, to $-64\ \text{dB}$ at endfire. With no
+sidelobe to measure, the useful prediction for it is its beamwidth, $23.6^\circ$
+at $10.0\ \text{GHz}$, 1.72 times the uniform pattern's $13.7^\circ$. It is a working example of the over-specification described
 under Loading a Taper into the PHASER: a design far deeper than the instrument
 can show, which widens the beam by 72%.
 ```
@@ -767,7 +769,27 @@ is the difference between two traces' peaks.
 
 The noise floor is not one fixed number. On my kit it sat anywhere from 17 to
 31 dB below the peak, depending on the setup, so you read your own floor and
-record it before anything else.
+record it before anything else. A lobe deeper than the floor does not show at
+all, and you find that out before the sweep by adding the trace's peak drop to
+the lobe's own level.
+
+:::{admonition} Worked example — a Hann sidelobe against the floor
+:class: tip
+Take a floor 23 dB below the uniform peak, the example floor in the figure under
+The Four GUI Presets. Hann's highest sidelobe sits $31.8$ dB below the Hann
+peak, and the Hann peak sits $4.7$ dB below the uniform peak (Peak Drop Versus
+Directivity Loss), so on the uniform peak's scale the sidelobe lands at
+
+$$
+-4.7 - 31.8 = -36.5\ \text{dB},
+$$
+
+$13.5$ dB under the floor. Nothing shows at the sidelobe's angle but the floor,
+so the sidelobe entry is "below the floor", with the floor's level beside it: a
+number read off the noise there measures the receiver, not the array. Measured
+from the Hann trace's own peak, the same floor sits $23 - 4.7 = 18.3$ dB down,
+so $-18.3$ dBc is the deepest lobe that trace could show.
+:::
 ::::
 
 ::::{frame} The Measured Sweep for Each Preset
@@ -800,10 +822,10 @@ reads them out on Custom only.
 | :-- | :-- | :-- |
 | Sidelobes | Set by the *shape* of the illumination, not its size | Uniform: $-12.8$ dB for $N = 8$, $-13.3$ dB continuous |
 | Amplitude taper $a_n$ | Element amplitudes, normalized so $\max a_n = 1$ | Softer edge $\rightarrow$ lower sidelobes, wider beam |
-| Cosine on pedestal | $a(p) = P + (1-P)\cos^2(\pi p)$ | Hann ($P = 0$): $-31.8$ dB, $19.1^\circ$ |
+| Cosine on pedestal | $a(p) = P + (1-P)\cos^2(\pi p)$ | Hann ($P = 0$): $-31.8$ dB, $19.7^\circ$ at 10.0 GHz |
 | Chebyshev (Dolph) | Equal ripple; narrowest beam for a stated sidelobe level | $-30$ dB on 8 elements: 26, 52, 81, 100 (%) |
 | Taylor $\bar{n}$ | Chebyshev's buildable cousin; first $\bar{n}-1$ lobes held, rest decay | $-30$ dB, $\bar{n} = 4$: 29, 53, 82, 100 (%) |
-| Beam broadening | HPBW multiplier relative to uniform | 1.11 at $-20$ dB, 1.29 at $-30$ dB, 1.42 at $-40$ dB |
+| Beam broadening | HPBW multiplier relative to uniform | 1.11 at $-20$ dB, 1.28 at $-30$ dB, 1.42 at $-40$ dB |
 | Taper efficiency $\eta_t$ | $(\sum a_n)^2 / (N \sum a_n^2)$; the directivity you keep | $-30$ dB Chebyshev: $0.841$, i.e. $-0.75$ dB |
 | Peak drop | $20\log_{10}(\sum a_n / N)$; the coherent loss on the trace | Hann preset: $-4.7$ dB, of which only $-1.2$ dB is directivity |
 | PHASER conversion | $\text{Rx}_n\ (\%) = 100\ a_n / \max a_n$ | Sliders cap at 100%, resolve to about 1% |
@@ -824,7 +846,16 @@ to class: you check every reading you take in Part 2 against it.
 | Question 2 | the peak drop and $\eta_t$ of a starting taper, and which one the plot shows | Step 12, Table B |
 | Question 3 | Blackman's and Chebyshev's peak drop and $\eta_t$, and what the sweep shows at a sidelobe under the floor | Steps 7 to 11, Table A |
 
-Peak Drop Versus Directivity Loss works the Hann row, the model for Question 3.
+Question 1 repeats arithmetic from earlier lessons: the wavelength and
+$d/\lambda$ as Lesson 18's
+<a href="../L18-beam-steering/index.html#frame-the-phaser-kit-cn0566">"The Phaser Kit (CN0566)"</a>
+works them, and the far-field distance as Lesson 21's
+<a href="../L21-antenna-pattern/index.html#frame-source-distance">"Source Distance"</a>
+does. At $10.0\ \text{GHz}$ they give $\lambda = 30.0\ \text{mm}$,
+$d/\lambda = 0.467$, and a far-field distance of $0.84\ \text{m}$.
+Peak Drop Versus Directivity Loss works the Hann row, the model for Question
+3(a), and the worked example under Reading a Tapered Sweep is the model for
+Question 3(b).
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet, Part 1 (PDF)</a>
 ::::

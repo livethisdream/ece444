@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predict the taper, grating-lobe, squint and quantization runs</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573; --ref:#9aa3ad;
+          --tr:#004a85; --hpbw:#1d7a4d; --amber:#8a5a00; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; flex-wrap:wrap; gap:8px 12px; align-items:center; justify-content:space-between;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .sels { display:flex; flex-wrap:wrap; gap:8px 10px; align-items:center; min-width:0; }
+  .controls select { font:600 13px 'Inter',system-ui,sans-serif; color:var(--navy); height:30px; max-width:100%;
+                     background:#fff; border:1px solid var(--edge2); border-radius:5px; padding:0 6px; }
+  .show { font:700 12px 'Inter',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.05em;
+          height:30px; padding:0 14px; border-radius:5px; cursor:pointer;
+          border:1px solid var(--navy); background:var(--navy); color:#fff; }
+  .show[aria-pressed="true"] { background:#fff; color:var(--navy); }
+  .show:focus-visible, .controls select:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 560px) { .readouts { grid-template-columns:repeat(2, minmax(0, 1fr)); } }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:4px; padding:7px 6px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { height:15px; line-height:15px; font-size:10.5px; font-weight:700; text-transform:uppercase;
+           letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; max-width:100%; }
+  .ro .v { height:19px; line-height:19px; font-size:14px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; color:var(--navy); overflow:hidden; max-width:100%; }
+  .ro.out .v { color:var(--hpbw); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" width="1000" height="400" aria-label="The trace the chosen run of the L22 to L23 Lab would draw, hidden until Show trace is pressed"></canvas>
+
+  <div class="controls">
+    <div class="sels">
+      <select id="run" aria-label="Run">
+        <option value="taper" selected>Taper run</option>
+        <option value="grating">Grating lobes</option>
+        <option value="squint">Squint</option>
+        <option value="quant">Quantization</option>
+      </select>
+      <select id="opt" aria-label="Setting for this run"></select>
+    </div>
+    <button class="show" id="show" aria-pressed="false">Show trace</button>
+  </div>
+
+  <div class="readouts" id="readouts"></div>
+</div>
+
+<script>
+'use strict';
+/* The four runs of the L22-L23 Lab, drawn from the array factor of the kit's
+   row: eight patches 14 mm apart. Drawn at 10.0 GHz by default, below every
+   HB100 kit, so no readout equals a Part 1 answer (the af-element-predict
+   rule); ?f=<GHz> (8 to 12) draws another frequency, with c = 3.00e8.
+
+   Prediction first: the trace stays hidden until "Show trace", and any change
+   hides it again, so each guess is made before it is checked. Readouts that
+   would print a frequency-independent Part 1 answer (a taper's or a thinned
+   row's peak drop) are left off. */
+const F_GHZ = (() => {
+  const v = parseFloat(new URLSearchParams(location.search).get('f'));
+  return (v >= 8 && v <= 12) ? v : 10.0;
+})();
+const C = 3.00e8, F = F_GHZ*1e9, PITCH = 14e-3, DEG = 180/Math.PI;
+const FLOOR = -23;          // example floor, dB; kits read 17 to 31 dB down
+const DBMIN = -40;
+const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+const TH_SRC = 45;          // squint run: the source angle
+const TH_Q = 15;            // quantization run: the held beam
+
+const TAPERS = {
+  uniform:  { name:'Uniform',   g:[100,100,100,100,100,100,100,100] },
+  hann:     { name:'Hann',      g:[ 12, 43, 77,100,100, 77, 43, 12] },
+  blackman: { name:'Blackman',  g:[  6, 27, 66,100,100, 66, 27,  6] },
+  cheby:    { name:'Chebyshev', g:[  4, 23, 62,100,100, 62, 23,  4] }
+};
+const OPTS = {
+  taper:   [['hann','Hann'], ['blackman','Blackman'], ['cheby','Chebyshev'], ['uniform','Uniform']],
+  grating: [['42','Rx1, Rx4, Rx7 (42 mm)'], ['56','Rx1, Rx5 (56 mm)'], ['14','All eight (14 mm)']],
+  squint:  [['500','Signal BW 500 MHz'], ['10','Signal BW 10 MHz']],
+  quant:   [['2','2 bits'], ['3','3 bits'], ['4','4 bits'], ['7','7 bits']]
+};
+const state = { run:'taper', opt:'hann', shown:false };
+
+const M = 1801, thOf = i => -90 + i*180/(M-1);
+const dB = x => 20*Math.log10(Math.max(x, 1e-9));
+
+/* |sum w_n exp(j phase_n(theta))|, with phase_n built per run. */
+function trace(run, opt){
+  const k = 2*Math.PI*F/C, out = new Float64Array(M);
+  let els = [], ref = null, norm = 1;
+  if (run === 'taper'){
+    const g = TAPERS[opt].g.map(v => v/100);
+    for (let n = 0; n < 8; n++) els.push({x:n*PITCH, w:g[n], a:0});
+    norm = 8;                                  // on the uniform peak's scale
+  } else if (run === 'grating'){
+    const d = +opt*1e-3, non = opt === '14' ? 8 : opt === '42' ? 3 : 2;
+    for (let n = 0; n < non; n++) els.push({x:n*d, w:1, a:0});
+    norm = non;                                // each trace on its own peak
+  } else if (run === 'squint'){
+    // beam sweep over the commanded angle; phases set Signal BW below the signal
+    const f0 = F - (+opt)*1e6, k0 = 2*Math.PI*f0/C, ss = Math.sin(TH_SRC/DEG);
+    for (let i = 0; i < M; i++){
+      const sc = Math.sin(thOf(i)/DEG);
+      let re = 0, im = 0;
+      for (let n = 0; n < 8; n++){ const p = n*PITCH*(k*ss - k0*sc); re += Math.cos(p); im += Math.sin(p); }
+      out[i] = dB(Math.hypot(re, im)/8);
+    }
+    return out;
+  } else {
+    // azimuth sweep past a beam held at 15 deg, Blackman taper, phases rounded
+    const lsb = 2*Math.PI/Math.pow(2, +opt), g = TAPERS.blackman.g.map(v => v/100);
+    const s0 = Math.sin(TH_Q/DEG);
+    for (let n = 0; n < 8; n++){ const a = k*n*PITCH*s0; els.push({x:n*PITCH, w:g[n], a:Math.round(a/lsb)*lsb}); }
+    norm = g.reduce((s, v) => s + v, 0);
+  }
+  for (let i = 0; i < M; i++){
+    const s = Math.sin(thOf(i)/DEG);
+    let re = 0, im = 0;
+    for (const e of els){ const p = k*e.x*s - e.a; re += e.w*Math.cos(p); im += e.w*Math.sin(p); }
+    out[i] = dB(Math.hypot(re, im)/norm);
+  }
+  return out;
+}
+const REF = { taper: () => trace('taper','uniform'), grating: () => trace('grating','14'),
+              squint: () => trace('squint','10'), quant: null };
+
+function peaks(db){
+  const out = [];
+  for (let i = 1; i < M-1; i++) if (db[i] >= db[i-1] && db[i] > db[i+1]) out.push(i);
+  return out;
+}
+function hpbw(db){
+  let ip = 0; for (let i = 1; i < M; i++) if (db[i] > db[ip]) ip = i;
+  const lvl = db[ip] - 3.0103;
+  const cross = dir => { let i = ip; while (i+dir > 0 && i+dir < M-1 && db[i+dir] > lvl) i += dir;
+    const j = i + dir, t = (lvl - db[i])/(db[j] - db[i]); return thOf(i) + t*(thOf(j) - thOf(i)); };
+  return { ip, peak:db[ip], left:cross(-1), right:cross(1) };
+}
+const sgn = x => (x >= 0 ? '+' : '−') + Math.abs(x).toFixed(1);
+const neg = x => (Math.abs(x) < 0.05 ? '0.0' : x.toFixed(1)).replace('-', '−');
+
+/* What the readouts say. Inputs show always; results only once shown. */
+function readouts(db){
+  const r = [], hide = !state.shown;
+  const q = v => hide ? '?' : v;
+  if (state.run === 'taper'){
+    const h = hpbw(db);
+    const side = peaks(db).filter(i => thOf(i) < h.left - 1 || thOf(i) > h.right + 1)
+                          .reduce((b, i) => (b === null || db[i] > db[b]) ? i : b, null);
+    const sl = side === null ? null : db[side];
+    r.push(['', 'taper', TAPERS[state.opt].name]);
+    r.push(['out', 'HPBW', q((h.right - h.left).toFixed(1) + '°')]);
+    // Hann's drop is worked in Lesson 22; Blackman's and Chebyshev's are Part 1.
+    r.push(['out', 'peak drop', q(state.opt === 'uniform' || state.opt === 'hann' ? neg(h.peak) + ' dB' : 'your Part 1')]);
+    r.push(['out', 'highest sidelobe', q(sl === null || sl < FLOOR ? 'below floor' : neg(sl - h.peak) + ' dBc')]);
+  } else if (state.run === 'grating'){
+    const d = +state.opt;
+    const lobes = peaks(db).filter(i => db[i] > -1 && Math.abs(thOf(i)) > 2).map(i => thOf(i));
+    const edge = Math.max(db[0], db[M-1]);
+    r.push(['', 'spacing', d + ' mm, ' + (d*F/C*1e-3).toFixed(3) + ' λ']);
+    r.push(['out', 'full-height lobes', q(lobes.length ? lobes.filter(t => t > 0).map(t => '±' + t.toFixed(1) + '°').join(', ') : 'none')]);
+    r.push(['out', 'level at ±90°', q(neg(edge) + ' dB')]);
+    r.push(['', 'frequency', F_GHZ.toFixed(1) + ' GHz']);
+  } else if (state.run === 'squint'){
+    const h = hpbw(db), pk = thOf(h.ip);
+    r.push(['', 'signal', F_GHZ.toFixed(1) + ' GHz']);
+    r.push(['', 'phases set at', ((F - (+state.opt)*1e6)/1e9).toFixed(2) + ' GHz']);
+    r.push(['out', 'Angle at peak', q(pk.toFixed(1) + '°')]);
+    r.push(['out', 'shift from source', q(sgn(pk - TH_SRC) + '°')]);
+  } else {
+    const B = +state.opt, h = hpbw(db);
+    const side = peaks(db).filter(i => Math.abs(thOf(i) - thOf(h.ip)) > 12)
+                          .reduce((b, i) => (b === null || db[i] > db[b]) ? i : b, null);
+    const vis = side !== null && db[side] > FLOOR;
+    r.push(['', 'phase LSB', (360/Math.pow(2, B)).toFixed(B > 3 ? 4 : 1).replace(/0+$/, '').replace(/\.$/, '') + '°']);
+    r.push(['', 'beam held at', TH_Q + '°']);
+    r.push(['out', 'strongest lobe', q(vis ? neg(db[side]) + ' dBc' : 'floor')]);
+    r.push(['out', 'where', q(vis ? sgn(thOf(side)) + '°' : '—')]);
+  }
+  document.getElementById('readouts').innerHTML = r.map(c =>
+    '<div class="ro' + (c[0] ? ' ' + c[0] : '') + '"><span class="k">' + c[1] +
+    '</span><span class="v">' + c[2] + '</span></div>').join('');
+}
+
+function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+function mixLabel(ctx,chunks,x,yc,h,color,align){
+  const fpx=h-1, f=fpx+'px '+SANS; let tot=0;
+  for(const c of chunks){ if(c.m) tot+=MJ.width(c.m,color,h); else { ctx.font=f; tot+=ctx.measureText(c.s).width; } }
+  let cx = align==='center' ? x-tot/2 : x;
+  for(const c of chunks){
+    if(c.m){ MJ.draw(ctx,c.m,cx,yc,h,color,'left'); cx+=MJ.width(c.m,color,h); }
+    else { stext(ctx,c.s,cx,yc,fpx,color,'left'); ctx.font=f; cx+=ctx.measureText(c.s).width; }
+  }
+}
+
+const canvas = document.getElementById('plot'), ctx = canvas.getContext('2d');
+function resizeCanvas(){
+  const w = canvas.getBoundingClientRect().width, dpr = window.devicePixelRatio || 1;
+  const h = Math.max(210, Math.min(w*0.42, 320));
+  canvas.width = w*dpr; canvas.height = h*dpr; canvas.style.height = h+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  draw();
+}
+window.addEventListener('resize', resizeCanvas);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const YLAB = { taper:['dB relative to uniform peak','dB re uniform peak'],
+               grating:['dB relative to own peak','dB re own peak'],
+               squint:['dB relative to peak','dB re peak'],
+               quant:['dBc, Blackman, 15° beam','dBc'] };
+const XLAB = { taper:'commanded steer angle (degrees)', grating:'commanded steer angle (degrees)',
+               squint:'commanded steer angle (degrees)', quant:null };
+const REFNAME = { taper:'uniform', grating:'all eight', squint:'Signal BW 10 MHz', quant:null };
+
+function draw(){
+  const dpr = window.devicePixelRatio || 1, w = canvas.width/dpr, h = canvas.height/dpr;
+  ctx.clearRect(0,0,w,h);
+  const narrow = w < 470, fs = narrow ? 10 : 11.5;
+  const mL = narrow ? 40 : 54, mR = 14, mT = 28, mB = narrow ? 40 : 46;
+  const pw = w-mL-mR, ph = h-mT-mB;
+  const xFor = t => mL + (t+90)/180*pw;
+  const yFor = v => mT + Math.min(Math.max(-v,0),-DBMIN)/(-DBMIN)*ph;
+
+  ctx.strokeStyle = '#e6eef6'; ctx.lineWidth = 1;
+  for (let t=-90;t<=90;t+=30){ ctx.beginPath(); ctx.moveTo(xFor(t),mT); ctx.lineTo(xFor(t),mT+ph); ctx.stroke(); }
+  for (let v=0;v>=DBMIN;v-=10){ ctx.beginPath(); ctx.moveTo(mL,yFor(v)); ctx.lineTo(mL+pw,yFor(v)); ctx.stroke(); }
+  ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.moveTo(mL,mT); ctx.lineTo(mL,mT+ph); ctx.lineTo(mL+pw,mT+ph); ctx.stroke();
+  for (let t=-90;t<=90;t+=30) stext(ctx,`${t}`.replace('-','−'),xFor(t),mT+ph+13,fs,'#5b6573','center');
+  for (let v=0;v>=DBMIN;v-=10) stext(ctx,`${v}`.replace('-','−'),mL-7,yFor(v),fs,'#5b6573','right');
+  if (XLAB[state.run]) stext(ctx, XLAB[state.run], mL+pw/2, mT+ph+(narrow?30:34), narrow?11:12, '#15202b', 'center');
+  else mixLabel(ctx,[{s:'source angle '},{m:'\\theta'},{s:' (degrees)'}],mL+pw/2,mT+ph+(narrow?30:34),narrow?11:12.5,'#15202b','center');
+  ctx.save(); ctx.translate(narrow?11:14, mT+ph/2); ctx.rotate(-Math.PI/2);
+  stext(ctx, YLAB[state.run][narrow ? 1 : 0], 0, 0, narrow?11:12, '#15202b', 'center');
+  ctx.restore();
+
+  const plot = (db, color, lw, dash) => {
+    ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash||[]);
+    ctx.beginPath();
+    for (let i = 0; i < M; i++){ const x = xFor(thOf(i)), y = yFor(db[i]); i ? ctx.lineTo(x,y) : ctx.moveTo(x,y); }
+    ctx.stroke(); ctx.setLineDash([]);
+  };
+  const clip = db => db.map(v => Math.max(v, FLOOR));
+  const floored = state.run === 'taper' || state.run === 'quant';
+
+  // the example floor, on the two runs where a lobe can sink under it
+  if (floored){
+    ctx.strokeStyle = '#9aa5b1'; ctx.setLineDash([5,4]); ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(mL,yFor(FLOOR)); ctx.lineTo(mL+pw,yFor(FLOOR)); ctx.stroke(); ctx.setLineDash([]);
+    const lab = narrow ? 'example floor' : 'example noise floor, −23 dB';
+    ctx.font = fs+'px '+SANS; const lw = ctx.measureText(lab).width;
+    ctx.fillStyle = '#fff'; ctx.fillRect(mL+3, yFor(FLOOR)+3, lw+6, fs+4);
+    stext(ctx, lab, mL+6, yFor(FLOOR)+5+fs/2, fs, '#5b6573', 'left');
+  }
+  // a marker at the fixed angle of the run
+  if (state.run === 'squint' || state.run === 'quant'){
+    const t = state.run === 'squint' ? TH_SRC : TH_Q;
+    ctx.strokeStyle = 'rgba(0,74,133,0.45)'; ctx.lineWidth = 1.2; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(xFor(t),mT); ctx.lineTo(xFor(t),mT+ph); ctx.stroke(); ctx.setLineDash([]);
+    stext(ctx, state.run === 'squint' ? 'source' : 'beam', xFor(t)+4, mT+ph-9, fs, css('--navy'), 'left');
+  }
+
+  // the reference every guess is made against
+  const ly = mT-14;
+  let lx = mL+6;
+  if (REF[state.run]){
+    const r = REF[state.run]();
+    plot(floored ? clip(r) : r, css('--ref'), 1.4, [5,4]);
+    ctx.strokeStyle = css('--ref'); ctx.lineWidth = 1.6; ctx.setLineDash([5,4]);
+    ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+18,ly); ctx.stroke(); ctx.setLineDash([]);
+    stext(ctx, REFNAME[state.run], lx+23, ly, fs, '#5b6573', 'left');
+    ctx.font = fs+'px '+SANS; lx += 23 + ctx.measureText(REFNAME[state.run]).width + 16;
+  }
+
+  const db = trace(state.run, state.opt);
+  readouts(db);
+  const name = OPTS[state.run].find(o => o[0] === state.opt)[1];
+  if (!state.shown){
+    const msg = narrow ? `${name}: predict, then show` : `${name}: predict the trace, then show it`;
+    const mpx = narrow ? 12 : 13.5;
+    ctx.font = '700 '+mpx+'px '+SANS;
+    const mw = Math.min(ctx.measureText(msg).width + 20, pw - 8), my = mT + ph*0.5;
+    ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.strokeStyle = css('--edge2'); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(mL+pw/2-mw/2, my-mpx, mw, 2*mpx, 5); ctx.fill(); ctx.stroke();
+    stext(ctx, msg, mL+pw/2, my, mpx, css('--navy'), 'center', true);
+    return;
+  }
+  ctx.strokeStyle = css('--tr'); ctx.lineWidth = 2.2;
+  ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+18,ly); ctx.stroke();
+  ctx.font = fs+'px '+SANS;
+  const short = name.replace(/ \(.*\)$/, '');
+  if (lx + 23 + ctx.measureText(short).width <= mL + pw) stext(ctx, short, lx+23, ly, fs, '#5b6573', 'left');
+  plot(floored ? clip(db) : db, css('--tr'), 2.2);
+  if (state.run === 'taper'){
+    const hh = hpbw(db), y3 = yFor(hh.peak - 3.0103);
+    ctx.strokeStyle = css('--hpbw'); ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(xFor(hh.left),y3); ctx.lineTo(xFor(hh.right),y3); ctx.stroke();
+    for (const x of [xFor(hh.left), xFor(hh.right)]){ ctx.beginPath(); ctx.moveTo(x,y3-5); ctx.lineTo(x,y3+5); ctx.stroke(); }
+  }
+}
+
+const runEl = document.getElementById('run'), optEl = document.getElementById('opt'), showBtn = document.getElementById('show');
+function fillOpts(){
+  optEl.innerHTML = OPTS[state.run].map(o => `<option value="${o[0]}">${o[1]}</option>`).join('');
+  state.opt = OPTS[state.run][0][0]; optEl.value = state.opt;
+}
+runEl.addEventListener('change', () => { state.run = runEl.value; fillOpts(); state.shown = false; sync(); });
+optEl.addEventListener('change', () => { state.opt = optEl.value; state.shown = false; sync(); });
+showBtn.addEventListener('click', () => { state.shown = !state.shown; sync(); });
+function sync(){
+  showBtn.setAttribute('aria-pressed', state.shown ? 'true' : 'false');
+  showBtn.textContent = state.shown ? 'Hide trace' : 'Show trace';
+  draw();
+}
+
+fillOpts(); resizeCanvas(); sync();
+MJ.setRedraw(() => draw());
+MJ.onReady(() => draw());
+</script>
+</body>
+</html>

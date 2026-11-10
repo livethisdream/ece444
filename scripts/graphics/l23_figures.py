@@ -6,7 +6,7 @@ the mechanism behind them instead (Neil, 2026-10-24: "illustrate why and when
 things happen", not what the kit shows).
 
   - L23-grating-whole-turn : why a grating lobe is full height. A plane wave
-                             from 43.9 deg reaches the fed elements of the
+                             from 45.6 deg reaches the fed elements of the
                              42 mm row exactly one wavelength apart, so every
                              element's phase dial reads the same; the full
                              14 mm row at the same angle sees a third of a
@@ -18,7 +18,8 @@ things happen", not what the kit shows).
                              two of them.
   - L23-squint-ramp        : why squint moves the beam instead of breaking it.
                              The ramp the phase shifters apply (set for 45 deg
-                             at 10.525 GHz) against the ramp a 10.025 GHz
+                             at 9.5 GHz, 500 MHz below the signal, as the GUI's
+                             Signal BW does) against the ramp a 10.0 GHz
                              signal needs at 45 deg; their difference is a
                              straight ramp, which is just a steer.
   - L23-quant-staircase    : why rounding makes a lobe. The exact ramp for 28
@@ -31,7 +32,9 @@ things happen", not what the kit shows).
                              kit's own reading at a 15 deg beam, so no measured
                              points go here.
 
-Every plotted number is computed here and matches the lesson text.
+Every plotted number is computed here and matches the lesson text. Every
+figure is drawn at 10.0 GHz (lambda = 30.0 mm with c = 3.00e8), below every
+kit's HB100, so none shows a number the L22-L23 Lab's Part 1 asks for.
 
     python3 scripts/graphics/l23_figures.py
     -> book/extras/viz/img/L23-*.svg
@@ -57,11 +60,11 @@ plt.rcParams.update({"svg.fonttype": "none", "font.size": 11, "text.color": INK,
                      "axes.edgecolor": GRAY, "axes.labelcolor": INK,
                      "xtick.color": GRAY, "ytick.color": GRAY})
 
-C = 2.99792458e8
+C = 3.00e8                           # the course's c, as in the packets
 PITCH = 14e-3
 N = 8
-LAM_103 = C / 10.3e9 * 1e3          # mm, the array design center
-LAM_0 = C / 10.525e9 * 1e3          # mm, the HB100
+LAM_10 = C / 10.0e9 * 1e3           # mm, 30.0: every figure's frequency
+F_SIG, F_SET = 10.0e9, 9.5e9         # squint: the signal, and the phase-set frequency
 
 
 def save(fig, name):
@@ -85,14 +88,14 @@ def af_db(xs_mm, alpha, th_deg, lam_mm):
 
 # --------------------------------------------------------------- grating ---
 def grating_whole_turn():
-    thg = np.degrees(np.arcsin(LAM_103 / 42.0))            # 43.9 deg
-    assert abs(thg - 43.9) < 0.05
+    thg = np.degrees(np.arcsin(LAM_10 / 42.0))             # 45.6 deg
+    assert abs(thg - 45.6) < 0.05
     rows = [("every third element, 42 mm", 42.0, 3, AMBER),
             ("all eight, 14 mm", 14.0, 8, BLUE)]
     fig, axes = plt.subplots(2, 1, figsize=(5.6, 4.2))
     for ax, (label, d, n, col) in zip(axes, rows):
         path = d * np.sin(np.radians(thg))                  # mm per element
-        frac = path / LAM_103                               # wavelengths per element
+        frac = path / LAM_10                                # wavelengths per element
         xs = np.arange(n) * d
         ax.set_xlim(-14, 112)
         ax.set_ylim(-1.15, 1.35)
@@ -127,7 +130,7 @@ def visible_window():
     cases = [(14.0, 8, BLUE, "14 mm, 8 elements"), (42.0, 3, AMBER, "42 mm, 3 elements")]
     fig, axes = plt.subplots(2, 1, figsize=(6.0, 3.1), sharex=True)
     for ax, (d, n, col, label) in zip(axes, cases):
-        half = 360 * d / LAM_103                            # kd in degrees: the window edge
+        half = 360 * d / LAM_10                             # kd in degrees: the window edge
         ax.axvspan(-half, half, color=SHADE, zorder=0)
         ax.plot(psi, af(n), color=col, lw=1.8, zorder=2)
         for rep in (-360, 360):
@@ -150,21 +153,21 @@ def visible_window():
 
 # ---------------------------------------------------------------- squint ---
 def squint_ramp():
-    f0, f = 10.525e9, 10.025e9
+    f0, f = F_SET, F_SIG
     lam0, lam = C / f0 * 1e3, C / f * 1e3
     n = np.arange(N)
     s45 = np.sin(np.radians(45))
     applied = 360 * (PITCH * 1e3 / lam0) * s45 * n          # set at f0
     needed = 360 * (PITCH * 1e3 / lam) * s45 * n            # what f needs at 45 deg
-    err = applied - needed
-    th = np.degrees(np.arcsin(f0 / f * s45))
-    assert abs(th - 47.9) < 0.05
+    err = needed - applied                                  # positive: the signal needs more
+    th = np.degrees(np.arcsin(f0 / f * s45))                # where the beam lands
+    assert abs(th - 42.2) < 0.05
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(6.4, 3.0), gridspec_kw={"width_ratios": [1.25, 1]})
     a1.plot(n + 1, applied, "o-", color=NAVY, lw=1.8, ms=4.5)
     a1.plot(n + 1, needed, "o--", color=GRAY, lw=1.4, ms=4)
-    a1.text(4.6, applied[4] + 70, "applied", color=NAVY, fontsize=10, ha="right", va="bottom",
+    a1.text(5.4, applied[4] - 70, "applied", color=NAVY, fontsize=10, ha="left", va="top",
             fontweight="bold")
-    a1.text(5.4, needed[4] - 70, "needed", color=GRAY, fontsize=10, ha="left", va="top",
+    a1.text(4.6, needed[4] + 70, "needed", color=GRAY, fontsize=10, ha="right", va="bottom",
             fontweight="bold")
     a1.set_xlim(0.6, 8.4)
     a1.set_ylabel("phase lag (degrees)")
@@ -189,7 +192,7 @@ def squint_ramp():
 # ---------------------------------------------------------- quantization ---
 def quant_staircase(th0=28, bits=3):
     n = np.arange(N)
-    exact = 360 * (PITCH * 1e3 / LAM_0) * np.sin(np.radians(th0)) * n
+    exact = 360 * (PITCH * 1e3 / LAM_10) * np.sin(np.radians(th0)) * n
     lsb = 360 / 2 ** bits
     q = np.round(exact / lsb) * lsb
     err = q - exact
@@ -223,7 +226,7 @@ def quant_staircase(th0=28, bits=3):
 def qsll_vs_bits():
     th = np.linspace(-90, 90, 7201)
     xs = np.arange(N) * PITCH * 1e3
-    k = 2 * np.pi / LAM_0
+    k = 2 * np.pi / LAM_10
     B = np.arange(2, 8)
     # The quantization lobe on its own: the field the rounding error radiates,
     # (quantized pattern) - (exact pattern), relative to the beam, at the worst
@@ -269,20 +272,20 @@ def ttd_vs_phase():
     tau = PITCH * np.sin(np.radians(45)) / C               # s, one element's delay
     f = np.linspace(0, 12e9, 400)
     ttd = 360 * f * tau
-    ps = np.full_like(f, 360 * 10.525e9 * tau)
-    gap = 360 * 10.525e9 * tau - 360 * 10.025e9 * tau
-    assert abs(360 * 10.525e9 * tau - 125.1) < 0.1 and abs(gap - 5.9) < 0.05
+    ps = np.full_like(f, 360 * F_SET * tau)
+    gap = 360 * F_SIG * tau - 360 * F_SET * tau
+    assert abs(360 * F_SET * tau - 112.9) < 0.1 and abs(gap - 5.9) < 0.05
     fig, ax = plt.subplots(figsize=(5.6, 3.2))
     ax.axvspan(10.0, 11.0, color=SHADE, zorder=0)
     ax.plot(f / 1e9, ttd, color=NAVY, lw=2.0)
     ax.plot(f / 1e9, ps, color=AMBER, lw=2.0)
-    ax.plot([10.525], [360 * 10.525e9 * tau], "o", color=INK, ms=5, zorder=4)
-    ax.plot([10.025, 10.025], [360 * 10.025e9 * tau, ps[0]], color=RED, lw=2.2)
+    ax.plot([F_SET / 1e9], [360 * F_SET * tau], "o", color=INK, ms=5, zorder=4)
+    ax.plot([F_SIG / 1e9, F_SIG / 1e9], [360 * F_SIG * tau, ps[0]], color=RED, lw=2.2)
     ax.text(5.6, 360 * 5.6e9 * tau + 9, "true time delay", color=NAVY, fontsize=10,
             fontweight="bold", ha="right", va="bottom", rotation=0)
-    ax.text(0.4, ps[0] + 5, "phase shifter, set at 10.525 GHz", color=AMBER, fontsize=10,
+    ax.text(0.4, ps[0] + 5, "phase shifter, set at 9.5 GHz", color=AMBER, fontsize=10,
             fontweight="bold", ha="left", va="bottom")
-    ax.text(10.15, 360 * 10.025e9 * tau - 7, f"{gap:.1f}°", color=RED, fontsize=10,
+    ax.text(F_SIG / 1e9 + 0.15, ps[0] - 4, f"{gap:.1f}°", color=RED, fontsize=10,
             fontweight="bold", ha="left", va="top")
     ax.set_xlim(0, 12)
     ax.set_ylim(0, 150)
@@ -296,28 +299,28 @@ def ttd_vs_phase():
 
 # ------------------------------------------------------- squint vs scan ---
 def squint_vs_scan():
-    f0 = 10.525
+    # The signal sits at 10.0 GHz and the phases are set below it, as the GUI's
+    # Signal BW sets them: the beam lands nearer broadside than commanded.
+    f = F_SIG / 1e9
     th0 = np.linspace(0, 70, 701)
     fig, ax = plt.subplots(figsize=(5.4, 3.2))
-    for off, col in ((-0.5, BLUE), (-1.0, NAVY)):
-        f = f0 + off
-        v = f0 / f * np.sin(np.radians(th0))
-        ok = v <= 1
-        exact = np.degrees(np.arcsin(v[ok])) - th0[ok]
-        approx = np.degrees(-(off / f0) * np.tan(np.radians(th0)))
-        ax.plot(th0[ok], exact, color=col, lw=2.0)
+    for off, col in ((0.5, BLUE), (1.0, NAVY)):
+        f0 = f - off
+        exact = th0 - np.degrees(np.arcsin(f0 / f * np.sin(np.radians(th0))))
+        approx = np.degrees((off / f0) * np.tan(np.radians(th0)))
+        ax.plot(th0, exact, color=col, lw=2.0)
         ax.plot(th0, approx, color=col, lw=1.2, ls=(0, (4, 3)))
         i = np.searchsorted(th0, 45)
         ax.plot([45], [exact[i]], "o", color=col, ms=5)
-        lx, ly, ha = ((46, 10.2, "right") if off < -0.75 else (69, 2.4, "right"))
-        ax.text(lx, ly, f"{abs(off)*1000:.0f} MHz low", color=col, fontsize=10,
-                fontweight="bold", ha=ha, va="bottom")
-    ax.text(3, 13.2, "solid: exact     dashed: −δ tan θ₀", color=GRAY, fontsize=9.5,
+        j = np.searchsorted(th0, 66)
+        ax.text(68, exact[j] - 0.9, f"phases {off*1000:.0f} MHz low", color=col, fontsize=10,
+                fontweight="bold", ha="right", va="top")
+    ax.text(3, 13.2, "solid: exact     dashed: δ tan θ₀", color=GRAY, fontsize=9.5,
             ha="left", va="top")
     ax.set_xlim(0, 70)
     ax.set_ylim(0, 15)
     ax.set_xlabel("commanded angle (degrees)")
-    ax.set_ylabel("squint (degrees)")
+    ax.set_ylabel("squint toward broadside (deg)")
     ax.grid(axis="y", color=RULE, lw=0.8)
     for sp in ("top", "right"):
         ax.spines[sp].set_visible(False)
@@ -326,7 +329,7 @@ def squint_vs_scan():
 
 # --------------------------------------------------- pointing grid --------
 def pointing_grid():
-    dl = PITCH * 1e3 / LAM_0
+    dl = PITCH * 1e3 / LAM_10
     fig, ax = plt.subplots(figsize=(5.8, 2.4))
     rows = [(2, AMBER), (3, BLUE), (4, NAVY), (7, GRAY)]
     for r, (b, col) in enumerate(rows):

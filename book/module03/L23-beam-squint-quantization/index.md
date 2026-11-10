@@ -56,7 +56,7 @@ $$
 :::
 :::{present}
 <img src="../../viz/img/L23-visible-window.svg"
-     alt="The array factor against its argument psi over two periods each side, with the window real angles reach shaded. Top: 14 mm and 8 elements, window plus or minus 173 degrees, the repeats at plus or minus 360 degrees outside it. Bottom: 42 mm and 3 elements, window plus or minus 519 degrees, both repeats inside it as full-height lobes"
+     alt="The array factor against its argument psi over two periods each side, with the window real angles reach shaded. Top: 14 mm and 8 elements at 10.0 GHz, window plus or minus 168 degrees, the repeats at plus or minus 360 degrees outside it. Bottom: 42 mm and 3 elements, window plus or minus 504 degrees, both repeats inside it as full-height lobes"
      style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -70,7 +70,7 @@ $$AF_N(\psi) = \frac{\sin(N\psi/2)}{N \sin(\psi/2)}.$$
 
 Replace $\psi$ by $\psi + 2\pi$ and both sines flip sign together, so $\vert AF_N \vert$ is unchanged. The array factor is periodic in $\psi$ with period $2\pi$. The main lobe is the peak at $\psi = 0$, and the same peak reappears at $\psi = \pm 2\pi, \pm 4\pi, \ldots$ — every one of them a full-height beam.
 
-Whether we ever see those repeats depends on how much of the $\psi$ axis the real angles $-90^\circ \le \theta \le +90^\circ$ reach. We call that span **visible space**, and the spacing sets its width: as $\sin\theta$ runs from $-1$ to $+1$, $\psi$ runs over a window of total width $2kd = 4\pi d/\lambda$. Widening $d$ brings more periods of the array factor into visible space. A repeat that lands inside visible space is a **grating lobe**. The figure draws both cases on the same axis: at $14\ \text{mm}$ the window stops at $\pm 173^\circ$, short of the repeats at $\pm 360^\circ$, and at $42\ \text{mm}$ it reaches $\pm 519^\circ$ and takes in both.
+Whether we ever see those repeats depends on how much of the $\psi$ axis the real angles $-90^\circ \le \theta \le +90^\circ$ reach. We call that span **visible space**, and the spacing sets its width: as $\sin\theta$ runs from $-1$ to $+1$, $\psi$ runs over a window of total width $2kd = 4\pi d/\lambda$. Widening $d$ brings more periods of the array factor into visible space. A repeat that lands inside visible space is a **grating lobe**. The figure draws both cases on the same axis at $10.0\ \text{GHz}$: at $14\ \text{mm}$ the window stops at $\pm 168^\circ$, short of the repeats at $\pm 360^\circ$, and at $42\ \text{mm}$ it reaches $\pm 504^\circ$ and takes in both.
 ::::
 
 ::::{frame} The Grating Condition
@@ -97,42 +97,42 @@ kd\ (\sin\theta_g - \sin\theta_0) &= 2\pi m \\
 \end{aligned}
 $$
 
-for integer $m = 1, 2, \ldots$ Any solution with $\vert \sin\theta_g \vert \le 1$ is a real angle, and the array radiates a second beam there. The thinning example's figure shows why from the elements' side: at $43.9^\circ$ the fed elements of the $42\ \text{mm}$ row sit exactly one wavelength of path apart, so their phases read $0^\circ$, $360^\circ$ and $720^\circ$ and add exactly as they do at broadside.
+for integer $m = 1, 2, \ldots$ Any solution with $\vert \sin\theta_g \vert \le 1$ is a real angle, and the array radiates a second beam there. The thinning example's figure shows why from the elements' side: at $45.6^\circ$ the fed elements of the $42\ \text{mm}$ row sit exactly one wavelength of path apart, so their phases read $0^\circ$, $360^\circ$ and $720^\circ$ and add exactly as they do at broadside.
 
 :::{callout}
-A grating lobe is not a sidelobe. At $\theta_g$ every element is back in phase — one full wavelength of path difference per element instead of zero — so the grating lobe is exactly as tall as the main lobe. Tapering does not reduce it, because the taper controls the sidelobe skirts of one beam and this is a second beam. Full height is an array-factor statement: <a href="../L21-antenna-pattern/index.html#frame-gain-of-the-course-array">Lesson 21</a>'s element factor scales the lobe by $EF(\theta_g)$, which the $\cos\theta$ model puts $1.4$ dB down at $\pm 43^\circ$. On my kit the lobes still read at full height.
+A grating lobe is not a sidelobe. At $\theta_g$ every element is back in phase — one full wavelength of path difference per element instead of zero — so the grating lobe is exactly as tall as the main lobe. Tapering does not reduce it, because the taper controls the sidelobe skirts of one beam and this is a second beam. Full height is an array-factor statement: <a href="../L21-antenna-pattern/index.html#frame-gain-of-the-course-array">Lesson 21</a>'s element factor scales the lobe by $EF(\theta_g)$, which the $\cos\theta$ model puts $1.6$ dB down at $\pm 46^\circ$. On my kit the lobes still read at full height.
 :::
 ::::
 
 ::::{frame} Worked Example: Thinning the PHASER Row
 :::{present}
-- Feed every third patch: $d = 42$ mm, $\lambda/d = 0.693$ at $10.3$ GHz.
-- Grating lobes at $\pm 43.9^\circ$: three full-height beams.
-- Every fourth patch: $d = 56$ mm, lobes at $\pm 31.3^\circ$.
+- Feed every third patch: $d = 42$ mm, $\lambda/d = 0.714$ at $10.0$ GHz.
+- Grating lobes at $\pm 45.6^\circ$: three full-height beams.
+- Every fourth patch: $d = 56$ mm, lobes at $\pm 32.4^\circ$.
 - A wide aperture with few elements gives a narrow but ambiguous beam.
 :::
 :::{present}
 <img src="../../viz/img/L23-grating-whole-turn.svg"
-     alt="Phase dials for a wave arriving from 43.9 degrees. Top: every third element, 42 mm apart, sees exactly one wavelength of extra path per element, so the dials read 0, 360 and 720 degrees and all point the same way. Bottom: all eight elements, 14 mm apart, see a third of a wavelength per element, so the dials step by 120 degrees and spread around the circle"
+     alt="Phase dials for a wave arriving from 45.6 degrees, at 10.0 GHz. Top: every third element, 42 mm apart, sees exactly one wavelength of extra path per element, so the dials read 0, 360 and 720 degrees and all point the same way. Bottom: all eight elements, 14 mm apart, see a third of a wavelength per element, so the dials step by 120 degrees and spread around the circle"
      style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 :::{admonition} Worked example — thinning the PHASER row
 :class: tip
-The PHASER array is 8 patches on a $d = 14\ \text{mm}$ pitch. Feed only every third element and the fed elements sit $42\ \text{mm}$ apart. At the array's design center of $10.3\ \text{GHz}$, $\lambda = 29.1\ \text{mm}$, so $\lambda/d = 29.1/42 = 0.693$.
+The PHASER array is 8 patches on a $d = 14\ \text{mm}$ pitch. Feed only every third element and the fed elements sit $42\ \text{mm}$ apart. At $10.0\ \text{GHz}$, $\lambda = 30.0\ \text{mm}$, so $\lambda/d = 30.0/42 = 0.714$.
 
 At broadside ($\theta_0 = 0$), the $m = 1$ solutions are
 
 $$
 \begin{aligned}
-\sin\theta_g &= \pm 0.693 \\
-\theta_g &= \pm 43.9^\circ.
+\sin\theta_g &= \pm 0.714 \\
+\theta_g &= \pm 45.6^\circ.
 \end{aligned}
 $$
 
-The $m = 2$ solutions need $\vert \sin\theta_g \vert = 1.386$, which is not a real angle, so there are exactly three full-height beams: $0^\circ$ and $\pm 44^\circ$. Part 1 of the L22–L23 Lab packet repeats the arithmetic at your own kit's Find HB100 frequency.
+The $m = 2$ solutions need $\vert \sin\theta_g \vert = 1.43$, which is not a real angle, so there are exactly three full-height beams: $0^\circ$ and $\pm 46^\circ$. Part 1 of the L22–L23 Lab packet repeats the arithmetic at your own kit's Find HB100 frequency.
 
-Feed every fourth element instead ($56\ \text{mm}$, $\lambda/d = 0.520$) and the pair moves in to $\pm 31.3^\circ$, with the $m = 2$ repeat just past the horizon, at $\sin\theta = \pm 1.04$ — the pattern comes back to within a fraction of a dB of full height at $\pm 90^\circ$.
+Feed every fourth element instead ($56\ \text{mm}$, $\lambda/d = 0.536$) and the pair moves in to $\pm 32.4^\circ$, with the $m = 2$ repeat just past the horizon, at $\sin\theta = \pm 1.07$, so the pattern climbs back to within $0.8$ dB of full height at $\pm 90^\circ$.
 :::
 
 Thinning has two effects. The three fed elements still span an $84\ \text{mm}$ aperture, so the main beam stays narrow, but with three elements instead of eight the array collects less signal and the pattern between the beams is poorly controlled. Each fed element adds the same voltage at the peak, so the peak falls by the fraction of elements fed, every third element and then every fourth:
@@ -158,7 +158,7 @@ $$
 :::
 :::{present}
 <img src="../../viz/img/L16-grating-limit.svg"
-     alt="Largest grating-lobe-free scan angle against element spacing in wavelengths: the boundary runs from 1.0 wavelength at broadside down to 0.5 wavelength at 90 degrees, with the PHASER at 0.481 inside the safe region and the 45 degree scan limit at 0.586 marked"
+     alt="Largest grating-lobe-free scan angle against element spacing in wavelengths: the boundary runs from 1.0 wavelength at broadside down to 0.5 wavelength at 90 degrees, with the PHASER's spacing marked inside the safe region and the 45 degree scan limit at 0.586 marked"
      style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -171,7 +171,7 @@ d &< \frac{\lambda}{1 + \vert \sin\theta_0 \vert}
 \end{aligned}
 $$
 
-The wider we intend to scan, the closer together the elements must be. Broadside operation tolerates $d < \lambda$. Scanning to $\pm 45^\circ$ demands $d < 0.586\lambda$, and $\pm 60^\circ$ demands $d < 0.536\lambda$. Take the criterion to its limit, $\theta_0 \to 90^\circ$, and you get $d < \lambda/2$ — which is why half-wavelength spacing is the default in every scanning array. It is grating-lobe-free at any scan angle we can command. The figure, from Lesson 16, draws the criterion as a boundary: any spacing and scan angle below the curve is free of grating lobes, and the PHASER's $0.481\lambda$ sits below it everywhere.
+The wider we intend to scan, the closer together the elements must be. Broadside operation tolerates $d < \lambda$. Scanning to $\pm 45^\circ$ demands $d < 0.586\lambda$, and $\pm 60^\circ$ demands $d < 0.536\lambda$. Take the criterion to its limit, $\theta_0 \to 90^\circ$, and you get $d < \lambda/2$ — which is why half-wavelength spacing is the default in every scanning array. It is grating-lobe-free at any scan angle we can command. The figure, from Lesson 16, draws the criterion as a boundary: any spacing and scan angle below the curve is free of grating lobes, and the PHASER's $14\ \text{mm}$ pitch, under half a wavelength at every kit frequency, sits below it everywhere.
 
 ```{note}
 Grating lobes are not always a defect. Interferometers and sparse radio-astronomy arrays use them on purpose, resolving fine detail with a small number of widely spaced elements and removing the ambiguity by other means. A designer can choose grating lobes; they should never be found after the array is built.
@@ -180,16 +180,16 @@ Grating lobes are not always a defect. Interferometers and sparse radio-astronom
 
 ::::{frame} The PHASER Has No Grating Lobe
 :::{present}
-- Worst case is the shortest $\lambda$: $10.5$ GHz, $\lambda/d = 28.6/14 = 2.04$.
-- Needs $\vert\sin\theta_0\vert < 1.04$: every real angle passes.
-- The $14$ mm pitch is $0.49\lambda$, just inside the half-wavelength rule.
+- At $10.0$ GHz, $\lambda/d = 30.0/14 = 2.14$.
+- Needs $\vert\sin\theta_0\vert < 1.14$: every real angle passes.
+- $14$ mm is half a wavelength at $10.7$ GHz, the top of the HB100 range.
 :::
 
 :::{admonition} Worked example — is the PHASER safe?
 :class: tip
-Use the highest frequency the array is specified for, $10.5\ \text{GHz}$, because $\lambda$ is shortest there and the criterion is tightest: $\lambda = 28.6\ \text{mm}$, so $\lambda/d = 28.6/14 = 2.04$.
+At $10.0\ \text{GHz}$, $\lambda = 30.0\ \text{mm}$, so $\lambda/d = 30.0/14 = 2.14$.
 
-The criterion requires $1 + \vert\sin\theta_0\vert < \lambda/d = 2.04$, or $\vert\sin\theta_0\vert < 1.04$. Every real angle satisfies that, so the array has no grating lobe at any scan angle in its band. The $14\ \text{mm}$ pitch is $0.49\lambda$ at the band edge, chosen to sit just inside the half-wavelength rule.
+The criterion requires $1 + \vert\sin\theta_0\vert < \lambda/d = 2.14$, or $\vert\sin\theta_0\vert < 1.14$. Every real angle satisfies that, so the array has no grating lobe at any scan angle. The margin shrinks as the frequency rises and $\lambda$ shortens, and it runs out where $d = \lambda/2$: $14\ \text{mm}$ is half a wavelength at $10.7\ \text{GHz}$, so the full row shows no grating lobe at any HB100 frequency, $10.1$ to $10.7\ \text{GHz}$.
 :::
 ::::
 
@@ -207,11 +207,11 @@ $$
 :::
 :::{present}
 <img src="../../viz/img/L23-squint-ramp.svg"
-     alt="Left: the phase lag the shifters apply across the eight elements, set for 45 degrees at 10.525 GHz, against the lag a 10.025 GHz signal needs at 45 degrees. Right: their difference grows by 5.9 degrees per element, a straight ramp"
+     alt="Left: the phase lag the shifters apply across the eight elements, set for 45 degrees at 9.5 GHz, against the lag a 10.0 GHz signal needs at 45 degrees. Right: their difference grows by 5.9 degrees per element, a straight ramp"
      style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-The beam-steering computer sets each phase shifter once, in degrees. The angle that setting steers to is not fixed, because the phase a given path length produces depends on frequency. The figure shows the result across the aperture for the worked example below: the shifters apply $125.1^\circ$ per element, set for $45^\circ$ at $10.525\ \text{GHz}$, and a $10.025\ \text{GHz}$ signal needs $119.2^\circ$ per element to add in phase at $45^\circ$. The difference, $5.9^\circ$ per element, is itself a straight ramp, and a straight ramp is a steer: the beam moves to a new angle and stays intact. <a href="../L18-beam-steering/index.html#frame-time-delay-versus-phase-delay">Lesson 18</a> named the result, beam squint, and the <a href="../L18-lab-beam-steering/index.html">L18 Lab</a> showed it once on the kit; here we compute it.
+The beam-steering computer sets each phase shifter once, in degrees. The angle that setting steers to is not fixed, because the phase a given path length produces depends on frequency. The figure shows the result across the aperture for a signal at $10.0\ \text{GHz}$ with the phases computed $500\ \text{MHz}$ below it, which is what the GUI's **Signal BW** setting does: the shifters apply $112.9^\circ$ per element, set for $45^\circ$ at $9.5\ \text{GHz}$, and the $10.0\ \text{GHz}$ signal needs $118.8^\circ$ per element to add in phase at $45^\circ$. The difference, $5.9^\circ$ per element, is itself a straight ramp, and a straight ramp is a steer: the beam moves to a new angle and stays intact. <a href="../L18-beam-steering/index.html#frame-time-delay-versus-phase-delay">Lesson 18</a> named the result, beam squint, and the <a href="../L18-lab-beam-steering/index.html">L18 Lab</a> showed it once on the kit; here we compute it.
 
 Suppose the beam-steering computer sets element $n$ to a lag of $n\ k_0 d \sin\theta_0$, computed at the design frequency $f_0$ where $k_0 = 2\pi/\lambda_0$. Now a signal arrives at some other frequency $f$ in the band. The elements add in phase toward whatever angle $\theta$ makes the arrival phase cancel the applied lag:
 
@@ -247,51 +247,52 @@ This is **beam squint**. It does not depend on $N$ or on $d$ — the phase ramp 
 
 $$\Delta\theta \approx -\delta\ \tan\theta_0 \quad \text{(radians).}$$
 
-The beam moves toward the horizon as the frequency drops, and it moves fastest when the beam is already far off broadside.
+A signal above $f_0$ has $f_0/f < 1$, and the beam moves toward broadside; a signal below $f_0$ moves it toward the horizon. Either way it moves fastest when the beam is already far off broadside.
 
 <img src="../../viz/img/L23-squint-vs-scan.svg"
-     alt="Squint in degrees against commanded angle from 0 to 70 degrees for signals 500 MHz and 1000 MHz below 10.525 GHz, exact as solid lines and the small-offset form as dashed lines; at 45 degrees the exact squint is 2.9 and 6.4 degrees, and the two forms separate as the angle grows"
+     alt="Squint toward broadside in degrees against commanded angle from 0 to 70 degrees, for a 10.0 GHz signal with the phases set 500 MHz and 1000 MHz below it, exact as solid lines and the small-offset form as dashed lines; at 45 degrees the exact squint is 2.8 and 5.5 degrees, and the two forms separate as the angle grows"
      style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 
-The figure plots both forms for signals $500$ and $1000\ \text{MHz}$ below $10.525\ \text{GHz}$. Squint is under a degree near broadside, $2.9^\circ$ and $6.4^\circ$ at $45^\circ$, and $5.4^\circ$ and $13.1^\circ$ at $60^\circ$. The small-offset form tracks the exact one at small angles and falls short at wide scan, by $3.7^\circ$ at $60^\circ$ for the $1000\ \text{MHz}$ offset, so a budget at wide scan should use the exact form.
+The figure plots both forms for a $10.0\ \text{GHz}$ signal with the phases set $500$ and $1000\ \text{MHz}$ below it, so the beam moves toward broadside. Squint is under a degree near broadside, $2.8^\circ$ and $5.5^\circ$ at $45^\circ$, and $4.6^\circ$ and $8.8^\circ$ at $60^\circ$. The small-offset form tracks the exact one at small angles and overstates it at wide scan, by $2.2^\circ$ at $60^\circ$ for the $1000\ \text{MHz}$ offset, so a budget at wide scan should use the exact form.
 ::::
 
 ::::{frame} Worked Example: Squint on the PHASER
 :::{present}
-- Phases set for $45^\circ$ at $10.525$ GHz; the signal arrives $500$ MHz lower.
-- The beam lands at $47.9^\circ$: $+2.9^\circ$ of squint, $0.25$ dB lost at the aimpoint.
-- $1$ GHz off: $6.4^\circ$, a third of a beam, $1.0$ dB.
+- Signal at $10.0$ GHz; Signal BW $500$ MHz sets the phases for $9.5$ GHz.
+- A source at $40^\circ$ peaks at a commanded $42.6^\circ$, a $+2.6^\circ$ shift.
+- Commanded to $40^\circ$, the beam lands at $37.6^\circ$, $0.2$ dB down there.
 :::
 
 :::{admonition} Worked example — squint on the PHASER
 :class: tip
-Phases are set for $\theta_0 = 45^\circ$ at the HB100's $f_0 = 10.525\ \text{GHz}$. A signal arrives $500\ \text{MHz}$ lower, at $10.025\ \text{GHz}$:
+The signal arrives at $f = 10.0\ \text{GHz}$, and the GUI computes the phases for $f_0 = 9.5\ \text{GHz}$, $500\ \text{MHz}$ below it, which is what its **Signal BW** setting does. A beam commanded to $\theta_c$ points where $\sin\theta = (f_0/f)\sin\theta_c$, so the beam sweep peaks on a source at $\theta_s = 40^\circ$ at the commanded angle that puts the beam on it:
 
 $$
 \begin{aligned}
-\sin\theta &= \frac{10.525}{10.025}\ \sin 45^\circ \\
-&= 1.0499 \times 0.7071 = 0.7424 \\
-\theta &= 47.9^\circ.
+\sin\theta_c &= \frac{f}{f_0}\ \sin\theta_s \\
+&= \frac{10.0}{9.5}\ \sin 40^\circ = 1.0526 \times 0.6428 = 0.6766 \\
+\theta_c &= 42.6^\circ.
 \end{aligned}
 $$
 
-The beam has squinted $\Delta\theta = +2.9^\circ$. The small-offset form, with $\delta = -0.0475$ and $\tan 45^\circ = 1$, gives
+The Angle readout, which reports the commanded angle at the peak, moves $+2.6^\circ$ from the source. The small-offset form, with $\delta = 0.5/9.5 = 0.0526$ and $\tan 40^\circ = 0.839$, gives
 
-$$\Delta\theta \approx 0.0475\ \text{rad} = 2.7^\circ,$$
+$$\delta\ \tan\theta_s = 0.0442\ \text{rad} = 2.5^\circ,$$
 
-close enough for a budget. The L22–L23 Lab makes the same measurement with the GUI's **Signal BW** setting, which sets the phases 500 MHz below the signal; Part 1 of the packet works out the shift at your kit's frequency.
+close enough for a budget. The L22–L23 Lab makes the same measurement on your kit's HB100 frequency, and Part 1 of the packet works it out there.
 
-At $45^\circ$ the beam is $18.7^\circ$ wide (Lesson 20's $13.2^\circ/\cos 45^\circ$), so $2.9^\circ$ of squint loses only $0.25\ \text{dB}$ at the aimpoint. That loss is the array factor evaluated at the aimpoint, which now sits off the beam's peak. At $10.025\ \text{GHz}$, $kd = 2.94$ rad, and the aimpoint's $\sin\theta$ sits $\sin 45^\circ - \sin 47.9^\circ = -0.0353$ from the peak's:
+Command the same beam to $40^\circ$ instead and it lands at $\sin\theta = 0.95 \sin 40^\circ$, or $37.6^\circ$. At $40^\circ$ the beam is $17.8^\circ$ wide (Lesson 20's $13.6^\circ$ at $10.0\ \text{GHz}$, divided by $\cos 40^\circ$), so $2.4^\circ$ of squint loses only $0.2\ \text{dB}$ at the aimpoint. That loss is the array factor evaluated at the aimpoint, which now sits off the beam's peak. At $10.0\ \text{GHz}$, $kd = 2.93$ rad, and the aimpoint's $\sin\theta$ sits $\sin 40^\circ - \sin 37.6^\circ = 0.0321$ from the peak's:
 
 $$
 \begin{aligned}
-\psi &= 2.94 \times (-0.0353) \\
-&= -0.104\ \text{rad} \\
-\vert AF_8(\psi) \vert &= 0.972 \\
-&= -0.25\ \text{dB}
+\psi &= 2.93 \times 0.0321 \\
+&= 0.094\ \text{rad} \\
+\vert AF_8(\psi) \vert &= 0.977 \\
+&= -0.20\ \text{dB}
 \end{aligned}
 $$
- At a $1\ \text{GHz}$ offset the squint reaches $6.4^\circ$, roughly a third of a beamwidth, and the loss grows to $1.0\ \text{dB}$.
+
+With the phases set $1\ \text{GHz}$ low, at $9.0\ \text{GHz}$, the beam lands at $35.3^\circ$, $4.7^\circ$ off, about a quarter of a beamwidth, and the loss grows to $0.8\ \text{dB}$.
 :::
 ::::
 
@@ -315,11 +316,11 @@ $$
 :::
 :::{present}
 <img src="../../viz/img/L23-ttd-vs-phase.svg"
-     alt="Phase lag at the second element for a 45 degree steer against frequency: a true time delay of 33.0 ps gives a straight line through the origin, a phase shifter set at 10.525 GHz gives a flat line at 125.1 degrees, and the two cross only at 10.525 GHz; at 10.025 GHz they differ by 5.9 degrees"
+     alt="Phase lag at the second element for a 45 degree steer against frequency: a true time delay of 33.0 ps gives a straight line through the origin, a phase shifter set at 9.5 GHz gives a flat line at 112.9 degrees, and the two cross only at 9.5 GHz; at 10.0 GHz they differ by 5.9 degrees"
      style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-The cure is to stop steering with phase. If instead of a phase lag you insert a **true time delay** of $\tau_n = n\ d \sin\theta_0 / c$ in each element, the delay compensates the geometric path difference itself, which is a length and not a phase. Every frequency in the band then arrives in phase at the same angle, and the squint is gone at all offsets. True time delay is expensive in analog hardware, which is why large wideband arrays usually compromise: time delay at the level of the **subarray** (a group of elements combined before the rest, as on the PHASER's two four-element halves in <a href="../L17-phased-array-hardware/index.html#frame-the-hybrid-beamformer">Lesson 17</a>) to control the squint across the aperture, phase shifters inside each subarray where the residual path differences are small. The figure shows why for one element of a $45^\circ$ steer: a $33.0\ \text{ps}$ delay produces a phase that grows in step with frequency, while a phase shifter holds its $125.1^\circ$ at every frequency, so the two agree only at $10.525\ \text{GHz}$ and differ by $5.9^\circ$ at $10.025\ \text{GHz}$.
+The cure is to stop steering with phase. If instead of a phase lag you insert a **true time delay** of $\tau_n = n\ d \sin\theta_0 / c$ in each element, the delay compensates the geometric path difference itself, which is a length and not a phase. Every frequency in the band then arrives in phase at the same angle, and the squint is gone at all offsets. True time delay is expensive in analog hardware, which is why large wideband arrays usually compromise: time delay at the level of the **subarray** (a group of elements combined before the rest, as on the PHASER's two four-element halves in <a href="../L17-phased-array-hardware/index.html#frame-the-hybrid-beamformer">Lesson 17</a>) to control the squint across the aperture, phase shifters inside each subarray where the residual path differences are small. The figure shows why for one element of a $45^\circ$ steer: a $33.0\ \text{ps}$ delay produces a phase that grows in step with frequency, while a phase shifter holds its $112.9^\circ$ at every frequency, so the two agree only at $9.5\ \text{GHz}$ and differ by $5.9^\circ$ at $10.0\ \text{GHz}$.
 ::::
 
 ::::{frame} Phase Quantization
@@ -347,9 +348,9 @@ $$
 \Delta\theta_0 \approx \frac{\text{LSB}}{360^\circ\ (d/\lambda)}\ \text{rad}
 $$
 
-- PHASER: $0.91^\circ$ at broadside, one-fourteenth of a beam.
-- Grows as $1/\cos\theta_0$: $1.8^\circ$ at $60^\circ$.
-- 2 bits: $29^\circ$ steps, so broadside and about $\pm 31^\circ$ only.
+- PHASER at $10.0$ GHz: $0.96^\circ$ at broadside, one-fourteenth of a beam.
+- Grows as $1/\cos\theta_0$: $1.9^\circ$ at $60^\circ$.
+- 2 bits: $31^\circ$ steps, so broadside and about $\pm 32^\circ$ only.
 :::
 
 The inter-element phase for a beam at $\theta_0$ is $\Delta\phi = 360^\circ (d/\lambda) \sin\theta_0$. If the controller can only command multiples of the LSB, only a discrete set of beam angles exists:
@@ -360,13 +361,13 @@ so the step near broadside is
 
 $$\Delta\theta_0 \approx \frac{\text{LSB}}{360^\circ\ (d/\lambda)}\ \text{rad}.$$
 
-For the PHASER at $10.525\ \text{GHz}$, $d/\lambda = 0.491$, so the step is $2.8125/(360 \times 0.491) = 0.0159\ \text{rad} = 0.91^\circ$ at broadside. Compared with the $13.2^\circ$ beamwidth that is about one-fourteenth of a beam, which is fine. Off broadside the same step in $\sin\theta_0$ spans a wider angle, because $\Delta(\sin\theta_0) = \cos\theta_0\ \Delta\theta_0$. The step therefore grows as $1/\cos\theta_0$, reaching $1.8^\circ$ at $60^\circ$. Drop to $B = 2$ and the same calculation gives $29^\circ$ per step: a 2-bit array can only point at broadside and at about $\pm 31^\circ$.
+For the PHASER at $10.0\ \text{GHz}$, $d/\lambda = 14/30 = 0.467$, so the step is $2.8125/(360 \times 0.467) = 0.0167\ \text{rad} = 0.96^\circ$ at broadside. Compared with the $13.6^\circ$ beamwidth that is about one-fourteenth of a beam, which is fine. Off broadside the same step in $\sin\theta_0$ spans a wider angle, because $\Delta(\sin\theta_0) = \cos\theta_0\ \Delta\theta_0$. The step therefore grows as $1/\cos\theta_0$, reaching $1.9^\circ$ at $60^\circ$. Drop to $B = 2$ and the same calculation gives $31^\circ$ per step: a 2-bit array can only point at broadside and at about $\pm 32^\circ$.
 
 <img src="../../viz/img/L23-pointing-grid.svg"
-     alt="The beam angles a phase shifter can command on the course array, as ticks from 0 to 90 degrees: 2 bits gives 0 and 30.6 degrees; 3 bits adds 14.7 and 49.7; 4 bits gives eight angles out to 62.9 degrees; 7 bits gives a dense set whose gaps widen toward wide scan"
+     alt="The beam angles a phase shifter can command on the course array at 10.0 GHz, as ticks from 0 to 90 degrees: 2 bits gives 0 and 32.4 degrees; 3 bits adds 15.5 and 53.5; 4 bits gives eight angles out to 69.6 degrees; 7 bits gives a dense set whose gaps widen toward wide scan"
      style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 
-The figure shows the angles each bit count can reach on the course array. With 3 bits they are $0^\circ$, $14.7^\circ$, $30.6^\circ$ and $49.7^\circ$, equally spaced in $\sin\theta_0$ and so spreading apart in angle as the scan widens. A real controller rounds each element on its own, which fills in the angles between these and brings in the quantization lobes below.
+The figure shows the angles each bit count can reach on the course array. With 3 bits they are $0^\circ$, $15.5^\circ$, $32.4^\circ$ and $53.5^\circ$ at $10.0\ \text{GHz}$, equally spaced in $\sin\theta_0$ and so spreading apart in angle as the scan widens. A real controller rounds each element on its own, which fills in the angles between these and brings in the quantization lobes below.
 ::::
 
 ::::{frame} Quantization Sidelobes
@@ -385,7 +386,7 @@ $$
      style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-A real controller does better than a uniform quantized increment. It computes the exact ramp for every element, then rounds each element independently, which puts the beam much closer to the commanded angle. What is left behind is a staircase: the difference between the exact ramp and the rounded one is a sawtooth error, bounded by half an LSB, that repeats across the aperture. A periodic phase error radiates, and where it radiates is a **quantization sidelobe**. The figure shows the staircase for a beam at $28^\circ$ with 3 bits: the exact ramp climbs $83.1^\circ$ per element, the shifters can only set multiples of $45^\circ$, and the error left at each element rises and falls within $\pm 22.5^\circ$.
+A real controller does better than a uniform quantized increment. It computes the exact ramp for every element, then rounds each element independently, which puts the beam much closer to the commanded angle. What is left behind is a staircase: the difference between the exact ramp and the rounded one is a sawtooth error, bounded by half an LSB, that repeats across the aperture. A periodic phase error radiates, and where it radiates is a **quantization sidelobe**. The figure shows the staircase for a beam at $28^\circ$ with 3 bits at $10.0\ \text{GHz}$: the exact ramp climbs $78.9^\circ$ per element, the shifters can only set multiples of $45^\circ$, and the error left at each element rises and falls within $\pm 22.5^\circ$.
 
 Its level follows from the size of the error. Rounding leaves at most half an LSB at each element. For a small phase error $e^{j\phi} \approx 1 + j\phi$, so the error adds a small field to each element in proportion to $\phi$, and the lobe that field radiates scales with the sawtooth's peak:
 
@@ -400,6 +401,41 @@ $$
 Each extra bit halves the error, which halves the lobe's field and lowers the **quantization sidelobe level (QSLL)** by $6$ dB. That gives the rule of thumb: 5 bits puts a lobe near $-30$ dB and 6 bits near $-36$ dB. Treat this as an RMS estimate for a large array. On an aperture as short as eight elements there are only a couple of sawtooth periods, so individual lobes scatter several dB either side of the rule. Taken at face value, the rule says that from 3 bits up the quantization lobes drop below the array's own $-13$ dB sidelobes and no longer set the sidelobe level.
 
 Whether a given beam shows a quantization lobe at all depends on how its ramp falls on the grid, not only on the bit count. The L22–L23 Lab is built around that. It holds the beam at $15^\circ$ with the Blackman taper, so every true sidelobe sits under the noise floor and any lobe that rises comes from rounding. It sweeps the source in azimuth on **Signal vs Time** instead of sweeping the beam, so the rounded weights stay fixed while you read the pattern they make. Part 1 of the packet rounds the $15^\circ$ ramp onto each grid and predicts which bit counts change the trace. A lobe the azimuth sweep shows reads a few dB under the array factor's value, because a source swept in azimuth also crosses each patch's own pattern, as in the L21 Lab.
+
+To predict a quantization lobe, divide the ramp by the LSB. If the ramp is close to a whole number of LSBs, every element rounds by only a few degrees, and the error is too small to raise a lobe out of the floor. If it is close to a whole number and a half, every other element rounds by almost half an LSB in the same direction, so the error repeats every two elements. A pattern that repeats every two elements radiates $180^\circ$ of $\psi$ away from the beam:
+
+$$
+\begin{aligned}
+\psi_q &= \Delta\phi - 180^\circ \\
+\sin\theta_q &= \frac{\psi_q}{360^\circ\ (d/\lambda)}
+\end{aligned}
+$$
+
+:::{admonition} Worked example — rounding a ramp onto the grid
+:class: tip
+Hold a beam at $53^\circ$ at $10.0\ \text{GHz}$, where $d/\lambda = 0.467$. The ramp is
+
+$$
+\begin{aligned}
+\Delta\phi &= 360^\circ\ (d/\lambda) \sin\theta_0 \\
+&= 360^\circ \times 0.467 \times 0.799 = 134.2^\circ.
+\end{aligned}
+$$
+
+At 3 bits the LSB is $45^\circ$, and the ramp is $134.2/45 = 2.98$ LSB. The controller asks element $n$ for $2.98n$ LSB and rounds it to $3n$, so the error grows by $0.8^\circ$ per element to $5.8^\circ$ at the far end of the row: too small for a lobe, so the 3-bit trace matches the 7-bit one.
+
+At 2 bits the LSB is $90^\circ$, and the ramp is $1.49$ LSB. The commanded phases are $0^\circ$, $134.2^\circ$, $268.3^\circ$, $402.5^\circ$, and so on; they round to $0^\circ$, $90^\circ$, $270^\circ$, $360^\circ$, so elements $n = 1, 3, 5, 7$ lose $39^\circ$ to $44^\circ$ and the others almost nothing. That error repeats every two elements, and the lobe sits at
+
+$$
+\begin{aligned}
+\psi_q &= 134.2^\circ - 180^\circ = -45.8^\circ \\
+\sin\theta_q &= \frac{-45.8^\circ}{360^\circ \times 0.467} = -0.273 \\
+\theta_q &= -15.8^\circ.
+\end{aligned}
+$$
+
+With the lab's Blackman taper the full array factor puts it at $-15.2^\circ$ and $-7.7$ dBc, well above the $-12$ dB the $-6B$ rule gives, because a pattern that repeats every two elements adds up in one lobe instead of spreading.
+:::
 
 <img src="../../viz/img/L23-qsll-vs-bits.svg"
      alt="Worst lobe in dB below the beam against phase-shifter bits from 2 to 7: the minus 6B rule; the simulated worst quantization lobe on the course array over steer angles 0 to 50 degrees, about 4 dB above the rule at every bit count; and the uniform array's own sidelobes at minus 13.3 dB"
@@ -475,7 +511,7 @@ The three failures look different on a sweep and a designer fixes each one in a 
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| $\sin\theta_g = \sin\theta_0 \pm m\lambda/d$ | Grating-lobe angles, from the $2\pi$ periodicity of the array factor | $42\ \text{mm}$ at $10.3\ \text{GHz}$ gives $\pm 43.9^\circ$; $56\ \text{mm}$ gives $\pm 31.3^\circ$ |
+| $\sin\theta_g = \sin\theta_0 \pm m\lambda/d$ | Grating-lobe angles, from the $2\pi$ periodicity of the array factor | $42\ \text{mm}$ at $10.0\ \text{GHz}$ gives $\pm 45.6^\circ$; $56\ \text{mm}$ gives $\pm 32.4^\circ$ |
 | $d < \lambda/(1+\vert\sin\theta_0\vert)$ | Spacing that keeps grating lobes out of visible space | $d \le \lambda/2$ is safe at every scan angle |
 | Grating-lobe height | It is a second main lobe, not a sidelobe | Equal to the main beam; a taper does not reduce it |
 ::::
@@ -485,7 +521,7 @@ The three failures look different on a sweep and a designer fixes each one in a 
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| $\Delta\theta = \arcsin((f_0/f)\sin\theta_0) - \theta_0$ | Beam squint when the signal is off the phase-set frequency | $500\ \text{MHz}$ at $45^\circ$ gives $+2.9^\circ$ |
+| $\Delta\theta = \arcsin((f_0/f)\sin\theta_0) - \theta_0$ | Beam squint when the signal is off the phase-set frequency | Phases $500\ \text{MHz}$ below a $10.0\ \text{GHz}$ signal: a source at $40^\circ$ peaks at a commanded $42.6^\circ$ |
 | $\Delta\theta \approx -(\Delta f/f_0)\tan\theta_0$ | Small-offset squint, for a budget | Zero at broadside, worst at wide scan |
 | True time delay | Delays the signal instead of rotating its phase | Removes squint at all offsets |
 ::::
@@ -496,7 +532,7 @@ The three failures look different on a sweep and a designer fixes each one in a 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | $\text{LSB} = 360^\circ/2^B$ | Phase step of a $B$-bit shifter | ADAR1000: $B = 7$, LSB $= 2.8125^\circ$ |
-| $\Delta\theta_0 \approx \text{LSB}/(360^\circ d/\lambda)$ | Pointing granularity near broadside | $0.91^\circ$ on the PHASER, one-fourteenth of a beam |
+| $\Delta\theta_0 \approx \text{LSB}/(360^\circ d/\lambda)$ | Pointing granularity near broadside | $0.96^\circ$ on the PHASER at $10.0\ \text{GHz}$, one-fourteenth of a beam |
 | $\text{QSLL} \approx -6B$ dB | Quantization sidelobe rule of thumb | 5 bits gives $-30$ dB; on eight elements the worst lobe sits about 4 dB above the rule |
 ::::
 
@@ -513,8 +549,9 @@ the lab period, and bring it to class.
 | Question 4(b) | the commanded angle and Angle shift with Signal BW at 500 MHz | Steps 17 and 18, Table D |
 | Question 4(c) | the $15^\circ$ ramp, its rounding at 7, 4, 3, and 2 bits, and which bit counts change the trace | Steps 19 to 21, Table E |
 
-The three worked examples above, Thinning the PHASER Row, Squint on the PHASER,
-and Quantization Sidelobes, are the models at $10.3$ and $10.525\ \text{GHz}$.
+The worked examples above are the models, all at $10.0\ \text{GHz}$, below every
+kit: Thinning the PHASER Row for Question 4(a), Squint on the PHASER for 4(b),
+and the rounding example under Quantization Sidelobes for 4(c).
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet, Part 1 (PDF)</a>
 ::::
