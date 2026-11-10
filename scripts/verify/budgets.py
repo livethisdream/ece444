@@ -61,7 +61,7 @@ BEAT_EXCEPTIONS = {
     "L12": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L13": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L14": (30, "cut under the 30-beat rule (2026-09); recut pending"),
-    "L20-lab": (LAB_BEATS, "restructured: lab opening only, procedure read-only (Neil, 2026-11-08)"),
+    "L20-lab": (LAB_BEATS + 1, "lab opening, a prediction widget, then the procedure as beats (Neil, 2026-11-10)"),
     "L18-lab": (LAB_BEATS, "restructured like L20 (#234)"),
     "L21-lab": (LAB_BEATS, "restructured like L20 (#233)"),
     "L22-L23-lab": (LAB_BEATS, "restructured like L20 (#235)"),
