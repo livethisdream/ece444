@@ -35,8 +35,8 @@ OUT = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 NAVY, MID, LIGHT, RED, GRAY, INK, ORANGE, GREEN = (
     "#004a85", "#0067b9", "#cddce9", "#b01e24", "#5a5a5a", "#1f2a36", "#d9822b", "#1d7a4d")
 
-# array model for the schematic traces (HB100 nominal, as the lab packet)
-LAM = 3e8 / 10.525e9
+# array model for the schematic traces, at 10.0 GHz, away from every kit
+LAM = 3e8 / 10.0e9
 D = 0.014
 N = 8
 KD = 2 * math.pi * D / LAM
