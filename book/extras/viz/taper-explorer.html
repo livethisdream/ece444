@@ -84,7 +84,7 @@
     </div>
     <div class="ctl">
       <label>Array</label>
-      <span class="val">\(N=8\), \(d/\lambda = 0.481\), broadside</span>
+      <span class="val" id="arr-val">\(N=8\), \(d/\lambda = 0.481\), broadside</span>
     </div>
   </div>
 
@@ -99,7 +99,15 @@
 <script>
 'use strict';
 const SANS='Inter, system-ui, -apple-system, sans-serif';
-const FLOOR=-60, N=8, DL=0.481, DEG=180/Math.PI;
+// Default d/lambda = 0.481 (10.3 GHz, d = 14 mm). Opt-in ?f=<GHz> (8 to 12)
+// draws the array at that frequency instead, with c = 3.00e8: Lesson 22 embeds
+// ?f=10.0, below every kit's HB100, so no readout equals a Part 1 answer of the
+// L22-L23 Lab. Without the parameter the widget is unchanged.
+const F_Q=parseFloat(new URLSearchParams(location.search).get('f'));
+const DL=(F_Q>=8 && F_Q<=12) ? 14e-3*F_Q*1e9/3.00e8 : 0.481;
+if(F_Q>=8 && F_Q<=12) document.getElementById('arr-val').textContent=
+  '\\(N=8\\), \\(d/\\lambda = '+DL.toFixed(3)+'\\) at '+F_Q.toFixed(1)+' GHz';
+const FLOOR=-60, N=8, DEG=180/Math.PI;
 function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
 const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const neg=x=>(Math.abs(x)<0.05?'0.0':x.toFixed(1)).replace('-','−');
