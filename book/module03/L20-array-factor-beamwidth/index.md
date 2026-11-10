@@ -248,7 +248,7 @@ $$\begin{aligned}
 &= 0.236.
 \end{aligned}$$
 
-In decibels that is $20\log_{10}(0.236) = -12.6$ dB. Searching the array factor between its first two nulls puts the true peak at $N\psi/2 = 1.44\pi$ and $-12.4$ dB, $0.1$ dB higher. Neither the frequency nor the spacing enters, because $AF_N$ depends on them only through $\psi$; they move the sidelobe in angle, not in level, as long as it lands inside the visible region.
+In decibels that is $20\log_{10}(0.236) = -12.6$ dB. Searching the array factor between its first two nulls puts the true peak at $N\psi/2 = 1.44\pi$ and $-12.4$ dB, so the estimate is close enough to use. Neither the frequency nor the spacing enters, because $AF_N$ depends on them only through $\psi$; they move the sidelobe in angle, not in level, as long as it lands inside the visible region.
 :::
 ::::
 
