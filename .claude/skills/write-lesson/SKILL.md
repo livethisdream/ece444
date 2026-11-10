@@ -80,6 +80,25 @@ Every frame:
 - No math in the raw-HTML objectives list, `\vert` not `|` in table math,
   `\ ` not `\,` or `\;`, no thin spaces (CLAUDE.md gotchas).
 
+Every Module 3 lesson and lab pair has one shape (Neil, 2026-11-08: "The
+lesson should be preparing them for the lab"; L20 is the worked example,
+#230). Class time is the lab; cadets read the lesson and do the pre-lab first.
+
+- **The lesson** teaches everything the lab tests and how to read what the
+  cadet will see. It is a reading page with no beat cap (`budgets.py`), and
+  it ends with a read-only **Pre-Lab** frame that maps each Part 1 question
+  to the step and table that checks it, linking the packet.
+- **The lab page** presents only its opening, at most `LAB_BEATS` (6): title,
+  objectives, **The Big Picture** (the story of what we test, with a figure),
+  **The Flow of the Lab** (the runs with their step ranges, with a strip
+  figure), and **Equipment and Setup**. Everything after is read-only: the
+  steps with their boxes, No Hardware?, Your Part 2 Entries, Lab Packet,
+  **For Part 3** (only what the writeup asks for), and a one-line Looking
+  Ahead. No teaching on the lab page: a frame that explains goes in the
+  lesson, or goes.
+- **The packet's** Part 1 produces exactly the predictions Part 2 compares
+  against, and Part 3 matches For Part 3. No practice set after L16.
+
 Every lab page (VOICE.md 27-34, from Neil's L20 Lab notes):
 
 - Steps run 1 to N straight through, a few frames of them, and the opening

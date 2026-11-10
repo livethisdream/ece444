@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
 """Generate the L18 Lab (Beam Steering) figures as inline SVG.
 
-  - L18-sweep-compare   : two beam-sweep traces, source at 0 and at +30 deg,
-                          sampled where the instrument samples them
-  - L18-expected-sweep  : the same pair, annotated with what the lab measures
-  - L18-phase-control      : the 30 deg ramp, unwrapped and wrapped, beside what
-                          Phase Control shows after Apply 30
-  - L18-lab-setup       : top view of the setup, 1 m arc, 0 / 30 / 45 deg,
-                          and the 1.2 m scan-loss positions on the same lines
+  - L18-sweep-compare   : the lab in one plot: the source at 0, the source
+                          moved to +45 (physical run, 1.5 dB lower), and
+                          Apply 45 with the source at boresight (commanded
+                          run, no drop), sampled where the instrument samples
+  - L18-expected-sweep  : the 0 and 30 deg beams as the angle and width
+                          readings see them, annotated with what the lab
+                          reads, at 10.0 GHz (away from every kit)
+  - L18-phase-control   : the 30 deg ramp at the lesson's 10.3 GHz,
+                          unwrapped and wrapped, beside what Phase Control
+                          shows after Apply 30 (not the lab's 10.525 GHz, so
+                          the page does not print the Part 1 key)
+  - L18-lab-setup       : top view of the setup, 1 m arc, 0 / 30 / 45 deg
   - L18-two-ways        : rotating the array versus sweeping the command
   - L18-error-budget    : the three error sources at 30 deg and their RSS
+                          (no longer generated: those are the Part 1 key, and
+                          the page now teaches the method; the file is kept)
 
 Every figure goes to book/extras/viz/img/ (the lesson page).
 
@@ -223,9 +230,9 @@ def grid_step_at(theta_deg):
     return float(x[i] - x[i - 1])
 
 
-def phase_control(theta_deg):
+def phase_control(theta_deg, freq=FREQ):
     """What Apply writes into Phase Control (main.js, btn-apply-steer)."""
-    ph = -(360 * D * math.sin(math.radians(theta_deg)) * FREQ / C_GUI)
+    ph = -(360 * D * math.sin(math.radians(theta_deg)) * freq / C_GUI)
     return [int(math.floor(k * ph + 0.5)) for k in range(N)]    # JS Math.round
 
 
@@ -265,22 +272,60 @@ def check_numbers():
 
 
 # --------------------------------------------------------------------------- 1
+def cmd_db(dphi_deg, apply_deg):
+    """The commanded run: the source at boresight, Apply loaded. Phase
+    Control holds -n dphi0 and the sweep adds +n dphi_s, so the trace is the
+    boresight array factor shifted to the Apply angle, at full level."""
+    p0 = 360.0 * D * FREQ / C_GUI * math.sin(math.radians(apply_deg))
+    db = 10 * np.log10(np.clip(af2(np.asarray(dphi_deg, dtype=float) - p0, 0.0), 1e-12, None))
+    return np.maximum(db, FLOOR_DB)
+
+
+def _cmd_curve(apply_deg, n=8001):
+    ph = np.linspace(M_STEPS[0] * LSB, M_STEPS[-1] * LSB, n)
+    x = sweep_axis(ph)
+    keep = np.abs(x) < 89.999
+    return x[keep], cmd_db(ph[keep], apply_deg)
+
+
+def _cmd_samples(apply_deg):
+    ph = M_STEPS * LSB
+    x = sweep_axis(ph)
+    keep = np.abs(x) < 89.999
+    return x[keep], cmd_db(ph[keep], apply_deg)
+
+
 def sweep_compare() -> None:
-    """The measurement: one beam traced twice, the source moved between."""
-    fig, ax = plt.subplots(figsize=(5.9, 3.0))
-    for src, col in ((0.0, NAVY), (30.0, AMBER)):
-        x, y = curve(src)
-        ax.plot(x, y, color=col, lw=1.3, alpha=0.55, zorder=2)
-        xs, ys = samples(src)
-        ax.plot(xs, ys, ls="none", marker="o", ms=2.6, color=col, zorder=3)
+    """The lab in one plot: the boresight trace, the source moved to +45
+    (physical run: the peak follows it, 1.5 dB lower, the ideal-element
+    bound), and Apply 45 with the source at boresight (commanded run: the
+    same place and width, no drop). 45 deg, not 30: at 30 the drop is
+    0.6 dB, inside the +/-0.9 dB multipath ripple, and no kit shows it."""
+    drop45 = 10 * math.log10(ef(45.0))
+    assert round(drop45, 1) == -1.5
+    fig, ax = plt.subplots(figsize=(5.9, 3.1))
+    x, y = curve(0.0)
+    ax.plot(x, y, color=NAVY, lw=1.3, alpha=0.55, zorder=2)
+    xs, ys = samples(0.0)
+    ax.plot(xs, ys, ls="none", marker="o", ms=2.6, color=NAVY, zorder=3)
+    x, y = _cmd_curve(45.0)
+    ax.plot(x, y, color=BLUE, lw=1.6, ls=(0, (4, 2)), zorder=2)
+    x, y = curve(45.0)
+    ax.plot(x, y, color=AMBER, lw=1.3, alpha=0.55, zorder=3)
+    xs, ys = samples(45.0)
+    ax.plot(xs, ys, ls="none", marker="o", ms=2.6, color=AMBER, zorder=4)
 
     ax.axhline(FLOOR_DB, color=GRAY, lw=1.0, ls=(0, (5, 4)), zorder=1)
     ax.text(-58, FLOOR_DB - 1.0, "noise floor", fontsize=13, color=GRAY, va="top")
     ax.text(-4.0, 1.0, "source at 0°", fontsize=13, color=NAVY, ha="right", va="bottom")
-    ax.text(34.0, 0.4, "source at +30°", fontsize=13, color=AMBER, ha="left", va="bottom")
+    # labels to the right of the 45 deg lobe, where both traces sit on the floor
+    ax.text(73.0, 1.5, "Apply 45:\n0 dB", fontsize=13, color=BLUE, ha="left", va="top",
+            linespacing=1.15)
+    ax.text(73.0, -7.5, f"source at\n45°: {drop45:.1f} dB".replace("-", "\u2212"),
+            fontsize=13, color=AMBER, ha="left", va="top", linespacing=1.15)
 
-    ax.set_xlim(-60, 60)
-    ax.set_ylim(-29, 4)
+    ax.set_xlim(-60, 100)
+    ax.set_ylim(-29, 5)
     ax.set_xticks(range(-60, 61, 30))
     ax.set_xticklabels(["−60", "−30", "0", "30", "60"])
     ax.set_yticks([-20, -10, 0])
@@ -295,45 +340,46 @@ def sweep_compare() -> None:
 
 # --------------------------------------------------------------------------- 2
 def expected_sweep() -> None:
-    """The pair again, marked with what the lab reads: the two half-power
-    spans, the first sidelobes, the element-pattern drop on the moved trace,
-    the sample spacing, and the floor."""
+    """Drawn at 10.0 GHz, away from every kit (Neil, 2026-11-08: no Part 1
+    answers on the pages), so its widths and sample spacings are not a
+    cadet's Part 1 key."""
+    global FREQ
+    saved, FREQ = FREQ, 10.0e9
+    try:
+        _expected_sweep()
+    finally:
+        FREQ = saved
+
+
+def _expected_sweep() -> None:
+    """The 0 and 30 deg beams as the angle and width readings see them,
+    marked with what the lab reads: the two half-power spans, the first
+    sidelobes, the sample spacing, and the floor. Both are drawn at full
+    level: the 0.6 dB a moved source loses at 30 deg is inside the
+    +/-0.9 dB ripple (L18 rule 38), so the figure does not draw it."""
     fig, ax = plt.subplots(figsize=(5.9, 3.5))
     spans = {}
     for src, col in ((0.0, NAVY), (30.0, AMBER)):
-        x, y = curve(src)
+        x, y = _cmd_curve(src)
         ax.plot(x, y, color=col, lw=1.3, alpha=0.55, zorder=2)
-        xs, ys = samples(src)
+        xs, ys = _cmd_samples(src)
         ax.plot(xs, ys, ls="none", marker="o", ms=2.8, color=col, zorder=3)
         spans[src] = hpbw_on_axis(src)
 
-    drop = 10 * math.log10(ef(30.0))
-    # the half-power spans, each at 3 dB below its own trace's peak
     for src, col in ((0.0, NAVY), (30.0, AMBER)):
         lo, hi = spans[src]
-        yb = -3.0 + (drop if src else 0.0)
-        ax.annotate("", xy=(hi, yb), xytext=(lo, yb), zorder=4,
+        ax.annotate("", xy=(hi, -3.0), xytext=(lo, -3.0), zorder=4,
                     arrowprops=dict(arrowstyle="<|-|>", color=GREEN, lw=1.5,
                                     shrinkA=0, shrinkB=0, mutation_scale=9))
-        ax.text((lo + hi) / 2, yb - 1.0, f"{hi - lo:.1f}°", color=GREEN, fontsize=13,
+        ax.text((lo + hi) / 2, -4.0, f"{hi - lo:.1f}°", color=GREEN, fontsize=13,
                 ha="center", va="top", zorder=5)
 
-    # first sidelobes: a tick on each, one label
-    for src, col in ((0.0, NAVY), (30.0, AMBER)):
-        off = drop if src else 0.0
+    for src in (0.0, 30.0):
         for xa, lev in first_sidelobes(src):
             if -40 < xa < 70:
-                ax.plot([xa - 3, xa + 3], [lev + off, lev + off], color=RED, lw=1.8, zorder=5)
+                ax.plot([xa - 3, xa + 3], [lev, lev], color=RED, lw=1.8, zorder=5)
     xa, lev = first_sidelobes(0.0)[0]
     ax.text(xa, lev + 1.0, f"−{abs(lev):.1f} dB", color=RED, fontsize=13, ha="center", va="bottom")
-
-    # the element-pattern drop on the moved trace's peak
-    # the 0 dB reference carried over the moved peak, so the drop can be seen
-    ax.plot([23, 37], [0, 0], color=AMBER, lw=1.0, ls=(0, (2, 2)), zorder=4)
-    ax.annotate(f"peak −{abs(drop):.1f} dB:\nelement pattern", xy=(37.5, -0.3),
-                xytext=(46, 1.6), color=AMBER, fontsize=13, ha="left", va="top",
-                linespacing=1.15,
-                arrowprops=dict(arrowstyle="-", color=AMBER, lw=1.0, shrinkA=1, shrinkB=1))
 
     ax.axhline(FLOOR_DB, color=GRAY, lw=1.0, ls=(0, (5, 4)), zorder=1)
     ax.text(69, FLOOR_DB - 0.7, f"floor −{abs(FLOOR_DB):.0f} dB", fontsize=13, color=GRAY,
@@ -361,15 +407,17 @@ def phase_ramp() -> None:
     """The 30 deg prediction against the readout: +n dphi rising, the same
     ramp wrapped into 0-360, and the falling, unwrapped whole degrees that
     Phase Control shows after Apply 30."""
-    dphi = KD_DEG * math.sin(math.radians(30.0))
+    f_lesson = 10.3e9                   # the lesson's frequency, not the lab's
+    dphi = 360.0 * D * f_lesson / C_COURSE * math.sin(math.radians(30.0))
     n = np.arange(N)
     unwrapped = n * dphi
     wrapped = unwrapped % 360.0
-    shown = np.array(phase_control(30.0))
+    shown = np.array(phase_control(30.0, f_lesson))
     assert np.allclose(np.round(unwrapped, 1),
-                       [0, 88.4, 176.8, 265.2, 353.6, 442.0, 530.5, 618.9])
+                       [0, 86.5, 173.0, 259.6, 346.1, 432.6, 519.1, 605.6])
     assert np.allclose(np.round(wrapped, 1),
-                       [0, 88.4, 176.8, 265.2, 353.6, 82.0, 170.5, 258.9])
+                       [0, 86.5, 173.0, 259.6, 346.1, 72.6, 159.1, 245.6])
+    assert list(shown) == [0, -87, -173, -260, -346, -433, -519, -606], shown
     # the readout is the prediction negated, to within the whole-degree rounding
     # and the GUI's c (0.07 % from the course's 3e8)
     assert np.all(np.abs(shown + unwrapped) < 1.0), shown + unwrapped
@@ -412,12 +460,8 @@ def lab_setup() -> None:
     left (Neil, 2026-10-20); from above, with boresight up the page, that puts
     E1 at the page's left.
 
-    The angle runs use the 1 m arc. The scan-loss levels are taken farther
-    out, at 1.2 m (4 ft) or more on the same three lines: in the 2026-10-19
-    dry run the 30 deg drop read only 0.2-0.4 dB at 1 m and 0.7 dB at 1.2 m
-    (theory 0.6 ideal, 0.8-0.9 for a patch). Hollow markers show those
-    positions."""
-    R, R2 = 1.0, 1.2
+    Every reading, angles and levels, is taken on the 1 m arc."""
+    R = 1.0
     fig, ax = plt.subplots(figsize=(5.9, 4.4))
     ax.set_aspect("equal")
     ax.axis("off")
@@ -433,15 +477,7 @@ def lab_setup() -> None:
     ax.text(xs[0] - 0.06, -0.045, "E1", color=NAVY, fontsize=13, ha="right", va="center")
     ax.text(0, -0.10, "array", color=GRAY, fontsize=13, ha="center",
             va="top")
-    ax.text(-1.15, 1.58, "top view", color=GRAY, fontsize=13, ha="left", va="top")
-
-    # the key: filled for the 1 m angle positions, hollow for the 1.2 m levels
-    ax.add_patch(Rectangle((-1.13, 0.255), 0.07, 0.05, facecolor=INK, edgecolor="none"))
-    ax.text(-1.02, 0.28, "1 m: angles", color=INK, fontsize=13, ha="left", va="center")
-    ax.add_patch(Rectangle((-1.13, 0.115), 0.07, 0.05, facecolor="white", edgecolor=INK,
-                           lw=1.3))
-    ax.text(-1.02, 0.14, "1.2 m: scan loss", color=INK, fontsize=13, ha="left",
-            va="center")
+    ax.text(-1.15, 1.36, "top view", color=GRAY, fontsize=13, ha="left", va="top")
 
     # the arc and its ticks every 15 deg
     a = np.radians(np.linspace(-60, 60, 400))
@@ -455,25 +491,19 @@ def lab_setup() -> None:
     ax.plot([0, 0], [0.02, R], color=GRAY, lw=1.0, ls=(0, (2, 3)), zorder=1)
     ax.text(-0.03, 0.5 * R, "1 m", color=INK, fontsize=13, ha="right", va="center")
 
-    # the three source positions: on the arc, and 1.2 m out on the same line
+    # the three source positions on the arc
     for t, col in ((0, GREEN), (30, AMBER), (45, AMBER)):
         ar = np.radians(t)
         px, py = R * np.sin(ar), R * np.cos(ar)
-        qx, qy = R2 * np.sin(ar), R2 * np.cos(ar)
         if t:
             ax.plot([0, px], [0.02, py], color=col, lw=1.2, alpha=0.7, zorder=1)
-        ax.plot([px, qx], [py, qy], color=col, lw=1.2, alpha=0.7, ls=(0, (2, 2)),
-                zorder=1)
         ax.add_patch(Rectangle((px - 0.035, py - 0.025), 0.07, 0.05, angle=-t,
                                rotation_point="center", facecolor=col, edgecolor="none",
                                zorder=4))
-        ax.add_patch(Rectangle((qx - 0.035, qy - 0.025), 0.07, 0.05, angle=-t,
-                               rotation_point="center", facecolor="white", edgecolor=col,
-                               lw=1.3, zorder=4))
         lab = f"{t}°" if t == 0 else f"+{t}°"
-        ax.text(1.33 * np.sin(ar), 1.33 * np.cos(ar), lab, color=col, fontsize=13,
+        ax.text(1.15 * np.sin(ar), 1.15 * np.cos(ar), lab, color=col, fontsize=13,
                 ha="center", va="center")
-    ax.text(0, 1.42 * R, "HB100", color=GREEN, fontsize=13, ha="center", va="bottom")
+    ax.text(0, 1.24 * R, "HB100", color=GREEN, fontsize=13, ha="center", va="bottom")
 
     # the + side
     ax.text(xs[-1] + 0.06, -0.045, "E8", color=NAVY, fontsize=13, ha="left", va="center")
@@ -481,7 +511,7 @@ def lab_setup() -> None:
                 arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.3))
     ax.text(0.72, 0.0, "+ side: toward E8", color=INK, fontsize=13, ha="left",
             va="bottom")
-    ax.text(0.72, -0.07, "confirm with Est. Angle", color=GRAY, fontsize=13, ha="left",
+    ax.text(0.72, -0.07, "confirm with Angle", color=GRAY, fontsize=13, ha="left",
             va="top")
 
     ax.set_xlim(-1.15, 1.9)
@@ -656,7 +686,6 @@ def main() -> int:
     phase_ramp()
     lab_setup()
     two_ways()
-    error_budget()
     return 0
 
 

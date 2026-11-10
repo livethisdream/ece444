@@ -52,8 +52,8 @@
     </div>
     <div class="ctl">
       <label>Spacing \(d/\lambda\)</label>
-      <input type="range" id="dl" min="0.25" max="1.0" step="0.001" value="0.481">
-      <span class="val" id="dl-val">0.481</span>
+      <input type="range" id="dl" min="0.25" max="1.0" step="0.001" value="0.467">
+      <span class="val" id="dl-val">0.467</span>
     </div>
     <div class="ctl">
       <label>Steer \(\theta_0\)</label>
@@ -81,7 +81,7 @@ function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bo
 const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 
 const cv=document.getElementById('pat'), ctx=cv.getContext('2d');
-const state={ N:8, dl:0.481, th0:0 };
+const state={ N:8, dl:0.467, th0:0 };
 
 /* ------------------------------- the array factor -------------------------------
    AF_N(psi) = sin(N psi/2) / (N sin(psi/2)),  psi = k d (sin th - sin th0).

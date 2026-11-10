@@ -30,7 +30,8 @@ History
             pages are reading pages with no beat cap (budget None; the 40-word
             frame rule still holds), and a restructured lab page gets
             LAB_BEATS: title, objectives, big picture, flow, setup, and one to
-            spare. A lab is listed here as it is restructured; L20 first. L18's
+            spare. A lab is listed here as it is restructured; L20 first, then L18, L21 and
+            L22-L23 (2026-11-09). L18's
             exception of 21 is retired with it: the lesson has no cap now.
 """
 
@@ -60,7 +61,10 @@ BEAT_EXCEPTIONS = {
     "L12": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L13": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L14": (30, "cut under the 30-beat rule (2026-09); recut pending"),
-    "L20-lab": (LAB_BEATS, "restructured: lab opening only, procedure read-only (Neil, 2026-11-08)"),
+    "L20-lab": (LAB_BEATS + 1, "lab opening, a prediction widget, then the procedure as beats (Neil, 2026-11-10)"),
+    "L18-lab": (LAB_BEATS, "restructured like L20 (#234)"),
+    "L21-lab": (LAB_BEATS, "restructured like L20 (#233)"),
+    "L22-L23-lab": (LAB_BEATS, "restructured like L20 (#235)"),
 }
 
 

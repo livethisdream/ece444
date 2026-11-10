@@ -84,14 +84,14 @@
 
     <div class="ctl" id="c-quant" style="display:none">
       <label>Phase-shifter bits \(B\)</label>
-      <input type="range" id="bits" min="2" max="7" step="1" value="2">
-      <span class="val" id="bits-val">2</span>
+      <input type="range" id="bits" min="2" max="7" step="1" value="3">
+      <span class="val" id="bits-val">3</span>
     </div>
 
     <div class="ctl" id="c-steer" style="display:none">
       <label>Steer to</label>
-      <input type="range" id="steer" min="0" max="60" step="1" value="15">
-      <span class="val" id="steer-val">15°</span>
+      <input type="range" id="steer" min="0" max="60" step="1" value="30">
+      <span class="val" id="steer-val">30°</span>
     </div>
   </div>
 
@@ -118,11 +118,13 @@ const sgn=x=>(x>=0?'+':'−')+Math.abs(x).toFixed(1);
    -6B rule are computed separately and shown alongside as predictions.       */
 
 const PITCH=14e-3, NEL=8;
-const F_DESIGN=10.3e9;                 // array design center, lambda = 29.1 mm
-const F0=10.525e9;                     // HB100 source, phases are set here
+// 10.0 GHz, well away from any kit's HB100, so the widget never shows the
+// numbers the L22-L23 Lab's Part 1 asks a cadet to predict (Neil, 2026-11-08).
+const F_DESIGN=10.0e9;                 // grating mode, lambda = 30.0 mm
+const F0=10.0e9;                       // squint and quantization: phases are set here
 const TH0_SQ=45;
 
-const state={ mode:'grating', dmm:14, foff:-500, bits:2, th0q:15 };
+const state={ mode:'grating', dmm:14, foff:-500, bits:3, th0q:30 };
 
 function model(){
   if(state.mode==='grating'){
@@ -240,11 +242,11 @@ function header(m,x){
     return [state.dmm+' mm spacing, '+m.el.length+' elements on, '+(m.f/1e9).toFixed(1)+' GHz',
             state.dmm+' mm, '+m.el.length+' elements, '+(m.f/1e9).toFixed(1)+' GHz'];
   if(state.mode==='squint')
-    return ['phases set for 45° at 10.525 GHz, signal at '+(m.f/1e9).toFixed(3)+' GHz',
-            'set for 45° at 10.525 GHz, signal '+(m.f/1e9).toFixed(3)+' GHz',
+    return ['phases set for 45° at '+(F0/1e9).toFixed(1)+' GHz, signal at '+(m.f/1e9).toFixed(3)+' GHz',
+            'set for 45° at '+(F0/1e9).toFixed(1)+' GHz, signal '+(m.f/1e9).toFixed(3)+' GHz',
             'signal at '+(m.f/1e9).toFixed(3)+' GHz'];
-  return [state.bits+'-bit phase shifter, 8 elements steered to '+state.th0q+'°, 10.525 GHz',
-          state.bits+'-bit phase shifter, steered to '+state.th0q+'°',
+  return [state.bits+'-bit, uniform taper, steered to '+state.th0q+'°, '+(F0/1e9).toFixed(1)+' GHz',
+          state.bits+'-bit, uniform, steered to '+state.th0q+'°',
           state.bits+' bits, steered to '+state.th0q+'°'];
 }
 function fitText(ctx, cands, maxW, px, bold){
