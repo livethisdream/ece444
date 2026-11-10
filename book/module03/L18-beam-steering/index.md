@@ -46,7 +46,9 @@ then read the process backwards — given a set of phases, find the angle the
 array is pointing. The second half turns to what the L18 Lab measures: the
 beam-sweep trace, the two ways to put its peak at an angle, what Phase Control
 shows after Apply, and how close a measured peak has to land. The Pre-Lab
-frame at the end lists the predictions to bring to the lab.
+frame at the end lists the predictions to bring to the lab. Every worked
+number on this page is at $10.0\ \text{GHz}$, below the frequency of every
+kit's HB100, so Part 1 repeats each method at your own kit's frequency.
 :::
 ::::
 
@@ -54,7 +56,7 @@ frame at the end lists the predictions to bring to the lab.
 :class: viz-frame
 
 :::{present}
-<iframe src="../../viz/steering-delay.html?lock=1"
+<iframe src="../../viz/steering-delay.html?lock=1&f=10.0"
         width="100%" height="463"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
@@ -126,7 +128,7 @@ $n\ \Delta\phi$.
 $$\Delta\phi = 2\pi\frac{d}{\lambda}\sin\theta_0$$
 
 - Broadside needs none: all phases at zero point the beam at $0^\circ$.
-- It follows $\sin\theta_0$: $0^\circ$ to $10^\circ$ needs $30.0^\circ$, $80^\circ$ to $90^\circ$ only $2.6^\circ$.
+- It follows $\sin\theta_0$: $0^\circ$ to $10^\circ$ needs $29.2^\circ$, $80^\circ$ to $90^\circ$ only $2.6^\circ$.
 - It scales with $d/\lambda$: a higher frequency needs more phase per element.
 :::
 
@@ -138,7 +140,7 @@ needed, which is why the array points to $0^\circ$ with every phase set to zero.
 The phase grows with the *sine* of the steer angle rather than with the angle,
 so the same $10^\circ$ of extra scan needs much less added phase near endfire
 than it does near broadside: on the course array, steering from $0^\circ$ to
-$10^\circ$ takes $30.0^\circ$ of added phase per element, and steering from
+$10^\circ$ takes $29.2^\circ$ of added phase per element, and steering from
 $80^\circ$ to $90^\circ$ takes $2.6^\circ$. And the phase scales with the electrical spacing
 $d/\lambda$: the same array asked to steer the same angle needs more phase per
 element as the frequency goes up.
@@ -216,15 +218,15 @@ reaches 8. Clear the lock and move $\theta_0$: the shifted waves fan out and the
 sums shrink. Turn on the **2nd** source and a second wave, from $\theta_2$,
 reaches the same elements; each line carries both, drawn apart in two colors.
 The same delays that line up the first scramble the second, so the total keeps
-one and loses the other: at the default settings, 8 against 0.71, or
-$-21.0\ \text{dB}$. That is the receive pattern, built by the delays, not by
+one and loses the other: at the default settings, 8 against 0.46, or
+$-24.8\ \text{dB}$. That is the receive pattern, built by the delays, not by
 anything in space. **Step** walks the chain one stage at a time. The gain stage
 is where L22 applies a taper; leave it at uniform for now, or pick Hann to see
 the aligned total fall from 8 to 4.64.
 :::
 
 :::{present}
-<iframe src="../../viz/rx-signal-path.html?lock=1"
+<iframe src="../../viz/rx-signal-path.html?lock=1&f=10.0"
         width="100%" height="510"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
@@ -261,21 +263,23 @@ pattern, which is the rigid shift in sine space later in this lesson.
 
 ::::{frame} The Phaser Kit (CN0566)
 :::{present}
-- At $10.3\ \text{GHz}$ with $d = 14\ \text{mm}$: $\lambda = 29.13\ \text{mm}$ and $d/\lambda = 0.4807$.
+- At $10.0\ \text{GHz}$ with $d = 14\ \text{mm}$: $\lambda = 30.00\ \text{mm}$ and $d/\lambda = 0.4667$.
 
 $$\begin{aligned}
-kd &= 2\pi(0.4807) \\
-&= 3.02\ \text{rad} = 173.0^\circ \\
-\Delta\phi &= 173.0^\circ \times \sin\theta_0
+kd &= 2\pi(0.4667) \\
+&= 2.93\ \text{rad} = 168.0^\circ \\
+\Delta\phi &= 168.0^\circ \times \sin\theta_0
 \end{aligned}$$
 
 - One number, $kd$, sets $\Delta\phi$ for every steer angle on this array.
 :::
 
-For the course array at the workshop frequency, $\lambda = c/f = 29.13\ \text{mm}$,
-$d/\lambda = 0.4807$, and
+For the course array at $10.0\ \text{GHz}$, below every kit's HB100,
+$\lambda = c/f = 30.00\ \text{mm}$, $d/\lambda = 0.4667$, and
 
-$$kd = 2\pi(0.4807) = 3.02\ \text{rad} = 173.0^\circ.$$
+$$kd = 2\pi(0.4667) = 2.93\ \text{rad} = 168.0^\circ.$$
+
+Question 1 of the L18 Lab packet repeats this at your kit's frequency.
 
 Multiplying $kd$ by $\sin\theta_0$ gives $\Delta\phi$ for any steer angle on
 this array.
@@ -292,49 +296,48 @@ mismatch between the subarrays is folded into the offsets of elements 4 to 7.
 
 ::::{frame} Worked Example: Phase Table at 30°
 :::{present}
-$$\Delta\phi = 173.0^\circ \times \sin 30^\circ = 86.5^\circ$$
+$$\Delta\phi = 168.0^\circ \times \sin 30^\circ = 84.0^\circ$$
 
 | $n$ | 0 | 1 | 2 | 3 |
 | :-- | :-- | :-- | :-- | :-- |
-| set | 0 | 86.5 | 173.0 | 259.6 |
+| set | 0 | 84.0 | 168.0 | 252.0 |
 | $n$ | 4 | 5 | 6 | 7 |
-| set | 346.1 | 72.6 | 159.1 | 245.6 |
+| set | 336.0 | 60.0 | 144.0 | 228.0 |
 
-- Whole turns wrap each $n(86.5^\circ)$ into $0^\circ$ to $360^\circ$: $432.6^\circ$ becomes $72.6^\circ$.
+- Whole turns wrap each $n(84.0^\circ)$ into $0^\circ$ to $360^\circ$: $420.0^\circ$ becomes $60.0^\circ$.
 :::
 :::{present}
 <img src="../../viz/img/L18-phase-ramp.svg"
-     alt="The 30-degree ramp rising from 0 to 605.6 degrees, and the wrapped settings the hardware is given, with one turn removed from elements 5 to 7"
+     alt="The 30-degree ramp at 10.0 GHz rising from 0 to 588 degrees, and the wrapped settings the hardware is given, with one turn removed from elements 5 to 7"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 :::{admonition} Worked example — the phase table for $\theta_0 = 30^\circ$
 :class: tip
-At $10.3\ \text{GHz}$ with $d = 14\ \text{mm}$:
+At $10.0\ \text{GHz}$ with $d = 14\ \text{mm}$:
 
-$$\Delta\phi = 173.0^\circ \times \sin 30^\circ = 173.0^\circ \times 0.500 = 86.5^\circ.$$
+$$\Delta\phi = 168.0^\circ \times \sin 30^\circ = 168.0^\circ \times 0.500 = 84.0^\circ.$$
 
-Element $n$ is commanded to $n(86.5^\circ)$, each entry computed from the
-unrounded step, $86.52^\circ$. The ADAR1000 accepts a phase in
-$0^\circ$ to $360^\circ$, so each value is wrapped by subtracting whole turns
+We command element $n$ to $n(84.0^\circ)$. The ADAR1000 accepts a phase in
+$0^\circ$ to $360^\circ$, so we wrap each value by subtracting whole turns
 until it lands in that range.
 
 | $n$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| $\phi_n$ (ramp) | 0 | 86.5 | 173.0 | 259.6 | 346.1 | 432.6 | 519.1 | 605.6 |
+| $\phi_n$ (ramp) | 0 | 84.0 | 168.0 | 252.0 | 336.0 | 420.0 | 504.0 | 588.0 |
 | turns removed | 0 | 0 | 0 | 0 | 0 | $-360$ | $-360$ | $-360$ |
-| $\phi_n$ (set) | 0 | 86.5 | 173.0 | 259.6 | 346.1 | 72.6 | 159.1 | 245.6 |
+| $\phi_n$ (set) | 0 | 84.0 | 168.0 | 252.0 | 336.0 | 60.0 | 144.0 | 228.0 |
 
 The bottom row is what goes into the hardware. It climbs to element 4, drops
 back by a turn, and climbs again, a sawtooth rather than a single ramp, and it
-is correct: a phase of $432.6^\circ$ and a phase of $72.6^\circ$ produce the
+is correct: a phase of $420.0^\circ$ and a phase of $60.0^\circ$ produce the
 same field from that element.
 :::
 ::::
 
 ::::{frame} Phase Wrapping and True Delay
 :::{present}
-- At one frequency, $360^\circ$ is the same as $0^\circ$: $432.6^\circ$ and $72.6^\circ$ steer the same beam.
+- At one frequency, $360^\circ$ is the same as $0^\circ$: $420.0^\circ$ and $60.0^\circ$ steer the same beam.
 - The wrapped table loses the record of the true delay.
 - So wideband systems use time-delay units instead of, or alongside, phase shifters.
 :::
@@ -379,12 +382,12 @@ commanded angle.
 $$\sin\theta_{\text{null}} = \sin\theta_0 \pm \frac{m\lambda}{Nd}$$
 
 - Against $\sin\theta$ the pattern slides unchanged; against $\theta$ it stretches as it moves.
-- At $30^\circ$, $\lambda/Nd = 0.260$: nulls at $13.9^\circ$ and $49.5^\circ$, $16.1^\circ$ and $19.5^\circ$ from the peak, wider toward endfire.
-- The upper $m = 2$ null would need $\sin\theta = 1.020$: no real angle.
+- At $30^\circ$, $\lambda/Nd = 0.268$: nulls at $13.4^\circ$ and $50.2^\circ$, $16.6^\circ$ and $20.2^\circ$ from the peak, wider toward endfire.
+- The upper $m = 2$ null would need $\sin\theta = 1.036$: no real angle.
 :::
 :::{present}
 <img src="../../viz/img/L18-sin-space.svg"
-     alt="The 30-degree pattern against angle, with nulls at 13.9 and 49.5 degrees, and against sine of angle, the broadside pattern slid 0.5 with nulls at 0.240 and 0.760"
+     alt="The 30-degree pattern at 10.0 GHz against angle, with nulls at 13.4 and 50.2 degrees, and against sine of angle, the broadside pattern slid 0.5 with nulls at 0.232 and 0.768"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -403,19 +406,19 @@ At a multiple of $N$ the numerator and the denominator vanish together, and that
 point is a grating lobe, not a null. L16's "Grating Lobes" puts the first one at
 $\sin\theta_g = \sin\theta_0 - \lambda/d$ and keeps it out of real space while
 $d < \lambda/(1 + \vert\sin\theta_0\vert)$. Steered to $30^\circ$, the course array
-would need $d > 19.4\ \text{mm}$ for one to appear, and a full $90^\circ$ scan
-needs only $d < 14.56\ \text{mm}$, so the PHASER's $14\ \text{mm}$ never shows
-one: at $30^\circ$ the lobe would sit at $\sin\theta = -1.58$.
+would need $d > 20.0\ \text{mm}$ for one to appear, and a full $90^\circ$ scan
+needs only $d < 15.0\ \text{mm}$, so the PHASER's $14\ \text{mm}$ never shows
+one: at $30^\circ$ the lobe would sit at $\sin\theta = -1.64$.
 
-For the course array, $\lambda/Nd = 29.1/112 = 0.260$. Steered to $30^\circ$, the
-two nulls flanking the main lobe are at $\sin\theta = 0.240$ and
-$\sin\theta = 0.760$, or $13.9^\circ$ and $49.5^\circ$. They are no longer
-symmetric about the beam: the main lobe reaches $16.1^\circ$ below the peak and
-$19.5^\circ$ above it, wider toward endfire. The nulls are an equal step of
-$0.260$ apart in $\sin\theta$, and a fixed step in $\sin\theta$ is a larger
+For the course array, $\lambda/Nd = 30.0/112 = 0.268$. Steered to $30^\circ$, the
+two nulls flanking the main lobe are at $\sin\theta = 0.232$ and
+$\sin\theta = 0.768$, or $13.4^\circ$ and $50.2^\circ$. They are no longer
+symmetric about the beam: the main lobe reaches $16.6^\circ$ below the peak and
+$20.2^\circ$ above it, wider toward endfire. The nulls are an equal step of
+$0.268$ apart in $\sin\theta$, and a fixed step in $\sin\theta$ is a larger
 step in $\theta$ where $\cos\theta$ is small, since
 $d\theta = d(\sin\theta)/\cos\theta$. The $m = 2$ null on the upper side would
-need $\sin\theta = 1.020$, which no real angle satisfies, so that null has left
+need $\sin\theta = 1.036$, which no real angle satisfies, so that null has left
 the visible region (L16, "Part 4: The Visible Region") entirely.
 ::::
 
@@ -433,11 +436,12 @@ check the bars against the worked table above: a positive steer angle gives a
 rising ramp. Then scan out toward $60^\circ$ and compare the $-3$ dB width
 printed on the pattern, which is read off the exact array factor, with the HPBW
 readout, which is the $1/\cos\theta_0$ rule: at $60^\circ$ the rule gives
-$26.4^\circ$ and the pattern $30.5^\circ$.
+$27.2^\circ$ and the pattern $31.9^\circ$. The widget draws the array at
+$10.0\ \text{GHz}$, as every example on this page does.
 :::
 
 :::{present}
-<iframe src="../../viz/beam-steering.html"
+<iframe src="../../viz/beam-steering.html?f=10.0"
         width="100%" height="427"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
@@ -471,8 +475,8 @@ The length that matters is $Nd = 112\ \text{mm}$, not the $98\ \text{mm}$
 between the centers of the first and last elements. L16's "Part 5: The Array
 as a Sampled Aperture" treats the array as a line source sampled every $d$, so
 each element stands for a cell $d$ wide and the eight cells fill an equivalent
-aperture $Nd = 3.85\lambda$. Using $98\ \text{mm}$ would give $15.1^\circ$ at
-broadside instead of $13.2^\circ$, against $13.3^\circ$ read off the exact
+aperture $Nd = 3.73\lambda$. Using $98\ \text{mm}$ would give $15.5^\circ$ at
+broadside instead of $13.6^\circ$, against $13.7^\circ$ read off the exact
 array factor. The effective aperture length is therefore
 
 $$L_{\text{eff}} = Nd\cos\theta_0.$$
@@ -481,7 +485,7 @@ L15 gave the half-power beamwidth of a uniform aperture of length $L$ as
 
 $$\theta_{\text{HP}} = 0.886\ \frac{\lambda}{L}\ \text{rad} = 50.8^\circ\ \frac{\lambda}{L},$$
 
-which for the course array at broadside is $0.886(29.1)/112 = 0.2302\ \text{rad} = 13.2^\circ$.
+which for the course array at broadside is $0.886(30.0)/112 = 0.2373\ \text{rad} = 13.6^\circ$.
 Substituting the projected length,
 
 $$\theta_{\text{HP}}(\theta_0) \approx \frac{0.886\ \lambda}{Nd\cos\theta_0}\ \text{rad} = \frac{\theta_{\text{HP}}(0)}{\cos\theta_0}.$$
@@ -492,7 +496,7 @@ $$\theta_{\text{HP}}(\theta_0) \approx \frac{0.886\ \lambda}{Nd\cos\theta_0}\ \t
 $$\text{scan loss} = 10\log_{10}(\cos\theta_0)$$
 
 - The smaller projected aperture lowers the peak gain: $-3$ dB at $60^\circ$.
-- The array factor's directivity holds near 7.7; the element pattern carries the loss.
+- The array factor's directivity holds near 7.5; the element pattern carries the loss.
 - On the kit, $1.5$ dB at $45^\circ$ shows; $0.6$ dB at $30^\circ$ does not.
 :::
 
@@ -503,8 +507,8 @@ is smaller by $\cos\theta_0$, so the peak gain drops by
 $$\text{scan loss} = 10\log_{10}(\cos\theta_0)\ \text{dB}.$$
 
 The array factor alone barely changes its directivity as it scans. For isotropic
-elements it computes to 7.70 at broadside, 7.70 at $30^\circ$, 7.78 at
-$45^\circ$, and 8.16 at $60^\circ$, a slight rise. A linear array's beam is a
+elements it computes to 7.48 at broadside, 7.50 at $30^\circ$, 7.63 at
+$45^\circ$, and 7.99 at $60^\circ$, a slight rise. A linear array's beam is a
 cone around the array axis, not a pencil. Steering tilts that cone toward the
 axis: its circumference shrinks as $\cos\theta_0$ while its width in $\theta$
 grows as $1/\cos\theta_0$, so the solid angle the beam fills, and with it the
@@ -520,12 +524,12 @@ why only the $45^\circ$ drop stands out from the measurement's own ripple.
 :::{present}
 | $\theta_0$ | $\cos\theta_0$ | HPBW | Gain relative to broadside |
 | :-- | :-- | :-- | :-- |
-| $0^\circ$ | 1.000 | $13.2^\circ$ | reference |
-| $30^\circ$ | 0.866 | $15.2^\circ$ | $-0.6$ dB |
-| $45^\circ$ | 0.707 | $18.7^\circ$ | $-1.5$ dB |
-| $60^\circ$ | 0.500 | $26.4^\circ$ | $-3.0$ dB |
+| $0^\circ$ | 1.000 | $13.6^\circ$ | reference |
+| $30^\circ$ | 0.866 | $15.7^\circ$ | $-0.6$ dB |
+| $45^\circ$ | 0.707 | $19.2^\circ$ | $-1.5$ dB |
+| $60^\circ$ | 0.500 | $27.2^\circ$ | $-3.0$ dB |
 
-- Exact width at $60^\circ$ is $30.5^\circ$: the rule reads narrow past $50^\circ$ of scan.
+- Exact width at $60^\circ$ is $31.9^\circ$: the rule reads narrow past $50^\circ$ of scan.
 :::
 :::{present}
 <img src="../../viz/img/L18-hpbw-vs-scan.svg"
@@ -541,9 +545,9 @@ peak gain is $3\ \text{dB}$ lower, and scanning further adds little coverage.
 ```{note}
 The $1/\cos\theta_0$ rule is an approximation, and it reads slightly narrow at
 large scan angles. Measuring the $-3$ dB width directly off the array factor for
-this array gives $13.3^\circ$ at broadside and $19.2^\circ$ at $45^\circ$, both
-within a few tenths of the rule, but $30.5^\circ$ at $60^\circ$ against the
-rule's $26.4^\circ$. Use the rule for design estimates out to about $50^\circ$
+this array gives $13.7^\circ$ at broadside and $19.8^\circ$ at $45^\circ$, both
+within about half a degree of the rule, but $31.9^\circ$ at $60^\circ$ against
+the rule's $27.2^\circ$. Use the rule for design estimates out to about $50^\circ$
 and the pattern itself past that.
 ```
 ::::
@@ -568,36 +572,36 @@ in $\phi_n = n\ \Delta\phi$, run in reverse:
 ::::{frame} Worked Example: Recovering the Steer Angle
 :::{present}
 $$\begin{aligned}
-\sin\theta_0 &= \frac{59.19^\circ}{173.0^\circ} = 0.342 \\
+\sin\theta_0 &= \frac{57.46^\circ}{168.0^\circ} = 0.342 \\
 \theta_0 &= +20.0^\circ
 \end{aligned}$$
 
-- Unwrapped, $\phi_7 = 414.3^\circ$: seven steps of $59.19^\circ$.
+- Unwrapped, $\phi_7 = 402.2^\circ$: seven steps of $57.46^\circ$.
 - Rising ramp: positive $\Delta\phi$, positive steer angle.
 :::
 :::{present}
 <img src="../../viz/img/L18-inverse-unwrap.svg"
-     alt="The eight reported settings as bars, six steps of plus 59.1 or 59.2 degrees and one of minus 300.8, which a restored turn makes 414.3 for element 7: a rising ramp, steer angle plus 20.0 degrees"
+     alt="The eight reported settings as bars, six steps of plus 57.4 or 57.5 degrees and one of minus 302.6, which a restored turn makes 402.2 for element 7: a rising ramp, steer angle plus 20.0 degrees"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 :::{admonition} Worked example — recovering the steer angle
 :class: tip
-The beamformer reports these settings:
+The beamformer reports these settings, at $10.0\ \text{GHz}$:
 
 | $n$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| $\phi_n$ (deg) | 0 | 59.2 | 118.4 | 177.5 | 236.7 | 295.9 | 355.1 | 54.3 |
+| $\phi_n$ (deg) | 0 | 57.5 | 114.9 | 172.4 | 229.8 | 287.3 | 344.8 | 42.2 |
 
-The first six differences are $59.2^\circ$, $59.2^\circ$, $59.1^\circ$,
-$59.2^\circ$, $59.2^\circ$, and $59.2^\circ$. The seventh is
-$54.3 - 355.1 = -300.8^\circ$, which is $59.2^\circ$ once a full turn is
+The first six differences are $57.5^\circ$, $57.4^\circ$, $57.5^\circ$,
+$57.4^\circ$, $57.5^\circ$, and $57.5^\circ$. The seventh is
+$42.2 - 344.8 = -302.6^\circ$, which is $57.4^\circ$ once a full turn is
 restored. All seven agree to within the $0.1^\circ$ rounding of the table, so
 the ramp is uniform. The span of the whole array gives the step most
-precisely: element 7 sits at $54.3^\circ + 360^\circ = 414.3^\circ$ unwrapped,
+precisely: element 7 sits at $42.2^\circ + 360^\circ = 402.2^\circ$ unwrapped,
 seven steps from element 0, so
 
-$$\Delta\phi = \frac{414.3^\circ}{7} = 59.19^\circ, \qquad \sin\theta_0 = \frac{59.19^\circ}{173.0^\circ} = 0.342, \qquad \theta_0 = +20.0^\circ.$$
+$$\Delta\phi = \frac{402.2^\circ}{7} = 57.46^\circ, \qquad \sin\theta_0 = \frac{57.46^\circ}{168.0^\circ} = 0.342, \qquad \theta_0 = +20.0^\circ.$$
 
 The ramp rises with $n$ and the steer angle is positive, which follows from the
 sign convention: the commanded phase is $+n\ \Delta\phi$, so a rising ramp
@@ -634,17 +638,17 @@ that ramp, which points at an arithmetic or unit error.
 $$\text{LSB} = \frac{360^\circ}{2^7} = 2.8125^\circ$$
 
 - The ADAR1000's phase shifter has 7 bits, so every commanded phase rounds to this grid.
-- At $30^\circ$, the $86.5^\circ$ step is set as 31 steps, $87.19^\circ$.
+- At $30^\circ$, the $84.0^\circ$ step is set as 30 steps, $84.38^\circ$.
 - L23 computes the effect on sidelobe level and null depth.
 :::
 
 The ADAR1000's phase shifter has 7 bits (L17, "The ADAR1000 Beamformers"), so
 its smallest step is $360^\circ/128 = 2.8125^\circ$ and every commanded phase
-lands on that grid. The $86.5^\circ$ step of the $30^\circ$ table is
-$30.76$ steps and is set as 31 steps, $87.19^\circ$. The backend rounds each
+lands on that grid. The $84.0^\circ$ step of the $30^\circ$ table is
+$29.87$ steps and is set as 30 steps, $84.38^\circ$. The backend rounds each
 element's unwrapped ramp value to the grid before wrapping, so the whole
-$30^\circ$ ramp is set as 0, 87.19, 174.38, 258.75, 345.94, 73.13, 160.31, and
-$244.69^\circ$. L23 computes how much that grid raises the sidelobe level and
+$30^\circ$ ramp is set as 0, 84.38, 168.75, 253.13, 334.69, 59.06, 143.44, and
+$227.81^\circ$. L23 computes how much that grid raises the sidelobe level and
 reduces null depth.
 ::::
 
@@ -703,7 +707,7 @@ source and the peak follows it, lower by the element pattern at its new angle; p
 :::
 
 :::{present}
-<iframe src="../../viz/sweep-trace.html"
+<iframe src="../../viz/sweep-trace.html?f=10.0"
         width="100%" height="441"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
@@ -745,16 +749,16 @@ Close Is Close Enough" below shows is too small to read from one trace.
 :::{present}
 | Element | E1 | E2 | E3 | E4 |
 | :-- | :-- | :-- | :-- | :-- |
-| Phase Control | 0 | −87 | −173 | −260 |
+| Phase Control | 0 | −84 | −168 | −252 |
 | Element | E5 | E6 | E7 | E8 |
-| Phase Control | −346 | −433 | −519 | −606 |
+| Phase Control | −336 | −420 | −504 | −588 |
 
 - Apply 30 writes $-n\Delta\phi$, whole degrees, unwrapped.
 - The sweep adds $+n\Delta\phi_s$; the sum vanishes at $+30^\circ$.
 :::
 :::{present}
 <img src="../../viz/img/L18-phase-control.svg"
-     alt="The 30-degree ramp at 10.3 GHz: the unwrapped ramp rising to 605.6 degrees, the wrapped settings, and the falling whole-degree offsets Phase Control shows after Apply 30, from 0 to minus 606"
+     alt="The 30-degree ramp at 10.0 GHz: the unwrapped ramp rising to 588 degrees, the wrapped settings, and the falling whole-degree offsets Phase Control shows after Apply 30, from 0 to minus 588"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -762,8 +766,9 @@ The GUI numbers the elements E1 to E8, so E$(n+1)$ is this lesson's element
 $n$. When you type 30 into **Steer Angle (deg)** and press **Apply**, the GUI
 computes $\Delta\phi$ from the Signal Freq on screen and writes $-n\Delta\phi$
 into the Phase Control boxes, rounded to whole degrees and not wrapped. At
-$10.3\ \text{GHz}$ the boxes read 0, −87, −173, −260, −346, −433, −519, and
-−606: the worked example's ramp with its sign flipped. The sliders beside the
+$10.0\ \text{GHz}$ the boxes read 0, −84, −168, −252, −336, −420, −504, and
+−588: the worked example's ramp with its sign flipped. Question 2 of the
+packet predicts these boxes at your kit's frequency. The sliders beside the
 boxes stop at $\pm 180^\circ$, so read the boxes.
 
 The minus sign is deliberate. During a sweep the backend adds its own ramp,
@@ -774,8 +779,8 @@ plotted angle $+30^\circ$. Apply is therefore the offset that makes a boresight
 source look like a source at $+\theta_0$ on the sweep plot. On their own, with
 no sweep ramp added, the offsets would point the beam to $-30^\circ$. To
 compare the read-back with the wrapped ramp, reduce it modulo $360^\circ$:
-E6's $-433^\circ$ is $287^\circ$, which is $360^\circ - 73^\circ$, the wrapped
-$72.6^\circ$ to the nearest degree.
+E6's $-420^\circ$ is $300^\circ$, which is $360^\circ - 60^\circ$, the wrapped
+$60.0^\circ$ with its sign flipped.
 
 The GUI computes $\Delta\phi$ with $c = 299792458\ \text{m/s}$, not the
 $3.00\times 10^8\ \text{m/s}$ of our predictions, a step $0.07\%$ larger, so
@@ -787,8 +792,8 @@ rounding.
 :class: viz-frame
 
 :::{depth}
-The widget predicts the trace, here at $10.0\ \text{GHz}$, away from every
-kit's frequency, so it shows the method rather than your Part 1 answers. Set
+The widget predicts the trace at $10.0\ \text{GHz}$, like every example on
+this page, so it shows the method rather than your Part 1 answers. Set
 the source's angle on the arc, which is where the trace should peak, and read $\Delta\phi$, the
 predicted half-power beamwidth, and the peak drop, and two rows of phases: the
 beam ramp $+n\Delta\phi$ wrapped to $0^\circ$ to $360^\circ$, and what Phase
@@ -825,15 +830,13 @@ while the sidelobe structure stretches with it.
 :::
 
 The sweep samples the trace at discrete steps. Each dot is one $2.8125^\circ$ phase
-step, which moves $\sin\theta$ by $2.8125^\circ/kd$: at $10.3\ \text{GHz}$,
-$2.8125/173.0 = 0.0163$, or $0.93^\circ$ of angle at broadside, widening as
+step, which moves $\sin\theta$ by $2.8125^\circ/kd$: at $10.0\ \text{GHz}$,
+$2.8125/168.0 = 0.0167$, or $0.96^\circ$ of angle at broadside, widening as
 $1/\cos\theta$ toward endfire. A half-power crossing falls between two dots,
 so a beamwidth read off the trace is good to about a degree. The lab compares
 each width with the $0.886\lambda/(Nd\cos\theta_0)$ rule of "Beam Broadening";
 the exact pattern reads a few tenths wider, up to about half a degree at
-$45^\circ$, which is why the tolerance grows there. The figure is drawn at
-$10.0\ \text{GHz}$, away from every kit, so its widths and spacings are not
-your Part 1 answers.
+$45^\circ$, which is why the tolerance grows there.
 
 Read every level in **dBc**, dB relative to the trace's own peak: subtract the
 peak from the reading. A level in dBc no longer depends on Rx Gain or on the
@@ -857,17 +860,23 @@ main lobe, and the L18 Lab says what to do when it does.
 
 A measured peak will not land exactly on the source's angle, and a measured
 beamwidth will not equal its prediction exactly. Three independent effects
-account for the difference, and Part 1 of the L18 Lab packet sizes each one
-for the lab's setup before you measure.
+account for the difference. Part 1 of the L18 Lab packet sizes each one for
+the lab's setup; the worked example below sizes them for a different setup.
 
 The sweep grid. The trace holds no information between samples, so a peak read
-off it can be wrong by half a step: at $10.3\ \text{GHz}$ and $30^\circ$, half
-of $1.08^\circ$, or $0.54^\circ$.
+off it can be wrong by half a sample step. One step moves $\sin\theta$ by
+$2.8125^\circ/kd$ ("Reading the Trace" above), and near an angle $\theta$ that
+is an angle step of
 
-The arc's placement and aim. On an arc of radius $R$, one degree is
-$R\pi/180$ of arc length, so a tripod placed $s$ off its mark puts the
-reference angle off by $s/(R\pi/180)$ degrees. This error is in the
-reference, not in the array.
+$$\Delta\theta = \frac{2.8125^\circ/kd}{\cos\theta}\ \text{rad}.$$
+
+The arc's placement and aim. On an arc of radius $R$, one degree is an arc
+length of
+
+$$s = R\ \frac{\pi}{180},$$
+
+so a tripod placed a distance $e$ off its mark puts the reference angle off by
+$e/s$ degrees. This error is in the reference, not in the array.
 
 Reflections. The table, the walls, and the people nearby return copies of the
 tone. A reflection with amplitude ratio $\rho$ to the direct path raises or
@@ -878,17 +887,64 @@ $$20\log_{10}(1 \pm \rho),$$
 depending on its phase. The reflection's phase relative to the direct path
 changes across the sweep, so the ripple rises on one side of the main lobe and
 falls on the other. That tilts the flat top of the lobe, and its maximum
-slides toward the raised side, by up to about a degree.
+slides toward the raised side. A reflection $20\ \text{dB}$ down, $\rho = 0.1$,
+moves it by up to about a degree, and a stronger one moves it further.
 
 Because the three are independent, they combine as a root sum of squares,
-$\sqrt{a^2 + b^2 + c^2}$, and a peak within that of its reference passes;
-agreement to $0.1^\circ$ points to a mistake in the comparison, not a good
-measurement. The same ripple sets which level changes the lab can read. A
-moved source loses $10\log_{10}(\cos\theta)$, $0.6$ dB at $30^\circ$ and
-$1.5$ dB at $45^\circ$. Part 1 sizes the ripple of a reflection
-$20\ \text{dB}$ down; a drop no larger than that ripple cannot be told from a
-reflection in one reading, which is why the lab compares levels at
-$45^\circ$.
+
+$$\sqrt{a^2 + b^2 + c^2},$$
+
+and a peak within that of its reference passes. Agreement to $0.1^\circ$
+points to a mistake in the comparison, not a good measurement.
+
+:::{admonition} Worked example — an error budget for another setup
+:class: tip
+At $10.0\ \text{GHz}$ the source sits at $45^\circ$ on a $1.5\ \text{m}$ arc,
+you can place the tripod to within $30\ \text{mm}$, and a wall returns a
+reflection $14\ \text{dB}$ below the direct path, $\rho = 0.2$.
+
+The grid, with $kd = 168.0^\circ$ from "The Phaser Kit (CN0566)":
+
+$$\begin{aligned}
+\Delta\theta &= \frac{2.8125^\circ/168.0^\circ}{\cos 45^\circ}\ \text{rad} \\
+&= \frac{0.0167}{0.707}\ \text{rad} = 1.36^\circ,
+\end{aligned}$$
+
+so a peak read off the grid can be off by half of that, $0.68^\circ$.
+
+One degree of the arc:
+
+$$s = (1500\ \text{mm})\frac{\pi}{180} = 26.2\ \text{mm},$$
+
+so the $30\ \text{mm}$ placement error is
+
+$$\frac{30\ \text{mm}}{26.2\ \text{mm}} = 1.1^\circ.$$
+
+The reflection:
+
+$$\begin{aligned}
+20\log_{10}(1.2) &= +1.6\ \text{dB} \\
+20\log_{10}(0.8) &= -1.9\ \text{dB}
+\end{aligned}$$
+
+Summing the direct trace with a reflected one, over every reflection angle
+and phase, moves the $45^\circ$ peak by up to just under $2^\circ$, so the
+budget allows $2.0^\circ$ for it. The total is
+
+$$\sqrt{0.68^2 + 1.1^2 + 2.0^2} = 2.4^\circ,$$
+
+and a pass standard of $\pm 2.5^\circ$ follows. The reflection is the largest
+term, so clearing the wall's path cuts the budget most. The same ripple,
+$+1.6$ to $-1.9\ \text{dB}$, is larger than the $1.5\ \text{dB}$ scan loss at
+$45^\circ$, so in this setup one trace could not show the scan loss at any
+angle.
+:::
+
+The same ripple sets which level changes the lab can read. A moved source
+loses $10\log_{10}(\cos\theta)$, $0.6$ dB at $30^\circ$ and $1.5$ dB at
+$45^\circ$. Part 1 sizes the ripple of the lab's reflection, $20\ \text{dB}$
+down; a drop no larger than that ripple cannot be told from a reflection in
+one reading, which is why the lab compares levels at $45^\circ$.
 ::::
 
 ::::{frame} Summary: Phase Ramp
@@ -896,9 +952,9 @@ $45^\circ$.
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| $\Delta\phi = kd\sin\theta_0$ | progressive element-to-element phase | $173.0^\circ \times \sin\theta_0$ for the course array |
-| $\phi_n = +n\ \Delta\phi$ | commanded ramp (a delay), element $n$ | $86.5^\circ$ per element at $\theta_0 = 30^\circ$ |
-| wrapping | whole turns removed to fit $0^\circ$ to $360^\circ$ | $432.6^\circ$ is set as $72.6^\circ$ |
+| $\Delta\phi = kd\sin\theta_0$ | progressive element-to-element phase | $168.0^\circ \times \sin\theta_0$ for the course array at $10.0\ \text{GHz}$ |
+| $\phi_n = +n\ \Delta\phi$ | commanded ramp (a delay), element $n$ | $84.0^\circ$ per element at $\theta_0 = 30^\circ$ |
+| wrapping | whole turns removed to fit $0^\circ$ to $360^\circ$ | $420.0^\circ$ is set as $60.0^\circ$ |
 ::::
 
 ::::{frame} Summary: Steered Pattern
@@ -907,7 +963,7 @@ $45^\circ$.
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | $\psi = kd(\sin\theta - \sin\theta_0)$ | array-factor argument | peak where $\psi = 0$, so $\theta = \theta_0$ |
-| $\sin\theta_{\text{null}} = \sin\theta_0 \pm m\lambda/Nd$ | null locations | $\lambda/Nd = 0.260$; nulls at $13.9^\circ$ and $49.5^\circ$ for $\theta_0 = 30^\circ$ |
+| $\sin\theta_{\text{null}} = \sin\theta_0 \pm m\lambda/Nd$ | null locations | $\lambda/Nd = 0.268$; nulls at $13.4^\circ$ and $50.2^\circ$ for $\theta_0 = 30^\circ$ |
 ::::
 
 ::::{frame} Summary: Broadening and Hardware
@@ -915,7 +971,7 @@ $45^\circ$.
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| $\theta_{\text{HP}} \approx \theta_{\text{HP}}(0)/\cos\theta_0$ | beam broadening | $13.2^\circ \to 18.7^\circ$ at $45^\circ$, $26.4^\circ$ at $60^\circ$ |
+| $\theta_{\text{HP}} \approx \theta_{\text{HP}}(0)/\cos\theta_0$ | beam broadening | $13.6^\circ \to 19.2^\circ$ at $45^\circ$, $27.2^\circ$ at $60^\circ$ |
 | scan loss | peak gain falls as $\cos\theta_0$, carried by the element pattern | $-3$ dB at $\theta_0 = 60^\circ$ |
 | LSB $= 360^\circ/2^B$ | phase-shifter step | $2.8125^\circ$ for the ADAR1000's 7 bits |
 ::::
@@ -926,8 +982,8 @@ $45^\circ$.
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | Beam-sweep trace | power against steered angle, source fixed | peaks at the source angle, or at the Apply angle for a boresight source |
-| Phase Control after Apply | $-n\Delta\phi$, whole degrees, unwrapped | E8 at $30^\circ$: $-606$ at $10.3\ \text{GHz}$ |
-| Sweep grid | one $2.8125^\circ$ phase step per sample | $0.93^\circ$ at broadside at $10.3\ \text{GHz}$ |
+| Phase Control after Apply | $-n\Delta\phi$, whole degrees, unwrapped | E8 at $30^\circ$: $-588$ at $10.0\ \text{GHz}$ |
+| Sweep grid | one $2.8125^\circ$ phase step per sample | $0.96^\circ$ at broadside at $10.0\ \text{GHz}$ |
 | Scan loss on the kit | element-pattern drop, moved source only | $-1.5$ dB at $45^\circ$; the $0.6$ dB at $30^\circ$ is inside the ripple |
 ::::
 
@@ -968,7 +1024,7 @@ Part 1 of the L18 Lab packet is the pre-lab. Do it before the lab period, at the
 | Question 3 | the HPBW at $0^\circ$, $15^\circ$, $30^\circ$, and $45^\circ$, the level drop, and the pass standard | Steps 11 to 14 and 16 to 19, Tables A and B |
 | Question 4 | Run 2, rehearsed on the hosted simulator | Steps 15 to 20 |
 
-Question 1 redoes this lesson's worked example at your kit's frequency, and Question 2 does the same for "The Sign in Phase Control". "Beam Broadening" and "How Close Is Close Enough" set up Question 3.
+Question 1 redoes this lesson's worked example at your kit's frequency, and Question 2 does the same for "The Sign in Phase Control". "Broadening and Scan Loss Versus Angle" and "Reading the Trace" work Question 3(a) and (b) at $10.0\ \text{GHz}$, and the worked example in "How Close Is Close Enough" works Question 3(c) to (e) for a different setup.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">L18 Lab packet, Part 1 (PDF)</a>
 ::::

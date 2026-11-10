@@ -116,7 +116,10 @@
   // ---- the course array (COURSE_SPEC M3) ------------------------------------
   // The same array, frequency and sign convention as steering-delay.html (the
   // Time Alignment widget): eight elements, d = 14 mm, 10.3 GHz, real pi.
-  const N = 8, D_MM = 14, F_HZ = 10.3e9;
+  // ?f=10.0 (GHz, 8 to 12) draws another frequency; the default stays
+  // 10.3 GHz, which the self-test asserts. L18 embeds it at 10.0 GHz.
+  const F_Q = parseFloat(new URLSearchParams(location.search).get('f'));
+  const N = 8, D_MM = 14, F_HZ = (F_Q >= 8 && F_Q <= 12) ? F_Q * 1e9 : 10.3e9;
   const LAMBDA_MM = 3e11 / F_HZ;                  // 29.126 mm, c = 3.00e8 as the lesson's table
   const KD_DEG = 360 * D_MM / LAMBDA_MM;          // kd = 173.04 deg
   const T_MAX = 60;
