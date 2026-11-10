@@ -107,6 +107,42 @@ authoritative statement of the requirements.
 - Vector network analyzer
 - Anechoic chamber and dashboard
 
+(updating-your-phaser-kit)=
+### Updating Your PHASER Kit
+
+When I announce a software update, run the installer again on your kit. It is
+the same command every time, and running it more than once does no harm.
+
+1. Connect the kit to your laptop with the Ethernet cable and power it, as in
+   the L17 Lab. Give it a minute to start and join the classroom Wi-Fi, which
+   is how it downloads the update.
+2. Log in from your laptop, with your kit's number in place of `NN`. The
+   password is `analog`.
+
+   ```sh
+   ssh analog@phaser-NN.local
+   ```
+
+3. Run the installer.
+
+   ```sh
+   curl -fsSL \
+     https://raw.githubusercontent.com/livethisdream/phaser/main/install.sh \
+     | bash
+   ```
+
+   The command is one line broken in three; copy all of it.
+
+   It asks for the password again, restarts the Phaser software, and ends by
+   printing your kit's address. Your calibration and settings stay as they
+   are.
+4. Reload the Phaser page in your browser, holding Shift as you press reload,
+   so the browser loads the new interface.
+
+If `curl` says it cannot resolve the host, the kit is not on the Wi-Fi; fix
+that and run the command again. If the installer stops with `ERROR`, send me
+the last lines it printed.
+
 ## Additional Resources
 
 - <a href="handouts/Makerspace_3D_Printing_Training.pdf" target="_blank" rel="noopener">3D printer training</a>
