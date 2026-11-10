@@ -30,7 +30,8 @@
            letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; max-width:100%; }
   .ro .v { height:19px; line-height:19px; font-size:14px; font-weight:700; white-space:nowrap;
            font-variant-numeric:tabular-nums; color:var(--navy); overflow:hidden; max-width:100%; }
-  @media (max-width: 430px) { .app { padding:10px; gap:8px; } .ro .k { font-size:10.5px; letter-spacing:0.02em; }
+  @media (max-width: 430px) { .app { padding:10px; gap:8px; } .ro .k { font-size:10.5px; letter-spacing:0.02em;
+                              white-space:normal; height:auto; min-height:15px; line-height:13px; text-align:center; }
                               .ro .v { font-size:13px; } }
 </style>
 </head>
@@ -163,7 +164,7 @@ function readouts(cs){
   if (cs === 'mv20' || cs === 'mv30'){
     const th = cs === 'mv20' ? 20 : 30;
     const man = dB(ab(af(UNI, th))/N), mv = level(cs, th);
-    return [['Manual there', fmtDb(man)], ['MVDR there', fmtDb(mv)], ['suppression', (man - mv).toFixed(1) + ' dB']];
+    return [['Manual at +' + th + '°', fmtDb(man)], ['MVDR at +' + th + '°', fmtDb(mv)], ['suppression', (man - mv).toFixed(1) + ' dB']];
   }
   const z = argExt(t => Math.abs(err(t)), -3, 3, false);
   const f = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2);
@@ -259,7 +260,7 @@ function draw(){
 
 const LABELS = { table: ['main lobe', 'at +22.5°', 'at −22.5°'], flip: ['main lobe', 'at +22.5°', 'at −22.5°'],
                  gains: ['main lobe', 'at +22.5°', 'at −22.5°'], diff: ['null at', 'left peak', 'right peak'],
-                 mv20: ['Manual there', 'MVDR there', 'suppression'], mv30: ['Manual there', 'MVDR there', 'suppression'],
+                 mv20: ['Manual at +20°', 'MVDR at +20°', 'suppression'], mv30: ['Manual at +30°', 'MVDR at +30°', 'suppression'],
                  err: ['error zero', 'steer −5°', 'steer +5°'] };
 const caseEl = document.getElementById('case'), showBtn = document.getElementById('show');
 function sync(){

@@ -34,19 +34,16 @@ with room for notes. Print from read mode for the whole lesson.
 
 ::::{frame} The Big Picture
 :::{present}
-- Each block of steps checks your Part 1.
-:::
-:::{present}
-| Steps | You set |
-| :-- | :-- |
-| 1–5 | HB100, Calibrate, Rx Gain |
-| 6–10 | A: your gains and phases |
-| 11–15 | B: Beam 1 Phase |
-| 16–22 | C: interferer, Manual, MVDR |
-| 23–27 | D: Tracking preset, mode |
+| Steps | Null | You set |
+| :-- | :-- | :-- |
+| 1–5 | (bring up) | HB100, Calibrate, Rx Gain |
+| 6–10 | A: computed notch | your gains and phases |
+| 11–15 | B: difference null | Beam 1 Phase |
+| 16–22 | C: adaptive null | interferer, Manual, MVDR |
+| 23–27 | D: monopulse pair | Tracking preset, Mode |
 :::
 
-Lesson 24 built four nulls, and today you measure each one on your kit. In Procedure A you load the gain and phase table you computed in Part 1 and sweep it. In Procedure B you subtract the two digital channels with Beam 1 Phase. In Procedure C the Phaser software adds a simulated interferer, first at $+20^\circ$ and then at $+30^\circ$, and you compare Manual with MVDR on a beam held at boresight. In Procedure D the Tracking preset forms the sum and delta beams together, and Tracking mode follows the HB100 as it moves. Step 6 freezes the uniform trace, and every level in Procedures A and B reads against its peak. Each block's readings fill one table in Part 2 of the packet, and you check each against your Part 1 prediction.
+Lesson 24 built four nulls, and today you measure each one on your kit. In Procedure A you load the gain and phase table you computed in Part 1 and sweep it. In Procedure B you subtract the two digital channels with Beam 1 Phase. In Procedure C the Phaser software adds a simulated interferer, first at $+20^\circ$ and then at $+30^\circ$, and you compare Manual with MVDR on a beam held at boresight. In Procedure D the Tracking preset forms the sum and delta beams together, and Tracking mode follows the HB100 as it moves. Step 6 freezes the uniform trace, and every level in Procedures A and B reads against its peak. Each block checks a Part 1 prediction: its readings fill one table in Part 2 of the packet, and you compare each with what you predicted.
 ::::
 
 ::::{frame} Predict First
@@ -137,7 +134,7 @@ gives the depth a cramped room allows.
 9. Press **Start** and read the new trace against the frozen one: the new
    **Peak Gain**, the notch's depth below the frozen peak, and the notch's
    angle, and compare each with your Part 1 prediction. A notch much shallower
-   than 40 dB points to the room first: a wall or a person beside the kit, or a
+   than your Part 1 estimate points to the room first: a wall or a person beside the kit, or a
    stale calibration.
    <div class="rec" data-lab="L24">
    <label>Step 9: null-steered main-lobe peak (dB) <input data-field="a.peak"></label>

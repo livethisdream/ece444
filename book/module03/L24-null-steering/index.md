@@ -370,7 +370,7 @@ The response at $+22.5^\circ$ is exactly zero. The main beam stays at broadside 
 :class: viz-frame
 
 :::{depth}
-The widget below applies the weight-subtraction rule to the course array and draws the result. Drag the null angle and watch three things: where the notch lands, how the eight element gains and phases redistribute, and how the main-lobe loss pill tracks $\vert r_\text{n}\vert$ rather than the null angle itself. Then switch the weights from Ideal to PHASER, which rounds every phase to the ADAR1000's $2.8125^\circ$ step and every gain to 1 %, and adds a floor at the shallow end of the depth my kit measured, so the notch is no longer infinitely deep and settles near what the hardware showed. The widget works at the lesson's $10.0$ GHz.
+The widget below applies the weight-subtraction rule to the course array and draws the result. Drag the null angle and watch three things: where the notch lands, how the eight element gains and phases redistribute, and how the main-lobe loss pill tracks $\vert r_\text{n}\vert$ rather than the null angle itself. Then switch the weights from Ideal to PHASER, which rounds every phase to the ADAR1000's $2.8125^\circ$ step and every gain to 1 %, and adds the floor that reflections left in a cramped room, 23 dB below the uniform peak, so the notch is no longer infinitely deep. The widget works at the lesson's $10.0$ GHz.
 :::
 
 <iframe src="../../viz/null-steering.html"
@@ -444,22 +444,22 @@ $$
 
 That level is relative to the null-steered peak, because $N$ in the estimate is that beam's own peak. Table A in the lab reads every level against the frozen uniform peak, which sits higher by the main-lobe loss, 2.1 dB in the $10.0$ GHz example, so the same notch reads $-21.9 - 2.1 = -24.0$ dB on that scale. The phase step dominates: the 5 % gain step adds almost nothing to $\epsilon_\text{rms}$. Part 1 of the L24 Lab packet puts the ADAR1000's numbers through the same two steps: its $2.8125^\circ$ phase step and 1 % gain step. The result sits on the same $-6B$ scale as the quantization sidelobes of <a href="../L23-beam-squint-quantization/index.html#frame-quantization-sidelobes">Lesson 23</a>, a few decibels deeper because the error is spread over eight elements.
 
-Rounding this particular table does less damage than the estimate, as the left half of the figure shows. Rounding keeps the gains symmetric and the phases antisymmetric (the mirror pairs of <a href="#frame-the-phaser-settings">The PHASER Settings</a>), so each pair sums to a real number, the pattern referred to the array center stays real and still passes through zero, and the null only moves a fraction of a degree. What fills a null on the kit is error that does not share that symmetry: each channel's own calibration residue in gain and phase. The estimate is the depth those errors allow when they are about one step in size.
+Rounding this particular table does less damage than the estimate, as the left half of the figure shows. Rounding keeps the gains symmetric and the phases antisymmetric (the mirror pairs of <a href="#frame-the-phaser-settings">The PHASER Settings</a>), so each pair sums to a real number and the pattern referred to the array center stays real. A real pattern can still miss zero, and in the $10.0$ GHz example it does, but only just: the rounded null sits a fraction of a degree from $+22.5^\circ$ and several decibels deeper than the estimate. What fills a null on the kit is error that does not share that symmetry: each channel's own calibration residue in gain and phase. The estimate is the depth those errors allow when they are about one step in size.
 ::::
 
 ::::{frame} Measured Null Depth
 :::{present}
-<img src="../../viz/img/L24-quant-depth.svg" alt="Exact and ADAR1000-rounded null patterns at 10.0 GHz, both still reaching zero near plus 22.5 degrees, and the band from minus 46 to minus 50 dB measured on a course kit" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L24-quant-depth.svg" alt="Exact and ADAR1000-rounded null patterns at 10.0 GHz near plus 22.5 degrees: the exact pattern reaches zero, and the rounded one bottoms out a fraction of a degree away" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- In an open room the notch reaches 46 to 50 dB below the uniform peak.
+- In an open room the notch reaches the depth your Part 1 estimate predicts.
 - In a cramped room reflections fill it to 22 to 24 dB.
-- The interferer ends up 34 to 38 dB below the target.
+- Step 9 of the lab measures it.
 :::
 
-The estimate is what the hardware shows. With the table above loaded, my kit's notch bottomed out 46 to 50 dB below the uniform peak in an open room, the depth one-step channel errors allow. The interferer of the first frame, 10 dB stronger than the target, now arrives 34 to 38 dB below it, where the uniform taper left it at $-3$ dB.
+The estimate is what the hardware shows. With the table above loaded in an open room, my kit's notch bottomed out at the depth one-step channel errors allow, which is the number Question 2 of your Part 1 asks for, and Step 9 of the lab has you measure it on your own kit. The interferer of the first frame, 10 dB stronger than the target, then arrives below it by that depth less 10 dB, where the uniform taper left it at $-3$ dB.
 
-The room sets a second limit. In a cramped space the same table bottomed out only 22 to 24 dB down: the HB100's own tone was still there in the notch, because a reflection arriving from another direction, about 22 dB below the direct path, filled it. So when a notch reads much shallower than 40 dB, look at the room before the arithmetic. A wall or a person beside the kit fills it, a stale calibration fills it, and a sign error on the phase column puts it on the wrong side of the sweep, where it is easy to miss.
+The room sets a second limit. In a cramped space the same table bottomed out only 22 to 24 dB down: the HB100's own tone was still there in the notch, because a reflection arriving from another direction, about 22 dB below the direct path, filled it. So when a notch reads much shallower than your Part 1 estimate, look at the room before the arithmetic. A wall or a person beside the kit fills it, a stale calibration fills it, and a sign error on the phase column puts it on the wrong side of the sweep, where it is easy to miss.
 ::::
 
 ::::{frame} Up to N−1 Nulls, All Static
@@ -652,7 +652,7 @@ Stepping by the sign alone is the simplest loop that works: it needs no slope, a
 | $r_\text{n} = \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d} / \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}$ | projection of the null beam on the desired beam | $= $ uniform pattern level at $\theta_1$ |
 | Main-lobe loss, null at $+22.5^\circ$, $10.0$ GHz | subtraction plus rescaling | 2.1 dB |
 | PHASER settings, null at $+22.5^\circ$, $10.0$ GHz | gains | 71, 66, 83, 100, 100, 83, 66, 71 % |
-| Notch depth | one-step channel errors, then the room | $-46$ to $-50$ dB open, $-22$ to $-24$ dB cramped |
+| Notch depth | one-step channel errors, then the room | your Part 1 estimate open, $-22$ to $-24$ dB cramped |
 | Difference beam | Beam 1 Phase $= 180^\circ$ subtracts the two channels | a structural null, no computed weight |
 | MVDR | $\mathbf{w} = \mathbf{R}^{-1}\mathbf{s} / (\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s})$ from $K$ snapshots | one null from two channels; loading $0.1$, $K = 1024$ |
 | Monopulse error | $\vert\Delta\vert/\vert\Sigma\vert$, signed by side, from one look | zero on the target, slope $2kd$ per radian; $0.10$ per degree at $10.0$ GHz |

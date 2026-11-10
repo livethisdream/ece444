@@ -49,7 +49,7 @@ FREQ = 10.0e9                   # worked-example frequency, well away from any k
 DL = 0.014 * FREQ / 3.00e8      # d / lambda = 0.467
 KD = 2 * np.pi * DL
 FLOOR = -50.0                   # plot floor, dB
-MEASURED = (-50.0, -46.0)       # my kit's notch bottom, dB below uniform peak (2026-10-23)
+# The kit's measured open-room depth is not drawn: it is a Part 1 answer.
 NIDX = np.arange(N)
 
 plt.rcParams.update({
@@ -242,11 +242,12 @@ def cost_vs_angle() -> None:
 
 # ------------------------------------------------------------------ figure 4
 def quant_depth() -> None:
-    """Depth against the uniform peak: exact, rounded, RMS estimate, measured."""
+    """Depth against the uniform peak: exact and rounded weights."""
     w, r = null_weights(22.5)
     ws = w / np.abs(w).max()
     wq = quantize(w)
-    th = np.linspace(0, 45, 4001)
+    # Sample densely through the null so neither curve stops short of the floor
+    th = np.union1d(np.linspace(0, 45, 4001), np.linspace(21.5, 23.5, 20001))
     pk = response(ws, TH).max()
     exact = db_pattern(ws, th, PK)
     rounded = db_pattern(wq, th, PK)
@@ -254,8 +255,8 @@ def quant_depth() -> None:
     eps = np.hypot(lsb / np.sqrt(12), 0.01 / np.sqrt(12))
     rms = 20 * np.log10(eps / np.sqrt(N) * pk / PK)
     fig, ax = plt.subplots(figsize=(8.4, 4.0))
-    ax.axhspan(*MEASURED, color=ORANGE, alpha=0.22, lw=0)
-    ax.text(0.8, MEASURED[1] + 1.3, "measured on my kit", color=ORANGE, fontsize=12)
+    # No measured band: the kit's open-room depth equals Part 1's Q2 answer,
+    # which is set by the bits, not the frequency (Integrator, 2026-11-10).
     # The RMS estimate is Part 1's answer, so the figure leaves it for the
     # cadet to draw (Neil, 2026-11-08); `rms` is kept for the docstring check.
     del rms
