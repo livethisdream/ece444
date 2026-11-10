@@ -803,12 +803,35 @@ L20, #230). Module 3 class time is the lab: cadets read the lesson and do the
 pre-lab beforehand, and Neil presents only the lab's opening ("the flow of
 the lab and what the big picture is"). The lesson teaches everything the lab
 tests and ends with a read-only Pre-Lab frame that maps each Part 1 question
-to the step that checks it; it is a reading page with no beat cap. The lab
-page presents title, objectives, The Big Picture, The Flow of the Lab, and
-Equipment and Setup (at most six beats, `LAB_BEATS` in `budgets.py`), and
-everything after that is read-only: the steps and their boxes, No Hardware?,
-Your Part 2 Entries, Lab Packet, For Part 3, Looking Ahead. The
-write-lesson skill carries the checklist.
+to the step that checks it; it is a reading page with no beat cap.
+
+**The lab page: predict first, then the procedure as beats** (Neil,
+2026-11-10, on the first L20 Lab of this shape; the approved one is #239).
+Two things were wrong with presenting only an opening. It gave away the
+answers: a tagline, a Big Picture figure and a flow strip with a thumbnail
+of each expected trace. And Equipment and Setup was the last slide, with the
+whole procedure hanging off it as read-only frames ("That seems like an odd
+way to set it up"). So the lab page presents, in order: title; objectives;
+**The Big Picture**, which lists what is measured by what is set or switched,
+with step ranges and no outcomes; **Predict First**, a widget that hides its
+answer until the cadet commits to a prediction and asks for it; then **one
+beat per procedure block** (Bring Up the Kit, each run), each presenting
+three or four bullets of what the cadet does, with its numbered steps and
+entry boxes in the frame's read-mode text. Equipment and Setup folds into
+Bring Up the Kit. No step states a value Part 1 predicts; it says to compare
+with the prediction. After the procedure, read-only: No Hardware?, Your Part
+2 Entries, Lab Packet, For Part 3, Looking Ahead. The budget is `LAB_BEATS`
+in `budgets.py`, ten: four opening beats and up to six procedure blocks.
+
+**The lesson works every method Part 1 needs, and gives no Part 1 answer**
+(Neil, 2026-11-08 and 2026-11-10: "Do the lessons give them what they need
+(almost explicitly) to make the part 1 predictions?"). Each Part 1 question
+has a worked example of its method on the lesson page, or a one-line recap
+linking the earlier lesson that worked it. Worked examples, figures and
+widget defaults use 10.0 GHz: the kits run 10.1 to 10.7 GHz, so 10.3 and
+10.525 GHz hand a cadet near that frequency the answer. No page prints a
+value that equals an answer-key value. The write-lesson skill carries the
+checklist.
 
 **No measurement past ±90°** (Neil, 2026-11-08, on L21's back-pattern
 reading: "we shouldn't be measuring past +/-90 and expect to be

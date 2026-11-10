@@ -33,6 +33,11 @@ History
             spare. A lab is listed here as it is restructured; L20 first, then L18, L21 and
             L22-L23 (2026-11-09). L18's
             exception of 21 is retired with it: the lesson has no cap now.
+2026-11-10  LAB_BEATS 6 -> 10 (Neil, on the L20 Lab, #239): presenting only
+            an opening gave the answers away and left the procedure hanging
+            off the last slide. A lab page now presents title, objectives,
+            The Big Picture (no outcomes), Predict First, and one beat per
+            procedure block, so the budget is four plus up to six blocks.
 """
 
 # Words a present frame may show (the LO frame is exempt).
@@ -42,8 +47,9 @@ WORDS = 40
 # read-only frames excluded. One 53-minute period.
 BEATS = 20
 
-# Beats a restructured Module 3 lab page may present: its opening only.
-LAB_BEATS = 6
+# Beats a Module 3 lab page may present: title, objectives, The Big Picture,
+# Predict First, and one beat per procedure block (up to six).
+LAB_BEATS = 10
 
 # Module 3 lessons read before class rather than presented (Neil, 2026-11-08).
 READING_LESSONS = {f"L{n}" for n in range(17, 25)}
@@ -61,10 +67,10 @@ BEAT_EXCEPTIONS = {
     "L12": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L13": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L14": (30, "cut under the 30-beat rule (2026-09); recut pending"),
-    "L20-lab": (LAB_BEATS + 1, "lab opening, a prediction widget, then the procedure as beats (Neil, 2026-11-10)"),
-    "L18-lab": (LAB_BEATS, "restructured like L20 (#234)"),
-    "L21-lab": (LAB_BEATS, "restructured like L20 (#233)"),
-    "L22-L23-lab": (LAB_BEATS, "restructured like L20 (#235)"),
+    "L20-lab": (LAB_BEATS, "predict first, then the procedure as beats (Neil, 2026-11-10; #239)"),
+    "L18-lab": (LAB_BEATS, "L20 shape (#234); predict-first pass in progress"),
+    "L21-lab": (LAB_BEATS, "L20 shape (#233); predict-first pass in progress"),
+    "L22-L23-lab": (LAB_BEATS, "L20 shape (#235); predict-first pass in progress"),
 }
 
 

@@ -8,6 +8,8 @@
   - L18-hpbw-vs-scan      : HPBW against theta0, 1/cos rule vs exact, and scan loss
   - L18-inverse-unwrap    : the inverse example's eight settings, unwrapped to +20 deg
 
+All of them are drawn at 10.0 GHz, below every kit's HB100 frequency.
+
 Every figure is written to the lesson page's book/extras/viz/img/. None carries
 an equation: symbols, numbers, and short words only.
 
@@ -40,11 +42,12 @@ INK, RULE, LIGHT = "#1a1a1a", "#c7d2e0", "#9fb1c2"
 
 IMG = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 
-# Course array at the workshop frequency: d = 14 mm, lambda = c/f = 29.13 mm
-# at 10.3 GHz with c = 3.00e8, unrounded (rounding lambda to 29.1 first gave
-# kd = 173.2 deg, a tenth high).
-N, DL = 8, 14.0e-3 / (3.00e8 / 10.3e9)
-KD_DEG = 360.0 * DL                     # 173.0 deg of phase per unit of sin(theta0)
+# Course array at the lesson's frequency: d = 14 mm, lambda = c/f = 30.00 mm
+# at 10.0 GHz with c = 3.00e8. 10.0 GHz sits below every HB100 kit
+# (10.1-10.7 GHz), so no number on the lesson page is a Part 1 answer (Neil,
+# 2026-11-10; the lesson was at 10.3 GHz until then, inside the kit range).
+N, DL = 8, 14.0e-3 / (3.00e8 / 10.0e9)
+KD_DEG = 360.0 * DL                     # 168.0 deg of phase per unit of sin(theta0)
 
 # The page's smallest label, 10.5 px, at the narrowest column a figure gets (a
 # 343 px phone column): a label of FS_MIN units in a W_PAGE-unit drawing.
@@ -239,9 +242,9 @@ def phase_ramp() -> None:
     unwrapped = n * dphi
     wrapped = unwrapped % 360.0
     assert np.allclose(np.round(unwrapped, 1),
-                       [0, 86.5, 173.0, 259.6, 346.1, 432.6, 519.1, 605.6])
+                       [0, 84.0, 168.0, 252.0, 336.0, 420.0, 504.0, 588.0])
     assert np.allclose(np.round(wrapped, 1),
-                       [0, 86.5, 173.0, 259.6, 346.1, 72.6, 159.1, 245.6])
+                       [0, 84.0, 168.0, 252.0, 336.0, 60.0, 144.0, 228.0])
     turned = unwrapped >= 360.0                     # one whole turn removed
     assert list(np.flatnonzero(turned)) == [5, 6, 7]
 
@@ -276,22 +279,22 @@ def phase_ramp() -> None:
 # --------------------------------------------------------------------------- 3
 def sin_space() -> None:
     """The steered pattern is a rigid shift in sin(theta), not in theta. At
-    30 deg the first nulls sit +/-0.260 either side of 0.500 in sine (equal),
-    which is 16.1 deg below and 19.5 deg above the peak in angle (not)."""
+    30 deg the first nulls sit +/-0.268 either side of 0.500 in sine (equal),
+    which is 16.6 deg below and 20.2 deg above the peak in angle (not)."""
     T0 = 30.0
     step = 1.0 / (N * DL)                            # lambda / Nd
     s0 = np.sin(np.radians(T0))
     s_null = np.array([s0 - step, s0 + step])
-    assert round(step, 3) == 0.260
-    assert np.allclose(np.round(s_null, 3), [0.240, 0.760])
-    # The page works from the sines as printed, 0.240 and 0.760: arcsin(0.760)
-    # is 49.46 deg, so 49.5 and 19.5. (Unrounded, the null is at 49.45 deg.)
+    assert round(step, 3) == 0.268
+    assert np.allclose(np.round(s_null, 3), [0.232, 0.768])
+    # The page works from the sines as printed, 0.232 and 0.768; the angles
+    # agree with the unrounded nulls to the tenth printed.
     th_null = np.degrees(np.arcsin(np.round(s_null, 3)))
-    assert np.allclose(np.round(th_null, 1), [13.9, 49.5])
-    assert np.allclose(np.round([T0 - th_null[0], th_null[1] - T0], 1), [16.1, 19.5])
+    assert np.allclose(np.round(th_null, 1), [13.4, 50.2])
+    assert np.allclose(np.round([T0 - th_null[0], th_null[1] - T0], 1), [16.6, 20.2])
     assert np.all(np.abs(np.degrees(np.arcsin(s_null)) - th_null) < 0.02)
     s_m2 = s0 + 2 * step
-    assert round(s_m2, 3) == 1.020 and s_m2 > 1.0    # the m = +2 null is off the axis
+    assert round(s_m2, 3) == 1.036 and s_m2 > 1.0    # the m = +2 null is off the axis
     # the pattern is zero at the nulls, not merely low
     assert np.all(np.abs(af(np.degrees(np.arcsin(s_null)), T0)) < 1e-9)
 
@@ -407,8 +410,8 @@ def hpbw_vs_scan() -> None:
     rule = hpbw_rule(pts)
     exact = np.array([hpbw_exact(t) for t in pts])
     loss = scan_loss_db(pts)
-    assert np.allclose(np.round(rule, 1), [13.2, 15.2, 18.7, 26.4]), rule
-    assert np.allclose(np.round(exact, 1), [13.3, 15.4, 19.2, 30.5]), exact
+    assert np.allclose(np.round(rule, 1), [13.6, 15.7, 19.2, 27.2]), rule
+    assert np.allclose(np.round(exact, 1), [13.7, 15.9, 19.8, 31.9]), exact
     assert np.allclose(np.round(loss, 1) + 0.0, [0.0, -0.6, -1.5, -3.0]), loss
     assert round(exact[3] / exact[0], 1) == 2.3        # "2.3 times, exactly"
 
@@ -470,14 +473,14 @@ def inverse_unwrap() -> None:
     """The inverse example: eight wrapped settings, the step between each
     pair, and the one step that needs a whole turn put back. The settings are
     the page's table as printed (0.1 deg rounding included)."""
-    phi = np.array([0.0, 59.2, 118.4, 177.5, 236.7, 295.9, 355.1, 54.3])
+    phi = np.array([0.0, 57.5, 114.9, 172.4, 229.8, 287.3, 344.8, 42.2])
     steps = np.round(np.diff(phi), 1)
-    assert np.allclose(steps, [59.2, 59.2, 59.1, 59.2, 59.2, 59.2, -300.8]), steps
-    assert round(steps[6] + 360.0, 1) == 59.2            # a turn restored
+    assert np.allclose(steps, [57.5, 57.4, 57.5, 57.4, 57.5, 57.5, -302.6]), steps
+    assert round(steps[6] + 360.0, 1) == 57.4            # a turn restored
     unwrapped7 = phi[7] + 360.0
-    assert round(unwrapped7, 1) == 414.3
+    assert round(unwrapped7, 1) == 402.2
     dphi = unwrapped7 / 7
-    assert round(dphi, 2) == 59.19
+    assert round(dphi, 2) == 57.46
     sin0 = dphi / round(KD_DEG, 1)
     assert round(sin0, 3) == 0.342
     theta0 = np.degrees(np.arcsin(sin0))
@@ -499,11 +502,11 @@ def inverse_unwrap() -> None:
         ax.text(i + 0.5, phi[i + 1] + pad, f"+{steps[i]:.1f}", color=GREEN, fontsize=13,
                 ha="center", va="bottom")
     # the odd step goes a row higher than the others, so it cannot be read as
-    # part of the +59.2 beside it
+    # part of the +57.5 beside it
     ax.text(6.5, unwrapped7 + pad * 0.6, f"\u2212{abs(steps[6]):.1f}", color=RED, fontsize=13,
             ha="center", va="bottom")
-    # the turn put back: element 7 lifted from 54.3 to 414.3, drawn up the
-    # right edge of its bar so it stays clear of the -300.8 label to its left
+    # the turn put back: element 7 lifted from 42.2 to 402.2, drawn up the
+    # right edge of its bar so it stays clear of the -302.6 label to its left
     xr = 7 + W / 2
     ax.plot([xr, xr], [phi[7], unwrapped7], color=AMBER, lw=1.4, ls=(0, (3, 2)), zorder=4)
     ax.plot([7.1, xr], [unwrapped7, unwrapped7], color=AMBER, lw=1.6, zorder=4)

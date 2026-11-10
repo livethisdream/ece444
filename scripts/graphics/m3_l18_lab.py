@@ -4,11 +4,13 @@
   - L18-sweep-compare   : the lab in one plot: the source at 0, the source
                           moved to +45 (physical run, 1.5 dB lower), and
                           Apply 45 with the source at boresight (commanded
-                          run, no drop), sampled where the instrument samples
+                          run, no drop), sampled where the instrument samples,
+                          at 10.0 GHz (the lesson's frequency, away from every
+                          kit); the lab page no longer shows it
   - L18-expected-sweep  : the 0 and 30 deg beams as the angle and width
                           readings see them, annotated with what the lab
                           reads, at 10.0 GHz (away from every kit)
-  - L18-phase-control   : the 30 deg ramp at the lesson's 10.3 GHz,
+  - L18-phase-control   : the 30 deg ramp at the lesson's 10.0 GHz,
                           unwrapped and wrapped, beside what Phase Control
                           shows after Apply 30 (not the lab's 10.525 GHz, so
                           the page does not print the Part 1 key)
@@ -296,6 +298,16 @@ def _cmd_samples(apply_deg):
 
 
 def sweep_compare() -> None:
+    """Drawn at 10.0 GHz, the lesson's frequency, away from every kit."""
+    global FREQ
+    saved, FREQ = FREQ, 10.0e9
+    try:
+        _sweep_compare()
+    finally:
+        FREQ = saved
+
+
+def _sweep_compare() -> None:
     """The lab in one plot: the boresight trace, the source moved to +45
     (physical run: the peak follows it, 1.5 dB lower, the ideal-element
     bound), and Apply 45 with the source at boresight (commanded run: the
@@ -407,17 +419,17 @@ def phase_ramp() -> None:
     """The 30 deg prediction against the readout: +n dphi rising, the same
     ramp wrapped into 0-360, and the falling, unwrapped whole degrees that
     Phase Control shows after Apply 30."""
-    f_lesson = 10.3e9                   # the lesson's frequency, not the lab's
+    f_lesson = 10.0e9                   # the lesson's frequency, below every kit
     dphi = 360.0 * D * f_lesson / C_COURSE * math.sin(math.radians(30.0))
     n = np.arange(N)
     unwrapped = n * dphi
     wrapped = unwrapped % 360.0
     shown = np.array(phase_control(30.0, f_lesson))
     assert np.allclose(np.round(unwrapped, 1),
-                       [0, 86.5, 173.0, 259.6, 346.1, 432.6, 519.1, 605.6])
+                       [0, 84.0, 168.0, 252.0, 336.0, 420.0, 504.0, 588.0])
     assert np.allclose(np.round(wrapped, 1),
-                       [0, 86.5, 173.0, 259.6, 346.1, 72.6, 159.1, 245.6])
-    assert list(shown) == [0, -87, -173, -260, -346, -433, -519, -606], shown
+                       [0, 84.0, 168.0, 252.0, 336.0, 60.0, 144.0, 228.0])
+    assert list(shown) == [0, -84, -168, -252, -336, -420, -504, -588], shown
     # the readout is the prediction negated, to within the whole-degree rounding
     # and the GUI's c (0.07 % from the course's 3e8)
     assert np.all(np.abs(shown + unwrapped) < 1.0), shown + unwrapped
