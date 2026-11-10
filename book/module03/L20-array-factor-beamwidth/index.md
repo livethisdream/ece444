@@ -237,6 +237,19 @@ The $-13$ dB figure is the large-$N$ limit, and a small array lands a little hig
 $$\frac{N\psi}{2} \approx \frac{3\pi}{2},$$
 
 and evaluate $AF_N$ there. That estimate lands within $0.2$ dB of the true peak for eight elements and closer for fewer.
+
+:::{admonition} Worked example — the first sidelobe of six elements
+:class: tip
+With $N$ = 6, the estimate puts the first sidelobe at $N\psi/2 = 3\pi/2$, so $\psi/2 = \pi/4$ and
+
+$$\begin{aligned}
+\lvert AF_6\rvert &= \left\lvert \frac{\sin(3\pi/2)}{6\ \sin(\pi/4)} \right\rvert \\
+&= \frac{1}{6\ (0.707)} \\
+&= 0.236.
+\end{aligned}$$
+
+In decibels that is $20\log_{10}(0.236) = -12.6$ dB. Searching the array factor between its first two nulls puts the true peak at $N\psi/2 = 1.44\pi$ and $-12.4$ dB, $0.1$ dB higher. Neither the frequency nor the spacing enters, because $AF_N$ depends on them only through $\psi$; they move the sidelobe in angle, not in level, as long as it lands inside the visible region.
+:::
 ::::
 
 ::::{frame} Directivity of a Uniform Array
@@ -402,11 +415,38 @@ and the first-null beamwidth is $2\arcsin(30.0/84) = 2 \times 20.92^\circ = 41.8
 
 The center pair, E4 and E5, is the smallest aperture the lab sweeps, and two of its predictions need care. With $N = 2$ the uniform array factor reduces to
 
-$$AF_2 = \frac{\sin\psi}{2\sin(\psi/2)} = \cos\frac{\psi}{2}, \qquad \psi = kd\sin\theta.$$
+$$\begin{aligned}
+AF_2 &= \frac{\sin\psi}{2\sin(\psi/2)} = \cos\frac{\psi}{2}, \\
+\psi &= kd\sin\theta.
+\end{aligned}$$
 
-The $0.886\ \lambda/(Nd)$ rule carries a small-angle step inside it, and the wider the beam, the worse that step gets. Decide whether a two-element beam is narrow enough for it. Because $AF_2$ is just $\cos(\psi/2)$, you can also solve its half-power point directly at your kit's frequency and compare.
+The $0.886\ \lambda/(Nd)$ rule carries small-angle steps inside it, and the wider the beam, the worse those steps get. Because $AF_2$ is just $\cos(\psi/2)$, we can solve its half-power point exactly instead. Half power is where the array factor falls to $1/\sqrt{2}$:
 
-The first-null beamwidth and the first sidelobe come from the same function. The first null of $\cos(\psi/2)$ needs $\psi = \pi$, which is $\sin\theta = \lambda/2d$. Evaluate that at your kit's frequency and decide whether a real angle satisfies it; the answer also tells you whether the pattern has a sidelobe. Part 1 of the packet asks what you entered for the two-element FNBW and first sidelobe, and why.
+$$\begin{aligned}
+\cos\frac{\psi}{2} &= \frac{1}{\sqrt{2}} \\
+\psi &= \frac{\pi}{2} \\
+\sin\theta &= \frac{\lambda}{4d}.
+\end{aligned}$$
+
+:::{admonition} Worked example — the center pair at 10.0 GHz
+:class: tip
+At $10.0\ \text{GHz}$, $\lambda$ = 30.0 mm and $d$ = 14 mm, so
+
+$$\begin{aligned}
+\sin\theta &= \frac{30.0}{4\ (14)} = 0.536 \\
+\theta_\text{HP} &= 2\ (32.4^\circ) = 64.8^\circ.
+\end{aligned}$$
+
+The rule gives $0.886\ (30.0)/28 = 0.949$ rad $= 54.4^\circ$, an error of $(54.4 - 64.8)/64.8 = -16.0\%$. Both small-angle steps fail here: the rule assumes $\sin(\psi/2) \approx \psi/2$, and at the half-power point $\psi/2 = 45^\circ$; it also assumes $\sin\theta \approx \theta$, and there $\theta = 32.4^\circ$.
+
+The first-null beamwidth and the first sidelobe come from the same function. The first null of $\cos(\psi/2)$ needs $\psi = \pi$, which is
+
+$$\sin\theta = \frac{\lambda}{2d} = \frac{30.0}{28} = 1.07.$$
+
+No real angle has a sine above 1, so this null falls outside the visible region. Across the visible region $\psi$ runs only from $-kd$ to $kd$, and $kd = 168.0^\circ$ is less than $180^\circ$, so $\cos(\psi/2)$ falls steadily from the peak to $\pm 90^\circ$ with no null and no sidelobe.
+:::
+
+When a pattern has no first null at any real angle, we quote its first-null beamwidth as $180^\circ$, the whole visible region, by convention, and its first sidelobe level as none. Part 1 of the packet has you evaluate $\lambda/2d$ at your kit's frequency and say what you entered for the two-element FNBW and first sidelobe, and why.
 ::::
 
 ::::{frame} Two Elements, Far Apart
@@ -425,7 +465,46 @@ The fourth sweep of the lab leaves only E1 and E8 on. It is still a two-element 
 
 $$\sin\theta_m = \frac{m\lambda}{D},$$
 
-and with $D$ above a wavelength several values of $m$ land in visible space. Those extra full-height lobes are grating lobes, which Lesson 23 treats. The lobe at $0^\circ$ is narrower than the full eight-element beam. All of the weight sits at the two ends of the row, the opposite of a taper, which narrows the main lobe and sends the rest of the power into the grating lobes. The two pairs add the same two voltages, so their peaks should agree, and their beams should not. Part 1 has you find the lobe angles and the width of the lobe at $0^\circ$ at your kit's frequency.
+and with $D$ above a wavelength several values of $m$ land in visible space. Those extra full-height lobes are grating lobes, which Lesson 23 treats. The lobe at $0^\circ$ is narrower than the full eight-element beam. All of the weight sits at the two ends of the row, the opposite of a taper, which narrows the main lobe and sends the rest of the power into the grating lobes. The two pairs add the same two voltages, so their peaks should agree, and their beams should not.
+
+The lobe at $0^\circ$ has the same half-power and null conditions as the center pair, $\psi = \pi/2$ and $\psi = \pi$ (see "Two Elements Side by Side" above), with $D$ in place of $d$:
+
+$$\begin{aligned}
+\sin\theta_\text{HP} &= \frac{\lambda}{4D} \\
+\sin\theta_\text{null} &= \frac{\lambda}{2D}.
+\end{aligned}$$
+
+Each is the half-angle; the beamwidth is twice it.
+
+:::{admonition} Worked example — a pair five spacings apart
+:class: tip
+Leave only E2 and E7 on, so $D = 5d = 70\ \text{mm}$. At $10.0\ \text{GHz}$, $D/\lambda = 70/30.0 = 2.33$ and $\lambda/D = 0.429$, so the full-height lobes sit at
+
+| $m$ | $\sin\theta_m = m\lambda/D$ | $\theta_m$ |
+| :-- | :-- | :-- |
+| 0 | 0 | $0^\circ$ |
+| $\pm 1$ | $\pm 0.429$ | $\pm 25.4^\circ$ |
+| $\pm 2$ | $\pm 0.857$ | $\pm 59.0^\circ$ |
+| $\pm 3$ | $\pm 1.29$ | outside the visible region |
+
+That puts five full-height lobes in visible space. The lobe at $0^\circ$ has
+
+$$\begin{aligned}
+\sin\theta_\text{HP} &= \frac{30.0}{4\ (70)} = 0.107 \\
+\theta_\text{HP} &= 2\ (6.15^\circ) = 12.3^\circ
+\end{aligned}$$
+
+and
+
+$$\begin{aligned}
+\sin\theta_\text{null} &= \frac{30.0}{2\ (70)} = 0.214 \\
+\text{FNBW} &= 2\ (12.37^\circ) = 24.7^\circ.
+\end{aligned}$$
+
+Its $12.3^\circ$ half-power width is already narrower than the $13.7^\circ$ of all eight elements at $10.0\ \text{GHz}$.
+:::
+
+Part 1 has you find the lobe angles and the width of the lobe at $0^\circ$ at your kit's frequency.
 ::::
 
 ::::{frame} Reading a Measured Sweep
