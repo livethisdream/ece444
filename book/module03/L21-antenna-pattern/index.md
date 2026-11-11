@@ -476,7 +476,7 @@ $$
 $$
 
 so a true $-20$ dBc lobe can read anywhere from $-18.5$ to $-21.5$ dBc.
-Part 1 finds the window for the errors in the table.
+In Part 3 you build that window from your own readings.
 
 Radius drift and pace belong to the azimuth sweep by hand, for the reasons
 in "The Time Axis." On the stand both go away, and what remains is the
@@ -568,8 +568,8 @@ pass of the kit on its stand that reads the $0^\circ$ and $30^\circ$ beams
 together. Compare them lobe by lobe, in dBc. The main lobe and the first
 sidelobes are where the methods should agree: a first sidelobe of a
 broadside beam reads about 13 dB below the peak on every trace, and the room
-moves each dBc value by the window you find in Part 1 (Question 6), since a
-dBc value is the difference of two readings that each carry the room's error.
+moves each dBc value by a window you build from your own readings in Part 3,
+since a dBc value is the difference of two readings that each carry the room's error.
 The
 farther sidelobes are recognizable but not quantitative, because the noise
 floor, the room, and the patch pattern all act there. Read angles from the
@@ -633,7 +633,7 @@ in place of $10\log_{10} 8$; the two agree within $0.2\ \text{dB}$.
 | Why it traces a pattern | $\vert AF\vert$ depends only on $\sin\theta_\text{src} - \sin\theta_0$ | stepping the beam or moving the source visits the same curve |
 | Azimuth sweep | one beam held, source moved in azimuth or antenna turned | Signal vs Time by hand; the stand's scale for angles |
 | dBc | level relative to the trace's own main-lobe peak | removes Rx Gain, distance, and source power |
-| Agreement | main lobe and first sidelobes | about $-13$ dBc at broadside, within the Part 1 window |
+| Agreement | main lobe and first sidelobes | about $-13$ dBc at broadside, within your error budget |
 | Patch pattern | seen by the azimuth sweep, not by the beam sweep | outer sidelobe of a $30^\circ$ beam reads lower; the room adds as much |
 | Source distance | $r \ge 2D^2/\lambda$, $D = Nd = 112\ \text{mm}$ | under $0.9\ \text{m}$; measure at $1.2\ \text{m}$ |
 
@@ -656,18 +656,18 @@ the sidelobes down and widens the main lobe.
 ::::{frame} Pre-Lab
 :class: read-only doc-links
 
-Part 1 of the L21 Lab packet is the pre-lab. Do it before the lab period, at the HB100 frequency your kit reported in the L18 Lab, and bring it to class: you check every trace you take in Part 2 against it. This lesson works its examples at $10.0\ \text{GHz}$, away from every kit, so its angles differ from yours by up to about $4^\circ$, mostly at the outer nulls; work every answer at your own frequency.
+Part 1 of the L21 Lab packet is the pre-lab: one prediction table for each Part 2 table, with the same rows. Do it before the lab period, at the HB100 frequency your kit reported in the L18 Lab, and bring it to class: you check every trace you take in Part 2 against it. This lesson works its examples at $10.0\ \text{GHz}$, away from every kit, so its angles differ from yours by up to about $4^\circ$, mostly at the outer nulls; work every value at your own frequency.
 
-| Part 1 | You predict | Checked in |
-| :-- | :-- | :-- |
-| Question 1 | $\lambda$, $d/\lambda$, $kd$, and the far-field distance at your frequency | Step 2 |
-| Question 2 | a sidelobe in dBc from two dBFS readings, and why Rx Gain cancels | Steps 9 and 14 |
-| Question 3 | the broadside nulls and first sidelobes, the same on all three traces | Steps 9, 14, and 18; Tables B to D |
-| Question 4 | the $30^\circ$ nulls, and how much lower the outer first sidelobe reads than the inner | Step 18; Table E |
-| Question 5 | your pace and the slowest update rate that puts five readings on a first sidelobe | Steps 11 and 13 |
-| Question 6 | the window two traces must agree within | Part 3 |
+| Part 1 table | You predict | Checked in | Method |
+| :-- | :-- | :-- | :-- |
+| Setup | frequency, far-field distance, slowest update rate | Steps 2 and 11 | "The Rectangular Plot," "Source Distance," "The Time Axis" |
+| Table A | the Angle readout with the stand at $+30$, $0$, and $-30$ | Table A; Steps 7 and 8 | "Turning the Kit on Its Stand" |
+| Table B | the beam sweep's half-power beamwidth and first sidelobes | Table B; Step 9 | Lesson 20's "Half-Power Beamwidth" and "Sidelobe Level" |
+| Table C | the azimuth sweep's first sidelobes, and the peak spread from radius drift | Table C; Steps 14 and 15 | "Beam Sweep and Azimuth Sweep at Broadside," "The Time Axis" |
+| Table D | angle and level of the main lobe, first nulls, and first sidelobes, beam at $0^\circ$ | Table D; Step 18 | "Beam Sweep and Azimuth Sweep at Broadside" |
+| Table E | the same for the beam at $30^\circ$ | Table E; Step 18 | "Beam Sweep and Azimuth Sweep at 30°" |
 
-Every question has a worked example above, at $10.0\ \text{GHz}$: Question 1 in "The Rectangular Plot" and "Source Distance," Question 2 in "Levels in dBc," Questions 3 and 4 in the two "Beam Sweep and Azimuth Sweep" frames, and Questions 5 and 6 in "The Time Axis" and "Measurement Errors."
+Every method has a worked example at $10.0\ \text{GHz}$ in the frame named beside it. Part 1 also asks you to show your work for one row of each table.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet, Part 1 (PDF)</a>
 ::::
