@@ -411,21 +411,6 @@ reasoning that connects them, and the uncertainty. Lesson 21's
 <a href="../L21-antenna-pattern/index.html#frame-measurement-errors">"Measurement Errors"</a>
 lists the error sources to size from your own readings.
 
-Here is a paragraph of that kind on the L20 Lab, from my kit's readings:
-
-> Halving the active aperture from eight elements to four lowered the peak by
-> about 1.5 dB less than the 6.0 dB the voltage sum predicts, and halving
-> again to two fell short by about as much. The voltage sum assumes the
-> elements left on keep the gain they had with all eight on, so a shortfall
-> that repeats at each halving points at something that changes with the
-> number of elements on, not at a fixed offset in the receiver. Neither the
-> kit nor the HB100 moved between sweeps, so the room's reflections are the
-> same in every trace and largely cancel in the step; repeating one sweep
-> gives the spread of a single reading, and a shortfall several times that
-> spread belongs to the kit, not to one reading. What this measurement
-> doesn't explain is the mechanism. Repeating Step 8
-> with E1 to E4 on in place of E3 to E6 would show whether the shortfall
-> depends on which elements are on.
 ::::
 
 ::::{frame} Looking Ahead
