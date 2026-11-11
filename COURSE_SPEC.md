@@ -843,17 +843,27 @@ accurate"). A lab asks for, and a packet grades, readings inside the
 front half-plane only; behind the board the kit's patches, the stand and
 the room set what you read, not the array.
 
-**Lab packet structure** (piloted on L19, 2026-10-10). A lab's practice
+**Lab packet structure** (piloted on L19, 2026-10-10; made lean on L21,
+2026-11-11). A lab's practice
 problems fold into its lab packet, `ECE444_Lab_L<NN>_<Short>.tex` (in
 `ECE444-faculty` since 2026-10-23, since the source holds the solutions),
-which has three parts: **Part 1, Pre-Lab** (individual, before the lab
-period: the predictions, plus a rehearsal of the commanded half of the
-procedure on the hosted simulator where the lab has one; it may scaffold like
-a practice set); **Part 2, Measurements** (each
-cadet's own data from their own kit, in class: measurement tables only, no
-prose questions); **Part 3, Writeup** (individual, after the lab:
-reconcile measured against predicted against the error budget, plus three or
-four analysis problems). **The packet is one submission** (Neil, 2026-10-11:
+which has three parts, **predict, measure, analyze** (Neil, 2026-11-11:
+"These are seniors, so they should have less structure and apply more
+critical thinking"). **Part 1, Predict** (individual, before the lab period):
+one prediction table per measurement table, with the same rows and
+quantities, filled in at the cadet's own frequency, and the work shown for
+one row. It gives only what a cadet cannot be expected to know (N, d, the arc
+radius); it does not state a result or list the steps, because the lesson
+works every method at 10.0 GHz. **Part 2, Measure** (each cadet's own data
+from their own kit, in class): measurement tables only, no prose questions.
+**Part 3, Analyze** (individual, after the lab): two or three open prompts
+about what this lab measured. A prompt does not name the finding, its
+direction, or its cause, and it is not boilerplate that would fit any lab
+(VOICE.md 43). No problem invents a person or readings (VOICE.md 41). The
+first page says what an analysis answer is graded on: a claim, the evidence,
+the reasoning, and the uncertainty. The key lists what a strong answer
+notices, not one model paragraph. A packet is about four pages.
+**The packet is one submission** (Neil, 2026-10-11:
 "I don't want to be grading extra assignments"), turned in complete before the
 next lesson, so one Gradescope assignment per lab. A short grading statement
 on the first page says the packet counts toward engagement and is graded as a
