@@ -400,8 +400,8 @@ comparisons:
 
 1. Broadside, three ways: the beam sweep, the sweeps by hand, and the pass
    on the stand, set against your predictions.
-2. The beam at $30^\circ$: the two first sidelobes of Table E, against each
-   other, your predictions, and your broadside pair.
+2. The beam at $30^\circ$: your pass at $30^\circ$ (Table E) against your
+   broadside pass (Table D) and your predictions.
 3. By hand against the stand: what you would report from each method, and
    the broadside first-sidelobe level as you would report it from today's
    data.
