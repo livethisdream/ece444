@@ -366,14 +366,14 @@ no patch pattern, so its trace is the array factor, and it has no stand to turn.
 
 This frame collects every box you filled in on this page. Your entries stay in this
 browser only, saved as you type. **Download my packet** writes them into Part 2
-of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
-viewer, and upload one PDF to Gradescope. If you have already typed Part 1 into
-the packet PDF, use **Fill my own copy** and choose that file instead: your Part 1
-is kept, and the page adds Part 2 to it. Either way the result is locked, so finish
-any typing in the PDF first. **Export entries** saves a small backup file you
-can **Import** on another laptop or after clearing your browser. The boxes are
-optional: the blank packet is in the next frame, to fill on paper or in a PDF
-viewer instead.
+of the blank packet and saves the PDF. The download locks every field, Parts 1
+and 3 included, so type those into your own copy of the packet first, then use **Fill
+my own copy** and choose that file: your Parts 1 and 3 are kept, and the page
+adds Part 2 to them. If you work Parts 1 and 3 on paper, download the packet
+and write on the printout. Upload one PDF to Gradescope. **Export entries**
+saves a small backup file you can **Import** on another laptop or after
+clearing your browser. The boxes are optional: the blank packet is in the next
+frame, to fill on paper or in a PDF viewer instead.
 
 <div class="rec-summary" data-lab="L21" data-pdf="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" data-file="ECE444_L21_Lab"></div>
 ::::
@@ -383,9 +383,9 @@ viewer instead.
 
 The L21 Lab packet is one submission for the whole lab, turned in complete before Lesson 22. It has three parts:
 
-1. Part 1, Pre-Lab (individual, before the lab period, because you need it in class): what each trace should show with the beam at $0^\circ$ and $30^\circ$, how to pace the sweep by hand, reading dBc off a trace, and what counts as agreement.
-2. Part 2, Measurements (your own kit's data, recorded in class): the angle check, the beam sweep, three azimuth sweeps by hand, and one pass on the stand.
-3. Part 3, Writeup (individual, after the lab): where the methods agree on lobe levels, the sweep by hand against the pass on the stand, and a far-field problem.
+1. Part 1, Predict (individual, before the lab period, because you need it in class): one prediction table for each Part 2 table, at your kit's frequency, and your work for one row of each.
+2. Part 2, Measure (your own kit's readings, recorded in class): the angle check, the beam sweep, three azimuth sweeps by hand, and one pass on the stand.
+3. Part 3, Analyze (individual, after the lab): three open prompts, each answered from your own readings.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet (PDF)</a>
 ::::
@@ -393,26 +393,39 @@ The L21 Lab packet is one submission for the whole lab, turned in complete befor
 ::::{frame} For Part 3
 :class: read-only
 
-Part 3 of the packet is the writeup, done after class with your Part 2
-entries beside you. Convert the lobe levels of Tables D and E to dBc first:
-subtract each table's main-lobe level. Then it asks three things:
+Part 3 is done after class with your Part 2 entries and your Part 1
+predictions beside you. Convert the lobe levels of Tables D and E to dBc
+first: subtract each table's main-lobe level. Then it asks about three
+comparisons:
 
-1. Do the three methods agree on the broadside first sidelobes, within the
-   window you found in Part 1? At $30^\circ$, do the two first sidelobes
-   differ in the direction you predicted, and by more than your own
-   broadside pair?
-2. How does the spread of your three sweeps by hand compare with the stand's
-   repeatability from Step 18? Convert a sweep's peak time to an angle at a
-   steady pace, and say what an uneven pace moves: the lobe positions, the
-   levels, or both. Could either method certify a sidelobe below
-   $-25$ dBc?
-3. A far-field problem for a larger panel at a higher frequency.
+1. Broadside, three ways: the beam sweep, the sweeps by hand, and the pass
+   on the stand, set against your predictions.
+2. The beam at $30^\circ$: the two first sidelobes of Table E, against each
+   other, your predictions, and your broadside pair.
+3. By hand against the stand: what you would report from each method, and
+   the broadside first-sidelobe level as you would report it from today's
+   data.
 
-Lesson 21's
+I grade each answer on a claim, the evidence from your own numbers, the
+reasoning that connects them, and the uncertainty. Lesson 21's
 <a href="../L21-antenna-pattern/index.html#frame-measurement-errors">"Measurement Errors"</a>
-and
-<a href="../L21-antenna-pattern/index.html#frame-classroom-against-chamber">"Classroom Against Chamber"</a>
-give the size of each effect.
+lists the error sources to size from your own readings.
+
+Here is a paragraph of that kind on the L20 Lab, from my kit's readings:
+
+> Halving the active aperture from eight elements to four lowered the peak by
+> about 1.5 dB less than the 6.0 dB the voltage sum predicts, and halving
+> again to two fell short by about as much. The voltage sum assumes the
+> elements left on keep the gain they had with all eight on, so a shortfall
+> that repeats at each halving points at something that changes with the
+> number of elements on, not at a fixed offset in the receiver. Neither the
+> kit nor the HB100 moved between sweeps, so the room's reflections are the
+> same in every trace and largely cancel in the step; repeating one sweep
+> gives the spread of a single reading, and a shortfall several times that
+> spread belongs to the kit, not to one reading. What this measurement
+> doesn't explain is the mechanism. Repeating Step 8
+> with E1 to E4 on in place of E3 to E6 would show whether the shortfall
+> depends on which elements are on.
 ::::
 
 ::::{frame} Looking Ahead
