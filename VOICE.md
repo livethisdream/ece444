@@ -655,7 +655,9 @@ cadet decides what agrees, what does not, and why, from their own numbers and
 their own error budget. The opposite failure is as bad (Neil: "I don't want
 to go from overly specific to overly generic"): a prompt that would fit any
 lab unchanged is boilerplate. Each prompt names what this lab measured and
-leaves the conclusion to the cadet. The same holds for Part 1: a prediction
+leaves the conclusion to the cadet. Use the plain verb: "compare your
+measurement at 30° with your measurement at broadside", not "set your pass
+beside ..." (Neil: "What does 'set your pass' mean?"). The same holds for Part 1: a prediction
 stem gives the quantity to predict and the givens a cadet cannot know, never
 the result ("the first sidelobes sit near ±21.5°") and never the steps.
 
