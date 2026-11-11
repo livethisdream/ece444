@@ -21,8 +21,8 @@ that silently ship wrong.
 ## 1. Before you write a word
 
 - Read `VOICE.md` in full, every time. It grows, and the newest rules (25,
-  first person; 26, every sentence earns its place) are the ones most often
-  missed.
+  first person; 26, every sentence earns its place; 41-43, problems and
+  packets) are the ones most often missed.
 - Read the earlier lessons this one builds on and note their notation with
   `grep -n`: L02's directivity and A_e, L05's field regions, L06's radiation
   vector, L07's dipole impedance, L12's T_A, L13's aperture efficiency, L16's
@@ -131,6 +131,18 @@ Every lab page (VOICE.md 27-34, from Neil's L20 Lab notes):
   answer column or in one row along the bottom of the part.
 - Bold for control names, defined terms and step leads only; italics almost
   never (VOICE.md 35).
+
+Every lab packet, practice set and assessment (VOICE.md 41-43, Neil,
+2026-11-11):
+
+- No invented people and no invented readings: never "a classmate", "a lab
+  partner", "a colleague" or "a customer". A packet's data is the cadet's own.
+- "What it doesn't explain", never "what X cannot show you" or "cannot tell
+  you".
+- A packet is predict, measure, analyze. Part 1 is a prediction table with
+  Part 2's rows; it states no result and lists no steps. Part 3 is two or
+  three open prompts about what this lab measured: none names the finding,
+  its direction or its cause, and none would fit another lab unchanged.
 
 Figures and widgets as you go: generators in `scripts/graphics/` through
 `apply_font_stack()`, widgets from `book/extras/viz/reflector-gain.html` as

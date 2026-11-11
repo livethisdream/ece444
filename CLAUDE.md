@@ -335,6 +335,13 @@ Every page is chrome-free: no sidebar, no header, one centerd bar at the bottom
   scaffold; assessments may not. Assessments live in the private
   `ece444-faculty` repo, never here.
 
+- **No problem invents a person** (Neil, 2026-11-11: "I don't want to ever
+  read a problem like that again. In any class, on any assignment"). No
+  classmate, lab partner, colleague or customer, and no made-up readings to
+  analyze. A lab packet is predict, measure, analyze on the cadet's own data,
+  with open analysis prompts that do not name their answer (VOICE.md 41-43;
+  COURSE_SPEC, "Lab packet structure").
+
 ## Don'ts
 
 - **Never use MATLAB.** Course software is Python or another FOSS language —

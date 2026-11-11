@@ -609,6 +609,56 @@ the difference between the -27dBc and -23dBc? Which one is correct? Does it
 matter?": when two numbers for one quantity appear, the page gives one, or
 says which applies where and whether the difference matters.
 
+## Problems and lab packets (Neil, 2026-11-11)
+
+### 41. No invented people, and no invented readings
+
+> **Before:** A classmate places the HB100 at +30.0° on the arc with Phase
+> Control at zero. The trace peaks at an Est. Angle of 28.5° ...
+>
+> **After:** No such problem. The cadet analyzes the sweep they took.
+
+Neil: "I don't want to ever read a problem like that again. In any class, on
+any assignment." A problem never invents a person (a classmate, a lab partner,
+a colleague, a customer) and hands the cadet that person's readings or
+opinion. In a lab packet the data is the cadet's own. In a practice set or an
+assessment, state the situation and the givens directly: "An HB100 sits at
++30° ...", not "A classmate places an HB100 ...". This holds in every course,
+not only this one.
+
+### 42. "Doesn't explain", not "cannot show you"
+
+> **Before:** ... and why your 30° Peak Gain cannot show that difference.
+>
+> **After:** ... and what your 30° Peak Gain doesn't explain.
+
+Neil: "I don't like the language like 'what the gain cannot show you'. Say
+'what it doesn't explain'." A measurement that leaves a question open
+"doesn't explain" it. "What X cannot show you" and "what X cannot tell you"
+are the teaser of rule 37 in another form: they promise a hidden thing. Frame
+titles too ("What One Port Doesn't Explain").
+
+### 43. An analysis prompt does not name its answer, and belongs to its lab
+
+> **Before:** Explain why the angle and width agree but only the physical run
+> loses peak level.
+>
+> **After:** Compare your beam sweep and your azimuth sweep at 30°. State
+> what agrees and what does not, give the cause you think is most likely, and
+> say what measurement would test it.
+
+Neil: "These are seniors, so they should have less structure and apply more
+critical thinking. I like the 'predict this, measure it, analyze it' method,
+but I don't want the analysis questions to be too leading." A prompt that
+names the finding, its direction, or its cause has done the analysis. The
+cadet decides what agrees, what does not, and why, from their own numbers and
+their own error budget. The opposite failure is as bad (Neil: "I don't want
+to go from overly specific to overly generic"): a prompt that would fit any
+lab unchanged is boilerplate. Each prompt names what this lab measured and
+leaves the conclusion to the cadet. The same holds for Part 1: a prediction
+stem gives the quantity to predict and the givens a cadet cannot know, never
+the result ("the first sidelobes sit near ±21.5°") and never the steps.
+
 ## What he does *not* want changed
 
 His voice is direct, and that is deliberate. Do not soften it into hedged
@@ -638,4 +688,8 @@ every note sits in its own step and the steps run 1 to N (27-33). Then
 read the opening frame and say the lesson's story in one sentence; if you
 cannot, neither can a cadet (36). Find every "cannot" and "must" and check
 that its reason is beside it (37), and every effect under a dB or so and ask
-whether a cadet could see it on the kit (38).
+whether a cadet could see it on the kit (38). In a problem
+or a packet, grep for `classmate`, `lab partner`, `colleague` and `customer`
+(41) and for `cannot show` and `cannot tell` (42), and read each analysis
+prompt asking whether it already states what the cadet should conclude, or
+would fit any lab unchanged (43).
