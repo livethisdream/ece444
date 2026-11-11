@@ -398,10 +398,10 @@ predictions beside you. Convert the lobe levels of Tables D and E to dBc
 first: subtract each table's main-lobe level. Then it asks about three
 comparisons:
 
-1. Broadside, three ways: the beam sweep, the sweeps by hand, and the pass
-   on the stand, set against your predictions.
-2. The beam at $30^\circ$: your pass at $30^\circ$ (Table E) against your
-   broadside pass (Table D) and your predictions.
+1. Broadside, three ways: compare the beam sweep, the sweeps by hand, and
+   the measurement on the stand with your predictions.
+2. The beam at $30^\circ$: compare your measurement at $30^\circ$ (Table E)
+   with your measurement at broadside (Table D) and with your predictions.
 3. By hand against the stand: what you would report from each method, and
    the broadside first-sidelobe level as you would report it from today's
    data.
