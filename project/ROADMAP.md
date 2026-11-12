@@ -79,6 +79,10 @@ That is the one shared file it may change.
   **Module 4 is the exception** (Neil, 2026-10-25): the L28–L31 Labs sit on
   their lesson's own page, lesson first, then the lab, with no `LNN-lab-*`
   page. The lab keeps its name ("L28 Lab") and its packet.
+  The Module 3 lesson-and-lab shape applies to that one page (Neil,
+  2026-11-12): the lesson half is reading only, the lab half presents at
+  most ten beats, predict first, and the packet is lean
+  (`project/briefs/M4_lab_reshape_2026-11-12.md`).
 - **A lesson page is at most 20 slides** in present mode, 40 words a slide
   (`scripts/verify/budgets.py`); a lab page's pre-bench frames count against
   the same budget.
