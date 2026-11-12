@@ -3,15 +3,15 @@
 
   - L28-chirp         : the transmitted chirp and its echo, frequency against
                         time, with the delay and the beat marked (not to scale)
-  - L28-range-profile : one chirp's range FFT from the recorded 2 m corner
-                        capture: the 0 m leakage, the corner, the far wall
-  - L28-windows       : a strong target and one 30 dB weaker, 2.0 m apart, rectangular
+  - L28-range-profile : one chirp's range FFT of a 2 m corner, at the
+                        lesson's worked chirp: the 0 m leakage, the corner, the far wall
+  - L28-windows       : a strong target and one 30 dB weaker, 2.5 m apart, rectangular
                         against Hann window
   - L28-waterfall     : range profiles of the recorded walker, stacked in time
 
 The data figures run on the recorded-data fallback, scripts/radar/fmcw_sim.py,
-so the page shows what the notebook draws from those files: the app's
-Range (Basic) preset, 500 MHz in 1 ms at 0.6 MSPS. The
+except that the range profile and the windows run on the lesson's worked chirp,
+400 MHz in 2 ms at 10.0 GHz, which no app preset uses. The
 figures carry no equations (house rule).
 
     python3 scripts/graphics/m4_l28_fmcw.py
@@ -38,6 +38,9 @@ NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d
 INK, RULE = "#1a1a1a", "#c7d2e0"
 OUT = ROOT / "book/extras/viz/img"
 C = sim.C
+# The lesson's worked chirp, not an app preset, so no figure prints a Part 1
+# answer (COURSE_SPEC, "Lesson and lab, one shape").
+EXAMPLE = dict(B=400e6, T_ramp=2e-3, fc=10.0e9)
 
 plt.rcParams.update({
     "svg.fonttype": "none",
@@ -116,16 +119,16 @@ def chirp() -> None:
 
 
 def range_profile() -> None:
-    cap = dict(np.load(sim.OUT / "L28_corner_2m.npz"))
-    for k in ("fs", "B", "T_ramp", "f0"):
-        cap[k] = float(cap[k])
-    r, p = profile_db(cap["iq"][0], cap)
+    cap = sim.l28_capture(**EXAMPLE)
+    sim.room(cap)
+    sim.add_point(cap, 2.0, rcs=0.47)
+    r, p = profile_db(sim.iq(cap)[0], cap)
     keep = (r >= -0.3) & (r <= 8)
     fig, ax = plt.subplots(figsize=(6.6, 3.0))
     ax.plot(r[keep], p[keep], color=NAVY, lw=1.3)
     for rr, lab, dy in ((0.0, "leakage, 0 m", 4), (2.0, "corner, 2.0 m", 4), (5.5, "wall, 5.5 m", 4)):
-        i = np.argmin(np.abs(r - rr))
-        j = i - 40 + np.argmax(p[i - 40:i + 40])
+        near = np.flatnonzero(np.abs(r - rr) < 0.4)
+        j = near[np.argmax(p[near])]
         ax.annotate(lab, (r[j], p[j]), xytext=(r[j] + 0.25, p[j] + dy), fontsize=12, color=INK)
     ax.set_xlim(-0.3, 8)
     ax.set_ylim(-95, 0)
@@ -140,18 +143,18 @@ def range_profile() -> None:
 
 
 def windows() -> None:
-    cap = sim.l28_capture(n_chirps=1)
+    cap = sim.l28_capture(n_chirps=1, **EXAMPLE)
     sim.add_point(cap, 2.0, level_dbfs=-10.0)
-    sim.add_point(cap, 4.0, level_dbfs=-40.0, phase0=1.0)
+    sim.add_point(cap, 4.5, level_dbfs=-40.0, phase0=1.0)
     sim.add_noise(cap, level_dbfs=-75.0, seed=3)
     fig, ax = plt.subplots(figsize=(6.6, 3.0))
     for win, color, lab, ls in ((None, ORANGE, "rectangular", "-"), ("hann", NAVY, "Hann", "-")):
         r, p = profile_db(sim.iq(cap)[0], cap, win)
-        keep = (r >= 0.5) & (r <= 5.0)
+        keep = (r >= 0.5) & (r <= 5.5)
         ax.plot(r[keep], p[keep], color=color, lw=1.4, ls=ls, label=lab)
-    ax.annotate("weak target, 4.0 m", (4.0, -40), xytext=(3.75, -18), fontsize=12, color=INK,
+    ax.annotate("weak target, 4.5 m", (4.5, -40), xytext=(4.0, -18), fontsize=12, color=INK,
                 arrowprops=dict(arrowstyle="-", color=INK, lw=0.8))
-    ax.set_xlim(0.5, 5.0)
+    ax.set_xlim(0.5, 5.5)
     ax.set_ylim(-100, 0)
     ax.set_xlabel("range (m)")
     ax.set_ylabel("power (dBFS)")

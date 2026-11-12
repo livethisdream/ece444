@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predict the range profile</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573; --ref:#9aa3ad; --new:#004a85; --floor:#b01e24; --w:#1d7a4d; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; justify-content:space-between;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .grp { display:flex; align-items:center; gap:6px; }
+  .grp .lab { font:700 11px 'Inter',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3); }
+  .seg { font:700 12px 'Inter',system-ui,sans-serif; min-width:38px; height:30px; padding:0 6px; border-radius:5px; cursor:pointer;
+         border:1px solid var(--edge2); background:#fff; color:var(--ink3); }
+  .seg[aria-pressed="true"] { background:var(--mid); border-color:var(--mid); color:#fff; }
+  .seg:focus-visible, .show:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  .show { font:700 12px 'Inter',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.05em;
+          height:30px; padding:0 14px; border-radius:5px; cursor:pointer;
+          border:1px solid var(--navy); background:var(--navy); color:#fff; }
+  .show[aria-pressed="true"] { background:#fff; color:var(--navy); }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 560px) { .readouts { grid-template-columns:repeat(2, minmax(0, 1fr)); } .seg { min-width:34px; } }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:4px; padding:7px 6px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { height:15px; line-height:15px; font-size:10.5px; font-weight:700; text-transform:uppercase;
+           letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; color:var(--navy); overflow:hidden; max-width:100%; }
+  .ro.wd .v { color:var(--w); }
+  .ro.fl .v { color:var(--floor); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" width="1000" height="400" aria-label="Range profile of one target for the reference chirp and the changed chirp, against beat frequency above the 0 m frequency"></canvas>
+
+  <div class="controls">
+    <div class="grp" role="group" aria-label="Chirp length"><span class="lab">Length</span><span id="g-T"></span></div>
+    <div class="grp" role="group" aria-label="Bandwidth"><span class="lab">Bandwidth</span><span id="g-B"></span></div>
+    <button class="show" id="show" aria-pressed="false">Show profile</button>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">chirp</span><span class="v" id="r-ch">400 MHz, 2 ms</span></div>
+    <div class="ro"><span class="k">beat at 4 m</span><span class="v" id="r-fb">?</span></div>
+    <div class="ro wd"><span class="k">width 3 dB</span><span class="v" id="r-w">?</span></div>
+    <div class="ro fl"><span class="k">floor vs ref</span><span class="v" id="r-fl">?</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+// One target at 4 m, seen by a reference chirp and by the chirp the controls
+// choose. The reference is the lesson's worked example, 400 MHz in 2 ms at
+// 10.0 GHz, sampled at 0.6 MSPS with the last 90% of each chirp kept and a
+// Hann window, as the app and radar_lab do. It is not an app preset, so no
+// readout equals a Part 1 answer; the factors carry to the kit.
+const C = 3.00e8, FS = 0.6e6, KEEP = 0.9, R0 = 4.0;
+const B0 = 400e6, T0 = 2e-3;
+const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+const FACT = [0.25, 0.5, 1, 2];
+const FLBL = ['×¼', '×½', '×1', '×2'];
+
+// Prediction first: the changed profile stays hidden until "Show profile",
+// and any change to the chirp hides it again.
+const state = { iT: 1, iB: 2, shown: false };
+
+function chirp(fT, fB){
+  const T = T0*fT, B = B0*fB, N = Math.floor((T - (1-KEEP)*T)*FS + 1e-9);
+  const kpm = 2*B/(C*T);                       // Hz of beat per meter
+  return { T, B, N, kpm, fb: kpm*R0, bin: FS/N };
+}
+// Hann-windowed tone, normalized by the window sum: 0 dB at its own peak.
+function hannDb(df, N){
+  const x = df*N/FS;                            // offset in bins
+  if (Math.abs(x) < 1e-9) return 0;
+  const d = (k) => { const a = Math.PI*(x-k); return Math.abs(a) < 1e-9 ? 1 : Math.sin(a)/a; };
+  const v = d(0) + 0.5*d(1) + 0.5*d(-1);        // Hann over its own sum
+  return 20*Math.log10(Math.max(Math.abs(v), 1e-6));
+}
+// The noise in one bin, re the reference: noise per sample fixed, so the
+// floor of a window-normalized FFT falls 10 log10(N) as the record grows.
+const FLOOR0 = -62;
+const floorDb = (ch, ref) => FLOOR0 - 10*Math.log10(ch.N/ref.N);
+
+function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+function mixLabel(ctx,chunks,x,yc,h,color,align){
+  const fpx=h-1, f=fpx+'px '+SANS; let tot=0;
+  for(const c of chunks){ if(c.m) tot+=MJ.width(c.m,color,h); else { ctx.font=f; tot+=ctx.measureText(c.s).width; } }
+  let cx = align==='center' ? x-tot/2 : x;
+  for(const c of chunks){
+    if(c.m){ MJ.draw(ctx,c.m,cx,yc,h,color,'left'); cx+=MJ.width(c.m,color,h); }
+    else { stext(ctx,c.s,cx,yc,fpx,color,'left'); ctx.font=f; cx+=ctx.measureText(c.s).width; }
+  }
+}
+
+const canvas = document.getElementById('plot'), ctx = canvas.getContext('2d');
+function resizeCanvas(){
+  const w = canvas.getBoundingClientRect().width, dpr = window.devicePixelRatio || 1;
+  const h = Math.max(210, Math.min(w*0.42, 320));
+  canvas.width = w*dpr; canvas.height = h*dpr; canvas.style.height = h+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  draw();
+}
+window.addEventListener('resize', resizeCanvas);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function niceStep(span){
+  const raw = span/6, p = 10**Math.floor(Math.log10(raw));
+  for (const m of [1, 2, 2.5, 5, 10]) if (raw <= m*p) return m*p;
+  return 10*p;
+}
+
+function draw(){
+  const dpr = window.devicePixelRatio || 1, w = canvas.width/dpr, h = canvas.height/dpr;
+  ctx.clearRect(0,0,w,h);
+  const narrow = w < 470, fs = narrow ? 10 : 11.5;
+  const mL = narrow ? 40 : 54, mR = 14, mT = 28, mB = narrow ? 40 : 46;
+  const pw = w-mL-mR, ph = h-mT-mB;
+  const ref = chirp(1, 1), cur = chirp(FACT[state.iT], FACT[state.iB]);
+  // The axis must hold the reference peak, and the changed one once shown,
+  // but it never moves on a change: the axis would give the answer away.
+  const xMax = 45e3, yMin = -80;                // holds every choice, ×8 the reference beat
+  const xFor = f => mL + f/xMax*pw;
+  const yFor = v => mT + Math.min(Math.max(-v,0),-yMin)/(-yMin)*ph;
+
+  const step = niceStep(xMax/1e3);
+  ctx.strokeStyle = '#e6eef6'; ctx.lineWidth = 1;
+  for (let f=0; f<=xMax/1e3+1e-9; f+=step){ ctx.beginPath(); ctx.moveTo(xFor(f*1e3),mT); ctx.lineTo(xFor(f*1e3),mT+ph); ctx.stroke(); }
+  for (let v=0; v>=yMin; v-=20){ ctx.beginPath(); ctx.moveTo(mL,yFor(v)); ctx.lineTo(mL+pw,yFor(v)); ctx.stroke(); }
+  ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.moveTo(mL,mT); ctx.lineTo(mL,mT+ph); ctx.lineTo(mL+pw,mT+ph); ctx.stroke();
+  for (let f=0; f<=xMax/1e3+1e-9; f+=step) stext(ctx,`${+f.toFixed(2)}`,xFor(f*1e3),mT+ph+13,fs,'#5b6573','center');
+  for (let v=0; v>=yMin; v-=20) stext(ctx,`${v}`,mL-7,yFor(v),fs,'#5b6573','right');
+  mixLabel(ctx,[{s:'Beat above '},{m:'f_0'},{s:' (kHz)'}],mL+pw/2,mT+ph+(narrow?30:34),narrow?11:12.5,'#15202b','center');
+  ctx.save(); ctx.translate(narrow?11:14, mT+ph/2); ctx.rotate(-Math.PI/2);
+  stext(ctx, narrow ? 'dB re peak' : 'dB relative to the peak', 0, 0, narrow?11:12.5, '#15202b', 'center');
+  ctx.restore();
+
+  const trace = (ch, color, lw, dash) => {
+    const fl = floorDb(ch, ref);
+    ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash||[]);
+    ctx.beginPath();
+    const n = 2400, fs_ = [];
+    for (let i=0; i<=n; i++) fs_.push(i/n*xMax);
+    fs_.push(ch.fb); fs_.sort((p, q) => p - q);       // the peak itself, on any grid
+    for (let i=0; i<fs_.length; i++){
+      const f = fs_[i], v = Math.max(hannDb(f - ch.fb, ch.N), fl);
+      const x = xFor(f), y = yFor(v);
+      if (i === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+  };
+  trace(ref, css('--ref'), 1.4, [5,4]);
+
+  const ly = mT-14;
+  ctx.strokeStyle = css('--ref'); ctx.lineWidth = 1.6; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(mL+6,ly); ctx.lineTo(mL+24,ly); ctx.stroke(); ctx.setLineDash([]);
+  stext(ctx,'400 MHz, 2 ms',mL+29,ly,fs,'#5b6573','left');
+  ctx.font = fs+'px '+SANS;
+  const lx = mL+29+ctx.measureText('400 MHz, 2 ms').width+16;
+
+  const name = chirpName(cur);
+  if (!state.shown){
+    const msg = narrow ? 'Predict, then show' : `${name}: predict the profile, then show it`, mpx = narrow ? 12 : 13.5;
+    ctx.font = '700 '+mpx+'px '+SANS;
+    const mw = Math.min(ctx.measureText(msg).width + 20, pw - 8), my = mT + ph*0.55;
+    const mx = mL + pw*0.62;
+    ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.strokeStyle = css('--edge2'); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(Math.min(mx-mw/2, mL+pw-mw-4), my-mpx, mw, 2*mpx, 5); ctx.fill(); ctx.stroke();
+    stext(ctx, msg, Math.min(mx, mL+pw-mw/2-4), my, mpx, css('--navy'), 'center', true);
+    return;
+  }
+  ctx.strokeStyle = css('--new'); ctx.lineWidth = 2.2;
+  ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+18,ly); ctx.stroke();
+  stext(ctx,name,lx+23,ly,fs,'#5b6573','left');
+  trace(cur, css('--new'), 2.2);
+  // the floor of the changed chirp, and its width 3 dB down
+  const fl = floorDb(cur, ref);
+  ctx.strokeStyle = css('--floor'); ctx.lineWidth = 1.2; ctx.setLineDash([2,3]);
+  ctx.beginPath(); ctx.moveTo(mL,yFor(fl)); ctx.lineTo(mL+pw,yFor(fl)); ctx.stroke(); ctx.setLineDash([]);
+  const half = 1.44/2*cur.bin, y3 = yFor(-3);
+  const xl = xFor(cur.fb - half), xr = xFor(cur.fb + half);
+  ctx.strokeStyle = css('--w'); ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.moveTo(xl,y3); ctx.lineTo(xr,y3); ctx.stroke();
+  for (const x of [xl,xr]){ ctx.beginPath(); ctx.moveTo(x,y3-5); ctx.lineTo(x,y3+5); ctx.stroke(); }
+}
+
+function fmtB(B){ return `${+(B/1e6).toFixed(0)} MHz`; }
+function fmtT(T){ return `${+(T*1e3).toFixed(2)} ms`; }
+function chirpName(ch){ return `${fmtB(ch.B)}, ${fmtT(ch.T)}`; }
+
+function readouts(){
+  const ref = chirp(1, 1), cur = chirp(FACT[state.iT], FACT[state.iB]);
+  const set = (id, s) => document.getElementById(id).textContent = s;
+  set('r-ch', chirpName(cur));
+  if (!state.shown){ ['r-fb','r-w','r-fl'].forEach(id => set(id, '?')); return; }
+  const m = '−', fl = floorDb(cur, ref) - FLOOR0;
+  set('r-fb', `${(cur.fb/1e3).toFixed(2)} kHz`);
+  set('r-w', `${(1.44*cur.bin/cur.kpm).toFixed(2)} m`);
+  set('r-fl', Math.abs(fl) < 0.05 ? '0.0 dB' : (fl > 0 ? `+${fl.toFixed(1)} dB` : `${m}${(-fl).toFixed(1)} dB`));
+}
+
+function buildSeg(id, key){
+  const host = document.getElementById(id);
+  FACT.forEach((f, i) => {
+    const b = document.createElement('button');
+    b.className = 'seg'; b.textContent = FLBL[i];
+    b.setAttribute('aria-label', (key === 'iT' ? 'chirp length ' : 'bandwidth ') + FLBL[i].replace('×', 'times '));
+    b.addEventListener('click', () => { state[key] = i; state.shown = false; sync(); });
+    host.appendChild(b);
+  });
+}
+buildSeg('g-T', 'iT'); buildSeg('g-B', 'iB');
+const showBtn = document.getElementById('show');
+showBtn.addEventListener('click', () => { state.shown = !state.shown; sync(); });
+function sync(){
+  document.querySelectorAll('#g-T .seg').forEach((b, i) => b.setAttribute('aria-pressed', i === state.iT ? 'true' : 'false'));
+  document.querySelectorAll('#g-B .seg').forEach((b, i) => b.setAttribute('aria-pressed', i === state.iB ? 'true' : 'false'));
+  showBtn.setAttribute('aria-pressed', state.shown ? 'true' : 'false');
+  showBtn.textContent = state.shown ? 'Hide profile' : 'Show profile';
+  readouts(); draw();
+}
+
+resizeCanvas(); sync();
+MJ.setRedraw(() => draw());
+MJ.onReady(() => draw());
+</script>
+</body>
+</html>
