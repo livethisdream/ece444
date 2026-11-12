@@ -139,12 +139,17 @@ Every lab packet, practice set and assessment (VOICE.md 41-43, Neil,
   partner", "a colleague" or "a customer". A packet's data is the cadet's own.
 - "What it doesn't explain", never "what X cannot show you" or "cannot tell
   you".
-- A packet is predict, measure, analyze. Predicted and measured share
-  each table (Neil, 2026-11-12): Part 1 is the shaded Predicted cells, Part 2
-  the white Measured cells beside them, never a separate prediction table.
-  Part 1 states no result and lists no steps. Part 3 is two or
-  three open prompts about what this lab measured: none names the finding,
-  its direction or its cause, and none would fit another lab unchanged.
+- A packet is predict, measure, analyze. Part 1 is the Predicted cell of
+  every quantity Part 2 measures; it states no result and lists no steps.
+  Part 3 is two or three open prompts about what this lab measured: none
+  names the finding, its direction or its cause, and none would fit another
+  lab unchanged.
+- Predicted sits beside measured (Neil, 2026-11-12): each table appears once,
+  with a Predicted and a Measured column per quantity, or a Predicted row
+  above the Measured row where pairs do not fit. Predicted cells are shaded
+  with the `\predv` macros (never `\cellcolor`), a cell with no prediction
+  shows a dash, and no Part 2 field name changes. COURSE_SPEC, "Lab packet
+  structure", has the details; the L21 packet is the worked example.
 
 Figures and widgets as you go: generators in `scripts/graphics/` through
 `apply_font_stack()`, widgets from `book/extras/viz/reflector-gain.html` as

@@ -850,13 +850,24 @@ problems fold into its lab packet, `ECE444_Lab_L<NN>_<Short>.tex` (in
 which has three parts, **predict, measure, analyze** (Neil, 2026-11-11:
 "These are seniors, so they should have less structure and apply more
 critical thinking"). **Part 1, Predict** (individual, before the lab period):
-the shaded Predicted cells, filled in at the cadet's own frequency.
-**Predicted and measured share each table** (Neil, 2026-11-12), a shaded
-Predicted cell beside each white Measured one, so the two are compared where
-they sit; there is no separate set of prediction tables. It gives only what a cadet cannot be expected to know (N, d, the arc
-radius); it does not state a result or list the steps, because the lesson
-works every method at 10.0 GHz. **Part 2, Measure** (each cadet's own data
-from their own kit, in class): measurement tables only, no prose questions.
+the Predicted cell of every quantity Part 2 measures, filled in at the
+cadet's own frequency, and the work shown for one row of each table. It gives
+only what a cadet cannot be expected to know (N, d, the arc radius); it does
+not state a result or list the steps, because the lesson works every method
+at 10.0 GHz. **Part 2, Measure** (each cadet's own data from their own kit,
+in class): the Measured cells of the same tables, no prose questions.
+**Predicted sits beside measured** (Neil, 2026-11-12: "one table that had
+HPBW predicted | measured, peak drop predicted | measured ... That would
+make comparison much easier"). Each table appears once in the packet. A
+quantity gets a Predicted and a Measured column side by side; a table too
+wide for pairs gets a Predicted row directly above its Measured row. A
+predicted cell is shaded light gray and named `p1.<the Part 2 field name>`;
+a measured cell is white and keeps its Part 2 name, which is what the lab
+page's boxes fill. A cell with no prediction shows a dash, never a shaded or
+empty box. Draw the shade as a gray box inside the cell (`\predv`, `\predh`,
+`\predl` in `ECE444_Lab_L21_Pattern.tex`), never with `\cellcolor`, which
+covers the table rules so a screen viewer shows a run of predicted cells as
+one gray block.
 **Part 3, Analyze** (individual, after the lab): two or three open prompts
 about what this lab measured. The prompts are open ended and do not lead to a
 set answer (Neil, 2026-11-12): a prompt does not name the finding, its
@@ -1303,7 +1314,7 @@ it when a rounded number differs from ADI's (L26: 715 Hz vs ADI's 716).
 | range chirp (L28 Lab) | **superseded 2026-11-04: see M8.1** | |
 | range-Doppler burst (L29–L31) | **superseded 2026-11-04: see M8.1** | |
 | 0 m frequency | about 100 kHz, set per kit by the L28 calibration | ADI's `signal_freq`; never called an IF on a page |
-| corner reflector | edge $a$ = 10 cm (Neil, 2026-11-12: the course's trihedral is 4 in, 10.16 cm) | $\sigma = 4\pi a^4/3\lambda^2$ = 0.47 m² |
+| corner reflector | edge $a$ = 10 cm (provisional) | $\sigma = 4\pi a^4/3\lambda^2$ = 0.47 m² |
 
 ### M8.1 The Phaser app's FMCW presets are the lab numbers (Neil, 2026-11-04)
 
