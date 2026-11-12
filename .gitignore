@@ -37,7 +37,7 @@ latex/*Assessment*.tex
 .claude/worktrees/
 
 # vendored reveal.js + mathjax for the render harness
-scripts/verify/node_modules/
+scripts/verify/node_modules
 
 # Instructor-only material. This remote is PUBLIC (github.com/livethisdream/ece444),
 # so these must never be committed. Kept in the working tree for convenience.

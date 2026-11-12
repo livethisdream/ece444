@@ -335,13 +335,12 @@ fall away.
 | Chebyshev $-40$ | $-40.0$ | $19.4^\circ$ | 0.761 |
 | Taylor $-30$, $\bar{n} = 4$ | $-28.3$ | $17.4^\circ$ | 0.853 |
 | Hann | $-31.8$ | $19.7^\circ$ | 0.750 |
-| Blackman | $-50.5$ | $22.4^\circ$ | Part 1 |
+| Blackman | $-50.5$ | $22.4^\circ$ | 0.655 |
 :::
 
 All eight elements at $d/\lambda = 0.467$, the $14\ \text{mm}$ pitch at $10.0\ \text{GHz}$; sidelobe levels are the highest
 sidelobe in dB relative to the peak, and the Chebyshev and Taylor designs are
-named by their design level in dB. Blackman's $\eta_t$ is a Part 1 question
-in the L22–L23 Lab packet. The amplitudes and the beam broadening factor
+named by their design level in dB. The amplitudes and the beam broadening factor
 (HPBW relative to uniform) for each:
 
 | Taper | $a_n$ (%) | Broadening |
@@ -548,8 +547,8 @@ factor. It does not, because 100% is already full scale.
 Chebyshev matches Hann's suppression with a $2.1^\circ$ narrower beam and 0.5 dB more directivity.
 :::
 
-The design problem is stated the way a customer states it: hold the sidelobes
-below some level, and tell me what it does to the beam. The procedure is short.
+A design problem usually arrives as a requirement on the sidelobes: hold
+them below some level, and say what that does to the beam. The procedure is short.
 
 1. Pick the family. Use Chebyshev when the specification is a hard ceiling on
    every sidelobe and the array is small. Use Taylor when the array is large or
@@ -722,8 +721,8 @@ The GUI ships four presets. Their gain lists are below, from the end element
 inward; the beamwidths in the table above are the exact patterns at
 $10.0\ \text{GHz}$, below every kit's HB100. Part 1 of the L22–L23 Lab packet turns this into your own
 predictions: the beamwidths at your kit's frequency, and the Blackman and
-Chebyshev presets' peak drop and taper efficiency, worked the way Peak Drop
-Versus Directivity Loss works the Hann preset.
+Chebyshev presets' peak drops, worked the way Peak Drop Versus Directivity
+Loss works the Hann preset.
 
 | Preset | $a_n$ (%) |
 | :-- | :-- |
@@ -801,8 +800,8 @@ any kit. Start on Uniform and note the first sidelobe near $-13$ dBc, then step
 through the presets and watch the main lobe widen and its peak drop. Then choose
 Custom and drag the edge attenuation: the $\eta_t$ readout is the directivity
 loss, so compare it with the peak drop each time; the two never agree. The
-presets' peak drops and $\eta_t$ are Part 1 of the lab packet, so the widget
-reads them out on Custom only.
+presets' peak drops are Part 1 of the lab packet, so the widget reads the
+peak drop and $\eta_t$ out on Custom only.
 :::
 
 :::{present}
@@ -835,27 +834,22 @@ reads them out on Custom only.
 ::::{frame} Pre-Lab
 :class: read-only doc-links
 
-Part 1 of the L22–L23 Lab packet is the pre-lab, shared with Lesson 23. The
-lab runs after Lesson 23, so do Questions 1 to 3 now, at the HB100 frequency
-your kit reported in an earlier lab, and Question 4 after Lesson 23. Bring it
-to class: you check every reading you take in Part 2 against it.
+Part 1 of the L22–L23 Lab packet is the pre-lab, shared with Lesson 23: the Predicted cells, shaded gray, of each table, beside the Measured cells you fill in class. The lab runs after Lesson 23, so predict the setup table and Tables A and B now, at the HB100 frequency your kit reported in an earlier lab, and Tables C to E after Lesson 23. Bring it to class: each reading you take goes beside its prediction. This lesson works its examples at $10.0\ \text{GHz}$, away from every kit, so work every value at your own frequency.
 
-| Part 1 | You predict | Checked in |
-| :-- | :-- | :-- |
-| Question 1 | $\lambda$, $d/\lambda$, and the far-field distance | Steps 1 and 3 |
-| Question 2 | the peak drop and $\eta_t$ of a starting taper, and which one the plot shows | Step 12, Table B |
-| Question 3 | Blackman's and Chebyshev's peak drop and $\eta_t$, and what the sweep shows at a sidelobe under the floor | Steps 7 to 11, Table A |
+| Table | You predict | Checked in | Method |
+| :-- | :-- | :-- | :-- |
+| Setup | frequency and far-field distance | Steps 1 and 3 | Lesson 18's "The Phaser Kit (CN0566)," Lesson 21's "Source Distance" |
+| Table A | each preset's HPBW, peak drop, and first sidelobe | Steps 7 to 11 | "Beam Broadening," "The Four GUI Presets," "Peak Drop Versus Directivity Loss," "Reading a Tapered Sweep" |
+| Table B | the gains, HPBW, peak drop, and first sidelobe of your own design | Step 12 | "Worked Example: A −30 dB Chebyshev," "The Measured Sweep for Each Preset" |
 
-Question 1 repeats arithmetic from earlier lessons: the wavelength and
-$d/\lambda$ as Lesson 18's
+The wavelength and $d/\lambda$ come from Lesson 18's
 <a href="../L18-beam-steering/index.html#frame-the-phaser-kit-cn0566">"The Phaser Kit (CN0566)"</a>
-works them, and the far-field distance as Lesson 21's
-<a href="../L21-antenna-pattern/index.html#frame-source-distance">"Source Distance"</a>
-does. At $10.0\ \text{GHz}$ they give $\lambda = 30.0\ \text{mm}$,
-$d/\lambda = 0.467$, and a far-field distance of $0.84\ \text{m}$.
-Peak Drop Versus Directivity Loss works the Hann row, the model for Question
-3(a), and the worked example under Reading a Tapered Sweep is the model for
-Question 3(b).
+and the far-field distance from Lesson 21's
+<a href="../L21-antenna-pattern/index.html#frame-source-distance">"Source Distance"</a>;
+at $10.0\ \text{GHz}$ they give $\lambda = 30.0\ \text{mm}$,
+$d/\lambda = 0.467$, and a far-field distance of $0.84\ \text{m}$. Lesson 23's
+Pre-Lab frame maps Tables C to E. Part 1 also asks you to attach your work for
+one row of each table, on your own paper.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet, Part 1 (PDF)</a>
 ::::
