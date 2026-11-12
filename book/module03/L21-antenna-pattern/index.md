@@ -656,9 +656,9 @@ the sidelobes down and widens the main lobe.
 ::::{frame} Pre-Lab
 :class: read-only doc-links
 
-Part 1 of the L21 Lab packet is the pre-lab: one prediction table for each Part 2 table, with the same rows. Do it before the lab period, at the HB100 frequency your kit reported in the L18 Lab, and bring it to class: you check every trace you take in Part 2 against it. This lesson works its examples at $10.0\ \text{GHz}$, away from every kit, so its angles differ from yours by up to about $4^\circ$, mostly at the outer nulls; work every value at your own frequency.
+Part 1 of the L21 Lab packet is the pre-lab: the shaded Predicted cells of each table in the packet, beside the Measured cells you fill in class. Do it before the lab period, at the HB100 frequency your kit reported in the L18 Lab, and bring it to class: you check every trace you take in Part 2 against it. This lesson works its examples at $10.0\ \text{GHz}$, away from every kit, so its angles differ from yours by up to about $4^\circ$, mostly at the outer nulls; work every value at your own frequency.
 
-| Part 1 table | You predict | Checked in | Method |
+| Packet table | You predict | Checked in | Method |
 | :-- | :-- | :-- | :-- |
 | Setup | frequency, far-field distance, slowest update rate | Steps 2 and 11 | "The Rectangular Plot," "Source Distance," "The Time Axis" |
 | Table A | the Angle readout with the stand at $+30$, $0$, and $-30$ | Table A; Steps 7 and 8 | "Turning the Kit on Its Stand" |
