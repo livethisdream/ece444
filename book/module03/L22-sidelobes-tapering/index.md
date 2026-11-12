@@ -848,8 +848,8 @@ and the far-field distance from Lesson 21's
 <a href="../L21-antenna-pattern/index.html#frame-source-distance">"Source Distance"</a>;
 at $10.0\ \text{GHz}$ they give $\lambda = 30.0\ \text{mm}$,
 $d/\lambda = 0.467$, and a far-field distance of $0.84\ \text{m}$. Lesson 23's
-Pre-Lab frame maps Tables C to E. Part 1 also asks you to show your work for
-one row of each table.
+Pre-Lab frame maps Tables C to E. Part 1 also asks you to attach your work for
+one row of each table, on your own paper.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet, Part 1 (PDF)</a>
 ::::

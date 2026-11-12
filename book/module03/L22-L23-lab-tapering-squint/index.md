@@ -342,7 +342,7 @@ frame, to fill on paper or in a PDF viewer instead.
 
 The L22–L23 Lab packet is one submission for the whole lab, turned in complete before Lesson 24. It has three parts:
 
-1. Part 1, Predict (individual, before the lab period, because you need it in class): the Predicted cells, shaded gray, in every table, at your kit's frequency, and your work for one row of each table.
+1. Part 1, Predict (individual, before the lab period, because you need it in class): the Predicted cells, shaded gray, in every table, at your kit's frequency, with your work for one row of each table attached on your own paper.
 2. Part 2, Measure (your own kit's readings, recorded in class): the Measured cells beside your predictions, for the four presets, your own taper, two thinned rows, the squint pair, and four quantization sweeps.
 3. Part 3, Analyze (individual, after the lab): three open prompts, each answered from your own readings.
 
