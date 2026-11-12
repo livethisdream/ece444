@@ -71,6 +71,7 @@ BEAT_EXCEPTIONS = {
     "L18-lab": (LAB_BEATS, "predict first, then the procedure as beats (#243)"),
     "L21-lab": (LAB_BEATS, "predict first, then the procedure as beats (#242)"),
     "L22-L23-lab": (LAB_BEATS, "predict first, then the procedure as beats (#244)"),
+    "L24-lab": (LAB_BEATS, "predict first, then the procedure as beats (#236)"),
 }
 
 
