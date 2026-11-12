@@ -357,8 +357,8 @@ predictions beside you. It asks about three comparisons:
 
 1. The tapers: compare your taper measurements (Tables A and B) with your
    predictions, and choose a taper for this kit.
-2. Grating lobes and squint: compare your grating-lobe run (Table C) and your
-   squint run (Table D) with your predictions.
+2. Grating lobes and squint: compare your grating-lobe measurement (Table C)
+   and your beam-squint measurement (Table D) with your predictions.
 3. Phase bits: compare your four quantization sweeps (Table E) with each
    other and with your predictions.
 
