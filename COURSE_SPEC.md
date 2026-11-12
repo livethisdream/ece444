@@ -850,14 +850,16 @@ problems fold into its lab packet, `ECE444_Lab_L<NN>_<Short>.tex` (in
 which has three parts, **predict, measure, analyze** (Neil, 2026-11-11:
 "These are seniors, so they should have less structure and apply more
 critical thinking"). **Part 1, Predict** (individual, before the lab period):
-one prediction table per measurement table, with the same rows and
-quantities, filled in at the cadet's own frequency, and the work shown for
-one row. It gives only what a cadet cannot be expected to know (N, d, the arc
+the shaded Predicted cells, filled in at the cadet's own frequency.
+**Predicted and measured share each table** (Neil, 2026-11-12), a shaded
+Predicted cell beside each white Measured one, so the two are compared where
+they sit; there is no separate set of prediction tables. It gives only what a cadet cannot be expected to know (N, d, the arc
 radius); it does not state a result or list the steps, because the lesson
 works every method at 10.0 GHz. **Part 2, Measure** (each cadet's own data
 from their own kit, in class): measurement tables only, no prose questions.
 **Part 3, Analyze** (individual, after the lab): two or three open prompts
-about what this lab measured. A prompt does not name the finding, its
+about what this lab measured. The prompts are open ended and do not lead to a
+set answer (Neil, 2026-11-12): a prompt does not name the finding, its
 direction, or its cause, and it is not boilerplate that would fit any lab
 (VOICE.md 43). No problem invents a person or readings (VOICE.md 41). The
 first page says what an analysis answer is graded on: a claim, the evidence,

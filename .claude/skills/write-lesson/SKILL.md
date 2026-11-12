@@ -139,8 +139,10 @@ Every lab packet, practice set and assessment (VOICE.md 41-43, Neil,
   partner", "a colleague" or "a customer". A packet's data is the cadet's own.
 - "What it doesn't explain", never "what X cannot show you" or "cannot tell
   you".
-- A packet is predict, measure, analyze. Part 1 is a prediction table with
-  Part 2's rows; it states no result and lists no steps. Part 3 is two or
+- A packet is predict, measure, analyze. Predicted and measured share
+  each table (Neil, 2026-11-12): Part 1 is the shaded Predicted cells, Part 2
+  the white Measured cells beside them, never a separate prediction table.
+  Part 1 states no result and lists no steps. Part 3 is two or
   three open prompts about what this lab measured: none names the finding,
   its direction or its cause, and none would fit another lab unchanged.
 
