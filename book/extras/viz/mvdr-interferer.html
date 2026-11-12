@@ -76,8 +76,9 @@
 (function () {
   "use strict";
 
-  // ---- array constants: the PHASER at 10.525 GHz -------------------------
-  var DL = 0.491;                 // d / lambda  (d = 14 mm)
+  // ---- array constants: the PHASER at 10.0 GHz ---------------------------
+  // the lesson's worked-example frequency, away from any kit (Neil, 2026-11-08)
+  var DL = 0.014 * 10.0e9 / 3.00e8;   // d / lambda = 0.467  (d = 14 mm)
   var KD = 2 * Math.PI * DL;      // k d
   var NOISE = 1e-3;               // display noise floor, -30 dB below the peak
   var SIGMA2 = 1e-3;              // per-channel receiver noise power in R

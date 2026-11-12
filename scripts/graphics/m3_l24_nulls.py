@@ -7,7 +7,7 @@
   - L24-cost-vs-angle     : main-lobe loss vs null angle, split into the
                             subtraction and rescaling terms
   - L24-quant-depth       : exact vs ADAR1000-rounded weights, the RMS fill
-                            estimate, and the depth phaser-00 measured
+                            estimate dropped (it is Part 1), and the depth my kit measured
   - L24-cancel-phasors    : why the null is exact: the desired beam's phasors
                             at theta_1 end at N r_n, and r_n w_n reaches the
                             same point in a straight line
@@ -18,7 +18,8 @@
   - L24-error-phasors     : why rounding moves the null but independent
                             channel errors fill it to sqrt(N) eps
 
-Array is the PHASER's: N = 8, d = 14 mm, 10.525 GHz -> d/lambda = 0.491.
+Array is the PHASER's: N = 8, d = 14 mm, worked at 10.0 GHz -> d/lambda = 0.467,
+well away from any kit so the pages give no Part 1 answers.
 The figures carry no equations (house rule); numbers and short words only.
 
     python3 scripts/graphics/m3_l24_nulls.py
@@ -43,10 +44,12 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "book/extras/viz/img"
 
 N = 8
-DL = 0.491                      # d / lambda at 10.525 GHz
+FREQ = 10.0e9                   # worked-example frequency, well away from any kit
+                                # (Neil, 2026-11-08: no Part 1 answers on the pages)
+DL = 0.014 * FREQ / 3.00e8      # d / lambda = 0.467
 KD = 2 * np.pi * DL
 FLOOR = -50.0                   # plot floor, dB
-MEASURED = (-50.0, -46.0)       # phaser-00 notch bottom, dB below uniform peak (2026-10-23)
+# The kit's measured open-room depth is not drawn: it is a Part 1 answer.
 NIDX = np.arange(N)
 
 plt.rcParams.update({
@@ -136,21 +139,65 @@ def jammer_sidelobe() -> None:
 
 # ------------------------------------------------------------------ figure 2
 def pattern_null() -> None:
+    """The uniform and null-steered patterns, drawn as house-style SVG.
+
+    Hand-built rather than matplotlib so the labels sit at a readable size
+    in clear space: the legend top right, the main-lobe loss top left, and
+    the notch label below the sidelobes with a leader to the null.
+    """
     w, r = null_weights(22.5)
     ws = w / np.abs(w).max()
-    p_null = db_pattern(ws, TH, PK)
-    fig, ax = plt.subplots(figsize=(8.4, 4.2))
-    ax.plot(TH, db_pattern(UNIF, TH, PK), color=GRAY, lw=1.2, label="uniform, broadside")
-    ax.plot(TH, p_null, color=NAVY, lw=2.4, label="null steered to +22.5 deg")
-    _axes(ax)
-    loss = p_null.max()
-    ax.annotate("", xy=(22.5, FLOOR + 2), xytext=(22.5, -13),
-                arrowprops=dict(arrowstyle="->", color=RED, lw=1.6))
-    ax.text(26, -26, "notch at\n+22.5 deg", color=RED, fontsize=12.5)
-    ax.annotate(f"main lobe {loss:.1f} dB", xy=(0, loss), xytext=(-86, -9),
-                arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.5), color=ORANGE, fontsize=12.5)
-    ax.legend(loc="lower center", fontsize=12, bbox_to_anchor=(0.5, -0.42), ncol=2)
-    finalize(fig, "L24-pattern-null")
+    th = np.linspace(-90, 90, 1441)
+    uni = np.maximum(db_pattern(UNIF, th, PK), FLOOR)
+    nul = np.maximum(db_pattern(ws, th, PK), FLOOR)
+    loss = float(db_pattern(ws, np.array([0.0]), PK)[0])
+    W, H = 620, 400
+    L, R, T, B = 70, 16, 14, 70
+    pw, ph = W - L - R, H - T - B
+    ymax, ymin = 3.0, FLOOR
+
+    def X(a):
+        return L + (a + 90) / 180 * pw
+
+    def Y(d):
+        return T + (ymax - d) / (ymax - ymin) * ph
+
+    out = [f'<svg viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="img" '
+           f'aria-label="Uniform and null-steered patterns of the 8-element array at 10.0 GHz. The '
+           f'null-steered pattern keeps its beam at broadside, {abs(loss):.1f} dB lower, and drops to an '
+           f'exact null at plus 22.5 degrees.">',
+           f'<rect x="{L}" y="{T}" width="{pw}" height="{ph}" fill="#f6f9fc" stroke="{RULE}" stroke-width="1"/>']
+    for d in range(0, int(ymin) - 1, -10):
+        out.append(f'<line x1="{L}" y1="{Y(d):.1f}" x2="{L + pw}" y2="{Y(d):.1f}" stroke="{RULE}" stroke-width="0.8"/>')
+        out.append(f'<text x="{L - 8}" y="{Y(d) + 6:.1f}" text-anchor="end" font-size="17" fill="{GRAY}">{d if d == 0 else "−" + str(-d)}</text>')
+    for a in range(-90, 91, 45):
+        out.append(f'<line x1="{X(a):.1f}" y1="{T}" x2="{X(a):.1f}" y2="{T + ph}" stroke="{RULE}" stroke-width="0.8"/>')
+        lab = f"{a}°" if a >= 0 else f"−{-a}°"
+        out.append(f'<text x="{X(a):.1f}" y="{T + ph + 24}" text-anchor="middle" font-size="17" fill="{GRAY}">{lab}</text>')
+    out.append(f'<text x="{L + pw / 2}" y="{H - 12}" text-anchor="middle" font-size="18" fill="{INK}">angle from broadside</text>')
+    out.append(f'<text x="20" y="{T + ph / 2}" text-anchor="middle" font-size="18" fill="{INK}" '
+               f'transform="rotate(-90 20 {T + ph / 2})">dB below the uniform peak</text>')
+    for v, col, lw in ((uni, "#9aa3ad", 1.8), (nul, NAVY, 3.0)):
+        pts = " ".join(f"{X(a):.1f},{Y(d):.1f}" for a, d in zip(th, v))
+        out.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="{lw}" stroke-linejoin="round"/>')
+    # legend, top left, above the far sidelobes
+    lx, ly = X(-86), Y(-2.5)
+    for k, (col, lw, lab) in enumerate((("#9aa3ad", 1.8, "uniform"), (NAVY, 3.0, "null steered"))):
+        yy = ly + k * 26
+        out.append(f'<line x1="{lx:.1f}" y1="{yy:.1f}" x2="{lx + 30:.1f}" y2="{yy:.1f}" stroke="{col}" stroke-width="{lw + 0.6}"/>')
+        out.append(f'<text x="{lx + 38:.1f}" y="{yy + 6:.1f}" font-size="18" fill="{INK}">{lab}</text>')
+    # labels top right, in the clear band above the right-hand sidelobes
+    tx = X(33)
+    out.append(f'<text x="{tx:.1f}" y="{Y(-1.5) + 6:.1f}" font-size="18" font-weight="700" fill="{ORANGE}">beam {abs(loss):.1f} dB lower</text>')
+    out.append(f'<line x1="{tx - 4:.1f}" y1="{Y(-1.5):.1f}" x2="{X(4):.1f}" y2="{Y(loss - 0.2):.1f}" stroke="{ORANGE}" stroke-width="1.5"/>')
+    out.append(f'<text x="{tx:.1f}" y="{Y(-8.5) + 6:.1f}" font-size="18" font-weight="700" fill="{RED}">null at +22.5°</text>')
+    nx = X(22.5)
+    out.append(f'<line x1="{tx - 4:.1f}" y1="{Y(-8.5):.1f}" x2="{nx:.1f}" y2="{Y(-8.5):.1f}" stroke="{RED}" stroke-width="1.5"/>')
+    out.append(f'<line x1="{nx:.1f}" y1="{Y(-8.5):.1f}" x2="{nx:.1f}" y2="{Y(FLOOR + 1):.1f}" stroke="{RED}" '
+               f'stroke-width="1.5" stroke-dasharray="4 3"/>')
+    out.append("</svg>")
+    (OUT / "L24-pattern-null.svg").write_text(apply_font_stack("\n".join(out)) + "\n", encoding="utf-8")
+    print(f"wrote {OUT / 'L24-pattern-null.svg'}")
 
 
 # ------------------------------------------------------------------ figure 3
@@ -195,11 +242,12 @@ def cost_vs_angle() -> None:
 
 # ------------------------------------------------------------------ figure 4
 def quant_depth() -> None:
-    """Depth against the uniform peak: exact, rounded, RMS estimate, measured."""
+    """Depth against the uniform peak: exact and rounded weights."""
     w, r = null_weights(22.5)
     ws = w / np.abs(w).max()
     wq = quantize(w)
-    th = np.linspace(0, 45, 4001)
+    # Sample densely through the null so neither curve stops short of the floor
+    th = np.union1d(np.linspace(0, 45, 4001), np.linspace(21.5, 23.5, 20001))
     pk = response(ws, TH).max()
     exact = db_pattern(ws, th, PK)
     rounded = db_pattern(wq, th, PK)
@@ -207,10 +255,11 @@ def quant_depth() -> None:
     eps = np.hypot(lsb / np.sqrt(12), 0.01 / np.sqrt(12))
     rms = 20 * np.log10(eps / np.sqrt(N) * pk / PK)
     fig, ax = plt.subplots(figsize=(8.4, 4.0))
-    ax.axhspan(*MEASURED, color=ORANGE, alpha=0.22, lw=0)
-    ax.text(0.8, MEASURED[1] + 1.3, "measured on phaser-00", color=ORANGE, fontsize=12)
-    ax.axhline(rms, color=RED, lw=1.2, ls=(0, (5, 4)))
-    ax.text(44.2, rms + 1.3, f"RMS estimate {rms:.0f} dB", color=RED, fontsize=12, ha="right")
+    # No measured band: the kit's open-room depth equals Part 1's Q2 answer,
+    # which is set by the bits, not the frequency (Integrator, 2026-11-10).
+    # The RMS estimate is Part 1's answer, so the figure leaves it for the
+    # cadet to draw (Neil, 2026-11-08); `rms` is kept for the docstring check.
+    del rms
     ax.plot(th, rounded, color=NAVY, lw=3.2, label="rounded to the ADAR1000 steps")
     ax.plot(th, exact, color="#9aa3ad", lw=1.3, ls=(0, (4, 2)), label="exact weights")
     ax.set_xlim(0, 45)

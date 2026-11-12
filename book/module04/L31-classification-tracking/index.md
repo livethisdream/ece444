@@ -48,7 +48,7 @@ classifies a detected target from its micro-Doppler signature, which
 introduced, and measures how often the classifier is right. The second half
 joins the detections into a track in range, with an alpha-beta filter, and in
 angle, with the monopulse comparison of the
-<a href="../../module03/L24-lab-null-steering/index.html#frame-sum-and-delta">L24 Lab</a>.
+<a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">L24 Lab</a>.
 You will work this lesson and its lab on your own, outside class, so this
 page writes out every step of the reasoning.
 :::
@@ -510,7 +510,7 @@ $$\begin{aligned}
 Range comes from the FMCW processing; angle comes from the array.
 <a href="../../module03/L19-direction-finding/index.html">Lesson 19</a> found a
 bearing by sweeping the beam across the field and taking the peak, one sweep
-at a time. The <a href="../../module03/L24-lab-null-steering/index.html#frame-sum-and-delta">L24 Lab</a>
+at a time. The <a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">L24 Lab</a>
 measured it in one look with **monopulse**, comparing the two subarray
 channels, and that is the method a tracker needs.
 
