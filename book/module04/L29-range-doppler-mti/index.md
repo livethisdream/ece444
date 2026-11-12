@@ -5,7 +5,7 @@ frame_view: true
 # L29 - Range-Doppler and MTI
 
 ::::{frame}
-:class: title-frame
+:class: title-frame read-only
 
 <div class="course-mark">ECE 444 · Fall 2026</div>
 
@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-A burst of 256 chirps measures velocity to 0.12 m/s, and a pulse canceller removes every return that does not move.
+A burst of chirps measures each target's radial velocity, and a pulse canceller removes the returns that do not move.
 
 Lesson 29 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -21,12 +21,12 @@ Lesson 29 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::{frame} Printing
 :class: read-only
 
-To print the slides, switch to present mode and print: one slide a sheet,
-with room for notes. Print from read mode for the whole lesson.
+To print the lab's slides, switch to present mode and print: one slide a
+sheet, with room for notes. Print from read mode for the whole lesson and lab.
 ::::
 
 ::::{frame} Learning Objectives
-:class: here-29
+:class: here-29 read-only
 
 <ol class="lo-list" style="--module: '4'; counter-reset: lo 4">
   <li>I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.</li>
@@ -36,101 +36,83 @@ with room for notes. Print from read mode for the whole lesson.
 ```{include} ../../_snippets/m4-strip.md
 ```
 
-:::{depth}
-<a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> defined the Doppler shift and the velocity resolution of a burst of pulses, <a href="../L27-radar-detection/index.html">Lesson 27</a> showed that adding the chirps of a burst coherently is what makes a weak target detectable, and <a href="../L28-fmcw/index.html">Lesson 28</a> turned one chirp into a range profile. This lesson puts the three together. We send a burst of chirps, arrange the samples as a matrix, and take a second FFT across the chirps, which gives the range-Doppler map: every target at its range and its radial velocity at once. Then we remove the returns that do not move, the walls, the bench, and the kit's own leakage, with moving target indication (MTI).
+This page is a lesson and then its lab. You read the lesson before the lab period and fill in Part 1 of the packet from it; the lab, lower on the page, is what we do in class.
 
-You will run all of this on your own kit in the L29 Lab, outside class, so the lesson carries the whole argument in read mode. We write the processing in terms of the two functions the course's `radar_lab.py` provides for it, `range_doppler` and `mti`, which build on the L28 range code.
-:::
+<a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> defined the Doppler shift and the velocity resolution of a burst of pulses, <a href="../L27-radar-detection/index.html">Lesson 27</a> showed that adding the chirps of a burst coherently is what makes a weak target detectable, and <a href="../L28-fmcw/index.html">Lesson 28</a> turned one chirp into a range profile. This lesson puts the three together. We send a burst of chirps, arrange the samples as a matrix, and take a second FFT across the chirps, which gives the range-Doppler map: every target at its range and its radial velocity at once. Then we remove the returns that do not move, the walls, the table, and the kit's own leakage, with moving target indication (MTI).
+
+Every example on this page uses one **teaching burst**: a 10.0 GHz carrier ($\lambda$ = 3.0 cm), chirps of 400 MHz in 200 µs sampled at 4 MSPS, and $M$ = 128 chirps, one every $T_\text{PRI}$ = 0.4 ms. The Phaser app does not send this burst. Your kit runs the app's **Range + Velocity** preset, whose numbers the packet gives you, so every method here carries over and none of its numbers is a Part 1 answer.
 ::::
 
 ::::{frame} From One Chirp to a Burst
-:::{present}
-- One chirp gives a range profile (L28).
-- A hand at 1 m/s moves 0.3 mm during a 300 µs chirp, 1% of a wavelength.
-- Velocity comes from comparing chirps: the burst sends 256, one every 0.5 ms.
-:::
+:class: read-only
 
-In <a href="../L28-fmcw/index.html">Lesson 28</a> one chirp gave one range profile. The echo, compared with the chirp still going out, is a tone whose frequency is proportional to range, and the range FFT sorts the echoes into range cells. The burst the L29–L31 Labs use sweeps 500 MHz in 300 µs, so the beat rises by 11.1 kHz for every meter of range, and the 0.30 m range cells of $\Delta R = c/2B$ are 3.33 kHz apart.
+In <a href="../L28-fmcw/index.html">Lesson 28</a> one chirp gave one range profile. The echo, compared with the chirp still going out, is a tone whose frequency is proportional to range, and the range FFT sorts the echoes into range cells. The teaching burst sweeps 400 MHz in 200 µs, so the beat rises by $2B/(cT)$ = 13.3 kHz for every meter of range, and the range cells of $\Delta R = c/2B$ = 0.375 m are $1/T$ = 5.0 kHz apart.
 
-A moving target also shifts the echo by its Doppler frequency, $f_D = 2v/\lambda$, which is 66.7 Hz for every meter per second at the 3.0 cm wavelength of a 10 GHz carrier. Within a single chirp that shift is invisible. A hand moving at 1 m/s shifts the beat by 66.7 Hz, a fiftieth of one range cell, and moves only 0.3 mm while the chirp lasts. By the rule of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>, an observation 300 µs long resolves frequencies 3.33 kHz apart, which is 50 m/s of velocity.
+A moving target also shifts the echo by its Doppler frequency, $f_D = 2v/\lambda$, which is 66.7 Hz for every meter per second at the 3.0 cm wavelength of a 10.0 GHz carrier. Within a single chirp that shift is invisible. A hand moving at 0.6 m/s shifts the beat by 40 Hz, under a hundredth of one range cell, and moves only 0.12 mm while the chirp lasts. By the rule of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>, an observation 200 µs long resolves frequencies 5.0 kHz apart, which is 75 m/s of velocity.
 
-To measure velocity we have to watch the target for longer, and an FMCW radar does it by repeating the chirp. The burst sends $M = 256$ chirps of 300 µs at a pulse repetition interval (PRI) of 0.5 ms, so it watches every range cell for 128 ms. The rest of the lesson is how the radar turns those 256 range profiles into a velocity, following ADI's <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-doppler/" target="_blank" rel="noopener">Range Doppler Radar Processing</a> lab.
+To measure velocity we have to watch the target for longer, and an FMCW radar does it by repeating the chirp. The teaching burst sends $M$ = 128 chirps at a pulse repetition interval (PRI) of 0.4 ms, so it watches every range cell for 51.2 ms. The rest of the lesson is how the radar turns those 128 range profiles into a velocity, following ADI's <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-doppler/" target="_blank" rel="noopener">Range Doppler Radar Processing</a> lab.
 ::::
 
 ::::{frame} Chirp Synchronization
-:::{present}
-- Velocity compares the phase from chirp to chirp.
-- A 1 m/s hand moves the phase 12° a chirp, and a 1 µs start error moves it 42°.
-- The kit starts each chirp a fixed delay after the capture starts.
-:::
-:::{present}
-<img src="../../viz/img/L29-chirp-sync.svg" alt="Power against velocity in the range cell of a hand moving at 1 m/s. With the chirps synchronized, one sharp peak at plus 1 m/s, 20 dB or more above the rest. With each chirp starting at a random time, the same energy is spread over the whole velocity axis from minus 15 to plus 15 m/s, about 20 dB down, with no peak" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
-:::
+:class: read-only
 
-The range FFT of <a href="../L28-fmcw/index.html">Lesson 28</a> needs only the frequency of the beat, so it does not care when the chirp started. The velocity measurement does. It compares the phase of the beat in one chirp with its phase in the next, and a moving target changes that phase by only a small, steady amount from chirp to chirp. A hand closing at 1 m/s moves 0.5 mm in one PRI, which shortens the round trip by 1.0 mm, a thirtieth of a wavelength, and advances the phase by 12°.
+<img src="../../viz/img/L29-chirp-sync.svg" alt="Power against velocity in the range cell of a hand moving at 0.6 m/s on the teaching burst. With the chirps synchronized, one sharp peak at plus 0.6 m/s, about 40 dB above the rest. With each chirp starting at a random time, the same energy is spread over the whole velocity axis, about 20 dB down, with no peak" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
 
-The beat phase also depends on when the samples start. A hand at 1.5 m has a beat of 117 kHz, the 0 m frequency of about 100 kHz that the L28 calibration measures plus 11.1 kHz per meter, so starting the samples 1 µs late changes the phase by $360° \times 0.117 = 42°$. If the start time wanders by a microsecond from chirp to chirp, the error is larger than the signal we are trying to measure.
+The range FFT of <a href="../L28-fmcw/index.html">Lesson 28</a> needs only the frequency of the beat, so it does not care when the chirp started. The velocity measurement does. It compares the phase of the beat in one chirp with its phase in the next, and a moving target changes that phase by only a small, steady amount from chirp to chirp. A hand closing at 0.6 m/s moves 0.24 mm in one PRI, which shortens the round trip by 0.48 mm, a sixty-third of a wavelength, and advances the phase by 5.8°.
+
+The beat phase also depends on when the samples start. A hand at 1.5 m on the teaching burst has a beat of 120 kHz, a 0 m frequency of 100 kHz plus 13.3 kHz per meter, so starting the samples 1 µs late changes the phase by $360° \times 0.120 = 43°$. If the start time wanders by a microsecond from chirp to chirp, the error is larger than the signal we are trying to measure.
 
 By default the board's receiver simply fills a buffer with samples, with no relation between the start of the buffer and the start of any chirp. ADI's <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/chirp-sync/" target="_blank" rel="noopener">Synchronizing Radar Chirps</a> lab describes how the PHASER fixes this: a timing engine in the radio starts the capture and then fires each chirp at a programmed delay after it, one every PRI, so every chirp's samples begin at the same point of its ramp. The capture format records that PRI as `PRI`, and every velocity on this page depends on it being exact.
 
-The figure shows the difference in the hand's range cell. With the chirps synchronized, the Doppler FFT of the next frames collects the hand into one sharp peak at +1 m/s. With each chirp starting at a random time within its PRI, the phase from chirp to chirp is random, and the same energy spreads evenly across every velocity: the hand is still there in range, but it has no velocity, and it sits 20 dB lower, close to the noise.
+The figure shows the difference in the hand's range cell. With the chirps synchronized, the Doppler FFT collects the hand into one sharp peak at +0.6 m/s. With each chirp starting at a random time within its PRI, the phase from chirp to chirp is random, and the same energy spreads evenly across every velocity: the hand is still there in range, but it has no velocity, and its peak sits 20 dB lower, close to the noise.
 ::::
 
 ::::{frame} Fast Time and Slow Time
-:::{present}
-<img src="../../viz/img/L29-data-matrix.svg" alt="The real part of the beat samples of a burst, drawn as an image with chirp number down and sample number across. Diagonal red and blue stripes: across a row the beat oscillates every 34 samples, and down a column it oscillates every 30 chirps" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
-:::
-:::{present}
-- A row is one chirp: 1200 samples, 0.25 µs apart (**fast time**).
-- A column is one sample across chirps, 0.5 ms apart (**slow time**).
-- `iq` in your capture is this matrix, `n_chirps × n_samples`.
-:::
+:class: read-only
 
-Stack the 256 chirps of a burst as the rows of a matrix. Along a row the samples are 0.25 µs apart, the 4 MSPS sample rate, and a row covers the 300 µs ramp in 1200 samples. That direction is **fast time**. Down a column the samples are one PRI apart, 0.5 ms, the same instant of each chirp; that direction is **slow time**. ADI draws the matrix the other way, chirps as columns; the capture format of the L28–L31 Labs stores it as the `iq` array, one row per chirp, `n_chirps × n_samples`, so the code on this page follows that layout.
+<img src="../../viz/img/L29-data-matrix.svg" alt="The real part of the beat samples of the teaching burst, drawn as an image with chirp number down and sample number across. Diagonal red and blue stripes: across a row the beat oscillates every 33 samples, and down a column it oscillates about every 62 chirps" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
 
-The figure is the real part of that matrix for a single hand at 1.5 m, closing at 1 m/s, for the first 96 chirps and 160 samples. Across a row the beat oscillates at 117 kHz, one cycle every 34 samples; that frequency sets the range. Down a column the same sample oscillates once every 30 chirps, because the phase advances 12° a chirp; that rate measures the velocity. The stripes are diagonal because both are happening at once. A stationary target would draw vertical stripes, the same in every row.
+Stack the chirps of a burst as the rows of a matrix. Along a row the samples are $1/f_s$ apart, 0.25 µs at 4 MSPS, and a row covers the ramp in $f_s T$ samples, 800 for the teaching burst. That direction is **fast time**. Down a column the samples are one PRI apart, the same instant of each chirp; that direction is **slow time**. ADI draws the matrix the other way, chirps as columns; the capture format of the L28–L31 Labs stores it as the `iq` array, one row per chirp, `n_chirps × n_samples`, so the code on this page follows that layout.
+
+The figure is the real part of that matrix for a single hand at 1.5 m, closing at 0.6 m/s, for the first 128 chirps and 160 samples. Across a row the beat oscillates at 120 kHz, one cycle every 33 samples; that frequency sets the range. Down a column the same sample oscillates once every 62 chirps, because the phase advances 5.8° a chirp; that rate measures the velocity. The stripes are diagonal because both are happening at once. A stationary target would draw vertical stripes, the same in every row.
 ::::
 
 ::::{frame} The Phase From Chirp to Chirp
-:::{present}
+:class: read-only
+
+Take the range FFT of every row. The target now sits in the same range cell of every chirp, and that cell holds a complex number whose phase is the phase of the echo, $-4\pi R_m/\lambda$, set by the round trip $2R_m$ in wavelengths. Between chirps the target moves. With a closing speed $v$, the range at chirp $m$ is $R_m = R_0 - v\ m\ T_\text{PRI}$, so
+
 $$
 \begin{aligned}
 \phi_m &= -\frac{4\pi R_m}{\lambda} \\
 &= -\frac{4\pi}{\lambda}\left(R_0 - v\ m\ T_\text{PRI}\right) \\
-&= -\frac{4\pi R_0}{\lambda} + 2\pi\ \frac{2v}{\lambda}\ m\ T_\text{PRI}
+&= -\frac{4\pi R_0}{\lambda} + 2\pi\ \frac{2v}{\lambda}\ m\ T_\text{PRI}.
 \end{aligned}
 $$
 
-- In slow time each range cell holds a tone at $f_D = 2v/\lambda$.
-- At 1 m/s, $f_D$ is 66.7 Hz and the phase advances 12° a chirp.
-:::
-
-Take the range FFT of every row. The target now sits in the same range cell of every chirp, and that cell holds a complex number whose phase is the phase of the echo, $-4\pi R_m/\lambda$, set by the round trip $2R_m$ in wavelengths. Between chirps the target moves. With a closing speed $v$, the range at chirp $m$ is $R_m = R_0 - v\ m\ T_\text{PRI}$, and substituting it gives the chain on the slide. The first term is a constant. The second grows linearly with $m$, which is a tone in slow time at
+The first term is a constant. The second grows linearly with $m$, which is a tone in slow time at
 
 $$
 f_D = \frac{2v}{\lambda},
 $$
 
-the Doppler shift of <a href="../L26-range-resolution-doppler/index.html#frame-the-doppler-shift">Lesson 26</a>, with the same sign: a closing target has a positive frequency. At $\lambda = 3.0$ cm, 1 m/s gives 66.7 Hz, and in one PRI of 0.5 ms the phase advances $360° \times 66.7 \times 0.5 \times 10^{-3} = 12°$.
+the Doppler shift of <a href="../L26-range-resolution-doppler/index.html#frame-the-doppler-shift">Lesson 26</a>, with the same sign: a closing target has a positive frequency, and an opening one a negative frequency. The phase advances $\Delta\phi = 360° f_D T_\text{PRI}$ a chirp. For the teaching burst's hand closing at 0.6 m/s, $f_D$ = 40 Hz and $\Delta\phi = 360° \times 40 \times 0.4 \times 10^{-3} = 5.8°$; a hand opening at 0.9 m/s gives −60 Hz and −8.6°.
 
-Two effects that the chain leaves out are small for this burst. The Doppler shift also moves the beat in fast time, but at the ±15 m/s limit of the next frames it is 1.0 kHz against 11.1 kHz per meter, a range error of 0.09 m, under a third of a range cell. And the target moves during the burst: at 1 m/s it covers 0.128 m in 128 ms, less than one 0.30 m cell, which is the dwell limit of <a href="../L27-radar-detection/index.html#frame-limits-on-the-dwell">Lesson 27</a>. A much faster target moves across several cells during the burst and smears in range; the widget later in the lesson shows it.
+Two effects that the chain leaves out are small for this burst. The Doppler shift also moves the beat in fast time, but at the ±18.75 m/s limit of the next frames it is 1.25 kHz against 13.3 kHz per meter, a range error of 0.09 m, a quarter of a range cell. And the target moves during the burst: at 0.6 m/s it covers $v\ M\ T_\text{PRI}$ = 3.1 cm in 51.2 ms, far less than one 0.375 m cell, which is the dwell limit of <a href="../L27-radar-detection/index.html#frame-limits-on-the-dwell">Lesson 27</a>. A much faster target moves across several cells during the burst and smears in range; the widget later in the lesson shows it.
 ::::
 
 ::::{frame} The Range-Doppler Map
-:::{present}
-<img src="../../viz/img/L29-rd-map.svg" alt="A range-Doppler map from 0 to 4 m in range and minus 6 to plus 6 m/s in velocity. The kit's leakage at 0 m and a wall at 3 m sit in the 0 m/s column. A hand at 1.5 m sits at plus 1 m/s. A fidget spinner at 2.1 m spreads into a comb of lines from about minus 2 to plus 2 m/s" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
-:::
-:::{present}
-- The radar takes a range FFT along each row, then a Doppler FFT down each column.
-- Returns that do not move sit in the 0 m/s column.
-- A spinner's arms spread over ±2.2 m/s at one range.
-:::
+:class: read-only
 
-The second FFT, down each column of the range-transformed matrix, finds the slow-time tone in every range cell. The result is the **range-Doppler map**: range on one axis, radial velocity on the other, and the power of each cell. Each FFT is the coherent integration of <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a>, so a target's energy from all 1200 × 256 samples collects into one cell.
+<img src="../../viz/img/L29-rd-map.svg" alt="A range-Doppler map of the teaching burst from 0 to 4 m in range and minus 6 to plus 6 m/s in velocity. The kit's leakage at 0 m and a wall at 3 m sit in the 0 m/s column. A hand at 1.5 m sits at plus 0.6 m/s. A fidget spinner at 2.1 m spreads into a comb of lines from about minus 3 to plus 3 m/s" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
 
-The figure is a map computed with the course's burst numbers for a scene like the one in the L29 Lab. The kit's own transmit leakage appears at 0 m and a wall at 3.0 m; neither moves, so both sit in the 0 m/s column, and they are the strongest returns on the map. A hand at 1.5 m closing at 1.0 m/s sits at +1.0 m/s. A fidget spinner at 2.1 m, three arms 3.5 cm long at 10 revolutions a second, has arm tips moving at $2\pi \times 0.035 \times 10 = 2.2$ m/s; the arms move toward and away from the radar as they turn, so the spinner covers a band of velocities from −2.2 to +2.2 m/s at a single range. That spread is micro-Doppler, which <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses to classify targets.
+The second FFT, down each column of the range-transformed matrix, finds the slow-time tone in every range cell. The result is the **range-Doppler map**: range on one axis, radial velocity on the other, and the power of each cell. Each FFT is the coherent integration of <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a>, so a target's energy from all 800 × 128 samples collects into one cell.
 
-Both FFTs use a Hann window, as the range FFT did in L28. The window matters more in Doppler than in range: the wall is 18 dB stronger than the hand here, and the first sidelobe of an unwindowed FFT is only 13 dB down, so without the window the wall's sidelobes would spread across every velocity at its range. The Hann window puts the first sidelobe 31 dB down.
+The figure is a map of the teaching burst for a scene like the one in the L29 Lab. The kit's own transmit leakage appears at 0 m and a wall at 3.0 m; neither moves, so both sit in the 0 m/s column, and they are the strongest returns on the map. A hand at 1.5 m closing at 0.6 m/s sits at +0.6 m/s. A fidget spinner at 2.1 m spreads into a band of velocities at one range, which the spinner frame below explains.
+
+Where a target lands in range depends on where the range cells sit. The range FFT's bins are $1/T$ apart in beat frequency, and the 0 m frequency $f_0$ that the L28 calibration measures need not fall on a bin, so the cells sit at $(k/T - f_0)/(2B/cT)$. With a 0 m frequency of 103 kHz the teaching burst's first cell at or beyond 0 m is the one at 105 kHz, 0.15 m out, and the cells run 0.15, 0.525, 0.90, … m. The leakage, at exactly 0 m, lands in that first cell, and a wall at 2.5 m lands in the cell at 2.40 m: within half a cell of its tape range, which is as close as the map can say.
+
+Both FFTs use a Hann window, as the range FFT did in L28. The window matters more in Doppler than in range: the wall is 18 dB stronger than the hand here, and the first sidelobe of an unwindowed FFT is only 13 dB down, so without the window the wall's sidelobes would spread across every velocity at its range. The Hann window puts the first sidelobe 31 dB down, and it makes every target's spot about one and a half cells wide 3 dB down, so the width of a spot on the screen is a direct reading of the cell.
 
 The provided `radar_lab.py` does this, and the L29 notebook runs it on your captures. The range FFT on each row is the one from L28.
 
@@ -154,110 +136,112 @@ The velocity axis converts each Doppler bin to velocity with $v = f_D\lambda/2$.
 ::::
 
 ::::{frame} The Velocity Axis
-:::{present}
-$$
-\begin{aligned}
-\Delta v &= \frac{\lambda}{2}\cdot\frac{1}{M\ T_\text{PRI}} = \frac{\lambda}{2M\ T_\text{PRI}} \\
-v_\text{max} &= \pm\frac{\lambda}{2}\cdot\frac{1}{2T_\text{PRI}} = \pm\frac{\lambda}{4T_\text{PRI}}
-\end{aligned}
-$$
-
-- With 256 chirps 0.5 ms apart, $\Delta v = 0.12$ m/s and $v_\text{max} = \pm 15$ m/s.
-- A target at +22 m/s appears at −8 m/s.
-:::
+:class: read-only
 
 The Doppler FFT of $M$ slow-time samples, $T_\text{PRI}$ apart, has bins $1/(M\ T_\text{PRI})$ apart in frequency, which is the rule of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>: watching for $M\ T_\text{PRI}$ resolves its reciprocal. Converting with $v = f_D\lambda/2$ gives the velocity resolution
 
 $$
 \begin{aligned}
 \Delta v &= \frac{\lambda}{2M\ T_\text{PRI}} \\
-&= \frac{0.030\ \text{m}}{2 \times 256 \times 0.5\ \text{ms}} \\
-&= 0.12\ \text{m/s}.
+&= \frac{0.030\ \text{m}}{2 \times 128 \times 0.4\ \text{ms}} \\
+&= 0.29\ \text{m/s}.
 \end{aligned}
 $$
 
-The slow-time samples come once per PRI, so the Doppler FFT sees the tone sampled at the PRF, 2 kHz, and it can only tell apart frequencies within ±1 kHz. That is the maximum unambiguous velocity,
+The slow-time samples come once per PRI, so the Doppler FFT sees the tone sampled at the PRF, 2.5 kHz, and it can only tell apart frequencies within ±1.25 kHz. That is the maximum unambiguous velocity,
 
 $$
 \begin{aligned}
 v_\text{max} &= \pm\frac{\lambda}{4T_\text{PRI}} \\
-&= \pm\frac{0.030\ \text{m}}{4 \times 0.5\ \text{ms}} \\
-&= \pm 15\ \text{m/s}.
+&= \pm\frac{0.030\ \text{m}}{4 \times 0.4\ \text{ms}} \\
+&= \pm 18.75\ \text{m/s}.
 \end{aligned}
 $$
 
-A faster target aliases. At +22 m/s the phase advances 264° a chirp, which the FFT cannot tell from −96°, so the map reports $22 - 30 = -8$ m/s. These are the same two formulas ADI's `Range_Doppler_Processing.py` prints as its velocity resolution and maximum velocity.
+A faster target aliases. At +25 m/s the phase advances 240° a chirp, which the FFT reads the same as −120°, so the map reports $25 - 37.5 = -12.5$ m/s. These are the same two formulas ADI's `Range_Doppler_Processing.py` prints as its velocity resolution and maximum velocity.
 ::::
 
 ::::{frame} Choosing the Burst
-:::{present}
-| Burst | $\Delta v$ (m/s) | $v_\text{max}$ (m/s) | $\Delta R$ (m) |
+:class: read-only
+
+| Teaching burst | $\Delta v$ (m/s) | $v_\text{max}$ (m/s) | $\Delta R$ (m) |
 | :-- | --: | --: | --: |
-| 256 chirps, 500 MHz | 0.12 | ±15 | 0.30 |
-| 32 chirps | 0.94 | ±15 | 0.30 |
-| 200 MHz chirp | 0.12 | ±15 | 0.75 |
+| 128 chirps, 400 MHz | 0.29 | ±18.75 | 0.375 |
+| 32 chirps | 1.17 | ±18.75 | 0.375 |
+| 160 MHz chirp | 0.29 | ±18.75 | 0.94 |
 
-- The chirp count sets $\Delta v$, the bandwidth sets $\Delta R$, and the PRI sets $v_\text{max}$.
-:::
+Each parameter of the burst controls one axis of the map. The number of chirps $M$ sets the velocity resolution and nothing else: 32 chirps watch for 12.8 ms and resolve 1.17 m/s, and 256 would resolve 0.146 m/s. The chirp bandwidth sets the range resolution and nothing else: dropping from 400 MHz to 160 MHz widens every target from 0.375 m to 0.94 m in range. The PRI sets the velocity limit, and a longer chirp needs a longer PRI to fit in, which forces a slower PRF and a smaller $v_\text{max}$. A shorter burst can be made from a long one after the fact: keep only its first $M$ chirps, which is what the L29 notebook does.
 
-Each parameter of the burst controls one axis of the map. The number of chirps $M$ sets the velocity resolution and nothing else: 32 chirps watch for 16 ms and resolve 0.94 m/s, 128 chirps resolve 0.23 m/s, and 256 chirps resolve 0.12 m/s. The chirp bandwidth sets the range resolution and nothing else: dropping from 500 MHz to 200 MHz widens every target from 0.30 m to 0.75 m in range. The PRI sets the velocity limit, and a longer chirp needs a longer PRI to fit in, so a 500 µs ramp, which cannot fit in a 0.5 ms PRI with time to reset, forces a slower PRF and a smaller $v_\text{max}$. These are the experiments ADI's range-Doppler lab suggests, and the L29 Lab runs the first two on your own kit.
-
-More chirps also have two drawbacks. The integration gain of <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a> is $10\log_{10}M$: 24.1 dB for 256 chirps and 15.1 dB for 32, so a short burst has a higher noise floor on the map. A long burst refreshes the map less often, 128 ms for 256 chirps, and lets a fast target cross range cells while the burst lasts.
+More chirps also have two drawbacks, and one gain. The gain is the integration gain of <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a>, $10\log_{10}M$. Because `range_doppler` divides each FFT by the sum of its window, a target's level on the map stays where it is whatever $M$ is, and the noise floor moves instead: keeping 48 of the teaching burst's 128 chirps raises the floor by $10\log_{10}(128/48)$ = 4.3 dB. The drawbacks: a long burst refreshes the map less often, and lets a fast target cross range cells while the burst lasts.
 ::::
 
 ::::{frame} Range-Doppler Explorer
-:class: viz-frame
+:class: viz-frame read-only
 
-:::{depth}
-The widget computes a range-Doppler map from a simulated burst with the course's numbers: leakage at 0 m, a wall at 3.0 m, and a hand at 1.5 m whose closing speed you set. Beside the map is the power gain of the MTI filter against velocity, with the hand's speed marked; the next frames derive it. Start with the hand at +1 m/s and change the number of chirps: the hand's spot narrows in velocity as $M$ grows and the noise floor drops. Move the hand past +15 m/s and watch it reappear at negative velocity, and at more than a few meters per second watch it smear in range as it crosses cells during the burst. Turn chirp sync off: every target keeps its range and loses its velocity. Then step through the MTI settings at a few speeds.
-:::
+The widget computes a range-Doppler map from the teaching burst: leakage at 0 m, a wall at 3.0 m, and a hand at 1.5 m whose closing speed you set. Beside the map is the power gain of the MTI filter against velocity, with the hand's speed marked; the next frames derive it. Start with the hand at +0.6 m/s and change the number of chirps: the hand's spot narrows in velocity as $M$ grows and the noise floor drops. Move the hand past +18.75 m/s and watch it reappear at negative velocity, and at more than a few meters per second watch it smear in range as it crosses cells during the burst. Turn chirp sync off: every target keeps its range and loses its velocity. Then step through the MTI settings at a few speeds.
 
 <iframe src="../../viz/range-doppler-mti.html"
         width="100%" height="450"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
-        title="Range-Doppler map of leakage, a wall, and a moving hand, with chirp count, chirp sync, and MTI, beside the canceller's gain against velocity">
+        title="Range-Doppler map of leakage, a wall, and a moving hand on the teaching burst, with chirp count, chirp sync, and MTI, beside the canceller's gain against velocity">
 </iframe>
 ::::
 
+::::{frame} A Spinner's Micro-Doppler
+:class: read-only
+
+A fidget spinner held edge-on, its plane of rotation along the line of sight, moves each of its arms toward the kit for half a turn and away for the other half. An arm on a circle of radius $a$ turning at $f_\text{rev}$ revolutions a second has a tip speed and a radial velocity of
+
+$$
+\begin{aligned}
+v_\text{tip} &= 2\pi a f_\text{rev} \\
+v_r(t) &= v_\text{tip}\sin\left(2\pi f_\text{rev}t\right),
+\end{aligned}
+$$
+
+so over a burst its echo covers every velocity between $-v_\text{tip}$ and $+v_\text{tip}$. The arm spends the longest near the extremes, where its radial velocity turns around, so the band is brightest at its edges. The spinner in the map figure has arms 2.5 cm from the hub at 20 revolutions a second, so $v_\text{tip} = 2\pi(0.025)(20) = 3.14$ m/s, a band of ±209 Hz at 10.0 GHz. The hub, and the hand that holds it, do not move, and sit at 0 m/s.
+
+The band is not smooth. Three identical arms make a pattern that repeats every third of a turn, and a signal that repeats every $1/(3f_\text{rev})$ seconds has its spectrum in lines $3f_\text{rev}$ apart: 60 Hz here, or $\lambda(60\ \text{Hz})/2 = 0.90$ m/s, about three of the teaching burst's 0.29 m/s cells, so the map resolves them. The spacing gives the spin rate without a ruler, $f_\text{rev} = 2\Delta v_\text{line}/(3\lambda)$, and the band's edge gives it with one, $f_\text{rev} = v_\text{edge}/(2\pi a)$. Held face-on, the spinner moves its arms across the beam, with no radial velocity, and the band collapses toward the 0 m/s column; a hand never holds it exactly face-on, and held $\theta$ off face-on only $\sin\theta$ of the swing reaches the line of sight, so a line or two either side of 0 m/s remains. This is the micro-Doppler of <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a>, the parts of a target moving relative to its body, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses it to tell one kind of target from another.
+::::
+
+::::{frame} Short Windows: The Spectrogram
+:class: read-only
+
+A spinner slows down, a hand speeds up and stops, and one map averages all of that over the whole burst. A **spectrogram** cuts one range cell's slow-time signal into short windows of $N_\text{win}$ chirps, each starting a hop of $N_\text{hop}$ chirps after the last, and takes the FFT of each. A window of $N_\text{win}$ chirps is a short burst, so its Doppler cell is the velocity resolution with $M = N_\text{win}$, and its columns are $N_\text{hop}\ T_\text{PRI}$ apart in time:
+
+$$
+\begin{aligned}
+\Delta v_\text{win} &= \frac{\lambda}{2N_\text{win}T_\text{PRI}} \\
+\Delta t &= N_\text{hop}T_\text{PRI}
+\end{aligned}
+$$
+
+On the teaching burst a 32-chirp window with a hop of 8 chirps gives 1.17 m/s cells and a column every 3.2 ms; halving the window doubles the cell and, with the hop a quarter of the window, halves the time between columns. The band's edge still reaches the tip speed, to within a cell, at any window that resolves it. The provided `rl.spectrogram` subtracts the cell's mean first, which removes the hub and the hand that holds it, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> builds its classifier on it.
+::::
+
 ::::{frame} Clutter at Zero Velocity
-:::{present}
-- Leakage, walls, and the bench return the same phase every chirp.
-- They land in the 0 m/s column, up to 30 dB above a hand.
-- Their sidelobes and spread can cover a slow mover.
-:::
+:class: read-only
 
-Everything that does not move returns the same echo on every chirp: the leakage from the transmit antenna straight into the receiver, the walls, the bench, the stand the kit sits on. Radar engineers call these returns **clutter**. On the map they all sit at 0 m/s, and in a lab room they are by far the strongest returns. In the scene of the earlier figure the leakage is 30 dB above the hand and the wall is 18 dB above it.
+Everything that does not move returns the same echo on every chirp: the leakage from the transmit antenna straight into the receiver, the walls, the table, the stand the kit sits on. Radar engineers call these returns **clutter**. On the map they all sit at 0 m/s, and in a lab room they are by far the strongest returns. In the scene of the map figure the leakage is 30 dB above the hand and the wall is 18 dB above it.
 
-The Doppler FFT already separates clutter from a moving target, but removing the clutter still helps, for three reasons. A strong return has sidelobes in Doppler even with a window, and anything that changes the clutter slightly from chirp to chirp, a vibrating stand, a fan's air moving a cable, the small timing error that chirp sync cannot remove, spreads its energy across nearby velocities, where a slow target competes with it. The CFAR detector of <a href="../L30-cfar/index.html">Lesson 30</a> estimates the noise from the cells around each test cell, and a clutter ridge in those cells raises the threshold for the targets beside it. And the spectrogram of one range bin, which the L29 Lab keeps for <a href="../L31-classification-tracking/index.html">Lesson 31</a>, has far less Doppler resolution than the full burst, so a strong clutter line there covers a wide band. Removing clutter before the Doppler FFT addresses all three, and that is **moving target indication** (MTI).
+The Doppler FFT already separates clutter from a moving target, but removing the clutter still helps, for three reasons. A strong return has sidelobes in Doppler even with a window, and anything that changes the clutter slightly from chirp to chirp, a vibrating stand, a fan's air moving a cable, the small timing error that chirp sync cannot remove, spreads its energy across nearby velocities, where a slow target competes with it. The CFAR detector of <a href="../L30-cfar/index.html">Lesson 30</a> estimates the noise from the cells around each test cell, and a clutter ridge in those cells raises the threshold for the targets beside it. And a spectrogram has far less Doppler resolution than the full burst, so a strong clutter line there covers a wide band. Removing clutter before the Doppler FFT addresses all three, and that is **moving target indication** (MTI).
 ::::
 
 ::::{frame} Pulse Cancellers
-:::{present}
+:class: read-only
+
+The simplest MTI filter subtracts each chirp from the one before it, sample by sample. ADI's <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-mti/" target="_blank" rel="noopener">MTI Radar Processing</a> lab calls it the **two-pulse canceller**. A return that is identical in two consecutive chirps, which is what a stationary return is when the chirps are synchronized, subtracts to zero. A moving target's phase has advanced between the chirps, so the difference is not zero, and the target survives. Applying the same subtraction to the output a second time gives the **three-pulse canceller**:
+
 $$
 \begin{aligned}
 y_m &= x_m - x_{m-1} \\
-y_m &= x_m - 2x_{m-1} + x_{m-2}
-\end{aligned}
-$$
-
-- The top line is the 2-pulse canceller, and the bottom line is the 3-pulse.
-- A return that repeats exactly from chirp to chirp subtracts to zero.
-- The 3-pulse canceller is the 2-pulse canceller applied twice.
-:::
-
-The simplest MTI filter subtracts each chirp from the one before it, sample by sample. ADI's <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-mti/" target="_blank" rel="noopener">MTI Radar Processing</a> lab calls it the **two-pulse canceller**. A return that is identical in two consecutive chirps, which is what a stationary return is when the chirps are synchronized, subtracts to zero. A moving target's phase has advanced between the chirps, so the difference is not zero, and the target survives.
-
-Applying the same subtraction to the output a second time gives
-
-$$
-\begin{aligned}
 y_m &= (x_m - x_{m-1}) - (x_{m-1} - x_{m-2}) \\
-&= x_m - 2x_{m-1} + x_{m-2},
+&= x_m - 2x_{m-1} + x_{m-2}.
 \end{aligned}
 $$
 
-the **three-pulse canceller**. Its notch at 0 m/s is deeper and wider, as the next frame shows.
+Its notch at 0 m/s is deeper and wider, as the next frame shows.
 
 Both filters work across chirps, so we can apply them to the raw beat samples before the range FFT, as ADI's script does, or to the range-transformed rows after it; the FFT is linear, so the two give the same map. Each output has one or two fewer chirps than the input. The provided `radar_lab.py` does this too, and the L29 notebook runs it on your captures. It returns a capture, so `range_doppler(mti(cap, "2pulse"))` works without any other change:
 
@@ -280,29 +264,11 @@ def mti(cap, kind="2pulse"):
 ::::
 
 ::::{frame} Canceller Response and Blind Speeds
-:::{present}
-$$
-\begin{aligned}
-\vert H_2\vert^2 &= 4\sin^2\left(\pi f_D T_\text{PRI}\right) \\
-\vert H_3\vert^2 &= \vert H_2\vert^4 \\
-v_\text{blind} &= k\ \frac{\lambda}{2T_\text{PRI}}
-\end{aligned}
-$$
+:class: read-only
 
-- Both null 0 m/s and every 30 m/s.
-- They peak at ±15 m/s, at +6.0 dB and +12.0 dB.
-:::
-:::{present}
-<img src="../../viz/img/L29-canceller.svg" alt="Power gain in dB against velocity from minus 35 to plus 35 m/s for the 2-pulse and 3-pulse cancellers. Both are zero at 0 and at plus and minus 30 m/s, the blind speeds, and peak at plus and minus 15 m/s, at plus 6 dB for the 2-pulse and plus 12 dB for the 3-pulse. The 3-pulse notch is wider and deeper. The unambiguous window, plus and minus 15 m/s, is shaded" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
-:::
+<img src="../../viz/img/L29-canceller.svg" alt="Power gain in dB against velocity from minus 45 to plus 45 m/s for the 2-pulse and 3-pulse cancellers on the teaching burst. Both are zero at 0 and at plus and minus 37.5 m/s, the blind speeds, and peak at plus and minus 18.75 m/s. The 3-pulse notch is wider and deeper and its peak twice as high in dB. The unambiguous window, plus and minus 18.75 m/s, is shaded" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
 
-To find what the canceller does to a target of any speed, feed it the slow-time tone of the earlier frame,
-
-$$
-x_m = A\ e^{j2\pi f_D m T_\text{PRI}}.
-$$
-
-The two-pulse output is
+To find what the canceller does to a target of any speed, feed it the slow-time tone of the phase frame, $x_m = A\ e^{j2\pi f_D m T_\text{PRI}}$. The two-pulse output is
 
 $$
 \begin{aligned}
@@ -320,219 +286,319 @@ $$
 \end{aligned}
 $$
 
-The three-pulse canceller is two of these in a row, so its power gain is the square,
+The three-pulse canceller is two of these in a row, so its power gain is the square, $\vert H_3\vert^2 = 16\sin^4\left(\pi f_D T_\text{PRI}\right)$, which in decibels is twice the two-pulse gain. Both gains are zero at $f_D = 0$, the clutter, and both are largest at the edge of the unambiguous window, $f_D = \pm 1/(2T_\text{PRI})$, where the power gain is 4 for the two-pulse canceller and 16 for the three-pulse.
 
-$$
-\vert H_3\vert^2 = 16\sin^4\left(\pi f_D T_\text{PRI}\right).
-$$
+On the teaching burst, a target at 16 m/s has $f_D$ = 1067 Hz and $f_D T_\text{PRI}$ = 0.427, so the two-pulse canceller multiplies its power by $4\sin^2(\pi \times 0.427) = 3.80$, +5.8 dB, and the three-pulse by +11.6 dB.
 
-Both gains are zero at $f_D = 0$, the clutter. Both peak at $f_D = \pm 1/(2T_\text{PRI})$, the edge of the unambiguous window at ±15 m/s, at 4 (+6.0 dB) and 16 (+12.0 dB).
-
-The gain is also zero wherever $f_D T_\text{PRI}$ is a whole number $k$: the target's phase then advances a whole number of turns from one chirp to the next, and the canceller cannot tell it from a stationary return. Those are the **blind speeds**,
+The gain is also zero wherever $f_D T_\text{PRI}$ is a whole number $k$: the target's phase then advances a whole number of turns from one chirp to the next, and the canceller subtracts it away exactly as it does a stationary return. Those are the **blind speeds**,
 
 $$
 v_\text{blind} = k\ \frac{\lambda}{2T_\text{PRI}},
 $$
 
-every 30 m/s for this burst. The first blind speed is twice $v_\text{max}$, which follows from the aliasing of the velocity-axis frame seen from the other side: a target at 30 m/s aliases to 0 m/s on the map, and the canceller removes it with the clutter. Nothing in the L29 Lab moves that fast, but a car or a drone can, and a radar that must see them changes its PRI from burst to burst so that a target blind at one PRI is visible at the next.
+every 37.5 m/s for the teaching burst. The first blind speed is twice $v_\text{max}$, which follows from the aliasing of the velocity-axis frame seen from the other side: a target at 37.5 m/s aliases to 0 m/s on the map, and the canceller removes it with the clutter. Nothing in the L29 Lab moves that fast, but a car or a drone can, and a radar that must see them changes its PRI from burst to burst so that a target blind at one PRI is visible at the next.
 ::::
 
 ::::{frame} What MTI Removes
-:::{present}
-<img src="../../viz/img/L29-mti-maps.svg" alt="The range-Doppler map of the earlier figure three times: with no MTI, with the 2-pulse canceller, and with the 3-pulse canceller. With either canceller the leakage at 0 m and the wall at 3 m are gone. The hand at plus 1 m/s is fainter with the 2-pulse canceller and barely visible with the 3-pulse. The spinner's outer lines survive and its center is removed" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
-:::
-:::{present}
-- The leakage and the wall are gone.
-- A 1 m/s hand drops 13.6 dB (2-pulse) or 27.2 dB (3-pulse), and so does the noise in its velocity cell.
-- A target that stops, or crosses the beam, vanishes too.
-:::
-
-The figure runs the scene of the range-Doppler frame through each canceller and draws all three maps on one scale. Both cancellers remove the leakage and the wall completely; what is left at 0 m/s is the residue of the small chirp-to-chirp timing error in the simulation, which is why chirp sync sets how deep the cancellation can go.
-
-The cancellers also weaken moving targets, and they weaken the slow ones most. A hand at 1.0 m/s has $f_D T_\text{PRI} = 66.7 \times 0.5 \times 10^{-3} = 0.033$, deep in the notch: the two-pulse canceller multiplies its power by $4\sin^2(0.105) = 0.044$, −13.6 dB, and the three-pulse by −27.2 dB. The noise goes through the same filter. Each output adds independent noise samples, so the total noise power rises by the sum of the squared taps: $1^2 + 1^2 = 2$, +3.0 dB, for the two-pulse canceller and $1^2 + 2^2 + 1^2 = 6$, +7.8 dB, for the three-pulse. Against that total the hand's SNR falls by 16.6 dB and 35.0 dB, and every target slower than about 7.5 m/s (two-pulse) or 8.6 m/s (three-pulse) loses SNR; that is the loss a detector would see if it looked at the canceled chirps without a Doppler FFT. The map does not compare the hand with the total. The Doppler FFT gives each velocity its own cell, and the noise in the hand's cell passed through the same notch as the hand, so it drops by the same 13.6 or 27.2 dB, and the hand stands as high above its own floor as it did without MTI. The floor rises only toward ±15 m/s, by up to 6.0 and 12.0 dB, so the canceller shapes the floor the way it shapes the targets, and the L29 Lab's notebook measures both. MTI improves the ratio of a target to the clutter, not to the noise, so it helps where clutter, not noise, limits what the radar can see.
-
-Two more consequences follow from the notch. The canceller removes a target that stops moving, and also one moving across the beam, whose radial velocity is zero. The spinner shows both effects at once: the arms moving fastest along the line of sight survive, and the canceller removes the parts of its spectrum near 0 m/s with the clutter. For a hovering drone, ADI's MTI lab points out, the body disappears but the blades' micro-Doppler remains, which is what <a href="../L31-classification-tracking/index.html">Lesson 31</a> classifies.
-
-The choice of canceller is therefore a choice about the scene. With strong clutter and fast targets the three-pulse canceller gives the cleanest map; for a slow hand the two-pulse canceller, or none, keeps more of the target. The L29 Lab measures both on the same captures.
-::::
-
-::::{frame} L29 Lab: Range-Doppler and MTI
-:::{present}
-- Read a hand's velocity and sign, then a fidget spinner's micro-Doppler.
-- Predict, then read, the cells at 64, 128, 256 chirps and 200 MHz.
-- Compare MTI off, 2-pulse, and 3-pulse: which returns go and which stay.
-:::
-
-The L29 Lab runs this lesson on your own kit, GUI first. The Phaser app does the live work: its **Range + Velocity** preset sends the burst, its **Range-Doppler** view draws the map, its **MTI** switch and **MTI Mode** run the cancellers, and **Save Capture** writes each burst to your laptop. In that view you check the velocity axis with your hand, closing and then opening, and watch a fidget spinner spread into a band of velocities at one range. You read the cells at 256 chirps on the kit and at 128, 64, and 200 MHz from the notebook and a recorded burst, and you switch the canceller between off, 2-pulse, and 3-pulse with a wall and your hand in the beam. The lab ends in the course's notebook, where you run the provided `range_doppler` and `mti` on the bursts you saved and change a line or two for each of three tasks. You work on your own and turn in one packet in three parts: **Part 1, Pre-Lab**, the predictions, before you go to the bench; **Part 2, Measurements**, from your kit and the notebook; and **Part 3, Writeup**, after it. I check the packet and return it with feedback. It is the second piece of scaffolding for your final report.
-
-The procedure follows ADI's <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-doppler/" target="_blank" rel="noopener">range-Doppler</a> and <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-mti/" target="_blank" rel="noopener">MTI</a> labs, which wave a hand and a fidget spinner at the same burst. The lab's numbers are the app's preset, not the round values above: a 9.9 GHz carrier ($\lambda$ = 3.03 cm), 500 MHz in 300 µs, 256 chirps every 0.5 ms, 2 MSPS (600 samples a chirp), and $c = 3.00\times 10^8$ m/s. The carrier moves the lesson's velocity numbers by 1%: a 0.118 m/s cell, ±15.2 m/s, and 66.0 Hz and 11.9° a chirp at 1 m/s. The sample rate changes nothing on the map, because the range cell is still $c/2B$ = 0.30 m. Their <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/chirp-sync/" target="_blank" rel="noopener">chirp synchronization</a> page describes how the kit starts every chirp at a known time.
-::::
-
-::::{frame} Pre-Lab Predictions
-:::{present}
-| Setting | $\Delta v$ (m/s) | $\Delta R$ (m) | Floor |
-| :-- | --: | --: | --: |
-| 256 chirps, 500 MHz | 0.12 | 0.30 | reference |
-| 128 chirps | 0.24 | 0.30 | +3 dB |
-| 64 chirps | 0.47 | 0.30 | +6 dB |
-| 200 MHz | 0.12 | 0.75 | same |
-:::
-
-The table is the core of Part 1, and every entry follows from the frame Choosing the Burst, at the preset's 9.9 GHz. The velocity cell is $\lambda/(2MT_\text{PRI})$, so halving the chirp count doubles it, and the range cell is $c/2B$, so 200 MHz makes it 2.5 times taller. The floor column is the integration gain of <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a>: half the chirps add 3 dB less, while a target's level stays where it was, because `range_doppler` divides each FFT by the sum of its window. A Hann window makes a target's spot one to one and a half cells wide 3 dB down, so a spot's width on the screen is the cell you read. Part 1 also predicts the hand's Doppler and the cancellers' gain at its speed, from the frame Canceller Response and Blind Speeds: at 1.0 m/s, 66.0 Hz and 11.9° a chirp, −13.7 dB through the 2-pulse canceller and −27.4 dB through the 3-pulse.
-::::
-
-::::{frame} A Spinner's Micro-Doppler
-:::{present}
-$$
-v_\text{tip} = 2\pi a f_\text{rev}
-$$
-
-- Edge-on, each arm swings through $\pm v_\text{tip}$ along the line of sight, which spreads the echo into a band at one range.
-- Three identical arms repeat every $1/(3f_\text{rev})$, which puts the spectrum in lines $3f_\text{rev}$ apart.
-:::
-
-A fidget spinner held edge-on, its plane of rotation along the line of sight, moves each of its arms toward the kit for half a turn and away for the other half. An arm on a circle of radius $a$ turning at $f_\text{rev}$ revolutions a second has a radial velocity of
-
-$$
-v_r(t) = v_\text{tip}\sin\left(2\pi f_\text{rev}t\right),
-$$
-
-so over a burst its echo covers every velocity between $-v_\text{tip}$ and $+v_\text{tip}$. The arm spends the longest near the extremes, where its radial velocity turns around, so the band is brightest at its edges. For arms 3 cm from the hub at 15 revolutions a second, $v_\text{tip} = 2\pi(0.03)(15) = 2.83$ m/s, a band of ±187 Hz at 9.9 GHz. The hub, and the hand that holds it, do not move, and sit at 0 m/s.
-
-The band is not smooth. Three identical arms make a pattern that repeats every third of a turn, and a signal that repeats every $1/(3f_\text{rev})$ seconds has its spectrum in lines $3f_\text{rev}$ apart: 45 Hz, or $\lambda(45\ \text{Hz})/2 = 0.68$ m/s, so the 0.118 m/s cells of the 256-chirp map resolve them. The spacing gives the spin rate without a ruler, and the band's edge gives it with one; the lab measures both. Held face-on, the spinner moves its arms across the beam, with no radial velocity, and the band collapses toward the 0 m/s column: a hand never holds it exactly face-on, so a line or two either side of 0 m/s remains. This is the micro-Doppler of <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a>, the parts of a target moving relative to its body, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses it to tell one kind of target from another.
-::::
-
-::::{frame} Bench Rules
-:::{present}
-- Stand clear of the beam for every static and MTI reading.
-- Move the hand along the line of sight, at array height.
-- Hold the spinner edge-on, about 0.5 m out.
-:::
-
-The burst sees everything that moves in the beam, and you are the largest mover in the room. While you read the wall or the cancellers on a static scene, step behind the kit or well to one side, or your breathing and sway appear as a smear of slow velocities across your range. When you are the target, keep it simple: a flat hand, 0.5 to 1 m out, pushed straight toward the array and pulled straight back at a steady speed. Moving the hand across the beam gives it almost no radial velocity, and the map shows it near 0 m/s.
-
-Use a wall, or the L28 plate standing on its own, about 2.5 m in front of the kit as the static target the cancellers remove. Hold the spinner by its hub at arm's length with its plane of rotation horizontal or vertical and pointed at the kit, so the arms move toward and away from it. A spinner with metal weights in its arms reflects more than an all-plastic one. The transmit antenna stays on **OUT2**, connected before you power the kit, as in the L28 Lab. No step needs a corner reflector.
-::::
-
-::::{frame} Results
-:::{present}
-- Keep your bursts of the hand with the wall, the spinner, and the static scene.
-- Keep your notebook with its edits.
-- Keep your Table B to E readings beside Part 1.
-:::
-
-The L30 Lab runs CFAR on range-Doppler maps of this burst, with and without MTI, so keep your bursts, the notebook, and `radar_lab.py` together in your Module 4 folder, with the file names written in your packet. For the final report, keep three results: the velocity cell you read at three chirp counts against $\lambda/(2MT_\text{PRI})$, the spinner's spin rate from its band and from its lines, and what each canceller removed and what it kept. The report asks you to explain how a burst of chirps becomes a velocity, and what MTI does to a scene, in your own words; the packet's tables are the evidence, not the explanation.
-::::
-
-::::{frame} Equipment and Setup
 :class: read-only
 
-You need:
+<img src="../../viz/img/L29-mti-maps.svg" alt="The range-Doppler map of the teaching burst three times: with no MTI, with the 2-pulse canceller, and with the 3-pulse canceller. With either canceller the leakage at 0 m and the wall at 3 m are gone. The hand at plus 0.6 m/s is fainter with the 2-pulse canceller and gone into the noise with the 3-pulse. The spinner's outer lines survive and its center is removed" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 
-- the ADALM-PHASER kit with its Raspberry Pi and Pluto attached, and its transmit antenna;
-- a fidget spinner, ideally one with metal weights in its arms, and a ruler;
-- a wall about 2.5 m in front of the kit, or the L28 plate standing on its own at that range, and a tape measure;
-- your laptop, on the kit's network for the Phaser app, with the Module 4 folder of the L28 Lab and this lab's bundle unzipped into it (the Notebook Setup frame).
+The figure runs the scene of the map figure through each canceller and draws all three maps on one scale. Both cancellers remove the leakage and the wall completely; what is left at 0 m/s is the residue of the small chirp-to-chirp timing error in the simulation, which is why chirp sync sets how deep the cancellation can go.
 
-The Phaser app's **FMCW** mode does every live step. Its **Range-Doppler** view draws velocity across and range up, positive velocity closing as in <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a>. Hover over any cell to read its velocity, range, and level in dB. Below the plot, **Peak Range**, **Peak Velocity**, and **Peak Magnitude** read the strongest cell that moves: they skip the cells within 0.3 m/s of zero, so read a wall or the leakage by hovering. The map's colors run from each frame's own peak down **Color Span (dB)**, so after MTI the strongest thing left fills the scale whatever its level; read levels by hovering, never by color. The app's dB scale sits about 18 dB below the notebook's dBFS on the same burst (it normalizes and windows differently), so compare a change in dB between the two, not a level.
+The cancellers also weaken moving targets, and they weaken the slow ones most. The teaching burst's hand at 0.6 m/s has $f_D T_\text{PRI} = 40 \times 0.4 \times 10^{-3} = 0.016$, deep in the notch: the two-pulse canceller multiplies its power by $4\sin^2(\pi \times 0.016) = 0.010$, −20.0 dB, and the three-pulse by −39.9 dB, which puts the hand below the noise in the figure. The noise goes through the same filter. Each output adds independent noise samples, so the total noise power is multiplied by the sum of the squared taps: $1^2 + 1^2 = 2$ for the two-pulse canceller and $1^2 + 2^2 + 1^2 = 6$ for the three-pulse. Against that total the hand's SNR falls by 23.0 dB and 47.7 dB, and on this burst every target slower than about 9.4 m/s (two-pulse) or 10.7 m/s (three-pulse) loses SNR; that is the loss a detector would see if it looked at the canceled chirps without a Doppler FFT. The map does not compare the hand with the total. The Doppler FFT gives each velocity its own cell, and the noise in the hand's cell passed through the same notch as the hand, so it drops by the same amount, and the hand stands as high above its own floor as it did without MTI, as long as that floor stays above the receiver's own. The floor rises only toward $\pm v_\text{max}$, by the canceller's gain there, so the canceller shapes the floor the way it shapes the targets, and the L29 notebook measures both. MTI improves the ratio of a target to the clutter, not to the noise, so it helps where clutter, not noise, limits what the radar can see.
 
-1. With the kit powered off, connect the transmit antenna to **OUT2**.
-2. Power the kit, wait for the Pi to boot, and on your laptop open the radar app at `http://phaser-NN.local:8081`, with your kit's number for NN. Choose the **FMCW** tab at the top.
-3. In the **FMCW** section of the settings, set **Preset** to **Range + Velocity** (500 MHz in 300 µs, 256 chirps every 0.5 ms, 9.9 GHz), leave **MTI** off, open the **Range-Doppler** view, and press **Start**.
-4. **Save Capture** downloads the current burst as a course `.npz` named `phaser_range_doppler_<date>-<time>.npz`: 256 raw chirps, whatever the MTI setting, so the notebook applies the canceller itself. Leave **Subarray Channels** off; this lab needs only the summed array. Rename each file for what it holds, for example `hand_closing_mine.npz`, move it into your Module 4 folder, and write its name in the packet.
+Two more consequences follow from the notch. The canceller removes a target that stops moving, and nearly removes one moving across the beam, whose radial velocity stays within a cell of zero. Neither is quite stationary: a hand held still has a tremor of a millimeter or two, which at a 3 cm wavelength still moves the echo's phase by tens of degrees, so the two-pulse canceller leaves a trace of it and the three-pulse removes more. The spinner shows the notch too: the arms moving fastest along the line of sight survive, and the canceller removes the parts of its spectrum near 0 m/s with the clutter. For a hovering drone, ADI's MTI lab points out, the body disappears but the blades' micro-Doppler remains, which is what <a href="../L31-classification-tracking/index.html">Lesson 31</a> classifies.
+
+The choice of canceller is therefore a choice about the scene. With strong clutter and fast targets the three-pulse canceller gives the cleanest map; for a slow hand the two-pulse canceller, or none, keeps more of the target.
+::::
+
+::::{frame} Summary
+:class: read-only
+
+| Symbol / idea | What it is | Teaching burst |
+| :-- | :-- | :-- |
+| Burst | $M$ chirps, one every $T_\text{PRI}$ | 128 chirps of 200 µs, 0.4 ms PRI, 51.2 ms |
+| Chirp sync | every chirp starts a fixed delay after the capture | 1 µs of error shifts the phase 43° at 120 kHz |
+| Fast time | samples within one chirp, a row of `iq` | 800 samples, 0.25 µs apart |
+| Slow time | the same sample across chirps, a column | 128 samples, 0.4 ms apart |
+| Slow-time tone | $f_D = 2v/\lambda$ in every range cell | 40 Hz, 5.8° a chirp, at 0.6 m/s |
+| Range-Doppler map | range FFT on rows, Doppler FFT on columns | 0.375 m by 0.29 m/s cells |
+| Velocity resolution | $\Delta v = \lambda/(2M\ T_\text{PRI})$ | 0.29 m/s; 1.17 m/s at 32 chirps |
+| Maximum velocity | $v_\text{max} = \pm\lambda/(4T_\text{PRI})$ | ±18.75 m/s; +25 m/s shows at −12.5 m/s |
+| Floor and $M$ | the floor moves by $10\log_{10}$ of the chirp ratio | +4.3 dB keeping 48 of 128 |
+| 2-pulse canceller | $y_m = x_m - x_{m-1}$, gain $4\sin^2(\pi f_D T_\text{PRI})$ | −20.0 dB at 0.6 m/s, +5.8 dB at 16 m/s |
+| 3-pulse canceller | $y_m = x_m - 2x_{m-1} + x_{m-2}$, gain squared | −39.9 dB at 0.6 m/s, +11.6 dB at 16 m/s |
+| Noise gain | sum of the squared taps; the floor takes the canceller's shape | 2 and 6 in power |
+| Spinner, edge-on | a band to $\pm v_\text{tip} = \pm 2\pi a f_\text{rev}$, lines $3f_\text{rev}$ apart | ±3.14 m/s and 0.90 m/s at 2.5 cm, 20 rev/s |
+| Spectrogram | cell $\lambda/(2N_\text{win}T_\text{PRI})$, columns $N_\text{hop}T_\text{PRI}$ apart | 1.17 m/s and 3.2 ms at 32 and 8 |
+| Blind speeds | $v_\text{blind} = k\lambda/(2T_\text{PRI})$ | every 37.5 m/s |
+::::
+
+::::{frame} Pre-Lab
+:class: read-only
+
+Part 1 of the <a href="../../labs/ECE444_Lab_L29_RangeDoppler_blank.pdf" target="_blank" rel="noopener">L29 Lab packet</a> is the shaded Predicted cells of its tables, worked at the Range + Velocity preset's numbers, which the packet gives. The lesson above works each method on the teaching burst:
+
+| Packet table | Predict | Method | Checked in |
+| :-- | :-- | :-- | :-- |
+| A, the static scene | where the leakage and the wall land | <a href="#frame-the-range-doppler-map">The Range-Doppler Map</a> | Step 4 |
+| B, a hand | the velocity and Doppler of a push and a pull | <a href="#frame-the-phase-from-chirp-to-chirp">The Phase From Chirp to Chirp</a> | Steps 5 and 6 |
+| C, a spinner | the band's edges, the line spacing, face-on | <a href="#frame-a-spinner-s-micro-doppler">A Spinner's Micro-Doppler</a> | Steps 7 to 9 |
+| D, chirp count and bandwidth | $\Delta v$, the floor, and $\Delta R$ | <a href="#frame-the-velocity-axis">The Velocity Axis</a>, <a href="#frame-choosing-the-burst">Choosing the Burst</a> | Steps 14 and 15 |
+| E, MTI | each canceller's gain on each return | <a href="#frame-canceller-response-and-blind-speeds">Canceller Response</a>, <a href="#frame-what-mti-removes">What MTI Removes</a> | Steps 10 to 12, 16 |
+| F, the spectrogram | its cell, its column spacing, its band | <a href="#frame-short-windows-the-spectrogram">Short Windows: The Spectrogram</a> | Step 17 |
+
+Show your work for one row of each table on your own paper and attach it.
+::::
+
+::::{frame}
+:class: title-frame
+
+<div class="course-mark">ECE 444 · Fall 2026</div>
+
+<h1 class="frame-title">L29 Lab: Range-Doppler and MTI</h1>
+
+<div class="title-rule"></div>
+
+Read a hand and a spinner on the range-Doppler map, then cancel the returns that do not move.
+
+L29 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+::::
+
+::::{frame} Learning Objectives
+:class: here-29
+
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 4">
+  <li>I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.</li>
+  <li>I can apply moving target indication (MTI) processing to distinguish moving targets from clutter.</li>
+</ol>
+::::
+
+::::{frame} The Big Picture
+:::{present}
+| Steps | You set | You read | Table |
+| :-- | :-- | :-- | :-- |
+| 1–4 | a clear scene | leakage, wall | A |
+| 5–9 | a hand, a spinner | velocity, band | B, C |
+| 10–13 | MTI | each return's level | E |
+| 14–17 | the notebook | cells, floors, spectrogram | D–F |
+:::
+
+The Phaser app's **Range + Velocity** preset sends one burst and draws its range-Doppler map. You read the static scene first, then a hand pushed and pulled along the line of sight, then a fidget spinner edge-on and face-on. You switch the app's MTI between off, 2-pulse, and 3-pulse with the wall, your hand, and your still hand in the beam. The app's presets all send 256 chirps of 500 MHz, so the notebook makes the shorter bursts and the spectrogram from the bursts you save. Every reading fills a white Measured cell in the packet, beside the shaded Predicted cell you filled in from the lesson.
+::::
+
+::::{frame} Predict First
+:class: viz-frame
+
+:::{depth}
+Before you measure, predict each picture, then check yourself. Choose a target, an MTI setting, and a chirp count, and decide before you press **Show map**: where on the map the target lands, at what sign of velocity, how wide in velocity, and what the canceller does to it. Then show it. Any change hides the map again, so each guess comes first. The widget runs the lesson's teaching burst, not the kit's preset, so its numbers are not your Part 1 values; its pictures are the ones your kit should draw.
+:::
+
+:::{present}
+<iframe src="../../viz/rd-predict.html"
+        width="100%" height="460"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Choose a target, an MTI setting, and a chirp count, predict the range-Doppler map, then show it">
+</iframe>
+:::
+::::
+
+::::{frame} Bring Up the Kit
+:::{present}
+- Transmit antenna on OUT2, then power; open the radar app.
+- FMCW tab, Range + Velocity, MTI off, the Range-Doppler view.
+- Calibrate 0 m, then read the leakage and the wall with the beam clear.
+:::
+
+You need the kit with its transmit antenna, a wall or the L28 plate standing on its own about 2.5 m in front of the kit, a tape measure, a ruler, and a fidget spinner, ideally one with metal weights in its arms. The burst sees everything that moves in the beam, and you are the largest mover in the room, so step behind the kit or well to one side for every static and MTI reading; otherwise your breathing and sway appear as a smear of slow velocities at your range.
+
+1. **Connect.** With the kit powered off, connect the transmit antenna to **OUT2**, then power it and wait for the Pi to boot. On your laptop open the radar app at `http://phaser-NN.local:8081`, with your kit's number for NN, and choose the **FMCW** tab.
+2. **Calibrate 0 m.** In the FMCW section, set **Preset** to **Range + Velocity**. Press **Calibrate…**, hold the plate against the array, wait for the strongest return to settle, and press **Calibrate**: the app writes your kit's 0 m frequency into **0 m Beat (kHz)**. Or type your L28 Table A value there. The app measures every range on the map from this frequency, so a wrong value moves every return by the same distance.
+
+   <div class="rec" data-lab="L29">
+   <label>Step 2: 0 m Beat (kHz) <input data-field="a.f0"></label>
+   </div>
+3. **Start the map.** Leave **MTI** off, open the **Range-Doppler** view, and press **Start**. Velocity runs across, positive closing, and range runs up. Hover over any cell to read its velocity, range, and level in dB. **Peak Range**, **Peak Velocity**, and **Peak Magnitude** below the plot read the strongest cell that moves: they skip the cells within 0.3 m/s of zero, so read a static return by hovering. The colors run from each frame's own peak down **Color Span (dB)**, so read levels by hovering, never by color.
+4. **Read the static scene.** Step clear of the beam. Hover over the leakage, which sits in the first range cell at 0 m/s, and over the wall's spot at 0 m/s, and record each range, velocity, and level, and the wall's tape range. Compare each with your Table A prediction; a spot within half a range cell of it agrees. Press **Save Capture**: it downloads the current burst as `phaser_range_doppler_<date>-<time>.npz`, 256 raw chirps whatever the MTI setting, so the notebook applies the canceller itself. Rename it for what it holds and move it into your Module 4 folder.
+
+   <div class="rec" data-lab="L29">
+   <label>Step 4: leakage, range and velocity <input data-field="a.leak"></label>
+   <label>Leakage level (dB) <input data-field="a.leak.db"></label>
+   <label>Wall, tape range <input data-field="a.wall.tape"></label>
+   <label>Wall, range and velocity on the map <input data-field="a.wall"></label>
+   <label>Wall level (dB) <input data-field="a.wall.db"></label>
+   <label>Static-scene file <input data-field="a.file"></label>
+   </div>
+::::
+
+::::{frame} A Hand
+:::{present}
+- A flat hand about 1 m out, at array height.
+- Push it straight in, then pull it straight out.
+- Read range and velocity from Peak Range and Peak Velocity; save a push.
+:::
+
+Moving the hand across the beam gives it almost no radial velocity, so keep it on the line of sight and at a steady pace.
+
+5. **Push.** Stand to one side of the kit and push a flat hand straight toward the array from about 1 m, about half a meter in half a second. Record its range and velocity from **Peak Range** and **Peak Velocity**, and convert the velocity to its Doppler frequency, $f_D = 2v/\lambda$. Repeat a few times and record a typical push. Compare the sign and size with your Table B prediction; a push is whatever speed your hand makes, so the prediction sets what a 1 m/s push reads. Press **Save Capture** during a push, with the wall still in view: the burst lasts the preset's whole burst time, so start the push before you press it.
+
+   <div class="rec" data-lab="L29">
+   <label>Step 5: push, range <input data-field="b.close.r"></label>
+   <label>Velocity <input data-field="b.close.v"></label>
+   <label>Doppler (Hz) <input data-field="b.close.fd"></label>
+   <label>Push file <input data-field="b.file"></label>
+   </div>
+6. **Pull.** Pull the hand straight away from the array and record the same.
+
+   <div class="rec" data-lab="L29">
+   <label>Step 6: pull, range <input data-field="b.open.r"></label>
+   <label>Velocity <input data-field="b.open.v"></label>
+   <label>Doppler (Hz) <input data-field="b.open.fd"></label>
+   </div>
+::::
+
+::::{frame} A Fidget Spinner
+:::{present}
+- Measure the arm radius.
+- Spin it hard, edge-on, about 0.5 m out; read the band and its lines.
+- Turn it face-on and read the band again.
+:::
+
+7. **Measure the arm.** Measure the spinner's arm radius $a$, from the center of the hub to the center of a weight.
+
+   <div class="rec" data-lab="L29">
+   <label>Step 7: arm radius a <input data-field="c.a"></label>
+   </div>
+8. **Edge-on.** Spin it hard and hold it by the hub, edge-on to the kit, its plane of rotation pointed at the array, about 0.5 m out at array height. A spinner with metal weights reflects more than an all-plastic one. Hover along the band's row to read its range, the velocities of its two edges, and, where the lines within it are visible, their spacing; then work out the spin rate from the edge and from the lines. A real spinner slows as it runs, so read both within a few seconds of each other, and press **Save Capture** while it spins fast.
+
+   <div class="rec" data-lab="L29">
+   <label>Step 8: band range <input data-field="c.r"></label>
+   <label>Band edges <input data-field="c.edge"></label>
+   <label>Line spacing <input data-field="c.space"></label>
+   <label>Spin rate from the edge <input data-field="c.rev.edge"></label>
+   <label>Spin rate from the lines <input data-field="c.rev.lines"></label>
+   <label>Spinner file <input data-field="c.file"></label>
+   </div>
+9. **Face-on.** Turn the spinner face-on to the kit and record where the band's edges are now.
+
+   <div class="rec" data-lab="L29">
+   <label>Step 9: face-on, band edges <input data-field="c.face"></label>
+   </div>
+::::
+
+::::{frame} Cancel the Clutter
+:::{present}
+- MTI off, then 2-pulse, then 3-pulse, at each return.
+- The wall with the beam clear, then a pushing hand.
+- A hand held still, then one moved across the beam.
+:::
+
+Read every level here by hovering, at the return's range: the wall at 0 m/s, a hand at its spot. Record the level with MTI off, and with each canceller the change from it in dB. After MTI the map rescales to the strongest thing left, so a weakened return can still look bright.
+
+10. **The wall.** Step clear of the beam with **MTI** off and read the wall's level. Turn **MTI** on with **MTI Mode** at **2-pulse**, then **3-pulse**, and read the same cell each time; a cell that falls into the floor, record as gone.
+
+    <div class="rec" data-lab="L29">
+    <label>Step 10: wall, MTI off (dB) <input data-field="e.wall.off"></label>
+    <label>2-pulse change <input data-field="e.wall.2"></label>
+    <label>3-pulse change <input data-field="e.wall.3"></label>
+    </div>
+11. **A pushing hand.** Push your hand as in Step 5 and read its spot the same three ways.
+
+    <div class="rec" data-lab="L29">
+    <label>Step 11: hand, MTI off (dB) <input data-field="e.hand.off"></label>
+    <label>2-pulse change <input data-field="e.hand.2"></label>
+    <label>3-pulse change <input data-field="e.hand.3"></label>
+    </div>
+12. **Still, and across.** Hold your hand still in the beam about 0.8 m out and read it the same three ways; then move it side to side across the beam at the same range and do the same. Compare all four rows with your Table E predictions.
+
+    <div class="rec" data-lab="L29">
+    <label>Step 12: still hand, MTI off (dB) <input data-field="e.still.off"></label>
+    <label>2-pulse change <input data-field="e.still.2"></label>
+    <label>3-pulse change <input data-field="e.still.3"></label>
+    <label>Hand across, MTI off (dB) <input data-field="e.across.off"></label>
+    <label>2-pulse change <input data-field="e.across.2"></label>
+    <label>3-pulse change <input data-field="e.across.3"></label>
+    </div>
+13. **Restore.** Turn **MTI** off.
+::::
+
+::::{frame} Run the Notebook
+:::{present}
+- Set `CAPTURE` to your push burst; run from the top.
+- Task (a): `M` = 256, 128, 64.
+- Task (b): `H_DB`, then `KIND`.
+- Task (c): `SPIN`, `R_SPIN`, then `N_WIN` = 64, 32.
+:::
+
+Do this part after class, from your saved bursts, with the notebook set up as the Notebook Setup frame describes. Each task's markdown cell states what to check, and each prints the numbers its step records. The app's presets all send 256 chirps of 500 MHz, so the 128- and 64-chirp rows are the first $M$ chirps of your own burst, and the 200 MHz row is a recorded burst for everyone.
+
+14. **The chirp count.** Open `L29_range_doppler.ipynb`, set `CAPTURE` in the first code cell to your push burst from Step 5, and run the cells from the top. In task (a), run the chirp-count cell with `M = 256`, then change that one line to `M = 128` and to `M = 64`. Record `dv`, the hand's width 3 dB down, and the floor for each.
+
+    <div class="rec" data-lab="L29">
+    <label>Step 14: M = 256, dv <input data-field="d.256.dv"></label>
+    <label>Width 3 dB down <input data-field="d.256.w"></label>
+    <label>Floor (dBFS) <input data-field="d.256.fl"></label>
+    <label>M = 128, dv <input data-field="d.128.dv"></label>
+    <label>Width 3 dB down <input data-field="d.128.w"></label>
+    <label>Floor (dBFS) <input data-field="d.128.fl"></label>
+    <label>M = 64, dv <input data-field="d.64.dv"></label>
+    <label>Width 3 dB down <input data-field="d.64.w"></label>
+    <label>Floor (dBFS) <input data-field="d.64.fl"></label>
+    </div>
+15. **The bandwidth.** Set `CAPTURE` to `L29_hand_closing_B200.npz` and run the map cell again. Record the hand's width in range, and set `CAPTURE` back to your own burst.
+
+    <div class="rec" data-lab="L29">
+    <label>Step 15: 200 MHz, width in range <input data-field="d.b200.w"></label>
+    </div>
+16. **The cancellers.** In task (b), replace `H_DB = None` with the canceller's predicted gain at the hand's Doppler, in dB, and run the MTI cell with `KIND = "2pulse"`; then change it to `KIND = "3pulse"`. Record the hand's change beside your `H_DB`, and the floor's change near 14 m/s.
+
+    <div class="rec" data-lab="L29">
+    <label>Step 16: 2-pulse, hand change; H_DB <input data-field="e.nb.hand.2"></label>
+    <label>Floor change near 14 m/s <input data-field="e.nb.fl14.2"></label>
+    <label>3-pulse, hand change; H_DB <input data-field="e.nb.hand.3"></label>
+    <label>Floor change near 14 m/s <input data-field="e.nb.fl14.3"></label>
+    </div>
+17. **The spectrogram.** In task (c), set `SPIN` to your spinner burst and run its map cell, which prints the band's lines; set `R_SPIN` to the band's range and run the spectrogram with `N_WIN = 64`, then `N_WIN = 32`. Record the Doppler cell, the time between columns, and the band within 10 dB of its peak. Save the notebook with its edits and plots and upload the `.ipynb` with the packet.
+
+    <div class="rec" data-lab="L29">
+    <label>Step 17: N_WIN = 64, Doppler cell <input data-field="f.64.cell"></label>
+    <label>Time between columns <input data-field="f.64.dt"></label>
+    <label>Band <input data-field="f.64.band"></label>
+    <label>N_WIN = 32, Doppler cell <input data-field="f.32.cell"></label>
+    <label>Time between columns <input data-field="f.32.dt"></label>
+    <label>Band <input data-field="f.32.band"></label>
+    </div>
 ::::
 
 ::::{frame} No Hardware?
 :class: read-only
 
 ```{note}
-If your kit will not produce a clean burst, every procedure works without
-one. Open the Phaser app's simulator in a browser,
+Every step works without a kit. Open the Phaser app's simulator in a
+browser,
 <a href="https://livethisdream.github.io/phaser/radar/" target="_blank" rel="noopener">livethisdream.github.io/phaser/radar</a>:
-the same radar app, with a **Scene** menu in its FMCW section and a pill
-that reads **Simulated**. Two things replace the bench there. A **Scene**
-moves simulated targets live on the Range + Velocity preset: `hand` waves
-a hand at 0.6 m, `corners` holds three corners at 1, 2, and 3 m, and
-`static` holds a still target at 1 m with movers at 3.5 and 7 m.
-**Load Recording** plays one of the course's recorded bursts through the
-same views as if it were live, with the MTI switch working on it; each
-procedure below names the file. The recordings are in the lab's bundle,
+the same radar app, with a **Scene** menu in its FMCW section and a pill that
+reads **Simulated**. A **Scene** moves simulated targets live on the Range +
+Velocity preset: `hand` waves a hand at 0.6 m, `corners` holds three corners
+at 1, 2, and 3 m, and `static` holds a still target at 1 m with movers at 3.5
+and 7 m. **Load Recording** plays one of the course's recorded bursts through
+the same views as if it were live, with the MTI switch working on it. Leave
+**0 m Beat (kHz)** empty: a recording uses its own 0 m frequency, which the
+**Logs** tab prints when it loads. The recordings are in the lab's bundle,
 <a href="../../bundles/L29_lab.zip" download>L29_lab.zip</a>, with the
-notebook. They simulate the PHASER on the app's preset, with a kit whose
-0 m frequency is 101.4 kHz and a wall at 2.5 m. The simulation times the
-chirps perfectly, so the cancellers remove the wall completely, which no
-kit does. Say in your packet which bursts are recorded rather than your own.
+notebook. They simulate the PHASER on the app's preset, with a wall at
+2.5 m; the simulation times the chirps perfectly, so the cancellers remove
+the wall completely, which no kit does. Say in your packet which readings are
+recorded rather than your own.
 
-- `L29_static.npz`: the leakage and the wall, nothing moving, Procedures A and E
-- `L29_hand_closing.npz`: a hand moving from 1.0 m toward the kit at 1.0 m/s, Procedures B, D, and E and the notebook
-- `L29_hand_opening.npz`: a hand moving from 0.7 m away from the kit at 1.5 m/s, Procedure B
-- `L29_spinner.npz`: a spinner edge-on at 0.5 m, three arms on a 3 cm radius at 15 rev/s, Procedure C and task (c)
-- `L29_spinner_faceon.npz`: the same spinner turned face-on, Procedure C
-- `L29_hand_closing_B200.npz`: the closing hand at 200 MHz, Procedure D, with or without a kit
-- `L29_hand_still.npz`: a hand held still at 0.8 m, Procedure E
-- `L29_hand_across.npz`: a hand moved side to side across the beam at 0.8 m, Procedure E
+- Steps 1 to 4 and 10: `L29_static.npz`
+- Steps 5, 11, 14, and 16: `L29_hand_closing.npz`; Step 6: `L29_hand_opening.npz`
+- Steps 7 to 9 and 17: `L29_spinner.npz` and `L29_spinner_faceon.npz`; the arm radius is 3.0 cm
+- Step 12: `L29_hand_still.npz` and `L29_hand_across.npz`
+- Step 15: `L29_hand_closing_B200.npz`, the same for everyone
 ```
-::::
-
-::::{frame} Procedure A: Calibrate
-:class: read-only
-
-1. Press **Calibrate…** in the FMCW section, hold the plate against the array, wait for the strongest return to settle, and press **Calibrate**: the app writes your kit's 0 m frequency into **0 m Beat (kHz)**. Or type your L28 Table A value into that box. Record $f_0$ in Table A.
-2. Step clear of the beam. The leakage sits in the first range cell, at 0 m/s: the cell nearest 0 m, 0.17 m on the recorded data. Hover over it and record its range and level.
-3. Find the wall, or the plate at 2.5 m: a spot at 0 m/s, the brightest on the recorded map. Hover over it and record its range on the map and on the tape.
-4. Press **Save Capture** for the static scene, still clear of the beam.
-
-Without a kit, leave **0 m Beat (kHz)** empty and **Load Recording** `L29_static.npz`: a recording uses its own 0 m frequency, 101.4 kHz, which the **Logs** tab prints when it loads.
-::::
-
-::::{frame} Procedure B: A Hand
-:class: read-only
-
-Write your Part 1 prediction of the hand's Doppler in Table B first.
-
-1. Stand to one side of the kit and hold a flat hand in the beam about **1 m** from the array, at array height.
-2. Push the hand straight toward the array at a steady pace, about half a meter in half a second, and watch its spot. Record its range, velocity, and the sign of the velocity in Table B from **Peak Range** and **Peak Velocity**. Repeat a few times; record a typical push.
-3. Pull the hand straight away from the array and record the same.
-4. Press **Save Capture** during a push, with the wall still in view. The burst lasts 128 ms, so start the push before you press it.
-
-Without a kit, choose the `hand` **Scene** in the simulator and watch the spot swing between about +0.9 and −0.9 m/s as the hand waves; then **Load Recording** `L29_hand_closing.npz` and `L29_hand_opening.npz` for Table B's numbers.
-::::
-
-::::{frame} Procedure C: A Fidget Spinner
-:class: read-only
-
-1. Measure the spinner's arm radius $a$, from the center of the hub to the center of a weight, and record it in Table C.
-2. Spin it hard and hold it by the hub, edge-on to the kit, about **0.5 m** from the array at array height.
-3. Hover along the band's row to read its range, the velocities of its two edges, and, where the lines within it are visible, their spacing. Record them in Table C, and press **Save Capture** while it is spinning fast.
-4. Turn the spinner face-on to the kit and write in Table C what happens to the band.
-
-Without a kit, **Load Recording** `L29_spinner.npz`, then `L29_spinner_faceon.npz`. The notebook's spinner cell prints the band's lines and their spacing for either file.
-::::
-
-::::{frame} Procedure D: Chirp Count and Bandwidth
-:class: read-only
-
-Copy your Part 1 predictions into Table D before you change anything. The app's presets all send 256 chirps of 500 MHz, so the kit gives the first row and the notebook and a recorded burst give the rest.
-
-1. With the **Range + Velocity** preset, push your hand as in Procedure B, and read the width of its spot in velocity, in cells and in m/s, by hovering across it.
-2. The 128 and 64 rows come from your Procedure B burst: the notebook's task (a) keeps its first 128 and then 64 chirps, as a shorter burst would, and prints the width and the floor.
-3. For the 200 MHz row, **Load Recording** `L29_hand_closing_B200.npz` and read the height of the hand's spot in range by hovering; the notebook's map cell prints its width in range. No preset sends a 200 MHz chirp, so this row is recorded for everyone.
-
-Without a kit, **Load Recording** `L29_hand_closing.npz` for step 1 and run task (a) on it.
-::::
-
-::::{frame} Procedure E: MTI
-:class: read-only
-
-Write your Part 1 predictions in Table E first. Read every level here by hovering.
-
-1. Step clear of the beam with **MTI** off. Read the level of the wall's spot and of the noise near it.
-2. Turn **MTI** on with **MTI Mode** at **2-pulse**, then **3-pulse**, and read the same at the wall's range and 0 m/s. Write down whatever is left.
-3. Come back with your hand, pushing as in Procedure B, and read its spot's level with MTI off, 2-pulse, and 3-pulse.
-4. Hold your hand still in the beam, about 0.8 m out, and read its spot's level the same three ways; then move it side to side across the beam and do the same.
-5. Turn **MTI** off.
-
-Without a kit, **Load Recording** `L29_static.npz` for steps 1 and 2, `L29_hand_closing.npz` for step 3, and `L29_hand_still.npz` and `L29_hand_across.npz` for step 4, switching the canceller as each plays. The notebook's last cell reads the same rows in dBFS.
 ::::
 
 ::::{frame} Notebook Setup
@@ -541,50 +607,43 @@ Without a kit, **Load Recording** `L29_static.npz` for steps 1 and 2, `L29_hand_
 Download the lab's bundle, <a href="../../bundles/L29_lab.zip" download>`L29_lab.zip`</a>, and unzip it into the Module 4 folder you set up in the L28 Lab's <a href="../L28-fmcw/index.html#frame-notebook-setup">Notebook Setup</a>, with the same Python and packages. It holds `L29_range_doppler.ipynb`, a fresh `radar_lab.py`, the data README, and all eight recorded bursts, which the notebook opens by default, so it runs as shipped before you change anything. Move the bursts you saved with **Save Capture** into the same folder. Start Jupyter in the folder with `jupyter lab` and open `L29_range_doppler.ipynb`.
 ::::
 
-::::{frame} Procedure F: Run the Notebook
+::::{frame} Your Part 2 Entries
 :class: read-only
 
-Do this part after the bench, from your saved bursts, in about 30 to 45 minutes.
+This frame collects every box you filled in on this page. Your entries stay in this
+browser only, saved as you type. **Download my packet** writes them into Part 2
+of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
+viewer, and upload one PDF to Gradescope with your notebook. If you have already typed Part 1 into
+the packet PDF, use **Fill my own copy** and choose that file instead: your Part 1
+is kept, and Part 2 is added to it. Either way the result is locked, so finish
+any typing in the PDF first. **Export entries** saves a small backup file you
+can **Import** on another laptop or after clearing your browser. The boxes are
+optional: the blank packet is in the next frame, to fill on paper or in a PDF
+viewer instead.
 
-1. Open `L29_range_doppler.ipynb`, set `CAPTURE` in the first code cell to your hand burst with the wall in view, and run the cells from the top. The map cell reads your hand's range, velocity, and width in range, the wall's range, and the leakage.
-2. **Task (a):** run the chirp-count cell with `M = 256`, then change that one line to `M = 128` and to `M = 64`. Record the velocity cell, the hand's width 3 dB down, its level, and the floor for each in Table F.
-3. **Task (b):** replace `H_DB = None` with the canceller's predicted gain at the hand's Doppler, in dB, and run the MTI cell with `KIND = "2pulse"`; then change it to `KIND = "3pulse"`. Record the hand's change against `H_DB`, the wall's drop, and the floor in two places.
-4. **Task (c):** set `SPIN` to your spinner burst and run the map cell, which prints the band's lines; set `R_SPIN` to the range of the band and run the spectrogram with `N_WIN = 64`, then `N_WIN = 32`. Record the band's edges, the Doppler cell, and the time between columns.
-5. Save the notebook with its edits and plots and upload the `.ipynb` with the packet.
-
-Each task's markdown cell states the result to check against. Anything you do beyond the three tasks belongs in your report's Extra Effort.
+<div class="rec-summary" data-lab="L29" data-pdf="../../labs/ECE444_Lab_L29_RangeDoppler_blank.pdf" data-file="ECE444_L29_Lab"></div>
 ::::
 
 ::::{frame} Lab Packet
 :class: read-only doc-links
 
+The L29 Lab packet is one submission, turned in complete before Lesson 30, with the notebook. It has three parts:
+
+1. Part 1, Predict (before the lab period): the shaded Predicted cells of Tables A to F, at the Range + Velocity preset.
+2. Part 2, Measure (your own kit, in class, and the notebook after): the white Measured cells of the same tables.
+3. Part 3, Analyze (after the lab): three prompts about what you measured.
+
 - <a class="doc-link" href="../../labs/ECE444_Lab_L29_RangeDoppler_blank.pdf" target="_blank" rel="noopener">L29 Lab packet (PDF)</a>
 ::::
 
-::::{frame} Summary
+::::{frame} For Part 3
 :class: read-only
 
-| Symbol / idea | What it is | Number for the L29 burst |
-| :-- | :-- | :-- |
-| Burst | $M$ chirps, one every $T_\text{PRI}$ | 256 chirps of 300 µs, 0.5 ms PRI, 128 ms |
-| Chirp sync | every chirp starts a fixed delay after the capture | 1 µs of error shifts the phase 42° at 117 kHz |
-| Fast time | samples within one chirp, a row of `iq` | 1200 samples, 0.25 µs apart |
-| Slow time | the same sample across chirps, a column | 256 samples, 0.5 ms apart |
-| Slow-time tone | $f_D = 2v/\lambda$ in every range cell | 66.7 Hz, 12° a chirp, at 1 m/s |
-| Range-Doppler map | range FFT on rows, Doppler FFT on columns | 0.30 m by 0.12 m/s cells |
-| Velocity resolution | $\Delta v = \lambda/(2M\ T_\text{PRI})$ | 0.12 m/s; 0.94 m/s at 32 chirps |
-| Maximum velocity | $v_\text{max} = \pm\lambda/(4T_\text{PRI})$ | ±15 m/s; +22 m/s shows at −8 m/s |
-| 2-pulse canceller | $y_m = x_m - x_{m-1}$, gain $4\sin^2(\pi f_D T_\text{PRI})$ | −13.6 dB at 1 m/s, +6.0 dB at 15 m/s |
-| 3-pulse canceller | $y_m = x_m - 2x_{m-1} + x_{m-2}$, gain squared | −27.2 dB at 1 m/s, +12.0 dB at 15 m/s |
-| Noise gain | sum of the squared taps, averaged over velocity; the floor takes the canceller's shape | +3.0 dB and +7.8 dB |
-| Spinner, edge-on | a band to $\pm v_\text{tip} = \pm 2\pi a f_\text{rev}$, lines $3f_\text{rev}$ apart | ±2.83 m/s and 0.68 m/s at 3 cm, 15 rev/s |
-| Blind speeds | $v_\text{blind} = k\lambda/(2T_\text{PRI})$ | every 30 m/s |
-
-The numbers are the lesson's round 10 GHz, 4 MSPS values. The kit's Range + Velocity preset, which the L29 Lab uses, is 9.9 GHz at 2 MSPS: 600 samples a chirp, 0.5 µs apart; 66.0 Hz and 11.9° a chirp at 1 m/s; 0.118 m/s cells; ±15.2 m/s; −13.7 and −27.4 dB through the cancellers at 1 m/s; and blind speeds every 30.3 m/s.
+Part 3 asks you to compare your Table D readings with your predictions, to find your spinner's spin rate every way Table C allows and say which you would report, and to compare what each canceller did in Table E with your predictions. I grade each answer on a claim, your own numbers as evidence, the reasoning between them, and how large a difference your readings can resolve. For the final report, keep your bursts, your notebook, and your tables: the report asks you to explain, in your own words, how a burst of chirps becomes a velocity and what MTI does to a scene.
 ::::
 
 ::::{frame} Looking Ahead
 :class: read-only
 
-<a href="../L30-cfar/index.html">Lesson 30</a> takes the range-Doppler map this lesson produces and decides which cells hold targets, setting the threshold from the cells around each one rather than from a noise power assumed in advance, as <a href="../L27-radar-detection/index.html#frame-the-fixed-threshold">Lesson 27</a> showed it must. The L30 Lab runs that detector on the maps you make in the L29 Lab, with and without MTI. <a href="../L31-classification-tracking/index.html">Lesson 31</a> then looks inside a detection: the slow-time signal of one range cell, cut into short pieces and transformed one piece at a time, is a spectrogram, and the micro-Doppler in it, the spinner's arms or a walker's limbs, is what tells one kind of target from another.
+<a href="../L30-cfar/index.html">Lesson 30</a> decides which cells of this map hold targets, setting the threshold from the cells around each one, and the L30 Lab runs that detector on range-Doppler maps of this burst.
 ::::

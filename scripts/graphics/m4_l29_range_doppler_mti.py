@@ -10,11 +10,12 @@
                         velocity, with the unambiguous window and blind speeds
   - L29-mti-maps      : the same map with no MTI, 2-pulse, and 3-pulse
 
-Every map is computed the way the L29 Lab computes one: a burst of beat
-signals with the course's range-Doppler numbers (COURSE_SPEC M8: 10 GHz,
-500 MHz in 300 us, 256 chirps at a 0.5 ms PRI, 4 MSPS, a 100 kHz 0 m
-frequency), a Hann-windowed range FFT along each chirp, a Hann-windowed
-Doppler FFT across the chirps. Every number the page prints is computed and
+Every map is computed the way the L29 Lab computes one, on the lesson's
+teaching burst, which the Phaser app does not send (Neil, 2026-11-12: the
+lesson works each method on a chirp the app does not use, so no figure prints
+a Part 1 answer): 10.0 GHz, 400 MHz in 200 us, 128 chirps at a 0.4 ms PRI,
+4 MSPS, a 100 kHz 0 m frequency; a Hann-windowed range FFT along each chirp,
+a Hann-windowed Doppler FFT across the chirps. Every number the page prints is computed and
 asserted here so the two cannot drift apart. None of the figures carries an
 equation: symbols, numbers, and short words only.
 
@@ -40,16 +41,17 @@ INK, LIGHT = "#1a1a1a", "#9fb1c2"
 IMG = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 PHONE_COL, PX_MIN = 343.0, 10.5
 
-# ------------------------------------------------------------ M8 burst numbers
+# ------------------------------------------------ the lesson's teaching burst
 C = 3.00e8
 FC = 10.0e9
 LAM = C / FC                 # 3.0 cm
-B = 500e6
-T_RAMP = 300e-6
-PRI = 0.5e-3
-M = 256
+B = 400e6
+T_RAMP = 200e-6
+PRI = 0.4e-3
+M = 128
 FS = 4e6
-N = int(round(FS * T_RAMP))  # 1200 samples on each ramp
+N = int(round(FS * T_RAMP))  # 800 samples on each ramp
+V_HAND = 0.6                 # the lesson's hand, closing, m/s
 F0 = 100e3                   # the 0 m frequency, set per kit by the L28 calibration
 SLOPE = B / T_RAMP
 
@@ -83,17 +85,19 @@ def numbers() -> dict:
     v["vmax"] = LAM / (4 * PRI)
     v["vblind"] = LAM / (2 * PRI)
     v["fd_per_mps"] = 2 / LAM
-    v["deg_per_chirp_1mps"] = np.degrees(4 * np.pi * 1.0 * PRI / LAM)
+    v["fd_hand"] = 2 * V_HAND / LAM
+    v["deg_per_chirp_hand"] = np.degrees(4 * np.pi * V_HAND * PRI / LAM)
     v["fb_hand"] = F0 + 2 * SLOPE * 1.5 / C            # hand at 1.5 m
     v["deg_per_us_hand"] = 360 * v["fb_hand"] * 1e-6
-    v["fd_15"] = 2 * 15 / LAM
-    v["range_err_15"] = v["fd_15"] * C / (2 * SLOPE)
-    v["migrate_1mps"] = 1.0 * M * PRI
+    v["fd_vmax"] = 2 * v["vmax"] / LAM
+    v["range_err_vmax"] = v["fd_vmax"] * C / (2 * SLOPE)
+    v["migrate_hand"] = V_HAND * M * PRI
     v["dv_32"] = LAM / (2 * 32 * PRI)
-    v["dv_128"] = LAM / (2 * 128 * PRI)
-    v["dR_200"] = C / (2 * 200e6)
-    # canceller power gains
-    x = np.pi * v["fd_per_mps"] * 1.0 * PRI
+    v["dv_256"] = LAM / (2 * 256 * PRI)
+    v["dR_160"] = C / (2 * 160e6)
+    v["floor_48"] = 10 * np.log10(M / 48)
+    # canceller power gains, for the hand
+    x = np.pi * v["fd_hand"] * PRI
     v["h2_1"] = 10 * np.log10(4 * np.sin(x) ** 2)
     v["h3_1"] = 10 * np.log10(16 * np.sin(x) ** 4)
     v["h2_max"] = 10 * np.log10(4)
@@ -102,19 +106,25 @@ def numbers() -> dict:
     v["n3"] = 10 * np.log10(6)
     v["snr2_1"] = v["h2_1"] - v["n2"]
     v["snr3_1"] = v["h3_1"] - v["n3"]
+    # the spinner of the figures: three arms 2.5 cm out at 20 rev/s
+    v["tip"] = 2 * np.pi * 0.025 * 20
+    v["fd_tip"] = 2 * v["tip"] / LAM
+    v["line_mps"] = 3 * 20 * LAM / 2
+    v["line_cells"] = v["line_mps"] / v["dv"]
     return v
 
 
 V = numbers()
 for key, want, tol in (
-    ("kHz_per_m", 11.1, 0.05), ("dR", 0.30, 1e-9), ("bin_kHz", 3.33, 0.01),
-    ("cpi_ms", 128, 1e-9), ("dv", 0.12, 0.005), ("vmax", 15.0, 1e-9),
-    ("vblind", 30.0, 1e-9), ("fd_per_mps", 66.7, 0.05), ("deg_per_chirp_1mps", 12.0, 0.05),
-    ("fb_hand", 116.7e3, 50), ("deg_per_us_hand", 42.0, 0.05), ("fd_15", 1000, 1e-6),
-    ("range_err_15", 0.09, 0.005), ("migrate_1mps", 0.128, 1e-9),
-    ("dv_32", 0.94, 0.005), ("dv_128", 0.23, 0.005), ("dR_200", 0.75, 1e-9),
-    ("h2_1", -13.6, 0.05), ("h3_1", -27.2, 0.05), ("h2_max", 6.0, 0.05), ("h3_max", 12.0, 0.05),
-    ("n2", 3.0, 0.05), ("n3", 7.8, 0.05), ("snr2_1", -16.6, 0.05), ("snr3_1", -35.0, 0.05),
+    ("kHz_per_m", 13.3, 0.05), ("dR", 0.375, 1e-9), ("bin_kHz", 5.0, 0.01),
+    ("cpi_ms", 51.2, 1e-9), ("dv", 0.293, 0.0005), ("vmax", 18.75, 1e-9),
+    ("vblind", 37.5, 1e-9), ("fd_per_mps", 66.7, 0.05), ("fd_hand", 40.0, 1e-9),
+    ("deg_per_chirp_hand", 5.76, 0.005), ("fb_hand", 120e3, 1e-6), ("deg_per_us_hand", 43.2, 0.05),
+    ("fd_vmax", 1250, 1e-6), ("range_err_vmax", 0.094, 0.0005), ("migrate_hand", 0.0307, 0.0005),
+    ("dv_32", 1.17, 0.005), ("dv_256", 0.146, 0.0005), ("dR_160", 0.94, 0.005), ("floor_48", 4.3, 0.05),
+    ("h2_1", -20.0, 0.05), ("h3_1", -39.9, 0.05), ("h2_max", 6.0, 0.05), ("h3_max", 12.0, 0.05),
+    ("n2", 3.0, 0.05), ("n3", 7.8, 0.05), ("snr2_1", -23.0, 0.05), ("snr3_1", -47.7, 0.05),
+    ("tip", 3.14, 0.005), ("fd_tip", 209, 0.5), ("line_mps", 0.90, 1e-9), ("line_cells", 3.07, 0.005),
 ):
     assert abs(V[key] - want) <= tol, f"{key} = {V[key]} (page says {want})"
 
@@ -174,8 +184,8 @@ def mti(x: np.ndarray, kind: str) -> np.ndarray:
 SCENE = [
     (1.0, 0.0, 0.0, None),               # transmit leakage, at the 0 m frequency
     (0.25, 3.0, 0.0, None),              # a wall
-    (0.03, 1.5, 1.0, None),              # a hand, closing at 1.0 m/s
-    (0.03, 2.1, 0.0, (0.035, 10.0, 3)),  # a fidget spinner, tips at 2.2 m/s
+    (0.03, 1.5, V_HAND, None),           # a hand, closing at 0.6 m/s
+    (0.03, 2.1, 0.0, (0.025, 20.0, 3)),  # a fidget spinner, tips at 3.14 m/s
 ]
 
 
@@ -217,7 +227,7 @@ def db(x):
 
 # -------------------------------------------------------------------- figures
 def chirp_sync() -> None:
-    hand = [(0.012, 1.5, 1.0, None)]
+    hand = [(0.012, 1.5, V_HAND, None)]
     out = {}
     for sync in (True, False):
         rd, r, vel = range_doppler(burst(hand, np.random.default_rng(3), sync=sync, noise=0.01))
@@ -227,9 +237,9 @@ def chirp_sync() -> None:
     fig, ax = plt.subplots(figsize=(4.4, 2.6))
     ax.plot(vel, out[False] - ref, color=RED, lw=1.0)
     ax.plot(vel, out[True] - ref, color=NAVY, lw=1.6)
-    ax.text(1.6, -2, "synchronized", color=NAVY, ha="left", va="center")
-    ax.text(-14.5, -15, "random start", color=RED, ha="left", va="bottom")
-    ax.set_xlim(-15, 15)
+    ax.text(1.2, -2, "synchronized", color=NAVY, ha="left", va="center")
+    ax.text(-18, -15, "random start", color=RED, ha="left", va="bottom")
+    ax.set_xlim(-V["vmax"], V["vmax"])
     ax.set_ylim(-60, 4)
     ax.set_xticks([-15, -10, -5, 0, 5, 10, 15])
     ax.set_yticks([-60, -40, -20, 0])
@@ -240,16 +250,16 @@ def chirp_sync() -> None:
 
 
 def data_matrix() -> None:
-    hand = [(1.0, 1.5, 1.0, None)]
+    hand = [(1.0, 1.5, V_HAND, None)]
     x = burst(hand, np.random.default_rng(1), jitter_rad=0, noise=0.05)
-    mm, nn = 96, 160
+    mm, nn = 128, 160
     fig, ax = plt.subplots(figsize=(4.4, 3.0))
     ax.imshow(x[:mm, :nn].real, origin="upper", aspect="auto", cmap="RdBu_r",
               vmin=-1.3, vmax=1.3, extent=(-0.5, nn - 0.5, mm - 0.5, -0.5), interpolation="nearest")
     ax.set_xlabel("sample n, 0.25 µs apart (fast time)")
-    ax.set_ylabel("chirp m, 0.5 ms apart\n(slow time)")
+    ax.set_ylabel("chirp m, 0.4 ms apart\n(slow time)")
     ax.set_xticks([0, 40, 80, 120, 160])
-    ax.set_yticks([0, 32, 64, 96])
+    ax.set_yticks([0, 32, 64, 96, 128])
     for s in ax.spines.values():
         s.set_visible(False)
     finalize(fig, "L29-data-matrix")
@@ -284,12 +294,12 @@ def rd_map() -> None:
     ax.text(0.5, 0.15, "leakage", color=RED, ha="left", **lab)
     ax.text(0.5, 3.0, "wall", color=RED, ha="left", **lab)
     ax.text(1.5, 1.5, "hand", color=NAVY, ha="left", **lab)
-    ax.text(2.8, 2.1, "spinner", color=NAVY, ha="left", **lab)
+    ax.text(3.6, 2.1, "spinner", color=NAVY, ha="left", **lab)
     finalize(fig, "L29-rd-map")
 
 
 def canceller() -> None:
-    v = np.linspace(-35, 35, 2801)
+    v = np.linspace(-45, 45, 3601)
     x = np.pi * (2 * v / LAM) * PRI
     h2 = 10 * np.log10(4 * np.sin(x) ** 2 + 1e-12)
     h3 = 10 * np.log10(16 * np.sin(x) ** 4 + 1e-12)
@@ -301,12 +311,13 @@ def canceller() -> None:
         ax.axvline(vb, color=RED, lw=1.0, ls="--")
     for vb in (-V["vblind"], V["vblind"]):
         ax.text(vb, 19, "blind", color=RED, ha="center", va="bottom", fontsize=13)
-    ax.text(0, 19, "±15 m/s", color=GRAY, ha="center", va="bottom", fontsize=13)
-    ax.text(-15, 13, "3-pulse", color=AMBER, ha="center", va="bottom")
-    ax.text(15, 4, "2-pulse", color=NAVY, ha="center", va="top")
-    ax.set_xlim(-35, 35)
+    ax.text(0, 19, "±18.75 m/s", color=GRAY, ha="center", va="bottom", fontsize=13)
+    ax.text(-V["vmax"], 13, "3-pulse", color=AMBER, ha="center", va="bottom")
+    ax.text(V["vmax"], 4, "2-pulse", color=NAVY, ha="center", va="top")
+    ax.set_xlim(-45, 45)
     ax.set_ylim(-40, 19)
-    ax.set_xticks([-30, -15, 0, 15, 30])
+    ax.set_xticks([-37.5, -18.75, 0, 18.75, 37.5])
+    ax.set_xticklabels(["−37.5", "−18.75", "0", "18.75", "37.5"])
     ax.set_yticks([-40, -20, 0])
     ax.set_xlabel("velocity (m/s)")
     ax.set_ylabel("gain (dB)")

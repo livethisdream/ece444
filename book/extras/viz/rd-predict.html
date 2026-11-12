@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predict the range-Doppler map</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573; --red:#b01e24; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  *, *::before, *::after { box-sizing:border-box; }
+  .app { display:flex; flex-direction:column; gap:8px; padding:10px; max-width:820px; margin:0 auto; }
+  canvas { display:block; width:100%; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; align-items:center;
+              padding:8px 10px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  @media (min-width:600px) { .controls { grid-template-columns:1.5fr 1fr 1fr auto; } }
+  .ctl { display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .ctl label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink3); }
+  select { font:13px 'Inter',system-ui,sans-serif; height:28px; border:1px solid var(--edge2); border-radius:5px;
+           background:#fff; color:var(--ink); min-width:0; width:100%; }
+  .show { font:700 12px 'Inter',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.05em;
+          height:30px; padding:0 14px; border-radius:5px; cursor:pointer; align-self:end;
+          border:1px solid var(--navy); background:var(--navy); color:#fff; }
+  .show[aria-pressed="true"] { background:#fff; color:var(--navy); }
+  .show:focus-visible, select:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  .readouts { display:grid; gap:6px; grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 4px 7px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { height:15px; line-height:15px; font-size:10.5px; font-weight:700; text-transform:uppercase;
+           letter-spacing:0.04em; color:var(--ink3); white-space:nowrap; overflow:hidden; max-width:100%; text-overflow:ellipsis; }
+  .ro .v { height:19px; line-height:19px; font-size:14px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; color:var(--navy); overflow:hidden; max-width:100%; }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="map" aria-label="Range-Doppler map of the chosen target, hidden until you show it"></canvas>
+  <div class="controls">
+    <div class="ctl"><label for="tgt">Target</label>
+      <select id="tgt">
+        <option value="push">Hand, closing</option>
+        <option value="pull">Hand, opening</option>
+        <option value="still">Hand, held still</option>
+        <option value="across">Hand, across the beam</option>
+        <option value="edge">Spinner, edge-on</option>
+        <option value="face">Spinner, face-on</option>
+      </select></div>
+    <div class="ctl"><label for="mti">MTI</label>
+      <select id="mti"><option value="0">off</option><option value="1">2-pulse</option><option value="2">3-pulse</option></select></div>
+    <div class="ctl"><label for="nc">Chirps</label>
+      <select id="nc"><option value="128">128</option><option value="64">64</option><option value="32">32</option></select></div>
+    <button class="show" id="show" aria-pressed="false">Show map</button>
+  </div>
+  <div class="readouts">
+    <div class="ro"><span class="k">spot at</span><span class="v" id="r-v">?</span></div>
+    <div class="ro"><span class="k">MTI change</span><span class="v" id="r-g">?</span></div>
+    <div class="ro"><span class="k">velocity cell</span><span class="v" id="r-dv">?</span></div>
+  </div>
+</div>
+<script>
+'use strict';
+// Predict first: the map stays hidden until "Show map", and any change hides
+// it again (af-element-predict.html is the model). The burst is the lesson's
+// teaching burst, which the Phaser app does not send, so no readout equals a
+// Part 1 answer: 10.0 GHz, 400 MHz chirps (0.375 m cells), 0.4 ms PRI
+// (+/-18.75 m/s). The kit's map has the same shapes at its own numbers.
+// Fast time is modeled with 64 samples whose FFT bins are one range cell each,
+// zero padded to 128, as in range-doppler-mti.html.
+const LAM = 0.03, PRI = 0.4e-3, DR = 0.375, VMAX = LAM / (4 * PRI);
+const NS = 64, NF = 128, RMAX = 4.0;
+const ROWS = Math.round(RMAX / (DR * NS / NF)) + 1;
+const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+const $ = id => document.getElementById(id);
+const cv = $('map'), ctx = cv.getContext('2d');
+const tgtEl = $('tgt'), mtiEl = $('mti'), ncEl = $('nc'), showBtn = $('show');
+
+function rng(seed) {
+  return function () {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function gauss(r) { return Math.sqrt(-2 * Math.log(r() + 1e-12)) * Math.cos(2 * Math.PI * r()); }
+function fft(re, im) {
+  const n = re.length;
+  for (let i = 1, j = 0; i < n; i++) {
+    let bit = n >> 1;
+    for (; j & bit; bit >>= 1) j ^= bit;
+    j ^= bit;
+    if (i < j) { let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; }
+  }
+  for (let len = 2; len <= n; len <<= 1) {
+    const a = -2 * Math.PI / len, wr = Math.cos(a), wi = Math.sin(a);
+    for (let i = 0; i < n; i += len) {
+      let cr = 1, ci = 0;
+      for (let k = 0; k < len / 2; k++) {
+        const p = i + k, q = p + len / 2;
+        const tr = re[q] * cr - im[q] * ci, ti = re[q] * ci + im[q] * cr;
+        re[q] = re[p] - tr; im[q] = im[p] - ti; re[p] += tr; im[p] += ti;
+        const nr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = nr;
+      }
+    }
+  }
+}
+const hann = n => Float64Array.from({ length: n }, (_, i) => 0.5 - 0.5 * Math.cos(2 * Math.PI * (i + 0.5) / n));
+
+// The scene: leakage at 0 m and a wall at 3.0 m stand still in every case.
+// Each target is a list of scatterers {a, R(t)}: closing speed positive.
+function scatterers(kind) {
+  const out = [{ a: 1.0, R: () => 0 }, { a: 0.25, R: () => 3.0 }];
+  if (kind === 'push') out.push({ a: 0.03, R: t => 1.5 - 0.6 * t });
+  if (kind === 'pull') out.push({ a: 0.03, R: t => 1.2 + 0.9 * t });
+  if (kind === 'still') out.push({ a: 0.03, R: t => 1.5 + 0.002 * Math.sin(2 * Math.PI * 0.5 * t) });
+  if (kind === 'across') out.push({ a: 0.03, R: t => Math.hypot(1.5, 0.2 * Math.sin(2 * Math.PI * t + 0.4)) });
+  if (kind === 'edge' || kind === 'face') {
+    const c = kind === 'edge' ? 1 : Math.cos(80 * Math.PI / 180);
+    out.push({ a: 0.02, R: () => 2.1 });                       // hub and the hand holding it
+    for (let k = 0; k < 3; k++)
+      out.push({ a: 0.012, R: t => 2.1 + 0.025 * c * Math.sin(2 * Math.PI * 20 * t + 2 * Math.PI * k / 3) });
+  }
+  return out;
+}
+const TGT_R = { push: 1.5, pull: 1.2, still: 1.5, across: 1.5, edge: 2.1, face: 2.1 };
+
+function compute(kind, mti, M) {
+  const r = rng(29), wr = hann(NS), sc = scatterers(kind);
+  const Rre = [], Rim = [];
+  for (let m = 0; m < M; m++) {
+    const t = (m - M / 2) * PRI;
+    const re = new Float64Array(NF), im = new Float64Array(NF);
+    const common = 0.002 * gauss(r);
+    for (const s of sc) {
+      const R = s.R(t), ph = -4 * Math.PI * R / LAM + common, cyc = R / (DR * NS);
+      for (let n = 0; n < NS; n++) {
+        const p = 2 * Math.PI * cyc * n + ph;
+        re[n] += s.a * Math.cos(p) * wr[n]; im[n] += s.a * Math.sin(p) * wr[n];
+      }
+    }
+    for (let n = 0; n < NS; n++) { re[n] += 0.02 * gauss(r) * wr[n]; im[n] += 0.02 * gauss(r) * wr[n]; }
+    fft(re, im);
+    Rre.push(re.slice(0, ROWS)); Rim.push(im.slice(0, ROWS));
+  }
+  const taps = mti === 0 ? [1] : mti === 1 ? [1, -1] : [1, -2, 1];
+  const K = M - taps.length + 1, wd = hann(K), P = [];
+  const norm = 1 / ((NS / 2) * (M / 2));
+  for (let b = 0; b < ROWS; b++) {
+    const re = new Float64Array(M), im = new Float64Array(M);
+    for (let k = 0; k < K; k++) {
+      let sr = 0, si = 0;
+      for (let j = 0; j < taps.length; j++) { sr += taps[j] * Rre[k + j][b]; si += taps[j] * Rim[k + j][b]; }
+      re[k] = sr * wd[k]; im[k] = si * wd[k];
+    }
+    fft(re, im);
+    const row = new Float64Array(M);
+    for (let k = 0; k < M; k++) {
+      const s = (k + M / 2) % M;
+      row[k] = 10 * Math.log10((re[s] * re[s] + im[s] * im[s]) * norm * norm + 1e-20);
+    }
+    P.push(row);
+  }
+  return P;
+}
+const vel = (k, M) => (k - M / 2) * (2 * VMAX / M);
+function rowOf(R) { return Math.round(R / (DR * NS / NF)); }
+function strongest(P, R, M) {
+  const b = rowOf(R); let best = -1e9, kb = 0, bb = b;
+  // within 6 m/s of zero: past that the cancellers lift the noise floor, not the target
+  for (let d = -1; d <= 1; d++) for (let k = 0; k < M; k++)
+    if (Math.abs(vel(k, M)) <= 6 && P[b + d][k] > best) { best = P[b + d][k]; kb = k; bb = b + d; }
+  return { db: best, v: vel(kb, M), b: bb };
+}
+
+const state = { shown: false };
+function SQ(h) { return (window.matchMedia && window.matchMedia('(max-width:599px)').matches) ? Math.round(h * 0.78) : h; }
+function fit() {
+  const dpr = window.devicePixelRatio || 1, w = cv.parentNode.clientWidth - 20, h = SQ(300);
+  cv.style.height = h + 'px'; cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+  return { w, h };
+}
+const STOPS = [[0, [255, 255, 255]], [0.2, [219, 231, 242]], [0.4, [127, 176, 220]],
+               [0.6, [0, 103, 185]], [0.8, [0, 74, 133]], [1, [0, 33, 61]]];
+function color(u) {
+  u = Math.max(0, Math.min(1, u));
+  for (let i = 1; i < STOPS.length; i++) if (u <= STOPS[i][0]) {
+    const [u0, c0] = STOPS[i - 1], [u1, c1] = STOPS[i], f = (u - u0) / (u1 - u0);
+    return c0.map((c, j) => Math.round(c + f * (c1[j] - c)));
+  }
+  return STOPS[STOPS.length - 1][1];
+}
+const off = document.createElement('canvas'), ox = off.getContext('2d');
+const LO = -75;
+function txt(s, x, y, px, col, al, bold) { ctx.fillStyle = col; ctx.font = (bold ? '700 ' : '') + px + 'px ' + SANS; ctx.textAlign = al || 'left'; ctx.textBaseline = 'middle'; ctx.fillText(s, x, y); }
+
+let cache = null;
+function draw() {
+  const g = fit(), narrow = g.w < 470, fs = narrow ? 10.5 : 11.5;
+  const L = 34, R = 8, T = 8, B = 34, pw = g.w - L - R, ph = g.h - T - B;
+  const M = +ncEl.value;
+  const xv = v => L + (v + VMAX) / (2 * VMAX) * pw;
+  const yr = r => T + ph - (r + DR * NS / NF / 2) / (RMAX + DR * NS / NF) * ph;
+  if (state.shown && cache) {
+    off.width = M; off.height = ROWS;
+    const img = ox.createImageData(M, ROWS);
+    for (let b = 0; b < ROWS; b++) {
+      const y = ROWS - 1 - b;
+      for (let k = 0; k < M; k++) {
+        const c = color((cache.P[b][k] - LO) / -LO), i = 4 * (y * M + k);
+        img.data[i] = c[0]; img.data[i + 1] = c[1]; img.data[i + 2] = c[2]; img.data[i + 3] = 255;
+      }
+    }
+    ox.putImageData(img, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(off, L, T, pw, ph);
+  } else {
+    ctx.fillStyle = '#f5f9fc'; ctx.fillRect(L, T, pw, ph);
+  }
+  ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1; ctx.strokeRect(L + 0.5, T + 0.5, pw - 1, ph - 1);
+  for (let v = -15; v <= 15; v += 5) txt((v < 0 ? '−' : '') + Math.abs(v), xv(v), T + ph + 11, fs, '#5b6573', 'center');
+  for (let r = 0; r <= 4; r++) txt(String(r), L - 6, yr(r), fs, '#5b6573', 'right');
+  txt('velocity (m/s), + closing', L + pw / 2, g.h - 9, narrow ? 11 : 12, '#15202b', 'center');
+  ctx.save(); ctx.translate(11, T + ph / 2); ctx.rotate(-Math.PI / 2); txt('range (m)', 0, 0, narrow ? 11 : 12, '#15202b', 'center'); ctx.restore();
+  if (!state.shown) {
+    const msg = narrow ? 'Predict, then show the map' : 'Predict where the target lands, then show the map';
+    const px = narrow ? 12 : 13.5;
+    ctx.font = '700 ' + px + 'px ' + SANS;
+    const mw = Math.min(ctx.measureText(msg).width + 20, pw - 8), my = T + ph / 2;
+    ctx.fillStyle = 'rgba(255,255,255,0.95)'; ctx.strokeStyle = '#b9d2e5';
+    ctx.beginPath(); ctx.roundRect(L + pw / 2 - mw / 2, my - px, mw, 2 * px, 5); ctx.fill(); ctx.stroke();
+    txt(msg, L + pw / 2, my, px, '#004a85', 'center', true);
+  }
+}
+function readouts() {
+  const set = (id, s) => $(id).textContent = s, M = +ncEl.value;
+  if (!state.shown || !cache) { ['r-v', 'r-g', 'r-dv'].forEach(id => set(id, '?')); return; }
+  const fmt = (x, d, u) => (x > 0.05 ? '+' : x < -0.05 ? '−' : '') + Math.abs(x).toFixed(d) + u;
+  set('r-v', fmt(cache.s.v, 2, ' m/s'));
+  set('r-g', +mtiEl.value === 0 ? '0 dB' : fmt(cache.s.db - cache.s0.db, 1, ' dB'));
+  set('r-dv', (2 * VMAX / M).toFixed(2) + ' m/s');
+}
+function sync() {
+  if (state.shown) {
+    const kind = tgtEl.value, M = +ncEl.value, mti = +mtiEl.value, R = TGT_R[kind];
+    const P = compute(kind, mti, M), P0 = mti ? compute(kind, 0, M) : P;
+    cache = { P, s: strongest(P, R, M), s0: strongest(P0, R, M) };
+  }
+  showBtn.setAttribute('aria-pressed', state.shown ? 'true' : 'false');
+  showBtn.textContent = state.shown ? 'Hide map' : 'Show map';
+  readouts(); draw();
+}
+[tgtEl, mtiEl, ncEl].forEach(el => el.addEventListener('change', () => { state.shown = false; sync(); }));
+showBtn.addEventListener('click', () => { state.shown = !state.shown; sync(); });
+window.addEventListener('resize', draw);
+sync();
+if (window.MJ) { MJ.setRedraw(draw); MJ.onReady(draw); }
+</script>
+</body>
+</html>
