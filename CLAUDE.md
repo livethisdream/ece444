@@ -341,6 +341,10 @@ Every page is chrome-free: no sidebar, no header, one centerd bar at the bottom
   analyze. A lab packet is predict, measure, analyze on the cadet's own data,
   with open analysis prompts that do not name their answer (VOICE.md 41-43;
   COURSE_SPEC, "Lab packet structure").
+- **In a packet, predicted sits beside measured** (Neil, 2026-11-12). Each
+  table appears once, with a shaded Predicted cell next to the white Measured
+  cell of the same quantity, so the comparison is on one line. The L21 packet
+  in `ECE444-faculty` is the worked example; COURSE_SPEC has the layout rules.
 
 ## Don'ts
 
