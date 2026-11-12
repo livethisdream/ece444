@@ -336,7 +336,7 @@ frame, to fill on paper or in a PDF viewer instead.
 
 The L24 Lab packet is one submission for the whole lab, turned in complete before Lesson 25. It has three parts:
 
-1. Part 1, Predict (individual, before the lab period, because you need it in class): the gains and phases you type in for Procedure A, and the shaded Predicted cells of Tables A to D, at your kit's frequency, with your work for one row of each table.
+1. Part 1, Predict (individual, before the lab period, because you need it in class): the gains and phases you type in for Procedure A, and the shaded Predicted cells of Tables A to D, at your kit's frequency, with your work for one row of each table attached on your own paper.
 2. Part 2, Measure (your own kit's readings, recorded in class): the white Measured cells of the same tables, one table per procedure, each beside its prediction.
 3. Part 3, Analyze (individual, after the lab): three open prompts, each answered from your own readings.
 

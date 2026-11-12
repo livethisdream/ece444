@@ -684,7 +684,7 @@ Part 1 of the L24 Lab packet is the pre-lab: the gains and phases you type in fo
 | Table C | Manual's Interferer vs Target at $+20^\circ$, MVDR's Peak Gain and null angle, the conventional pattern at the null, and Peak Gain at $+30^\circ$ | Table C; Steps 18 to 21 | "MVDR," "Two Limits of Two Channels" |
 | Table D | the delta null, the error's zero and its sign on each side, the tracked angle at each stand mark, and how far the tracker follows | Table D; Steps 25 to 27 | "The Error Function," "Closing the Loop," Lesson 21's "Turning the Kit on Its Stand" |
 
-Every method has a worked example at $10.0\ \text{GHz}$ in the frame named beside it. Part 1 also asks you to show your work for one row of each table.
+Every method has a worked example at $10.0\ \text{GHz}$ in the frame named beside it. Part 1 also asks you to attach your work for one row of each table, on your own paper; for the gains and phases, your script is enough.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">L24 Lab packet, Part 1 (PDF)</a>
 ::::
