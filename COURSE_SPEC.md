@@ -1301,7 +1301,7 @@ it when a rounded number differs from ADI's (L26: 715 Hz vs ADI's 716).
 | range chirp (L28 Lab) | **superseded 2026-11-04: see M8.1** | |
 | range-Doppler burst (L29–L31) | **superseded 2026-11-04: see M8.1** | |
 | 0 m frequency | about 100 kHz, set per kit by the L28 calibration | ADI's `signal_freq`; never called an IF on a page |
-| corner reflector | edge $a$ = 10 cm (provisional) | $\sigma = 4\pi a^4/3\lambda^2$ = 0.47 m² |
+| corner reflector | edge $a$ = 10 cm (Neil, 2026-11-12: the course's trihedral is 4 in, 10.16 cm) | $\sigma = 4\pi a^4/3\lambda^2$ = 0.47 m² |
 
 ### M8.1 The Phaser app's FMCW presets are the lab numbers (Neil, 2026-11-04)
 
