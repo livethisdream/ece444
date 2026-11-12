@@ -674,9 +674,9 @@ Lesson 25 derives the radar range equation and asks how much power comes back fr
 ::::{frame} Pre-Lab
 :class: read-only doc-links
 
-Part 1 of the L24 Lab packet is the pre-lab: one prediction table for each Part 2 table, with the same rows, and the gains and phases you type in for Procedure A. Do it before the lab period, at the HB100 frequency your kit reported in an earlier lab, and bring it to class: you check every reading you take in Part 2 against it. This lesson works its examples at $10.0\ \text{GHz}$, away from every kit, so its numbers show the method without giving your answers; work every value at your own frequency.
+Part 1 of the L24 Lab packet is the pre-lab: the gains and phases you type in for Procedure A, and the shaded Predicted cells of Tables A to D, each beside the Measured cell you fill in class. Do it before the lab period, at the HB100 frequency your kit reported in an earlier lab, and bring it to class: you check every reading you take in Part 2 against the prediction next to it. This lesson works its examples at $10.0\ \text{GHz}$, away from every kit, so its numbers show the method without giving your answers; work every value at your own frequency.
 
-| Part 1 table | You predict | Checked in | Method |
+| Predicted cells | You predict | Checked in | Method |
 | :-- | :-- | :-- | :-- |
 | Steps 7 and 8 | each element's gain and phase for a null at $+22.5^\circ$ | entered in Steps 7 and 8 | "Worked Example: Null at +22.5°," "The PHASER Settings" |
 | Table A | the uniform sidelobe nearest $+22.5^\circ$, the null-steered peak, and the notch's depth and angle | Table A; Steps 6 and 9 | "Worked Example: Null at +22.5°," "Main-Lobe Loss Versus Null Angle," "Quantization and Null Depth" |
