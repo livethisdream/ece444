@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predict the micro-Doppler band</title>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573; --band:#004a85; --edgec:#b01e24; --body:#1d7a4d; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:9px; padding:12px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; flex-direction:column; gap:7px; padding:8px 12px; background:var(--bg);
+              border:1px solid var(--edge); border-radius:6px; }
+  .top { display:flex; flex-wrap:wrap; gap:8px 12px; align-items:center; justify-content:space-between; }
+  .seg { display:flex; gap:4px; flex-wrap:wrap; }
+  .seg button { font:700 12px 'Inter',system-ui,sans-serif; height:28px; padding:0 10px; border-radius:5px; cursor:pointer;
+                border:1px solid var(--edge2); background:#fff; color:var(--ink3); }
+  .seg button[aria-pressed="true"] { background:var(--mid); border-color:var(--mid); color:#fff; }
+  .show { font:700 12px 'Inter',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.05em;
+          height:28px; padding:0 12px; border-radius:5px; cursor:pointer;
+          border:1px solid var(--navy); background:var(--navy); color:#fff; }
+  .show[aria-pressed="true"] { background:#fff; color:var(--navy); }
+  button:focus-visible, input:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  .sliders { display:grid; gap:4px 14px; grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  @media (max-width: 600px) { .sliders { grid-template-columns:1fr; } }
+  .ctl { display:grid; grid-template-columns:auto 1fr auto; gap:6px; align-items:center; min-width:0; }
+  .ctl label { font-size:11.5px; font-weight:700; color:var(--ink3); white-space:nowrap; }
+  .ctl input { width:100%; min-width:60px; accent-color:var(--mid); }
+  .ctl .val { font-size:12px; font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:6.2ch; text-align:right; }
+  .ctl.off { visibility:hidden; }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:4px; padding:6px 6px 7px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { height:15px; line-height:15px; font-size:10.5px; font-weight:700; text-transform:uppercase;
+           letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; color:var(--navy); overflow:hidden; max-width:100%; }
+  .ro.ed .v { color:var(--edgec); }
+  .ro.bd .v { color:var(--body); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" width="1000" height="360" aria-label="The target's Doppler band against radial velocity, as the Range-Doppler view shows it at the target's range"></canvas>
+
+  <div class="controls">
+    <div class="top">
+      <div class="seg" id="kind" role="group" aria-label="Target">
+        <button data-k="fan">Fan</button><button data-k="spinner">Spinner</button><button data-k="hand">Hand</button><button data-k="walker">Walker</button>
+      </div>
+      <button class="show" id="show" aria-pressed="false">Show band</button>
+    </div>
+    <div class="sliders">
+      <div class="ctl" id="c1"><label id="l1"></label><input type="range" id="s1"><span class="val" id="v1"></span></div>
+      <div class="ctl" id="c2"><label id="l2"></label><input type="range" id="s2"><span class="val" id="v2"></span></div>
+      <div class="ctl" id="c3"><label id="l3"></label><input type="range" id="s3"><span class="val" id="v3"></span></div>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro ed"><span class="k">largest −</span><span class="v" id="r-neg">?</span></div>
+    <div class="ro ed"><span class="k">largest +</span><span class="v" id="r-pos">?</span></div>
+    <div class="ro bd"><span class="k">centered on 0</span><span class="v" id="r-ctr">?</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* The band a target puts in the Range-Doppler view at its range, against
+   radial velocity (+ closing), held over a few seconds. The models are the
+   L31 lesson's: a rotor seen edge-on (a fan's blades of points from hub to
+   tip, a spinner's weight near its rim), tilted psi off edge-on so cos(psi)
+   of the motion lies along the line of sight; a hand swinging A each way at
+   f; a walker's torso at v0 with two legs and two arms swinging about it.
+   Prediction first: the band and the readouts stay hidden until "Show band",
+   and any change hides them again. The defaults are the lesson's examples,
+   not the lab's records, so no default readout is a packet answer.
+   Velocities are radial speeds, the same at any carrier; the axis spans the
+   +/-15 m/s of a 0.5 ms PRI at 10 GHz. */
+const VMAX = 15, FLOOR = -40, DV = 0.12;
+const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+const SPEC = {
+  fan:     [['Diameter', 10, 40, 1, 25, 'cm'], ['Speed', 300, 1500, 50, 700, 'rpm'], ['Tilt', 0, 75, 5, 0, '°']],
+  spinner: [['Diameter', 4, 10, 0.5, 6, 'cm'], ['Speed', 300, 2400, 50, 1500, 'rpm'], ['Tilt', 0, 75, 5, 0, '°']],
+  hand:    [['Swing', 5, 40, 1, 15, 'cm'], ['Rate', 0.4, 3, 0.1, 1.2, 'Hz'], null],
+  walker:  [['Torso', -2, 2, 0.1, 1.1, 'm/s'], ['Limb swing', 1, 3.5, 0.1, 2.3, 'm/s'], null],
+};
+const state = { kind: 'fan', p: {}, shown: false };
+for (const k in SPEC) state.p[k] = SPEC[k].map(s => s ? s[4] : null);
+(function(){
+  const q = new URLSearchParams(location.search);
+  if (SPEC[q.get('target')]) state.kind = q.get('target');
+})();
+
+/* Scatterers' radial speeds over many instants, each with its weight; the
+   held band is their weighted histogram. */
+function samples(kind, p){
+  const out = [];
+  const T = 200;
+  if (kind === 'fan' || kind === 'spinner'){
+    const R = p[0] / 200, rps = p[1] / 60, c = Math.cos(p[2] * Math.PI / 180);
+    const rho = kind === 'fan' ? Array.from({length: 25}, (_, j) => 0.015 + j * (R - 0.015) / 24) : [0.8 * R, R];
+    const w = kind === 'fan' ? 1 / 25 : 1 / 2;
+    for (let i = 0; i < T; i++) for (let b = 0; b < 3; b++){
+      const s = Math.sin(2 * Math.PI * (i / T + b / 3));
+      for (const r of rho) out.push([2 * Math.PI * rps * r * c * s, w]);
+    }
+    return { pts: out, body: null, edges: [-2 * Math.PI * rps * R * c, 2 * Math.PI * rps * R * c] };
+  }
+  if (kind === 'hand'){
+    const A = p[0] / 100, f = p[1], vp = 2 * Math.PI * f * A;
+    for (let i = 0; i < T; i++) out.push([vp * Math.cos(2 * Math.PI * i / T), 1]);
+    return { pts: out, body: null, edges: [-vp, vp] };
+  }
+  const v0 = p[0], A = p[1];
+  for (let i = 0; i < T; i++){
+    out.push([v0, 1]);
+    const s = Math.sin(2 * Math.PI * i / T);
+    for (const [sw, g] of [[A, 0.16], [-A, 0.16], [0.6 * A, 0.08], [-0.6 * A, 0.08]]) out.push([v0 + sw * s, g]);
+  }
+  return { pts: out, body: v0, edges: [Math.min(v0 - A, v0), Math.max(v0 + A, v0)] };
+}
+
+/* Histogram on a DV grid, smoothed by a Hann window's main lobe, in dB of its peak. */
+function band(kind, p){
+  const s = samples(kind, p), n = Math.round(2 * VMAX / DV) + 1, h = new Float64Array(n);
+  for (const [v, w] of s.pts){
+    const vv = ((v + VMAX) % (2 * VMAX) + 2 * VMAX) % (2 * VMAX) - VMAX;   // wraps past +/-VMAX, as the view does
+    const i = Math.round((vv + VMAX) / DV);
+    if (i >= 0 && i < n) h[i] += w;
+  }
+  const k = [0.25, 0.5, 1, 0.5, 0.25], g = new Float64Array(n);
+  for (let i = 0; i < n; i++) for (let j = -2; j <= 2; j++){ const q = i + j; if (q >= 0 && q < n) g[i] += k[j + 2] * h[q]; }
+  let mx = 0; for (const x of g) mx = Math.max(mx, x);
+  return { db: Array.from(g, x => 10 * Math.log10(Math.max(x / mx, 1e-6))), s };
+}
+
+const canvas = document.getElementById('plot'), ctx = canvas.getContext('2d');
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function stext(str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+function resizeCanvas(){
+  const w = canvas.getBoundingClientRect().width, dpr = window.devicePixelRatio || 1;
+  const h = Math.max(190, Math.min(w * 0.36, 270));
+  canvas.width = w * dpr; canvas.height = h * dpr; canvas.style.height = h + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+window.addEventListener('resize', resizeCanvas);
+
+function draw(){
+  const dpr = window.devicePixelRatio || 1, w = canvas.width / dpr, h = canvas.height / dpr;
+  ctx.clearRect(0, 0, w, h);
+  const narrow = w < 470, fs = narrow ? 10.5 : 11.5;
+  const mL = narrow ? 38 : 50, mR = 12, mT = 14, mB = narrow ? 38 : 42;
+  const pw = w - mL - mR, ph = h - mT - mB;
+  const xFor = v => mL + (v + VMAX) / (2 * VMAX) * pw;
+  const yFor = d => mT + Math.min(Math.max(-d, 0), -FLOOR) / (-FLOOR) * ph;
+  ctx.strokeStyle = '#e6eef6'; ctx.lineWidth = 1;
+  for (let v = -15; v <= 15; v += 5){ ctx.beginPath(); ctx.moveTo(xFor(v), mT); ctx.lineTo(xFor(v), mT + ph); ctx.stroke(); }
+  for (let d = 0; d >= FLOOR; d -= 10){ ctx.beginPath(); ctx.moveTo(mL, yFor(d)); ctx.lineTo(mL + pw, yFor(d)); ctx.stroke(); }
+  ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.moveTo(mL, mT); ctx.lineTo(mL, mT + ph); ctx.lineTo(mL + pw, mT + ph); ctx.stroke();
+  for (let v = -15; v <= 15; v += 5) stext(`${v}`, xFor(v), mT + ph + 12, fs, '#5b6573', 'center');
+  for (let d = 0; d >= FLOOR; d -= 20) stext(`${d}`, mL - 6, yFor(d), fs, '#5b6573', 'right');
+  stext('radial velocity (m/s), + closing', mL + pw / 2, mT + ph + (narrow ? 28 : 31), narrow ? 11 : 12, '#15202b', 'center');
+  ctx.save(); ctx.translate(narrow ? 10 : 13, mT + ph / 2); ctx.rotate(-Math.PI / 2);
+  stext('dB', 0, 0, narrow ? 11 : 12, '#15202b', 'center'); ctx.restore();
+
+  const name = { fan: 'fan', spinner: 'spinner', hand: 'hand', walker: 'walker' }[state.kind];
+  if (!state.shown){
+    const msg = narrow ? 'Predict, then show the band' : `Predict the ${name}'s largest speeds, then show the band`, mpx = narrow ? 11.5 : 13;
+    ctx.font = '700 ' + mpx + 'px ' + SANS;
+    const mw = Math.min(ctx.measureText(msg).width + 20, pw - 8), my = mT + ph * 0.5;
+    ctx.fillStyle = 'rgba(255,255,255,0.94)'; ctx.strokeStyle = css('--edge2'); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(mL + pw / 2 - mw / 2, my - mpx, mw, 2 * mpx, 5); ctx.fill(); ctx.stroke();
+    stext(msg, mL + pw / 2, my, mpx, css('--navy'), 'center', true);
+    return;
+  }
+  const { db, s } = band(state.kind, state.p[state.kind]);
+  ctx.fillStyle = 'rgba(0,103,185,0.14)'; ctx.strokeStyle = css('--band'); ctx.lineWidth = 1.8;
+  ctx.beginPath(); ctx.moveTo(xFor(-VMAX), yFor(FLOOR));
+  db.forEach((d, i) => ctx.lineTo(xFor(-VMAX + i * DV), yFor(d)));
+  ctx.lineTo(xFor(VMAX), yFor(FLOOR)); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); db.forEach((d, i) => { const x = xFor(-VMAX + i * DV), y = yFor(d); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke();
+  ctx.strokeStyle = css('--edgec'); ctx.lineWidth = 1.4; ctx.setLineDash([4, 3]);
+  for (const e of s.edges){ if (Math.abs(e) <= VMAX){ ctx.beginPath(); ctx.moveTo(xFor(e), mT); ctx.lineTo(xFor(e), mT + ph); ctx.stroke(); } }
+  ctx.setLineDash([]);
+  if (Math.max(...s.edges.map(Math.abs)) > VMAX) stext('past ±15 m/s: the band wraps', mL + pw - 6, mT + 10, fs, css('--edgec'), 'right', true);
+}
+
+function readouts(){
+  const set = (id, t) => document.getElementById(id).textContent = t;
+  if (!state.shown){ ['r-neg', 'r-pos', 'r-ctr'].forEach(id => set(id, '?')); return; }
+  const { s } = band(state.kind, state.p[state.kind]);
+  const f = v => (v < 0 ? '−' : '+') + Math.abs(v).toFixed(1) + ' m/s';
+  set('r-neg', f(s.edges[0])); set('r-pos', f(s.edges[1]));
+  const off = s.body !== null && Math.abs(s.body) >= 0.05;
+  set('r-ctr', off ? 'no' : 'yes');
+}
+
+const showBtn = document.getElementById('show');
+function buildSliders(){
+  SPEC[state.kind].forEach((sp, i) => {
+    const c = document.getElementById('c' + (i + 1)), sl = document.getElementById('s' + (i + 1));
+    if (!sp){ c.classList.add('off'); return; }
+    c.classList.remove('off');
+    document.getElementById('l' + (i + 1)).textContent = sp[0];
+    sl.min = sp[1]; sl.max = sp[2]; sl.step = sp[3]; sl.value = state.p[state.kind][i];
+    sl.setAttribute('aria-label', sp[0] + ' (' + sp[5] + ')');
+    showVal(i);
+  });
+}
+function showVal(i){
+  const sp = SPEC[state.kind][i], v = state.p[state.kind][i];
+  const dec = sp[3] < 1 ? (sp[3] < 0.5 ? 1 : 1) : 0;
+  document.getElementById('v' + (i + 1)).textContent = (sp[5] === 'm/s' && v > 0 && i === 0 ? '+' : '') + Number(v).toFixed(dec) + (sp[5] === '°' ? '°' : ' ' + sp[5]);
+}
+[0, 1, 2].forEach(i => document.getElementById('s' + (i + 1)).addEventListener('input', e => {
+  state.p[state.kind][i] = parseFloat(e.target.value); showVal(i); state.shown = false; sync();
+}));
+document.querySelectorAll('#kind button').forEach(b => b.addEventListener('click', () => {
+  state.kind = b.dataset.k; state.shown = false; buildSliders(); sync();
+}));
+showBtn.addEventListener('click', () => { state.shown = !state.shown; sync(); });
+function sync(){
+  document.querySelectorAll('#kind button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === state.kind ? 'true' : 'false'));
+  showBtn.setAttribute('aria-pressed', state.shown ? 'true' : 'false');
+  showBtn.textContent = state.shown ? 'Hide band' : 'Show band';
+  readouts(); draw();
+}
+buildSliders(); resizeCanvas(); sync();
+</script>
+</body>
+</html>
