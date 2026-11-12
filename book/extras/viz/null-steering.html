@@ -68,7 +68,7 @@
       <label for="mode">Weights</label>
       <select id="mode">
         <option value="ideal" selected>Ideal (exact)</option>
-        <option value="phaser">PHASER (quantized + bench floor)</option>
+        <option value="phaser">PHASER (quantized + room floor)</option>
       </select>
     </div>
   </div>
@@ -86,10 +86,12 @@
 (function () {
   "use strict";
 
-  // ---- the course array: PHASER, 8 elements, d = 14 mm at 10.525 GHz ----
-  const N = 8, DL = 0.491, KD = 2 * Math.PI * DL;
+  // ---- the course array: PHASER, 8 elements, d = 14 mm, at 10.0 GHz ----
+  // 10.0 GHz is the lesson's worked-example frequency, well away from any
+  // kit's HB100, so the readouts never answer Part 1 (Neil, 2026-11-08).
+  const N = 8, DL = 0.014 * 10.0e9 / 3.00e8, KD = 2 * Math.PI * DL;
   const LSB = 2.8125, GSTEP = 0.01;      // ADAR1000 phase LSB, 1% gain steps
-  const SWEEP_FLOOR_DB = -48;            // notch bottom measured on phaser-00 (2026-10-23), below the uniform peak
+  const SWEEP_FLOOR_DB = -23;            // the floor reflections left in a cramped room, below the uniform peak; the open-room depth is a Part 1 answer, so it is not drawn
   const FLOOR = -60;                     // plot floor
   const DEG = Math.PI / 180;
 
@@ -189,10 +191,10 @@
     pR.textContent = cabs(S.r).toFixed(3) + ' (' + (20 * Math.log10(cabs(S.r))).toFixed(1) + ' dB)';
     note.textContent = phaser
       ? 'PHASER mode rounds every phase to the ADAR1000’s 2.8125° step and every '
-        + 'gain to 1 %, then adds a floor 48 dB below the uniform peak, where the notch '
-        + 'bottomed out on a course kit. Rounding alone barely moves the null.'
+        + 'gain to 1 %, then adds a floor 23 dB below the uniform peak, where reflections '
+        + 'left the notch in a cramped room. Rounding alone barely moves the null.'
       : 'Ideal mode applies the exact complex weights: the response at the null angle is zero, '
-        + 'so the notch runs off the bottom of the plot. The main lobe still pays for it.';
+        + 'so the notch runs off the bottom of the plot. The main lobe still drops.';
   }
 
   // ---- canvas plumbing ----
@@ -241,7 +243,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; 
       px.beginPath(); px.moveTo(L, y(S.noiseDb)); px.lineTo(g.w - R, y(S.noiseDb)); px.stroke();
       px.restore();
       px.fillStyle = '#b01e24'; px.font = F(11); px.textAlign = 'right';
-      px.fillText('bench floor', g.w - R - 6, y(S.noiseDb) + 12);   // below the line, clear of the sidelobes
+      px.fillText('room floor', g.w - R - 6, y(S.noiseDb) + 12);   // below the line, clear of the sidelobes
     }
 
     const grid = [];                                 // fine sampling through the null

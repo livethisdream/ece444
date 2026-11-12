@@ -633,7 +633,7 @@ in place of $10\log_{10} 8$; the two agree within $0.2\ \text{dB}$.
 | Why it traces a pattern | $\vert AF\vert$ depends only on $\sin\theta_\text{src} - \sin\theta_0$ | stepping the beam or moving the source visits the same curve |
 | Azimuth sweep | one beam held, source moved in azimuth or antenna turned | Signal vs Time by hand; the stand's scale for angles |
 | dBc | level relative to the trace's own main-lobe peak | removes Rx Gain, distance, and source power |
-| Agreement | main lobe and first sidelobes | about $-13$ dBc at broadside, within your error budget |
+| Agreement | main lobe and first sidelobes | about $-13$ dBc at broadside, within the errors you quantify in Part 3 |
 | Patch pattern | seen by the azimuth sweep, not by the beam sweep | outer sidelobe of a $30^\circ$ beam reads lower; the room adds as much |
 | Source distance | $r \ge 2D^2/\lambda$, $D = Nd = 112\ \text{mm}$ | under $0.9\ \text{m}$; measure at $1.2\ \text{m}$ |
 
@@ -656,9 +656,9 @@ the sidelobes down and widens the main lobe.
 ::::{frame} Pre-Lab
 :class: read-only doc-links
 
-Part 1 of the L21 Lab packet is the pre-lab: one prediction table for each Part 2 table, with the same rows. Do it before the lab period, at the HB100 frequency your kit reported in the L18 Lab, and bring it to class: you check every trace you take in Part 2 against it. This lesson works its examples at $10.0\ \text{GHz}$, away from every kit, so its angles differ from yours by up to about $4^\circ$, mostly at the outer nulls; work every value at your own frequency.
+Part 1 of the L21 Lab packet is the pre-lab: the shaded Predicted cells of each table in the packet, beside the Measured cells you fill in class. Do it before the lab period, at the HB100 frequency your kit reported in the L18 Lab, and bring it to class: you check every trace you take in Part 2 against it. This lesson works its examples at $10.0\ \text{GHz}$, away from every kit, so its angles differ from yours by up to about $4^\circ$, mostly at the outer nulls; work every value at your own frequency.
 
-| Part 1 table | You predict | Checked in | Method |
+| Packet table | You predict | Checked in | Method |
 | :-- | :-- | :-- | :-- |
 | Setup | frequency, far-field distance, slowest update rate | Steps 2 and 11 | "The Rectangular Plot," "Source Distance," "The Time Axis" |
 | Table A | the Angle readout with the stand at $+30$, $0$, and $-30$ | Table A; Steps 7 and 8 | "Turning the Kit on Its Stand" |
@@ -667,7 +667,7 @@ Part 1 of the L21 Lab packet is the pre-lab: one prediction table for each Part 
 | Table D | angle and level of the main lobe, first nulls, and first sidelobes, beam at $0^\circ$ | Table D; Step 18 | "Beam Sweep and Azimuth Sweep at Broadside" |
 | Table E | the same for the beam at $30^\circ$ | Table E; Step 18 | "Beam Sweep and Azimuth Sweep at 30°" |
 
-Every method has a worked example at $10.0\ \text{GHz}$ in the frame named beside it. Part 1 also asks you to show your work for one row of each table.
+Every method has a worked example at $10.0\ \text{GHz}$ in the frame named beside it. Part 1 also asks you to attach your work for one row of each table, on your own paper.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet, Part 1 (PDF)</a>
 ::::
