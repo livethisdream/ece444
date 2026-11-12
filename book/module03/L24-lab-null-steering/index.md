@@ -118,7 +118,7 @@ gives the depth a cramped room allows.
    **Freeze** to hold the trace as your reference. Record the level of the
    sidelobe nearest $+22.5^\circ$ in dBc, its reading minus the uniform peak,
    so the frozen peak is 0 dB for every level in Procedures A and B. Compare
-   it with your Part 1 $\vert r_\text{n}\vert$. If the two first
+   it with your Table A prediction. If the two first
    sidelobes differ by more than about 2 dB, calibrate again and repeat this
    step.
    <div class="rec" data-lab="L24">
@@ -128,13 +128,14 @@ gives the depth a cramped room allows.
    **Enforce Symmetric Taper** off: the set is already symmetric, and with the
    switch on a later edit to one slider is mirrored onto its partner.
 8. Enter your Part 1 phases into **Phase Control**, each with its sign, and
-   check every sign before you sweep. Your Part 1 answer to Question 1(d) says
-   where a sign error puts the notch, so look there too if Step 9 shows no notch
-   where you expect it.
+   check every sign before you sweep. Lesson 24's
+   <a href="../L24-null-steering/index.html#frame-the-phaser-settings">"The PHASER Settings"</a>
+   says where a sign error puts the notch, so look there too if Step 9 shows no
+   notch where you expect it.
 9. Press **Start** and read the new trace against the frozen one: the new
    **Peak Gain**, the notch's depth below the frozen peak, and the notch's
-   angle, and compare each with your Part 1 prediction. A notch much shallower
-   than your Part 1 estimate points to the room first: a wall or a person beside the kit, or a
+   angle, and compare each with your Table A prediction. A notch much shallower
+   than your prediction points to the room first: a wall or a person beside the kit, or a
    stale calibration.
    <div class="rec" data-lab="L24">
    <label>Step 9: null-steered main-lobe peak (dB) <input data-field="a.peak"></label>
@@ -158,8 +159,8 @@ gives the depth a cramped room allows.
 14. Record the null's depth below the frozen uniform peak and its angle, and
     the angles of the two peaks that replace the main lobe. The sweep steps the
     phase by one $2.8125^\circ$ LSB, about $1^\circ$ of angle here, so one
-    step is the reading tolerance. Compare the peak angles with your Part 1
-    answer to Question 3.
+    step is the reading tolerance. Compare each reading with your Table B
+    prediction.
     <div class="rec" data-lab="L24">
     <label>Step 14: null depth (dB) <input data-field="b.depth"></label>
     <label>Step 14: null angle <input data-field="b.angle"></label>
@@ -205,7 +206,7 @@ your kit.
     and **Peak Gain** and record the median of each, the middle value once
     sorted. The readings jump between updates, and the median ignores the odd
     wild one where an average would not. Compare Interferer vs Target with
-    your Part 1 prediction.
+    your Table C prediction.
     <div class="rec" data-lab="L24">
     <label>Step 18: Manual, Interferer vs Target (dB) <input data-field="c.man.ivt"></label>
     <label>Step 18: Manual, Peak Gain (dBFS) <input data-field="c.man.peak"></label>
@@ -238,7 +239,7 @@ your kit.
     </div>
 21. Move the interferer to $+30^\circ$. Record Peak Gain in Manual, then in MVDR
     at Diagonal Load $0.001$ and at $0.1$, and watch Interferer vs Target. Compare
-    both with your Part 1 answer to Question 4(c).
+    the Peak Gains with your Table C prediction.
     <div class="rec" data-lab="L24">
     <label>Step 21: +30°, Manual Peak Gain (dBFS) <input data-field="c.30.man"></label>
     <label>Step 21: +30°, MVDR load 0.001 Peak Gain (dBFS) <input data-field="c.30.load001"></label>
@@ -276,13 +277,14 @@ your kit.
     </div>
 26. Read the **Error** trace. It crosses zero once near boresight, where the
     beam points at the HB100. Record that angle, and the sign of the error on
-    each side of it, and compare both with your Part 1 answers to Question 5.
+    each side of it, and compare both with your Table D prediction.
     <div class="rec" data-lab="L24">
     <label>Step 26: error zero crossing <input data-field="d.zero"></label>
     <label>Step 26: sign below and above the crossing <input data-field="d.sign"></label>
     </div>
 27. Choose **Tracking** from the **Mode** menu and open the **Tracking** tab,
-    which plots the tracked steering angle against update number. The first
+    which plots the tracked steering angle against update number; Tracking
+    mode needs the current Phaser software on your kit. The first
     update sweeps and locks on the HB100; after that each update holds the beam
     and steps it one phase LSB toward the side the error points, and the
     Rectangular plot marks where the beam sits. Move the HB100 slowly in
@@ -317,14 +319,14 @@ also carries a simulated interferer, so procedure C runs there too.
 
 This frame collects every box you filled in on this page. Your entries stay in this
 browser only, saved as you type. **Download my packet** writes them into Part 2
-of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
-viewer, and upload one PDF to Gradescope. If you have already typed Part 1 into
-the packet PDF, use **Fill my own copy** and choose that file instead: your Part 1
-is kept, and Part 2 is added to it. Either way the result is locked, so finish
-any typing in the PDF first. **Export entries** saves a small backup file you
-can **Import** on another laptop or after clearing your browser. The boxes are
-optional: the blank packet is in the next frame, to fill on paper or in a PDF
-viewer instead.
+of the blank packet and saves the PDF. The download locks every field, Parts 1
+and 3 included, so type those into your own copy of the packet first, then use **Fill
+my own copy** and choose that file: your Parts 1 and 3 are kept, and the page
+adds Part 2 to them. If you work Parts 1 and 3 on paper, download the packet
+and write on the printout. Upload one PDF to Gradescope. **Export entries**
+saves a small backup file you can **Import** on another laptop or after
+clearing your browser. The boxes are optional: the blank packet is in the next
+frame, to fill on paper or in a PDF viewer instead.
 
 <div class="rec-summary" data-lab="L24" data-pdf="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" data-file="ECE444_L24_Lab"></div>
 ::::
@@ -334,9 +336,9 @@ viewer instead.
 
 The L24 Lab packet is one submission for the whole lab, turned in complete before Lesson 25. It has three parts:
 
-1. Part 1, Pre-Lab (individual, before the lab period, because you need it in class): your gain and phase table and main-lobe loss, the notch depth, the difference null's peaks, Manual's Interferer vs Target and the channel phase differences for Procedure C, and the delta null for Procedure D.
-2. Part 2, Measurements (your own kit's data, recorded in class): Tables A to D, one per procedure.
-3. Part 3, Writeup (individual, after the lab): reconcile the measurements with the predictions, and two analysis problems.
+1. Part 1, Predict (individual, before the lab period, because you need it in class): one prediction table for each Part 2 table, and the gains and phases you type in for Procedure A, at your kit's frequency, with your work for one row of each.
+2. Part 2, Measure (your own kit's readings, recorded in class): Tables A to D, one per procedure.
+3. Part 3, Analyze (individual, after the lab): three open prompts, each answered from your own readings.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">L24 Lab packet (PDF)</a>
 ::::
@@ -344,26 +346,26 @@ The L24 Lab packet is one submission for the whole lab, turned in complete befor
 ::::{frame} For Part 3
 :class: read-only
 
-Part 3 of the packet is the writeup, done after class with your Part 2
-entries beside you. Its first three questions ask:
+Part 3 is done after class with your Part 2 entries and your Part 1
+predictions beside you. It asks about three comparisons:
 
-1. How does your notch depth compare with the Part 1 estimate, and what set it on your kit?
-2. Reading a null-steered sweep: the notch depth against the null-steered peak, a notch on the wrong side, and which error is large enough to move a notch $3^\circ$.
-3. How did Manual and MVDR compare at $+20^\circ$, and why could MVDR do little at $+30^\circ$?
+1. Three nulls: compare your notch (Table A), your difference null
+   (Table B) and your delta null (Table D) with each other and with your
+   predictions.
+2. MVDR at two angles: compare your Manual and MVDR readings, with the
+   interferer at $+20^\circ$ and at $+30^\circ$ (Table C), with your
+   predictions, and say which conclusions would hold for a real interferer.
+3. The tracker: compare your Table D readings, the beam sweep and the tracked
+   angles, with your predictions and with the stand's scale.
 
-Lesson 24's
-<a href="../L24-null-steering/index.html#frame-measured-null-depth">"Measured Null Depth"</a>
-and <a href="../L24-null-steering/index.html#frame-two-limits-of-two-channels">"Two Limits of Two Channels"</a>
-give the mechanisms; "Closing the Loop" explains the tracker. Procedures C
-and D need the current Phaser software installed on your kit: MVDR that
-measures its look direction, the held pattern on the Rectangular tab, and
-closed-loop Tracking. For the notch angle, and for the boresight offset the
-monopulse question asks about, Lesson 19's
+I grade each answer on a claim, the evidence from your own numbers, the
+reasoning that connects them, and the uncertainty. Lesson 24's
+<a href="../L24-null-steering/index.html#frame-measured-null-depth">"Measured Null Depth"</a>,
+<a href="../L24-null-steering/index.html#frame-two-limits-of-two-channels">"Two Limits of Two Channels"</a>
+and <a href="../L24-null-steering/index.html#frame-closing-the-loop">"Closing the Loop"</a>
+give the mechanisms. For alignment, Lesson 19's
 <a href="../L19-direction-finding/index.html#frame-the-bearing-error-budget">"The Bearing Error Budget"</a>
-sizes the error of aligning a kit by eye, and the L19 Lab's
-<a href="../L19-lab-fox-hunt/index.html#frame-reference-shot">"Reference Shot"</a>
-checks a setup against a known angle. The two analysis problems that follow
-choose between manual and adaptive nulling, and read the monopulse pair.
+sizes the error of aligning a kit by eye.
 ::::
 
 ::::{frame} Looking Ahead

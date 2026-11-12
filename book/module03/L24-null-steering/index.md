@@ -153,7 +153,7 @@ $$
 The conjugate steering vector *is* the progressive phase ramp $\Delta\phi = kd\sin\theta_0$ you have been programming into the ADAR1000s since the L18 Lab. With $\mathbf{w}_\text{d}$ applied, $y(\theta_0) = N$ — every element contributes a unit phasor pointing the same way — and that is the peak of the pattern.
 
 :::{note}
-Two conventions matter and both are course-wide. We measure angles $\theta$ from broadside, and the weight that steers to $\theta_0$ carries $e^{-jnkd\sin\theta_0}$, the negative of the arrival phase. Enter every phase with that sign; Part 1 of the L24 Lab packet has you work out what a sign error does to the notch.
+Two conventions matter and both are course-wide. We measure angles $\theta$ from broadside, and the weight that steers to $\theta_0$ carries $e^{-jnkd\sin\theta_0}$, the negative of the arrival phase. Enter every phase with that sign; <a href="#frame-the-phaser-settings">The PHASER Settings</a> works out what a sign error does to the notch.
 :::
 ::::
 
@@ -457,7 +457,7 @@ Rounding this particular table does less damage than the estimate, as the left h
 - Step 9 of the lab measures it.
 :::
 
-The estimate is what the hardware shows. With the table above loaded in an open room, my kit's notch bottomed out at the depth one-step channel errors allow, which is the number Question 2 of your Part 1 asks for, and Step 9 of the lab has you measure it on your own kit. The interferer of the first frame, 10 dB stronger than the target, then arrives below it by that depth less 10 dB, where the uniform taper left it at $-3$ dB.
+The estimate is what the hardware shows. With the table above loaded in an open room, my kit's notch bottomed out at the depth one-step channel errors allow, which is the notch depth you predict in Table A of Part 1, and Step 9 of the lab has you measure it on your own kit. The interferer of the first frame, 10 dB stronger than the target, then arrives below it by that depth less 10 dB, where the uniform taper left it at $-3$ dB.
 
 The room sets a second limit. In a cramped space the same table bottomed out only 22 to 24 dB down: the HB100's own tone was still there in the notch, because a reflection arriving from another direction, about 22 dB below the direct path, filled it. So when a notch reads much shallower than your Part 1 estimate, look at the room before the arithmetic. A wall or a person beside the kit fills it, a stale calibration fills it, and a sign error on the phase column puts it on the wrong side of the sweep, where it is easy to miss.
 ::::
@@ -674,17 +674,17 @@ Lesson 25 derives the radar range equation and asks how much power comes back fr
 ::::{frame} Pre-Lab
 :class: read-only doc-links
 
-Part 1 of the L24 Lab packet is the pre-lab. Do it before the lab period, at the HB100 frequency your kit reported in an earlier lab, and bring it to class: you check every reading you take in Part 2 against it.
+Part 1 of the L24 Lab packet is the pre-lab: one prediction table for each Part 2 table, with the same rows, and the gains and phases you type in for Procedure A. Do it before the lab period, at the HB100 frequency your kit reported in an earlier lab, and bring it to class: you check every reading you take in Part 2 against it. This lesson works its examples at $10.0\ \text{GHz}$, away from every kit, so its numbers show the method without giving your answers; work every value at your own frequency.
 
-| Part 1 | You predict | Checked in |
-| :-- | :-- | :-- |
-| Question 1 | $\psi_1$, the gain and phase table, $\vert r_\text{n}\vert$, the main-lobe loss, and what a sign error or a missing phase column does | Steps 6 to 9, Table A |
-| Question 2 | the notch depth that one-step channel errors allow | Step 9, Table A |
-| Question 3 | the difference null and the angles of its two peaks | Step 14, Table B |
-| Question 4 | Manual's Interferer vs Target at $+20^\circ$, the channel phase difference at $+20^\circ$ and $+30^\circ$, and whether MVDR can remove an interferer at $+30^\circ$ | Steps 18 to 21, Table C |
-| Question 5 | where the delta null and the error's zero sit, which side reads positive, the error's slope at your frequency, and how deep the delta null reads | Steps 25 to 27, Table D |
+| Part 1 table | You predict | Checked in | Method |
+| :-- | :-- | :-- | :-- |
+| Steps 7 and 8 | each element's gain and phase for a null at $+22.5^\circ$ | entered in Steps 7 and 8 | "Worked Example: Null at +22.5°," "The PHASER Settings" |
+| Table A | the uniform sidelobe nearest $+22.5^\circ$, the null-steered peak, and the notch's depth and angle | Table A; Steps 6 and 9 | "Worked Example: Null at +22.5°," "Main-Lobe Loss Versus Null Angle," "Quantization and Null Depth" |
+| Table B | the difference null's depth and angle, and the angles of its two peaks | Table B; Step 14 | "The Difference Beam" |
+| Table C | Manual's Interferer vs Target at $+20^\circ$, MVDR's Peak Gain and null angle, the conventional pattern at the null, and Peak Gain at $+30^\circ$ | Table C; Steps 18 to 21 | "MVDR," "Two Limits of Two Channels" |
+| Table D | the delta null, the error's zero and its sign on each side, the tracked angle at each stand mark, and how far the tracker follows | Table D; Steps 25 to 27 | "The Error Function," "Closing the Loop," Lesson 21's "Turning the Kit on Its Stand" |
 
-This lesson works its examples at $10.0\ \text{GHz}$, well away from any kit's HB100, so it shows the method without giving your answers. Work yours at your kit's frequency: that is the table you type in.
+Every method has a worked example at $10.0\ \text{GHz}$ in the frame named beside it. Part 1 also asks you to show your work for one row of each table.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">L24 Lab packet, Part 1 (PDF)</a>
 ::::
