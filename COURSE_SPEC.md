@@ -850,12 +850,24 @@ problems fold into its lab packet, `ECE444_Lab_L<NN>_<Short>.tex` (in
 which has three parts, **predict, measure, analyze** (Neil, 2026-11-11:
 "These are seniors, so they should have less structure and apply more
 critical thinking"). **Part 1, Predict** (individual, before the lab period):
-one prediction table per measurement table, with the same rows and
-quantities, filled in at the cadet's own frequency, and the work shown for
-one row. It gives only what a cadet cannot be expected to know (N, d, the arc
-radius); it does not state a result or list the steps, because the lesson
-works every method at 10.0 GHz. **Part 2, Measure** (each cadet's own data
-from their own kit, in class): measurement tables only, no prose questions.
+the Predicted cell of every quantity Part 2 measures, filled in at the
+cadet's own frequency, and the work shown for one row of each table. It gives
+only what a cadet cannot be expected to know (N, d, the arc radius); it does
+not state a result or list the steps, because the lesson works every method
+at 10.0 GHz. **Part 2, Measure** (each cadet's own data from their own kit,
+in class): the Measured cells of the same tables, no prose questions.
+**Predicted sits beside measured** (Neil, 2026-11-12: "one table that had
+HPBW predicted | measured, peak drop predicted | measured ... That would
+make comparison much easier"). Each table appears once in the packet. A
+quantity gets a Predicted and a Measured column side by side; a table too
+wide for pairs gets a Predicted row directly above its Measured row. A
+predicted cell is shaded light gray and named `p1.<the Part 2 field name>`;
+a measured cell is white and keeps its Part 2 name, which is what the lab
+page's boxes fill. A cell with no prediction shows a dash, never a shaded or
+empty box. Draw the shade as a gray box inside the cell (`\predv`, `\predh`,
+`\predl` in `ECE444_Lab_L21_Pattern.tex`), never with `\cellcolor`, which
+covers the table rules so a screen viewer shows a run of predicted cells as
+one gray block.
 **Part 3, Analyze** (individual, after the lab): two or three open prompts
 about what this lab measured. A prompt does not name the finding, its
 direction, or its cause, and it is not boilerplate that would fit any lab

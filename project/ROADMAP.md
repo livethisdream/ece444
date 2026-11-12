@@ -106,9 +106,16 @@ That is the one shared file it may change.
   lobes, squint, and quantization) runs after L23 and hangs off it
   (Neil, 2026-10-13); L22 has no lab of its own.
 - **A lab is one packet, one submission, one Gradescope assignment.**
-  - *Part 1, Pre-Lab*: individual, before the period.
-  - *Part 2, Measurements*: your own kit, in class.
-  - *Part 3, Writeup*: after the lab.
+  - *Part 1, Predict*: individual, before the period.
+  - *Part 2, Measure*: your own kit, in class.
+  - *Part 3, Analyze*: after the lab.
+  - **The lean shape** (Neil, 2026-11-11 and 11-12; COURSE_SPEC, "Lab packet
+    structure"; VOICE.md 41-43): about four pages; predicted beside measured
+    in one set of tables; two or three open analysis prompts that do not name
+    their answer; no invented people or readings. L21, L22-L23 and L24 have
+    it. **It applies to every packet written or reworked from here on, the
+    Module 4 thread's L28-L31 packets included**; the L21 packet is the
+    worked example.
   - The packet replaces the lab's own practice set, and no lesson after L16
     has one (Neil, 2026-11-08: "No practice sets after L17 - just prelabs
     (predictions) as a part of the lab packet"). A **Module 3** packet counts toward engagement as a
