@@ -400,7 +400,7 @@ $$
 
 Each extra bit halves the error, which halves the lobe's field and lowers the **quantization sidelobe level (QSLL)** by $6$ dB. That gives the rule of thumb: 5 bits puts a lobe near $-30$ dB and 6 bits near $-36$ dB. Treat this as an RMS estimate for a large array. On an aperture as short as eight elements there are only a couple of sawtooth periods, so individual lobes scatter several dB either side of the rule. Taken at face value, the rule says that from 3 bits up the quantization lobes drop below the array's own $-13$ dB sidelobes and no longer set the sidelobe level.
 
-Whether a given beam shows a quantization lobe at all depends on how its ramp falls on the grid, not only on the bit count. The L22–L23 Lab is built around that. It holds the beam at $15^\circ$ with the Blackman taper, so every true sidelobe sits under the noise floor and any lobe that rises comes from rounding. It sweeps the source in azimuth on **Signal vs Time** instead of sweeping the beam, so the rounded weights stay fixed while you read the pattern they make. Part 1 of the packet rounds the $15^\circ$ ramp onto each grid and predicts which bit counts change the trace. A lobe the azimuth sweep shows reads a few dB under the array factor's value, because a source swept in azimuth also crosses each patch's own pattern, as in the L21 Lab.
+Whether a given beam shows a quantization lobe at all depends on how its ramp falls on the grid, not only on the bit count. The L22–L23 Lab is built around that. It holds the beam at $15^\circ$ with the Blackman taper, so every true sidelobe sits under the noise floor and any lobe that rises comes from rounding. It sweeps the source in azimuth on **Signal vs Time** instead of sweeping the beam, so the rounded weights stay fixed while you read the pattern they make. Part 1 of the packet predicts, for each bit count, the strongest lobe that trace shows and where it sits. A lobe the azimuth sweep shows reads a few dB under the array factor's value, because a source swept in azimuth also crosses each patch's own pattern, as in the L21 Lab.
 
 To predict a quantization lobe, divide the ramp by the LSB. If the ramp is close to a whole number of LSBs, every element rounds by only a few degrees, and the error is too small to raise a lobe out of the floor. If it is close to a whole number and a half, every other element rounds by almost half an LSB in the same direction, so the error repeats every two elements. A pattern that repeats every two elements radiates $180^\circ$ of $\psi$ away from the beam:
 
@@ -539,19 +539,18 @@ The three failures look different on a sweep and a designer fixes each one in a 
 ::::{frame} Pre-Lab
 :class: read-only doc-links
 
-Question 4 of Part 1 in the L22–L23 Lab packet is this lesson's share of the
-pre-lab; Questions 1 to 3 go with Lesson 22. Do it at the same frequency, before
-the lab period, and bring it to class.
+Tables C to E of Part 1 in the L22–L23 Lab packet are this lesson's share of
+the pre-lab; the Setup row and Tables A and B go with Lesson 22. Do them at the
+same frequency, before the lab period, and bring them to class.
 
-| Part 1 | You predict | Checked in |
-| :-- | :-- | :-- |
-| Question 4(a) | the grating-lobe angles and peak drops for 42 and 56 mm | Steps 15 and 16, Table C |
-| Question 4(b) | the commanded angle and Angle shift with Signal BW at 500 MHz | Steps 17 and 18, Table D |
-| Question 4(c) | the $15^\circ$ ramp, its rounding at 7, 4, 3, and 2 bits, and which bit counts change the trace | Steps 19 to 21, Table E |
+| Part 1 table | You predict | Checked in | Method |
+| :-- | :-- | :-- | :-- |
+| Table C | lobe angles, their height against the $0^\circ$ lobe, and the peak drop, for 42 and 56 mm | Table C; Steps 15 and 16 | "Worked Example: Thinning the PHASER Row," "The Grating Condition" |
+| Table D | the Angle readout at a Signal BW of 10 and 500 MHz, and the shift | Table D; Steps 17 and 18 | "Worked Example: Squint on the PHASER" |
+| Table E | the strongest lobe outside the main lobe, and where, at 7, 4, 3, and 2 bits | Table E; Steps 19 to 21 | the rounding example under "Quantization Sidelobes" |
 
-The worked examples above are the models, all at $10.0\ \text{GHz}$, below every
-kit: Thinning the PHASER Row for Question 4(a), Squint on the PHASER for 4(b),
-and the rounding example under Quantization Sidelobes for 4(c).
+Every method has a worked example at $10.0\ \text{GHz}$, below every kit, in
+the frame named beside it.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet, Part 1 (PDF)</a>
 ::::

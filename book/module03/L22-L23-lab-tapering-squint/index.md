@@ -95,7 +95,7 @@ at $23$ dB down; you read your own in Step 8.
 
 Place the HB100 at boresight, $1.2$ m from the array face, at patch-row height
 and aimed at the center of the patch row. Check the $1.2$ m against the
-far-field distance you found in Part 1, Question 1: the sweep reads the
+far-field distance in your Part 1 Setup row: the sweep reads the
 far-field pattern only beyond it. Every taper number is a comparison between
 sweeps, so the source stays put until Step 17. Keep $\pm 40^\circ$ either side
 of the kit clear of walls and people, because a reflection off either raises a
@@ -168,12 +168,12 @@ read against the frozen uniform trace.
 9. **Load Hann.** Choose the **Hann** taper and check the eight sliders read
    12, 43, 77, 100, 100, 77, 43, 12. Check your Part 1 row for it.
 10. **Sweep Hann.** Press **Start** and record the HPBW, the peak drop against
-    the frozen uniform trace, and the first sidelobe, entered the way your
-    Part 1, Question 3(b) answer says. Compare each with your Part 1 row. On a
+    the frozen uniform trace, and the first sidelobe, and compare each with
+    your Part 1 row for Table A. On a
     kit without the gain-slider fix, the slider is not linear in voltage, and
     every taper comes out milder than your Part 1 row, its beam narrower and
     its peak drop smaller by about the same fraction on every taper. Record
-    what you measure; Part 3 asks you to name the cause of any difference.
+    what you measure; Part 3 asks you to account for any difference.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 10, Hann: HPBW <input data-field="a.hann.hpbw"></label>
@@ -181,8 +181,7 @@ read against the frozen uniform trace.
     <label>Step 10, Hann: first sidelobe <input data-field="a.hann.sll"></label>
     </div>
 11. **Blackman and Chebyshev (optional).** Repeat Steps 9 and 10 for each, if
-    time allows, and compare with your Part 1 rows. Part 3's question on
-    Blackman against Hann uses these rows.
+    time allows, and compare with your Part 1 rows.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 11, Blackman: HPBW <input data-field="a.black.hpbw"></label>
@@ -194,8 +193,8 @@ read against the frozen uniform trace.
     </div>
 12. **Design your own taper.** With Enforce Symmetric Taper on, meet this
     specification: HPBW no wider than $16^\circ$, with the first sidelobe
-    below $-20$ dBc. Start from the taper you worked in Part 1, Question 2,
-    30, 60, 90, 100. Set the sliders, sweep, read the HPBW and sidelobe, and
+    below $-20$ dBc. Start from the taper you designed in Part 1, Table B.
+    Set the sliders, sweep, read the HPBW and sidelobe, and
     adjust: raise the end elements to narrow the beam, and lower them if the
     sidelobe rises past $-20$ dBc. Record your final gains and the result.
 
@@ -324,16 +323,16 @@ have no simulator equivalent; use your Part 1 predictions in their place.
 ::::{frame} Your Part 2 Entries
 :class: read-only
 
-This frame collects every box you filled in on this page. Your entries stay in
-this browser only, saved as you type. **Download my packet** writes them into
-Part 2 of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in
-the PDF viewer, and upload one PDF to Gradescope. If you have already typed
-Part 1 into the packet PDF, use **Fill my own copy** and choose that file
-instead: your Part 1 is kept, and Part 2 is added to it. Either way the result
-is locked, so finish any typing in the PDF first. **Export entries** saves a
-small backup file you can **Import** on another laptop or after clearing your
-browser. The boxes are optional: the blank packet is in the next frame, to fill
-on paper or in a PDF viewer instead.
+This frame collects every box you filled in on this page. Your entries stay in this
+browser only, saved as you type. **Download my packet** writes them into Part 2
+of the blank packet and saves the PDF. The download locks every field, Parts 1
+and 3 included, so type those into your own copy of the packet first, then use **Fill
+my own copy** and choose that file: your Parts 1 and 3 are kept, and the page
+adds Part 2 to them. If you work Parts 1 and 3 on paper, download the packet
+and write on the printout. Upload one PDF to Gradescope. **Export entries**
+saves a small backup file you can **Import** on another laptop or after
+clearing your browser. The boxes are optional: the blank packet is in the next
+frame, to fill on paper or in a PDF viewer instead.
 
 <div class="rec-summary" data-lab="L22-L23" data-pdf="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" data-file="ECE444_L22_L23_Lab"></div>
 ::::
@@ -343,9 +342,9 @@ on paper or in a PDF viewer instead.
 
 The L22–L23 Lab packet is one submission for the whole lab, turned in complete before Lesson 24. It has three parts:
 
-1. Part 1, Pre-Lab (individual, before the lab period, because you need it in class): your frequency and the far-field distance, the peak drop and taper efficiency of a starting taper, the predicted columns of Table A, and the grating-lobe angles, squint shift, and quantization prediction for Tables C to E.
-2. Part 2, Measurements (your own kit's data, recorded in class): Tables A to E.
-3. Part 3, Writeup (individual, after the lab): reconcile the measurements with the predictions, a measurement that disagrees, and the three departures.
+1. Part 1, Predict (individual, before the lab period, because you need it in class): one prediction table for each Part 2 table, at your kit's frequency, and your work for one row of each.
+2. Part 2, Measure (your own kit's readings, recorded in class): the four presets, your own taper, two thinned rows, the squint pair, and four quantization sweeps.
+3. Part 3, Analyze (individual, after the lab): three open prompts, each answered from your own readings.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet (PDF)</a>
 ::::
@@ -353,26 +352,20 @@ The L22–L23 Lab packet is one submission for the whole lab, turned in complete
 ::::{frame} For Part 3
 :class: read-only
 
-Part 3 of the packet is the writeup, done after class with your Part 2
-entries beside you. It asks three things:
+Part 3 is done after class with your Part 2 entries and your Part 1
+predictions beside you. It asks about three comparisons:
 
-1. The two numbers and the floor: why the sweep gives a beamwidth for every
-   taper but no sidelobe level; why the peak drop is not the directivity the
-   array lost; how your Table A compares with your predictions; and whether
-   Blackman beats Hann on anything this sweep can show.
-2. A measurement that disagrees: a Hann sweep whose peak falls too far:
-   run the peak-drop formula backwards to find the fault.
-3. The three departures: your grating-lobe angles and why a grating lobe
-   stands as tall as the main lobe; what moved between the two squint sweeps;
-   and your Table E against the $-6B$ rule and your Part 1 prediction.
+1. The tapers: compare your taper measurements (Tables A and B) with your
+   predictions, and choose a taper for this kit.
+2. Grating lobes and squint: compare your grating-lobe run (Table C) and your
+   squint run (Table D) with your predictions.
+3. Phase bits: compare your four quantization sweeps (Table E) with each
+   other and with your predictions.
 
-Lesson 22's
-<a href="../L22-sidelobes-tapering/index.html#frame-peak-drop-versus-directivity-loss">"Peak Drop Versus Directivity Loss"</a>
-and
+I grade each answer on a claim, the evidence from your own numbers, the
+reasoning that connects them, and the uncertainty. Lesson 22's
 <a href="../L22-sidelobes-tapering/index.html#frame-reading-a-tapered-sweep">"Reading a Tapered Sweep"</a>
-cover the first question, and Lesson 23's worked examples and
-<a href="../L23-beam-squint-quantization/index.html#frame-quantization-sidelobes">"Quantization Sidelobes"</a>
-cover the third.
+says how to read each kind of level against its reference.
 ::::
 
 ::::{frame} Looking Ahead
