@@ -53,9 +53,9 @@
     <button class="show" id="show" aria-pressed="false">Show map</button>
   </div>
   <div class="readouts">
-    <div class="ro"><span class="k">spot at</span><span class="v" id="r-v">?</span></div>
+    <div class="ro"><span class="k" id="k-v">spot at</span><span class="v" id="r-v">?</span></div>
     <div class="ro"><span class="k">MTI change</span><span class="v" id="r-g">?</span></div>
-    <div class="ro"><span class="k">velocity cell</span><span class="v" id="r-dv">?</span></div>
+    <div class="ro"><span class="k" id="k-3">floor, 16 m/s</span><span class="v" id="r-3">?</span></div>
   </div>
 </div>
 <script>
@@ -64,7 +64,7 @@
 // it again (af-element-predict.html is the model). The burst is the lesson's
 // teaching burst, which the Phaser app does not send, so no readout equals a
 // Part 1 answer: 10.0 GHz, 400 MHz chirps (0.375 m cells), 0.4 ms PRI
-// (+/-18.75 m/s). The kit's map has the same shapes at its own numbers.
+// (+/-18.75 m/s); the map shows +/-6 m/s. The kit's map has the same shapes at its own numbers.
 // Fast time is modeled with 64 samples whose FFT bins are one range cell each,
 // zero padded to 128, as in range-doppler-mti.html.
 const LAM = 0.03, PRI = 0.4e-3, DR = 0.375, VMAX = LAM / (4 * PRI);
@@ -165,12 +165,49 @@ function compute(kind, mti, M) {
 }
 const vel = (k, M) => (k - M / 2) * (2 * VMAX / M);
 function rowOf(R) { return Math.round(R / (DR * NS / NF)); }
-function strongest(P, R, M) {
-  const b = rowOf(R); let best = -1e9, kb = 0, bb = b;
-  // within 6 m/s of zero: past that the cancellers lift the noise floor, not the target
+// What the readouts measure. A hand is read in its own range cell, near its
+// own velocity, so a canceled hand reads "gone" instead of the strongest
+// noise cell; a spinner is read as a band: its edges and its line spacing.
+const TRUEV = { push: 0.6, pull: -0.9, still: 0, across: 0 };
+const VSHOW = 6;                       // the map shows +/-6 m/s, where every target is
+function median(a) { const b = a.slice().sort((x, y) => x - y); return b[b.length >> 1]; }
+function floorDb(P, M, v0, v1) {      // the noise floor between |v| = v0 and v1, away from the targets' rows
+  const vals = [];
+  for (let b = 0; b < P.length; b++) for (let k = 0; k < M; k++) {
+    const v = Math.abs(vel(k, M));
+    if (v >= v0 && v <= v1) vals.push(P[b][k]);
+  }
+  return median(vals);
+}
+function handCell(P, b, M, v0) {      // strongest cell in the hand's rows within a cell or two of its velocity
+  const dv = 2 * VMAX / M, w = v0 === 0 ? Math.max(2 * dv, 0.5) : 2 * dv;
+  let best = { db: -1e9, k: 0, b: b };
   for (let d = -1; d <= 1; d++) for (let k = 0; k < M; k++)
-    if (Math.abs(vel(k, M)) <= 6 && P[b + d][k] > best) { best = P[b + d][k]; kb = k; bb = b + d; }
-  return { db: best, v: vel(kb, M), b: bb };
+    if (Math.abs(vel(k, M) - v0) <= w && P[b + d][k] > best.db) best = { db: P[b + d][k], k: k, b: b + d };
+  return best;
+}
+function band(P, b, M, floor) {        // a spinner's band: its edges, and the spacing of its lines
+  const dv = 2 * VMAX / M, lin = x => Math.pow(10, x / 10);
+  let row = P[b], top = -1e9;             // the spinner's own row: the strongest within +/-6 m/s
+  for (let d = -1; d <= 1; d++) for (let k = 0; k < M; k++)
+    if (Math.abs(vel(k, M)) > 0.3 && Math.abs(vel(k, M)) <= VSHOW && P[b + d][k] > top) { top = P[b + d][k]; row = P[b + d]; }
+  // Edges and lines as the notebook reads them: within 10 dB of the strongest line.
+  let edge = 0;
+  const peaks = [];
+  for (let k = 1; k < M - 1; k++) {
+    const v = vel(k, M);
+    if (Math.abs(v) <= VSHOW && Math.abs(v) > 0.3 && row[k] > Math.max(top - 10, floor + 10)) {
+      edge = Math.max(edge, Math.abs(v));
+      if (row[k] >= row[k - 1] && row[k] >= row[k + 1] && v > 0) peaks.push(v);
+    }
+  }
+  // The lines sit at whole multiples of one spacing, so the spacing is the
+  // largest step that puts every peak within half a cell of a multiple.
+  let best = null;
+  for (let sp = 1.5 * dv; sp <= 2.5 && peaks.length >= 2; sp += 0.005) {
+    if (peaks.every(v => Math.abs(v / sp - Math.round(v / sp)) * sp <= dv / 2 + 1e-9 && Math.round(v / sp) >= 1)) best = sp;
+  }
+  return { top, edge, spacing: best };
 }
 
 const state = { shown: false };
@@ -192,23 +229,26 @@ function color(u) {
   return STOPS[STOPS.length - 1][1];
 }
 const off = document.createElement('canvas'), ox = off.getContext('2d');
-const LO = -75;
+const HI = -20, LO = -60;              // dB, the leakage at 0 dB: the clutter saturates, so the targets and the floor take the scale
 function txt(s, x, y, px, col, al, bold) { ctx.fillStyle = col; ctx.font = (bold ? '700 ' : '') + px + 'px ' + SANS; ctx.textAlign = al || 'left'; ctx.textBaseline = 'middle'; ctx.fillText(s, x, y); }
 
 let cache = null;
 function draw() {
   const g = fit(), narrow = g.w < 470, fs = narrow ? 10.5 : 11.5;
-  const L = 34, R = 8, T = 8, B = 34, pw = g.w - L - R, ph = g.h - T - B;
-  const M = +ncEl.value;
-  const xv = v => L + (v + VMAX) / (2 * VMAX) * pw;
+  const L = 34, R = narrow ? 38 : 46, T = 8, B = 34, pw = g.w - L - R, ph = g.h - T - B;
+  const M = +ncEl.value, dv = 2 * VMAX / M;
+  const k0 = Math.max(0, Math.ceil(M / 2 - VSHOW / dv)), k1 = Math.min(M - 1, Math.floor(M / 2 + VSHOW / dv));
+  const vlo = vel(k0, M) - dv / 2, vhi = vel(k1, M) + dv / 2;
+  const xv = v => L + (v - vlo) / (vhi - vlo) * pw;
   const yr = r => T + ph - (r + DR * NS / NF / 2) / (RMAX + DR * NS / NF) * ph;
   if (state.shown && cache) {
-    off.width = M; off.height = ROWS;
-    const img = ox.createImageData(M, ROWS);
+    const nk = k1 - k0 + 1;
+    off.width = nk; off.height = ROWS;
+    const img = ox.createImageData(nk, ROWS);
     for (let b = 0; b < ROWS; b++) {
       const y = ROWS - 1 - b;
-      for (let k = 0; k < M; k++) {
-        const c = color((cache.P[b][k] - LO) / -LO), i = 4 * (y * M + k);
+      for (let k = k0; k <= k1; k++) {
+        const c = color((cache.P[b][k] - LO) / (HI - LO)), i = 4 * (y * nk + (k - k0));
         img.data[i] = c[0]; img.data[i + 1] = c[1]; img.data[i + 2] = c[2]; img.data[i + 3] = 255;
       }
     }
@@ -219,10 +259,17 @@ function draw() {
     ctx.fillStyle = '#f5f9fc'; ctx.fillRect(L, T, pw, ph);
   }
   ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1; ctx.strokeRect(L + 0.5, T + 0.5, pw - 1, ph - 1);
-  for (let v = -15; v <= 15; v += 5) txt((v < 0 ? '−' : '') + Math.abs(v), xv(v), T + ph + 11, fs, '#5b6573', 'center');
+  for (let v = -6; v <= 6; v += 2) txt((v < 0 ? '−' : '') + Math.abs(v), xv(v), T + ph + 11, fs, '#5b6573', 'center');
   for (let r = 0; r <= 4; r++) txt(String(r), L - 6, yr(r), fs, '#5b6573', 'right');
   txt('velocity (m/s), + closing', L + pw / 2, g.h - 9, narrow ? 11 : 12, '#15202b', 'center');
   ctx.save(); ctx.translate(11, T + ph / 2); ctx.rotate(-Math.PI / 2); txt('range (m)', 0, 0, narrow ? 11 : 12, '#15202b', 'center'); ctx.restore();
+  // the color scale: dB, the leakage at 0
+  const bx = L + pw + 8, bw = 9;
+  for (let i = 0; i < ph; i++) { const c = color(1 - i / ph); ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; ctx.fillRect(bx, T + i, bw, 1.5); }
+  ctx.strokeStyle = '#8a929c'; ctx.strokeRect(bx + 0.5, T + 0.5, bw - 1, ph - 1);
+  txt('−20', bx + bw + 3, T + 5, fs, '#5b6573', 'left');
+  txt('−60', bx + bw + 3, T + ph - 5, fs, '#5b6573', 'left');
+  txt('dB', bx + bw + 3, T + ph / 2, fs, '#5b6573', 'left');
   if (!state.shown) {
     const msg = narrow ? 'Predict, then show the map' : 'Predict where the target lands, then show the map';
     const px = narrow ? 12 : 13.5;
@@ -233,19 +280,33 @@ function draw() {
     txt(msg, L + pw / 2, my, px, '#004a85', 'center', true);
   }
 }
+const fmt = (x, d, u) => (x > 0.005 ? '+' : x < -0.005 ? '−' : '') + Math.abs(x).toFixed(d) + u;
 function readouts() {
-  const set = (id, s) => $(id).textContent = s, M = +ncEl.value;
-  if (!state.shown || !cache) { ['r-v', 'r-g', 'r-dv'].forEach(id => set(id, '?')); return; }
-  const fmt = (x, d, u) => (x > 0.05 ? '+' : x < -0.05 ? '−' : '') + Math.abs(x).toFixed(d) + u;
-  set('r-v', fmt(cache.s.v, 2, ' m/s'));
-  set('r-g', +mtiEl.value === 0 ? '0 dB' : fmt(cache.s.db - cache.s0.db, 1, ' dB'));
-  set('r-dv', (2 * VMAX / M).toFixed(2) + ' m/s');
+  const set = (id, s) => $(id).textContent = s, kind = tgtEl.value, spin = kind === 'edge' || kind === 'face';
+  $('k-v').textContent = spin ? 'band edges' : 'spot at';
+  $('k-3').textContent = spin ? 'lines apart' : 'floor, 16 m/s';
+  if (!state.shown || !cache) { ['r-v', 'r-g', 'r-3'].forEach(id => set(id, '?')); return; }
+  const c = cache, mti = +mtiEl.value;
+  if (spin) {
+    const gone = c.band.top < c.floor + 10 || c.band.edge === 0;
+    set('r-v', gone ? 'gone' : '±' + c.band.edge.toFixed(2) + ' m/s');
+    set('r-g', mti === 0 ? '0 dB' : gone ? 'gone' : fmt(c.band.top - c.band0.top, 1, ' dB'));
+    // the canceller does not move the lines, so their spacing is read with MTI off
+    set('r-3', gone ? '—' : c.band0.spacing === null ? 'not resolved' : c.band0.spacing.toFixed(2) + ' m/s');
+  } else {
+    const gone = c.hand.db < c.floor + 6;
+    set('r-v', gone ? 'gone' : fmt(vel(c.hand.k, +ncEl.value), 2, ' m/s'));
+    set('r-g', mti === 0 ? '0 dB' : gone ? 'gone' : fmt(c.hand.db - c.hand0.db, 1, ' dB'));
+    set('r-3', mti === 0 ? '0 dB' : fmt(c.fl16 - c.fl16off, 1, ' dB'));
+  }
 }
 function sync() {
   if (state.shown) {
-    const kind = tgtEl.value, M = +ncEl.value, mti = +mtiEl.value, R = TGT_R[kind];
+    const kind = tgtEl.value, M = +ncEl.value, mti = +mtiEl.value, b = rowOf(TGT_R[kind]);
     const P = compute(kind, mti, M), P0 = mti ? compute(kind, 0, M) : P;
-    cache = { P, s: strongest(P, R, M), s0: strongest(P0, R, M) };
+    cache = { P, floor: floorDb(P, M, 3.5, 6), fl16: floorDb(P, M, 15.5, 16.5), fl16off: floorDb(P0, M, 15.5, 16.5) };
+    if (kind in TRUEV) { cache.hand = handCell(P, b, M, TRUEV[kind]); cache.hand0 = handCell(P0, b, M, TRUEV[kind]); }
+    else { cache.band = band(P, b, M, cache.floor); cache.band0 = band(P0, b, M, floorDb(P0, M, 3.5, 6)); }
   }
   showBtn.setAttribute('aria-pressed', state.shown ? 'true' : 'false');
   showBtn.textContent = state.shown ? 'Hide map' : 'Show map';
