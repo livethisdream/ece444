@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predict the CFAR threshold on a range profile</title>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573; --red:#b01e24; --grn:#1d7a4d; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  *, *::before, *::after { box-sizing:border-box; }
+  .app { max-width:820px; margin:0 auto; padding:10px 10px 14px; }
+  .card { border:1px solid var(--edge); border-radius:6px; background:#fff; padding:6px 8px 2px; margin-bottom:10px; }
+  canvas { display:block; width:100%; }
+  .controls { display:grid; grid-template-columns:1fr; gap:7px 18px;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px;
+              padding:8px 12px; margin-bottom:10px; }
+  @media (min-width:560px) { .controls { grid-template-columns:1fr 1fr; } }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; }
+  .ctl label { font-size:13.5px; color:var(--ink); white-space:nowrap; min-width:104px; }
+  .ctl input[type=range] { flex:1 1 80px; min-width:70px; accent-color:var(--navy); }
+  .val { font-variant-numeric:tabular-nums; font-size:13.5px; color:var(--navy);
+         font-weight:600; min-width:52px; text-align:right; }
+  .show { font:700 12px 'Inter',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.05em;
+          height:30px; padding:0 14px; border-radius:5px; cursor:pointer; margin-left:auto;
+          border:1px solid var(--navy); background:var(--navy); color:#fff; }
+  .show[aria-pressed="true"] { background:#fff; color:var(--navy); }
+  .show:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center; height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; text-align:center; color:var(--navy); }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <div class="card"><canvas id="prof"></canvas></div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label for="gd">Guard Cells</label>
+      <input id="gd" type="range" min="0" max="8" step="1" value="4">
+      <span class="val" id="gdv"></span>
+    </div>
+    <div class="ctl">
+      <label for="rf">Ref Cells</label>
+      <input id="rf" type="range" min="1" max="24" step="1" value="16">
+      <span class="val" id="rfv"></span>
+    </div>
+    <div class="ctl">
+      <label for="bs">CFAR Bias (dB)</label>
+      <input id="bs" type="range" min="0" max="25" step="0.5" value="6">
+      <span class="val" id="bsv"></span>
+    </div>
+    <div class="ctl">
+      <button class="show" id="show" type="button" aria-pressed="false">Show threshold</button>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">person</span><span class="v" id="rHit">?</span></div>
+    <div class="ro"><span class="k">margin</span><span class="v" id="rMg">?</span></div>
+    <div class="ro"><span class="k">false alarms</span><span class="v" id="rFa">?</span></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // A range profile as the Phaser app draws it on a single-chirp preset: a
+  // Blackman window, no zero padding, one cell per FFT bin, and CFAR by cell
+  // averaging in power with the guard and reference cells counted on each
+  // side (phaser_radar_dsp.ca_cfar). The chirp is the lesson's example, not a
+  // preset the app runs: 400 MHz in 2 ms, so a cell is c/2B = 0.375 m and the
+  // 80 cells reach 30 m. Levels are in dB over the mean noise in one cell.
+  const NS = 160, NC = 80, CELL = 0.375, UPD = 30;
+  const SCENE = [                       // bin (fractional), peak level dB over noise
+    { k: 0.15, db: 70, what: 'leakage' },
+    { k: 12.2, db: 42, what: 'person' },  // 4.6 m
+    { k: 24.4, db: 55, what: 'wall' }     // 9.2 m
+  ];
+  const PERSON = 1;
+  const $ = id => document.getElementById(id);
+  const cv = $('prof'), cx = cv.getContext('2d');
+  const gdEl = $('gd'), rfEl = $('rf'), bsEl = $('bs'), showBtn = $('show');
+
+  let seed = 30;
+  function rand() {                           // mulberry32: the same 30 updates every load
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  }
+  function gauss() {
+    let u = 0; while (u === 0) u = rand();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rand());
+  }
+
+  // Blackman window, symmetric (numpy's np.blackman, which the app uses).
+  const W = [], sw = { s1: 0, s2: 0 };
+  for (let n = 0; n < NS; n++) {
+    const w = 0.42 - 0.5 * Math.cos(2 * Math.PI * n / (NS - 1)) + 0.08 * Math.cos(4 * Math.PI * n / (NS - 1));
+    W.push(w); sw.s1 += w; sw.s2 += w * w;
+  }
+  // Noise of unit variance per complex sample puts sum(w^2) of power in a bin;
+  // dividing by that makes the mean noise in a cell 1 (0 dB).
+  function profile() {
+    const re = new Float64Array(NS), im = new Float64Array(NS);
+    for (let n = 0; n < NS; n++) { re[n] = gauss() / Math.SQRT2; im[n] = gauss() / Math.SQRT2; }
+    SCENE.forEach((s, i) => {
+      const a = Math.sqrt(10 ** (s.db / 10) * sw.s2) / sw.s1, ph = 0.7 + 1.9 * i;
+      for (let n = 0; n < NS; n++) {
+        const t = 2 * Math.PI * s.k * n / NS + ph;
+        re[n] += a * Math.cos(t); im[n] += a * Math.sin(t);
+      }
+    });
+    const P = new Float64Array(NC);
+    for (let k = 0; k < NC; k++) {
+      let xr = 0, xi = 0;
+      for (let n = 0; n < NS; n++) {
+        const c = Math.cos(2 * Math.PI * k * n / NS), s = Math.sin(2 * Math.PI * k * n / NS);
+        const ar = re[n] * W[n], ai = im[n] * W[n];
+        xr += ar * c + ai * s; xi += ai * c - ar * s;
+      }
+      P[k] = (xr * xr + xi * xi) / sw.s2;
+    }
+    return P;
+  }
+  const UPDATES = [];
+  for (let u = 0; u < UPD; u++) UPDATES.push(profile());
+
+  // The objects' own cells: within 1 m of each echo. A crossing anywhere else
+  // beyond 1 m is noise.
+  const OBJ = new Array(NC).fill(false);
+  for (let k = 0; k < NC; k++) {
+    const r = k * CELL;
+    SCENE.forEach(s => { if (Math.abs(r - s.k * CELL) <= 1.0) OBJ[k] = true; });
+    if (r <= 1.0) OBJ[k] = true;
+  }
+  const kPerson = Math.round(SCENE[PERSON].k);
+
+  // phaser_radar_dsp.ca_cfar: the reference cells that exist, each side.
+  function threshold(P, g, n, bdb) {
+    const T = new Float64Array(NC);
+    for (let i = 0; i < NC; i++) {
+      let s = 0, c = 0;
+      for (let j = i - g - n; j <= i + g + n; j++) {
+        if (j < 0 || j >= NC || Math.abs(j - i) <= g) continue;
+        s += P[j]; c++;
+      }
+      T[i] = (c ? s / c : Math.max(...P)) * 10 ** (bdb / 10);
+    }
+    return T;
+  }
+
+  const st = { shown: false };
+  function compute() {
+    const g = +gdEl.value, n = +rfEl.value, bdb = +bsEl.value;
+    const T = threshold(UPDATES[0], g, n, bdb);
+    let fa = 0;
+    UPDATES.forEach(P => {
+      const Tu = threshold(P, g, n, bdb);
+      for (let k = 0; k < NC; k++) if (!OBJ[k] && P[k] > Tu[k]) { fa++; break; }
+    });
+    const P0 = UPDATES[0];
+    Object.assign(st, { g, n, bdb, T, fa,
+                        found: P0[kPerson] > T[kPerson],
+                        margin: 10 * Math.log10(P0[kPerson] / T[kPerson]) });
+    $('gdv').textContent = g + ' a side';
+    $('rfv').textContent = n + ' a side';
+    $('bsv').textContent = bdb.toFixed(1) + ' dB';
+    const m = '−';
+    $('rHit').textContent = st.shown ? (st.found ? 'found' : 'missed') : '?';
+    $('rMg').textContent = st.shown ? (st.margin < 0 ? m + (-st.margin).toFixed(1) : '+' + st.margin.toFixed(1)) + ' dB' : '?';
+    $('rFa').textContent = st.shown ? 'in ' + fa + ' of ' + UPD : '?';
+  }
+
+  // ---- canvas plumbing (the house SQ: a shorter design box on a phone) ----
+  var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:659px)') : null;
+  function SQ(h) { return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.7) : h; }
+  function fit(c, ctx, h) {
+    h = SQ(h);
+    const dpr = window.devicePixelRatio || 1;
+    const w = c.parentNode.clientWidth - 16;
+    c.style.height = h + 'px';
+    c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    return { w: w, h: h };
+  }
+  const F = (s, w) => (w || '') + ' ' + s + 'px Inter, system-ui, sans-serif';
+  const db = v => 10 * Math.log10(v);
+
+  function draw() {
+    const g = fit(cv, cx, 280);
+    const narrow = g.w < 420;
+    const L = 34, R = 8, T = 18, B = 30;
+    const Y0 = -10, Y1 = 82;
+    const x = r => L + r / (NC * CELL) * (g.w - L - R);
+    const y = d => T + (Y1 - Math.max(Y0, Math.min(Y1, d))) / (Y1 - Y0) * (g.h - T - B);
+
+    cx.strokeStyle = '#e6eef6'; cx.lineWidth = 1;
+    cx.fillStyle = '#8792a2'; cx.font = F(11); cx.textAlign = 'right';
+    for (let d = 0; d <= 80; d += narrow ? 20 : 10) {
+      cx.beginPath(); cx.moveTo(L, y(d)); cx.lineTo(g.w - R, y(d)); cx.stroke();
+      cx.fillText(d, L - 5, y(d) + 4);
+    }
+    for (let r = 0; r <= 30; r += narrow ? 10 : 5) {
+      cx.textAlign = r === 30 ? 'right' : 'center';
+      cx.fillText(r, r === 30 ? g.w - R : x(r), g.h - B + 15);
+    }
+    cx.fillStyle = '#5b6573'; cx.font = F(11.5);
+    cx.textAlign = 'center'; cx.fillText('range (m)', (L + g.w - R) / 2, g.h - 3);
+    cx.textAlign = 'left'; cx.fillText('power over the noise (dB)', L, T - 6);
+
+    // the profile, update 0
+    const P = UPDATES[0];
+    cx.beginPath();
+    for (let k = 0; k < NC; k++) { const p = [x(k * CELL), y(db(P[k]))]; k ? cx.lineTo(...p) : cx.moveTo(...p); }
+    cx.strokeStyle = '#004a85'; cx.lineWidth = 1.2; cx.lineJoin = 'round'; cx.stroke();
+
+    // object labels, placed above each peak where there is room
+    cx.fillStyle = '#5b6573'; cx.font = F(narrow ? 10.5 : 11);
+    SCENE.forEach(s => {
+      if (s.what === 'leakage' && narrow) return;
+      // the leakage peak sits at the top-left corner, so its label goes to its right
+      const lk = s.what === 'leakage';
+      const xx = lk ? x(s.k * CELL) + 12 : x(s.k * CELL), yy = lk ? y(s.db) + 4 : y(s.db) - 8;
+      cx.textAlign = lk ? 'left' : 'center';
+      if (yy > T + 4) cx.fillText(s.what, xx, yy);
+    });
+
+    cx.textAlign = 'left';
+    if (!st.shown) {
+      const msg = narrow ? 'Predict, then show the threshold' : 'Is the person found? How many updates cross? Predict, then show.';
+      const px = narrow ? 12 : 13;
+      cx.font = F(px, 700);
+      const mw = Math.min(cx.measureText(msg).width + 20, g.w - L - R - 8), my = y(20);
+      cx.fillStyle = 'rgba(255,255,255,0.92)'; cx.strokeStyle = '#b9d2e5'; cx.lineWidth = 1;
+      cx.beginPath(); cx.roundRect((L + g.w - R) / 2 - mw / 2, my - px, mw, 2 * px, 5); cx.fill(); cx.stroke();
+      cx.fillStyle = '#004a85'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+      cx.fillText(msg, (L + g.w - R) / 2, my); cx.textBaseline = 'alphabetic';
+      return;
+    }
+
+    // threshold, dashed as the app draws it
+    cx.beginPath();
+    for (let k = 0; k < NC; k++) { const p = [x(k * CELL), y(db(st.T[k]))]; k ? cx.lineTo(...p) : cx.moveTo(...p); }
+    cx.strokeStyle = '#1d7a4d'; cx.lineWidth = 2; cx.setLineDash([6, 4]); cx.stroke(); cx.setLineDash([]);
+
+    // detections: the objects ringed, noise crossings filled red
+    for (let k = 0; k < NC; k++) {
+      if (!(P[k] > st.T[k])) continue;
+      cx.beginPath(); cx.arc(x(k * CELL), y(db(P[k])), 4, 0, 2 * Math.PI);
+      if (OBJ[k]) { cx.strokeStyle = '#004a85'; cx.lineWidth = 1.8; cx.stroke(); }
+      else { cx.fillStyle = '#b01e24'; cx.fill(); }
+    }
+  }
+
+  function sync() {
+    showBtn.setAttribute('aria-pressed', st.shown ? 'true' : 'false');
+    showBtn.textContent = st.shown ? 'Hide threshold' : 'Show threshold';
+    compute(); draw();
+  }
+  [gdEl, rfEl, bsEl].forEach(el => el.addEventListener('input', () => { st.shown = false; sync(); }));
+  showBtn.addEventListener('click', () => { st.shown = !st.shown; sync(); });
+  window.addEventListener('resize', draw);
+  sync();
+})();
+</script>
+</body>
+</html>
