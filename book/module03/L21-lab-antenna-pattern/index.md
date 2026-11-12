@@ -383,7 +383,7 @@ frame, to fill on paper or in a PDF viewer instead.
 
 The L21 Lab packet is one submission for the whole lab, turned in complete before Lesson 22. It has three parts:
 
-1. Part 1, Predict (individual, before the lab period, because you need it in class): the shaded Predicted cells of every table, at your kit's frequency, and your work for one row of each.
+1. Part 1, Predict (individual, before the lab period, because you need it in class): the shaded Predicted cells of every table, at your kit's frequency, with your work for one row of each attached on your own paper.
 2. Part 2, Measure (your own kit's readings, recorded in class): the white Measured cells of the same tables, from the angle check, the beam sweep, three azimuth sweeps by hand, and one pass on the stand.
 3. Part 3, Analyze (individual, after the lab): three open prompts, each answered from your own readings.
 

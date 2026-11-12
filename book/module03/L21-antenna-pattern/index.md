@@ -633,7 +633,7 @@ in place of $10\log_{10} 8$; the two agree within $0.2\ \text{dB}$.
 | Why it traces a pattern | $\vert AF\vert$ depends only on $\sin\theta_\text{src} - \sin\theta_0$ | stepping the beam or moving the source visits the same curve |
 | Azimuth sweep | one beam held, source moved in azimuth or antenna turned | Signal vs Time by hand; the stand's scale for angles |
 | dBc | level relative to the trace's own main-lobe peak | removes Rx Gain, distance, and source power |
-| Agreement | main lobe and first sidelobes | about $-13$ dBc at broadside, within your error budget |
+| Agreement | main lobe and first sidelobes | about $-13$ dBc at broadside, within the errors you quantify in Part 3 |
 | Patch pattern | seen by the azimuth sweep, not by the beam sweep | outer sidelobe of a $30^\circ$ beam reads lower; the room adds as much |
 | Source distance | $r \ge 2D^2/\lambda$, $D = Nd = 112\ \text{mm}$ | under $0.9\ \text{m}$; measure at $1.2\ \text{m}$ |
 
@@ -667,7 +667,7 @@ Part 1 of the L21 Lab packet is the pre-lab: the shaded Predicted cells of each 
 | Table D | angle and level of the main lobe, first nulls, and first sidelobes, beam at $0^\circ$ | Table D; Step 18 | "Beam Sweep and Azimuth Sweep at Broadside" |
 | Table E | the same for the beam at $30^\circ$ | Table E; Step 18 | "Beam Sweep and Azimuth Sweep at 30°" |
 
-Every method has a worked example at $10.0\ \text{GHz}$ in the frame named beside it. Part 1 also asks you to show your work for one row of each table.
+Every method has a worked example at $10.0\ \text{GHz}$ in the frame named beside it. Part 1 also asks you to attach your work for one row of each table, on your own paper.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet, Part 1 (PDF)</a>
 ::::
