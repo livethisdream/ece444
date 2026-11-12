@@ -460,7 +460,12 @@ def _spectrogram_fig() -> None:
         S -= S.max()
         vel = np.fft.fftshift(np.fft.fftfreq(nw, PRI)) * LAM / 2
         t = (np.arange(S.shape[1]) * hop + nw / 2) * PRI * 1e3
-        ax.pcolormesh(t, vel, np.clip(S, -25, 0), cmap=MAP, shading="nearest", vmin=-25, vmax=0)
+        # Filled contours, not one rectangle a cell: the same picture as merged
+        # vector paths, a few tens of kB instead of megabytes.
+        keep = np.abs(vel) <= 5
+        step = max(1, S.shape[1] // 128)            # at most 128 columns drawn; the trace is smooth
+        ax.contourf(t[::step], vel[keep], np.clip(S[keep][:, ::step], -25, 0), levels=np.linspace(-25, 0, 6),
+                    cmap=MAP, vmin=-25, vmax=0)
         ax.set_ylim(-4.5, 4.5)
         ax.set_title(f"N_win = {nw}, hop {hop}", fontsize=FSW, color=INK)
         ax.set_xlabel("time (ms)")
