@@ -95,7 +95,7 @@ at $23$ dB down; you read your own in Step 8.
 
 Place the HB100 at boresight, $1.2$ m from the array face, at patch-row height
 and aimed at the center of the patch row. Check the $1.2$ m against the
-far-field distance in your Part 1 Setup row: the sweep reads the
+far-field distance you predicted in the packet's setup table: the sweep reads the
 far-field pattern only beyond it. Every taper number is a comparison between
 sweeps, so the source stays put until Step 17. Keep $\pm 40^\circ$ either side
 of the kit clear of walls and people, because a reflection off either raises a
@@ -166,12 +166,12 @@ read against the frozen uniform trace.
    <label>Step 8: noise floor (dBc) <input data-field="f.floor"></label>
    </div>
 9. **Load Hann.** Choose the **Hann** taper and check the eight sliders read
-   12, 43, 77, 100, 100, 77, 43, 12. Check your Part 1 row for it.
+   12, 43, 77, 100, 100, 77, 43, 12. Check your Predicted cells for it in Table A.
 10. **Sweep Hann.** Press **Start** and record the HPBW, the peak drop against
     the frozen uniform trace, and the first sidelobe, and compare each with
-    your Part 1 row for Table A. On a
+    your prediction beside it in Table A. On a
     kit without the gain-slider fix, the slider is not linear in voltage, and
-    every taper comes out milder than your Part 1 row, its beam narrower and
+    every taper comes out milder than your prediction, its beam narrower and
     its peak drop smaller by about the same fraction on every taper. Record
     what you measure; Part 3 asks you to account for any difference.
 
@@ -181,7 +181,7 @@ read against the frozen uniform trace.
     <label>Step 10, Hann: first sidelobe <input data-field="a.hann.sll"></label>
     </div>
 11. **Blackman and Chebyshev (optional).** Repeat Steps 9 and 10 for each, if
-    time allows, and compare with your Part 1 rows.
+    time allows, and compare with your predictions.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 11, Blackman: HPBW <input data-field="a.black.hpbw"></label>
@@ -193,7 +193,7 @@ read against the frozen uniform trace.
     </div>
 12. **Design your own taper.** With Enforce Symmetric Taper on, meet this
     specification: HPBW no wider than $16^\circ$, with the first sidelobe
-    below $-20$ dBc. Start from the taper you designed in Part 1, Table B.
+    below $-20$ dBc. Start from the taper you designed in Part 1, the Predicted row of Table B.
     Set the sliders, sweep, read the HPBW and sidelobe, and
     adjust: raise the end elements to narrow the beam, and lower them if the
     sidelobe rises past $-20$ dBc. Record your final gains and the result.
@@ -227,7 +227,7 @@ read against the frozen uniform trace.
     leaves Rx1, Rx4, and Rx7 at 100% and the other five at 0%, so the active
     elements sit $3d = 42\ \text{mm}$ apart. Press **Start** and record the
     lobe angles, their heights against the $0^\circ$ lobe, and the peak drop
-    against the frozen uniform trace. Compare each with your Part 1 row.
+    against the frozen uniform trace. Compare each with your prediction.
 
     <div class="rec" data-lab="L22-L23">
     <label>Step 15, Rx1, Rx4, Rx7: lobe angles <input data-field="c.147.lobes"></label>
@@ -236,7 +236,7 @@ read against the frozen uniform trace.
     </div>
 16. **Every fourth element.** Set Rx4 and Rx7 to 0% and Rx5 to 100%, so only
     Rx1 and Rx5 are on, $4d = 56\ \text{mm}$ apart, and sweep again. Record the
-    same three, and compare them with your Part 1 row, including what it says
+    same three, and compare them with your prediction, including what it says
     about both ends of the plot. The measured peak drops in Steps 15 and 16 run
     about 1 dB short of the element count, even with elements fully on or off,
     for a reason that is still open, so I grade these two steps on the lobe
@@ -324,11 +324,11 @@ have no simulator equivalent; use your Part 1 predictions in their place.
 :class: read-only
 
 This frame collects every box you filled in on this page. Your entries stay in this
-browser only, saved as you type. **Download my packet** writes them into Part 2
-of the blank packet and saves the PDF. The download locks every field, Parts 1
-and 3 included, so type those into your own copy of the packet first, then use **Fill
-my own copy** and choose that file: your Parts 1 and 3 are kept, and the page
-adds Part 2 to them. If you work Parts 1 and 3 on paper, download the packet
+browser only, saved as you type. **Download my packet** writes them into the Measured
+cells of the blank packet and saves the PDF. The download locks every field, the Predicted cells
+and Part 3 included, so type those into your own copy of the packet first, then use **Fill
+my own copy** and choose that file: your predictions and Part 3 are kept, and the page
+adds your measurements beside them. If you work Parts 1 and 3 on paper, download the packet
 and write on the printout. Upload one PDF to Gradescope. **Export entries**
 saves a small backup file you can **Import** on another laptop or after
 clearing your browser. The boxes are optional: the blank packet is in the next
@@ -342,8 +342,8 @@ frame, to fill on paper or in a PDF viewer instead.
 
 The L22–L23 Lab packet is one submission for the whole lab, turned in complete before Lesson 24. It has three parts:
 
-1. Part 1, Predict (individual, before the lab period, because you need it in class): one prediction table for each Part 2 table, at your kit's frequency, and your work for one row of each.
-2. Part 2, Measure (your own kit's readings, recorded in class): the four presets, your own taper, two thinned rows, the squint pair, and four quantization sweeps.
+1. Part 1, Predict (individual, before the lab period, because you need it in class): the Predicted cells, shaded gray, in every table, at your kit's frequency, and your work for one row of each table.
+2. Part 2, Measure (your own kit's readings, recorded in class): the Measured cells beside your predictions, for the four presets, your own taper, two thinned rows, the squint pair, and four quantization sweeps.
 3. Part 3, Analyze (individual, after the lab): three open prompts, each answered from your own readings.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet (PDF)</a>

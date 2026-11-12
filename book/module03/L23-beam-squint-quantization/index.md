@@ -539,15 +539,16 @@ The three failures look different on a sweep and a designer fixes each one in a 
 ::::{frame} Pre-Lab
 :class: read-only doc-links
 
-Tables C to E of Part 1 in the L22–L23 Lab packet are this lesson's share of
-the pre-lab; the Setup row and Tables A and B go with Lesson 22. Do them at the
+The Predicted cells of Tables C to E in the L22–L23 Lab packet are this
+lesson's share of the pre-lab; the setup table and Tables A and B go with
+Lesson 22. Do them at the
 same frequency, before the lab period, and bring them to class.
 
-| Part 1 table | You predict | Checked in | Method |
+| Table | You predict | Checked in | Method |
 | :-- | :-- | :-- | :-- |
-| Table C | lobe angles, their height against the $0^\circ$ lobe, and the peak drop, for 42 and 56 mm | Table C; Steps 15 and 16 | "Worked Example: Thinning the PHASER Row," "The Grating Condition" |
-| Table D | the Angle readout at a Signal BW of 10 and 500 MHz, and the shift | Table D; Steps 17 and 18 | "Worked Example: Squint on the PHASER" |
-| Table E | the strongest lobe outside the main lobe, and where, at 7, 4, 3, and 2 bits | Table E; Steps 19 to 21 | the rounding example under "Quantization Sidelobes" |
+| Table C | lobe angles, their height against the $0^\circ$ lobe, and the peak drop, for 42 and 56 mm | Steps 15 and 16 | "Worked Example: Thinning the PHASER Row," "The Grating Condition" |
+| Table D | the Angle readout at a Signal BW of 10 and 500 MHz, and the shift | Steps 17 and 18 | "Worked Example: Squint on the PHASER" |
+| Table E | the strongest lobe outside the main lobe, and where, at 7, 4, 3, and 2 bits | Steps 19 to 21 | the rounding example under "Quantization Sidelobes" |
 
 Every method has a worked example at $10.0\ \text{GHz}$, below every kit, in
 the frame named beside it.

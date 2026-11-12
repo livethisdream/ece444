@@ -834,13 +834,13 @@ peak drop and $\eta_t$ out on Custom only.
 ::::{frame} Pre-Lab
 :class: read-only doc-links
 
-Part 1 of the L22–L23 Lab packet is the pre-lab, shared with Lesson 23: one prediction table for each Part 2 table, with the same rows. The lab runs after Lesson 23, so do the Setup row and Tables A and B now, at the HB100 frequency your kit reported in an earlier lab, and Tables C to E after Lesson 23. Bring it to class: you check every reading you take in Part 2 against it. This lesson works its examples at $10.0\ \text{GHz}$, away from every kit, so work every value at your own frequency.
+Part 1 of the L22–L23 Lab packet is the pre-lab, shared with Lesson 23: the Predicted cells, shaded gray, of each table, beside the Measured cells you fill in class. The lab runs after Lesson 23, so predict the setup table and Tables A and B now, at the HB100 frequency your kit reported in an earlier lab, and Tables C to E after Lesson 23. Bring it to class: each reading you take goes beside its prediction. This lesson works its examples at $10.0\ \text{GHz}$, away from every kit, so work every value at your own frequency.
 
-| Part 1 table | You predict | Checked in | Method |
+| Table | You predict | Checked in | Method |
 | :-- | :-- | :-- | :-- |
 | Setup | frequency and far-field distance | Steps 1 and 3 | Lesson 18's "The Phaser Kit (CN0566)," Lesson 21's "Source Distance" |
-| Table A | each preset's HPBW, peak drop, and first sidelobe | Table A; Steps 7 to 11 | "Beam Broadening," "The Four GUI Presets," "Peak Drop Versus Directivity Loss," "Reading a Tapered Sweep" |
-| Table B | the gains, HPBW, peak drop, and first sidelobe of your own design | Table B; Step 12 | "Worked Example: A −30 dB Chebyshev," "The Measured Sweep for Each Preset" |
+| Table A | each preset's HPBW, peak drop, and first sidelobe | Steps 7 to 11 | "Beam Broadening," "The Four GUI Presets," "Peak Drop Versus Directivity Loss," "Reading a Tapered Sweep" |
+| Table B | the gains, HPBW, peak drop, and first sidelobe of your own design | Step 12 | "Worked Example: A −30 dB Chebyshev," "The Measured Sweep for Each Preset" |
 
 The wavelength and $d/\lambda$ come from Lesson 18's
 <a href="../L18-beam-steering/index.html#frame-the-phaser-kit-cn0566">"The Phaser Kit (CN0566)"</a>
