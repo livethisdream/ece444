@@ -365,11 +365,11 @@ no patch pattern, so its trace is the array factor, and it has no stand to turn.
 :class: read-only
 
 This frame collects every box you filled in on this page. Your entries stay in this
-browser only, saved as you type. **Download my packet** writes them into Part 2
-of the blank packet and saves the PDF. The download locks every field, Parts 1
-and 3 included, so type those into your own copy of the packet first, then use **Fill
-my own copy** and choose that file: your Parts 1 and 3 are kept, and the page
-adds Part 2 to them. If you work Parts 1 and 3 on paper, download the packet
+browser only, saved as you type. **Download my packet** writes them into the Measured
+cells of the blank packet and saves the PDF. The download locks every field, the Predicted cells and Part 3
+included, so type those into your own copy of the packet first, then use **Fill
+my own copy** and choose that file: your predictions and Part 3 are kept, and
+the page adds your measurements beside them. If you work Parts 1 and 3 on paper, download the packet
 and write on the printout. Upload one PDF to Gradescope. **Export entries**
 saves a small backup file you can **Import** on another laptop or after
 clearing your browser. The boxes are optional: the blank packet is in the next
@@ -383,8 +383,8 @@ frame, to fill on paper or in a PDF viewer instead.
 
 The L21 Lab packet is one submission for the whole lab, turned in complete before Lesson 22. It has three parts:
 
-1. Part 1, Predict (individual, before the lab period, because you need it in class): one prediction table for each Part 2 table, at your kit's frequency, and your work for one row of each.
-2. Part 2, Measure (your own kit's readings, recorded in class): the angle check, the beam sweep, three azimuth sweeps by hand, and one pass on the stand.
+1. Part 1, Predict (individual, before the lab period, because you need it in class): the shaded Predicted cells of every table, at your kit's frequency, and your work for one row of each.
+2. Part 2, Measure (your own kit's readings, recorded in class): the white Measured cells of the same tables, from the angle check, the beam sweep, three azimuth sweeps by hand, and one pass on the stand.
 3. Part 3, Analyze (individual, after the lab): three open prompts, each answered from your own readings.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet (PDF)</a>
