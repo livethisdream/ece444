@@ -412,6 +412,8 @@ The `yes` in Step 18 appears again because the laptop has never seen a kit
 named `phaser-NN` before. Running the installer again later is how a kit is
 updated:
 `curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/install.sh | bash`.
+The steps are on the Materials page, under
+[Updating Your PHASER Kit](updating-your-phaser-kit).
 :::
 ::::
 

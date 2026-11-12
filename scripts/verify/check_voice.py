@@ -27,6 +27,10 @@ WARN (read each one; a regex cannot decide them):
   preset-label VOICE 29, a GUI's numbered label in bold (**2 Array Factor**)
   dry-run      VOICE 32, a dry-run anecdote on a page; keep it only if the
                cadet needs the number
+  invented     VOICE 41, a problem that invents a person: classmate, lab
+               partner, colleague, customer (Neil, 2026-11-11). WARN until the
+               older practice sets are clean; then FAIL
+  cannot-show  VOICE 42, "cannot show / tell you"; say "doesn't explain"
 
     check_voice.py L18                     every page and practice set of L18
     check_voice.py book/module03/L18-beam-steering/index.md
@@ -72,6 +76,8 @@ WARN = {
     "bench": re.compile(r"\bbench(es)?\b", re.I),
     "preset-label": re.compile(r"\*\*\d+ [A-Z][\w ]*\*\*"),
     "dry-run": re.compile(r"\bdry[- ]run\b", re.I),
+    "invented": re.compile(r"\b(classmates?|lab ?partners?|colleagues?|customers?)\b", re.I),
+    "cannot-show": re.compile(r"\b(cannot|can't|can not) (show|tell)\b", re.I),
 }
 _CFG = Path(__file__).with_name("voice_rules.json")
 WARN_ONLY = set(json.loads(_CFG.read_text())["warn_only"]) if _CFG.is_file() else set()
