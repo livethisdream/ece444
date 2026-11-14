@@ -64,25 +64,24 @@ $0^\circ$, and Table E, the beam held at $30^\circ$.
 :class: viz-frame
 
 :::{depth}
-Before you take a trace, predict it, then check yourself. Choose a beam angle
-and decide, before you press **Show azimuth sweep**, how the azimuth sweep
-compares with the dashed beam sweep: where its peak and first nulls fall,
-whether its first sidelobes read at the beam sweep's level, and which lobes
-read lower. Then show it. Choosing another angle hides the azimuth sweep
-again, so each guess comes first. Both traces are in dBc of their own peak,
-with the noise floor about $23\ \text{dB}$ down. The widget draws the course
-model at $10.0\ \text{GHz}$, not at your kit's frequency, so its numbers are
-close to your Part 1 values but not equal to them; Lesson 21's
-<a href="../L21-antenna-pattern/index.html#frame-reading-your-traces">"Reading Your Traces"</a>
-says which features the room and the floor leave you able to compare.
+Before you take a trace, predict it. Choose a beam angle, click the plot where
+the azimuth sweep will peak, and say which of its first sidelobes reads
+higher; only then does **Show** draw the two traces. Both are in dB relative
+to the broadside peak, so a beam steered off broadside sits lower. **Show one
+patch** draws the pattern of a single patch, which never moves when the beam
+steers, and **isotropic** replaces the patches with elements that collect
+equally from every direction: try it, and the two traces lie on top of each
+other. The widget draws the course model at $10.0\ \text{GHz}$, not at your
+kit's frequency; Part 1 of the packet asks you for the same predictions at
+your own frequency.
 :::
 
 :::{present}
 <iframe src="../../viz/azimuth-predict.html"
-        width="100%" height="485"
+        width="100%" height="508"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
-        title="Choose a beam angle, predict the azimuth sweep against the beam sweep, then show it">
+        title="Choose a beam angle, place your predicted peak and pick the higher first sidelobe, then show the beam sweep and the azimuth sweep">
 </iframe>
 :::
 ::::

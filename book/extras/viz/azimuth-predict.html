@@ -8,75 +8,98 @@
 <style>
   :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
           --ink:#15202b; --ink3:#5b6573; --ref:#d9822b; --az:#004a85; --floor:#9aa3ad;
-          --nl:#b01e24; --sl:#1d7a4d; }
+          --ef:#1d7a4d; --guess:#b01e24; --ok:#1d7a4d; --bad:#b01e24; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
-  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
-  .controls { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; justify-content:space-between;
-              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .app { display:flex; flex-direction:column; gap:8px; padding:12px 14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; cursor:crosshair; touch-action:none; }
+  .controls { display:flex; flex-wrap:wrap; gap:7px 14px; align-items:center; justify-content:space-between;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .grp { display:flex; gap:5px; align-items:center; flex-wrap:nowrap; font-size:13px; }
-  .grp .lab { margin-right:4px; color:var(--ink); white-space:nowrap; }
-  .ang { font:700 12px 'Inter',system-ui,sans-serif; min-width:42px; height:30px; padding:0 6px; border-radius:5px; cursor:pointer;
-         border:1px solid var(--edge2); background:#fff; color:var(--ink3); }
-  .ang[aria-pressed="true"] { background:var(--mid); border-color:var(--mid); color:#fff; }
-  .ang:focus-visible, .show:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  .grp.wrap { flex-wrap:wrap; }
+  .grp .lab { margin-right:3px; color:var(--ink); white-space:nowrap; }
+  .btn { font:700 12px 'Inter',system-ui,sans-serif; min-width:40px; height:30px; padding:0 8px; border-radius:5px; cursor:pointer;
+         border:1px solid var(--edge2); background:#fff; color:var(--ink3); white-space:nowrap; }
+  .btn[aria-pressed="true"] { background:var(--mid); border-color:var(--mid); color:#fff; }
+  .btn.right { border-color:var(--ok); background:var(--ok); color:#fff; }
+  .btn.wrong { border-color:var(--bad); background:var(--bad); color:#fff; }
+  .btn:focus-visible, .show:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
   .show { font:700 12px 'Inter',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.05em;
           height:30px; padding:0 14px; border-radius:5px; cursor:pointer;
           border:1px solid var(--navy); background:var(--navy); color:#fff; }
+  .show:disabled { background:#e6edf4; border-color:var(--edge2); color:#8a96a3; cursor:not-allowed; }
   .show[aria-pressed="true"] { background:#fff; color:var(--navy); }
+  .step { font-size:12.5px; color:var(--ink3); }
+  .step b { color:var(--ink); }
   .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0, 1fr)); }
-  @media (max-width: 560px) { .readouts { grid-template-columns:repeat(2, minmax(0, 1fr)); } .ang { min-width:36px; } }
-  .ro { display:flex; flex-direction:column; align-items:center; gap:4px; padding:7px 6px 8px; min-width:0;
+  @media (max-width: 560px) { .readouts { grid-template-columns:repeat(2, minmax(0, 1fr)); } .btn { min-width:34px; padding:0 6px; } }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 6px 7px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
   .ro .k { height:15px; line-height:15px; font-size:10.5px; font-weight:700; text-transform:uppercase;
            letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; }
   .ro .v { height:19px; line-height:19px; font-size:14px; font-weight:700; white-space:nowrap;
            font-variant-numeric:tabular-nums; color:var(--navy); overflow:hidden; max-width:100%; }
-  .ro.nl .v { color:var(--nl); }
-  .ro.sl .v { color:var(--sl); }
+  .ro.g .v { color:var(--guess); }
 </style>
 </head>
 <body>
 <div class="app">
-  <canvas id="plot" width="1000" height="400" aria-label="The beam sweep and the azimuth sweep of the eight-element array in dB below each trace's own peak, against angle"></canvas>
+  <canvas id="plot" width="1000" height="400" tabindex="0" aria-label="Click to place your predicted peak. The beam sweep and the azimuth sweep of the eight-element array, in dB relative to the broadside peak, against angle"></canvas>
 
   <div class="controls">
     <div class="grp" id="angs" role="group" aria-label="Beam angle"><span class="lab">Beam at</span></div>
-    <button class="show" id="show" aria-pressed="false">Show azimuth sweep</button>
+    <div class="grp wrap" role="group" aria-label="Elements">
+      <span class="lab">Elements</span>
+      <button class="btn" id="el-patch" aria-pressed="true">patch</button>
+      <button class="btn" id="el-iso" aria-pressed="false">isotropic</button>
+      <button class="btn" id="ef" aria-pressed="false">show one patch</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <span class="step" id="step1"><b>1.</b> Click the plot where the peak will sit.</span>
+    <div class="grp wrap" role="group" aria-label="Which first sidelobe of the azimuth sweep reads higher">
+      <span class="step"><b>2.</b> Higher first sidelobe:</span>
+      <button class="btn lobe" data-v="left" aria-pressed="false">left</button>
+      <button class="btn lobe" data-v="right" aria-pressed="false">right</button>
+      <button class="btn lobe" data-v="same" aria-pressed="false">same</button>
+    </div>
+    <button class="show" id="show" aria-pressed="false" disabled>Show</button>
   </div>
 
   <div class="readouts">
-    <div class="ro"><span class="k">peak at</span><span class="v" id="r-pk">?</span></div>
-    <div class="ro nl"><span class="k">first nulls</span><span class="v" id="r-nl">?</span></div>
-    <div class="ro sl"><span class="k">left first SL</span><span class="v" id="r-sl">?</span></div>
-    <div class="ro sl"><span class="k">right first SL</span><span class="v" id="r-sr">?</span></div>
+    <div class="ro g"><span class="k">your peak</span><span class="v" id="r-g">?</span></div>
+    <div class="ro"><span class="k">azimuth peak</span><span class="v" id="r-pk">?</span></div>
+    <div class="ro"><span class="k">left first SL</span><span class="v" id="r-sl">?</span></div>
+    <div class="ro"><span class="k">right first SL</span><span class="v" id="r-sr">?</span></div>
   </div>
 </div>
 
 <script>
 'use strict';
 // The L21 Lab's prediction: the kit's eight patches, 14 mm apart, uniform
-// weights. The beam sweep (the HB100 fixed at the beam angle, the beam stepped
-// past it) is the dashed reference and is always drawn; the azimuth sweep (the
-// beam held, the source moved) stays hidden until "Show", and any change of
-// angle hides it again, so each guess comes before its check.
+// weights. Both traces are in dB relative to the broadside peak, so the
+// element pattern's drop with steer angle shows (Neil, 2026-11-14). The
+// cadet must place a predicted peak on the plot and say which first sidelobe
+// of the azimuth sweep reads higher before Show unlocks; any change of angle or
+// element resets the guess. "show one patch" draws one patch's own pattern,
+// power cos(theta); "isotropic" sets it to 1, and the two traces coincide.
 // Drawn at 10.0 GHz by default, away from every kit's HB100, so no readout
 // equals a Part 1 answer (Neil, 2026-11-08). ?f=10.2 (GHz) draws another.
-// Both traces are in dB below their own peak (dBc) with the noise floor of the
-// L20 Lab, 23 dB below the peak, added in power, as in the Lesson 21 figures;
-// the element is the course's ideal patch, power cos(theta).
+// The noise floor of the L20 Lab, 23 dB below the broadside peak, is added in
+// power at the kit's fixed gain.
 const F_GHZ = (() => {
   const v = parseFloat(new URLSearchParams(location.search).get('f'));
   return (v >= 8 && v <= 12) ? v : 10.0;
 })();
 const N = 8, LAM = 3.00e8/(F_GHZ*1e9), DEL = 14e-3, KD = 2*Math.PI*DEL/LAM;
 const LSB = 2.8125*Math.PI/180;
-const FLOOR_DBC = -23, YMIN = -30;
-const ANGLES = [0, 15, 30, 45];
+const FLOOR_DB = -23, YMIN = -30, SAME_DB = 0.5;
+const ANGLES = [0, 15, 30, 45, 60];
 const SANS = 'Inter, system-ui, -apple-system, sans-serif';
 const rad = d => d*Math.PI/180, deg = r => r*180/Math.PI;
+const mn = s => s.replace(/-/g, '−');
 
-const state = { beam: 0, shown: false };
+const state = { beam: 0, patch: true, ef: false, guess: null, lobe: null, shown: false };
 
 function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
 function mixLabel(ctx,chunks,x,yc,h,color,align){
@@ -96,57 +119,64 @@ function af2(psi){
   const a = Math.sin(N*psi/2)/den;
   return a*a;
 }
-const flo = 10**(FLOOR_DBC/10);
+const ef = a => state.patch ? Math.max(Math.cos(rad(a)), 0) : 1;   // one patch, power
+const flo = 10**(FLOOR_DB/10);
+const db = p => 10*Math.log10(p);
 
 // Beam sweep: the source fixed at the beam angle, one point per phase LSB,
-// plotted at the commanded angle. Peak 1 at the source, so dBc is direct.
+// plotted at the commanded angle. The patch sees the source from one
+// direction the whole time, so its pattern is one constant, ef(source).
 function beamSweep(src){
-  const pts = [];
+  const pts = [], e = ef(src);
   for (let k = -400; k <= 400; k++){
     const s0 = k*LSB/KD;
     if (Math.abs(s0) > 1) continue;
-    const p = af2(KD*(Math.sin(rad(src)) - s0)) + flo;
-    pts.push([deg(Math.asin(s0)), p]);
+    pts.push([deg(Math.asin(s0)), db(af2(KD*(Math.sin(rad(src)) - s0))*e + flo)]);
   }
-  const mx = Math.max(...pts.map(q => q[1]));
-  return pts.map(([a, p]) => [a, 10*Math.log10(p/mx)]);
+  return pts;
 }
-// Azimuth sweep: the beam held at theta_0, the source moved; the element
-// pattern multiplies the array factor, then the floor is added.
+// Azimuth sweep: the beam held at theta_0, the source moved; at each angle the
+// patch pattern there multiplies the array factor.
 function azSweep(t0){
   const pts = [];
   for (let i = 0; i <= 3600; i++){
-    const a = -90 + i*0.05, ef = Math.max(Math.cos(rad(a)), 0);
-    pts.push([a, af2(KD*(Math.sin(rad(a)) - Math.sin(rad(t0))))*ef + flo]);
+    const a = -90 + i*0.05;
+    pts.push([a, db(af2(KD*(Math.sin(rad(a)) - Math.sin(rad(t0))))*ef(a) + flo)]);
   }
-  const mx = Math.max(...pts.map(q => q[1]));
-  return pts.map(([a, p]) => [a, 10*Math.log10(p/mx)]);
+  return pts;
 }
 
-// Features of the azimuth sweep: its peak, the first nulls on each side, and
-// the highest level between each first and second null.
-function features(t0){
-  const az = azSweep(t0), s0 = Math.sin(rad(t0)), w = LAM/(N*DEL);
-  let pk = az[0];
-  for (const q of az) if (q[1] > pk[1]) pk = q;
+// Peak and first sidelobes of a trace; the first sidelobe on each side is the
+// highest level between the first and second nulls of the array factor.
+function features(pts, t0){
+  const s0 = Math.sin(rad(t0)), w = LAM/(N*DEL);
   const nullAt = s => Math.abs(s) <= 1 ? deg(Math.asin(s)) : null;
-  const nL = nullAt(s0 - w), nR = nullAt(s0 + w);
+  const nL = nullAt(s0 - w), nR = nullAt(s0 + w), nL2 = nullAt(s0 - 2*w), nR2 = nullAt(s0 + 2*w);
+  let pk = pts[0];
+  for (const q of pts) if (q[1] > pk[1]) pk = q;
   const lobe = (lo, hi) => {
     if (lo === null || hi === null) return null;
     let best = null;
-    for (const q of az) if (q[0] > Math.min(lo,hi) && q[0] < Math.max(lo,hi) && (!best || q[1] > best[1])) best = q;
+    for (const q of pts) if (q[0] > Math.min(lo,hi) && q[0] < Math.max(lo,hi) && (!best || q[1] > best[1])) best = q;
     return best;
   };
-  const nL2 = nullAt(s0 - 2*w), nR2 = nullAt(s0 + 2*w);
-  return { az, pk, nL, nR,
-           sl: lobe(nL2 === null ? -90 : nL2, nL),
-           sr: lobe(nR, nR2 === null ? 90 : nR2) };
+  return { pk, sl: lobe(nL2 === null ? -90 : nL2, nL), sr: lobe(nR, nR2 === null ? 90 : nR2) };
+}
+// Which first sidelobe of the azimuth sweep reads higher: the one nearer
+// broadside, where each patch collects more. Within SAME_DB counts as the
+// same; a side with no first sidelobe (past the horizon) counts as lower.
+function answer(){
+  const fa = features(azSweep(state.beam), state.beam);
+  const L = fa.sl ? fa.sl[1] : -Infinity, R = fa.sr ? fa.sr[1] : -Infinity;
+  const lobe = Math.abs(L - R) < SAME_DB ? 'same' : (L > R ? 'left' : 'right');
+  return { fa, lobe };
 }
 
 const canvas = document.getElementById('plot'), ctx = canvas.getContext('2d');
+let geo = null;
 function resizeCanvas(){
   const w = canvas.getBoundingClientRect().width, dpr = window.devicePixelRatio || 1;
-  const h = Math.max(210, Math.min(w*0.42, 320));
+  const h = Math.max(200, Math.min(w*0.40, 300));
   canvas.width = w*dpr; canvas.height = h*dpr; canvas.style.height = h+'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
   draw();
@@ -162,21 +192,22 @@ function draw(){
   const pw = w-mL-mR, ph = h-mT-mB;
   const xFor = t => mL + (t+90)/180*pw;
   const yFor = v => mT + Math.min(Math.max(-v,0),-YMIN)/(-YMIN)*ph;
+  geo = { mL, mT, pw, ph };
 
   ctx.strokeStyle = '#e6eef6'; ctx.lineWidth = 1;
   for (let t=-90;t<=90;t+=30){ ctx.beginPath(); ctx.moveTo(xFor(t),mT); ctx.lineTo(xFor(t),mT+ph); ctx.stroke(); }
   for (let v=0;v>=YMIN;v-=10){ ctx.beginPath(); ctx.moveTo(mL,yFor(v)); ctx.lineTo(mL+pw,yFor(v)); ctx.stroke(); }
   ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.1;
   ctx.beginPath(); ctx.moveTo(mL,mT); ctx.lineTo(mL,mT+ph); ctx.lineTo(mL+pw,mT+ph); ctx.stroke();
-  for (let t=-90;t<=90;t+=30) stext(ctx,`${t}`.replace('-','−'),xFor(t),mT+ph+13,fs,'#5b6573','center');
-  for (let v=0;v>=YMIN;v-=10) stext(ctx,`${v}`.replace('-','−'),mL-7,yFor(v),fs,'#5b6573','right');
+  for (let t=-90;t<=90;t+=30) stext(ctx,mn(`${t}`),xFor(t),mT+ph+13,fs,'#5b6573','center');
+  for (let v=0;v>=YMIN;v-=10) stext(ctx,mn(`${v}`),mL-7,yFor(v),fs,'#5b6573','right');
   mixLabel(ctx,[{s:'Angle '},{m:'\\theta'},{s:' (degrees)'}],mL+pw/2,mT+ph+(narrow?30:34),narrow?11:12.5,'#15202b','center');
   ctx.save(); ctx.translate(narrow?11:14, mT+ph/2); ctx.rotate(-Math.PI/2);
-  stext(ctx, 'dBc', 0, 0, narrow?11:12.5, '#15202b', 'center');
+  stext(ctx, narrow ? 'dB re broadside' : 'dB relative to broadside peak', 0, 0, narrow?10.5:11.5, '#15202b', 'center');
   ctx.restore();
 
-  // the noise floor, labeled where the right-hand plot area is clear
-  const yF = yFor(FLOOR_DBC);
+  // the noise floor
+  const yF = yFor(FLOOR_DB);
   ctx.strokeStyle = css('--floor'); ctx.lineWidth = 1; ctx.setLineDash([4,3]);
   ctx.beginPath(); ctx.moveTo(mL,yF); ctx.lineTo(mL+pw,yF); ctx.stroke(); ctx.setLineDash([]);
   if (ph > 120) stext(ctx,'noise floor',mL+pw-4,yF+fs*0.95,fs,'#5b6573','right');
@@ -187,57 +218,122 @@ function draw(){
     pts.forEach(([a, v], i) => { const x = xFor(a), y = yFor(Math.max(v, YMIN)); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); });
     ctx.stroke(); ctx.setLineDash([]);
   };
-  plot(beamSweep(state.beam), css('--ref'), 1.6, [5,4]);
+
+  // one patch's own pattern, fixed whatever the beam angle
+  if (state.ef){
+    const e = [];
+    for (let a = -89.5; a <= 89.5; a += 0.5) e.push([a, db(ef(a))]);
+    plot(e, css('--ef'), 2, [2,3]);
+    const lx = xFor(-62), lyv = db(ef(-62));
+    stext(ctx, 'one patch', lx, yFor(lyv) - fs, fs, css('--ef'), 'center', true);
+  }
 
   // legend
   const ly = mT-14;
-  ctx.strokeStyle = css('--ref'); ctx.lineWidth = 1.8; ctx.setLineDash([5,4]);
-  ctx.beginPath(); ctx.moveTo(mL+6,ly); ctx.lineTo(mL+24,ly); ctx.stroke(); ctx.setLineDash([]);
-  stext(ctx,'beam sweep',mL+29,ly,fs,'#5b6573','left');
-  ctx.font = fs+'px '+SANS;
-  const lx = mL+29+ctx.measureText('beam sweep').width+16;
+  let lx = mL+6;
+  const key = (label, color, dash, lw) => {
+    ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash);
+    ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+18,ly); ctx.stroke(); ctx.setLineDash([]);
+    stext(ctx,label,lx+23,ly,fs,'#5b6573','left');
+    ctx.font = fs+'px '+SANS; lx += 23 + ctx.measureText(label).width + 14;
+  };
+  if (state.shown){ key('beam sweep', css('--ref'), [5,4], 1.8); key('azimuth sweep', css('--az'), [], 2.2); }
 
-  const name = `Beam at ${state.beam}°`;
-  if (!state.shown){
-    const msg = narrow ? `${name}: predict, then show` : `${name}: predict the azimuth sweep, then show it`;
+  if (state.shown){
+    plot(beamSweep(state.beam), css('--ref'), 1.6, [5,4]);
+    plot(azSweep(state.beam), css('--az'), 2.2);
+  }
+
+  // the cadet's predicted peak
+  if (state.guess){
+    const gx = xFor(state.guess[0]), gy = yFor(state.guess[1]);
+    ctx.strokeStyle = css('--guess'); ctx.lineWidth = 2.2;
+    ctx.beginPath(); ctx.moveTo(gx-7,gy-7); ctx.lineTo(gx+7,gy+7); ctx.moveTo(gx+7,gy-7); ctx.lineTo(gx-7,gy+7); ctx.stroke();
+    const right = gx < mL + pw*0.7;
+    stext(ctx, 'your peak', gx + (right ? 11 : -11), gy - 10, fs, css('--guess'), right ? 'left' : 'right', true);
+  } else if (!state.shown){
+    const msg = narrow ? `Beam at ${state.beam}°: click your peak` : `Beam at ${state.beam}°: click where the azimuth sweep will peak`;
     const mpx = narrow ? 12 : 13.5;
     ctx.font = '700 '+mpx+'px '+SANS;
-    const mw = Math.min(ctx.measureText(msg).width + 20, pw - 8), my = mT + ph*0.52;
+    const mw = Math.min(ctx.measureText(msg).width + 20, pw - 8), my = mT + ph*0.62;
     ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.strokeStyle = css('--edge2'); ctx.lineWidth = 1;
     ctx.beginPath(); ctx.roundRect(mL+pw/2-mw/2, my-mpx, mw, 2*mpx, 5); ctx.fill(); ctx.stroke();
     stext(ctx, msg, mL+pw/2, my, mpx, css('--navy'), 'center', true);
-    return;
   }
-  ctx.strokeStyle = css('--az'); ctx.lineWidth = 2.2;
-  ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+18,ly); ctx.stroke();
-  stext(ctx,'azimuth sweep',lx+23,ly,fs,'#5b6573','left');
-  plot(features(state.beam).az, css('--az'), 2.2);
 }
+
+// place the guess by click or drag, in plot coordinates
+function placeAt(ev){
+  if (state.shown || !geo) return;
+  const r = canvas.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top;
+  const a = Math.max(-90, Math.min(90, (x - geo.mL)/geo.pw*180 - 90));
+  const v = Math.max(YMIN, Math.min(0, -(y - geo.mT)/geo.ph*(-YMIN)));
+  state.guess = [a, v];
+  sync();
+}
+let dragging = false;
+canvas.addEventListener('pointerdown', ev => { dragging = true; canvas.setPointerCapture(ev.pointerId); placeAt(ev); });
+canvas.addEventListener('pointermove', ev => { if (dragging) placeAt(ev); });
+canvas.addEventListener('pointerup', () => { dragging = false; });
+canvas.addEventListener('keydown', ev => {
+  if (state.shown) return;
+  const g = state.guess || [state.beam, -3];
+  const step = { ArrowLeft:[-1,0], ArrowRight:[1,0], ArrowUp:[0,0.5], ArrowDown:[0,-0.5] }[ev.key];
+  if (!step) return;
+  ev.preventDefault();
+  state.guess = [Math.max(-90, Math.min(90, g[0]+step[0])), Math.max(YMIN, Math.min(0, g[1]+step[1]))];
+  sync();
+});
 
 function readouts(){
   const set = (id, s) => document.getElementById(id).textContent = s;
-  if (!state.shown){ ['r-pk','r-nl','r-sl','r-sr'].forEach(id => set(id, '?')); return; }
-  const f = features(state.beam), m = s => s.replace('-', '−');
-  const a = v => v === null ? 'none' : m(`${v.toFixed(1)}°`);
-  set('r-pk', a(f.pk[0]));
-  set('r-nl', `${a(f.nL)}, ${a(f.nR)}`);
-  const lv = q => q === null ? 'none' : m(`${q[1].toFixed(1)} dBc`);
-  set('r-sl', lv(f.sl));
-  set('r-sr', lv(f.sr));
+  set('r-g', state.guess ? mn(`${state.guess[0].toFixed(0)}°, ${state.guess[1].toFixed(1)} dB`) : '?');
+  if (!state.shown){ ['r-pk','r-sl','r-sr'].forEach(id => set(id, '?')); return; }
+  const A = answer(), pk = A.fa.pk;
+  set('r-pk', mn(`${pk[0].toFixed(1)}°, ${pk[1].toFixed(1)} dB`));
+  const lv = q => q === null ? 'past 90°' : mn(`${q[1].toFixed(1)} dB`);
+  set('r-sl', lv(A.fa.sl));
+  set('r-sr', lv(A.fa.sr));
 }
 
 const grp = document.getElementById('angs'), showBtn = document.getElementById('show');
-const btns = ANGLES.map(t => {
+const lobeBtns = [...document.querySelectorAll('.lobe')];
+const reset = () => { state.guess = null; state.lobe = null; state.shown = false; };
+const angBtns = ANGLES.map(t => {
   const b = document.createElement('button');
-  b.className = 'ang'; b.textContent = t+'°';
-  b.addEventListener('click', () => { state.beam = t; state.shown = false; sync(); });
+  b.className = 'btn'; b.textContent = t+'°';
+  b.addEventListener('click', () => { state.beam = t; reset(); sync(); });
   grp.appendChild(b); return [t, b];
 });
-showBtn.addEventListener('click', () => { state.shown = !state.shown; sync(); });
+document.getElementById('el-patch').addEventListener('click', () => { state.patch = true; reset(); sync(); });
+document.getElementById('el-iso').addEventListener('click', () => { state.patch = false; reset(); sync(); });
+document.getElementById('ef').addEventListener('click', () => { state.ef = !state.ef; sync(); });
+lobeBtns.forEach(b => b.addEventListener('click', () => { if (state.shown) return; state.lobe = b.dataset.v; sync(); }));
+showBtn.addEventListener('click', () => {
+  if (state.shown){ reset(); sync(); return; }      // a new guess, not a peek
+  if (state.guess && state.lobe){ state.shown = true; sync(); }
+});
+
 function sync(){
-  for (const [t, b] of btns) b.setAttribute('aria-pressed', t === state.beam ? 'true' : 'false');
+  for (const [t, b] of angBtns) b.setAttribute('aria-pressed', t === state.beam ? 'true' : 'false');
+  document.getElementById('el-patch').setAttribute('aria-pressed', state.patch ? 'true' : 'false');
+  document.getElementById('el-iso').setAttribute('aria-pressed', state.patch ? 'false' : 'true');
+  document.getElementById('ef').setAttribute('aria-pressed', state.ef ? 'true' : 'false');
+  const ans = state.shown ? answer().lobe : null;
+  for (const b of lobeBtns){
+    b.classList.remove('right', 'wrong');
+    b.setAttribute('aria-pressed', b.dataset.v === state.lobe ? 'true' : 'false');
+    if (state.shown){
+      if (b.dataset.v === ans) b.classList.add('right');
+      else if (b.dataset.v === state.lobe) b.classList.add('wrong');
+    }
+  }
+  const ready = !!(state.guess && state.lobe);
+  showBtn.disabled = !ready;
   showBtn.setAttribute('aria-pressed', state.shown ? 'true' : 'false');
-  showBtn.textContent = state.shown ? 'Hide azimuth sweep' : 'Show azimuth sweep';
+  showBtn.textContent = state.shown ? 'Guess again' : 'Show';
+  document.getElementById('step1').innerHTML = state.guess
+    ? '<b>1.</b> Peak placed; drag to move it.' : '<b>1.</b> Click the plot where the peak will sit.';
   readouts(); draw();
 }
 
