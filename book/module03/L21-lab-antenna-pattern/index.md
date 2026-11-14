@@ -70,10 +70,8 @@ higher; only then does **Show** draw the two traces. Both are in dB relative
 to the broadside peak, so a beam steered off broadside sits lower. **Show one
 patch** draws the pattern of a single patch, which never moves when the beam
 steers, and **isotropic** replaces the patches with elements that collect
-equally from every direction: try it, and the two traces lie on top of each
-other. The widget draws the course model at $10.0\ \text{GHz}$, not at your
-kit's frequency; Part 1 of the packet asks you for the same predictions at
-your own frequency.
+equally from every direction. The widget draws the course model at
+$10.0\ \text{GHz}$.
 :::
 
 :::{present}
