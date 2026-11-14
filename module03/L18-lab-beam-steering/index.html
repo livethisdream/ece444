@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L18 Lab — Beam Steering &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=292d567668">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l18-lab-beam-steering">
+<h1>L18 Lab — Beam Steering<a class="headerlink" href="#l18-lab-beam-steering" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Beam Steering</h1>
+<div class="title-rule"></div>
+<p>Put the peak at an angle by moving the source, then by applying a steer angle, and measure each beam.</p>
+<p>L18 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 4">
+  <li>I can implement beam steering on the ADALM-PHASER and verify the steered pattern against theory.</li>
+</ol>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-big-picture">
+<div class="wrap docutils container">
+<p class="rubric">The Big Picture</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Two runs put the sweep’s peak at an angle.</p></li>
+<li><p>Each reading checks a Part 1 prediction.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Steps</p></th>
+<th class="head text-left"><p>Run</p></th>
+<th class="head text-left"><p>Set</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>1–9</p></td>
+<td class="text-left"><p>Bring up</p></td>
+<td class="text-left"><p>source at <span class="qty">0°</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>10–14</p></td>
+<td class="text-left"><p>Move the source</p></td>
+<td class="text-left"><p><span class="qty">0°</span>, <span class="qty">30°</span>, <span class="qty">45°</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>15–20</p></td>
+<td class="text-left"><p>Apply</p></td>
+<td class="text-left"><p>15, 30, 45</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lesson 18 showed that the beam-sweep trace is the array factor seen from the
+source, so it peaks at the angle where the steered beam meets the source.
+Today you put that peak at the same angles two ways. In Run 1, Steps 10 to 14,
+Phase Control holds zero and you move the HB100 along an arc. In Run 2, Steps
+15 to 20, the source stays at boresight and <strong>Apply</strong> in the Beam Steering
+section writes per-element offsets for the angle you type. At each angle you
+read the peak’s angle, its half-power width, and its Peak Gain, and Run 2 also
+reads back the Phase Control boxes. Run 1 fills Table A in Part 2 of the
+packet; Run 2 fills Table B and the Phase Control rows. You check every
+reading against the prediction you made in Part 1. Keep the sweep running
+throughout: the trace redraws on its own after you move the source or press
+Apply.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-predict-first">
+<div class="wrap docutils container">
+<p class="rubric">Predict First</p>
+<div class="depth docutils container">
+<p>Before you sweep, predict each trace, then check yourself. Choose a run and an
+angle from the table above and decide, before you press <strong>Show trace</strong>: where
+the peak lands, how wide the beam is next to the dashed boresight trace, how
+far the peak drops, and what E8 reads in Phase Control. Then show it. Any
+change to the run or the angle hides the trace again, so each guess comes
+first. The widget draws the ideal beam-sweep trace at <span class="qty">10.0 GHz</span>, not
+at your kit’s frequency, with the element pattern at Lesson 18’s ideal bound,
+so its numbers are close to your Part 1 values but not equal to them. Its
+HPBW is read off the exact array factor, which runs a few tenths of a degree
+wider than the rule of Lesson 18’s
+<a href="../L18-beam-steering/index.html#frame-broadening-and-scan-loss-versus-angle">”Broadening and Scan Loss Versus Angle”</a>.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/steer-predict.html"
+        width="100%" height="485"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Choose a run and an angle, predict the beam-sweep trace, then show it">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-bring-up-the-kit">
+<div class="wrap docutils container">
+<p class="rubric">Bring Up the Kit</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>HB100 at <span class="qty">0°</span> on a <span class="qty">1 m</span> arc centered between E4 and E5, at patch-row height.</p></li>
+<li><p>Facing the patches, <span class="math notranslate nohighlight">\(+\theta\)</span> is to your left, toward E8.</p></li>
+<li><p>Find HB100, Calibrate, then the Steering Angle preset.</p></li>
+<li><p>Rx Gain for a <span class="qty">−10</span> dBFS peak.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-lab-setup.svg"
+     alt="The setup from above: the eight-element array, a 1 m protractor arc centered between E4 and E5, and the HB100 positions at 0, 30, and 45 degrees on the plus side, toward E8; confirm the plus side with the Angle readout"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Set up the HB100 on a tripod about <span class="qty">1 m</span> from the array face, at the
+height of the patch row, and lay a protractor arc of <span class="qty">1 m</span> radius
+centered under the middle of the array, between E4 and E5. One meter clears
+Lesson 17’s far-field distance for this array, <span class="qty">0.88 m</span>, which is
+enough for the angles and beamwidths. Center the arc on the array, not on the
+board’s edge: an arc centered <span class="qty">10 mm</span> off the middle shifts the
+reference angle by <span class="qty">0.57°</span>.</p>
+<p>Lesson 18’s sign convention puts <span class="math notranslate nohighlight">\(+\theta\)</span> on the E8 end of the array. Facing
+the patch side, E1 is at the right end of the row and E8 at the left, as in
+the L17 Lab, so <span class="math notranslate nohighlight">\(+\theta\)</span> is to your left. The figure looks down from above,
+which puts E8 on the right. Step 13 confirms the sign on your kit.</p>
+<ol class="arabic">
+<li><p><strong>Connect.</strong> Browse to your kit’s address from Lesson 17 and wait for the
+pill to read <strong>Connected</strong>.</p></li>
+<li><p><strong>Place the source.</strong> Set the powered HB100 <span class="qty">1 m</span> out at <span class="qty">0°</span>
+on the arc, facing the array.</p></li>
+<li><p><strong>Find the source.</strong> Press <strong>Find HB100</strong> and record the Signal Freq. If it
+is more than <span class="qty">10 MHz</span> from the frequency you used in Part 1, redo
+your Phase Control row before Run 2: E8’s value moves about <span class="qty">0.6°</span> for
+every <span class="qty">10 MHz</span>, and Step 18 allows <span class="qty">1°</span>.</p>
+<div class="rec" data-lab="L18">
+<label>Step 3: Signal Freq after <b>Find HB100</b> <input data-field="freq"></label>
+</div>
+</li>
+<li><p><strong>Calibrate the array.</strong> Press <strong>Calibrate</strong> and wait for it to finish,
+with the source still at boresight. A source off boresight while
+Calibrate runs bakes a steering ramp into the calibration offsets, and
+every trace after it peaks in the wrong place.</p></li>
+<li><p><strong>Load the preset.</strong> Open the <strong>Lab Presets</strong> section and choose the
+Steering Angle preset. It loads a uniform taper on E1 to E8, zeros Phase
+Control, turns <strong>Use Bits</strong> on, and sets <strong>Signal BW</strong> to
+<span class="qty">10 MHz</span>, so each sweep point is one <span class="qty">2.8125°</span> phase step. It
+keeps the Signal Freq that Find HB100 stored and opens the <strong>FFT</strong> tab.</p></li>
+<li><p><strong>Set the gain.</strong> Set <strong>Rx Gain (dB)</strong> for an FFT peak of <span class="math notranslate nohighlight">\(-10 \pm 3\)</span> dBFS,
+as in the L17 Lab; the preset does not set it.</p></li>
+<li><p><strong>Mark the peak.</strong> Turn on <strong>Show Peak Angle Marker</strong> under
+<strong>Plot Options</strong>.</p></li>
+<li><p><strong>Check the tone.</strong> Press <strong>Start</strong>. The <strong>FFT</strong> tab should show one narrow
+tone within about <span class="qty">±1 MHz</span> of <span class="qty">0 MHz</span>, at least
+<span class="qty">20 dB</span> above the floor. If the noise buries it, re-aim the HB100 or press
+<strong>Find HB100</strong> again.</p></li>
+<li><p><strong>Open the trace.</strong> Open the <strong>Rectangular</strong> tab. The sweep keeps running
+from here on, and the button reads <strong>Stop</strong>.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-run-1-move-the-source">
+<div class="wrap docutils container">
+<p class="rubric">Run 1: Move the Source</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Reset Phase Control to zero.</p></li>
+<li><p>Move the HB100 along the arc: <span class="qty">0°</span>, then <span class="qty">+30°</span>, then <span class="qty">+45°</span>.</p></li>
+<li><p>At each, record Angle, HPBW, and Peak Gain in Table A.</p></li>
+<li><p>Freeze the <span class="qty">0°</span> trace to compare against.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Read every half-power beamwidth as the distance between the two angles where
+the trace falls <span class="qty">3 dB</span> below its own peak. The difference box is
+<strong>Angle</strong> minus the arc angle; compare it with the pass standard you sized in
+Part 1. Take every reading on the <span class="qty">1 m</span> arc, and before each position
+check your Part 1 row for it.</p>
+<ol class="arabic" start="10">
+<li><p><strong>Zero the offsets.</strong> Press <strong>Reset</strong> under <strong>Phase Control</strong>.</p></li>
+<li><p><strong>Source at <span class="qty">0°</span>.</strong> Record <strong>Angle</strong>, the half-power beamwidth, and
+<strong>Peak Gain</strong>, then press <strong>Freeze</strong> to hold this trace. Compare the
+difference with your pass standard and the width with your Part 1
+prediction.</p>
+<div class="rec" data-lab="L18">
+<label>Table A, source at 0°: Angle <input data-field="a.0.angle"></label>
+<label>Table A, source at 0°: difference from the arc angle <input data-field="a.0.diff"></label>
+<label>Table A, source at 0°: half-power beamwidth <input data-field="a.0.hpbw"></label>
+<label>Table A, source at 0°: Peak Gain <input data-field="a.0.gain"></label>
+</div>
+</li>
+<li><p><strong>Keep the reference.</strong> Leave the frozen trace on the plot for the next
+two positions, so you can compare each new trace with it.</p></li>
+<li><p><strong>Source at <span class="qty">+30°</span>.</strong> Move the HB100 along the arc to <span class="qty">+30°</span>,
+still <span class="qty">1 m</span> out and facing the array, and record the same four
+boxes. If <strong>Angle</strong> reads near <span class="qty">−30°</span>, the source is on the negative
+side of the arc; move it across. Compare the width and the change in
+Peak Gain from the <span class="qty">0°</span> row with your Part 1 predictions.</p>
+<div class="rec" data-lab="L18">
+<label>Table A, source at 30°: Angle <input data-field="a.30.angle"></label>
+<label>Table A, source at 30°: difference from the arc angle <input data-field="a.30.diff"></label>
+<label>Table A, source at 30°: half-power beamwidth <input data-field="a.30.hpbw"></label>
+<label>Table A, source at 30°: Peak Gain <input data-field="a.30.gain"></label>
+</div>
+</li>
+<li><p><strong>Source at <span class="qty">+45°</span>.</strong> Move it to <span class="qty">+45°</span> and record the same
+four, and compare them with your Part 1 predictions in the same way. If
+<strong>Angle</strong> jumps to about <span class="qty">−90°</span>, read the main lobe’s angle off the
+trace and record that. The sweep’s last steps take the
+element-to-element phase out to <span class="qty">−227.8°</span>, the same ramp as
+<span class="qty">+132.2°</span>, which points within a few degrees of a <span class="qty">45°</span> source;
+the GUI plots all of them at <span class="qty">−90°</span>, so they read almost as high as
+the main lobe, and noise can lift one above it.</p>
+<div class="rec" data-lab="L18">
+<label>Table A, source at 45°: Angle <input data-field="a.45.angle"></label>
+<label>Table A, source at 45°: difference from the arc angle <input data-field="a.45.diff"></label>
+<label>Table A, source at 45°: half-power beamwidth <input data-field="a.45.hpbw"></label>
+<label>Table A, source at 45°: Peak Gain <input data-field="a.45.gain"></label>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-run-2-apply-the-steer-angle">
+<div class="wrap docutils container">
+<p class="rubric">Run 2: Apply the Steer Angle</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Move the HB100 back to <span class="qty">0°</span> on the arc.</p></li>
+<li><p>Apply 15, 30, and 45 on Uniform; record Angle, HPBW, and Peak Gain in Table B.</p></li>
+<li><p>At Apply 30, copy the eight Phase Control boxes.</p></li>
+<li><p>Reset Phase Control before you leave.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<ol class="arabic" start="15">
+<li><p><strong>Source back to boresight.</strong> Move the HB100 back to <span class="qty">0°</span> on the arc,
+<span class="qty">1 m</span> out.</p></li>
+<li><p><strong>Apply 15.</strong> In <strong>Beam Steering</strong>, leave <strong>Taper</strong> on Uniform, enter 15 in
+<strong>Steer Angle (deg)</strong>, and press <strong>Apply</strong>. Apply also rewrites <strong>Element
+Gains</strong> with the chosen taper, which is why it stays on Uniform. Record
+<strong>Angle</strong>, <strong>Peak Gain</strong>, and the half-power beamwidth. The difference box
+is <strong>Angle</strong> minus the Apply value; compare the readings with your Part 1
+predictions.</p>
+<div class="rec" data-lab="L18">
+<label>Table B, Apply 15: Angle <input data-field="b.15.angle"></label>
+<label>Table B, Apply 15: difference from the Apply value <input data-field="b.15.diff"></label>
+<label>Table B, Apply 15: half-power beamwidth <input data-field="b.15.hpbw"></label>
+<label>Table B, Apply 15: Peak Gain <input data-field="b.15.gain"></label>
+</div>
+</li>
+<li><p><strong>Apply 30.</strong> Repeat for 30 and record the same four.</p>
+<div class="rec" data-lab="L18">
+<label>Table B, Apply 30: Angle <input data-field="b.30.angle"></label>
+<label>Table B, Apply 30: difference from the Apply value <input data-field="b.30.diff"></label>
+<label>Table B, Apply 30: half-power beamwidth <input data-field="b.30.hpbw"></label>
+<label>Table B, Apply 30: Peak Gain <input data-field="b.30.gain"></label>
+</div>
+</li>
+<li><p><strong>Read Phase Control.</strong> With Apply 30 still loaded, copy the eight
+<strong>Phase Control</strong> boxes beside your Part 1 prediction. Read the boxes, not
+the sliders: the sliders stop at <span class="qty">±180°</span>, and Apply writes
+unwrapped values. The read-back should match your prediction to within
+<span class="qty">1°</span> on every element; a difference that grows with element number
+means your Part 1 frequency differs from the Signal Freq on screen.</p>
+<div class="rec" data-lab="L18">
+<label>Phase Control, E1: predicted (your Question 2(a)) <input data-field="pc.pred.1"></label>
+<label>Phase Control, E2: predicted (your Question 2(a)) <input data-field="pc.pred.2"></label>
+<label>Phase Control, E3: predicted (your Question 2(a)) <input data-field="pc.pred.3"></label>
+<label>Phase Control, E4: predicted (your Question 2(a)) <input data-field="pc.pred.4"></label>
+<label>Phase Control, E5: predicted (your Question 2(a)) <input data-field="pc.pred.5"></label>
+<label>Phase Control, E6: predicted (your Question 2(a)) <input data-field="pc.pred.6"></label>
+<label>Phase Control, E7: predicted (your Question 2(a)) <input data-field="pc.pred.7"></label>
+<label>Phase Control, E8: predicted (your Question 2(a)) <input data-field="pc.pred.8"></label>
+<label>Phase Control, E1: read back <input data-field="pc.read.1"></label>
+<label>Phase Control, E2: read back <input data-field="pc.read.2"></label>
+<label>Phase Control, E3: read back <input data-field="pc.read.3"></label>
+<label>Phase Control, E4: read back <input data-field="pc.read.4"></label>
+<label>Phase Control, E5: read back <input data-field="pc.read.5"></label>
+<label>Phase Control, E6: read back <input data-field="pc.read.6"></label>
+<label>Phase Control, E7: read back <input data-field="pc.read.7"></label>
+<label>Phase Control, E8: read back <input data-field="pc.read.8"></label>
+<label>Phase Control, E1: difference <input data-field="pc.diff.1"></label>
+<label>Phase Control, E2: difference <input data-field="pc.diff.2"></label>
+<label>Phase Control, E3: difference <input data-field="pc.diff.3"></label>
+<label>Phase Control, E4: difference <input data-field="pc.diff.4"></label>
+<label>Phase Control, E5: difference <input data-field="pc.diff.5"></label>
+<label>Phase Control, E6: difference <input data-field="pc.diff.6"></label>
+<label>Phase Control, E7: difference <input data-field="pc.diff.7"></label>
+<label>Phase Control, E8: difference <input data-field="pc.diff.8"></label>
+</div>
+</li>
+<li><p><strong>Apply 45.</strong> Repeat for 45. If <strong>Angle</strong> jumps to about <span class="qty">−90°</span>,
+record the main lobe’s angle off the trace, as in Step 14. Compare the
+Peak Gain with the <span class="qty">0°</span> and <span class="qty">45°</span> rows of Table A and with your
+Part 1 prediction.</p>
+<div class="rec" data-lab="L18">
+<label>Table B, Apply 45: Angle <input data-field="b.45.angle"></label>
+<label>Table B, Apply 45: difference from the Apply value <input data-field="b.45.diff"></label>
+<label>Table B, Apply 45: half-power beamwidth <input data-field="b.45.hpbw"></label>
+<label>Table B, Apply 45: Peak Gain <input data-field="b.45.gain"></label>
+</div>
+</li>
+<li><p><strong>Reset.</strong> Press <strong>Reset</strong> under <strong>Phase Control</strong> before you leave the
+station. The offsets stay loaded until you do, and they add to every
+sweep the next person runs.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-no-hardware">
+<div class="wrap docutils container">
+<p class="rubric">No Hardware?</p>
+<div class="tip admonition">
+<p class="admonition-title">No hardware?</p>
+<p>Open the hosted simulator at
+<a class="reference external" href="https://livethisdream.github.io/phaser/">livethisdream.github.io/phaser</a>, the
+same dashboard with nothing to install. At a station whose hardware has failed,
+add <code class="docutils literal notranslate"><span class="pre">?sim=1</span></code> to the station’s URL or turn on <strong>Simulator Mode</strong> under
+<strong>Configuration</strong>; an orange <strong>SIMULATION</strong> pill marks simulated data. With a
+checkout of the Phaser repository, <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">phaser_headless.py</span> <span class="pre">--sim</span></code> serves the
+same page at <code class="docutils literal notranslate"><span class="pre">http://localhost:8080</span></code>.</p>
+<p>The simulator holds its source at boresight, so Run 1’s moves have no
+simulated version. Run 2 works as written, and it is the rehearsal in Part 1 of the
+packet; Phase Control shows the same offsets as the hardware. The simulator has
+no element pattern and does not model <strong>Rx Gain (dB)</strong>; its tone sits at
+<span class="qty">−1 MHz</span>; and <strong>Find HB100</strong> and <strong>Calibrate</strong> run scripted scans.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-your-part-2-entries">
+<div class="wrap docutils container">
+<p class="rubric">Your Part 2 Entries</p>
+<p>This frame collects every box you filled in on this page. Your entries stay in this
+browser only, saved as you type. <strong>Download my packet</strong> writes them into Part 2
+of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
+viewer, and upload one PDF to Gradescope. If you have already typed Part 1 into
+the packet PDF, use <strong>Fill my own copy</strong> and choose that file instead: your Part 1
+is kept, and Part 2 is added to it. Either way the result is locked, so finish
+any typing in the PDF first. <strong>Export entries</strong> saves a small backup file you
+can <strong>Import</strong> on another laptop or after clearing your browser. The boxes are
+optional: the blank packet is in the next frame, to fill on paper or in a PDF
+viewer instead.</p>
+<div class="rec-summary" data-lab="L18" data-pdf="../../labs/ECE444_Lab_L18_Steering_blank.pdf" data-file="ECE444_L18_Lab"></div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-lab-packet">
+<div class="wrap docutils container">
+<p class="rubric">Lab Packet</p>
+<p>The L18 Lab packet is one submission for the whole lab, turned in complete before Lesson 19. It has three parts:</p>
+<ol class="arabic simple">
+<li><p>Part 1, Pre-Lab (individual, before the lab period, because you need it in class): the phase table at your kit’s frequency, what Phase Control will show, the beamwidths, the pass standard, and a rehearsal of Run 2 on the hosted simulator.</p></li>
+<li><p>Part 2, Measurements (your own kit’s data, recorded in class): Tables A and B, from Run 1 and Run 2.</p></li>
+<li><p>Part 3, Writeup (individual, after the lab): reconcile the measurements with the predictions, and three analysis problems.</p></li>
+</ol>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">L18 Lab packet (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-for-part-3">
+<div class="wrap docutils container">
+<p class="rubric">For Part 3</p>
+<p>Part 3 of the packet is the writeup, done after class with your Part 2
+entries beside you. Its first question asks four things:</p>
+<ol class="arabic simple">
+<li><p>Compare each Table A difference with your pass standard. For a row
+outside it, name the error source in your budget most likely responsible,
+and say how you would check it.</p></li>
+<li><p>Compare the <span class="qty">45°</span> rows of Tables A and B: Angle, HPBW, and Peak Gain.
+Why do the angle and width agree while only the moved source loses level,
+and why can your <span class="qty">30°</span> Peak Gain not show that drop?</p></li>
+<li><p>Does the Phase Control read-back match your prediction? Explain the sign,
+and any difference.</p></li>
+<li><p>Do the beamwidths match your predictions, and why does the lab quote them
+to the nearest degree?</p></li>
+</ol>
+<p>Lesson 18’s
+<a href="../L18-beam-steering/index.html#frame-two-ways-to-steer-the-peak">”Two Ways to Steer the Peak”</a>,
+<a href="../L18-beam-steering/index.html#frame-the-sign-in-phase-control">”The Sign in Phase Control”</a>,
+and
+<a href="../L18-beam-steering/index.html#frame-how-close-is-close-enough">”How Close Is Close Enough”</a>
+give the reasoning. The three analysis problems that follow read a classmate’s
+sweep, recover a steer angle from Phase Control, and compare two frozen traces.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<p>The L19 Lab uses today’s skill: the peak of a sweep is a bearing, and bearings
+from several stations cross at the hidden HB100.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L18-lab-beam-steering"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

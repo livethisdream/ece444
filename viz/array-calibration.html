@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Calibrate does: gain, pair-sweep phase, and the pattern</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:8px; padding:12px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* Side by side above 620px; below it the two canvases stack and the design
+     box shortens (fit() scales the height, never the bitmap alone). */
+  .cv2 { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px; }
+  @media (max-width:619px) { .cv2 { grid-template-columns:1fr; } }
+  .steps { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  .steps .tab { flex:1 1 0; }
+  .tab.on { background:var(--navy); color:#fff; border-color:var(--navy); }
+  .legend { display:flex; flex-wrap:wrap; justify-content:center; gap:4px 16px; font-size:11.5px; color:var(--ink3); min-height:15px; }
+  .legend span { display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+  .legend i { display:inline-block; width:22px; height:0; border-top:2px solid; }
+  .legend b { display:inline-block; width:8px; height:8px; border-radius:50%; }
+  .controls { display:flex; align-items:center; gap:8px 14px; flex-wrap:wrap;
+              padding:7px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 220px; min-width:0; }
+  .ctl label, .sel label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
+  .ctl input[type=range] { flex:1 1 auto; min-width:90px; accent-color:var(--mid); }
+  .sel { display:flex; align-items:center; gap:6px; }
+  select { font:inherit; font-size:12px; color:var(--navy); border:1px solid var(--edge2); border-radius:5px; background:#fff; padding:2px 4px; }
+  button { font:inherit; font-size:12px; font-weight:600; padding:3px 10px; border-radius:5px;
+           border:1px solid var(--edge2); background:#fff; color:var(--navy); cursor:pointer; }
+  button:hover { background:var(--bg); }
+  .tab.on:hover { background:var(--navy); }
+  @media (max-width:430px) {
+    .app { padding:8px; gap:6px; }
+    .controls { padding:6px 8px; gap:6px 10px; }
+    .ctl { flex:1 1 100%; }
+    button { padding:3px 6px; }
+  }
+  .readouts { display:grid; gap:6px; grid-template-columns:repeat(3, minmax(0,1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:3px; padding:5px 4px 6px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center; height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.04em; color:var(--ink3); white-space:nowrap; overflow:hidden; max-width:100%; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; color:var(--navy); overflow:hidden; max-width:100%; }
+  .state { margin:0; text-align:center; font-size:12px; font-weight:700; color:var(--ink3); min-height:15px; }
+  .state.ok { color:var(--grn); }
+  .state.hot { color:var(--amber); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="steps">
+    <button class="tab" type="button" data-stage="0">1 Gain</button>
+    <button class="tab" type="button" data-stage="1">2 Phase</button>
+    <button class="tab" type="button" data-stage="2">3 Pattern</button>
+    <button id="play" type="button">&#9654; play all</button>
+  </div>
+  <div class="cv2">
+    <canvas id="cA" aria-label="Left panel. Gain step: each element's level measured alone. Phase step: the swept pair's sum against the swept element's phase, with the argmax and fit estimates. Pattern step: the array pattern before and after calibration."></canvas>
+    <canvas id="cB" aria-label="Right panel. Gain step: the trim applied to each element. Phase step: each element's remaining phase error after calibration, for five runs. Pattern step: the eight element phasors added head to tail at broadside."></canvas>
+  </div>
+  <div class="legend" id="legend"></div>
+  <div class="controls">
+    <div class="sel">
+      <label for="est">Estimator</label>
+      <select id="est">
+        <option value="fit" selected>fit the curve</option>
+        <option value="argmax">highest sample</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label for="noise">Noise</label>
+      <input type="range" id="noise" min="0" max="0.5" step="0.01" value="0.3">
+      <span class="val" id="noise-val">0.30 dB</span>
+    </div>
+    <button id="rerun" type="button">new runs</button>
+  </div>
+  <div class="readouts">
+    <div class="ro"><span class="k" id="k0">&#8212;</span><span class="v" id="v0">&#8212;</span></div>
+    <div class="ro"><span class="k" id="k1">&#8212;</span><span class="v" id="v1">&#8212;</span></div>
+    <div class="ro"><span class="k" id="k2">&#8212;</span><span class="v" id="v2">&#8212;</span></div>
+  </div>
+  <p class="state" id="state">&#8212;</p>
+</div>
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+const GRAY='#8b95a3', GRID='#e1eaf2';
+const MINUS='−';
+const sgn=(v,d)=>(v<0?MINUS:(v>0?'+':''))+Math.abs(v).toFixed(d);
+const neg=(v,d)=>(v<0?MINUS:'')+Math.abs(v).toFixed(d);
+
+/* ---- the hardware. Eight channels, each with its own gain and phase from
+   trace lengths and part tolerances. Illustrative, not measured: the same
+   example as the lesson's figures (scripts/graphics/l17_calibration.py
+   GAIN_DB, PHASE_DEG), chosen so the uncalibrated beam both squints (+6.0 deg)
+   and raises its sidelobes (-7.8 dB). d/lambda = 0.491 at 10.525 GHz. */
+const N=8, DL=0.491;
+const GAIN_DB=[-0.6, 0.0, -1.4, -0.3, -2.2, -0.9, -1.7, -0.5];
+const PHASE_DEG=[0, -5, -8, 12, -30, -42, -93, -140];
+const G=GAIN_DB.map(d=>Math.pow(10,d/20));
+const GMIN=Math.min(...G), WEAK=G.indexOf(GMIN);
+const R=Math.PI/180;
+const wrap=a=>((a+180)%360+360)%360-180;
+
+/* ---- the algorithm, as in phaser_functions.py.
+   gain_calibration: one element on at full gain, the rest off; the weakest
+   becomes the reference and every trim is <= 1, since the chip can only
+   attenuate. phase_calibration: pairs (1,2) ... (7,8); hold the left element at
+   its solved offset, sweep the right one from -180 to +180 deg in 7-bit steps,
+   keep the phase that peaks the sum. Each answer seeds the next pair, so an
+   error in one carries down the array. _fit_pair_phase: the angle of the first
+   Fourier coefficient of the linear response, sum(r * e^{j phi}); the argmax
+   is what it replaced. Captures are read in dB, so the noise is added in dB. */
+const STEP=360/128, PHI=[];
+for(let p=-180;p<=180+STEP/2;p+=STEP) PHI.push(p);
+const RUNS=5;
+function rng(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function gauss(r){ let u=0,v=0; while(u===0) u=r(); v=r(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+function estimate(resp, how){
+  if(how==='argmax'){ let i=0; for(let k=1;k<resp.length;k++) if(resp[k]>resp[i]) i=k; return PHI[i]; }
+  // the sweep includes both -180 and +180, the same phase twice: drop one
+  let re=0, im=0;
+  for(let k=0;k<resp.length-1;k++){ const a=Math.pow(10,resp[k]/20); re+=a*Math.cos(PHI[k]*R); im+=a*Math.sin(PHI[k]*R); }
+  return wrap(Math.atan2(im,re)/R);
+}
+// one run of the phase step: every pair's noisy sweep, the estimate, and each
+// element's remaining phase error relative to element 1
+function phaseRun(seed, sigma, how){
+  const r=rng(seed), pc=new Array(N).fill(0), pairs=[];
+  for(let p=0;p<N-1;p++){
+    const la=PHASE_DEG[p]+pc[p], resp=[], clean=[];
+    for(const ph of PHI){
+      const b=PHASE_DEG[p+1]+ph, re=G[p]*Math.cos(la*R)+G[p+1]*Math.cos(b*R), im=G[p]*Math.sin(la*R)+G[p+1]*Math.sin(b*R);
+      const db=20*Math.log10(Math.hypot(re,im)+1e-9);
+      clean.push(db); resp.push(db+sigma*gauss(r));
+    }
+    const est=estimate(resp, how), truth=wrap(la-PHASE_DEG[p+1]);
+    pc[p+1]=est;
+    pairs.push({ resp, clean, est, argmax:estimate(resp,'argmax'), fit:estimate(resp,'fit'), truth, top:20*Math.log10(G[p]+G[p+1]) });
+  }
+  const err=PHASE_DEG.map((ph,k)=>wrap(ph+pc[k]-PHASE_DEG[0]-pc[0]));
+  return { pc, pairs, err };
+}
+const state={ stage:0, t:0, playing:false, all:false, how:'fit', sigma:0.3, seed:18, runs:[] };
+// seed 18 at 0.30 dB happens to land near the phaser-00 runs with the highest
+// sample: element 8 spread over 101 deg in five runs (104 measured), element 2
+// over 20 deg
+function compute(){
+  state.runs=[];
+  for(let k=0;k<RUNS;k++) state.runs.push(phaseRun(state.seed*101+k*7919, state.sigma, state.how));
+}
+
+/* ---- the array factor of the eight channels at weights w (complex, as
+   [re, im] pairs), normalized to its own peak, from -90 to +90 deg. */
+const TH=[]; for(let i=0;i<=720;i++) TH.push(-90+i/4);
+function pattern(w){
+  const out=TH.map(th=>{ const u=2*Math.PI*DL*Math.sin(th*R); let re=0, im=0;
+    for(let n=0;n<N;n++){ const c=Math.cos(n*u), s=Math.sin(n*u); re+=w[n][0]*c-w[n][1]*s; im+=w[n][0]*s+w[n][1]*c; }
+    return Math.hypot(re,im); });
+  const pk=Math.max(...out);
+  return out.map(v=>Math.max(-30, 20*Math.log10(v/pk+1e-12)));
+}
+function lobeStats(db){
+  let i=0; for(let k=1;k<db.length;k++) if(db[k]>db[i]) i=k;
+  let j=i; while(j<db.length-1 && db[j+1]<db[j]) j++;
+  let k=i; while(k>0 && db[k-1]<db[k]) k--;
+  let sl=-30; for(let m=0;m<db.length;m++) if(m<k||m>j) sl=Math.max(sl,db[m]);
+  return { beam:TH[i], psl:sl-db[i] };
+}
+// weights before calibration, after it, and part way (s from 0 to 1): the
+// gains and phases each move linearly from one to the other
+function weights(s){
+  const pc=state.runs[0].pc;
+  return G.map((g,n)=>{ const a=g+(GMIN-g)*s, ph=(PHASE_DEG[n]+s*pc[n])*R; return [a*Math.cos(ph), a*Math.sin(ph)]; });
+}
+
+/* ---- canvases */
+const cA=document.getElementById('cA'), xa=cA.getContext('2d');
+const cB=document.getElementById('cB'), xb=cB.getContext('2d');
+let AW=0, AH=0, BW=0, BH=0;
+const LAB=10.5;
+function box(ctx,w,h){ ctx.clearRect(0,0,w,h); }
+function title(ctx,s,x){ stext(ctx,s,x||8,11,LAB,cssv('--ink3'),'left',true); }
+
+/* stage 1: gain. Timeline: 0.45 s per element measured alone, then 1.5 s
+   for the trims. */
+const T_MEAS=0.45, T_TRIM=1.5;
+const gainDur=()=>N*T_MEAS+T_TRIM+0.6;
+function drawGain(t){
+  const ink3=cssv('--ink3'), navy=cssv('--navy'), amber=cssv('--amber'), red=cssv('--red'), grn=cssv('--grn');
+  const meas=Math.min(N, t/T_MEAS), s=Math.max(0, Math.min(1, (t-N*T_MEAS)/T_TRIM));
+  const active = t<N*T_MEAS ? Math.floor(meas) : -1;
+  // left: the element row, then each element's level in dB re the strongest
+  box(xa,AW,AH);
+  title(xa, (active>=0 ? 'element '+(active+1)+' alone, full gain' : (s<1?'trimming to the weakest':'all trimmed to element '+(WEAK+1)))+', dB');
+  const x0=34, x1=AW-10, y0=Math.max(46, AH*0.22), y1=AH-22, lo=-3;
+  const ym=d=>y0+(-d)/(-lo)*(y1-y0), bw=(x1-x0)/N;
+  // the element row: lit while measured, off otherwise
+  for(let n=0;n<N;n++){
+    const cx=x0+bw*(n+0.5), on = active===n || active<0;
+    xa.fillStyle= on ? red : '#d5dde6'; xa.beginPath(); xa.arc(cx, 28, 4.5, 0, 7); xa.fill();
+  }
+  for(const d of [0,-1,-2,-3]){
+    xa.strokeStyle=GRID; xa.lineWidth=1; xa.beginPath(); xa.moveTo(x0,ym(d)); xa.lineTo(x1,ym(d)); xa.stroke();
+    stext(xa, neg(d,0), x0-6, ym(d), LAB, ink3, 'right');
+  }
+  for(let n=0;n<N;n++){
+    const done = n<meas, part = n===Math.floor(meas) ? meas-n : (done?1:0);
+    if(part<=0) continue;
+    const d0=GAIN_DB[n], d=d0+(GAIN_DB[WEAK]-d0)*s, top=lo+(d-lo)*Math.min(1,part*1.6);
+    const cx=x0+bw*n+bw*0.18, w=bw*0.64;
+    xa.fillStyle= n===WEAK ? amber : navy;
+    xa.fillRect(cx, ym(top), w, ym(lo)-ym(top));
+    // the measured level stays as an outline once the trim takes it down
+    if(s>0 && n!==WEAK){ xa.strokeStyle=navy; xa.lineWidth=1; xa.setLineDash([2,2]); xa.strokeRect(cx+0.5, ym(d0), w-1, ym(d)-ym(d0)); xa.setLineDash([]); }
+    stext(xa, 'E'+(n+1), cx+w/2, y1+11, LAB, ink3, 'center');
+  }
+  if(s>0){
+    const y=ym(GAIN_DB[WEAK]);
+    xa.strokeStyle=amber; xa.setLineDash([4,3]); xa.lineWidth=1.3;
+    xa.beginPath(); xa.moveTo(x0,y); xa.lineTo(x1,y); xa.stroke(); xa.setLineDash([]);
+  }
+  // right: the trim each element gets, in dB (never positive)
+  box(xb,BW,BH);
+  title(xb,'trim applied to each element, dB');
+  const X0=34, X1=BW-10, Y0=Math.max(30, BH*0.14), Y1=BH-22, bw2=(X1-X0)/N;
+  const yb=d=>Y0+(-d)/3*(Y1-Y0);
+  for(const d of [0,-1,-2,-3]){
+    xb.strokeStyle=GRID; xb.beginPath(); xb.moveTo(X0,yb(d)); xb.lineTo(X1,yb(d)); xb.stroke();
+    stext(xb, neg(d,0), X0-6, yb(d), LAB, ink3, 'right');
+  }
+  for(let n=0;n<N;n++){
+    const trim=(GAIN_DB[WEAK]-GAIN_DB[n])*s, cx=X0+bw2*n+bw2*0.18, w=bw2*0.64;
+    if(trim<0){ xb.fillStyle=grn; xb.fillRect(cx, yb(0), w, yb(trim)-yb(0)); }
+    stext(xb, 'E'+(n+1), cx+w/2, Y1+11, LAB, ink3, 'center');
+  }
+  legend([['bar', cssv('--navy'), 'level, one element on'], ['bar', amber, 'weakest'], ['bar', grn, 'trim']]);
+  ro([['weakest', meas>=N ? 'E'+(WEAK+1) : '\u2014'], ['largest trim', s>0 ? neg(GAIN_DB[WEAK]*s-0.0001,1)+' dB' : '—'],
+      ['elements on', active>=0 ? '1 of 8' : '8 of 8']]);
+  status(t<N*T_MEAS ? 'Each element is measured alone, at full gain, with the other seven off.'
+       : 'Every element is trimmed down to the weakest; the chip can attenuate but not boost.', s>=1?'ok':'');
+}
+
+/* stage 2: phase. Each pair's sweep takes 1.1 s to trace, then holds 0.5 s. */
+const T_SWEEP=1.1, T_HOLD=0.5;
+const phaseDur=()=>(N-1)*(T_SWEEP+T_HOLD)+0.4;
+function drawPhase(t){
+  const ink3=cssv('--ink3'), navy=cssv('--navy'), amber=cssv('--amber'), grn=cssv('--grn');
+  const per=T_SWEEP+T_HOLD, p=Math.min(N-2, Math.floor(t/per)), u=Math.min(1,(t-p*per)/T_SWEEP);
+  const run=state.runs[0], pr=run.pairs[p], nShow=Math.max(1,Math.round(u*PHI.length));
+  // left: the pair's sum against the swept phase, in linear amplitude where
+  // 2 is both elements in phase: |1 + e^{j delta}| when the gains are equal
+  box(xa,AW,AH);
+  title(xa,'pair E'+(p+1)+', E'+(p+2)+': sweep E'+(p+2));
+  const x0=30, x1=AW-10, y0=30, y1=AH-34;
+  const xm=ph=>x0+(ph+180)/360*(x1-x0), ym=a=>y1-a/2.1*(y1-y0);
+  for(const a of [0,1,2]){
+    xa.strokeStyle=GRID; xa.lineWidth=1; xa.beginPath(); xa.moveTo(x0,ym(a)); xa.lineTo(x1,ym(a)); xa.stroke();
+    stext(xa, String(a), x0-6, ym(a), LAB, ink3, 'right');
+  }
+  for(const ph of [-180,-90,0,90,180]) stext(xa, neg(ph,0)+'°', Math.min(Math.max(xm(ph),x0+12),x1-12), y1+11, LAB, ink3, 'center');
+  MJ.draw(xa, '\\delta', (x0+x1)/2, y1+25, 13, ink3, 'center');
+  MJ.draw(xa, '|1+e^{j\\delta}|', x1, 12, 14, navy, 'right');
+  // normalized so the in-phase sum reads 2, whatever the pair's gains
+  const sc=2/Math.pow(10,pr.top/20);
+  xa.strokeStyle=GRAY; xa.lineWidth=1.4; xa.setLineDash([3,3]); xa.beginPath();
+  pr.clean.forEach((d,k)=>{ const x=xm(PHI[k]), y=ym(sc*Math.pow(10,d/20)); k?xa.lineTo(x,y):xa.moveTo(x,y); });
+  xa.stroke(); xa.setLineDash([]);
+  xa.fillStyle=navy;
+  for(let k=0;k<nShow;k++){ xa.beginPath(); xa.arc(xm(PHI[k]), ym(sc*Math.pow(10,pr.resp[k]/20)), 1.8, 0, 7); xa.fill(); }
+  if(u>=1){
+    const mk=(ph,color,w,dash)=>{ xa.strokeStyle=color; xa.lineWidth=w; xa.setLineDash(dash||[]); xa.beginPath(); xa.moveTo(xm(ph),y0); xa.lineTo(xm(ph),y1); xa.stroke(); xa.setLineDash([]); };
+    mk(pr.truth, ink3, 1.2, [2,3]);
+    mk(pr.argmax, amber, state.how==='argmax'?2.4:1.2);
+    mk(pr.fit, grn, state.how==='fit'?2.4:1.2);
+  }
+  // right: each element's phase error after calibration, five runs; run 1 is
+  // the one being animated, drawn as far as its current pair
+  box(xb,BW,BH);
+  title(xb,'phase error after calibration, 5 runs');
+  const X0=40, X1=BW-12, Y0=34, Y1=BH-22, lim=120;
+  const xe=k=>X0+k/(N-1)*(X1-X0), ye=e=>(Y0+Y1)/2-Math.max(-lim,Math.min(lim,e))/lim*(Y1-Y0)/2;
+  for(const e of [-120,-60,0,60,120]){
+    xb.strokeStyle=e===0?'#b9d2e5':GRID; xb.lineWidth=1; xb.beginPath(); xb.moveTo(X0,ye(e)); xb.lineTo(X1,ye(e)); xb.stroke();
+    stext(xb, neg(e,0)+'°', X0-6, ye(e), LAB, ink3, 'right');
+  }
+  for(let k=0;k<N;k++) stext(xb, 'E'+(k+1), xe(k), Y1+11, LAB, ink3, 'center');
+  const upto=p+(u>=1?1:0);
+  const col=state.how==='fit'?grn:amber;
+  state.runs.forEach((r,ri)=>{
+    xb.strokeStyle=col; xb.globalAlpha=ri===0?1:0.45; xb.lineWidth=ri===0?2.2:1.3;
+    xb.beginPath();
+    for(let k=0;k<=upto;k++){ const x=xe(k), y=ye(r.err[k]); k?xb.lineTo(x,y):xb.moveTo(x,y); }
+    xb.stroke();
+    xb.fillStyle=col;
+    for(let k=0;k<=upto;k++){ xb.beginPath(); xb.arc(xe(k), ye(r.err[k]), ri===0?2.6:1.8, 0, 7); xb.fill(); }
+  });
+  xb.globalAlpha=1;
+  legend([['dot', navy, 'samples'], ['dash', GRAY, 'no noise'], ['line', amber, 'highest sample'], ['line', grn, 'fit']]);
+  const e8=state.runs.map(r=>r.err[N-1]), spread=Math.max(...e8)-Math.min(...e8);
+  const est=state.how==='argmax'?pr.argmax:pr.fit;
+  ro([['pair', 'E'+(p+1)+' → E'+(p+2)], ['this pair’s error', u>=1 ? sgn(wrap(est-pr.truth),1)+'°' : '—'],
+      ['E8 spread, 5 runs', upto>=N-1 ? spread.toFixed(0)+'°' : '—']]);
+  status(state.how==='argmax' ? 'The top of the curve is flat, so noise moves the highest sample, and each pair passes its error on.'
+       : 'Every sample counts in the fit, so the flanks and the null pin the phase down.', state.how==='argmax'?'hot':'ok');
+}
+
+/* stage 3: the pattern, before and after, morphing over 1.8 s */
+const T_MORPH=1.8;
+const patDur=()=>T_MORPH+0.6;
+function drawPattern(t){
+  const ink3=cssv('--ink3'), navy=cssv('--navy'), amber=cssv('--amber');
+  const s=Math.max(0,Math.min(1,(t-0.3)/T_MORPH)), e=s*s*(3-2*s);
+  const before=pattern(weights(0)), now=pattern(weights(e)), b=lobeStats(before), a=lobeStats(now);
+  box(xa,AW,AH);
+  title(xa,'pattern, all phases commanded 0, dB');
+  const x0=34, x1=AW-10, y0=30, y1=AH-24;
+  const xm=th=>x0+(th+90)/180*(x1-x0), ym=d=>y0+(-d)/30*(y1-y0);
+  for(const d of [0,-10,-20,-30]){
+    xa.strokeStyle=GRID; xa.lineWidth=1; xa.beginPath(); xa.moveTo(x0,ym(d)); xa.lineTo(x1,ym(d)); xa.stroke();
+    stext(xa, neg(d,0), x0-6, ym(d), LAB, ink3, 'right');
+  }
+  for(const th of [-90,-45,0,45,90]) stext(xa, neg(th,0)+'°', Math.min(Math.max(xm(th),x0+12),x1-12), y1+12, LAB, ink3, 'center');
+  xa.strokeStyle=ink3; xa.setLineDash([3,3]); xa.lineWidth=1; xa.beginPath(); xa.moveTo(xm(0),y0); xa.lineTo(xm(0),y1); xa.stroke(); xa.setLineDash([]);
+  const curve=(v,color,w,dash)=>{ xa.strokeStyle=color; xa.lineWidth=w; xa.setLineDash(dash||[]); xa.beginPath(); v.forEach((d,i)=>{ const x=xm(TH[i]), y=ym(d); i?xa.lineTo(x,y):xa.moveTo(x,y); }); xa.stroke(); xa.setLineDash([]); };
+  curve(before, amber, 1.8, [6,3]);
+  if(e>0) curve(now, navy, 2.2);
+  // right: the eight phasors at broadside, head to tail, before and now
+  box(xb,BW,BH);
+  title(xb,'eight phasors added at broadside');
+  const chain=w=>{ const pts=[[0,0]]; w.forEach(c=>{ const l=pts[pts.length-1]; pts.push([l[0]+c[0], l[1]+c[1]]); }); return pts; };
+  const cb=chain(weights(0)), cn=chain(weights(e));
+  // a fixed scale: the uncalibrated chain is the longest the picture needs
+  const all=cb.concat(cn), minx=Math.min(...all.map(p=>p[0])), maxx=Math.max(...all.map(p=>p[0])), miny=Math.min(...all.map(p=>p[1])), maxy=Math.max(...all.map(p=>p[1]));
+  const pad=14, top=26, scl=Math.min((BW-2*pad)/Math.max(1e-6,maxx-minx), (BH-top-pad)/Math.max(1.5,maxy-miny));
+  const px=p=>pad+(p[0]-minx)*scl+((BW-2*pad)-(maxx-minx)*scl)/2, py=p=>top+(maxy-p[1])*scl+((BH-top-pad)-(maxy-miny)*scl)/2;
+  const draw=(pts,color,w,dash)=>{ xb.strokeStyle=color; xb.lineWidth=w; xb.setLineDash(dash||[]); xb.beginPath(); pts.forEach((p,i)=>i?xb.lineTo(px(p),py(p)):xb.moveTo(px(p),py(p))); xb.stroke(); xb.setLineDash([]);
+    xb.fillStyle=color; pts.forEach(p=>{ xb.beginPath(); xb.arc(px(p),py(p),2.2,0,7); xb.fill(); }); };
+  draw(cb, amber, 1.6, [5,3]);
+  if(e>0) draw(cn, navy, 2.2);
+  legend([['dash', amber, 'uncalibrated'], ['line', navy, e>=1?'calibrated':'calibrating']]);
+  ro([['beam at', sgn(b.beam,1)+'° → '+sgn(a.beam,1)+'°'], ['peak sidelobe, dB', neg(b.psl,1)+' → '+neg(a.psl,1)],
+      ['E8 phase error', sgn(state.runs[0].err[N-1]*e + wrap(PHASE_DEG[N-1]-PHASE_DEG[0])*(1-e),1)+'°']]);
+  status(e<1 ? 'Calibration removes the offsets: the gains level and the phasors line up.'
+       : (Math.abs(a.beam)<0.5 && a.psl<-12 ? 'Calibrated: the beam is at broadside and the sidelobes are back near −13 dB.'
+          : 'The phase errors left by this calibration still move the beam and raise the sidelobes.'), e>=1 && Math.abs(a.beam)<0.5 && a.psl<-12 ? 'ok' : (e>=1?'hot':''));
+}
+
+/* ---- legend, readouts, status line */
+function legend(items){
+  const el=document.getElementById('legend');
+  el.innerHTML=items.map(([kind,color,text])=>{
+    const sw = kind==='bar' ? '<b style="background:'+color+';border-radius:1px"></b>'
+      : kind==='dot' ? '<b style="background:'+color+'"></b>'
+      : '<i style="border-color:'+color+(kind==='dash'?';border-top-style:dashed':'')+'"></i>';
+    return '<span>'+sw+text+'</span>'; }).join('');
+}
+function ro(items){ items.forEach(([k,v],i)=>{ document.getElementById('k'+i).textContent=k; document.getElementById('v'+i).textContent=v; }); }
+function status(s,cls){ const el=document.getElementById('state'); el.textContent=s; el.className='state'+(cls?' '+cls:''); }
+
+const DRAW=[drawGain, drawPhase, drawPattern], DUR=[gainDur, phaseDur, patDur];
+function drawAll(){ DRAW[state.stage](state.t); }
+
+/* ---- sizing: side by side, each canvas is a little wider than tall; stacked
+   on a phone, both design boxes shorten so the stack fits the frame. */
+function setSize(c,wCss,hCss,dpr){
+  c.width=Math.round(wCss*dpr); c.height=Math.round(hCss*dpr); c.style.height=hCss+'px';
+  const bh=c.offsetHeight-c.clientHeight; if(bh) c.style.height=(hCss+bh)+'px';
+}
+const STACK=window.matchMedia ? window.matchMedia('(max-width:619px)') : null;
+function fit(){
+  const dpr=window.devicePixelRatio||1, stacked=STACK && STACK.matches;
+  const aw=Math.max(200, cA.clientWidth), bw=Math.max(200, cB.clientWidth);
+  const h=stacked ? Math.round(Math.min(aw*0.52, 172)) : Math.round(Math.min(aw*0.74, 260));
+  setSize(cA,aw,h,dpr); xa.setTransform(dpr,0,0,dpr,0,0);
+  setSize(cB,bw,h,dpr); xb.setTransform(dpr,0,0,dpr,0,0);
+  AW=aw; AH=h; BW=bw; BH=h;
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+/* ---- the animation clock. A stage plays from t = 0 to its end and holds
+   there; "play all" runs the three in order. Paused off screen. */
+const REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+let visible=true, last=0, started=false;
+function setTabs(){ document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on', +b.dataset.stage===state.stage)); }
+function go(stage, all){
+  state.stage=stage; state.all=!!all; state.t=REDUCED ? DUR[stage]() : 0; state.playing=!REDUCED;
+  setTabs(); drawAll();
+}
+function loop(now){
+  const dt=last ? Math.min(0.1,(now-last)/1000) : 0; last=now;
+  if(state.playing && visible && !document.hidden){
+    state.t+=dt;
+    if(state.t>=DUR[state.stage]()){
+      state.t=DUR[state.stage]();
+      if(state.all && state.stage<2){ state.stage++; state.t=0; setTabs(); }
+      else state.playing=false;
+    }
+    drawAll();
+  }
+  requestAnimationFrame(loop);
+}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>go(+b.dataset.stage,false)));
+document.getElementById('play').addEventListener('click',()=>go(0,true));
+const estEl=document.getElementById('est'), noiseEl=document.getElementById('noise');
+// a change of estimator or noise recomputes the five runs with the same
+// noise draws, so the only difference on screen is the one you changed
+estEl.addEventListener('change',()=>{ state.how=estEl.value; compute(); drawAll(); });
+noiseEl.addEventListener('input',()=>{ state.sigma=+noiseEl.value; document.getElementById('noise-val').textContent=state.sigma.toFixed(2)+' dB'; compute(); drawAll(); });
+document.getElementById('rerun').addEventListener('click',()=>{ state.seed++; compute(); drawAll(); });
+// a preset by query string: ?stage=2 (1-3) and ?est=argmax
+(function(){
+  const q=new URLSearchParams(location.search);
+  const st=+q.get('stage'); if(st>=1 && st<=3) state.stage=st-1;
+  if(q.get('est')==='argmax'||q.get('est')==='fit'){ state.how=q.get('est'); estEl.value=state.how; }
+})();
+compute();
+state.t=DUR[state.stage](); setTabs();
+fit();
+// play everything once, the first time the widget comes into view
+if('IntersectionObserver' in window){
+  new IntersectionObserver(es=>{ es.forEach(e=>{ visible=e.isIntersecting;
+    if(visible && !started){ started=true; if(!REDUCED) go(state.stage, state.stage===0); } }); }, {threshold:0.3}).observe(cA);
+}
+requestAnimationFrame(loop);
+MJ.setRedraw(drawAll);
+MJ.onReady(()=>{ MJ.typeset(document.body).then(drawAll); drawAll(); });
+</script>
+</body>
+</html>

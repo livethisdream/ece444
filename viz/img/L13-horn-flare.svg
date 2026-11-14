@@ -1,0 +1,30 @@
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Left: an open-ended waveguide; only a little of the incoming wave reflects, and the rest spills out of the small opening in a broad, low-gain beam. Right: a horn; the flare lets the wave expand gradually and flow out through a large opening">
+<defs><marker id="l13hf-ah-004a85" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker><marker id="l13hf-ah-0067b9" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0067b9"/></marker><marker id="l13hf-ah-b01e24" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker><marker id="l13hf-ah-3f7d34" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3f7d34"/></marker><marker id="l13hf-ah-8a5a00" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a5a00"/></marker></defs>
+<line x1="300" y1="16" x2="300" y2="314" stroke="#dbe3ee" stroke-width="1"/>
+<text x="150.0" y="32.0" fill="#004a85" font-size="21" font-weight="700" text-anchor="middle">Open-ended waveguide</text>
+<rect x="30" y="142" width="140" height="56" fill="#eaf2f9" stroke="#004a85" stroke-width="3"/>
+<line x1="44.0" y1="162.0" x2="154.0" y2="162.0" stroke="#0067b9" stroke-width="3" marker-end="url(#l13hf-ah-0067b9)"/>
+<line x1="154.0" y1="180.0" x2="112.0" y2="180.0" stroke="#b01e24" stroke-width="1.6" marker-end="url(#l13hf-ah-b01e24)"/>
+<path d="M175.7 148.7 A 22 22 0 0 1 175.7 191.3" fill="none" stroke="#3f7d34" stroke-width="2.2" opacity="1.0"/>
+<path d="M180.9 129.4 A 42 42 0 0 1 180.9 210.6" fill="none" stroke="#3f7d34" stroke-width="2.2" opacity="1.0"/>
+<path d="M186.0 110.1 A 62 62 0 0 1 186.0 229.9" fill="none" stroke="#3f7d34" stroke-width="2.2" opacity="1.0"/>
+<text x="100.0" y="120.0" fill="#0067b9" font-size="18" font-weight="700" text-anchor="middle">in</text>
+<text x="118.0" y="230.0" fill="#b01e24" font-size="18" font-weight="700" text-anchor="middle">a little reflects</text>
+<text x="252.0" y="92.0" fill="#3f7d34" font-size="17" font-weight="700" text-anchor="middle">a broad beam</text>
+<text x="252.0" y="112.0" fill="#3f7d34" font-size="17" font-weight="700" text-anchor="middle">spills out</text>
+<text x="150.0" y="290.0" fill="#5a5a5a" font-size="17" text-anchor="middle">a small opening: a few dBi</text>
+<text x="530.0" y="32.0" fill="#004a85" font-size="21" font-weight="700" text-anchor="middle">Horn</text>
+<path d="M330 142 H410 L620 62 V278 L410 198 H330 Z" fill="#eaf2f9" stroke="#004a85" stroke-width="3" stroke-linejoin="round"/>
+<line x1="620" y1="62" x2="620" y2="278" stroke="#eaf2f9" stroke-width="3"/>
+<path d="M472.0 122.8 A 143.5 143.5 0 0 1 472.0 217.2" fill="none" stroke="#0067b9" stroke-width="2.2" opacity="1.0"/>
+<path d="M514.5 108.1 A 188.5 188.5 0 0 1 514.5 231.9" fill="none" stroke="#0067b9" stroke-width="2.2" opacity="1.0"/>
+<path d="M557.0 93.3 A 233.5 233.5 0 0 1 557.0 246.7" fill="none" stroke="#0067b9" stroke-width="2.2" opacity="1.0"/>
+<path d="M599.5 78.5 A 278.5 278.5 0 0 1 599.5 261.5" fill="none" stroke="#0067b9" stroke-width="2.2" opacity="1.0"/>
+<path d="M647.8 98.1 A 319.5 319.5 0 0 1 647.8 241.9" fill="none" stroke="#3f7d34" stroke-width="2.6" opacity="1.0"/>
+<path d="M680.9 90.5 A 353.5 353.5 0 0 1 680.9 249.5" fill="none" stroke="#3f7d34" stroke-width="2.6" opacity="1.0"/>
+<line x1="342.0" y1="170.0" x2="420.0" y2="170.0" stroke="#0067b9" stroke-width="3" marker-end="url(#l13hf-ah-0067b9)"/>
+<line x1="714.0" y1="170.0" x2="748.0" y2="170.0" stroke="#3f7d34" stroke-width="3" marker-end="url(#l13hf-ah-3f7d34)"/>
+<text x="690.0" y="68.0" fill="#3f7d34" font-size="18" font-weight="700" text-anchor="middle">the wave</text>
+<text x="690.0" y="90.0" fill="#3f7d34" font-size="18" font-weight="700" text-anchor="middle">flows out</text>
+<text x="530.0" y="290.0" fill="#5a5a5a" font-size="17" text-anchor="middle">a gradual flare to a large opening</text>
+</svg>

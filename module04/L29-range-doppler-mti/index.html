@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L29 - Range-Doppler and MTI &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=292d567668">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l29-range-doppler-and-mti">
+<h1>L29 - Range-Doppler and MTI<a class="headerlink" href="#l29-range-doppler-and-mti" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame read-only docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Range-Doppler and MTI</h1>
+<div class="title-rule"></div>
+<p>A burst of chirps measures each target’s radial velocity, and a pulse canceller removes the returns that do not move.</p>
+<p>Lesson 29 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the lab’s slides, switch to present mode and print: one slide a
+sheet, with room for notes. Print from read mode for the whole lesson and lab.</p>
+</div>
+</div>
+<div class="frame here-29 read-only docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 4">
+  <li>I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.</li>
+  <li>I can apply moving target indication (MTI) processing to distinguish moving targets from clutter.</li>
+</ol>
+<!-- The Module 4 "you are here" strip. Included into a lesson's Learning
+     Objectives frame, which carries `:class: here-NN` to light up its own
+     chip (frames.css). L25-L27 are taught in class; L28-L31 are the final
+     project, each one page with its lesson and then its lab. -->
+<div class="lane-strip" role="navigation" aria-label="Module 4 lessons, by whether they are taught in class or worked as the final project">
+  <span class="ls-label">Module 4</span>
+  <a class="ls-chip" data-n="25" href="../L25-radar-equation/index.html" title="L25 Radar Equation: in class">25</a>
+  <a class="ls-chip" data-n="26" href="../L26-range-resolution-doppler/index.html" title="L26 Range, Resolution, and Doppler: in class">26</a>
+  <a class="ls-chip" data-n="27" href="../L27-radar-detection/index.html" title="L27 Radar Detection: in class">27</a>
+  <a class="ls-chip ls-proj" data-n="28" href="../L28-fmcw/index.html" title="L28 FMCW and its lab: final project">28</a>
+  <a class="ls-chip ls-proj" data-n="29" href="../L29-range-doppler-mti/index.html" title="L29 Range-Doppler and MTI and its lab: final project">29</a>
+  <a class="ls-chip ls-proj" data-n="30" href="../L30-cfar/index.html" title="L30 CFAR and its lab: final project">30</a>
+  <a class="ls-chip ls-proj" data-n="31" href="../L31-classification-tracking/index.html" title="L31 Classification and Tracking and its lab: final project">31</a>
+  <a class="ls-chip ls-proj ls-report" href="../final-project/index.html" title="Final Project: Radar Systems Report">Report</a>
+  <span class="ls-key"><i></i>in class <i class="ls-proj"></i>final project</span>
+</div>
+<p>This page is a lesson and then its lab. You read the lesson before the lab period and fill in Part 1 of the packet from it; the lab, lower on the page, is what we do in class.</p>
+<p><a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> defined the Doppler shift and the velocity resolution of a burst of pulses, <a href="../L27-radar-detection/index.html">Lesson 27</a> showed that adding the chirps of a burst coherently is what makes a weak target detectable, and <a href="../L28-fmcw/index.html">Lesson 28</a> turned one chirp into a range profile. This lesson puts the three together. We send a burst of chirps, arrange the samples as a matrix, and take a second FFT across the chirps, which gives the range-Doppler map: every target at its range and its radial velocity at once. Then we remove the returns that do not move, the walls, the table, and the kit’s own leakage, with moving target indication (MTI).</p>
+<p>Every example on this page uses one <strong>teaching burst</strong>: a 10.0 GHz carrier (<span class="math notranslate nohighlight">\(\lambda\)</span> = 3.0 cm), chirps of 400 MHz in 200 µs sampled at 4 MSPS, and <span class="math notranslate nohighlight">\(M\)</span> = 128 chirps, one every <span class="math notranslate nohighlight">\(T_\text{PRI}\)</span> = 0.4 ms. The Phaser app does not send this burst. Your kit runs the app’s <strong>Range + Velocity</strong> preset, whose numbers the packet gives you, so every method here carries over and none of its numbers is a Part 1 answer.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-from-one-chirp-to-a-burst">
+<div class="wrap docutils container">
+<p class="rubric">From One Chirp to a Burst</p>
+<p>In <a href="../L28-fmcw/index.html">Lesson 28</a> one chirp gave one range profile. The echo, compared with the chirp still going out, is a tone whose frequency is proportional to range, and the range FFT sorts the echoes into range cells. The teaching burst sweeps 400 MHz in 200 µs, so the beat rises by <span class="math notranslate nohighlight">\(2B/(cT)\)</span> = 13.3 kHz for every meter of range, and the range cells of <span class="math notranslate nohighlight">\(\Delta R = c/2B\)</span> = 0.375 m are <span class="math notranslate nohighlight">\(1/T\)</span> = 5.0 kHz apart.</p>
+<p>A moving target also shifts the echo by its Doppler frequency, <span class="math notranslate nohighlight">\(f_D = 2v/\lambda\)</span>, which is 66.7 Hz for every meter per second at the 3.0 cm wavelength of a 10.0 GHz carrier. Within a single chirp that shift is invisible. A hand moving at 0.6 m/s shifts the beat by 40 Hz, under a hundredth of one range cell, and moves only 0.12 mm while the chirp lasts. By the rule of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>, an observation 200 µs long resolves frequencies 5.0 kHz apart, which is 75 m/s of velocity.</p>
+<p>To measure velocity we have to watch the target for longer, and an FMCW radar does it by repeating the chirp. The teaching burst sends <span class="math notranslate nohighlight">\(M\)</span> = 128 chirps at a pulse repetition interval (PRI) of 0.4 ms, so it watches every range cell for 51.2 ms. The rest of the lesson is how the radar turns those 128 range profiles into a velocity, following ADI’s <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-doppler/" target="_blank" rel="noopener">Range Doppler Radar Processing</a> lab.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-chirp-synchronization">
+<div class="wrap docutils container">
+<p class="rubric">Chirp Synchronization</p>
+<img src="../../viz/img/L29-chirp-sync.svg" alt="Power against velocity in the range cell of a hand moving at 0.6 m/s on the teaching burst. With the chirps synchronized, one sharp peak at plus 0.6 m/s, about 40 dB above the rest. With each chirp starting at a random time, the same energy is spread over the whole velocity axis, about 21 dB down, with no peak" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+<p>The range FFT of <a href="../L28-fmcw/index.html">Lesson 28</a> needs only the frequency of the beat, so it does not care when the chirp started. The velocity measurement does. It compares the phase of the beat in one chirp with its phase in the next, and a moving target changes that phase by only a small, steady amount from chirp to chirp. A hand closing at 0.6 m/s moves 0.24 mm in one PRI, which shortens the round trip by 0.48 mm, a sixty-third of a wavelength, and advances the phase by 5.8°.</p>
+<p>The beat phase also depends on when the samples start. A hand at 1.5 m on the teaching burst has a beat of 123 kHz, the teaching kit’s <a href="../L28-fmcw/index.html#frame-the-0-m-frequency">0 m frequency</a> of 103 kHz plus 13.3 kHz per meter, so starting the samples 1 µs late changes the phase by <span class="math notranslate nohighlight">\(360° \times 0.123 = 44°\)</span>. If the start time wanders by a microsecond from chirp to chirp, the error is larger than the signal we are trying to measure.</p>
+<p>By default the board’s receiver simply fills a buffer with samples, with no relation between the start of the buffer and the start of any chirp. ADI’s <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/chirp-sync/" target="_blank" rel="noopener">Synchronizing Radar Chirps</a> lab describes how the PHASER fixes this: a timing engine in the radio starts the capture and then fires each chirp at a programmed delay after it, one every PRI, so every chirp’s samples begin at the same point of its ramp. The capture format records that PRI as <code class="docutils literal notranslate"><span class="pre">PRI</span></code>, and every velocity on this page depends on it being exact.</p>
+<p>The figure shows the difference in the hand’s range cell. With the chirps synchronized, the Doppler FFT collects the hand into one sharp peak at +0.6 m/s. With each chirp starting at a random time within its PRI, the phase from chirp to chirp is random, and the same energy spreads evenly across every velocity: the hand is still there in range, but the map no longer shows its velocity, and its peak sits about 21 dB lower, close to the noise. That 21 dB is <span class="math notranslate nohighlight">\(10\log_{10}128\)</span>, the coherent gain of <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a> that the random phases throw away.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-fast-time-and-slow-time">
+<div class="wrap docutils container">
+<p class="rubric">Fast Time and Slow Time</p>
+<img src="../../viz/img/L29-data-matrix.svg" alt="The real part of the beat samples of the teaching burst, drawn as an image with chirp number down and sample number across. Diagonal red and blue stripes: across a row the beat oscillates about every 33 samples, and down a column it oscillates about every 62 chirps" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+<p>We stack the chirps of a burst as the rows of a matrix. Along a row the samples are <span class="math notranslate nohighlight">\(1/f_s\)</span> apart, 0.25 µs at 4 MSPS, and a row covers the ramp in <span class="math notranslate nohighlight">\(f_s T\)</span> samples, 800 for the teaching burst. That direction is <strong>fast time</strong>. Down a column the samples are one PRI apart, the same instant of each chirp; that direction is <strong>slow time</strong>. ADI draws the matrix the other way, chirps as columns; the capture format of the L28–L31 Labs stores it as the <code class="docutils literal notranslate"><span class="pre">iq</span></code> array, one row per chirp, <code class="docutils literal notranslate"><span class="pre">n_chirps</span> <span class="pre">×</span> <span class="pre">n_samples</span></code>, so the code on this page follows that layout.</p>
+<p>The figure is the real part of that matrix for a single hand at 1.5 m, closing at 0.6 m/s, for the first 128 chirps and 160 samples. Across a row the beat oscillates at 123 kHz, one cycle every 33 samples; that frequency sets the range. Down a column the same sample oscillates once every 62 chirps, because the phase advances 5.8° a chirp; that rate measures the velocity. The stripes are diagonal because both are happening at once. A stationary target would draw vertical stripes, the same in every row.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-the-phase-from-chirp-to-chirp">
+<div class="wrap docutils container">
+<p class="rubric">The Phase From Chirp to Chirp</p>
+<p>We take the range FFT of every row. The target now sits in the same range cell of every chirp, and that cell holds a complex number whose phase is the phase of the echo, <span class="math notranslate nohighlight">\(-4\pi R_m/\lambda\)</span>, set by the round trip <span class="math notranslate nohighlight">\(2R_m\)</span> in wavelengths. Between chirps the target moves. With a closing speed <span class="math notranslate nohighlight">\(v\)</span>, the range at chirp <span class="math notranslate nohighlight">\(m\)</span> is <span class="math notranslate nohighlight">\(R_m = R_0 - v\ m\ T_\text{PRI}\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\phi_m &amp;= -\frac{4\pi R_m}{\lambda} \\
+&amp;= -\frac{4\pi}{\lambda}\left(R_0 - v\ m\ T_\text{PRI}\right) \\
+&amp;= -\frac{4\pi R_0}{\lambda} + 2\pi\ \frac{2v}{\lambda}\ m\ T_\text{PRI}.
+\end{aligned}
+\end{split}\]</div>
+<p>The first term is a constant. The second grows linearly with <span class="math notranslate nohighlight">\(m\)</span>, which is a tone in slow time at</p>
+<div class="math notranslate nohighlight">
+\[
+f_D = \frac{2v}{\lambda},
+\]</div>
+<p>the Doppler shift of <a href="../L26-range-resolution-doppler/index.html#frame-the-doppler-shift">Lesson 26</a>, with the same sign: a closing target has a positive frequency, and an opening one a negative frequency. The phase advances <span class="math notranslate nohighlight">\(360° f_D T_\text{PRI}\)</span> a chirp. For the teaching burst’s hand closing at 0.6 m/s,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+f_D &amp;= \frac{2 \times 0.6\ \text{m/s}}{0.030\ \text{m}} = 40\ \text{Hz} \\
+\Delta\phi &amp;= 360° \times 40\ \text{Hz} \times 0.4\ \text{ms} = 5.8°,
+\end{aligned}
+\end{split}\]</div>
+<p>and a hand opening at 0.9 m/s gives −60 Hz and −8.6°. The left of the figure draws the hand’s phasor in its range cell stepping 5.8° a chirp; the right is the aliasing of the next frame.</p>
+<img src="../../viz/img/L29-phasor.svg" alt="Left: twelve phasors on the unit circle, each 5.8 degrees past the last, the hand's range cell from chirp 0 to chirp 11. Right: a target whose phase advances 240 degrees a chirp, drawn at chirps 0 to 3; the dashed arc of plus 240 degrees and the shorter arc of minus 120 degrees reach the same point" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+<p>Two effects that the chain leaves out are small for this burst. The Doppler shift also moves the beat in fast time, but at the ±18.75 m/s limit of the next frames it is 1.25 kHz against 13.3 kHz per meter, a range error of 0.09 m, a quarter of a range cell. And the target moves during the burst: at 0.6 m/s it covers <span class="math notranslate nohighlight">\(v\ M\ T_\text{PRI}\)</span> = 3.1 cm in 51.2 ms, far less than one 0.375 m cell, which is the dwell limit of <a href="../L27-radar-detection/index.html#frame-limits-on-the-dwell">Lesson 27</a>. A much faster target moves across several cells during the burst and smears in range, as the Range-Doppler Explorer shows.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-the-range-doppler-map">
+<div class="wrap docutils container">
+<p class="rubric">The Range-Doppler Map</p>
+<img src="../../viz/img/L29-rd-map.svg" alt="A range-Doppler map of the teaching burst from 0 to 4 m in range and minus 6 to plus 6 m/s in velocity, with a color bar in dB relative to the leakage. The kit's leakage at 0 m and a wall at 2.9 m sit in the 0 m/s column. A hand at 1.5 m sits at plus 0.6 m/s, about 30 dB below the leakage. A fidget spinner at 2.1 m spreads into a comb of lines from about minus 3 to plus 3 m/s" style="max-width: 500px; width: 100%; display: block; margin: 0 auto;">
+<p>The second FFT, down each column of the range-transformed matrix, finds the slow-time tone in every range cell. The result is the <strong>range-Doppler map</strong>: range on one axis, radial velocity on the other, and the power of each cell. Each FFT is the coherent integration of <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a>, so a target’s energy from all 800 × 128 samples collects into one cell.</p>
+<p>The figure is a map of the teaching burst for a scene like the one in the L29 Lab. The kit’s own transmit leakage appears at 0 m and a wall at 2.9 m; neither moves, so both sit in the 0 m/s column, and they are the strongest returns on the map. A hand at 1.5 m closing at 0.6 m/s sits at +0.6 m/s. A fidget spinner at 2.1 m spreads into a band of velocities at one range, which A Spinner’s Micro-Doppler explains.</p>
+<p>Where a target lands in range depends on where the range cells sit. The range FFT’s bins are <span class="math notranslate nohighlight">\(1/T\)</span> apart in beat frequency, and the <a href="../L28-fmcw/index.html#frame-the-0-m-frequency">0 m frequency</a> <span class="math notranslate nohighlight">\(f_0\)</span> that the L28 calibration measures need not fall on a bin, so cell <span class="math notranslate nohighlight">\(k\)</span> sits at</p>
+<div class="math notranslate nohighlight">
+\[
+R_k = \frac{k/T - f_0}{2B/(cT)}.
+\]</div>
+<p>With the teaching kit’s 0 m frequency of 103 kHz the first cell at or beyond 0 m is the one at 105 kHz, 0.15 m out, and the cells run 0.15, 0.525, 0.90, … m. The leakage, at exactly 0 m, lands in that first cell, and the wall at 2.9 m lands in the cell at 2.78 m: within half a cell of its tape range, which is as close as the map can say.</p>
+<p>Both FFTs use a Hann window, as the range FFT did in <a href="../L28-fmcw/index.html#frame-windowing-the-chirp">Lesson 28</a>. The window matters more in Doppler than in range: the wall is 18 dB stronger than the hand here, and the first sidelobe of an unwindowed FFT is only 13 dB down, so without the window the wall’s Doppler sidelobes would spread across every velocity at the wall’s range and bury any slow target there, and the leakage’s would do the same in the first cell. The Hann window puts the first sidelobe 31 dB down, and it makes every target’s spot about one and a half cells wide 3 dB down, so the width of a spot on the screen is a direct reading of the cell.</p>
+<p>The provided <code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code> does this, and the L29 notebook runs it on your captures. The range FFT on each row is the one from L28.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">range_doppler</span><span class="p">(</span><span class="n">cap</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s2">"hann"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Range-Doppler map: (rd_db, range_m, vel_mps), rd_db indexed [range, velocity]."""</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="n">range_fft</span><span class="p">(</span><span class="n">cap</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>                 <span class="c1"># n_chirps x n_bins, from L28</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">range_axis</span><span class="p">(</span><span class="n">cap</span><span class="p">)</span>
+    <span class="n">keep</span> <span class="o">=</span> <span class="n">r</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="n">rp</span><span class="p">[:,</span> <span class="n">keep</span><span class="p">]</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">wd</span> <span class="o">=</span> <span class="n">_window</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="n">rd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">rp</span> <span class="o">*</span> <span class="n">wd</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">axes</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">wd</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">lam</span> <span class="o">=</span> <span class="n">C</span> <span class="o">/</span> <span class="n">cap</span><span class="p">[</span><span class="s2">"fc"</span><span class="p">]</span>
+    <span class="n">vel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">cap</span><span class="p">[</span><span class="s2">"PRI"</span><span class="p">]))</span> <span class="o">*</span> <span class="n">lam</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">rd_db</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rd</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rd_db</span><span class="p">,</span> <span class="n">r</span><span class="p">[</span><span class="n">keep</span><span class="p">],</span> <span class="n">vel</span>
+</pre></div>
+</div>
+<p>The velocity axis converts each Doppler bin to velocity with <span class="math notranslate nohighlight">\(v = f_D\lambda/2\)</span>. The module follows the conventions of this page: positive velocity is closing, toward the kit, as in <a href="../L26-range-resolution-doppler/index.html#frame-doppler-sign-convention">Lesson 26</a>; the map is indexed <code class="docutils literal notranslate"><span class="pre">[range,</span> <span class="pre">velocity]</span></code>, which is the order <a href="../L30-cfar/index.html">Lesson 30</a>’s <code class="docutils literal notranslate"><span class="pre">cfar_2d</span></code> expects; only ranges at or beyond 0 m are kept; and <code class="docutils literal notranslate"><span class="pre">range_doppler</span></code> divides each FFT by the sum of its window, so a tone of amplitude 1 reads 0 dBFS whatever the window. A hand moving toward the kit therefore lands at positive velocity, and checking that on your own map is the first test of the velocity axis.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-the-velocity-axis">
+<div class="wrap docutils container">
+<p class="rubric">The Velocity Axis</p>
+<p>The Doppler FFT of <span class="math notranslate nohighlight">\(M\)</span> slow-time samples, <span class="math notranslate nohighlight">\(T_\text{PRI}\)</span> apart, has bins <span class="math notranslate nohighlight">\(1/(M\ T_\text{PRI})\)</span> apart in frequency, which is the rule of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>: watching for <span class="math notranslate nohighlight">\(M\ T_\text{PRI}\)</span> resolves its reciprocal. Converting with <span class="math notranslate nohighlight">\(v = f_D\lambda/2\)</span> gives the velocity resolution</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\Delta v &amp;= \frac{\lambda}{2M\ T_\text{PRI}} \\
+&amp;= \frac{0.030\ \text{m}}{2 \times 128 \times 0.4\ \text{ms}} \\
+&amp;= 0.29\ \text{m/s}.
+\end{aligned}
+\end{split}\]</div>
+<p>The slow-time samples come once per PRI, so the Doppler FFT sees the tone sampled at the PRF, 2.5 kHz, and it can only tell apart frequencies within ±1.25 kHz. That is the maximum unambiguous velocity,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+v_\text{max} &amp;= \pm\frac{\lambda}{4T_\text{PRI}} \\
+&amp;= \pm\frac{0.030\ \text{m}}{4 \times 0.4\ \text{ms}} \\
+&amp;= \pm 18.75\ \text{m/s}.
+\end{aligned}
+\end{split}\]</div>
+<p>A faster target aliases. At +25 m/s the phase advances 240° a chirp, which the FFT reads the same as −120°, as the right of the phasor figure shows, so the map reports <span class="math notranslate nohighlight">\(25 - 37.5 = -12.5\)</span> m/s. These are the same two formulas ADI’s <code class="docutils literal notranslate"><span class="pre">Range_Doppler_Processing.py</span></code> prints as its velocity resolution and maximum velocity.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-choosing-the-burst">
+<div class="wrap docutils container">
+<p class="rubric">Choosing the Burst</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Teaching burst</p></th>
+<th class="head text-right"><p><span class="math notranslate nohighlight">\(\Delta v\)</span> (m/s)</p></th>
+<th class="head text-right"><p><span class="math notranslate nohighlight">\(v_\text{max}\)</span> (m/s)</p></th>
+<th class="head text-right"><p><span class="math notranslate nohighlight">\(\Delta R\)</span> (m)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>128 chirps, 400 MHz</p></td>
+<td class="text-right"><p>0.29</p></td>
+<td class="text-right"><p>±18.75</p></td>
+<td class="text-right"><p>0.375</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>32 chirps</p></td>
+<td class="text-right"><p>1.17</p></td>
+<td class="text-right"><p>±18.75</p></td>
+<td class="text-right"><p>0.375</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>160 MHz chirp</p></td>
+<td class="text-right"><p>0.29</p></td>
+<td class="text-right"><p>±18.75</p></td>
+<td class="text-right"><p>0.94</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<img src="../../viz/img/L29-burst-choices.svg" alt="The hand's spot on the teaching burst's map three times, between 0.5 and 2.5 m and minus 3 to plus 3 m/s: with 128 chirps and 400 MHz a small spot at plus 0.6 m/s; with 32 chirps the same range height and four times as wide in velocity; with a 160 MHz chirp the same width in velocity and about 2.5 times as tall in range" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<p>Each parameter of the burst controls one axis of the map. The number of chirps <span class="math notranslate nohighlight">\(M\)</span> sets the velocity resolution and nothing else: 32 chirps watch for 12.8 ms and resolve 1.17 m/s, and 256 would resolve 0.146 m/s. The chirp bandwidth sets the range resolution and nothing else: dropping from 400 MHz to 160 MHz widens every target from 0.375 m to 0.94 m in range. The PRI sets the velocity limit, and a longer chirp needs a longer PRI to fit in, which forces a slower PRF and a smaller <span class="math notranslate nohighlight">\(v_\text{max}\)</span>. A shorter burst can be made from a long one after the fact: keep only its first <span class="math notranslate nohighlight">\(M\)</span> chirps, which is what the L29 notebook does.</p>
+<p>More chirps also have two drawbacks, and one gain. The gain is the integration gain of <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a>, <span class="math notranslate nohighlight">\(10\log_{10}M\)</span>. Because <code class="docutils literal notranslate"><span class="pre">range_doppler</span></code> divides each FFT by the sum of its window, a target’s level on the map stays where it is whatever <span class="math notranslate nohighlight">\(M\)</span> is, and the noise floor moves instead: keeping 48 of the teaching burst’s 128 chirps raises the floor by <span class="math notranslate nohighlight">\(10\log_{10}(128/48)\)</span> = 4.3 dB. The drawbacks: a long burst refreshes the map less often, and lets a fast target cross range cells while the burst lasts.</p>
+</div>
+</div>
+<div class="frame viz-frame read-only docutils container" id="frame-range-doppler-explorer">
+<div class="wrap docutils container">
+<p class="rubric">Range-Doppler Explorer</p>
+<p>The widget computes a range-Doppler map from the teaching burst: leakage at 0 m, a wall at 3.0 m, and a hand at 1.5 m whose closing speed you set. Beside the map is the power gain of the MTI filter against velocity, with the hand’s speed marked, which Canceller Response and Blind Speeds derives. Start with the hand at +0.6 m/s and change the number of chirps: the hand’s spot narrows in velocity as <span class="math notranslate nohighlight">\(M\)</span> grows and the noise floor drops. Move the hand past +18.75 m/s and watch it reappear at negative velocity, and at more than a few meters per second watch it smear in range as it crosses cells during the burst. Turn chirp sync off: the map keeps every target’s range and no longer shows its velocity. Then step through the MTI settings at a few speeds.</p>
+<iframe src="../../viz/range-doppler-mti.html"
+        width="100%" height="450"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Range-Doppler map of leakage, a wall, and a moving hand on the teaching burst, with chirp count, chirp sync, and MTI, beside the canceller's gain against velocity">
+</iframe>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-a-spinner-s-micro-doppler">
+<div class="wrap docutils container">
+<p class="rubric">A Spinner’s Micro-Doppler</p>
+<img src="../../viz/img/L29-spinner-cut.svg" alt="Power against velocity in the spinner's range cell, from a 512-chirp record of the teaching burst. Edge-on, a comb of lines 0.9 m/s apart reaching out to about plus and minus 3 m/s, inside dashed marks at the tip speed, 3.14 m/s. Face-on, held 10 degrees off, only the center line and one line either side, at plus and minus 0.9 m/s" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+<p>A fidget spinner held edge-on, its plane of rotation along the line of sight, moves each of its arms toward the kit for half a turn and away for the other half. An arm on a circle of radius <span class="math notranslate nohighlight">\(a\)</span> turning at <span class="math notranslate nohighlight">\(f_\text{rev}\)</span> revolutions a second has a tip speed and a radial velocity of</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+v_\text{tip} &amp;= 2\pi a f_\text{rev} \\
+v_r(t) &amp;= v_\text{tip}\sin\left(2\pi f_\text{rev}t\right),
+\end{aligned}
+\end{split}\]</div>
+<p>so over a burst its echo covers every velocity between <span class="math notranslate nohighlight">\(-v_\text{tip}\)</span> and <span class="math notranslate nohighlight">\(+v_\text{tip}\)</span>. The arm spends the longest near the extremes, where its radial velocity turns around, so the band is brightest toward its edges. The spinner in the figures has arms 2.5 cm from the hub at 20 revolutions a second, so <span class="math notranslate nohighlight">\(v_\text{tip} = 2\pi(0.025)(20) = 3.14\)</span> m/s, a band of ±209 Hz at 10.0 GHz. The hub, and the hand that holds it, do not move, and sit at 0 m/s.</p>
+<p>The band is not smooth. Three identical arms make a pattern that repeats every third of a turn, and a signal that repeats every <span class="math notranslate nohighlight">\(1/(3f_\text{rev})\)</span> seconds has its spectrum in lines <span class="math notranslate nohighlight">\(3f_\text{rev}\)</span> apart: 60 Hz here, or <span class="math notranslate nohighlight">\(\lambda(60\ \text{Hz})/2 = 0.90\)</span> m/s, about three of the teaching burst’s 0.29 m/s cells, so the map resolves them. The figure is a longer, 512-chirp record, whose finer cells show the lines cleanly. The line heights rise and fall across the band, so some lines are weak; the spacing is the same everywhere, and the outermost strong line sits a little inside the tip speed. The spacing gives the spin rate without a ruler, and the band’s edge gives it with one:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+f_\text{rev} &amp;= \frac{2\Delta v_\text{line}}{3\lambda} \\
+f_\text{rev} &amp;= \frac{v_\text{edge}}{2\pi a}.
+\end{aligned}
+\end{split}\]</div>
+<p>Held face-on, the spinner moves its arms across the beam, with no radial velocity. A hand never holds it exactly face-on: held <span class="math notranslate nohighlight">\(\theta\)</span> off face-on, only <span class="math notranslate nohighlight">\(\sin\theta\)</span> of the swing reaches the line of sight. For this spinner held 10° off, that is <span class="math notranslate nohighlight">\(3.14 \sin 10° = 0.55\)</span> m/s, less than one 0.90 m/s line spacing, and the lines stay <span class="math notranslate nohighlight">\(3f_\text{rev}\)</span> apart whatever the swing, so the band shrinks to the center line and the first line either side, at ±0.90 m/s: its edge sits on a line, not at the swing.</p>
+<p>This is <strong>micro-Doppler</strong>, the Doppler of the parts of a target that move relative to its body, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses it to tell one kind of target from another.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-short-windows-the-spectrogram">
+<div class="wrap docutils container">
+<p class="rubric">Short Windows: The Spectrogram</p>
+<img src="../../viz/img/L29-spectrogram.svg" alt="Two spectrograms of a hand waved along the line of sight, 0.3 m either way at 1.5 Hz, velocity against time over 0.8 s on the teaching burst. With a 64-chirp window the trace is a thin sinusoid stepping in coarse time steps. With a 16-chirp window it follows the motion in finer time steps but is four times as wide in velocity" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<p>A spinner slows down, a hand speeds up and stops, and one map averages all of that over the whole burst. A <strong>spectrogram</strong> cuts one range cell’s slow-time signal into short windows of <span class="math notranslate nohighlight">\(N_\text{win}\)</span> chirps, each starting a hop of <span class="math notranslate nohighlight">\(N_\text{hop}\)</span> chirps after the last, and takes the FFT of each. A window of <span class="math notranslate nohighlight">\(N_\text{win}\)</span> chirps is a short burst, so its Doppler cell is the velocity resolution with <span class="math notranslate nohighlight">\(M = N_\text{win}\)</span>, and its columns are <span class="math notranslate nohighlight">\(N_\text{hop}\ T_\text{PRI}\)</span> apart in time:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\Delta v_\text{win} &amp;= \frac{\lambda}{2N_\text{win}T_\text{PRI}} \\
+\Delta t &amp;= N_\text{hop}T_\text{PRI}
+\end{aligned}
+\end{split}\]</div>
+<p>The figure is a hand waved on the teaching burst. A 64-chirp window with a hop of 16 gives 0.59 m/s cells and a column every 6.4 ms; a 16-chirp window with a hop of 4 gives 2.34 m/s cells and a column every 1.6 ms. Shortening the window, with the hop a fixed fraction of it, widens the cell and shortens the time between columns by the same factor. The band’s edge still reaches the target’s top speed, to within a cell, at any window that resolves it. The provided <code class="docutils literal notranslate"><span class="pre">radar_lab.spectrogram</span></code> subtracts the cell’s mean first, which removes its 0 m/s component, the hub and the hand that holds a spinner, the way the cancellers below do; <a href="../L31-classification-tracking/index.html">Lesson 31</a> builds its classifier on it.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-clutter-at-zero-velocity">
+<div class="wrap docutils container">
+<p class="rubric">Clutter at Zero Velocity</p>
+<p>Everything that does not move returns the same echo on every chirp: the leakage from the transmit antenna straight into the receiver, the walls, the table, the stand the kit sits on. Radar engineers call these returns <strong>clutter</strong>. On the map they all sit at 0 m/s, and in a lab room they are by far the strongest returns. In the scene of the map figure the leakage is 30 dB above the hand and the wall is 18 dB above it.</p>
+<p>The Doppler FFT already separates clutter from a moving target, but removing the clutter still helps, for three reasons. A strong return has sidelobes in Doppler even with a window, and anything that changes the clutter slightly from chirp to chirp, a vibrating stand, a fan’s air moving a cable, the small timing error that chirp sync cannot remove, spreads its energy across nearby velocities, where a slow target competes with it. The CFAR detector of <a href="../L30-cfar/index.html">Lesson 30</a> estimates the noise from the cells around each test cell, and a clutter ridge in those cells raises the threshold for the targets beside it. And a spectrogram has far less Doppler resolution than the full burst, so a strong clutter line there covers a wide band. Removing clutter before the Doppler FFT addresses all three, and that is <strong>moving target indication</strong> (MTI).</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-pulse-cancellers">
+<div class="wrap docutils container">
+<p class="rubric">Pulse Cancellers</p>
+<p>The simplest MTI filter subtracts each chirp from the one before it, sample by sample. ADI’s <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-mti/" target="_blank" rel="noopener">MTI Radar Processing</a> lab calls it the <strong>two-pulse canceller</strong>. A return that is identical in two consecutive chirps, which is what a stationary return is when the chirps are synchronized, subtracts to zero. A moving target’s phase has advanced between the chirps, so the difference is not zero, and the target survives. Applying the same subtraction to the output a second time gives the <strong>three-pulse canceller</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+y_m &amp;= x_m - x_{m-1} \\
+y_m &amp;= (x_m - x_{m-1}) - (x_{m-1} - x_{m-2}) \\
+&amp;= x_m - 2x_{m-1} + x_{m-2}.
+\end{aligned}
+\end{split}\]</div>
+<p>Its notch at 0 m/s is deeper and wider; Canceller Response and Blind Speeds gives both gains.</p>
+<img src="../../viz/img/L29-canceller-blocks.svg" alt="Block diagrams. The 2-pulse canceller: the input chirp and the chirp before it, delayed by one PRI, go into a summer with a minus sign on the delayed one, giving the output. The 3-pulse canceller: two of those stages in a row" style="max-width: 420px; width: 100%; display: block; margin: 0 auto;">
+<p>Both filters work across chirps, so we can apply them to the raw beat samples before the range FFT, as ADI’s script does, or to the range-transformed rows after it; the FFT is linear, so the two give the same map. Each output has one or two fewer chirps than the input. The provided <code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code> does this too, and the L29 notebook runs it on your captures. It returns a capture, so <code class="docutils literal notranslate"><span class="pre">range_doppler(mti(cap,</span> <span class="pre">&quot;2pulse&quot;))</span></code> works without any other change:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">mti</span><span class="p">(</span><span class="n">cap</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"2pulse"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""A pulse canceller across chirps; returns a capture, one or two chirps shorter."""</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cancel</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>                              <span class="c1"># chirps on the second-to-last axis</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"2pulse"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"3pulse"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"none"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"kind must be '2pulse', '3pulse', or 'none', not </span><span class="si">{</span><span class="n">kind</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">cap</span><span class="p">,</span> <span class="s2">"iq"</span><span class="p">:</span> <span class="n">cancel</span><span class="p">(</span><span class="n">cap</span><span class="p">[</span><span class="s2">"iq"</span><span class="p">])}</span>
+    <span class="k">if</span> <span class="s2">"iq_ch"</span> <span class="ow">in</span> <span class="n">cap</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">"iq_ch"</span><span class="p">]</span> <span class="o">=</span> <span class="n">cancel</span><span class="p">(</span><span class="n">cap</span><span class="p">[</span><span class="s2">"iq_ch"</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-canceller-response-and-blind-speeds">
+<div class="wrap docutils container">
+<p class="rubric">Canceller Response and Blind Speeds</p>
+<img src="../../viz/img/L29-canceller.svg" alt="Power gain in dB against velocity from minus 45 to plus 45 m/s for the 2-pulse and 3-pulse cancellers on the teaching burst. Both are zero at 0 and at plus and minus 37.5 m/s, the blind speeds, and peak at plus and minus 18.75 m/s. The 3-pulse notch is wider and deeper and its peak twice as high in dB. The unambiguous window, plus and minus 18.75 m/s, is shaded" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+<p>To find what the canceller does to a target of any speed, feed it the slow-time tone of the phase frame, <span class="math notranslate nohighlight">\(x_m = A\ e^{j2\pi f_D m T_\text{PRI}}\)</span>. The two-pulse output is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+y_m &amp;= x_m - x_{m-1} \\
+&amp;= x_m\left(1 - e^{-j2\pi f_D T_\text{PRI}}\right),
+\end{aligned}
+\end{split}\]</div>
+<p>so the tone comes out with its power multiplied by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\vert H_2\vert^2 &amp;= \left\vert 1 - e^{-j2\pi f_D T_\text{PRI}}\right\vert^2 \\
+&amp;= 4\sin^2\left(\pi f_D T_\text{PRI}\right).
+\end{aligned}
+\end{split}\]</div>
+<p>The three-pulse canceller is two of these in a row, so its power gain is the square,</p>
+<div class="math notranslate nohighlight">
+\[
+\vert H_3\vert^2 = 16\sin^4\left(\pi f_D T_\text{PRI}\right),
+\]</div>
+<p>which in decibels is twice the two-pulse gain. Both gains are zero at <span class="math notranslate nohighlight">\(f_D = 0\)</span>, the clutter, and both are largest at the edge of the unambiguous window, <span class="math notranslate nohighlight">\(f_D = \pm 1/(2T_\text{PRI})\)</span>, where the power gain is 4 for the two-pulse canceller and 16 for the three-pulse.</p>
+<p>On the teaching burst, a target at 16 m/s has <span class="math notranslate nohighlight">\(f_D\)</span> = 1067 Hz and <span class="math notranslate nohighlight">\(f_D T_\text{PRI}\)</span> = 0.427, so the two-pulse canceller multiplies its power by <span class="math notranslate nohighlight">\(4\sin^2(\pi \times 0.427) = 3.79\)</span>, +5.8 dB, and the three-pulse by +11.6 dB.</p>
+<p>The gain is also zero wherever <span class="math notranslate nohighlight">\(f_D T_\text{PRI}\)</span> is a whole number <span class="math notranslate nohighlight">\(k\)</span>: the target’s phase then advances a whole number of turns from one chirp to the next, and the canceller subtracts it away exactly as it does a stationary return. Those are the <strong>blind speeds</strong>,</p>
+<div class="math notranslate nohighlight">
+\[
+v_\text{blind} = k\ \frac{\lambda}{2T_\text{PRI}},
+\]</div>
+<p>every 37.5 m/s for the teaching burst. The first blind speed is twice <span class="math notranslate nohighlight">\(v_\text{max}\)</span>, which follows from the aliasing in The Velocity Axis: a target at 37.5 m/s aliases to 0 m/s on the map, and the canceller removes it with the clutter. Nothing in the L29 Lab moves that fast, but a car or a drone can, and a radar that must see them changes its PRI from burst to burst so that a target blind at one PRI is visible at the next.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-what-mti-removes">
+<div class="wrap docutils container">
+<p class="rubric">What MTI Removes</p>
+<img src="../../viz/img/L29-mti-maps.svg" alt="The range-Doppler map of the teaching burst three times, with one color bar in dB relative to the leakage: with no MTI, with the 2-pulse canceller, and with the 3-pulse canceller. With either canceller the leakage at 0 m and the wall at 2.9 m drop into the floor. The hand at plus 0.6 m/s is fainter with the 2-pulse canceller and below the noise with the 3-pulse. The spinner's outer lines survive and its center is removed" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<p>The figure runs the scene of the map figure through each canceller and draws all three maps on one scale. The leakage and the wall drop into the floor under either canceller. The figure’s simulation adds a small chirp-to-chirp timing jitter, and its residue is what remains at 0 m/s; the course’s recorded bursts add none, and a kit’s own timing adds more. Chirp sync sets how deep the cancellation can go.</p>
+<p>The cancellers also weaken moving targets, and they weaken the slow ones most. The teaching burst’s hand at 0.6 m/s has <span class="math notranslate nohighlight">\(f_D T_\text{PRI} = 40 \times 0.4 \times 10^{-3} = 0.016\)</span>, deep in the notch: the two-pulse canceller multiplies its power by <span class="math notranslate nohighlight">\(4\sin^2(\pi \times 0.016) = 0.010\)</span>, −20.0 dB, and the three-pulse by −39.9 dB, which puts the hand below the noise in the figure. The noise goes through the same filter. Each output adds independent noise samples, so the canceller multiplies the total noise power by the sum of the squared taps: <span class="math notranslate nohighlight">\(1^2 + 1^2 = 2\)</span> for the two-pulse canceller and <span class="math notranslate nohighlight">\(1^2 + 2^2 + 1^2 = 6\)</span> for the three-pulse. Against that total the hand’s SNR falls by 23.0 dB and 47.7 dB, and on this burst every target slower than about 9.4 m/s (two-pulse) or 10.7 m/s (three-pulse) loses SNR; that is the loss a detector would see if it looked at the canceled chirps without a Doppler FFT. The map does not compare the hand with the total. The Doppler FFT gives each velocity its own cell, and the noise in the hand’s cell passed through the same notch as the hand, so it drops by the same amount, and the hand stands as high above its own floor as it did without MTI. The floor rises only toward <span class="math notranslate nohighlight">\(\pm v_\text{max}\)</span>, by the canceller’s gain there, so the canceller shapes the floor the way it shapes the targets, and the L29 notebook measures both. MTI improves the ratio of a target to the clutter, not to the noise, so it helps where clutter, not noise, limits what the radar can see.</p>
+<p>The same gain says what the cancellers do to a hand that is almost still. A hand held still has a tremor: one 1 mm either way at 1 Hz moves at most <span class="math notranslate nohighlight">\(2\pi(1\ \text{mm})(1\ \text{Hz}) = 6.3\)</span> mm/s and swings the echo’s phase by <span class="math notranslate nohighlight">\(4\pi(1\ \text{mm})/\lambda = 24°\)</span> either way. At 6.3 mm/s, <span class="math notranslate nohighlight">\(f_D\)</span> is 0.42 Hz, and the two-pulse canceller’s gain there is −59.6 dB; the three-pulse gain is twice that in dB. A hand moved across the beam at range <span class="math notranslate nohighlight">\(R_0\)</span>, a distance <span class="math notranslate nohighlight">\(x = A\sin(2\pi f t)\)</span> to the side, has a range and a radial velocity of</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+R(t) &amp;= \sqrt{R_0^2 + x^2} \approx R_0 + \frac{x^2}{2R_0} \\
+v_r(t) &amp;= \frac{x\ \dot{x}}{R_0} = \frac{\pi A^2 f}{R_0}\sin\left(4\pi f t\right),
+\end{aligned}
+\end{split}\]</div>
+<p>so its radial speed peaks at <span class="math notranslate nohighlight">\(\pi A^2 f/R_0\)</span>. For 0.15 m either way at 1 Hz, 1.5 m out, that is 0.047 m/s, a Doppler of 3.1 Hz, and a two-pulse gain of −42.1 dB. Both come out far deeper than the hand pushed at 0.6 m/s. The radial speed of each passes through zero and spends most of its time below its peak, so a gain worked at the peak speed is the least the canceller removes. The spinner shows the notch too: the arms moving fastest along the line of sight survive, and the canceller removes the parts of its spectrum near 0 m/s with the clutter. For a hovering drone, ADI’s MTI lab points out, the body disappears but the blades’ micro-Doppler remains, which is what <a href="../L31-classification-tracking/index.html">Lesson 31</a> classifies.</p>
+<p>With strong clutter and fast targets the three-pulse canceller gives the cleanest map; for a slow hand the two-pulse canceller, or none, keeps more of the target.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary">
+<div class="wrap docutils container">
+<p class="rubric">Summary</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Teaching burst</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Burst</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(M\)</span> chirps, one every <span class="math notranslate nohighlight">\(T_\text{PRI}\)</span></p></td>
+<td class="text-left"><p>128 chirps of 200 µs, 0.4 ms PRI, 51.2 ms</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Chirp sync</p></td>
+<td class="text-left"><p>every chirp starts a fixed delay after the capture</p></td>
+<td class="text-left"><p>1 µs of error shifts the phase 44° at 123 kHz</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Fast time</p></td>
+<td class="text-left"><p>samples within one chirp, a row of <code class="docutils literal notranslate"><span class="pre">iq</span></code></p></td>
+<td class="text-left"><p>800 samples, 0.25 µs apart</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Slow time</p></td>
+<td class="text-left"><p>the same sample across chirps, a column</p></td>
+<td class="text-left"><p>128 samples, 0.4 ms apart</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Slow-time tone</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(f_D = 2v/\lambda\)</span> in every range cell</p></td>
+<td class="text-left"><p>40 Hz, 5.8° a chirp, at 0.6 m/s</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Range-Doppler map</p></td>
+<td class="text-left"><p>range FFT on rows, Doppler FFT on columns</p></td>
+<td class="text-left"><p>0.375 m by 0.29 m/s cells</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Range cells</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(R_k = (k/T - f_0)/(2B/cT)\)</span></p></td>
+<td class="text-left"><p>0.15 m first, at <span class="math notranslate nohighlight">\(f_0\)</span> = 103 kHz</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Velocity resolution</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta v = \lambda/(2M\ T_\text{PRI})\)</span></p></td>
+<td class="text-left"><p>0.29 m/s; 1.17 m/s at 32 chirps</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Maximum velocity</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(v_\text{max} = \pm\lambda/(4T_\text{PRI})\)</span></p></td>
+<td class="text-left"><p>±18.75 m/s; +25 m/s shows at −12.5 m/s</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Floor and <span class="math notranslate nohighlight">\(M\)</span></p></td>
+<td class="text-left"><p>the floor moves by <span class="math notranslate nohighlight">\(10\log_{10}\)</span> of the chirp ratio</p></td>
+<td class="text-left"><p>+4.3 dB keeping 48 of 128</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>2-pulse canceller</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(y_m = x_m - x_{m-1}\)</span>, gain <span class="math notranslate nohighlight">\(4\sin^2(\pi f_D T_\text{PRI})\)</span></p></td>
+<td class="text-left"><p>−20.0 dB at 0.6 m/s, +5.8 dB at 16 m/s</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>3-pulse canceller</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(y_m = x_m - 2x_{m-1} + x_{m-2}\)</span>, gain squared</p></td>
+<td class="text-left"><p>−39.9 dB at 0.6 m/s, +11.6 dB at 16 m/s</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Noise gain</p></td>
+<td class="text-left"><p>sum of the squared taps; the floor takes the canceller’s shape</p></td>
+<td class="text-left"><p>2 and 6 in power</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Spinner, edge-on</p></td>
+<td class="text-left"><p>a band to <span class="math notranslate nohighlight">\(\pm v_\text{tip} = \pm 2\pi a f_\text{rev}\)</span>, lines <span class="math notranslate nohighlight">\(3f_\text{rev}\)</span> apart</p></td>
+<td class="text-left"><p>±3.14 m/s and 0.90 m/s at 2.5 cm, 20 rev/s</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Spinner, face-on</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\sin\theta\)</span> of the swing; the edge sits on a line</p></td>
+<td class="text-left"><p>the first line, ±0.90 m/s, at 10° off</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Nearly still</p></td>
+<td class="text-left"><p>gain at the peak radial speed</p></td>
+<td class="text-left"><p>tremor: −59.6 dB; across the beam: <span class="math notranslate nohighlight">\(\pi A^2 f/R_0\)</span>, −42.1 dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Spectrogram</p></td>
+<td class="text-left"><p>cell <span class="math notranslate nohighlight">\(\lambda/(2N_\text{win}T_\text{PRI})\)</span>, columns <span class="math notranslate nohighlight">\(N_\text{hop}T_\text{PRI}\)</span> apart</p></td>
+<td class="text-left"><p>0.59 m/s and 6.4 ms at 64 and 16</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Blind speeds</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(v_\text{blind} = k\lambda/(2T_\text{PRI})\)</span></p></td>
+<td class="text-left"><p>every 37.5 m/s</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-pre-lab">
+<div class="wrap docutils container">
+<p class="rubric">Pre-Lab</p>
+<p>Part 1 of the <a href="../../labs/ECE444_Lab_L29_RangeDoppler_blank.pdf" target="_blank" rel="noopener">L29 Lab packet</a> is the shaded Predicted cells of its tables, worked at the Range + Velocity preset’s numbers, which the packet gives. The lesson above works each method on the teaching burst:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Packet table</p></th>
+<th class="head text-left"><p>Predict</p></th>
+<th class="head text-left"><p>Method</p></th>
+<th class="head text-left"><p>Checked in</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>A, the static scene</p></td>
+<td class="text-left"><p>where the leakage and the wall land</p></td>
+<td class="text-left"><p><a href="#frame-the-range-doppler-map">The Range-Doppler Map</a></p></td>
+<td class="text-left"><p>Step 4</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>B, a hand</p></td>
+<td class="text-left"><p>the velocity and Doppler of a push and a pull</p></td>
+<td class="text-left"><p><a href="#frame-the-phase-from-chirp-to-chirp">The Phase From Chirp to Chirp</a></p></td>
+<td class="text-left"><p>Steps 5 and 6</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>C, a spinner</p></td>
+<td class="text-left"><p>the band’s edges, the line spacing, face-on</p></td>
+<td class="text-left"><p><a href="#frame-a-spinner-s-micro-doppler">A Spinner’s Micro-Doppler</a></p></td>
+<td class="text-left"><p>Steps 7 to 9</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>D, chirp count and bandwidth</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta v\)</span>, the floor, and <span class="math notranslate nohighlight">\(\Delta R\)</span></p></td>
+<td class="text-left"><p><a href="#frame-the-velocity-axis">The Velocity Axis</a>, <a href="#frame-choosing-the-burst">Choosing the Burst</a></p></td>
+<td class="text-left"><p>Steps 14 and 15</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>E, MTI</p></td>
+<td class="text-left"><p>each canceller’s gain on each return</p></td>
+<td class="text-left"><p><a href="#frame-canceller-response-and-blind-speeds">Canceller Response</a>, <a href="#frame-what-mti-removes">What MTI Removes</a></p></td>
+<td class="text-left"><p>Steps 10 to 12, 16</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>F, the spectrogram</p></td>
+<td class="text-left"><p>its cell, its column spacing, its band</p></td>
+<td class="text-left"><p><a href="#frame-short-windows-the-spectrogram">Short Windows: The Spectrogram</a></p></td>
+<td class="text-left"><p>Step 17</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Show your work for one row of each table on your own paper and attach it.</p>
+</div>
+</div>
+<div class="frame title-frame docutils container" id="frame-20">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">L29 Lab: Range-Doppler and MTI</h1>
+<div class="title-rule"></div>
+<p>Read a hand and a spinner on the range-Doppler map, then cancel the returns that do not move.</p>
+<p>L29 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame here-29 docutils container" id="frame-learning-objectives-2">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 4">
+  <li>I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.</li>
+  <li>I can apply moving target indication (MTI) processing to distinguish moving targets from clutter.</li>
+</ol>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-big-picture">
+<div class="wrap docutils container">
+<p class="rubric">The Big Picture</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Read velocity, then cancel what does not move.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Steps</p></th>
+<th class="head text-left"><p>Set</p></th>
+<th class="head text-left"><p>Read</p></th>
+<th class="head text-left"><p>Table</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>1–4</p></td>
+<td class="text-left"><p>clear scene</p></td>
+<td class="text-left"><p>leakage, wall</p></td>
+<td class="text-left"><p>A</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>5–9</p></td>
+<td class="text-left"><p>hand, spinner</p></td>
+<td class="text-left"><p>velocity, band</p></td>
+<td class="text-left"><p>B, C</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>10–13</p></td>
+<td class="text-left"><p>MTI</p></td>
+<td class="text-left"><p>levels</p></td>
+<td class="text-left"><p>E</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>14–17</p></td>
+<td class="text-left"><p>notebook</p></td>
+<td class="text-left"><p>cells, spectrogram</p></td>
+<td class="text-left"><p>D–F</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The Phaser app’s <strong>Range + Velocity</strong> preset sends one burst and draws its range-Doppler map. You read the static scene first, then a hand pushed and pulled along the line of sight, then a fidget spinner edge-on and face-on. You switch the app’s MTI between off, 2-pulse, and 3-pulse with the wall, your hand, and your still hand in the beam. After class the notebook runs the same chirp count, canceller, and spectrogram readings on the bursts you saved. Every reading fills a white Measured cell in the packet, beside the shaded Predicted cell you filled in from the lesson.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-predict-first">
+<div class="wrap docutils container">
+<p class="rubric">Predict First</p>
+<div class="depth docutils container">
+<p>Before you measure, predict each picture, then check yourself. Choose a target, an MTI setting, and a chirp count, and decide before you press <strong>Show map</strong>: where on the map the target lands, at what sign of velocity, how wide in velocity, and what the canceller does to it. Then show it. Any change hides the map again, so each guess comes first. The widget runs the lesson’s teaching burst, not the kit’s preset, so its numbers are not your Part 1 values; its pictures are the ones your kit should draw.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/rd-predict.html"
+        width="100%" height="460"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Choose a target, an MTI setting, and a chirp count, predict the range-Doppler map, then show it">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-bring-up-the-kit">
+<div class="wrap docutils container">
+<p class="rubric">Bring Up the Kit</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Tx on OUT2; Range + Velocity, MTI off, the Range-Doppler view.</p></li>
+<li><p>Calibrate 0 m, then read the leakage and the wall.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<img src="../../viz/img/L29-setup.svg" alt="Top-down sketch of the setup: the kit with its transmit antenna on OUT2 at the left, its beam opening to the right, a spinner about 0.5 m out, a hand about 1 m out, a wall or plate about 2.5 m out, and you standing behind and to one side of the kit, clear of the beam" style="max-width: 420px; width: 100%; display: block; margin: 0 auto;">
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>You need a wall or the L28 plate standing on its own about 2.5 m in front of the kit, a tape measure, a ruler, and a fidget spinner. The burst sees everything that moves in the beam, and your body is the largest moving return in the room, so step behind the kit or well to one side for every static and MTI reading; otherwise your breathing and sway appear as a smear of slow velocities at your range.</p>
+<ol class="arabic">
+<li><p><strong>Connect.</strong> With the kit powered off, connect the transmit antenna to <strong>OUT2</strong>, then power it and wait for the Pi to boot. On your laptop open the radar app at <code class="docutils literal notranslate"><span class="pre">http://phaser-NN.local:8081</span></code>, with your kit’s number for NN, and choose the <strong>FMCW</strong> tab.</p></li>
+<li><p><strong>Calibrate 0 m.</strong> In the FMCW section, set <strong>Preset</strong> to <strong>Range + Velocity</strong>. Press <strong>Calibrate…</strong>, hold the plate against the array, wait for the strongest return to settle, and press <strong>Calibrate</strong>: the app writes your kit’s 0 m frequency into <strong>0 m Beat (kHz)</strong>. Or type your L28 Table A value there. The app measures every range on the map from this frequency, so a wrong value moves every return by the same distance.</p>
+<div class="rec" data-lab="L29">
+<label>Step 2: 0 m Beat (kHz) <input data-field="a.f0"></label>
+</div>
+</li>
+<li><p><strong>Start the map.</strong> Leave <strong>MTI</strong> off, open the <strong>Range-Doppler</strong> view, and press <strong>Start</strong>. Velocity runs across, positive closing, and range runs up. Hover over any cell to read its velocity, range, and level in dB. <strong>Peak Range</strong>, <strong>Peak Velocity</strong>, and <strong>Peak Magnitude</strong> below the plot read the strongest cell that moves: they skip the cells within 0.3 m/s of zero, so read a static return by hovering. The colors run from each frame’s own peak down <strong>Color Span (dB)</strong>, so read levels by hovering, never by color. The app’s levels sit about 18 dB below the notebook’s dBFS on the same burst, because the app windows each FFT with a Blackman window and scales it differently from <code class="docutils literal notranslate"><span class="pre">range_doppler</span></code>; compare a change in dB between the two, never a level.</p></li>
+<li><p><strong>Read the static scene.</strong> Step clear of the beam. Hover over the leakage, which sits in the first range cell at 0 m/s, and over the wall’s spot at 0 m/s, and record each range, velocity, and level, and the wall’s tape range. Compare each with your Table A prediction; a spot within half a range cell of it agrees. Press <strong>Save Capture</strong>: it downloads the current burst as <code class="docutils literal notranslate"><span class="pre">phaser_range_doppler_&lt;date&gt;-&lt;time&gt;.npz</span></code>, 256 raw chirps whatever the MTI setting, so the notebook applies the canceller itself. Rename it for what it holds and move it into your Module 4 folder.</p>
+<div class="rec" data-lab="L29">
+<label>Step 4: leakage, range and velocity <input data-field="a.leak"></label>
+<label>Leakage level (dB) <input data-field="a.leak.db"></label>
+<label>Wall, tape range <input data-field="a.wall.tape"></label>
+<label>Wall, range and velocity on the map <input data-field="a.wall"></label>
+<label>Wall level (dB) <input data-field="a.wall.db"></label>
+<label>Static-scene file <input data-field="a.file"></label>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-a-hand">
+<div class="wrap docutils container">
+<p class="rubric">A Hand</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A flat hand about 1 m out, at array height.</p></li>
+<li><p>Push it in, then pull it out, along the line of sight.</p></li>
+<li><p>Read Peak Range and Peak Velocity; save a push.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<img src="../../viz/img/L29-hand-moves.svg" alt="Two sketches of the kit and a hand: pushed and pulled along the line of sight, and moved across the beam, which gives it almost no radial speed" style="max-width: 420px; width: 100%; display: block; margin: 0 auto;">
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Moving the hand across the beam gives it almost no radial velocity, so keep it on the line of sight and at a steady pace.</p>
+<ol class="arabic" start="5">
+<li><p><strong>Push.</strong> Stand to one side of the kit and push a flat hand straight toward the array from about 1 m, about half a meter in half a second. Record its range and velocity from <strong>Peak Range</strong> and <strong>Peak Velocity</strong>, and convert the velocity to its Doppler frequency, <span class="math notranslate nohighlight">\(f_D = 2v/\lambda\)</span>. Repeat a few times and record a typical push. Your push will not be exactly 1 m/s, so compare its sign with Table B, and check that your Doppler equals <span class="math notranslate nohighlight">\(2v/\lambda\)</span> at the velocity you read. Press <strong>Save Capture</strong> during a push, with the wall still in view: the burst lasts 128 ms, so start the push before you press it and keep moving until it saves.</p>
+<div class="rec" data-lab="L29">
+<label>Step 5: push, range <input data-field="b.close.r"></label>
+<label>Velocity <input data-field="b.close.v"></label>
+<label>Doppler (Hz) <input data-field="b.close.fd"></label>
+<label>Push file <input data-field="b.file"></label>
+</div>
+</li>
+<li><p><strong>Pull.</strong> Pull the hand straight away from the array and record the same.</p>
+<div class="rec" data-lab="L29">
+<label>Step 6: pull, range <input data-field="b.open.r"></label>
+<label>Velocity <input data-field="b.open.v"></label>
+<label>Doppler (Hz) <input data-field="b.open.fd"></label>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-a-fidget-spinner">
+<div class="wrap docutils container">
+<p class="rubric">A Fidget Spinner</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Measure the arm radius.</p></li>
+<li><p>Edge-on, about 0.5 m out: read the band and its lines.</p></li>
+<li><p>Face-on: read the band again.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<img src="../../viz/img/L29-spinner-orient.svg" alt="Two top-down sketches of the kit and a spinner: edge-on, its plane of rotation holding the line of sight so the arms move toward and away from the kit; face-on, its plane across the beam so the arms move across it" style="max-width: 420px; width: 100%; display: block; margin: 0 auto;">
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<ol class="arabic" start="7">
+<li><p><strong>Measure the arm.</strong> Measure the spinner’s arm radius <span class="math notranslate nohighlight">\(a\)</span>, from the center of the hub to the center of a weight.</p>
+<div class="rec" data-lab="L29">
+<label>Step 7: arm radius a <input data-field="c.a"></label>
+</div>
+</li>
+<li><p><strong>Edge-on.</strong> Spin it hard and hold it by the hub, edge-on to the kit, its plane of rotation pointed at the array, about 0.5 m out at array height. A spinner with metal weights in its arms reflects more than an all-plastic one. Hover along the band’s row to read its range, the velocities of its two edges, and, where the lines within it are visible, their spacing; then work out the spin rate from the edge and from the lines. A real spinner slows as it runs, so read both within a few seconds of each other, and press <strong>Save Capture</strong> while it spins fast.</p>
+<div class="rec" data-lab="L29">
+<label>Step 8: band range <input data-field="c.r"></label>
+<label>Band edges <input data-field="c.edge"></label>
+<label>Line spacing <input data-field="c.space"></label>
+<label>Spin rate from the edge <input data-field="c.rev.edge"></label>
+<label>Spin rate from the lines <input data-field="c.rev.lines"></label>
+<label>Spinner file <input data-field="c.file"></label>
+</div>
+</li>
+<li><p><strong>Face-on.</strong> Turn the spinner face-on to the kit and record where the band’s edges are now.</p>
+<div class="rec" data-lab="L29">
+<label>Step 9: face-on, band edges <input data-field="c.face"></label>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-cancel-the-clutter">
+<div class="wrap docutils container">
+<p class="rubric">Cancel the Clutter</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>MTI off, then 2-pulse, then 3-pulse, at each return.</p></li>
+<li><p>The wall with the beam clear, then a pushing hand.</p></li>
+<li><p>A hand held still, then one moved across the beam.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Read every level here by hovering, at the return’s range: the wall at 0 m/s, a hand at its spot. Record the level with MTI off, and with each canceller the change from it in dB. After MTI the map rescales to the strongest thing left, so a weakened return can still look bright.</p>
+<ol class="arabic" start="10">
+<li><p><strong>The wall.</strong> Step clear of the beam with <strong>MTI</strong> off and read the wall’s level. Turn <strong>MTI</strong> on with <strong>MTI Mode</strong> at <strong>2-pulse</strong>, then <strong>3-pulse</strong>, and read the same cell each time. If the return drops to the noise floor, record it as gone.</p>
+<div class="rec" data-lab="L29">
+<label>Step 10: wall, MTI off (dB) <input data-field="e.wall.off"></label>
+<label>2-pulse change <input data-field="e.wall.2"></label>
+<label>3-pulse change <input data-field="e.wall.3"></label>
+</div>
+</li>
+<li><p><strong>A pushing hand.</strong> Push your hand as in Step 5 and read its spot the same three ways.</p>
+<div class="rec" data-lab="L29">
+<label>Step 11: hand, MTI off (dB) <input data-field="e.hand.off"></label>
+<label>2-pulse change <input data-field="e.hand.2"></label>
+<label>3-pulse change <input data-field="e.hand.3"></label>
+</div>
+</li>
+<li><p><strong>Still, and across.</strong> Hold your hand still in the beam about 0.8 m out and read it the same three ways; then move it side to side across the beam at the same range, about 0.2 m either way, once a second, and do the same. Compare all four rows with your Table E predictions.</p>
+<div class="rec" data-lab="L29">
+<label>Step 12: still hand, MTI off (dB) <input data-field="e.still.off"></label>
+<label>2-pulse change <input data-field="e.still.2"></label>
+<label>3-pulse change <input data-field="e.still.3"></label>
+<label>Hand across, MTI off (dB) <input data-field="e.across.off"></label>
+<label>2-pulse change <input data-field="e.across.2"></label>
+<label>3-pulse change <input data-field="e.across.3"></label>
+</div>
+</li>
+<li><p><strong>Restore.</strong> Turn <strong>MTI</strong> off.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-run-the-notebook">
+<div class="wrap docutils container">
+<p class="rubric">Run the Notebook</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Run it on your push burst.</p></li>
+<li><p>Task (a): shorten the burst to 128, then 64 chirps.</p></li>
+<li><p>Task (b): enter your predicted gain, then run 2-pulse and 3-pulse.</p></li>
+<li><p>Task (c): the spinner’s spectrogram, 64- then 32-chirp windows.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Do this part after class, from your saved bursts, with the notebook set up as the Notebook Setup frame describes. Each task’s markdown cell states what to check, and each prints the numbers its step records. The notebook’s levels are dBFS, about 18 dB above the app’s hover levels on the same burst, because <code class="docutils literal notranslate"><span class="pre">range_doppler</span></code> uses a Hann window and divides each FFT by the window’s sum; compare changes between the two, never levels. The app’s presets all send 256 chirps of 500 MHz, so the 128- and 64-chirp rows are the first <span class="math notranslate nohighlight">\(M\)</span> chirps of your own burst, and the 200 MHz row is a recorded burst for everyone.</p>
+<ol class="arabic" start="14">
+<li><p><strong>The chirp count.</strong> Open <code class="docutils literal notranslate"><span class="pre">L29_range_doppler.ipynb</span></code>, set <code class="docutils literal notranslate"><span class="pre">CAPTURE</span></code> in the first code cell to your push burst from Step 5, and run the cells from the top. In task (a), run the chirp-count cell with <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">=</span> <span class="pre">256</span></code>, then change that one line to <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">=</span> <span class="pre">128</span></code> and to <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">=</span> <span class="pre">64</span></code>. Record <code class="docutils literal notranslate"><span class="pre">dv</span></code> and the hand’s width 3 dB down for each, the floor at <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">=</span> <span class="pre">256</span></code> in dBFS, and the floor’s change from it at 128 and 64.</p>
+<div class="rec" data-lab="L29">
+<label>Step 14: M = 256, dv <input data-field="d.256.dv"></label>
+<label>Width 3 dB down <input data-field="d.256.w"></label>
+<label>Floor (dBFS) <input data-field="d.256.fl"></label>
+<label>M = 128, dv <input data-field="d.128.dv"></label>
+<label>Width 3 dB down <input data-field="d.128.w"></label>
+<label>Floor change from 256 (dB) <input data-field="d.128.fl"></label>
+<label>M = 64, dv <input data-field="d.64.dv"></label>
+<label>Width 3 dB down <input data-field="d.64.w"></label>
+<label>Floor change from 256 (dB) <input data-field="d.64.fl"></label>
+</div>
+</li>
+<li><p><strong>The bandwidth.</strong> Set <code class="docutils literal notranslate"><span class="pre">CAPTURE</span></code> to <code class="docutils literal notranslate"><span class="pre">L29_hand_closing_B200.npz</span></code> and run the map cell again. Record the hand’s width in range, and set <code class="docutils literal notranslate"><span class="pre">CAPTURE</span></code> back to your own burst.</p>
+<div class="rec" data-lab="L29">
+<label>Step 15: 200 MHz, width in range <input data-field="d.b200.w"></label>
+</div>
+</li>
+<li><p><strong>The cancellers.</strong> In task (b), replace <code class="docutils literal notranslate"><span class="pre">H_DB</span> <span class="pre">=</span> <span class="pre">None</span></code> with the canceller’s predicted gain at the hand’s Doppler, in dB, and run the MTI cell with <code class="docutils literal notranslate"><span class="pre">KIND</span> <span class="pre">=</span> <span class="pre">&quot;2pulse&quot;</span></code>; then change it to <code class="docutils literal notranslate"><span class="pre">KIND</span> <span class="pre">=</span> <span class="pre">&quot;3pulse&quot;</span></code>. Record the hand’s change beside your <code class="docutils literal notranslate"><span class="pre">H_DB</span></code>, and the floor’s change near 14 m/s.</p>
+<div class="rec" data-lab="L29">
+<label>Step 16: 2-pulse, hand change; H_DB <input data-field="e.nb.hand.2"></label>
+<label>Floor change near 14 m/s <input data-field="e.nb.fl14.2"></label>
+<label>3-pulse, hand change; H_DB <input data-field="e.nb.hand.3"></label>
+<label>Floor change near 14 m/s <input data-field="e.nb.fl14.3"></label>
+</div>
+</li>
+<li><p><strong>The spectrogram.</strong> In task (c), set <code class="docutils literal notranslate"><span class="pre">SPIN</span></code> to your spinner burst and run its map cell, which prints the band’s lines; set <code class="docutils literal notranslate"><span class="pre">R_SPIN</span></code> to the band’s range and run the spectrogram with <code class="docutils literal notranslate"><span class="pre">N_WIN</span> <span class="pre">=</span> <span class="pre">64</span></code>, then <code class="docutils literal notranslate"><span class="pre">N_WIN</span> <span class="pre">=</span> <span class="pre">32</span></code>. Record the Doppler cell, the time between columns, and the band within 10 dB of its peak. Save the notebook with its edits and plots and upload the <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> with the packet.</p>
+<div class="rec" data-lab="L29">
+<label>Step 17: N_WIN = 64, Doppler cell <input data-field="f.64.cell"></label>
+<label>Time between columns <input data-field="f.64.dt"></label>
+<label>Band <input data-field="f.64.band"></label>
+<label>N_WIN = 32, Doppler cell <input data-field="f.32.cell"></label>
+<label>Time between columns <input data-field="f.32.dt"></label>
+<label>Band <input data-field="f.32.band"></label>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-no-hardware">
+<div class="wrap docutils container">
+<p class="rubric">No Hardware?</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Every step works without a kit. Open the Phaser app’s simulator in a
+browser,
+<a href="https://livethisdream.github.io/phaser/radar/" target="_blank" rel="noopener">livethisdream.github.io/phaser/radar</a>:
+the same radar app, with a <strong>Scene</strong> menu in its FMCW section and a pill that
+reads <strong>Simulated</strong>. A <strong>Scene</strong> moves simulated targets live on the Range +
+Velocity preset: <code class="docutils literal notranslate"><span class="pre">hand</span></code> waves a hand at 0.6 m, <code class="docutils literal notranslate"><span class="pre">corners</span></code> holds three corners
+at 1, 2, and 3 m, and <code class="docutils literal notranslate"><span class="pre">static</span></code> holds a still target at 1 m with movers at 3.5
+and 7 m. <strong>Load Recording</strong> plays one of the course’s recorded bursts through
+the same views as if it were live, with the MTI switch working on it. Leave
+<strong>0 m Beat (kHz)</strong> empty: a recording uses its own 0 m frequency, which the
+<strong>Logs</strong> tab prints when it loads. The recordings are in the lab’s bundle,
+<a href="../../bundles/L29_lab.zip" download>L29_lab.zip</a>, with the
+notebook. They simulate the PHASER on the app’s preset, with a wall at
+2.5 m; the simulation times the chirps perfectly, so the cancellers remove
+the wall completely, which no kit does. Say in your packet which readings are
+recorded rather than your own.</p>
+<ul class="simple">
+<li><p>Steps 1 to 4 and 10: <code class="docutils literal notranslate"><span class="pre">L29_static.npz</span></code></p></li>
+<li><p>Steps 5, 11, 14, and 16: <code class="docutils literal notranslate"><span class="pre">L29_hand_closing.npz</span></code>; Step 6: <code class="docutils literal notranslate"><span class="pre">L29_hand_opening.npz</span></code></p></li>
+<li><p>Steps 7 to 9 and 17: <code class="docutils literal notranslate"><span class="pre">L29_spinner.npz</span></code> and <code class="docutils literal notranslate"><span class="pre">L29_spinner_faceon.npz</span></code>; the arm radius is 3.0 cm</p></li>
+<li><p>Step 12: <code class="docutils literal notranslate"><span class="pre">L29_hand_still.npz</span></code> and <code class="docutils literal notranslate"><span class="pre">L29_hand_across.npz</span></code></p></li>
+<li><p>Step 15: <code class="docutils literal notranslate"><span class="pre">L29_hand_closing_B200.npz</span></code>, the same for everyone</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-notebook-setup">
+<div class="wrap docutils container">
+<p class="rubric">Notebook Setup</p>
+<p>Download the lab’s bundle, <a href="../../bundles/L29_lab.zip" download><code class="docutils literal notranslate"><span class="pre">L29_lab.zip</span></code></a>, and unzip it into the Module 4 folder you set up in the L28 Lab’s <a href="../L28-fmcw/index.html#frame-notebook-setup">Notebook Setup</a>, with the same Python and packages. It holds <code class="docutils literal notranslate"><span class="pre">L29_range_doppler.ipynb</span></code>, a fresh <code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code>, the data README, and all eight recorded bursts, which the notebook opens by default, so it runs as shipped before you change anything. Move the bursts you saved with <strong>Save Capture</strong> into the same folder. Start Jupyter in the folder with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">lab</span></code> and open <code class="docutils literal notranslate"><span class="pre">L29_range_doppler.ipynb</span></code>.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-your-part-2-entries">
+<div class="wrap docutils container">
+<p class="rubric">Your Part 2 Entries</p>
+<p>This frame collects every box you filled in on this page. Your entries stay in this
+browser only, saved as you type. <strong>Download my packet</strong> writes them into Part 2
+of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
+viewer, and upload one PDF to Gradescope with your notebook. If you have already typed Part 1 into
+the packet PDF, use <strong>Fill my own copy</strong> and choose that file instead: your Part 1
+is kept, and Part 2 is added to it. Either way the result is locked, so finish
+any typing in the PDF first. <strong>Export entries</strong> saves a small backup file you
+can <strong>Import</strong> on another laptop or after clearing your browser. The boxes are
+optional: the blank packet is in the next frame, to fill on paper or in a PDF
+viewer instead.</p>
+<div class="rec-summary" data-lab="L29" data-pdf="../../labs/ECE444_Lab_L29_RangeDoppler_blank.pdf" data-file="ECE444_L29_Lab"></div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-lab-packet">
+<div class="wrap docutils container">
+<p class="rubric">Lab Packet</p>
+<p>The L29 Lab packet is one submission, turned in complete before Lesson 30, with the notebook. It has three parts:</p>
+<ol class="arabic simple">
+<li><p>Part 1, Predict (before the lab period): the shaded Predicted cells of Tables A to F, at the Range + Velocity preset.</p></li>
+<li><p>Part 2, Measure (your own kit, in class, and the notebook after): the white Measured cells of the same tables.</p></li>
+<li><p>Part 3, Analyze (after the lab): three prompts about what you measured.</p></li>
+</ol>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../labs/ECE444_Lab_L29_RangeDoppler_blank.pdf" target="_blank" rel="noopener">L29 Lab packet (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-for-part-3">
+<div class="wrap docutils container">
+<p class="rubric">For Part 3</p>
+<p>Part 3 asks you to compare your Table D readings at the three chirp counts with your predictions, to find your spinner’s spin rate every way Table C allows and say which you would report, and to compare what each canceller did to each return in Table E with your predictions. I grade each answer on a claim, your own numbers as evidence, the reasoning between them, and how large a difference your readings can resolve. For the final report, keep your bursts, your notebook, and your tables: the report asks you to explain, in your own words, how a burst of chirps becomes a velocity and what MTI does to a scene.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<p><a href="../L30-cfar/index.html">Lesson 30</a> decides which cells of this map hold targets, setting the threshold from the cells around each one, and the L30 Lab runs that detector on range-Doppler maps of this burst.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module04/L29-range-doppler-mti"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

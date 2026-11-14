@@ -1,0 +1,1045 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L21 - Antenna Pattern &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=292d567668">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l21-antenna-pattern">
+<h1>L21 - Antenna Pattern<a class="headerlink" href="#l21-antenna-pattern" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Antenna Pattern</h1>
+<div class="title-rule"></div>
+<p>The kit builds its pattern plot from many beams. Today we measure one beam directly and compare the two.</p>
+<p>Lesson 21 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 5">
+  <li>I can distinguish between array factor and true antenna pattern and account for element pattern effects.</li>
+</ol>
+<div class="depth docutils container">
+<p>Every pattern you have read since the L18 Lab came from the PHASER’s
+Rectangular plot, the <strong>beam sweep</strong>: the kit holds the HB100 still, steps the
+beam past it, and plots the level it receives at each commanded angle, so each
+point comes from a different beam. An antenna range measures a pattern the
+other way. It holds one beam still and moves the source around it in azimuth.
+Today we take that <strong>azimuth sweep</strong> with the kit’s Signal vs Time mode and
+compare it with the beam sweep. The two agree on the main lobe and the first
+sidelobes, and they part farther out, where each patch’s own pattern, the
+noise floor, and the room decide the level.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-rectangular-plot">
+<div class="wrap docutils container">
+<p class="rubric">The Rectangular Plot</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The HB100 stays put while the kit steps the element-to-element phase, <span class="qty">2.8125°</span> at a time.</p></li>
+<li><p>Each step makes a different beam; the plot puts the level received through it at that beam’s commanded angle.</p></li>
+<li><p>One trace is 162 steps.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>You built this trace step by step in Lesson 18
+(<a href="../L18-beam-steering/index.html#frame-the-beam-sweep-trace">”The Beam-Sweep Trace”</a>).
+With Use Bits on, as in every lab preset, the kit adds one phase-shifter LSB,
+<span class="qty">2.8125°</span>, to the element-to-element phase, writes that ramp to the eight
+channels, reads the peak of the FFT, and plots the reading at the angle the
+ramp steers to. This lesson works its examples at <span class="qty">10.0 GHz</span>, where
+<span class="math notranslate nohighlight">\(\lambda = c/f = 30.0\ \text{mm}\)</span>, <span class="math notranslate nohighlight">\(d/\lambda = 14/30.0 = 0.467\)</span>, and
+<span class="math notranslate nohighlight">\(kd = 360^\circ\ d/\lambda = 168.0^\circ\)</span>, by the steps of Lesson 18’s
+<a href="../L18-beam-steering/index.html#frame-the-phaser-kit-cn0566">”The Phaser Kit (CN0566)”</a>.
+One step moves <span class="math notranslate nohighlight">\(\sin\theta_0\)</span> by <span class="math notranslate nohighlight">\(2.8125^\circ/168.0^\circ = 0.0167\)</span>, which is
+<span class="qty">0.96°</span> of angle near broadside and <span class="qty">1.11°</span> at <span class="qty">30°</span>. Of the
+162 steps, 119 fall inside <span class="qty">±81°</span>; the rest ask for more phase than any real angle needs and
+plot at <span class="qty">±90°</span>. Lesson 20 shows what that grid and the noise floor
+do to the readings
+(<a href="../L20-array-factor-beamwidth/index.html#frame-reading-a-measured-sweep">”Reading a Measured Sweep”</a>).</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-beam-sweep-step-by-step">
+<div class="wrap docutils container">
+<p class="rubric">Beam Sweep, Step by Step</p>
+<div class="depth docutils container">
+<p>This is the beam sweep the kit runs, slowed down. Press <strong>step</strong> to add one
+phase LSB at a time and watch the left panel: the beam swings past the HB100,
+and the inset adds the eight element signals tip to tail. Away from the
+source the element signals arrive out of phase and their sum is small, so the
+point lands in a sidelobe or near the noise floor; as the beam reaches the
+source the signals line up and the trace rises to its peak. Each point on the
+right panel comes from the beam on the left at that moment, never from one
+beam held still.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/sweep-trace.html?f=10.0"
+        width="100%" height="441"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="The beam-sweep trace built one phase step at a time: the beam swinging past the HB100, the eight element signals summed, and each step's power plotted at the angle it steers to">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-why-the-beam-sweep-traces-a-pattern">
+<div class="wrap docutils container">
+<p class="rubric">Why the Beam Sweep Traces a Pattern</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\psi = kd\left(\sin\theta_\text{src} - \sin\theta_0\right)
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\vert AF\vert\)</span> depends only on <span class="math notranslate nohighlight">\(\psi\)</span>, and it is even in <span class="math notranslate nohighlight">\(\psi\)</span>.</p></li>
+<li><p>Stepping <span class="math notranslate nohighlight">\(\theta_0\)</span> or moving <span class="math notranslate nohighlight">\(\theta_\text{src}\)</span> visits the same curve.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L21-psi-two-ways.svg"
+     alt="The array factor in decibels against psi from minus 180 to 180 degrees. Open orange circles, the beam sweep stepping theta zero with the source fixed, and small navy dots, the azimuth sweep moving the source with the beam fixed, both fall on the same curve."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lesson 18 (“The Steered Pattern”) showed that steering replaces the
+array-factor argument with</p>
+<div class="math notranslate nohighlight">
+\[
+\psi = kd\left(\sin\theta_\text{src} - \sin\theta_0\right),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\theta_\text{src}\)</span> is the direction the signal arrives from and
+<span class="math notranslate nohighlight">\(\theta_0\)</span> is the angle the phase ramp steers to. The beam sweep holds
+<span class="math notranslate nohighlight">\(\theta_\text{src}\)</span> and steps <span class="math notranslate nohighlight">\(\theta_0\)</span>; the azimuth sweep holds <span class="math notranslate nohighlight">\(\theta_0\)</span>
+and moves <span class="math notranslate nohighlight">\(\theta_\text{src}\)</span>. Both run <span class="math notranslate nohighlight">\(\psi\)</span> through the same values, and
+<span class="math notranslate nohighlight">\(\vert AF\vert\)</span> is the same for <span class="math notranslate nohighlight">\(\psi\)</span> and <span class="math notranslate nohighlight">\(-\psi\)</span>, so both trace the same
+curve. That is why a trace built from 162 different beams looks like the
+pattern of one beam.</p>
+<p>The two differ only in what the array factor leaves out. The azimuth sweep
+carries the source across each patch’s own pattern, so it records the
+product of the element pattern and the array factor that Lesson 16 derived
+(<a href="../L16-array-factor/index.html#frame-from-two-patterns-to-one">”From Two Patterns to One”</a>).
+The beam sweep keeps the source in one direction, so each patch receives the
+same level at every step and the element pattern is a single constant.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-antenna-range-method">
+<div class="wrap docutils container">
+<p class="rubric">The Antenna-Range Method</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-left"><p>Beam sweep</p></th>
+<th class="head text-left"><p>Azimuth sweep, by hand</p></th>
+<th class="head text-left"><p>Azimuth sweep, on the stand</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>x-axis</p></td>
+<td class="text-left"><p>steer angle</p></td>
+<td class="text-left"><p>elapsed time</p></td>
+<td class="text-left"><p>stand angle</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Measures</p></td>
+<td class="text-left"><p>array factor</p></td>
+<td class="text-left"><p>element <span class="math notranslate nohighlight">\(\times\)</span> array</p></td>
+<td class="text-left"><p>element <span class="math notranslate nohighlight">\(\times\)</span> array</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Distance</p></td>
+<td class="text-left"><p>fixed</p></td>
+<td class="text-left"><p>your arm</p></td>
+<td class="text-left"><p>fixed</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L21-three-methods.svg"
+     alt="Three ways to trace a pattern. Beam sweep: the HB100 stays put and the kit steps the beam past it. By hand: the beam is held and you carry the HB100 around an arc. On the stand: the beam is held, the HB100 stays on its tripod, and the kit turns on its stand."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lesson 9 described how an antenna range measures a pattern
+(<a href="../../module02/L09-pattern-measurement-theory/index.html#frame-two-measurements-one-question">”Two Measurements, One Question”</a>).
+The antenna under test sits on a turntable with its beam fixed, a source
+stands at a fixed distance, and the turntable records the received level
+against the angle between the two. Every reading comes from the same beam,
+and each one carries a physical angle. The L21 Lab takes this azimuth sweep
+twice. By hand, you carry the HB100 around the kit on a taped arc; the kit
+plots the level against elapsed time, which maps to azimuth only at a steady
+pace, and the level holds only while you hold the radius. On the stand, the
+HB100 stays on its tripod and you turn the kit in front of it; every reading
+carries an angle off the stand’s scale, and the distance never changes.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-signal-vs-time-mode">
+<div class="wrap docutils container">
+<p class="rubric">Signal vs Time Mode</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The kit holds the beam at the Steer Angle and plots the peak level against time.</p></li>
+<li><p>You carry the HB100 from <span class="qty">−90°</span> to <span class="qty">+90°</span> on a <span class="qty">1.2 m</span> arc.</p></li>
+<li><p>The trace is one beam’s pattern across azimuth.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The <strong>Antenna Pattern</strong> preset sets <strong>Mode</strong> to <strong>Signal vs Time</strong>. In
+that mode the kit stops stepping the beam: it holds every element at the
+phase for the <strong>Steer Angle</strong> you set, and the Tracking tab plots the FFT
+peak against elapsed time. As you carry the HB100 around the arc, the level
+at each instant is the held beam’s response in the direction of the HB100 at
+that instant. This is the measurement in ADI’s PHASER workshop, “Measuring
+the Actual Antenna Pattern.”</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-azimuth-sweep-simulator">
+<div class="wrap docutils container">
+<p class="rubric">Azimuth Sweep Simulator</p>
+<div class="depth docutils container">
+<p>The widget runs the azimuth sweep in simulation. Choose a steer angle and a
+speed profile, then watch the trace paint as the source moves around the arc.
+Run it once with the uniform profile and once with the hand-like profile, and
+compare the readouts: the lobe spacing changes and the lobe levels do not.
+The simulation holds the radius fixed; a hand-carried source drifts by a few
+centimeters, which moves the level (next frame).</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/pattern-measurement-sim.html"
+        width="100%" height="461"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Simulated azimuth sweep: a source moves around an arc in front of a fixed beam while the level-versus-time trace paints below">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-time-axis">
+<div class="wrap docutils container">
+<p class="rubric">The Time Axis</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>At a steady pace, time on the plot maps directly to azimuth.</p></li>
+<li><p>An uneven pace stretches or squeezes a lobe in time; its level stays the same if the lobe gets several updates.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L21-time-axis.svg"
+     alt="One 30 second azimuth sweep by hand plotted twice: against time, where an uneven pace spaces the lobes unevenly, and against source angle, where they are symmetric. A dashed line at the first-sidelobe level touches the same lobes on both."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The Signal vs Time plot puts time on its x-axis, and at a steady pace time
+and azimuth are the same axis with a fixed scale factor: the <span class="qty">180°</span> arc
+divided by the time the sweep takes. The figure shows a <span class="qty">30 s</span> sweep.</p>
+<p>The pace sets how long the source spends in each lobe, and the plot’s update
+rate, which its title shows, sets how many readings land there. A lobe
+crossed in a fraction of a second gets only a few readings, and its peak can
+fall between them. Worked for a <span class="qty">30 s</span> sweep at <span class="qty">10.0 GHz</span>,
+where Lesson 20 found the half-power width to be <span class="qty">13.7°</span> and the first
+sidelobe runs from the first null at <span class="qty">15.5°</span> to the second at
+<span class="qty">32.4°</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\text{pace} &amp;= \frac{180^\circ}{30\ \text{s}} = 6.0^\circ/\text{s} \\
+t_\text{main} &amp;= \frac{13.7^\circ}{6.0^\circ/\text{s}} = 2.3\ \text{s} \\
+t_\text{SL} &amp;= \frac{32.4^\circ - 15.5^\circ}{6.0^\circ/\text{s}} = 2.8\ \text{s} \\
+\text{rate} &amp;\ge \frac{5\ \text{readings}}{2.8\ \text{s}} = 1.8\ \text{updates/s} .
+\end{aligned}
+\end{split}\]</div>
+<p>A kit that updates more slowly than that puts fewer than five readings on the
+first sidelobe, and the fix is a slower sweep.</p>
+<p>A hand is not perfectly steady. Moving slowly through a lobe draws it wider
+on the plot and hurrying draws it narrower, but the level at each instant is
+still the pattern in the source’s direction, so the lobe levels come through.
+The angles do not. Convert time to angle at the average pace, and a hand
+<span class="qty">20%</span> fast through the main lobe spends <span class="math notranslate nohighlight">\(1/1.2\)</span> of the steady time in it,
+while one <span class="qty">20%</span> slow spends <span class="math notranslate nohighlight">\(1/0.8\)</span> of it, so the conversion reports</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\theta_\text{fast} &amp;= \frac{13.7^\circ}{1.2} = 11.4^\circ \\
+\theta_\text{slow} &amp;= \frac{13.7^\circ}{0.8} = 17.1^\circ
+\end{aligned}
+\end{split}\]</div>
+<p>for a true <span class="qty">13.7°</span> beam. For angles read to a degree or two, the L21 Lab
+turns the kit on its stand and reads the stand’s scale.</p>
+<p>A drift in the arc’s radius changes the level. Received power falls as
+<span class="math notranslate nohighlight">\(1/r^2\)</span>, so drifting <span class="qty">5 cm</span> in or out at <span class="qty">1.2 m</span> changes a
+reading by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+20\log_{10}\frac{1.25\ \text{m}}{1.2\ \text{m}} &amp;= 0.4\ \text{dB} \\
+20\log_{10}\frac{1.2\ \text{m}}{1.15\ \text{m}} &amp;= 0.4\ \text{dB} ,
+\end{aligned}
+\end{split}\]</div>
+<p>and a larger drift moves it more; Part 1 sizes the lab’s.</p>
+<p>Turning the kit on its stand holds the distance fixed, which is why the L21
+Lab does both.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-turning-the-kit-on-its-stand">
+<div class="wrap docutils container">
+<p class="rubric">Turning the Kit on Its Stand</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The HB100 stays on its tripod, <span class="qty">1.2 m</span> out; the stand turns the kit about the array’s center.</p></li>
+<li><p>Facing the patches, E1 is on the right. Turning the face toward E1 puts the source at <span class="math notranslate nohighlight">\(+\theta\)</span>.</p></li>
+<li><p>The stand’s scale reads <span class="math notranslate nohighlight">\(-\theta\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L21-rotation-setup.svg"
+     alt="Top view of the stand setup: the HB100 fixed 1.2 m from the array, and the kit turned 30 degrees about the array center on its stand, its face toward E1, which puts the source at plus 30 degrees on the E8 side while the pointer, which turns with the kit, reads minus 30 on the scale on the fixed base"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Turning the kit in front of a fixed source records the same pattern as
+carrying the source around a fixed kit, because only the angle between the
+array normal and the source matters. The setup changes in three ways: the
+distance stays fixed, so you can compare levels from one reading to the next;
+the HB100 stays aimed at the array without effort; and you take each reading
+at an angle you read off the stand’s scale, with a click every <span class="qty">5°</span>.</p>
+<p>A stand reading of <span class="qty">−30</span> means the source is at <span class="qty">+30°</span>. Lesson 18 put
+<span class="math notranslate nohighlight">\(+\theta\)</span> on the E8 end of the array, and turning the kit’s face toward E1, as
+seen from the source, puts the source on that side. The scale sits on
+the fixed base and counts clockwise as seen from above, while that turn is
+counterclockwise, so the pointer reads the opposite sign. Part 2 starts by
+confirming the sign with a beam sweep, whose <strong>Angle</strong> readout, set to
+<strong>Peak</strong>, reads the source’s angle (Run 1 of the L21 Lab).</p>
+<p>The stand puts the array’s center on its turning axis, so the distance stays
+fixed as you turn. The scale reads to about <span class="qty">±2°</span>, which is fine for a
+lobe about <span class="qty">15°</span> wide.</p>
+<p>On the stand the kit keeps sweeping its beam, and one pass reads two held
+beams at once. Each point of a beam sweep is the beam held at that steer
+angle for an instant, so at each stand position the sample at <span class="qty">0°</span> steer
+is the beam held at <span class="qty">0°</span>, and the sample nearest <span class="qty">30°</span> is the beam
+held at <span class="qty">30°</span>, both seeing the source at the angle the stand sets. Read
+those two samples at every mark and you have taken two azimuth sweeps in one
+pass (Run 3 of the L21 Lab).</p>
+<p><img src="../../viz/img/L21-run3-reading.svg"
+     alt="One beam sweep at one kit position, against steer angle, with an unnumbered level axis. The sample at 0 degrees steer goes in Table D and the sample nearest 30 degrees goes in Table E."
+     style="max-width: 560px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-levels-in-dbc">
+<div class="wrap docutils container">
+<p class="rubric">Levels in dBc</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+L_\text{dBc} = L_\text{dBFS} - L_\text{dBFS,\ peak}
+\]</div>
+<ul class="simple">
+<li><p>dBFS: level relative to the receiver’s full scale, which the kit plots.</p></li>
+<li><p>dBc: level relative to the trace’s own main-lobe peak.</p></li>
+<li><p>The subtraction removes Rx Gain, distance, and source power.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The kit reports every level in <strong>dBFS</strong>, decibels relative to the full scale
+of the receiver’s analog-to-digital converter. A dBFS reading depends on
+everything between the HB100 and the converter: the Rx Gain setting, the
+distance, the HB100’s battery, and the direction of the source. Two traces
+taken at different gains or distances therefore sit at different dBFS
+levels even when the patterns are identical.</p>
+<p><strong>dBc</strong> removes that. Subtract the main-lobe peak of the same trace from
+every reading, and each level becomes a ratio to the peak: a first sidelobe
+at <span class="qty">−27.9</span> dBFS under a main lobe at <span class="qty">−14.6</span> dBFS reads
+<span class="math notranslate nohighlight">\(-27.9 - (-14.6) = -13.3\)</span> dBc. Everything common to the two readings cancels,
+which is what lets us lay a beam sweep and an azimuth sweep on the same axes.
+The lesson and the L21 Lab quote every lobe level in dBc.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-beam-sweep-and-azimuth-sweep-at-broadside">
+<div class="wrap docutils container">
+<p class="rubric">Beam Sweep and Azimuth Sweep at Broadside</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The main lobe and first sidelobes match: about <span class="qty">−13</span> dBc on both.</p></li>
+<li><p>The nulls drop to the noise floor, about <span class="qty">−23</span> dBc, on both.</p></li>
+<li><p>Past <span class="qty">±50°</span> the azimuth sweep reads lower.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L21-beam-vs-azimuth-0.svg"
+     alt="Predicted beam sweep and azimuth sweep at broadside, in dBc: the main lobes and first sidelobes coincide near minus 13 dBc and every null drops to a dashed noise floor at minus 23 dBc; the outer lobes read about minus 17 dBc on the beam sweep and minus 19.5 dBc on the azimuth sweep. Worked at 10.0 GHz."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The figure predicts both traces for a beam at broadside, at
+<span class="qty">10.0 GHz</span>. The beam sweep
+holds the HB100 at boresight and steps the beam; the azimuth sweep holds the
+beam at <span class="qty">0°</span> and moves the HB100. Out to the first sidelobes, at
+<span class="qty">±22.6°</span>, the two lie on top of each other, and both put the first
+sidelobes about 13 dB below the peak. That comparison is the one the L21 Lab
+asks for, because the main lobe and first sidelobes stand well above the
+noise floor and the room’s reflections.</p>
+<p>The nulls fall where Lesson 20’s
+<a href="../L20-array-factor-beamwidth/index.html#frame-null-locations">”Null Locations”</a>
+puts them, <span class="math notranslate nohighlight">\(\sin\theta_m = \pm m\lambda/(Nd)\)</span>: at <span class="qty">10.0 GHz</span>,
+<span class="math notranslate nohighlight">\(\lambda/(Nd) = 0.268\)</span>, which puts them at <span class="qty">±15.5°</span>, <span class="qty">±32.4°</span>,
+and <span class="qty">±53.5°</span>.</p>
+<p>Run 3 of the L21 Lab reads the stand at its <span class="qty">10°</span> marks, and a mark reads
+at the noise floor only if it sits within a degree or two of a null, because
+the level climbs steeply on either side of one. To find those marks, subtract
+each null angle from the nearest mark. At <span class="qty">10.0 GHz</span> the first null,
+at <span class="qty">15.5°</span>, is <span class="qty">4.5°</span> from the <span class="qty">20°</span> mark, and there the array
+factor is already back up to <span class="qty">−14.0</span> dB, so no mark sees that null. The same
+steepness keeps the marks off the sidelobe peaks: the first sidelobe peaks at
+<span class="qty">22.7°</span>, and the <span class="qty">20°</span> mark, <span class="qty">2.7°</span> away, reads <span class="qty">1.2</span> dB below
+it. A lobe peak lands on a mark only by chance, which is why Run 3 has you
+turn the kit slowly through each lobe for its highest reading.</p>
+<p>Every null drops to the noise floor, about <span class="qty">23 dB</span> below the peak,
+which the L20 Lab measured. The floor also lifts the outer sidelobes, which
+the array factor puts at <span class="qty">−16</span> to <span class="qty">−18</span> dB, by a decibel or two on both
+traces. The difference between the traces near <span class="qty">±67°</span>, about
+<span class="qty">3 dB</span>, comes from each patch’s own pattern. A patch over a ground plane radiates nothing
+behind the board and less and less toward the horizon; the course models it
+as the ideal element of “Gain of the Course Array” below, whose power falls
+as <span class="math notranslate nohighlight">\(\cos\theta\)</span>, <span class="qty">3.9 dB</span> down at <span class="qty">66°</span>. The azimuth sweep moves
+the HB100 out there, and the beam sweep never does. A real patch falls off
+faster than the ideal element, so expect the outer lobes of your azimuth
+sweep to read lower still. At the first sidelobes the patch pattern changes
+the level by less than half a decibel.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-beam-sweep-and-azimuth-sweep-at-30">
+<div class="wrap docutils container">
+<p class="rubric">Beam Sweep and Azimuth Sweep at 30°</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Both put the nulls at <span class="qty">13.4°</span> and <span class="qty">50.2°</span>: the lobe is wider outside.</p></li>
+<li><p>The outer first sidelobe reads about 2 dB lower on the azimuth sweep.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L21-beam-vs-azimuth-30.svg"
+     alt="Predicted beam sweep and azimuth sweep for a 30 degree beam, in dBc: both peak near 30 degrees with nulls at 13.4 and 50.2 degrees on the dashed noise floor; the inner first sidelobes match near minus 12 dBc, while the outer one near 61 degrees reads about minus 12.5 dBc on the beam sweep and minus 14.5 dBc on the azimuth sweep. Worked at 10.0 GHz."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Steering does not change the agreement. For the azimuth sweep, set the Steer
+Angle to <span class="qty">30°</span> and carry the HB100 around the arc; for the beam sweep,
+put the HB100 at <span class="qty">30°</span> and let the kit step the beam past it. The array
+factor slides in <span class="math notranslate nohighlight">\(\sin\theta\)</span>, not in <span class="math notranslate nohighlight">\(\theta\)</span> (Lesson 18, “Rigid Shift in
+Sine Space”), so at <span class="qty">10.0 GHz</span> the first nulls fall at
+<span class="math notranslate nohighlight">\(\sin\theta = 0.5 \pm 0.268\)</span>, which is <span class="qty">13.4°</span> and <span class="qty">50.2°</span>. The main
+lobe reaches <span class="qty">16.6°</span> below its peak and <span class="qty">20.2°</span> above it, on both
+traces.</p>
+<p>The outer first sidelobe, near <span class="qty">61°</span>, reads about <span class="qty">−12.5</span> dBc on the
+beam sweep and about <span class="qty">−14.5</span> dBc on the azimuth sweep. The patch pattern
+causes that difference. The azimuth sweep reads in dBc of its own peak near
+<span class="qty">30°</span>, where the ideal element is down <span class="qty">0.6 dB</span>, and carries the
+HB100 out to <span class="qty">61°</span>, where it is down <span class="qty">3.1 dB</span>; the sidelobe
+therefore drops by the difference, about <span class="qty">2.5 dB</span>, which the noise
+floor trims to about <span class="qty">2 dB</span>. The inner first sidelobe sits near
+broadside on both, where the patch pattern is nearly flat, so on the azimuth
+sweep the outer one reads lower than the inner. The beam sweep keeps the HB100 at
+<span class="qty">30°</span> for every step.</p>
+<p>The same two subtractions size the gap between the two first sidelobes at any
+steer angle: each lobe moves by the element pattern at its own angle, relative
+to the element pattern at the peak. Worked for a beam steered to <span class="qty">20°</span> at
+<span class="qty">10.0 GHz</span>, the array factor puts both first sidelobes <span class="qty">12.8</span> dB below
+the peak, the inner one near <span class="qty">−2.5°</span> and the outer one near <span class="qty">46.7°</span>,
+and the ideal element gives</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\text{inner: } 10\log_{10}\frac{\cos 2.5^\circ}{\cos 20^\circ} &amp;= +0.3\ \text{dB} \\
+\text{outer: } 10\log_{10}\frac{\cos 46.7^\circ}{\cos 20^\circ} &amp;= -1.4\ \text{dB} ,
+\end{aligned}
+\end{split}\]</div>
+<p>so the inner lobe reads about <span class="qty">−12.5</span> dBc and the outer about <span class="qty">−14.2</span> dBc, the
+outer <span class="qty">1.7 dB</span> lower. Farther from broadside the outer lobe sits lower
+on the element pattern, so the gap grows with the steer angle; Part 1 works it
+for <span class="qty">30°</span> at your frequency.</p>
+<p>On my kit the room alone made the two first
+sidelobes of a broadside azimuth sweep differ by about <span class="qty">3 dB</span> (<span class="qty">−11.5</span>
+and <span class="qty">−14.8</span> dBc), so a single azimuth sweep cannot separate the patch pattern
+from the room.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-measurement-errors">
+<div class="wrap docutils container">
+<p class="rubric">Measurement Errors</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Error</p></th>
+<th class="head text-left"><p>Size</p></th>
+<th class="head text-left"><p>Trace</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Room reflections</p></td>
+<td class="text-left"><p><span class="qty">±1</span> dB a reading</p></td>
+<td class="text-left"><p>both</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Radius drift, <span class="qty">5 cm</span></p></td>
+<td class="text-left"><p><span class="qty">0.4</span> dB</p></td>
+<td class="text-left"><p>azimuth</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Uneven pace</p></td>
+<td class="text-left"><p>stretches lobes in time</p></td>
+<td class="text-left"><p>azimuth</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Phase grid</p></td>
+<td class="text-left"><p>beamwidth <span class="qty">±1°</span></p></td>
+<td class="text-left"><p>beam</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Stand’s scale</p></td>
+<td class="text-left"><p><span class="qty">±2°</span></p></td>
+<td class="text-left"><p>stand</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Noise floor</p></td>
+<td class="text-left"><p>about <span class="qty">−23</span> dBc</p></td>
+<td class="text-left"><p>both</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Room reflections: the lab is not an anechoic chamber. Signals from the
+HB100 also reach the array off the floor, the ceiling, the tables, and the
+people nearby, and they add to the direct signal in and out of phase. A
+reflection <span class="qty">18 dB</span> below the level being read moves that reading by
+about a decibel, and the same reflection moves a weaker lobe by more. The
+far sidelobes are therefore the least trustworthy part of either trace, and a
+lobe that moves when you move the kit or a person comes from the room. Lesson
+9 shows why the nulls feel this first
+(<a href="../../module02/L09-pattern-measurement-theory/index.html#frame-the-nulls-fill-first">”The Nulls Fill First”</a>).</p>
+<p>A level in dBc is the difference of two readings, the lobe and the main-lobe
+peak, and each carries its own error from the room. In the worst case the
+room raises one and lowers the other, so the two errors add. Worked with
+smaller errors than the lab’s: a reflection <span class="qty">24 dB</span> below the
+main-lobe peak moves it by about <span class="qty">0.5 dB</span>, and if the sidelobe reading
+carries <span class="qty">1.0 dB</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta L_\text{dBc} = \pm(0.5 + 1.0)\ \text{dB} = \pm 1.5\ \text{dB} ,
+\]</div>
+<p>so a true <span class="qty">−20</span> dBc lobe can read anywhere from <span class="qty">−18.5</span> to <span class="qty">−21.5</span> dBc.
+In Part 3 you build that window from your own readings.</p>
+<p>Radius drift and pace belong to the azimuth sweep by hand, for the reasons
+in “The Time Axis.” On the stand both go away, and what remains is the
+scale, read to about <span class="qty">2°</span>. The stand cannot remove the room either, but
+the reflections sit in fixed places, so a reading you repeat at the same
+angle comes back to the same value; that repeatability is the stand’s
+advantage. The phase grid places each beam-sweep point one step
+apart, so each half-power crossing can be off by half a step and a beamwidth
+by up to a step, about <span class="qty">1°</span>. The noise floor is the level the nulls
+drop to; the L20 Lab found it about <span class="qty">23 dB</span> below the peak of each
+trace.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-classroom-against-chamber">
+<div class="wrap docutils container">
+<p class="rubric">Classroom Against Chamber</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The stand reads angle to <span class="qty">±2°</span>; a range’s encoder reads far finer.</p></li>
+<li><p>The stand and a range both fix the distance.</p></li>
+<li><p>A chamber absorbs reflections; a room adds them.</p></li>
+<li><p>Closer than the far-field distance, the nulls fill in.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L21-range-artifacts.svg"
+     alt="Left, a classroom seen from the side: the direct path from the HB100 to the kit, plus reflections off the floor and a wall that add to it. Right, an anechoic chamber: absorber on every wall, a turntable under the antenna, and only the direct path."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The azimuth sweep on the stand is the measurement an antenna range makes,
+without the range’s encoder or its absorber. Comparing the two shows what the
+classroom still leaves in your data.</p>
+<p>A range turns the antenna on a turntable with a shaft encoder, so
+every sample carries its angle to a fraction of a degree. The stand’s scale
+gives each stop’s angle to about <span class="qty">±2°</span>; the time axis of a sweep by
+hand gives it only as well as you hold a steady pace.</p>
+<p>A range bolts the source at a fixed distance. So does the stand;
+a sweep by hand does not.</p>
+<p>The direct path is not the only path from the HB100 to the
+array. Reflections off the floor, the walls, and the whiteboard arrive too and
+add to the direct signal in and out of phase, in both of your azimuth sweeps.
+An anechoic chamber lines every surface with absorber so only the direct path
+survives.</p>
+<p>The far-field distance is set by the antenna’s size and the
+wavelength, not by the room. A chamber, like a classroom, works only if it is
+long enough to reach that distance for the antenna and frequency being
+measured.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-source-distance">
+<div class="wrap docutils container">
+<p class="rubric">Source Distance</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+r &amp;\ge \frac{2D^2}{\lambda} = \frac{2(0.112\ \text{m})^2}{0.0300\ \text{m}} \\
+&amp;= 0.84\ \text{m}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(D = Nd = 112\ \text{mm}\)</span>, as in Lesson 18.</p></li>
+<li><p>The L21 Lab sets the HB100 <span class="qty">1.2 m</span> out, clear of the far-field distance.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The HB100 must sit past Lesson 5’s far-field distance, or the wavefront
+curves across the array and the edge elements see more than the
+<span class="qty">22.5°</span> (<span class="math notranslate nohighlight">\(\lambda/16\)</span> of path) of phase error the criterion allows,
+which fills the nulls and raises the sidelobes (Lesson 9,
+<a href="../../module02/L09-pattern-measurement-theory/index.html#frame-where-2d-comes-from">”Where 2D²/λ Comes From”</a>).
+Lesson 18 took the aperture as <span class="math notranslate nohighlight">\(D = Nd = 112\ \text{mm}\)</span>, since each element
+accounts for one spacing of aperture, which puts the boundary at
+<span class="qty">0.84 m</span> at <span class="qty">10.0 GHz</span>; Part 1 finds it at your kit’s
+frequency. The L21 Lab uses <span class="qty">1.2 m</span>, which stays past the
+boundary even with a hand-carried source drifting in and out.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-reading-your-traces">
+<div class="wrap docutils container">
+<p class="rubric">Reading Your Traces</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Feature</p></th>
+<th class="head text-left"><p>What to expect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Main lobe</p></td>
+<td class="text-left"><p>same level on both</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>First sidelobes, broadside</p></td>
+<td class="text-left"><p>about <span class="qty">−13</span> dBc on every trace</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>First sidelobes at <span class="qty">30°</span></p></td>
+<td class="text-left"><p>outer below inner, azimuth sweep</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Farther sidelobes</p></td>
+<td class="text-left"><p>qualitative only</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Nulls</p></td>
+<td class="text-left"><p>noise floor, about <span class="qty">−23</span> dBc</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The L21 Lab gives you a beam sweep, three azimuth sweeps by hand, and one
+pass of the kit on its stand that reads the <span class="qty">0°</span> and <span class="qty">30°</span> beams
+together. Compare them lobe by lobe, in dBc. The main lobe and the first
+sidelobes are where the methods should agree: a first sidelobe of a
+broadside beam reads about 13 dB below the peak on every trace, and the room
+moves each dBc value by a window you build from your own readings in Part 3,
+since a dBc value is the difference of two readings that each carry the room’s error.
+The
+farther sidelobes are recognizable but not quantitative, because the noise
+floor, the room, and the patch pattern all act there. Read angles from the
+stand’s scale.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-gain-of-the-course-array">
+<div class="wrap docutils container">
+<p class="rubric">Gain of the Course Array</p>
+<p>Later lessons use one gain figure for the course array, which we get by
+modeling each patch as an ideal element that collects its share of the
+aperture. Lesson 2 tied gain to effective aperture,</p>
+<div class="math notranslate nohighlight">
+\[
+G = \frac{4\pi A_e}{\lambda^2} ,
+\]</div>
+<p>and seen from <span class="math notranslate nohighlight">\(\theta\)</span> off broadside that share presents its projected area
+<span class="math notranslate nohighlight">\(A\cos\theta\)</span>, so the element’s power pattern is</p>
+<div class="math notranslate nohighlight">
+\[
+G_e(\theta) = G_e(0)\cos\theta ,
+\]</div>
+<p>the same projection that sets scan loss in Lesson 18 (“Scan Loss”). The
+ground plane blocks the back hemisphere, so with <span class="math notranslate nohighlight">\(U = U_0\cos\theta\)</span> over the
+front hemisphere only, Lesson 2’s directivity gives</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+D_e &amp;= \frac{4\pi U_\text{max}}{P_\text{rad}} \\
+P_\text{rad} &amp;= \int_0^{2\pi}\!\!\int_0^{\pi/2} U_0\cos\theta\ \sin\theta\ d\theta\ d\phi \\
+&amp;= \pi U_0 \\
+D_e &amp;= \frac{4\pi U_0}{\pi U_0} = 4 = 6.0\ \text{dBi} .
+\end{aligned}
+\end{split}\]</div>
+<p>Eight such elements tile the aperture, so the array collects eight times one
+element’s share and adds <span class="math notranslate nohighlight">\(10\log_{10} 8 = 9.0\ \text{dB}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+G(\theta_0) &amp;= G_e(0) + 10\log_{10} N \\
+&amp;\quad + 10\log_{10}(\cos\theta_0) \\
+&amp;= 15.0 + 10\log_{10}(\cos\theta_0)\ \text{dBi} ,
+\end{aligned}
+\end{split}\]</div>
+<p>which is <span class="qty">15.0 dBi</span> at broadside and <span class="qty">14.4</span>, <span class="qty">13.5</span>, and
+<span class="qty">12.0 dBi</span> steered to <span class="qty">30°</span>, <span class="qty">45°</span>, and <span class="qty">60°</span>. Lesson
+20 wrote the same sum with the array factor’s directivity, <span class="qty">8.9 dB</span>,
+in place of <span class="math notranslate nohighlight">\(10\log_{10} 8\)</span>; the two agree within <span class="qty">0.2 dB</span>.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary">
+<div class="wrap docutils container">
+<p class="rubric">Summary</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Beam sweep</p></td>
+<td class="text-left"><p>the Rectangular plot: beam stepped past a fixed source, one point from each beam</p></td>
+<td class="text-left"><p>162 steps of <span class="qty">2.8125°</span>; about <span class="qty">1°</span> near broadside</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Why it traces a pattern</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\vert AF\vert\)</span> depends only on <span class="math notranslate nohighlight">\(\sin\theta_\text{src} - \sin\theta_0\)</span></p></td>
+<td class="text-left"><p>stepping the beam or moving the source visits the same curve</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Azimuth sweep</p></td>
+<td class="text-left"><p>one beam held, source moved in azimuth or antenna turned</p></td>
+<td class="text-left"><p>Signal vs Time by hand; the stand’s scale for angles</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>dBc</p></td>
+<td class="text-left"><p>level relative to the trace’s own main-lobe peak</p></td>
+<td class="text-left"><p>removes Rx Gain, distance, and source power</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Agreement</p></td>
+<td class="text-left"><p>main lobe and first sidelobes</p></td>
+<td class="text-left"><p>about <span class="qty">−13</span> dBc at broadside, within the errors you quantify in Part 3</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Patch pattern</p></td>
+<td class="text-left"><p>seen by the azimuth sweep, not by the beam sweep</p></td>
+<td class="text-left"><p>outer sidelobe of a <span class="qty">30°</span> beam reads lower; the room adds as much</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Source distance</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(r \ge 2D^2/\lambda\)</span>, <span class="math notranslate nohighlight">\(D = Nd = 112\ \text{mm}\)</span></p></td>
+<td class="text-left"><p>under <span class="qty">0.9 m</span>; measure at <span class="qty">1.2 m</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The L21 Lab: a beam sweep, an azimuth sweep by hand, and one on the stand; compare lobe levels.</p></li>
+<li><p>Lesson 22: taper the Element Gains to push the first sidelobes below <span class="qty">−13</span> dBc.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>In the L21 Lab you take the same pattern three ways and compare the lobe
+levels in dBc, using the error table above to judge whether two values
+agree. Every trace so far has had uniform illumination, which fixes the
+first sidelobes near <span class="qty">−13</span> dBc. Lesson 22 feeds the eight elements
+unequally, with more power in the middle and less at the edges, which pushes
+the sidelobes down and widens the main lobe.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-pre-lab">
+<div class="wrap docutils container">
+<p class="rubric">Pre-Lab</p>
+<p>Part 1 of the L21 Lab packet is the pre-lab: the shaded Predicted cells of each table in the packet, beside the Measured cells you fill in class. Do it before the lab period, at the HB100 frequency your kit reported in the L18 Lab, and bring it to class: you check every trace you take in Part 2 against it. This lesson works its examples at <span class="qty">10.0 GHz</span>, away from every kit, so its angles differ from yours by up to about <span class="qty">4°</span>, mostly at the outer nulls; work every value at your own frequency.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Packet table</p></th>
+<th class="head text-left"><p>You predict</p></th>
+<th class="head text-left"><p>Checked in</p></th>
+<th class="head text-left"><p>Method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Setup</p></td>
+<td class="text-left"><p>frequency, far-field distance, slowest update rate</p></td>
+<td class="text-left"><p>Steps 2 and 11</p></td>
+<td class="text-left"><p>“The Rectangular Plot,” “Source Distance,” “The Time Axis”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Table A</p></td>
+<td class="text-left"><p>the Angle readout with the stand at <span class="qty">+30</span>, <span class="qty">0</span>, and <span class="qty">−30</span></p></td>
+<td class="text-left"><p>Table A; Steps 7 and 8</p></td>
+<td class="text-left"><p>“Turning the Kit on Its Stand”</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Table B</p></td>
+<td class="text-left"><p>the beam sweep’s half-power beamwidth and first sidelobes</p></td>
+<td class="text-left"><p>Table B; Step 9</p></td>
+<td class="text-left"><p>Lesson 20’s “Half-Power Beamwidth” and “Sidelobe Level”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Table C</p></td>
+<td class="text-left"><p>the azimuth sweep’s first sidelobes, and the peak spread from radius drift</p></td>
+<td class="text-left"><p>Table C; Steps 14 and 15</p></td>
+<td class="text-left"><p>“Beam Sweep and Azimuth Sweep at Broadside,” “The Time Axis”</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Table D</p></td>
+<td class="text-left"><p>angle and level of the main lobe, first nulls, and first sidelobes, beam at <span class="qty">0°</span></p></td>
+<td class="text-left"><p>Table D; Step 18</p></td>
+<td class="text-left"><p>“Beam Sweep and Azimuth Sweep at Broadside”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Table E</p></td>
+<td class="text-left"><p>the same for the beam at <span class="qty">30°</span></p></td>
+<td class="text-left"><p>Table E; Step 18</p></td>
+<td class="text-left"><p>“Beam Sweep and Azimuth Sweep at 30°”</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Every method has a worked example at <span class="qty">10.0 GHz</span> in the frame named beside it. Part 1 also asks you to attach your work for one row of each table, on your own paper.</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">L21 Lab packet, Part 1 (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L21-antenna-pattern"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

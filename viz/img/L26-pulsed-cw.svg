@@ -1,0 +1,207 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="268.342561pt" height="178.057492pt" viewBox="0 0 268.342561 178.057492" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 178.057492 
+L 268.342561 178.057492 
+L 268.342561 0 
+L 0 0 
+L 0 178.057492 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 7.342561 154.008 
+L 264.022561 154.008 
+L 264.022561 4.32 
+L 7.342561 4.32 
+L 7.342561 154.008 
+z
+" style="fill: none"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 45.463354 28.27008 
+L 58.170284 28.27008 
+L 58.170284 10.30752 
+L 45.463354 10.30752 
+z
+" clip-path="url(#pba100c4621)" style="fill: #004a85"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 58.170284 58.20768 
+L 147.118799 58.20768 
+L 147.118799 40.24512 
+L 58.170284 40.24512 
+z
+" clip-path="url(#pba100c4621)" style="fill: #0067b9; opacity: 0.18"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 45.463354 58.20768 
+L 58.170284 58.20768 
+L 58.170284 40.24512 
+L 45.463354 40.24512 
+z
+" clip-path="url(#pba100c4621)" style="fill: url(#h13f93a4d8b); opacity: 0.35"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 101.373849 55.21392 
+L 114.080779 55.21392 
+L 114.080779 43.23888 
+L 101.373849 43.23888 
+z
+" clip-path="url(#pba100c4621)" style="fill: #0067b9"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 147.118799 28.27008 
+L 159.82573 28.27008 
+L 159.82573 10.30752 
+L 147.118799 10.30752 
+z
+" clip-path="url(#pba100c4621)" style="fill: #004a85"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 159.82573 58.20768 
+L 248.774245 58.20768 
+L 248.774245 40.24512 
+L 159.82573 40.24512 
+z
+" clip-path="url(#pba100c4621)" style="fill: #0067b9; opacity: 0.18"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 147.118799 58.20768 
+L 159.82573 58.20768 
+L 159.82573 40.24512 
+L 147.118799 40.24512 
+z
+" clip-path="url(#pba100c4621)" style="fill: url(#h13f93a4d8b); opacity: 0.35"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 203.029294 55.21392 
+L 215.736225 55.21392 
+L 215.736225 43.23888 
+L 203.029294 43.23888 
+z
+" clip-path="url(#pba100c4621)" style="fill: #0067b9"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 45.463354 106.10784 
+L 261.481175 106.10784 
+L 261.481175 88.14528 
+L 45.463354 88.14528 
+z
+" clip-path="url(#pba100c4621)" style="fill: #004a85"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 45.463354 136.04544 
+L 261.481175 136.04544 
+L 261.481175 118.08288 
+L 45.463354 118.08288 
+z
+" clip-path="url(#pba100c4621)" style="fill: #0067b9; opacity: 0.45"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="text_1">
+     <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="135.682561" y="170.60175" transform="rotate(-0 135.682561 170.60175)">time</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2"/>
+   <g id="patch_13">
+    <path d="M 45.463354 154.008 
+L 261.481175 154.008 
+" style="fill: none; stroke: #8a929c; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="51.816819" y="74.393942" transform="rotate(-0 51.816819 74.393942)">blind</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #0067b9" x="107.727314" y="74.393942" transform="rotate(-0 107.727314 74.393942)">echo</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #0067b9" x="187.780977" y="74.393942" transform="rotate(-0 187.780977 74.393942)">listen</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #1a1a1a" x="41.651274" y="24.017804" transform="rotate(-0 41.651274 24.017804)">Tx</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #1a1a1a" x="41.651274" y="53.955404" transform="rotate(-0 41.651274 53.955404)">Rx</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #1a1a1a" x="41.651274" y="101.855564" transform="rotate(-0 41.651274 101.855564)">Tx</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #1a1a1a" x="41.651274" y="131.793164" transform="rotate(-0 41.651274 131.793164)">Rx</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #004a85" transform="translate(16.91375 54.855491) rotate(-90)">pulsed</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #004a85" transform="translate(16.91375 123.247938) rotate(-90)">CW</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pba100c4621">
+   <rect x="7.342561" y="4.32" width="256.68" height="149.688"/>
+  </clipPath>
+ </defs>
+ <defs>
+  <pattern id="h13f93a4d8b" patternUnits="userSpaceOnUse" x="0" y="0" width="72" height="72">
+   <rect x="0" y="0" width="73" height="73" fill="#5a5a5a"/>
+   <path d="M -36 36 
+L 36 -36 
+M -32 40 
+L 40 -32 
+M -28 44 
+L 44 -28 
+M -24 48 
+L 48 -24 
+M -20 52 
+L 52 -20 
+M -16 56 
+L 56 -16 
+M -12 60 
+L 60 -12 
+M -8 64 
+L 64 -8 
+M -4 68 
+L 68 -4 
+M 0 72 
+L 72 0 
+M 4 76 
+L 76 4 
+M 8 80 
+L 80 8 
+M 12 84 
+L 84 12 
+M 16 88 
+L 88 16 
+M 20 92 
+L 92 20 
+M 24 96 
+L 96 24 
+M 28 100 
+L 100 28 
+M 32 104 
+L 104 32 
+M 36 108 
+L 108 36 
+" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.0; stroke-linecap: butt; stroke-linejoin: miter; stroke-opacity: 0.35"/>
+  </pattern>
+ </defs>
+</svg>

@@ -1,0 +1,624 @@
+---
+frame_view: true
+---
+
+# L20 - Array Factor and Beamwidth
+
+::::{frame}
+:class: title-frame
+
+<div class="course-mark">ECE 444 · Fall 2026</div>
+
+<h1 class="frame-title">Array Factor and Beamwidth</h1>
+
+<div class="title-rule"></div>
+
+The aperture measured in wavelengths, $Nd/\lambda$, sets the beamwidth, and steering widens it by $1/\cos\theta_0$.
+
+Lesson 20 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+::::
+
+::::{frame} Printing
+:class: read-only
+
+To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.
+::::
+
+::::{frame} Learning Objectives
+
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 1">
+  <li>I can derive the array factor for an arbitrary linear array and apply pattern multiplication.</li>
+</ol>
+::::
+
+::::{frame} The Uniform Array Factor
+:::{present}
+$$\begin{aligned}
+AF_N(\psi) &= \frac{\sin(N\psi/2)}{N\ \sin(\psi/2)} \\
+\psi &= kd(\sin\theta - \sin\theta_0)
+\end{aligned}$$
+
+- It gives the L18 Lab beam: $13^\circ$ wide at boresight, wider at $45^\circ$.
+- We find beamwidth, nulls, sidelobes, and directivity, then read them off the L20 Lab sweep.
+- Your midterm project measured these from a pattern cut.
+:::
+
+The **Antenna Pattern Measurement** midterm project, assigned in Lesson 9, measured all of this from the other direction. The quantities you extracted from a measured cut — the half-power width, the null positions, the sidelobe level referenced to the peak — are exactly the quantities this lesson computes from theory, so keep your project data at hand.
+
+In the L18 Lab you swept the beam across the room and watched it widen as it went. The main lobe was about 13° across at boresight and noticeably wider at 45°, with sidelobes that moved with the beam. Lesson 16 gave us the closed form that produces all of that. This lesson takes numbers from it: the half-power beamwidth of a steered array, the angle of every null, the first sidelobe level, and the directivity, and then runs the beamwidth result in reverse to size an array from a specification. The central result is that the aperture in wavelengths, $Nd/\lambda$, sets the beamwidth. The L20 Lab tests it on your kit by halving the active aperture twice, so the last part of this lesson covers that experiment and how to read the kit's sweep, and the Pre-Lab at the end lists the predictions you bring to class.
+
+Lesson 16 summed $N$ equal-amplitude elements with a progressive phase and collapsed the geometric series into the **normalized uniform array factor**
+
+$$\begin{aligned}
+AF_N(\psi) &= \frac{\sin(N\psi/2)}{N\ \sin(\psi/2)}, \\
+\psi &= kd(\sin\theta - \sin\theta_0).
+\end{aligned}$$
+
+Everything about the shape of the pattern is in that one function of $\psi$. The array's physical parameters enter only through the map from angle to $\psi$, and the beam peak is wherever $\psi$ = 0, which is $\theta = \theta_0$.
+::::
+
+::::{frame} The Sinc Near the Peak
+:::{present}
+$$\begin{aligned}
+AF_N &\approx \frac{\sin(N\psi/2)}{N\psi/2} \\
+&= \frac{\sin u}{u}, \qquad u \equiv \frac{N\psi}{2}
+\end{aligned}$$
+
+- Near the peak $\psi$ is small, so $\sin(\psi/2) \approx \psi/2$.
+- The array is a sampled aperture of length $L = Nd$, and this is L6's uniform line-source pattern.
+:::
+
+Near the peak, $\psi$ is small, so $\sin(\psi/2) \approx \psi/2$ and
+
+$$\begin{aligned}
+AF_N &\approx \frac{\sin(N\psi/2)}{N\psi/2} = \frac{\sin u}{u}, \\
+u &\equiv \frac{N\psi}{2}.
+\end{aligned}$$
+
+That is the same $\sin u / u$ we found in Lesson 6 for a uniform line source, and the reason is physical: an $N$-element uniform array with spacing $d$ is a **sampled aperture** of length $L = Nd$. Near the peak, where the sampling is too fine to matter, the array's pattern matches the continuous aperture's. The length is $Nd$ rather than the $(N-1)d$ between the end elements because each element accounts for one spacing $d$ of aperture, the sampled line source of Lesson 16.
+::::
+
+::::{frame} Half-Power Beamwidth
+:::{present}
+$$\begin{aligned}
+\frac{N\psi}{2} &= 1.392 \\
+\sin\theta - \sin\theta_0 &= \frac{0.443\ \lambda}{Nd} \\
+\theta_\text{HP} &\approx \frac{0.886\ \lambda}{Nd\ \cos\theta_0}
+\end{aligned}$$
+
+- $\sin\theta$ has slope $\cos\theta_0$ at the beam, so the width in angle grows by $1/\cos\theta_0$.
+:::
+:::{present}
+<img src="../../viz/img/L20-sine-slope.svg"
+     alt="The sine of the angle plotted against angle. The same band of sine, the course array's half-power width, maps to 13.7 degrees of angle at broadside, where the slope is 1, and to 31.9 degrees at 60 degrees, where the slope is 0.5"
+     style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+Power is half the peak where $\lvert \sin u/u\rvert = 1/\sqrt{2}$, which happens at $u$ = 1.392. Solving outward from there:
+
+$$\begin{aligned}
+\frac{N\psi}{2} &= 1.392 \\
+kd(\sin\theta - \sin\theta_0) &= \frac{2.784}{N} \\
+\sin\theta - \sin\theta_0 &= \frac{0.443\ \lambda}{Nd}.
+\end{aligned}$$
+
+The last step fixes the half-power width in $\sin\theta$, and that width is the same at every scan angle, because the array factor depends only on $\sin\theta - \sin\theta_0$. The scan angle enters when we convert it back to an angle. The derivative of $\sin\theta$ is $\cos\theta$, so near the beam peak the first term of its Taylor series gives
+
+$$\sin\theta - \sin\theta_0 \approx (\theta - \theta_0)\cos\theta_0.$$
+
+At broadside $\sin\theta$ is steepest, with slope 1, and a step in $\sin\theta$ is the same step in angle. Toward the horizon $\sin\theta$ flattens, and the same step in $\sin\theta$ covers more angle: at $60^\circ$ the slope is 0.5, so the beam is twice as wide. The figure shows the course array's half-power band in $\sin\theta$ mapped back to angle at both scan angles. For a beam that is narrow compared with its distance from broadside, the half-width is
+
+$$\theta - \theta_0 \approx \frac{0.443\ \lambda}{Nd\ \cos\theta_0}$$
+
+and the full width is twice that:
+
+$$\theta_\text{HP} \approx \frac{0.886\ \lambda}{Nd\ \cos\theta_0}.$$
+
+:::{callout}
+The aperture measured in wavelengths, $Nd/\lambda$, sets the beamwidth. The constant $0.886$ is the uniform line-source constant from Lesson 6 and Lesson 15, unchanged, because a uniform array of length $Nd$ is that line source sampled at $N$ points. Steering off broadside foreshortens the aperture as seen from the beam direction, and the beam widens by $1/\cos\theta_0$.
+:::
+
+<img src="../../viz/img/L18-broadening.svg"
+     alt="An array of length Nd seen from a direction theta0 off broadside: its projected length normal to that direction is shorter by cos theta0"
+     style="max-width: 420px; width: 100%; display: block; margin: 0 auto;">
+
+The same factor has a physical reading, shown in Lesson 18's figure: seen from the beam direction, the array's projected length is $Nd\cos\theta_0$, and a shorter aperture gives a wider beam.
+::::
+
+::::{frame} Scan Broadening of the Course Array
+:::{present}
+<img src="../../viz/img/L20-scan-broadening.svg"
+     alt="Array factor of the eight-element course array steered to 0, 30 and 60 degrees, showing the main lobe widening from 14 to 32 degrees"
+     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
+
+- $N$ = 8, $d$ = 14 mm, worked at $10.0\ \text{GHz}$: $Nd$ = 3.73 $\lambda$.
+- The rule gives $13.6^\circ$ at broadside ($13.7^\circ$ exact) and $15.7^\circ$ at $30^\circ$.
+- At $60^\circ$ the rule gives $27.2^\circ$ and the pattern $31.9^\circ$.
+:::
+
+:::{admonition} Worked example — the PHASER array
+:class: tip
+The course array has $N$ = 8 patches on $d$ = 14 mm centers. We work this example at $10.0\ \text{GHz}$, below every kit's HB100, so it shows the method without giving any Part 1 answer; Part 1 has you work at your own kit's frequency. At $10.0\ \text{GHz}$, $\lambda$ = 30.0 mm, so $d/\lambda$ = 0.467 and the aperture is $Nd$ = 112 mm = 3.73 $\lambda$.
+
+Broadside: $\theta_\text{HP}$ = 0.886/3.73 = 0.237 rad = 13.6° by the rule, against $13.7^\circ$ from the exact pattern.
+
+Steered to $30^\circ$: 13.6°/cos 30° = 15.7°, against $15.9^\circ$ from the pattern.
+
+Steered to $45^\circ$: 13.6°/cos 45° = 19.2°.
+
+Steered to $60^\circ$: the formula gives $27.2^\circ$, while the pattern itself is $31.9^\circ$ wide. The small-angle step above is the approximation that fails, and it underestimates the width — a wide-scanned beam is always wider than $0.886\lambda/(Nd\cos\theta_0)$ predicts.
+:::
+::::
+
+::::{frame} Beamwidth Explorer
+:class: viz-frame
+
+:::{depth}
+The widget draws the uniform array factor for any element count, spacing, and steering angle. Set $N$ and $d/\lambda$ and watch the main lobe narrow as the aperture grows; the green bar is the half-power width read off the pattern and the dotted bar underneath is what $0.886\lambda/(Nd\cos\theta_0)$ predicts. Steer toward $\pm 60^\circ$ and two things happen at once: the beam widens, and the dotted bar falls short of the real one. Push $d/\lambda$ toward $1.0$ with the beam steered and a grating lobe enters from the edge of visible space.
+:::
+
+:::{present}
+<iframe src="../../viz/array-beamwidth.html"
+        width="100%" height="523"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Uniform linear array pattern with half-power beamwidth, nulls, first-null beamwidth and directivity">
+</iframe>
+:::
+::::
+
+::::{frame} Null Locations
+:::{present}
+$$\begin{aligned}
+\frac{N\psi}{2} &= m\pi, \quad m = 1, 2, \ldots \\
+\sin\theta &= \sin\theta_0 \pm \frac{m\lambda}{Nd} \\
+\text{FNBW} &= 2\arcsin\!\left(\frac{\lambda}{Nd}\right)
+\end{aligned}$$
+
+- Equal 0.268 steps in $\sin\theta$ become 15.5°, 16.9°, 21.1° in angle; the fourth null has no real angle.
+:::
+:::{present}
+<img src="../../viz/img/L20-null-comb.svg"
+     alt="The broadside eight-element pattern plotted twice. Against the sine of the angle, the nulls are evenly spaced, 0.268 apart, and the fourth, at 1.07, falls in the shaded region with no real angle. Against angle, the same three nulls land at 15.5, 32.4 and 53.5 degrees, so the gaps grow from 15.5 to 16.9 to 21.1 degrees toward the horizon"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+A null is a zero of the numerator that is not also a zero of the denominator. The numerator vanishes when
+
+$$\begin{aligned}
+\frac{N\psi}{2} &= m\pi, \qquad m = 1, 2, 3, \ldots \\
+\psi &= \frac{2\pi m}{N}
+\end{aligned}$$
+
+except when $m$ is a multiple of $N$, because then $\sin(\psi/2)$ vanishes as well and the ratio returns to unity. Those are the main lobe and its repeats, the **grating lobes** of Lesson 23, not nulls. Converting through $\psi = kd(\sin\theta - \sin\theta_0)$:
+
+$$\sin\theta = \sin\theta_0 \pm \frac{m\lambda}{Nd}.$$
+
+The nulls are equally spaced in $\sin\theta$, not in $\theta$. The figure plots the same broadside pattern twice. The top panel uses $\sin\theta$ as its axis, and there the nulls are a comb with teeth every $\lambda/Nd$ = 0.268. The bottom panel uses angle, and the dashed lines carry each null down to it: the gaps grow from 15.5° to 16.9° to 21.1°, because $\sin\theta$ flattens toward the horizon, the same slope argument that widened the steered beam. A null exists only if the right-hand side lands inside the **visible region** $\lvert \sin\theta\rvert$ ≤ 1; values outside it correspond to no real direction, and there is no null.
+
+Taking $m$ = 1 on both sides of a broadside beam gives the **first-null beamwidth**
+
+$$\text{FNBW} = 2\arcsin\!\left(\frac{\lambda}{Nd}\right).$$
+::::
+
+::::{frame} Anatomy of a Uniform-Array Pattern
+:::{present}
+<img src="../../viz/img/L20-beamwidth-anatomy.svg"
+     alt="Broadside pattern of the eight-element array in decibels, with the 13.7 degree half-power width, the 31.1 degree null-to-null width, the first null at 15.5 degrees and the minus 13 decibel first sidelobe marked"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+
+- $\lambda/Nd$ = 0.268: nulls at $15.5^\circ$, $32.4^\circ$, and $53.5^\circ$; the fourth falls outside the visible region.
+- FNBW is $31.1^\circ$, about $2.3$ times the half-power width.
+- The nulls are sharp, so a coarse sweep can miss them.
+:::
+
+:::{admonition} Worked example — nulls of the course array
+:class: tip
+With $Nd/\lambda$ = 3.73, the tooth spacing is $\lambda/Nd$ = 0.268 in $\sin\theta$. Broadside, the nulls sit at
+
+$\sin\theta$ = 0.268 → 15.5°, 0.536 → 32.4°, 0.804 → 53.5°, $\quad 1.071 \rightarrow$ outside the visible region.
+
+So the eight-element array shows three nulls per side, not seven, and FNBW = 2(15.5°) = 31.1°. Steer the same array to $30^\circ$ and the first nulls land at $\sin\theta$ = 0.5 ± 0.268, which is $13.4^\circ$ and $50.2^\circ$. The beam is no longer symmetric about its own peak: the lower null sits $16.6^\circ$ below it and the upper null $20.2^\circ$ above, for a first-null beamwidth of $36.7^\circ$.
+:::
+
+The null-to-null width runs about $2.3$ times the half-power width for a uniform array. Use that ratio as a check when you read a measured sweep: the nulls are sharp features that a coarse angle grid can miss entirely, while the half-power points are easy to interpolate.
+::::
+
+::::{frame} Sidelobe Level
+:::{present}
+:class: callout
+
+Beamwidth and null positions scale with $Nd/\lambda$; the sidelobe level does not. A uniform array holds its first sidelobe near $-13$ dB at 8 elements or 800. L22's taper lowers it and widens the beam.
+:::
+
+The $-13$ dB figure is the large-$N$ limit, and a small array lands a little higher: eight elements land a few tenths of a decibel above it, and fewer elements land higher still. To find the level for a given $N$, note that the first sidelobe peaks close to midway between the first two nulls, at
+
+$$\frac{N\psi}{2} \approx \frac{3\pi}{2},$$
+
+and evaluate $AF_N$ there. That estimate lands within $0.2$ dB of the true peak for eight elements and closer for fewer.
+
+:::{admonition} Worked example — the first sidelobe of six elements
+:class: tip
+With $N$ = 6, the estimate puts the first sidelobe at $N\psi/2 = 3\pi/2$, so $\psi/2 = \pi/4$ and
+
+$$\begin{aligned}
+\lvert AF_6\rvert &= \left\lvert \frac{\sin(3\pi/2)}{6\ \sin(\pi/4)} \right\rvert \\
+&= \frac{1}{6\ (0.707)} \\
+&= 0.236.
+\end{aligned}$$
+
+In decibels that is $20\log_{10}(0.236) = -12.6$ dB. Searching the array factor between its first two nulls puts the true peak at $N\psi/2 = 1.44\pi$ and $-12.4$ dB, so the estimate is close enough to use. Neither the frequency nor the spacing enters, because $AF_N$ depends on them only through $\psi$; they move the sidelobe in angle, not in level, as long as it lands inside the visible region.
+:::
+::::
+
+::::{frame} Directivity of a Uniform Array
+:::{present}
+$$\begin{aligned}
+D &= \frac{4\pi\ U_\text{max}}{P_\text{rad}} \\
+&= \frac{\text{peak of } \lvert AF\rvert^2}{\text{average of } \lvert AF\rvert^2} \\
+&\approx \frac{2Nd}{\lambda} = \frac{2L}{\lambda}
+\end{aligned}$$
+
+- Peak: the $N$ fields add in phase, so $\lvert AF\rvert^2$ = $N^2$.
+- Average over the sphere: $N$ at $d = \lambda/2$, so $D = N$.
+- Doubling $N$ adds 3 dB by halving the beamwidth.
+:::
+
+Lesson 2 defined directivity as the peak radiation intensity over its average over the sphere, $D = 4\pi U_\text{max}/P_\text{rad}$. For an array of isotropic elements the intensity follows $\lvert AF\rvert^2$, so we need its peak and its average. Write the unnormalized array factor as a sum over elements, with $\gamma$ the angle from the array axis (so $\cos\gamma = \sin\theta$ in the plane of the array), and multiply it by its conjugate:
+
+$$\begin{aligned}
+AF &= \sum_{n=0}^{N-1} e^{jknd\cos\gamma} \\
+\lvert AF\rvert^2 &= \sum_{m}\sum_{n} e^{jkd(m-n)\cos\gamma}.
+\end{aligned}$$
+
+At the peak every term is 1, so the peak of $\lvert AF\rvert^2$ is $N^2$: the $N$ fields add in phase. The average over the sphere goes term by term. A term with $m = n$ is 1 everywhere. A cross term averages to a sinc of the separation $x = d(m-n)$:
+
+$$\begin{aligned}
+\left\langle e^{jkx\cos\gamma} \right\rangle &= \frac{1}{4\pi}\oint e^{jkx\cos\gamma}\ d\Omega \\
+&= \frac{1}{2}\int_0^\pi e^{jkx\cos\gamma}\sin\gamma\ d\gamma \\
+&= \frac{\sin kx}{kx}.
+\end{aligned}$$
+
+The ratio is the directivity:
+
+$$D = \frac{N^2}{\displaystyle\sum_{m}\sum_{n} \frac{\sin\!\left(kd(m-n)\right)}{kd(m-n)}}.$$
+
+At $d = \lambda/2$ every cross term contains $\sin(\pi(m-n))$, which is zero, and the double sum collapses to the $N$ diagonal terms:
+
+$$D = \frac{N^2}{N} = N = \frac{2Nd}{\lambda} \quad \text{at } d = \lambda/2.$$
+
+Written in that last form, the result carries over to other spacings: for any uniform broadside array with $d$ below a wavelength,
+
+$$D \approx \frac{2Nd}{\lambda} = \frac{2L}{\lambda},$$
+
+which is the long uniform line-source directivity from Lesson 6 with $L = Nd$ — the same sampled-aperture argument that produced the $0.886$. Directivity grows linearly with aperture in wavelengths. Doubling the element count at fixed spacing doubles $D$ and adds $3$ dB, and it does so by halving the beamwidth, not by making any element radiate harder.
+::::
+
+::::{frame} Directivity of the Course Array
+:::{present}
+$$D \approx 2(8)(0.467) = 7.5 = 8.7\ \text{dB}$$
+
+$$G_\text{total} = G_\text{element} + D_\text{array}$$
+
+- The center four alone give $5.7$ dB, $3$ dB less, and twice the beamwidth.
+- Steering widens the beam but holds $D$ near 8.7 dB; scan loss comes from the element (L18).
+:::
+
+:::{admonition} Worked example — directivity of the course array
+:class: tip
+$D$ ≈ 2(8)(0.467) = 7.5, or $10\log_{10}(7.5)$ = 8.7 dB at $10.0\ \text{GHz}$. Turning off four elements to leave the center four gives $D$ ≈ 3.73 = 5.7 dB, exactly $3$ dB less, and doubles the beamwidth.
+
+The eight elements are patches, not isotropic radiators, so the array's gain is the element gain plus the array gain. Pattern multiplication becomes addition in dB:
+
+$$\begin{aligned}
+G_\text{total}\ [\text{dBi}] &= G_\text{element}\ [\text{dBi}] \\
+&\quad + D_\text{array}\ [\text{dB}].
+\end{aligned}$$
+
+Eight half-wave dipoles, at $2.15$ dBi each, would make a $10.9$ dBi array. The sum holds while the element pattern is close to flat across the main lobe.
+:::
+
+**Directivity under steering.** The array-factor directivity of a linear array barely changes as you steer, even though the beam visibly widens. The main lobe of a linear array is a cone about the array axis; steering off broadside thickens the cone wall by $1/\cos\theta_0$ and shrinks its circumference by $\cos\theta_0$, leaving the solid angle nearly unchanged. For the course array at $10.0\ \text{GHz}$ the array-factor directivity is $8.74$ dB at broadside, $8.82$ dB at $45^\circ$, and $9.03$ dB at $60^\circ$. The scan loss you measure on real hardware comes from the element pattern, not from the array factor, which is why the PHASER loses gain toward the edges of its scan volume, as Lesson 18 measured.
+
+<img src="../../viz/img/L20-steering-cone.svg"
+     alt="The main lobe of a linear array drawn as a band of directions around the array axis. At broadside it is a full ring 13.7 degrees thick with directivity 8.74 dB; steered to 60 degrees it is a cone 31.9 degrees thick with half the circumference and directivity 9.03 dB"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+::::
+
+::::{frame} Designing to a Beamwidth
+:::{present}
+Sample requirement: $\theta_\text{HP}$ ≤ 5° at $10\ \text{GHz}$, scan $\pm 45^\circ$.
+
+| Step | Result |
+| :-- | :-- |
+| Aperture | $Nd$ = 305 mm = 10.2 $\lambda$ |
+| Spacing (L23) | $d$ = $\lambda/2$ = 15 mm |
+| Count | $N$ = 21: $4.8^\circ$ broadside, $6.8^\circ$ at $45^\circ$ |
+| $5^\circ$ held at $45^\circ$ | $N$ = 29: $43.5\ \text{cm}$, $14.6$ dB |
+:::
+:::{present}
+<img src="../../viz/img/L20-aperture-vs-beamwidth.svg"
+     alt="Half-power beamwidth against aperture length in wavelengths on log axes, at broadside and steered to 45 degrees, with the eight-element PHASER at 3.7 wavelengths and 13.6 degrees at 10.0 GHz and the 5 degree target reached at 10.2 wavelengths"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+We can run every result so far in reverse. If we fix the beamwidth and scan volume as requirements, we can design the array using the following three-step process.
+
+1. **Aperture.** Invert the half-power formula, with $\theta_\text{HP}$ in radians:
+
+   $$Nd = \frac{0.886\ \lambda}{\theta_\text{HP}}.$$
+
+   If the specification has to hold across a scan volume, divide by $\cos\theta_0$ at the widest scan angle, because that is where the beam is widest.
+2. **Spacing.** Lesson 23 derives the condition that keeps grating lobes out of visible space:
+
+   $$d < \frac{\lambda}{1 + \lvert\sin\theta_0\rvert_\text{max}}.$$
+
+   At $d = \lambda/2$ the criterion holds for any scan angle, which is why half-wavelength spacing is the default.
+3. **Element count.** $N = Nd/d$, rounded up. Every element is an antenna, a phase shifter, an amplifier and a control line, so this is the number that sets the cost of the array.
+
+:::{admonition} Worked example — a 5° pencil beam at X-band
+:class: tip
+Sample requirement: $\theta_\text{HP}$ ≤ 5° at $10\ \text{GHz}$, scanning to $\pm 45^\circ$. These two numbers are an example chosen to give an array of a few dozen elements, not a requirement from a real system. At $10\ \text{GHz}$, $\lambda$ = 30 mm.
+
+| Step | Work | Result |
+| :-- | :-- | :-- |
+| Aperture for $5^\circ$ broadside | $Nd$ = 0.886(30)/0.0873 | 305 mm = 10.2 $\lambda$ |
+| Spacing for $\pm 45^\circ$ scan | $d$ < $\lambda/(1+\sin 45^\circ)$ = 0.586 $\lambda$ | take $d$ = $\lambda/2$ = 15 mm |
+| Element count | $N$ = 305/15 = 20.3, round up | $N$ = 21, aperture $315\ \text{mm}$ |
+| Broadside beamwidth | $0.886(30)/315$ | $4.8^\circ$ |
+| Broadside directivity | $D$ ≈ 2(21)(0.5) = 21 | $13.2$ dB |
+
+Now check the corner of the scan volume. At $45^\circ$ the same array gives 4.8°/cos 45° = 6.8°, which misses the specification by nearly $2^\circ$. Holding $5^\circ$ at $45^\circ$ requires $Nd$ = 305/cos 45° = 431 mm, so $N$ = 29 elements at half-wavelength spacing, a $43.5\ \text{cm}$ aperture and $14.6$ dB.
+
+The last $45^\circ$ of scan volume is what added the eight extra channels. Whether that is the right trade depends on how much of the time the beam sits out at the edge of the volume.
+:::
+::::
+
+::::{frame} Halving the Active Aperture
+:::{present}
+$$\theta_\text{HP} \approx \frac{0.886\ \lambda}{Nd}$$
+
+- Switch off end elements: $Nd$ halves and the beam doubles.
+- The voltages add, so each halving drops the received peak.
+:::
+:::{present}
+<img src="../../viz/img/L20-aperture-halving.svg"
+     alt="Ideal array factors at 10.0 GHz for 8, 4, and 2 active elements: the beam doubles in width at each halving, and the peak steps down each time"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+Both beamwidth results depend on the array only through $Nd$, the **active aperture**. Switching off elements at the ends of the row shortens $Nd$ without changing $d$, and that is the experiment the L20 Lab runs: all eight elements (E1 to E8), the center four (E3 to E6), and the center pair (E4 and E5). Each step halves $Nd$, so both beamwidths double. The amplitude distribution stays uniform, so the first sidelobe moves only through the small-$N$ correction in "Sidelobe Level" above.
+
+The peak changes too, and the lab reads a received peak, not a directivity. On receive, the array adds the element voltages in phase, so the peak voltage is proportional to $N$ and the peak power to $N^2$. Relative to all eight elements,
+
+$$\Delta P = 20\log_{10}\!\left(\frac{N_\text{active}}{8}\right),$$
+
+which Part 1 has you evaluate for four elements and for two. Each halving loses $3$ dB because half the elements collect half the power, and $3$ dB because the beam's directivity halves. The kit reads up to about 1.5 dB less than the voltage sum per halving, and up to about 3 dB less over both, consistent with it within the spread of its readings. The figure draws the three ideal patterns at $10.0\ \text{GHz}$.
+
+:::{admonition} Worked example — a six-element aperture
+:class: tip
+Turn off only E1 and E8, leaving six elements over $Nd = 6 \times 14 = 84\ \text{mm}$. At $10.0\ \text{GHz}$, where $\lambda = 30.0\ \text{mm}$, the $0.886$ rule gives
+
+$$\begin{aligned}
+\theta_{\text{HP}} &\approx \frac{0.886\ \lambda}{Nd} \\
+&= \frac{0.886\ (30.0)}{84}\ \text{rad} \\
+&= 18.1^\circ
+\end{aligned}$$
+
+and the first-null beamwidth is $2\arcsin(30.0/84) = 2 \times 20.92^\circ = 41.8^\circ$. Solving the six-element array factor directly gives $18.4^\circ$, the value to predict; the rule's $18.1^\circ$ is within a third of one $0.96^\circ$ sweep step of it. The voltage sum puts the peak $20\log_{10}(6/8) = -2.5\ \text{dB}$ below the eight-element peak.
+:::
+::::
+
+::::{frame} Two Elements Side by Side
+:class: read-only
+
+The center pair, E4 and E5, is the smallest aperture the lab sweeps, and two of its predictions need care. With $N = 2$ the uniform array factor reduces to
+
+$$\begin{aligned}
+AF_2 &= \frac{\sin\psi}{2\sin(\psi/2)} = \cos\frac{\psi}{2}, \\
+\psi &= kd\sin\theta.
+\end{aligned}$$
+
+The $0.886\ \lambda/(Nd)$ rule carries small-angle steps inside it, and the wider the beam, the worse those steps get. Because $AF_2$ is just $\cos(\psi/2)$, we can solve its half-power point exactly instead. Half power is where the array factor falls to $1/\sqrt{2}$:
+
+$$\begin{aligned}
+\cos\frac{\psi}{2} &= \frac{1}{\sqrt{2}} \\
+\psi &= \frac{\pi}{2} \\
+\sin\theta &= \frac{\lambda}{4d}.
+\end{aligned}$$
+
+:::{admonition} Worked example — the center pair at 10.0 GHz
+:class: tip
+At $10.0\ \text{GHz}$, $\lambda$ = 30.0 mm and $d$ = 14 mm, so
+
+$$\begin{aligned}
+\sin\theta &= \frac{30.0}{4\ (14)} = 0.536 \\
+\theta_\text{HP} &= 2\ (32.4^\circ) = 64.8^\circ.
+\end{aligned}$$
+
+The rule gives $0.886\ (30.0)/28 = 0.949$ rad $= 54.4^\circ$, an error of $(54.4 - 64.8)/64.8 = -16.0\%$. Both small-angle steps fail here: the rule assumes $\sin(\psi/2) \approx \psi/2$, and at the half-power point $\psi/2 = 45^\circ$; it also assumes $\sin\theta \approx \theta$, and there $\theta = 32.4^\circ$.
+
+The first-null beamwidth and the first sidelobe come from the same function. The first null of $\cos(\psi/2)$ needs $\psi = \pi$, which is
+
+$$\sin\theta = \frac{\lambda}{2d} = \frac{30.0}{28} = 1.07.$$
+
+No real angle has a sine above 1, so this null falls outside the visible region. Across the visible region $\psi$ runs only from $-kd$ to $kd$, and $kd = 168.0^\circ$ is less than $180^\circ$, so $\cos(\psi/2)$ falls steadily from the peak to $\pm 90^\circ$ with no null and no sidelobe.
+:::
+
+When a pattern has no first null at any real angle, we quote its first-null beamwidth as $180^\circ$, the whole visible region, by convention, and its first sidelobe level as none. Part 1 of the packet has you evaluate $\lambda/2d$ at your kit's frequency and say what you entered for the two-element FNBW and first sidelobe, and why.
+::::
+
+::::{frame} Two Elements, Far Apart
+:::{present}
+$$\begin{aligned}
+AF &= \cos\frac{\psi}{2} \\
+\psi &= kD\sin\theta \\
+D &= 7d = 98\ \text{mm}
+\end{aligned}$$
+
+- E1 and E8: the same two-element array factor, seven times the spacing.
+- Full-height lobes repeat wherever $\psi = 2\pi m$ lands in visible space.
+:::
+
+The fourth sweep of the lab leaves only E1 and E8 on. It is still a two-element array, so its array factor is the same $\cos(\psi/2)$ as the E4 and E5 pair, with the spacing $D = 98\ \text{mm}$ in place of $d$. That one change tests the derivation on an array that is not a contiguous block, which is what "an arbitrary linear array" in the objective asks for. The full peaks sit where $\psi = 2\pi m$, which is
+
+$$\sin\theta_m = \frac{m\lambda}{D},$$
+
+and with $D$ above a wavelength several values of $m$ land in visible space. Those extra full-height lobes are grating lobes, which Lesson 23 treats. The lobe at $0^\circ$ is narrower than the full eight-element beam. All of the weight sits at the two ends of the row, the opposite of a taper, which narrows the main lobe and sends the rest of the power into the grating lobes. The two pairs add the same two voltages, so their peaks should agree, and their beams should not.
+
+The lobe at $0^\circ$ has the same half-power and null conditions as the center pair, $\psi = \pi/2$ and $\psi = \pi$ (see "Two Elements Side by Side" above), with $D$ in place of $d$:
+
+$$\begin{aligned}
+\sin\theta_\text{HP} &= \frac{\lambda}{4D} \\
+\sin\theta_\text{null} &= \frac{\lambda}{2D}.
+\end{aligned}$$
+
+Each is the half-angle; the beamwidth is twice it.
+
+:::{admonition} Worked example — a pair five spacings apart
+:class: tip
+Leave only E2 and E7 on, so $D = 5d = 70\ \text{mm}$. At $10.0\ \text{GHz}$, $D/\lambda = 70/30.0 = 2.33$ and $\lambda/D = 0.429$, so the full-height lobes sit at
+
+| $m$ | $\sin\theta_m = m\lambda/D$ | $\theta_m$ |
+| :-- | :-- | :-- |
+| 0 | 0 | $0^\circ$ |
+| $\pm 1$ | $\pm 0.429$ | $\pm 25.4^\circ$ |
+| $\pm 2$ | $\pm 0.857$ | $\pm 59.0^\circ$ |
+| $\pm 3$ | $\pm 1.29$ | outside the visible region |
+
+That puts five full-height lobes in visible space. The lobe at $0^\circ$ has
+
+$$\begin{aligned}
+\sin\theta_\text{HP} &= \frac{30.0}{4\ (70)} = 0.107 \\
+\theta_\text{HP} &= 2\ (6.15^\circ) = 12.3^\circ
+\end{aligned}$$
+
+and
+
+$$\begin{aligned}
+\sin\theta_\text{null} &= \frac{30.0}{2\ (70)} = 0.214 \\
+\text{FNBW} &= 2\ (12.37^\circ) = 24.7^\circ.
+\end{aligned}$$
+
+Its $12.3^\circ$ half-power width is already narrower than the $13.7^\circ$ of all eight elements at $10.0\ \text{GHz}$.
+:::
+
+Part 1 has you find the lobe angles and the width of the lobe at $0^\circ$ at your kit's frequency.
+::::
+
+::::{frame} Reading a Measured Sweep
+:::{present}
+- The kit samples every $2.8125^\circ$ of phase, about $1^\circ$ near broadside.
+- Levels are in dBc: each reading minus its own trace's peak.
+- The noise floor sits $23$ dB below each trace's peak; nulls read it.
+:::
+:::{present}
+<img src="../../viz/img/L20-read-the-trace.svg"
+     alt="One measured eight-element sweep annotated with the half-power beamwidth, the first-null beamwidth, the first sidelobe level, and the noise floor"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+The kit's Rectangular tab does not plot the array factor. It plots received power against **commanded steer angle**: the software steps the beam past a stationary source and records the power at each step. By reciprocity that traces the array pattern, but three properties of the measurement are built into every trace.
+
+The kit samples the sweep at discrete steps. With Use Bits on, as in every lab preset, the software steps the element-to-element phase one ADAR1000 LSB, $2.8125^\circ$, per point. One step moves $\sin\theta$ by $2.8125^\circ/kd = 2.8125^\circ/168.0^\circ = 0.0167$ at $10.0\ \text{GHz}$, which is $0.96^\circ$ of angle at broadside and $1.36^\circ$ at $45^\circ$, widening as $1/\cos\theta$. A sweep is 162 points: at $10.0\ \text{GHz}$, 119 of them span $\pm 81^\circ$, and the other 43 ask for more phase than any real angle needs and all plot at $\pm 90^\circ$. The trace stands up in that column, because it shows the array factor at that extra phase; it is not a lobe at any real angle. A half-power width read as the span between the outermost samples above $-3$ dB comes out short by up to a step: $12.5^\circ$ to $13.5^\circ$ for the full array at $10.0\ \text{GHz}$, against $13.7^\circ$ from the pattern. Interpolating between the two samples on either side of each $-3$ dB crossing recovers the width to within $0.1^\circ$.
+
+Levels are in **dBc**: a reading minus its own trace's peak, so 0 dB is the peak. The kit's Peak Gain reads in dBFS and drops each time you switch elements off, so only a level taken relative to its own peak lets the eight-, four-, and two-element traces share one axis with the array factor.
+
+The trace has a noise floor. It stops following the array factor about $23$ dB below its own peak, and anything the array factor puts below that line reads as the noise floor instead. The floor follows the trace: when you switch elements off and the peak drops, the floor drops with it, so it stays about $23$ dB below each trace's peak, $-23$ dBc.
+
+The nulls show both effects at once. A true null is infinitely deep and infinitely narrow, so the grid usually misses its bottom, and even a sample that lands on it reads the noise floor. A sample where the array factor has fallen to the floor's level reads $3$ dB above the noise floor, because the receiver adds the two powers. Reading each null at its lowest sample puts the measured FNBW up to one step, about $1^\circ$, wider than the array factor's: between $31.1^\circ$ and $32.1^\circ$ for the full array at $10.0\ \text{GHz}$.
+::::
+
+::::{frame} Ideal Versus Measured
+:class: viz-frame
+
+:::{depth}
+The widget draws the array factor for each of the three apertures and adds the three measurement effects on a toggle: the phase-step grid, a floor $23$ dB below each trace's own peak, and receiver noise. Set the aperture, read HPBW, FNBW, and first sidelobe level off the ideal curve, then switch the measurement effects on and read the same three numbers again from the sampled trace. The eight-element FNBW holds when the grid appears, because the null sits exactly 16 phase steps out and a sample lands on it. The HPBW moves at four and two elements, and more as the aperture shrinks.
+:::
+
+:::{present}
+<iframe src="../../viz/af-measurement-compare.html"
+        width="100%" height="463"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Ideal array factor and measured sweep at 8, 4, and 2 active elements">
+</iframe>
+:::
+::::
+
+::::{frame} What the Sweep Shows
+:::{present}
+| Feature | Array factor | Sweep reads |
+| :-- | :-- | :-- |
+| Floor | none | about $-23$ dBc |
+| Nulls | $-\infty$ | the noise floor |
+| FNBW | from the nulls | up to $1^\circ$ wider |
+| First SLL | near $-13$ dB | $-11$ to $-14$ dBc |
+| HPBW, 2 elements | exact | several degrees narrow |
+:::
+
+These are the differences between a trace and the array factor to expect in the lab.
+
+The first sidelobe of the eight-element trace sits only about $10$ dB above the floor, so the floor adds power to it and noise moves the reading a few tenths of a decibel from sweep to sweep. The two first sidelobes of one trace need not match each other either, so read a first sidelobe as a range, $-11$ to $-14$ dBc, not as a single number. The second and third sidelobes sit closer to the floor still, which is why the lab asks for the first.
+
+A null that fills to the floor reads wide, so a four-element FNBW can come out a few degrees wider than the array factor gives.
+
+The half-power readings get less certain as the aperture shrinks. The two-element pattern is flat near its half-power points: it falls only about $0.2$ dB per degree there, against about $1$ dB per degree for eight elements. An error of $0.6$ dB in the level you read the $-3$ dB crossings against moves each crossing about $3^\circ$, and the HPBW twice that. The error is one-sided: on a flat top, the highest of several noisy samples sits above the true peak, which raises the $-3$ dB line and pulls both crossings in, so the two-element HPBW tends to read narrow. Expect the eight- and four-element HPBW within about a degree of your prediction, and the two-element HPBW within several degrees.
+::::
+
+::::{frame} Summary: Beamwidth
+:class: read-only
+
+| Symbol / idea | What it is | Number to remember |
+| :-- | :-- | :-- |
+| $\psi = kd(\sin\theta - \sin\theta_0)$ | array-factor argument | beam peak is at $\psi$ = 0 |
+| $N\psi/2$ = 1.392 | half-power point of $\sin u/u$ | the source of the $0.886$ |
+| $\theta_\text{HP} \approx 0.886\lambda/(Nd\cos\theta_0)$ | beamwidth from aperture and scan | $13.6^\circ$ for the course array at $10.0\ \text{GHz}$ ($13.7^\circ$ exact) |
+::::
+
+::::{frame} Summary: Nulls and Directivity
+:class: read-only
+
+| Symbol / idea | What it is | Number to remember |
+| :-- | :-- | :-- |
+| $\sin\theta = \sin\theta_0 \pm m\lambda/Nd$ | null locations | equally spaced in $\sin\theta$, not $\theta$ |
+| $\text{FNBW} = 2\arcsin(\lambda/Nd)$ | null-to-null width, broadside | $31.1^\circ$ at $N$ = 8, $10.0\ \text{GHz}$; about $2.3\ \theta_\text{HP}$ |
+| $D \approx 2Nd/\lambda$ | broadside directivity, uniform array | 7.5 = 8.7 dB at $N$ = 8, $10.0\ \text{GHz}$ |
+::::
+
+::::{frame} Summary: Gain and Array Sizing
+:class: read-only
+
+| Symbol / idea | What it is | Number to remember |
+| :-- | :-- | :-- |
+| $G_\text{total} = G_\text{element} + D_\text{array}$ | pattern multiplication in dB | add the decibels |
+| $d < \lambda/(1+\lvert\sin\theta_0\rvert)$ | spacing for a scan volume | $\lambda/2$ scans anywhere |
+| first sidelobe ≈ −13 dB | set by the taper, not the size | near $-13$ dB for large $N$; unmoved by steering |
+::::
+
+::::{frame} Looking Ahead
+:::{present}
+- The L20 Lab, in class: sweep 8, 4, and 2 elements, then E1 and E8.
+- Lesson 21 compares this beam sweep with an azimuth sweep: one beam held still.
+:::
+
+Every sweep in the L20 Lab steers the beam past a fixed source. Lesson 21 holds one beam still and sweeps the source around it in azimuth, the way an antenna range measures a pattern, and the L21 Lab compares the two traces.
+::::
+
+::::{frame} Pre-Lab
+:class: read-only doc-links
+
+Part 1 of the L20 Lab packet is the pre-lab. Do it before the lab period, at the HB100 frequency your kit reported in the L18 Lab, and bring it to class: you check every reading you take in Part 2 against it.
+
+| Part 1 | You predict | Checked in |
+| :-- | :-- | :-- |
+| Question 1 | $\lambda$, $d/\lambda$, $kd$, and the sweep step at your frequency | Steps 2 and 7 |
+| Question 2 | HPBW, FNBW, first SLL, and peak change for 8, 4, and 2 elements | Steps 7 to 9, Table A |
+| Question 3 | E1 and E8: the full-height lobe angles, the width of the lobe at $0^\circ$, and the peak change | Step 10, Tables A and B |
+| Question 4 | the E1 and E8 sweep, rehearsed on the hosted simulator | Step 10 |
+
+The worked examples above use $10.0\ \text{GHz}$, below every kit, so they show the method and leave every Part 1 answer to you. "Two Elements Side by Side" and "Two Elements, Far Apart" above set up the rest.
+
+- <a class="doc-link" href="../../labs/ECE444_Lab_L20_ArrayFactor_blank.pdf" target="_blank" rel="noopener">L20 Lab packet, Part 1 (PDF)</a>
+::::

@@ -1,0 +1,49 @@
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="0 0 640 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same 20 by 15 centimeter aperture tiled in square wavelengths: about 33 at 10 GHz and about 133 at 20 GHz. Four times as many squares is 6 dB more gain">
+<defs><marker id="l13hs-ah-004a85" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker></defs>
+<text x="215.0" y="50.0" fill="#004a85" font-size="28" font-weight="700" text-anchor="middle">10 GHz</text>
+<rect x="115.0" y="70" width="200" height="150" fill="#eaf2f9" stroke="#004a85" stroke-width="2.6"/>
+<line x1="145.0" y1="70" x2="145.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="175.0" y1="70" x2="175.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="205.0" y1="70" x2="205.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="235.0" y1="70" x2="235.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="265.0" y1="70" x2="265.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="295.0" y1="70" x2="295.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="115.0" y1="100" x2="315.0" y2="100" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="115.0" y1="130" x2="315.0" y2="130" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="115.0" y1="160" x2="315.0" y2="160" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="115.0" y1="190" x2="315.0" y2="190" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<rect x="115.0" y="70" width="30" height="30" fill="rgba(176,30,36,0.28)" stroke="#b01e24" stroke-width="1.6"/>
+<text x="215.0" y="256.0" fill="#004a85" font-size="26" font-weight="700" text-anchor="middle">33 squares</text>
+<text x="500.0" y="50.0" fill="#004a85" font-size="28" font-weight="700" text-anchor="middle">20 GHz</text>
+<rect x="400.0" y="70" width="200" height="150" fill="#eaf2f9" stroke="#004a85" stroke-width="2.6"/>
+<line x1="415.0" y1="70" x2="415.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="430.0" y1="70" x2="430.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="445.0" y1="70" x2="445.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="460.0" y1="70" x2="460.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="475.0" y1="70" x2="475.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="490.0" y1="70" x2="490.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="505.0" y1="70" x2="505.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="520.0" y1="70" x2="520.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="535.0" y1="70" x2="535.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="550.0" y1="70" x2="550.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="565.0" y1="70" x2="565.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="580.0" y1="70" x2="580.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="595.0" y1="70" x2="595.0" y2="220" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="400.0" y1="85" x2="600.0" y2="85" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="400.0" y1="100" x2="600.0" y2="100" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="400.0" y1="115" x2="600.0" y2="115" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="400.0" y1="130" x2="600.0" y2="130" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="400.0" y1="145" x2="600.0" y2="145" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="400.0" y1="160" x2="600.0" y2="160" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="400.0" y1="175" x2="600.0" y2="175" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="400.0" y1="190" x2="600.0" y2="190" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<line x1="400.0" y1="205" x2="600.0" y2="205" stroke="#0067b9" stroke-width="1" opacity="0.7"/>
+<rect x="400.0" y="70" width="15" height="15" fill="rgba(176,30,36,0.28)" stroke="#b01e24" stroke-width="1.6"/>
+<text x="500.0" y="256.0" fill="#004a85" font-size="26" font-weight="700" text-anchor="middle">133 squares</text>
+<text x="105.0" y="88.0" fill="#b01e24" font-size="19" font-weight="700" text-anchor="end">one</text>
+<text x="105.0" y="110.0" fill="#b01e24" font-size="19" font-weight="700" text-anchor="end">square</text>
+<text x="105.0" y="132.0" fill="#b01e24" font-size="19" font-weight="700" text-anchor="end">wave-</text>
+<text x="105.0" y="154.0" fill="#b01e24" font-size="19" font-weight="700" text-anchor="end">length</text>
+<text x="357.0" y="300.0" fill="#5a5a5a" font-size="19" text-anchor="middle">same 20 × 15 cm opening</text>
+<text x="357.0" y="334.0" fill="#b01e24" font-size="23" font-weight="700" text-anchor="middle">4× the squares: 6 dB more gain</text>
+</svg>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plane wave — freeze time / freeze space</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root {
+    --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5;
+    --bg:#f5f9fc; --ink:#15202b; --ink3:#5b6573;
+    --wave:#0067b9; --space:#004a85; --time:#b3213a; --probe:#8a5a00;
+  }
+  html,body{margin:0;padding:0;font-family:'Inter',system-ui,-apple-system,sans-serif;color:var(--ink);background:#fff;}
+  .app{display:flex;flex-direction:column;gap:8px;padding:12px;}
+  .cap{font-size:12.5px;color:var(--ink3);line-height:1.35;text-align:center;margin:0 4px;}
+  canvas{display:block;box-sizing:border-box;width:100%;height:auto;background:#fff;border:1px solid var(--edge);border-radius:6px;}
+  .controls{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px 16px;
+            padding:8px 12px;background:var(--bg);border:1px solid var(--edge);border-radius:4px;font-size:12.5px;}
+  .ctl{display:flex;flex-direction:column;gap:2px;min-width:132px;flex:1 1 132px;}
+  .ctl label{font-size:11px;color:var(--ink3);font-weight:600;}
+  .ctl label .v{color:var(--navy);font-variant-numeric:tabular-nums;}
+  .ctl input[type=range]{width:100%;margin:0;}
+  .btns{display:flex;gap:6px;}
+  .btns button{font:600 12px/1 Inter,sans-serif;padding:8px 11px;border:1px solid var(--edge2);
+               border-radius:4px;background:#fff;color:var(--navy);cursor:pointer;}
+  .btns button:hover{background:#eef4fa;}
+  .btns button.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts{display:grid;gap:8px;grid-template-columns:repeat(auto-fit, minmax(148px, 1fr));}
+  .ro{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+      gap:4px;padding:7px 8px 8px;min-width:0;
+      border:1px solid var(--edge2);border-radius:6px;background:#eef4fa;}
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k{display:block;text-align:center;
+         height:15px;line-height:15px;font-size:10.5px;font-weight:700;
+         text-transform:uppercase;letter-spacing:0.045em;color:var(--ink3);
+         white-space:nowrap;overflow:hidden;}
+  .ro .k mjx-container{font-size:inherit !important;}
+  .ro .v{height:19px;line-height:19px;font-size:14.5px;font-weight:700;white-space:nowrap;
+         font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;
+         text-align:center;min-width:8ch;color:var(--navy);}
+  .ro.space{background:rgba(0,74,133,0.09);border-color:rgba(0,74,133,0.30);}
+  .ro.space .v{color:var(--space);}
+  .ro.time{background:rgba(179,33,58,0.10);border-color:rgba(179,33,58,0.30);}
+  .ro.time .v{color:var(--time);}
+</style>
+</head>
+<body>
+<div class="app">
+  <p class="cap">The same wave is a ripple in <b>space</b> (period \(\lambda\)) and in <b>time</b> (period \(T\)), tied by the crest speed/phase velocity \(c=\lambda f=\omega/k\).</p>
+  <canvas id="space" aria-label="Field versus position (freeze time)"></canvas>
+  <canvas id="time"  aria-label="Field versus time (freeze space)"></canvas>
+  <div class="controls">
+    <div class="ctl"><label>\(f\) = <span class="v" id="fv">1.00</span> GHz</label>
+      <input id="freq" type="range" min="0.6" max="2.4" step="0.2" value="1"></div>
+    <div class="ctl"><label>snapshot \(t\) = <span class="v" id="tv">0.00</span> ns</label>
+      <input id="tsnap" type="range" min="0" max="5" step="0.05" value="0"></div>
+    <div class="ctl"><label>probe \(z_0\) = <span class="v" id="zv">0.40</span> m</label>
+      <input id="z0" type="range" min="0" max="1.2" step="0.01" value="0.4"></div>
+    <div class="btns"><button id="play" class="active">▶ Play</button><button id="step">Step</button></div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro space"><span class="k">\(\lambda\) in space</span><span class="v" id="rlam">—</span></div>
+    <div class="ro time"><span class="k">\(T\) in time</span><span class="v" id="rT">—</span></div>
+    <div class="ro"><span class="k">\(c=\lambda f\)</span><span class="v" id="rc">—</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+// E(z,t) = cos(ω t − k z). Units: length m, time ns, c = 0.30 m/ns (=3e8 m/s), f in GHz.
+const C = 0.30, ZMAX = 1.2, TSPAN = 5.0, E0 = 1.0;
+const state = { f:1.0, z0:0.40, t:0.0, playing:false };
+
+function derived(){ const f=state.f, lambda=C/f, T=1/f; return {f,lambda,T,k:2*Math.PI/lambda,omega:2*Math.PI*f}; }
+const E = (z,t)=>{ const {k,omega}=derived(); return E0*Math.cos(omega*t-k*z); };
+
+// ---------- labels: MathJax for math, sans UI font for words/units ----------
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const mtext=(ctx,tex,x,y,h,color,align)=>MJ.draw(ctx,tex,x,y,h,color,align);
+function stext(ctx,str,x,y,px,color,align,bold){
+  ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS;
+  ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y);
+}
+// axis label: math variable (LaTeX) + unit (sans), right-anchored at xR
+function axisLabel(ctx,varTex,unit,xR,y,color){
+  ctx.font='12px '+SANS; const uw=ctx.measureText(unit).width;
+  stext(ctx,unit,xR,y,12,color,'right');
+  MJ.draw(ctx,varTex,xR-uw-4,y,13,color,'right');
+}
+
+// ---------- controls ----------
+const el=id=>document.getElementById(id);
+el('freq').addEventListener('input',e=>{state.f=parseFloat(e.target.value);el('fv').textContent=state.f.toFixed(2);drawAll();});
+el('z0').addEventListener('input',e=>{state.z0=parseFloat(e.target.value);el('zv').textContent=state.z0.toFixed(2);drawAll();});
+el('tsnap').addEventListener('input',e=>{pause();state.t=parseFloat(e.target.value);drawAll();});
+const playBtn=el('play');
+function pause(){ if(!state.playing) return; state.playing=false; playBtn.textContent='▶ Play'; playBtn.classList.add('active'); }
+playBtn.addEventListener('click',()=>{
+  state.playing=!state.playing;
+  playBtn.textContent=state.playing?'❚❚ Pause':'▶ Play';
+  playBtn.classList.toggle('active',!state.playing);
+  if(state.playing){ lastTs=null; requestAnimationFrame(tick); }
+});
+el('step').addEventListener('click',()=>{ state.t=(state.t+derived().T/12)%TSPAN; drawAll(); });
+
+let lastTs=null;
+function tick(ts){ if(!state.playing) return; if(lastTs===null) lastTs=ts;
+  const dt=Math.min(0.05,(ts-lastTs)/1000); lastTs=ts;
+  state.t=(state.t+dt*0.6)%TSPAN; drawAll(); requestAnimationFrame(tick); }
+
+// ---------- canvas ----------
+const spaceCv=el('space'), timeCv=el('time');
+const sctx=spaceCv.getContext('2d'), tctx=timeCv.getContext('2d');
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=360;
+let SCL=1;
+function fitOne(cv){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(cv);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL, h=Math.max(104,Math.min(w*0.205,166));
+  setSize(cv,wCss,h*SCL,dpr);
+  cv.getContext('2d').setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  return {w,h};
+}
+
+function frame(ctx,w,h){
+  const mL=42,mR=16,mT=18,mB=28, pW=w-mL-mR, pH=h-mT-mB, y0=mT+pH/2, yAmp=pH/2-4;
+  const yFor=e=>y0-(e/1.2)*yAmp;
+  ctx.strokeStyle='#eef3f8'; ctx.lineWidth=1;
+  for(const e of [-1,-0.5,0.5,1]){ ctx.beginPath(); ctx.moveTo(mL,yFor(e)); ctx.lineTo(mL+pW,yFor(e)); ctx.stroke(); }
+  ctx.strokeStyle='#cddce9'; ctx.strokeRect(mL,mT,pW,pH);
+  ctx.strokeStyle='#9fb6cc'; ctx.beginPath(); ctx.moveTo(mL,y0); ctx.lineTo(mL+pW,y0); ctx.stroke();
+  return {mL,mR,mT,mB,pW,pH,y0,yFor};
+}
+function periodArrow(ctx,x1,x2,y,color){
+  ctx.strokeStyle=color; ctx.fillStyle=color; ctx.lineWidth=1.4; ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y); ctx.lineTo(x2,y); ctx.stroke();
+  const hd=4.5;
+  for(const [x,dir] of [[x1,1],[x2,-1]]){ ctx.beginPath(); ctx.moveTo(x,y);
+    ctx.lineTo(x+dir*hd,y-hd*0.8); ctx.lineTo(x+dir*hd,y+hd*0.8); ctx.closePath(); ctx.fill(); }
+  ctx.beginPath(); ctx.moveTo(x1,y-5); ctx.lineTo(x1,y+5); ctx.moveTo(x2,y-5); ctx.lineTo(x2,y+5); ctx.stroke();
+}
+function xticks(ctx,F,vals,fmt,xFor){ ctx.fillStyle='#5b6573'; ctx.font='10px Inter,sans-serif';
+  ctx.textAlign='center'; ctx.textBaseline='top'; for(const v of vals) ctx.fillText(fmt(v),xFor(v),F.y0+4); }
+
+function drawSpace(){
+  const {w,h}=fitOne(spaceCv), ctx=sctx; ctx.clearRect(0,0,w,h);
+  const F=frame(ctx,w,h); const xFor=z=>F.mL+(z/ZMAX)*F.pW; const d=derived();
+  stext(ctx,'FREEZE TIME',F.mL+2,F.mT+7,11.5,cssVar('--space'),'left',true);
+  ctx.strokeStyle=cssVar('--wave'); ctx.lineWidth=2.4; ctx.beginPath();
+  for(let px=0;px<=F.pW;px++){ const y=F.yFor(E((px/F.pW)*ZMAX,state.t)); px?ctx.lineTo(F.mL+px,y):ctx.moveTo(F.mL+px,y); } ctx.stroke();
+  // λ bracket between two crests, pushed toward center
+  const {k,omega}=d; const nS=Math.ceil((omega*state.t-k*(0.30*ZMAX))/(2*Math.PI));
+  let zc1=(omega*state.t-2*Math.PI*nS)/k; while(zc1<0.30*ZMAX) zc1+=d.lambda; const zc2=zc1+d.lambda;
+  if(zc2<=ZMAX*0.98){ periodArrow(ctx,xFor(zc1),xFor(zc2),F.yFor(1)-5,cssVar('--space'));
+    mtext(ctx,'\\lambda',(xFor(zc1)+xFor(zc2))/2,F.yFor(1)-16,13,cssVar('--space'),'center'); }
+  // probe
+  ctx.strokeStyle=cssVar('--probe'); ctx.setLineDash([4,4]); ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(xFor(state.z0),F.mT); ctx.lineTo(xFor(state.z0),F.mT+F.pH); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle=cssVar('--probe'); ctx.beginPath(); ctx.arc(xFor(state.z0),F.yFor(E(state.z0,state.t)),4.5,0,7); ctx.fill();
+  mtext(ctx,'z_0',xFor(state.z0),F.mT+F.pH-8,11,cssVar('--probe'),'center');
+  xticks(ctx,F,[0,0.3,0.6,0.9,1.2],v=>v.toFixed(1),xFor);
+  mtext(ctx,'E',14,F.y0,12,'#3b4651','center');
+  axisLabel(ctx,'z','(m)',F.mL+F.pW,h-6,'#3b4651');
+}
+function drawTime(){
+  const {w,h}=fitOne(timeCv), ctx=tctx; ctx.clearRect(0,0,w,h);
+  const F=frame(ctx,w,h); const xFor=t=>F.mL+(t/TSPAN)*F.pW; const d=derived();
+  stext(ctx,'FREEZE SPACE',F.mL+2,F.mT+7,11.5,cssVar('--time'),'left',true);
+  ctx.strokeStyle=cssVar('--wave'); ctx.lineWidth=2.4; ctx.beginPath();
+  for(let px=0;px<=F.pW;px++){ const y=F.yFor(E(state.z0,(px/F.pW)*TSPAN)); px?ctx.lineTo(F.mL+px,y):ctx.moveTo(F.mL+px,y); } ctx.stroke();
+  const {k,omega}=d; let nS=Math.ceil((omega*(0.28*TSPAN)-k*state.z0)/(2*Math.PI));
+  let tc1=(2*Math.PI*nS+k*state.z0)/omega; while(tc1<0.28*TSPAN) tc1+=d.T; const tc2=tc1+d.T;
+  if(tc2<=TSPAN*0.98){ periodArrow(ctx,xFor(tc1),xFor(tc2),F.yFor(1)-5,cssVar('--time'));
+    mtext(ctx,'T',(xFor(tc1)+xFor(tc2))/2,F.yFor(1)-16,13,cssVar('--time'),'center'); }
+  const tN=((state.t%TSPAN)+TSPAN)%TSPAN;
+  ctx.strokeStyle=cssVar('--probe'); ctx.setLineDash([4,4]); ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(xFor(tN),F.mT); ctx.lineTo(xFor(tN),F.mT+F.pH); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle=cssVar('--probe'); ctx.beginPath(); ctx.arc(xFor(tN),F.yFor(E(state.z0,tN)),4.5,0,7); ctx.fill();
+  stext(ctx,'now',xFor(tN),F.mT+F.pH-8,10,cssVar('--probe'),'center',true);
+  xticks(ctx,F,[0,1,2,3,4,5],v=>v.toFixed(0),xFor);
+  mtext(ctx,'E',14,F.y0,12,'#3b4651','center');
+  axisLabel(ctx,'t','(ns)',F.mL+F.pW,h-6,'#3b4651');
+}
+
+function updateReadout(){ const d=derived();
+  el('rlam').textContent=d.lambda.toFixed(2)+' m';
+  el('rT').textContent=d.T.toFixed(2)+' ns';
+  el('rc').textContent=(d.lambda*d.f).toFixed(2)+' m/ns';
+  el('tv').textContent=state.t.toFixed(2); el('tsnap').value=state.t;
+}
+function drawAll(){ drawSpace(); drawTime(); updateReadout(); }
+window.addEventListener('resize',drawAll);
+
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.querySelector('.app')).then(drawAll); drawAll(); });
+drawAll();
+</script>
+</body>
+</html>

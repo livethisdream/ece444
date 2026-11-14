@@ -1,0 +1,163 @@
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="0 0 400 876" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The L19 Lab in five steps, each a top view of the firing range: bring the kit up on your own HB100; take the reference shot toward plus x to set the sign of Angle; with the fox on, walk the station marks reading Angle and Peak Gain; the bearings cross at a box, which is your call; I reveal the live box">
+<defs><marker id="l19sArr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker></defs>
+<rect x="4" y="4" width="192" height="284" rx="8" fill="#ffffff" stroke="#c7d2e0" stroke-width="1.2"/>
+<circle cx="22" cy="24" r="11" fill="#004a85"/>
+<text x="22" y="29" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">1</text>
+<text x="40" y="29" font-size="16" font-weight="700" fill="#1f2a36">Bring up</text>
+<rect x="44.0" y="88.0" width="112.0" height="56.0" fill="#eef4fa" stroke="none"/>
+<rect x="45.4" y="128.6" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="52.4" y="140.1" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">1</text>
+<rect x="93.0" y="137.0" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="100.0" y="148.5" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">2</text>
+<rect x="140.6" y="123.0" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="147.6" y="134.5" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">3</text>
+<rect x="70.6" y="89.4" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="77.6" y="100.9" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">4</text>
+<rect x="118.2" y="83.8" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="125.2" y="95.3" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">5</text>
+<line x1="16.0" y1="200.0" x2="184.0" y2="200.0" stroke="#5a5a5a" stroke-width="2"/>
+<line x1="16.0" y1="205.0" x2="16.0" y2="210.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="58.0" y1="205.0" x2="58.0" y2="210.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="100.0" y1="205.0" x2="100.0" y2="210.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="142.0" y1="205.0" x2="142.0" y2="210.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="184.0" y1="205.0" x2="184.0" y2="210.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<rect x="91.0" y="197.0" width="18" height="7" rx="1.5" fill="#004a85"/>
+<line x1="100.0" y1="196.0" x2="100.0" y2="175.2" stroke="#b01e24" stroke-width="1.4" stroke-dasharray="4 3"/>
+<circle cx="100.0" cy="169.2" r="5.5" fill="#b01e24"/>
+<text x="100.0" y="242" text-anchor="middle" font-size="13" fill="#1f2a36">Own HB100 at</text>
+<text x="100.0" y="258" text-anchor="middle" font-size="13" fill="#1f2a36">boresight: Find</text>
+<text x="100.0" y="274" text-anchor="middle" font-size="13" fill="#1f2a36">HB100, Calibrate</text>
+<rect x="204" y="4" width="192" height="284" rx="8" fill="#ffffff" stroke="#c7d2e0" stroke-width="1.2"/>
+<circle cx="222" cy="24" r="11" fill="#004a85"/>
+<text x="222" y="29" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">2</text>
+<text x="240" y="29" font-size="16" font-weight="700" fill="#1f2a36">Reference shot</text>
+<rect x="244.0" y="88.0" width="112.0" height="56.0" fill="#eef4fa" stroke="none"/>
+<rect x="245.4" y="128.6" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="252.4" y="140.1" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">1</text>
+<rect x="293.0" y="137.0" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="300.0" y="148.5" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">2</text>
+<rect x="340.6" y="123.0" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="347.6" y="134.5" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">3</text>
+<rect x="270.6" y="89.4" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="277.6" y="100.9" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">4</text>
+<rect x="318.2" y="83.8" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="325.2" y="95.3" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">5</text>
+<line x1="216.0" y1="200.0" x2="384.0" y2="200.0" stroke="#5a5a5a" stroke-width="2"/>
+<line x1="216.0" y1="205.0" x2="216.0" y2="210.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="258.0" y1="205.0" x2="258.0" y2="210.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="300.0" y1="205.0" x2="300.0" y2="210.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="342.0" y1="205.0" x2="342.0" y2="210.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="384.0" y1="205.0" x2="384.0" y2="210.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<rect x="291.0" y="197.0" width="18" height="7" rx="1.5" fill="#004a85"/>
+<line x1="300.0" y1="196.0" x2="328.0" y2="144.0" stroke="#b01e24" stroke-width="1.4" stroke-dasharray="4 3"/>
+<circle cx="328.0" cy="144.0" r="5.5" fill="#b01e24"/>
+<text x="384.0" y="191.0" text-anchor="end" font-size="12" font-weight="700" fill="#1f2a36">+x</text>
+<text x="300.0" y="242" text-anchor="middle" font-size="13" fill="#1f2a36">Source toward +x</text>
+<text x="300.0" y="258" text-anchor="middle" font-size="13" fill="#1f2a36">sets the sign s</text>
+<text x="300.0" y="274" text-anchor="middle" font-size="13" fill="#1f2a36">of Angle</text>
+<rect x="4" y="296" width="192" height="284" rx="8" fill="#ffffff" stroke="#c7d2e0" stroke-width="1.2"/>
+<circle cx="22" cy="316" r="11" fill="#004a85"/>
+<text x="22" y="321" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">3</text>
+<text x="40" y="321" font-size="16" font-weight="700" fill="#1f2a36">Walk the line</text>
+<rect x="44.0" y="380.0" width="112.0" height="56.0" fill="#eef4fa" stroke="none"/>
+<rect x="45.4" y="420.6" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="52.4" y="432.1" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">1</text>
+<rect x="93.0" y="429.0" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="100.0" y="440.5" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">2</text>
+<rect x="140.6" y="415.0" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="147.6" y="426.5" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">3</text>
+<rect x="70.6" y="381.4" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="77.6" y="392.9" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">4</text>
+<rect x="118.2" y="375.8" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="125.2" y="387.3" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">5</text>
+<line x1="16.0" y1="492.0" x2="184.0" y2="492.0" stroke="#5a5a5a" stroke-width="2"/>
+<line x1="16.0" y1="497.0" x2="16.0" y2="502.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="58.0" y1="497.0" x2="58.0" y2="502.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="100.0" y1="497.0" x2="100.0" y2="502.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="142.0" y1="497.0" x2="142.0" y2="502.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="184.0" y1="497.0" x2="184.0" y2="502.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<rect x="7.0" y="489.0" width="18" height="7" rx="1.5" fill="#004a85" opacity="0.35"/>
+<rect x="49.0" y="489.0" width="18" height="7" rx="1.5" fill="#004a85" opacity="0.35"/>
+<rect x="91.0" y="489.0" width="18" height="7" rx="1.5" fill="#004a85"/>
+<rect x="133.0" y="489.0" width="18" height="7" rx="1.5" fill="#004a85" opacity="0.35"/>
+<rect x="175.0" y="489.0" width="18" height="7" rx="1.5" fill="#004a85" opacity="0.35"/>
+<line x1="100.0" y1="488.0" x2="74.0" y2="372.0" stroke="#004a85" stroke-width="1.3"/>
+<line x1="114.0" y1="509.0" x2="144.0" y2="509.0" stroke="#5a5a5a" stroke-width="1.2" marker-end="url(#l19sArr)"/>
+<text x="100.0" y="534" text-anchor="middle" font-size="13" fill="#1f2a36">Fox on: Angle and</text>
+<text x="100.0" y="550" text-anchor="middle" font-size="13" fill="#1f2a36">Peak Gain at</text>
+<text x="100.0" y="566" text-anchor="middle" font-size="13" fill="#1f2a36">each station</text>
+<rect x="204" y="296" width="192" height="284" rx="8" fill="#ffffff" stroke="#c7d2e0" stroke-width="1.2"/>
+<circle cx="222" cy="316" r="11" fill="#004a85"/>
+<text x="222" y="321" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">4</text>
+<text x="240" y="321" font-size="16" font-weight="700" fill="#1f2a36">Fix</text>
+<rect x="244.0" y="380.0" width="112.0" height="56.0" fill="#eef4fa" stroke="none"/>
+<rect x="245.4" y="420.6" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="252.4" y="432.1" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">1</text>
+<rect x="293.0" y="429.0" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="300.0" y="440.5" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">2</text>
+<rect x="340.6" y="415.0" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="347.6" y="426.5" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">3</text>
+<rect x="270.6" y="381.4" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="277.6" y="392.9" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">4</text>
+<rect x="318.2" y="375.8" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="325.2" y="387.3" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">5</text>
+<line x1="216.0" y1="492.0" x2="384.0" y2="492.0" stroke="#5a5a5a" stroke-width="2"/>
+<line x1="216.0" y1="497.0" x2="216.0" y2="502.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="258.0" y1="497.0" x2="258.0" y2="502.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="300.0" y1="497.0" x2="300.0" y2="502.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="342.0" y1="497.0" x2="342.0" y2="502.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="384.0" y1="497.0" x2="384.0" y2="502.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<rect x="207.0" y="489.0" width="18" height="7" rx="1.5" fill="#004a85"/>
+<rect x="249.0" y="489.0" width="18" height="7" rx="1.5" fill="#004a85"/>
+<rect x="291.0" y="489.0" width="18" height="7" rx="1.5" fill="#004a85"/>
+<rect x="333.0" y="489.0" width="18" height="7" rx="1.5" fill="#004a85"/>
+<rect x="375.0" y="489.0" width="18" height="7" rx="1.5" fill="#004a85" opacity="0.35"/>
+<line x1="216.0" y1="488.0" x2="286.2" y2="374.0" stroke="#004a85" stroke-width="1.3"/>
+<line x1="258.0" y1="488.0" x2="280.7" y2="371.9" stroke="#004a85" stroke-width="1.3"/>
+<line x1="300.0" y1="488.0" x2="274.0" y2="372.0" stroke="#004a85" stroke-width="1.3"/>
+<line x1="342.0" y1="488.0" x2="268.7" y2="374.1" stroke="#004a85" stroke-width="1.3"/>
+<circle cx="277.6" cy="388.4" r="13" fill="none" stroke="#b01e24" stroke-width="1.8"/>
+<text x="300.0" y="534" text-anchor="middle" font-size="13" fill="#1f2a36">Bearings cross;</text>
+<text x="300.0" y="550" text-anchor="middle" font-size="13" fill="#1f2a36">the nearest box</text>
+<text x="300.0" y="566" text-anchor="middle" font-size="13" fill="#1f2a36">is your call</text>
+<rect x="4" y="588" width="192" height="284" rx="8" fill="#ffffff" stroke="#c7d2e0" stroke-width="1.2"/>
+<circle cx="22" cy="608" r="11" fill="#004a85"/>
+<text x="22" y="613" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">5</text>
+<text x="40" y="613" font-size="16" font-weight="700" fill="#1f2a36">Reveal</text>
+<rect x="44.0" y="672.0" width="112.0" height="56.0" fill="#eef4fa" stroke="none"/>
+<rect x="45.4" y="712.6" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="52.4" y="724.1" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">1</text>
+<rect x="93.0" y="721.0" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="100.0" y="732.5" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">2</text>
+<rect x="140.6" y="707.0" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="147.6" y="718.5" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">3</text>
+<rect x="70.6" y="673.4" width="14" height="14" rx="2" fill="#b01e24" stroke="#b01e24" stroke-width="1.3"/>
+<text x="77.6" y="684.9" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">4</text>
+<rect x="118.2" y="667.8" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="125.2" y="679.3" text-anchor="middle" font-size="11" font-weight="700" fill="#5a5a5a">5</text>
+<line x1="16.0" y1="784.0" x2="184.0" y2="784.0" stroke="#5a5a5a" stroke-width="2"/>
+<line x1="16.0" y1="789.0" x2="16.0" y2="794.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="58.0" y1="789.0" x2="58.0" y2="794.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="100.0" y1="789.0" x2="100.0" y2="794.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="142.0" y1="789.0" x2="142.0" y2="794.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="184.0" y1="789.0" x2="184.0" y2="794.0" stroke="#5a5a5a" stroke-width="1.2"/>
+<rect x="7.0" y="781.0" width="18" height="7" rx="1.5" fill="#004a85" opacity="0.35"/>
+<rect x="49.0" y="781.0" width="18" height="7" rx="1.5" fill="#004a85" opacity="0.35"/>
+<rect x="91.0" y="781.0" width="18" height="7" rx="1.5" fill="#004a85" opacity="0.35"/>
+<rect x="133.0" y="781.0" width="18" height="7" rx="1.5" fill="#004a85" opacity="0.35"/>
+<rect x="175.0" y="781.0" width="18" height="7" rx="1.5" fill="#004a85" opacity="0.35"/>
+<text x="100.0" y="826" text-anchor="middle" font-size="13" fill="#1f2a36">I name</text>
+<text x="100.0" y="842" text-anchor="middle" font-size="13" fill="#1f2a36">the live box;</text>
+<text x="100.0" y="858" text-anchor="middle" font-size="13" fill="#1f2a36">writeup compares</text>
+<text x="224" y="614" font-size="15" font-weight="700" fill="#1f2a36">Key</text>
+<rect x="224" y="640" width="18" height="7" rx="1.5" fill="#004a85"/>
+<text x="252" y="648" font-size="13" fill="#1f2a36">your kit, on the line</text>
+<line x1="218" y1="676" x2="248" y2="676" stroke="#5a5a5a" stroke-width="2"/>
+<text x="252" y="680" font-size="13" fill="#1f2a36">firing line, 5 marks</text>
+<rect x="226" y="701" width="14" height="14" rx="2" fill="#ffffff" stroke="#5a5a5a" stroke-width="1.3"/>
+<text x="252" y="712" font-size="13" fill="#1f2a36">numbered box</text>
+<circle cx="233" cy="740" r="5.5" fill="#b01e24"/>
+<text x="252" y="744" font-size="13" fill="#1f2a36">a live HB100</text>
+<line x1="218" y1="772" x2="248" y2="772" stroke="#004a85" stroke-width="1.3"/>
+<text x="252" y="776" font-size="13" fill="#1f2a36">a bearing</text>
+</svg>
