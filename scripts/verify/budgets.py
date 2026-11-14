@@ -73,6 +73,7 @@ BEAT_EXCEPTIONS = {
     "L22-L23-lab": (LAB_BEATS, "predict first, then the procedure as beats (#244)"),
     "L24-lab": (LAB_BEATS, "predict first, then the procedure as beats (#236)"),
     "L29": (LAB_BEATS, "one page, lesson half reading only (Neil, 2026-11-12)"),
+    "L31": (LAB_BEATS, "one page, lesson half reading only (Neil, 2026-11-12)"),
 }
 
 
