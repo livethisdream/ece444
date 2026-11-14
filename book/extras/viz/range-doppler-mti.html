@@ -50,12 +50,12 @@
   <div class="controls">
     <div class="ctl">
       <label for="vel">Hand speed</label>
-      <input id="vel" type="range" min="-35" max="35" step="0.5" value="1">
+      <input id="vel" type="range" min="-45" max="45" step="0.2" value="0.6">
       <span class="val" id="velv"></span>
     </div>
     <div class="ctl">
       <label for="nc">Chirps</label>
-      <input id="nc" type="range" min="5" max="8" step="1" value="8">
+      <input id="nc" type="range" min="5" max="8" step="1" value="7">
       <span class="val" id="ncv"></span>
     </div>
     <div class="ctl">
@@ -81,11 +81,12 @@
 (function () {
   "use strict";
 
-  // The L29 burst (COURSE_SPEC M8): 10 GHz, 0.5 ms PRI, so +/-15 m/s and blind
-  // speeds every 30 m/s. Range cells are c/2B = 0.30 m. Fast time is modeled
+  // The lesson's teaching burst, which the Phaser app does not send (the lab's
+  // Part 1 answers stay off the page): 10.0 GHz, 400 MHz chirps, a 0.4 ms PRI,
+  // so +/-18.75 m/s and blind speeds every 37.5 m/s. Range cells are c/2B = 0.375 m. Fast time is modeled
   // with 64 samples whose FFT bins are one range cell each, zero padded to 128;
   // that keeps the map exact in range and Doppler and cheap to recompute.
-  const LAM = 0.03, PRI = 0.5e-3, DR = 0.30;
+  const LAM = 0.03, PRI = 0.4e-3, DR = 0.375;
   const VMAX = LAM / (4 * PRI), VBLIND = LAM / (2 * PRI);
   const NS = 64, NF = 128, RMAX = 4.0;
   const ROWS = Math.round(RMAX / (DR * NS / NF)) + 1;    // display range bins, 0 to 4 m
@@ -267,7 +268,7 @@
   function drawResp() {
     const g = fit(respEl, rx, 270);
     const L = 30, R = 8, T = 22, B = 32;
-    const V0 = -35, V1 = 35, D0 = -40, D1 = 15;
+    const V0 = -45, V1 = 45, D0 = -40, D1 = 15;
     const x = v => L + (v - V0) / (V1 - V0) * (g.w - L - R);
     const y = d => T + (D1 - Math.max(D0, Math.min(D1, d))) / (D1 - D0) * (g.h - T - B);
     rx.fillStyle = '#eef4fa'; rx.fillRect(x(-VMAX), T, x(VMAX) - x(-VMAX), g.h - T - B);
@@ -278,7 +279,7 @@
       rx.fillText(d, L - 5, y(d) + 4);
     }
     rx.textAlign = 'center';
-    for (let v = -30; v <= 30; v += 15) rx.fillText((v < 0 ? '−' : '') + Math.abs(v), x(v), g.h - B + 14);
+    for (let v = -37.5; v <= 37.5; v += 37.5) rx.fillText((v < 0 ? '−' : '') + Math.abs(v), x(v), g.h - B + 14);
     rx.save(); rx.setLineDash([4, 3]); rx.strokeStyle = '#b01e24';
     for (const v of [-VBLIND, 0, VBLIND]) { rx.beginPath(); rx.moveTo(x(v), T); rx.lineTo(x(v), g.h - B); rx.stroke(); }
     rx.restore();
