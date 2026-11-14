@@ -58,10 +58,8 @@ The lab follows it on this page.
 ::::{frame} An Example Burst
 :class: read-only
 
-Every kit runs the Phaser app's presets, so the preset's numbers would be the
-same Part 1 answers for every cadet. The lesson therefore works each method
-on an example burst the app does not use, and on example targets that are
-not the lab's records:
+The lesson works each method on an example burst, not the lab's preset, and
+on example targets, not the lab's records:
 
 | Example burst | Value |
 | :-- | :-- |
@@ -123,34 +121,35 @@ what is moving, which is the property a classifier needs.
 :class: read-only
 
 :::{present}
-- The **walker** shows a torso line off zero, and its limbs swing once a stride.
-- The **fan** shows a steady band out to its tips.
-- The **spinner** shows steady lines near its tips.
-- The **hand** shows one trace swinging through zero.
+- The walker shows a torso line off zero, and its limbs swing once a stride.
+- The fan shows a steady band out to its tips.
+- The spinner's band piles up in horns near its tips.
+- The hand shows one trace swinging through zero.
 :::
 :::{present}
 <img src="../../viz/img/L31-signatures.svg"
-     alt="Simulated slow-time spectrograms over three seconds of the lesson's four example targets: a walker with a torso line at 73 Hz and limb traces swinging 0.9 times a second; a fan with a steady band out to plus and minus 611 Hz; a spinner with steady lines near plus and minus 314 Hz; and a hand whose single trace swings sinusoidally through zero"
+     alt="Simulated slow-time spectrograms over three seconds of the lesson's four example targets, each panel with its own Doppler span in hertz and, on the right, in meters per second: a walker whose torso line, dashed, sits at 73 Hz above zero with limb traces swinging 0.9 times a second; a fan with a steady band out to plus and minus 611 Hz; a spinner whose band is strongest near plus and minus 314 Hz; and a hand whose single trace swings sinusoidally through zero"
      style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 The L31 Lab reads four kinds of target: you walking, a desk fan, a fidget
 spinner, and your hand waving. The figure simulates the lesson's example of
 each on the example burst, one range bin sampled once per chirp, with the
-spectrogram the next frames build.
+spectrogram the next frames build. Each panel has its own span, and the
+right-hand axis reads the same scale in m/s, the unit of the app's view.
 
-The **walker** is the only target that goes anywhere, so it is the only one
+The walker is the only target that goes anywhere, so it is the only one
 whose pattern sits off zero: the torso is the steady line at $73\ \text{Hz}$
-and the limbs trace arcs above and below it, once a stride. The **fan** stays
+and the limbs trace arcs above and below it, once a stride. The fan stays
 put, so its band is centered on zero, and it is steady, because the blades
-pass too often for any one of them to appear. The **spinner**, $6\ \text{cm}$
+pass too often for any one of them to appear. The spinner, $6\ \text{cm}$
 across at $1500\ \text{rpm}$, is a smaller rotor, with tips at
 $\pi(0.06)(25) = 4.7\ \text{m/s}$, or $314\ \text{Hz}$. Its weight sits in
 three lobes near the rim rather than along a blade, and a point moving
-sinusoidally spends most of its time near its extremes, so its spectrum shows
-two lines near the tip speed instead of a filled band. The **hand** is one
-scatterer moving back and forth. A $0.15\ \text{m}$ wave at $1.2\ \text{Hz}$
-peaks at $2\pi(1.2)(0.15) = 1.1\ \text{m/s}$, or $75\ \text{Hz}$, and the
+sinusoidally spends most of its time near its extremes, so its band piles up
+in two horns near the tip speed instead of filling evenly. The hand is one
+scatterer moving back and forth. A wave $0.15\ \text{m}$ each way at
+$1.2\ \text{Hz}$ peaks at $2\pi(1.2)(0.15) = 1.1\ \text{m/s}$, or $75\ \text{Hz}$, and the
 trace crosses zero twice a cycle, so the hand has no average Doppler at all.
 
 In the app's Range-Doppler view the same targets appear at their ranges,
@@ -175,6 +174,10 @@ taken over short, overlapping pieces of a longer recording instead of over
 one whole burst, so each column of the spectrogram is a Doppler spectrum of a
 few tens of milliseconds of the target.
 
+<img src="../../viz/img/L31-slow-time.svg"
+     alt="The burst drawn as a grid of range bins down and chirps across; one range bin's row is highlighted, and three overlapping windows along it each feed one spectrogram column"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+
 The slow-time samples arrive at the PRI, $0.4\ \text{ms}$ on the example
 burst, so the sample rate is $2.5\ \text{kHz}$ and the spectrogram covers
 $\pm 1.25\ \text{kHz}$, the $\pm 18.75\ \text{m/s}$ that L29 calls
@@ -194,8 +197,7 @@ For a walker, `spectrogram` takes a slice of bins around the track's range
 and sums them, flipping the sign of every other bin first: a Hann-windowed
 tone puts $-\tfrac{1}{4}$, $\tfrac{1}{2}$, $-\tfrac{1}{4}$ of itself in
 neighboring bins, so a plain sum cancels whenever the target sits on a bin
-center, while the alternating sum makes the three add and reads the middle
-of each chirp, where the window is 1.
+center, while the alternating sum makes the three add.
 The range bin comes from the L30 detection list. The course provides
 `radar_lab.py` complete, with a notebook for each lab; its `spectrogram` is
 the one below, and the lab asks you to run it and tune it, not to write it.
@@ -264,7 +266,17 @@ about 85 chirps of the example burst. Windows come in powers of two:
 | 256 chirps | $102.4\ \text{ms}$ | $9.8\ \text{Hz}$ | $89\ \text{Hz}$ |
 
 Sixty-four chirps keeps the two closest, and it resolves
-$0.59\ \text{m/s}$. Sixteen chirps follows the limbs but resolves only
+$0.59\ \text{m/s}$.
+
+<img src="../../viz/img/L31-window.svg"
+     alt="Resolution and limb smear in hertz against window length on log axes: resolution falls as one over the window and smear rises with it, crossing at the best window of 34 milliseconds; the 16, 64 and 256 chirp windows of the example burst are marked"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+
+A measured line is wider than $1/T_w$. The Hann window that `spectrogram`
+applies widens a line's main lobe to $1.44$ bins at its 3 dB points, the
+widening <a href="../L28-fmcw/index.html">Lesson 28</a> gives for a line in range,
+and a part that moves during the window widens it further, so expect a line
+about $1.44/T_w$ wide or more. Sixteen chirps follows the limbs but resolves only
 $156\ \text{Hz}$; 256 chirps resolves finely but smears the limbs across
 $89\ \text{Hz}$. The torso, which hardly accelerates, is sharpest in the
 longest window. The table changes with the PRI, so the lab's own windows have
@@ -318,8 +330,8 @@ $$\begin{aligned}
 
 A classifier does not look at a picture; it compares numbers. A **feature**
 is one number computed from the spectrogram that takes different values for
-different classes of target, and three go a long way for the lab's four
-targets. Each measures a different physical property, which is why they
+different classes of target, and three are enough to separate most of the
+lab's four kinds of target. Each measures a different physical property, which is why they
 separate targets that any one of them alone would confuse.
 
 Each column of the spectrogram is a Doppler spectrum $P(f,t)$, in linear
@@ -333,12 +345,12 @@ centroid; averaged and scaled the same way, it says how fast the parts move
 relative to the body.
 
 The **periodicity** asks whether the motion repeats at the pace of a body. We
-subtract each Doppler row's mean, smooth along time over $0.1\ \text{s}$ so a
-rotor's blade flashes average out, and correlate the spectrogram with a copy
+subtract each Doppler row's mean, smooth along time over 12 columns, about
+$0.08\ \text{s}$ on the example burst, so a rotor's blade flashes average out, and correlate the spectrogram with a copy
 of itself shifted in time, normalized so a zero shift gives 1. A stride or a
 wave repeats every $0.25$ to $2\ \text{s}$; the largest correlation at those
-shifts is the periodicity. A steady rotor scores near zero, and a walker or a
-waving hand scores near 0.8. The provided `features` computes all three:
+shifts is the periodicity. A steady rotor scores low, about 0.2, and a walker
+or a waving hand scores near 0.8. The provided `features` computes all three:
 
 ```python
 def features(t, f, S, lam, floor_db=-15):
@@ -362,8 +374,8 @@ def features(t, f, S, lam, floor_db=-15):
 
 :::{present}
 <img src="../../viz/img/L31-features.svg"
-     alt="Twenty training trials of each example target in the plane of centroid against spread: walkers spread along the centroid axis; hands, spinners and fans all sit near zero centroid, hands lowest in spread, spinners and fans overlapping between about 2 and 7 meters per second; a cross marks each class's mean"
-     style="max-width: 480px; width: 100%; display: block; margin: 0 auto;">
+     alt="Twenty training trials of each example target in two panels. Left, centroid against spread: walkers spread along the centroid axis; hands, spinners and fans sit near zero centroid, most hands lowest in spread, spinners and fans overlapping between about 2 and 7 meters per second. Right, periodicity against spread: hands and walkers sit near 0.8 periodicity, rotors below about 0.5. A cross marks each class's mean"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
 $$\begin{aligned}
@@ -389,8 +401,9 @@ $60^\circ$ off the line of sight, $25\ \text{cm}$ fans from 450 to
 $850\ \text{rpm}$, $6\ \text{cm}$ spinners from 900 to $2000\ \text{rpm}$,
 waves of different sizes and rates, and an SNR of 3 to $15\ \text{dB}$ a
 chirp. The walkers are the only class well off zero in centroid, with a mean
-of $0.78\ \text{m/s}$. The hands have the least spread among the others,
-under $1\ \text{m/s}$, and the most periodicity. The fans and spinners share
+of $0.78\ \text{m/s}$. Most hands have the least spread among the others,
+under $1\ \text{m/s}$, though a few slow, large waves reach into the rotors'
+range, and the right panel shows what sets the hands apart: periodicity. The fans and spinners share
 zero centroid and low periodicity, so only their spread separates them, a
 mean of $4.7$ against $3.6\ \text{m/s}$, and the two clouds overlap: a fast
 spinner looks like a slow fan.
@@ -493,7 +506,16 @@ $$\begin{aligned}
 A tilt or a rate scales every speed in the band by the same factor, so the
 **shape**, the spread over the edge, is the same at any tilt and any rate: it
 measures where the weight sits, not how fast it moves. A rotor whose weight
-sits farther out has a larger shape. The notebook's task (b) adds the edge
+sits farther out has a larger shape.
+
+<img src="../../viz/img/L31-shape.svg"
+     alt="Held Doppler spectra in decibels against radial speed divided by the band's edge, for a blade weighted evenly from hub to tip, the same blade tilted 40 degrees, a rotor with its weight at the rim, and a blade weighted on its outer third; the tilted blade's curve lies on the untilted one, the rim's piles up at the edges, and dashed lines mark the outer third's RMS speed"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+
+The figure normalizes each held spectrum to its own edge. The tilted blade
+lands on the untilted one, because a tilt scales every speed by the same
+$\cos\psi$; the rim and the outer third differ from the full blade because
+their weight sits elsewhere. The notebook's task (b) adds the edge
 and then the shape to the three features and compares the matrices.
 ::::
 
@@ -570,13 +592,17 @@ The two gains set how much weight the track gives a new detection. A large $\alp
 follows each detection closely, noise and all; a small one averages over many
 frames and smooths the noise, but it is slow to notice a change in velocity,
 so it lags a target that turns. The usual choice ties the two gains together,
-$\beta = \alpha^2/(2-\alpha)$, which minimizes the track's noise and its lag
-together (the Benedict-Bordner relation), and leaves one number to choose.
+$\beta = \alpha^2/(2-\alpha)$, the Benedict-Bordner choice, which balances the
+track's noise against its lag and leaves one number to choose.
 
-The other two lines say what that number trades. For steady detection noise
-$\sigma_z$, the track's RMS error is $\sigma_\text{track}$, the second line.
-Under a steady acceleration $a$, the track trails the target, once it
-settles, by the third line. Work both for $\alpha = 0.4$ on the example
+The other two lines say what that number trades. For detection noise
+$\sigma_z$ that is independent from frame to frame, the track's settled RMS
+error is $\sigma_\text{track}$, the second line: the filter's output is a
+weighted sum of past detections, and the line is the RMS of that sum's
+weights. Under a steady acceleration $a$ the track trails the target by the
+third line. The target gains $a\Delta t$ of speed each frame, and once the
+track settles its velocity must gain the same, so the velocity correction
+$(\beta/\Delta t)e$ equals $a\Delta t$ and the residual is $e = a\Delta t^2/\beta$. Work both for $\alpha = 0.4$ on the example
 burst:
 
 $$\begin{aligned}
@@ -589,6 +615,13 @@ $1\ \text{s}$, as a cosine, has a peak acceleration of
 $\pi(1.2) = 3.8\ \text{m/s}^2$, so the settled lag would be
 
 $$\text{lag} = \frac{3.8\ (0.1024)^2}{0.100} = 0.40\ \text{m}.$$
+
+<img src="../../viz/img/L31-ab-trade.svg"
+     alt="The alpha-beta trade on the example burst: the noise ratio rises from about 0.2 toward 1 as alpha grows, and the settled lag, on a log axis, falls from tens of meters toward a few centimeters; alpha equal to 0.4 is marked on both curves"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+
+A small $\alpha$ gives a low noise ratio and a long lag, and a large one the
+reverse; the choice depends on how much the target maneuvers.
 
 The figure simulates that walk on the example burst: out from
 $2\ \text{m}$ at $1.2\ \text{m/s}$, the one-second turn, and back. The
@@ -613,7 +646,7 @@ $$\begin{aligned}
 \end{aligned}$$
 
 - Two subarray channels $D = 56\ \text{mm}$ apart give the angle in one look, with no sweep.
-- Unambiguous within $\pm 15.5^\circ$ of the steer direction at $10.0\ \text{GHz}$.
+- Unambiguous within $\pm 15.5^\circ$ of broadside at $10.0\ \text{GHz}$.
 - Read in the detection's range-Doppler cell.
 :::
 
@@ -630,11 +663,16 @@ other, so the two channels differ in phase by
 
 $$\Delta\phi = \frac{2\pi D}{\lambda}\sin\theta,$$
 
+<img src="../../viz/img/L24-monopulse.svg"
+     alt="The monopulse geometry of Lesson 24: two subarray centers a distance D apart, a plane wave arriving at angle theta, and the extra path D sine theta to the farther center"
+     style="max-width: 360px; width: 100%; display: block; margin: 0 auto;">
+
 $672^\circ$ per unit of $\sin\theta$ at $10.0\ \text{GHz}$, and the second line
 turns a measured phase back into an angle. A phase is known only
-within $\pm 180^\circ$, so the angle is unambiguous while
-$\vert\sin\theta\vert < \lambda/(2D) = 0.268$, which is $\pm 15.5^\circ$ about
-the direction the array is steered. The L24 Lab's error function,
+within $\pm 180^\circ$, so the angle is unambiguous while $\sin\theta$ stays
+within $\lambda/(2D) = 0.268$ of the steer direction's $\sin\theta_0$, which is
+$\pm 15.5^\circ$ at broadside and a little more in angle when the beam is
+steered. The L24 Lab's error function,
 
 $$\frac{\text{Im}\lbrace\Delta\Sigma^*\rbrace}{\vert\Sigma\vert^2},$$
 
@@ -670,6 +708,10 @@ the second line, where $\hat{\mathbf r}$ is the unit vector from the array to
 the walker; the minus sign makes a closing walker positive, as on every page
 of this module.
 
+<img src="../../viz/img/L31-floor.svg"
+     alt="The floor seen from above: the array at the origin with E1 on the left and E8 on the right as drawn, boresight straight up as y, x to the side; the example walker at P on the E8 side walks toward Q on the E1 side, with the unit vector u along the walk, the unit vector r from the array to P, and the angle theta from boresight to P"
+     style="max-width: 360px; width: 100%; display: block; margin: 0 auto;">
+
 Work it for a walker who starts at $P$, $0.4\ \text{m}$ to the E8 side and
 $1.8\ \text{m}$ out, and walks at $1.2\ \text{m/s}$ toward $Q$,
 $0.9\ \text{m}$ to the E1 side and $3.4\ \text{m}$ out:
@@ -700,20 +742,25 @@ vanishing except at the turn.
 
 :::{present}
 - At $1\ \text{m/s}$ and $4\ \text{m}$ a crossing walker moves $14.3^\circ/\text{s}$.
-- Between beam sweeps it moves $15.9^\circ$, more than the $13.6^\circ$ beam.
+- A beam sweep about a second long lets it leave the $13.6^\circ$ beam between looks.
 - Between monopulse frames it moves $1.5^\circ$.
 :::
 
 A walker crossing in front of the radar at $1\ \text{m/s}$, $4\ \text{m}$
 away, changes bearing at $v/R = 0.25\ \text{rad/s}$, or $14.3^\circ$ a second.
-The GUI's beam sweep completes about 0.9 sweeps a second, so between two looks
-the walker moves
+A beam sweep looks in each direction once a sweep, so between two looks the
+walker moves $14.3^\circ/\text{s}$ times the sweep's length. The array's
+beamwidth at $10.0\ \text{GHz}$ is
 
-$$\frac{14.3^\circ/\text{s}}{0.9\ \text{s}^{-1}} = 15.9^\circ,$$
+$$\theta_\text{3dB} = \frac{0.886\lambda}{Nd} = 13.6^\circ,$$
 
-more than the array's beamwidth at $10.0\ \text{GHz}$,
+so any sweep longer than $13.6/14.3 = 0.95\ \text{s}$ lets the walker cross a
+whole beamwidth between looks. The figure draws a sweep every
+$1.1\ \text{s}$, the walker moving $15.9^\circ$ between looks.
 
-$$\theta_\text{3dB} = \frac{0.886\lambda}{Nd} = 13.6^\circ.$$
+<img src="../../viz/img/L31-sweep-vs-mono.svg"
+     alt="A crossing walker's bearing against time over four seconds, from minus 27 to plus 27 degrees: beam-sweep looks every 1.1 seconds, each with its 13.6 degree beam shaded, are far apart, while monopulse frames every 0.1 seconds follow the bearing closely"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
 
 A sweep can find a walker who stands still, but a crossing walker can leave
 the beam between one look and the next. Monopulse measures once a frame, and
@@ -741,7 +788,7 @@ array, and a beam the track points.
 | nearest centroid | the class whose mean is nearest, in scaled features | train and test on different trials |
 | confusion matrix | true class against the call | $64/80 = 80\%$; most errors confuse the two rotors |
 | alpha-beta | predict, residual, correct | $\alpha = 0.4$: $\beta = 0.100$, noise $0.57$, lag $0.40\ \text{m}$ |
-| monopulse | $\Delta\phi = 2\pi D\sin\theta/\lambda$ | $D = 56\ \text{mm}$; $\pm 15.5^\circ$ |
+| monopulse | $\Delta\phi = 2\pi D\sin\theta/\lambda$ | $D = 56\ \text{mm}$; $\pm 15.5^\circ$ at broadside |
 | a diagonal walk | $v_r = -v\ \hat{\mathbf u}\cdot\hat{\mathbf r}$ | $-0.75\ \text{m/s}$ at $P$ |
 ::::
 
@@ -752,13 +799,11 @@ Part 1 of the L31 Lab packet is the pre-lab: the shaded Predicted cells of
 Tables A to E, each beside the Measured cell you fill in during the lab. Do
 it before the lab, at the lab's preset and the givens the packet lists, and
 bring it with you: you check every reading against the prediction next to it.
-This lesson works its examples on the example burst and example targets, so
-its numbers show the method without giving your answers.
 
 | Predicted cells | You predict | Checked in | Method |
 | :-- | :-- | :-- | :-- |
 | Table A | each target's largest speed on each side of $0\ \text{m/s}$, and whether its band is centered | Table A; Steps 5 to 8 | "Micro-Doppler of a Moving Part," "Four Signatures" |
-| Table B | each tape mark's range and angle, the walker's radial speed near A both ways and at the turn, and the angle at B | Table B; Steps 9 to 12 | "A Walker on a Diagonal," "Angle by Monopulse" |
+| Table B | each tape mark's range and angle, the walker's range near A both ways and at the turn, its radial speed near A both ways, and the angle at B | Table B; Steps 9, 10, and 13 | "A Walker on a Diagonal," "Angle by Monopulse" |
 | Table C | the resolution of each spectrogram window | Table C; Step 14 | "Window Length" |
 | Table D | the shape of a fan's band and of a spinner's | Table D; Step 15 | "The Band's Edge and Shape" |
 | Table E | the noise ratio and the settled lag of each $\alpha$ | Table E; Step 16 | "Choosing Alpha and Beta" |
@@ -774,7 +819,7 @@ own paper.
 | Steps | Set | Read |
 | :-- | :-- | :-- |
 | 5-8 | four targets | largest speeds |
-| 9-12 | walk A-B-A; sway on B | range, radial speed, angle |
+| 9-11, 13 | walk A-B-A; sway on B | range, radial speed, angle |
 | 14 | window 64, 16, 256 | line widths |
 | 15 | features, + edge, + shape | confusion matrix |
 | 16 | $\alpha$ 0.5, 0.2, 0.8 | track errors |
@@ -782,13 +827,14 @@ own paper.
 
 The L31 Lab is the last stage of the chain your
 [final project](../final-project/index.md) report explains, in four parts.
-**Bring Up the Kit** (Steps 1 to 4) sets the Phaser app to its Range +
-Velocity preset. **Four Targets** (Steps 5 to 8) reads the micro-Doppler of a
-fan, a fidget spinner, your hand, and you walking in the Range-Doppler view.
-**A Crossing Walker** (Steps 9 to 12) reads a walk on a diagonal and back,
-and saves one burst on the far mark with both subarray channels. **Run the
-Notebook** (Steps 13 to 17) runs the provided `radar_lab.py` on the course's
-recorded data: it finds each target with the L30 detector, classifies 16
+Bring Up the Kit (Steps 1 to 4) sets the Phaser app to its Range + Velocity
+preset. Four Targets (Steps 5 to 8) reads the micro-Doppler of a fan, a
+fidget spinner, your hand, and you walking in the Range-Doppler view. A
+Crossing Walker (Steps 9 to 11) reads a walk on a diagonal and back, and
+saves one burst on the far mark with both subarray channels. Run the
+Notebook (Steps 12 to 17) runs the provided `radar_lab.py` on that burst and
+on the course's recorded data: it reads the angle at the far mark, finds each
+target with the L30 detector, classifies 16
 records, and tracks a recorded walk in range and angle, while you change the
 spectrogram window, add a feature, and tune $\alpha$. Each step that takes a
 reading has boxes under it, and each fills a Measured cell of the packet,
@@ -830,6 +876,11 @@ few seconds, without the kit's noise, leakage, or window skirts.
 - FMCW, the Range + Velocity preset, then **Calibrate…** for 0 m.
 - MTI on, 2-pulse; the **Range-Doppler** view; **Start**.
 :::
+:::{present}
+<img src="../../viz/img/L31-app-settings.svg"
+     alt="The Phaser app controls the lab sets: Mode FMCW, Preset Range + Velocity, 0 m Beat set by Calibrate, MTI on, MTI Mode 2-pulse, the Range-Doppler view, Subarray Channels on for Step 11, and Save Capture in Step 11"
+     style="max-width: 400px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 The preset is the lab's waveform: 300 µs chirps of 500 MHz, one every
 0.5 ms, at 9.9 GHz, and 256 chirps a frame, 128 ms. Your Part 1 predictions
@@ -842,9 +893,7 @@ use it.
    and set **Preset** to **Range + Velocity**.
 3. **Calibrate 0 m.** Set the 0 m frequency for this preset with
    **Calibrate…**, as in the L28 Lab, so that **0 m Beat (kHz)** holds your
-   kit's value. A wrong 0 m frequency shifts every range, not the velocities,
-   so if Step 9's ranges read off by the same amount at both marks, calibrate
-   again.
+   kit's value.
 4. **Show the view.** Turn **MTI** on with **MTI Mode** at 2-pulse, open the
    **Range-Doppler** view, and press **Start**. The canceller removes
    everything that stands still, so the room drops out and only what moves
@@ -855,7 +904,7 @@ use it.
 
 ::::{frame} Four Targets
 :::{present}
-- Fan, spinner, and hand, each about 1 m out; then walk toward the kit.
+- Fan at 1 m, spinner at 0.5 m, hand at 0.8 m; then walk toward the kit.
 - Read the largest speed on each side of $0\ \text{m/s}$.
 - Note whether the band is centered, and compare each with your prediction.
 :::
@@ -909,13 +958,19 @@ breathing and fidgeting move too.
 
 ::::{frame} A Crossing Walker
 :::{present}
-- Tape marks A and B; measure each one's range and angle.
-- Walk A to B to A at about 1 m/s; read near A both ways and at the turn.
-- Sway on B and save one burst with both channels.
+- Tape A and B; measure each one's range and angle.
+- Walk A to B to A; read near A both ways and at the turn.
+- Sway on B; save one burst with both channels.
+:::
+:::{present}
+<img src="../../viz/img/L31-floor-lab.svg"
+     alt="The floor plan for the walk: the array at the bottom with E1 on the left and E8 on the right as drawn, boresight up; mark A 1.47 meters out and 0.31 meters to the E1 side, mark B 3.94 meters out and 0.69 meters to the E8 side, and the walk from A to B, a turn at B, and back"
+     style="max-width: 340px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 You need about 4.5 m of clear floor in front of the kit and a lane no one
-else walks through, because every kit's beam crosses someone. Put the array
+else walks through, because anyone moving in the beam shows up in the view as
+a second walker. Put the array
 at the origin: $y$ straight out from it, $x$ to the side, positive on the E8
 side. Facing the patches, E1 is on your right.
 
@@ -932,11 +987,12 @@ side. Facing the patches, E1 is on your right.
    </div>
 10. **Walk it.** With MTI on, walk from A to B at about 1 m/s, turn at B, and
     walk back to A. Read the walker's range and velocity just after A, at B,
-    and just before A on the way back. At B, read the torso: the line nearest
-    $0\ \text{m/s}$, which the canceller weakens as the radial speed passes
-    through zero. Walking out, your back is to the screen, so have a partner
-    read the view, or start a screen recording on the laptop, walk, and read
-    the three moments from the recording afterwards.
+    and just before A on the way back, and compare them with your
+    predictions. At B, read the torso line, not a limb's. Walking out, your
+    back is to the screen, so have a partner read the view, or start a screen
+    recording on the laptop, walk, and read the three moments from the
+    recording afterward. If your ranges at A and B are both off by the same
+    amount, the 0 m frequency is off: calibrate again (Step 3).
 
     <div class="rec" data-lab="L31">
     <label>Step 10: just after A, range (m) <input data-field="b.out.range"></label>
@@ -951,17 +1007,7 @@ side. Facing the patches, E1 is on your right.
     stands still. Turn **Subarray Channels** on and press **Save Capture**.
     The app downloads one burst with both channels,
     `phaser_range_doppler_<date>-<time>.npz`; rename it `L31_sway_B.npz` and
-    move it into the notebook's folder (Notebook Setup, below).
-12. **Read the angle at B.** In the notebook, set `B_REC = "L31_sway_B.npz"`
-    in the angle cell after Procedure B and run it. It prints your range and
-    angle. Which side of broadside reads positive depends on the order of the
-    kit's channels, so compare the sign with your prediction for B; if it is
-    reversed, the kit's channels are the other way round, and you say so in
-    the packet.
-
-    <div class="rec" data-lab="L31">
-    <label>Step 12: angle at B <input data-field="b.angleB"></label>
-    </div>
+    keep it for Step 13.
 ::::
 
 ::::{frame} Run the Notebook
@@ -970,17 +1016,39 @@ side. Facing the patches, E1 is on your right.
 - Task (b): three features, then add the edge, then the shape.
 - Task (c): $\alpha$ = 0.5, 0.2, 0.8, then your choice.
 :::
+:::{present}
+<img src="../../viz/img/L31-notebook-strip.svg"
+     alt="What the three notebook tasks show, with values left out: a walker's spectrogram for task (a), a four-by-four confusion matrix with its diagonal shaded for task (b), and a range track over the walk's truth and detections for task (c)"
+     style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
+:::
 
-The notebook runs on the course's recorded data, with or without a kit, in
-about 30 to 45 minutes. Its first code cell names the files it loads,
-`RECORDS` and `WALK`; leave them as shipped. Each record's target is found by
-the L30 chain run on the record's first burst, the 2-pulse canceller, the
-range-Doppler map, and `cfar_2d`, and its detection's range and velocity pick
-the range bins the spectrogram sums.
+The notebook runs on your burst from Step 11 and on the course's recorded
+data, with or without a kit, in about 30 to 45 minutes. The notebook finds
+each record's target with the L30 chain, run on the record's first burst, the
+2-pulse canceller, the range-Doppler map, and `cfar_2d`, and its detection's
+range and velocity pick the range bins the spectrogram sums.
 
-13. **Run the first cells.** Run the cells in order from the top, through the
-    angle cell. The Procedure A and B cells print the numbers the
-    No Hardware? frame uses; with a kit, they still run.
+12. **Set up the notebook.** Download the lab's bundle,
+    <a href="../../bundles/L31_lab.zip" download>`L31_lab.zip`</a>, and unzip
+    it into a folder of its own in your Module 4 folder. It holds the
+    notebook, `L31_classify_track.ipynb`; the provided `radar_lab.py`; every
+    recorded file the notebook loads, `L31_*.npz`; and the data README. Move
+    `L31_sway_B.npz` into the same folder. Python with numpy, scipy,
+    matplotlib, and Jupyter is the setup from the
+    <a href="../L28-fmcw/index.html#frame-notebook-setup">L28 Lab's Notebook Setup</a>
+    frame. Start Jupyter in the folder with `jupyter lab`, and open the
+    notebook. Its first code cell names the files it loads, `RECORDS` and
+    `WALK`; leave them as shipped.
+13. **Run it to the angle at B.** Run the cells in order from the top. In the
+    angle cell, after Procedure B, set `B_REC = "L31_sway_B.npz"` and run it.
+    It prints your range and angle at B. Which side of broadside reads
+    positive depends on the order of the kit's channels, so compare the sign
+    with your prediction; if it is reversed, the kit's channels are the other
+    way around, and you say so in the packet.
+
+    <div class="rec" data-lab="L31">
+    <label>Step 13: angle at B <input data-field="b.angleB"></label>
+    </div>
 14. **Task (a), the window.** Run the window cell with `N_WIN = 64`, then 16,
     then 256. Each run prints the resolution and three widths; compare the
     walker's torso line with your predicted resolution.
@@ -1016,8 +1084,9 @@ the range bins the spectrogram sums.
     0.2, then 0.8, then the value you would use, which writes
     `L31_track.csv`. Each run prints the detections' RMS error and the
     track's, from the walk's truth after the first second. The noise ratio is
-    the track's range RMS over the detections'; compare it, and the range
-    error at the turn, with your predictions.
+    the track's range RMS over the detections'; compare it with your
+    predicted noise ratio, and the range error at the turn with your
+    predicted settled lag.
 
     <div class="rec" data-lab="L31">
     <label>Step 16: detections, range RMS (m) <input data-field="e.det.range"></label>
@@ -1054,22 +1123,16 @@ select **FMCW**, set **Preset** to **Range + Velocity**, turn **MTI** on at
 2-pulse, and open the **Range-Doppler** view. Its **Scene** list has no fan or
 spinner, so Steps 5 to 10 use **Load Recording**, which plays one of the
 course's recorded files through the same view as if it were live, looping.
-The files are in the lab's bundle. They come from a simulation of the PHASER
+The files are in the lab's bundle (Step 12). They come from a simulation of the PHASER
 at this preset; each target record is 2.0 s of chirps that keep 90 samples
 each, so the range bins are the same 0.30 m and the view ends at 4.1 m. Mark
 in the packet which rows come from recorded data.
 
 - **Steps 5 to 8:** load `L31_fan_1.npz`, `L31_spinner_1.npz`, `L31_hand_1.npz`, and `L31_walker_1.npz` in turn, and read each. Each file's note, printed by the notebook's first code cell, gives the target's size and rate. The notebook's Procedure A cell prints the speeds from the same four files; check your readings against it.
 - **Steps 9 and 10:** load `L31_dismount.npz`, a person walking at 1 m/s from A to B, turning, and walking back, past a chair at 3.2 m. Its note gives A's and B's ranges and angles, which stand in for your tape. The file keeps every 4th chirp, so the view spans $\pm 3.8\ \text{m/s}$ and each update covers 0.5 s of walking, which blurs the range; the notebook's Procedure B cell prints three 128 ms frames of it, near A going out, at the turn, and near A coming back, which fill Step 10's boxes.
-- **Steps 11 and 12:** run the angle cell as shipped, on `L31_dismount.npz`; its farthest frame is the turn at B.
-- **Steps 13 to 17** run on the bundle's files with or without a kit.
+- **Steps 11 and 13:** skip the burst; in Step 13 run the angle cell as shipped, on `L31_dismount.npz`. Its farthest frame is the turn at B.
+- **Steps 12 to 17** run on the bundle's files with or without a kit.
 ```
-::::
-
-::::{frame} Notebook Setup
-:class: read-only
-
-Download the lab's bundle, <a href="../../bundles/L31_lab.zip" download>`L31_lab.zip`</a>, and unzip it into a folder of its own in your Module 4 folder. It holds the notebook, `L31_classify_track.ipynb`; the provided `radar_lab.py`; every recorded file the notebook loads, `L31_*.npz`; and the data README. Python with numpy, scipy, matplotlib, and Jupyter is the setup from the <a href="../L28-fmcw/index.html#frame-notebook-setup">L28 Lab's Notebook Setup</a> frame. Start Jupyter in the unzipped folder with `jupyter lab`, and open `L31_classify_track.ipynb`.
 ::::
 
 ::::{frame} Your Part 2 Entries

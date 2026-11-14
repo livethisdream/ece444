@@ -152,7 +152,7 @@ window.addEventListener('resize', fit);
 const off=document.createElement('canvas'), octx=off.getContext('2d');
 function draw(){
   const s=spec(state.kind,state.nwin);
-  const L=56, Rm=12, Tm=10, B=40, pw=W-L-Rm, ph=H-Tm-B;
+  const L=56, Rm=46, Tm=10, B=40, pw=W-L-Rm, ph=H-Tm-B;
   ctx.clearRect(0,0,W,H);
   off.width=s.cols; off.height=s.rows;
   const img=octx.createImageData(s.cols,s.rows);
@@ -173,9 +173,15 @@ function draw(){
     stext(String(t),x,Tm+ph+14,11.5,ink3,'center'); });
   stext('time (s)',L+pw/2,H-9,12,ink3,'center');
   ctx.save(); ctx.translate(13,Tm+ph/2); ctx.rotate(-Math.PI/2); stext('Doppler (Hz)',0,0,12,ink3,'center'); ctx.restore();
+  // the same scale in m/s, the unit of the app's Range-Doppler view: v = f lambda / 2
+  [-10,-5,0,5,10].forEach(v=>{ const y=yp(2*v/LAM); ctx.beginPath(); ctx.moveTo(L+pw,y); ctx.lineTo(L+pw+4,y); ctx.stroke();
+    stext(String(v),L+pw+7,y,11.5,ink3,'left'); });
+  ctx.save(); ctx.translate(W-9,Tm+ph/2); ctx.rotate(-Math.PI/2); stext('m/s',0,0,12,ink3,'center'); ctx.restore();
   // the window's length, drawn to scale on the time axis
   const wx=xp(T)-6, wl=xp(s.nwin*PRI)-xp(0);
-  ctx.fillStyle='rgba(176,30,36,0.85)'; ctx.fillRect(wx-wl,Tm+6,Math.max(wl,2),5);
+  ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fillRect(wx-Math.max(wl,2)-58,Tm+3,Math.max(wl,2)+60,16);
+  ctx.fillStyle='rgba(176,30,36,0.9)'; ctx.fillRect(wx-Math.max(wl,2),Tm+6,Math.max(wl,2),9);
+  stext('window',wx-Math.max(wl,2)-5,Tm+11,11.5,'#b01e24','right');
   const ms=s.nwin*PRI*1e3, df=1/(s.nwin*PRI);
   el('win-val').textContent=s.nwin+' chirps, '+(ms<10?ms.toFixed(1):ms.toFixed(0))+' ms, '+(df<10?df.toFixed(1):df.toFixed(0))+' Hz';
 }

@@ -410,46 +410,65 @@ CHECK = {
 # ---------------------------------------------------------------- figures --
 
 def fig_signatures() -> None:
-    """The lesson's four example targets, 3 s each, 64-chirp window."""
+    """The lesson's four example targets, 3 s each, 64-chirp window. Each panel
+    has its own Doppler span, so the walker's off-zero torso line shows; the
+    right axis gives the same scale in m/s, the unit of the app's view."""
     rng = np.random.default_rng(310)
-    fig, axs = plt.subplots(2, 2, figsize=(4.6, 3.7), sharex=True, sharey=True)
+    fig, axs = plt.subplots(2, 2, figsize=(4.9, 3.9), sharex=True)
+    span = {"walker": 300, "hand": 300, "fan": 800, "spinner": 800}
+    ticks = {300: ([-200, 0, 200], [-3, 0, 3]), 800: ([-500, 0, 500], [-8, 0, 8])}
     for ax, k in zip(axs.flat, KINDS):
         t, f, S = spectrogram(target(k, TYPICAL[k], 3.0, rng))
         # an embedded bitmap: a vector mesh of every cell would be megabytes
         ax.imshow(np.clip(S, -40, 0), origin="lower", aspect="auto", cmap="Blues",
                   extent=(t[0], t[-1], f[0], f[-1]), interpolation="bilinear")
-        ax.text(0.12, 1080, k, color=COLORS[k], ha="left", va="top", fontweight="bold")
+        F = span[k]
+        ax.text(0.12, 0.88 * F, k, color=COLORS[k], ha="left", va="top", fontweight="bold")
+        if k == "walker":
+            ft = 2 * TYPICAL[k]["v0"] / LAM
+            ax.axhline(ft, color=RED, lw=1.0, ls="--")
+            ax.text(2.92, ft + 12, "torso", color=RED, ha="right", va="bottom", fontsize=13)
         ax.set_xlim(0, 3)
-        ax.set_ylim(-1250, 1250)
+        ax.set_ylim(-F, F)
         ax.set_xticks([1, 2])
-        ax.set_yticks([-1000, 0, 1000])
+        ax.set_yticks(ticks[F][0])
         style(ax)
+        sec = ax.secondary_yaxis("right", functions=(lambda x: x * LAM / 2, lambda vv: 2 * vv / LAM))
+        sec.set_yticks(ticks[F][1])
+        sec.tick_params(colors=GRAY, labelsize=13)
     for ax in axs[1]:
         ax.set_xlabel("time (s)")
     for ax in axs[:, 0]:
-        ax.set_ylabel("Doppler (Hz)")
-    fig.subplots_adjust(wspace=0.1, hspace=0.14)
+        ax.set_ylabel("Hz")
+    for ax in axs[:, 1]:
+        ax.text(1.32, 0.5, "m/s", rotation=90, va="center", ha="center", transform=ax.transAxes, fontsize=13)
+    fig.subplots_adjust(wspace=0.62, hspace=0.14)
     finalize(fig, "L31-signatures")
 
 
 def fig_features(v: dict) -> None:
+    """Two views of the training trials: centroid against spread, where the
+    walkers stand apart, and periodicity against spread, where the hands do."""
     X, y = v["Xtr"], v["ytr"]
-    fig, ax = plt.subplots(figsize=(4.4, 3.0))
-    for k in KINDS:
-        m = y == k
-        ax.scatter(X[m, 0], X[m, 1], s=22, marker=MARKERS[k], facecolor="none",
-                   edgecolor=COLORS[k], linewidth=1.1, label=k)
-        mu = v["means"][k]
-        ax.scatter([mu[0]], [mu[1]], s=110, marker="X", color=COLORS[k], edgecolor="white", linewidth=0.8)
-    ax.set_xlim(-0.05, 1.4)
-    ax.set_ylim(0, 7.2)
-    ax.set_xticks([0, 0.5, 1.0])
-    ax.set_yticks([0, 2, 4, 6])
-    ax.set_xlabel("centroid (m/s)")
-    ax.set_ylabel("spread (m/s)")
-    ax.legend(loc="upper right", fontsize=13, handletextpad=0.2, borderaxespad=0.1,
-              labelspacing=0.25)
-    style(ax)
+    fig, axs = plt.subplots(1, 2, figsize=(5.6, 3.0))
+    for ax, (i, xl) in zip(axs, ((0, "centroid (m/s)"), (2, "periodicity"))):
+        for k in KINDS:
+            m = y == k
+            ax.scatter(X[m, i], X[m, 1], s=18, marker=MARKERS[k], facecolor="none",
+                       edgecolor=COLORS[k], linewidth=1.0, label=k)
+            mu = v["means"][k]
+            ax.scatter([mu[i]], [mu[1]], s=90, marker="X", color=COLORS[k], edgecolor="white", linewidth=0.8)
+        ax.set_xlabel(xl)
+        ax.set_ylim(0, 7.5)
+        ax.set_yticks([0, 2, 4, 6])
+        ax.set_xticks([0, 0.5, 1.0])
+        style(ax)
+    axs[0].set_xlim(-0.05, 1.4)
+    axs[0].set_ylabel("spread (m/s)")
+    axs[1].set_xlim(-0.05, 1.05)
+    axs[1].set_yticklabels([])
+    axs[0].legend(loc="upper right", fontsize=13, handletextpad=0.2, borderaxespad=0.1, labelspacing=0.25)
+    fig.subplots_adjust(wspace=0.08)
     finalize(fig, "L31-features")
 
 
