@@ -43,17 +43,17 @@
   <div class="controls">
     <div class="ctl">
       <label for="gd">Guard Cells</label>
-      <input id="gd" type="range" min="0" max="8" step="1" value="4">
+      <input id="gd" type="range" min="0" max="8" step="1" value="2">
       <span class="val" id="gdv"></span>
     </div>
     <div class="ctl">
       <label for="rf">Ref Cells</label>
-      <input id="rf" type="range" min="1" max="24" step="1" value="16">
+      <input id="rf" type="range" min="1" max="30" step="1" value="8">
       <span class="val" id="rfv"></span>
     </div>
     <div class="ctl">
       <label for="bs">CFAR Bias (dB)</label>
-      <input id="bs" type="range" min="0" max="25" step="0.5" value="6">
+      <input id="bs" type="range" min="0" max="25" step="0.5" value="10">
       <span class="val" id="bsv"></span>
     </div>
     <div class="ctl">
@@ -64,7 +64,7 @@
   <div class="readouts">
     <div class="ro"><span class="k">person</span><span class="v" id="rHit">?</span></div>
     <div class="ro"><span class="k">margin</span><span class="v" id="rMg">?</span></div>
-    <div class="ro"><span class="k">false alarms</span><span class="v" id="rFa">?</span></div>
+    <div class="ro"><span class="k">noise hits</span><span class="v" id="rFa">?</span></div>
   </div>
 </div>
 
@@ -77,12 +77,14 @@
   // averaging in power with the guard and reference cells counted on each
   // side (phaser_radar_dsp.ca_cfar). The chirp is the lesson's example, not a
   // preset the app runs: 400 MHz in 2 ms, so a cell is c/2B = 0.375 m and the
-  // 80 cells reach 30 m. Levels are in dB over the mean noise in one cell.
-  const NS = 160, NC = 80, CELL = 0.375, UPD = 30;
+  // 160 cells reach 60 m. Levels are in dB over the mean noise in one cell.
+  // The person stands 40 cells from the leakage and 24 from the wall, so only
+  // a reference window that reaches 24 cells takes the wall in.
+  const NS = 320, NC = 160, CELL = 0.375, UPD = 30;
   const SCENE = [                       // bin (fractional), peak level dB over noise
     { k: 0.15, db: 70, what: 'leakage' },
-    { k: 12.2, db: 42, what: 'person' },  // 4.6 m
-    { k: 24.4, db: 55, what: 'wall' }     // 9.2 m
+    { k: 40.3, db: 40, what: 'person' },  // 15.1 m
+    { k: 64.4, db: 55, what: 'wall' }     // 24.2 m
   ];
   const PERSON = 1;
   const $ = id => document.getElementById(id);
@@ -134,13 +136,13 @@
   const UPDATES = [];
   for (let u = 0; u < UPD; u++) UPDATES.push(profile());
 
-  // The objects' own cells: within 1 m of each echo. A crossing anywhere else
-  // beyond 1 m is noise.
+  // The objects' own cells: within 1.5 m of each echo, four cells, which
+  // covers the Blackman main lobe and the first skirt of a strong peak. A
+  // crossing anywhere else is noise.
   const OBJ = new Array(NC).fill(false);
   for (let k = 0; k < NC; k++) {
     const r = k * CELL;
-    SCENE.forEach(s => { if (Math.abs(r - s.k * CELL) <= 1.0) OBJ[k] = true; });
-    if (r <= 1.0) OBJ[k] = true;
+    SCENE.forEach(s => { if (Math.abs(r - s.k * CELL) <= 1.5) OBJ[k] = true; });
   }
   const kPerson = Math.round(SCENE[PERSON].k);
 
@@ -162,13 +164,14 @@
   function compute() {
     const g = +gdEl.value, n = +rfEl.value, bdb = +bsEl.value;
     const T = threshold(UPDATES[0], g, n, bdb);
-    let fa = 0;
-    UPDATES.forEach(P => {
+    const upd = UPDATES.map(P => {
       const Tu = threshold(P, g, n, bdb);
-      for (let k = 0; k < NC; k++) if (!OBJ[k] && P[k] > Tu[k]) { fa++; break; }
+      for (let k = 0; k < NC; k++) if (!OBJ[k] && P[k] > Tu[k]) return true;
+      return false;
     });
+    const fa = upd.filter(Boolean).length;
     const P0 = UPDATES[0];
-    Object.assign(st, { g, n, bdb, T, fa,
+    Object.assign(st, { g, n, bdb, T, fa, upd,
                         found: P0[kPerson] > T[kPerson],
                         margin: 10 * Math.log10(P0[kPerson] / T[kPerson]) });
     $('gdv').textContent = g + ' a side';
@@ -177,7 +180,7 @@
     const m = '−';
     $('rHit').textContent = st.shown ? (st.found ? 'found' : 'missed') : '?';
     $('rMg').textContent = st.shown ? (st.margin < 0 ? m + (-st.margin).toFixed(1) : '+' + st.margin.toFixed(1)) + ' dB' : '?';
-    $('rFa').textContent = st.shown ? 'in ' + fa + ' of ' + UPD : '?';
+    $('rFa').textContent = st.shown ? fa + ' of ' + UPD : '?';
   }
 
   // ---- canvas plumbing (the house SQ: a shorter design box on a phone) ----
@@ -199,7 +202,7 @@
   function draw() {
     const g = fit(cv, cx, 280);
     const narrow = g.w < 420;
-    const L = 34, R = 8, T = 18, B = 30;
+    const L = 34, R = 8, T = 18, B = 46;
     const Y0 = -10, Y1 = 82;
     const x = r => L + r / (NC * CELL) * (g.w - L - R);
     const y = d => T + (Y1 - Math.max(Y0, Math.min(Y1, d))) / (Y1 - Y0) * (g.h - T - B);
@@ -210,13 +213,27 @@
       cx.beginPath(); cx.moveTo(L, y(d)); cx.lineTo(g.w - R, y(d)); cx.stroke();
       cx.fillText(d, L - 5, y(d) + 4);
     }
-    for (let r = 0; r <= 30; r += narrow ? 10 : 5) {
-      cx.textAlign = r === 30 ? 'right' : 'center';
-      cx.fillText(r, r === 30 ? g.w - R : x(r), g.h - B + 15);
+    const RMAX = NC * CELL;
+    for (let r = 0; r <= RMAX; r += narrow ? 20 : 10) {
+      cx.textAlign = r === RMAX ? 'right' : 'center';
+      cx.fillText(r, r === RMAX ? g.w - R : x(r), g.h - B + 15);
     }
     cx.fillStyle = '#5b6573'; cx.font = F(11.5);
     cx.textAlign = 'center'; cx.fillText('range (m)', (L + g.w - R) / 2, g.h - 3);
     cx.textAlign = 'left'; cx.fillText('power over the noise (dB)', L, T - 6);
+
+    // once shown: the person's window, guard cells gray and reference cells
+    // blue, so whatever else falls inside the blue band is visible
+    if (st.shown) {
+      const cw = x(CELL) - x(0);
+      for (let k = kPerson - st.g - st.n; k <= kPerson + st.g + st.n; k++) {
+        if (k < 0 || k >= NC || k === kPerson) continue;
+        cx.fillStyle = Math.abs(k - kPerson) <= st.g ? 'rgba(91,101,115,0.16)' : 'rgba(0,103,185,0.12)';
+        cx.fillRect(x(k * CELL) - cw / 2, T, cw, g.h - T - B);
+      }
+      cx.fillStyle = 'rgba(176,30,36,0.14)';
+      cx.fillRect(x(kPerson * CELL) - cw / 2, T, cw, g.h - T - B);
+    }
 
     // the profile, update 0
     const P = UPDATES[0];
@@ -227,17 +244,18 @@
     // object labels, placed above each peak where there is room
     cx.fillStyle = '#5b6573'; cx.font = F(narrow ? 10.5 : 11);
     SCENE.forEach(s => {
-      if (s.what === 'leakage' && narrow) return;
+      if (s.what === 'leakage' && (narrow || st.shown)) return;
       // the leakage peak sits at the top-left corner, so its label goes to its right
       const lk = s.what === 'leakage';
-      const xx = lk ? x(s.k * CELL) + 12 : x(s.k * CELL), yy = lk ? y(s.db) + 4 : y(s.db) - 8;
+      const kk = Math.round(s.k), top = st.shown ? Math.max(s.db, db(st.T[kk])) : s.db;
+      const xx = lk ? x(s.k * CELL) + 20 : x(s.k * CELL), yy = lk ? y(s.db) + 4 : y(top) - 9;
       cx.textAlign = lk ? 'left' : 'center';
       if (yy > T + 4) cx.fillText(s.what, xx, yy);
     });
 
     cx.textAlign = 'left';
     if (!st.shown) {
-      const msg = narrow ? 'Predict, then show the threshold' : 'Is the person found? How many updates cross? Predict, then show.';
+      const msg = 'Predict, then show the threshold';
       const px = narrow ? 12 : 13;
       cx.font = F(px, 700);
       const mw = Math.min(cx.measureText(msg).width + 20, g.w - L - R - 8), my = y(20);
@@ -260,6 +278,15 @@
       if (OBJ[k]) { cx.strokeStyle = '#004a85'; cx.lineWidth = 1.8; cx.stroke(); }
       else { cx.fillStyle = '#b01e24'; cx.fill(); }
     }
+
+    // the 30 updates, one tick each, red where a noise cell crossed: the
+    // count in the readout, and the trace above is update 1
+    const sy = g.h - B + 22, sh = 8, x0 = narrow ? L : L + 52, sw = (g.w - R - x0) / UPD;
+    if (!narrow) { cx.fillStyle = '#5b6573'; cx.font = F(10.5); cx.textAlign = 'left'; cx.fillText('updates', L, sy + sh - 1); }
+    st.upd.forEach((hit, u) => {
+      cx.fillStyle = hit ? '#b01e24' : '#d6e2ee';
+      cx.fillRect(x0 + u * sw + 1, sy, Math.max(1, sw - 2), sh);
+    });
   }
 
   function sync() {
