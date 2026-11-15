@@ -91,8 +91,8 @@ gives the depth a cramped room allows.
    it reports and your source distance. Compare it with your Part 1 frequency:
    a change of $0.08$ GHz moves the notch only about $0.2^\circ$, so keep your table.
    <div class="rec" data-lab="L24">
-   <label>Step 2: Signal Freq <input data-field="f.sig"></label>
-   <label>Step 2: distance to the HB100 <input data-field="f.dist"></label>
+   <label>Step 2: Signal Freq (GHz) <input data-field="f.sig"></label>
+   <label>Step 2: distance to the HB100 (m) <input data-field="f.dist"></label>
    </div>
 3. Press **Calibrate** and wait for it to finish, with the HB100 still at
    boresight. An uncalibrated array fills a null on its own, and a shallow
@@ -140,7 +140,7 @@ gives the depth a cramped room allows.
    <div class="rec" data-lab="L24">
    <label>Step 9: null-steered main-lobe peak (dB) <input data-field="a.peak"></label>
    <label>Step 9: notch bottom, below the uniform peak (dB) <input data-field="a.depth"></label>
-   <label>Step 9: notch angle <input data-field="a.angle"></label>
+   <label>Step 9: notch angle (°) <input data-field="a.angle"></label>
    </div>
 10. Press **Reset** in Phase Control and return Element Gains to Uniform.
 ::::
@@ -163,9 +163,9 @@ gives the depth a cramped room allows.
     prediction.
     <div class="rec" data-lab="L24">
     <label>Step 14: null depth (dB) <input data-field="b.depth"></label>
-    <label>Step 14: null angle <input data-field="b.angle"></label>
-    <label>Step 14: left peak angle <input data-field="b.left"></label>
-    <label>Step 14: right peak angle <input data-field="b.right"></label>
+    <label>Step 14: null angle (°) <input data-field="b.angle"></label>
+    <label>Step 14: left peak angle (°) <input data-field="b.left"></label>
+    <label>Step 14: right peak angle (°) <input data-field="b.right"></label>
     </div>
 15. Set **Beam 1 Phase** back to $0^\circ$.
 ::::
@@ -208,8 +208,8 @@ your kit.
     wild one where an average would not. Compare Interferer vs Target with
     your Table C prediction.
     <div class="rec" data-lab="L24">
-    <label>Step 18: Manual, Interferer vs Target (dB) <input data-field="c.man.ivt"></label>
-    <label>Step 18: Manual, Peak Gain (dBFS) <input data-field="c.man.peak"></label>
+    <label>Step 18: Manual Interferer vs Target (dB) <input data-field="c.man.ivt"></label>
+    <label>Step 18: Manual Peak Gain (dBFS) <input data-field="c.man.peak"></label>
     </div>
 19. Set Mode to **MVDR**, Snapshots to $1024$, and Diagonal Load to $0.1$. Leave
     Steer Angle at $0^\circ$: it is MVDR's look direction. MVDR has one null to
@@ -222,8 +222,8 @@ your kit.
     10 dB at $+20^\circ$ points to the beam first: check that Steer Angle is
     $0^\circ$ and the HB100 still sits at boresight.
     <div class="rec" data-lab="L24">
-    <label>Step 19: MVDR, Interferer vs Target (dB) <input data-field="c.mvdr.ivt"></label>
-    <label>Step 19: MVDR, Peak Gain (dBFS) <input data-field="c.mvdr.peak"></label>
+    <label>Step 19: MVDR Interferer vs Target (dB) <input data-field="c.mvdr.ivt"></label>
+    <label>Step 19: MVDR Peak Gain (dBFS) <input data-field="c.mvdr.peak"></label>
     <label>Step 19: MVDR Suppression (dB) <input data-field="c.mvdr.supp"></label>
     </div>
 20. Open the **Rectangular** tab. Record the angle and depth of the solid
@@ -233,7 +233,7 @@ your kit.
     <a href="../L24-null-steering/index.html#frame-what-mvdr-chooses">"What MVDR Chooses"</a>
     says what to look for.
     <div class="rec" data-lab="L24">
-    <label>Step 20: MVDR null angle <input data-field="c.null.angle"></label>
+    <label>Step 20: MVDR null angle (°) <input data-field="c.null.angle"></label>
     <label>Step 20: MVDR null depth (dB) <input data-field="c.null.depth"></label>
     <label>Step 20: conventional pattern at the null (dB) <input data-field="c.null.conv"></label>
     </div>
@@ -241,9 +241,9 @@ your kit.
     at Diagonal Load $0.001$ and at $0.1$, and watch Interferer vs Target. Compare
     the Peak Gains with your Table C prediction.
     <div class="rec" data-lab="L24">
-    <label>Step 21: +30°, Manual Peak Gain (dBFS) <input data-field="c.30.man"></label>
-    <label>Step 21: +30°, MVDR load 0.001 Peak Gain (dBFS) <input data-field="c.30.load001"></label>
-    <label>Step 21: +30°, MVDR load 0.1 Peak Gain (dBFS) <input data-field="c.30.load01"></label>
+    <label>Step 21: Manual Peak Gain at +30° (dBFS) <input data-field="c.30.man"></label>
+    <label>Step 21: MVDR load 0.001 Peak Gain at +30° (dBFS) <input data-field="c.30.load001"></label>
+    <label>Step 21: MVDR load 0.1 Peak Gain at +30° (dBFS) <input data-field="c.30.load01"></label>
     </div>
 22. Press the interferer button to turn it off, and set Mode back to
     **Manual** and **Beam Sweep**.
@@ -273,13 +273,13 @@ your kit.
     dBc, below the sum trace's peak, and its angle.
     <div class="rec" data-lab="L24">
     <label>Step 25: delta null depth (dBc) <input data-field="d.depth"></label>
-    <label>Step 25: delta null angle <input data-field="d.angle"></label>
+    <label>Step 25: delta null angle (°) <input data-field="d.angle"></label>
     </div>
 26. Read the **Error** trace. It crosses zero once near boresight, where the
     beam points at the HB100. Record that angle, and the sign of the error on
     each side of it, and compare both with your Table D prediction.
     <div class="rec" data-lab="L24">
-    <label>Step 26: error zero crossing <input data-field="d.zero"></label>
+    <label>Step 26: error zero crossing (°) <input data-field="d.zero"></label>
     <label>Step 26: sign below and above the crossing <input data-field="d.sign"></label>
     </div>
 27. Choose **Tracking** from the **Mode** menu and open the **Tracking** tab,
@@ -295,10 +295,10 @@ your kit.
     scale, and record the tracked angle at each, once it settles.
     <div class="rec" data-lab="L24">
     <label>Step 27: how far it followed the moving HB100 <input data-field="d.track"></label>
-    <label>Step 27: stand at −20°, tracked angle <input data-field="d.t.m20"></label>
-    <label>Step 27: stand at −10°, tracked angle <input data-field="d.t.m10"></label>
-    <label>Step 27: stand at +10°, tracked angle <input data-field="d.t.p10"></label>
-    <label>Step 27: stand at +20°, tracked angle <input data-field="d.t.p20"></label>
+    <label>Step 27: tracked angle with the stand at −20° (°) <input data-field="d.t.m20"></label>
+    <label>Step 27: tracked angle with the stand at −10° (°) <input data-field="d.t.m10"></label>
+    <label>Step 27: tracked angle with the stand at +10° (°) <input data-field="d.t.p10"></label>
+    <label>Step 27: tracked angle with the stand at +20° (°) <input data-field="d.t.p20"></label>
     </div>
 ::::
 

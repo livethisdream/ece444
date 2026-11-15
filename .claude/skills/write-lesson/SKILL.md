@@ -129,6 +129,13 @@ Every lab page (VOICE.md 27-34, from Neil's L20 Lab notes):
 - Entry boxes at each step that takes a reading, and a summary frame, as
   the L17-L20 Labs do; packet boxes 1.5 in, right-justified in the 0.42
   answer column or in one row along the bottom of the part.
+- Every entry box's label has one format, `Step N: what it is (unit)`
+  (Neil, 2026-11-15, on the L22-L23 Lab: "the labels in the fillable fields
+  vary in label format"). The case goes in the description, not after a
+  comma ("Step 8: Uniform first sidelobe (dBc)", not "Step 8, Uniform:
+  first sidelobe"); every reading names its unit; a GUI readout keeps the
+  GUI's name and capitals (Signal Freq, Rx Gain, Peak Gain, Angle). The
+  L22-L23 and L24 Lab pages are the worked examples.
 - Bold for control names, defined terms and step leads only; italics almost
   never (VOICE.md 35).
 
