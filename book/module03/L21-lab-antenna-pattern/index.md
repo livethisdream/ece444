@@ -126,8 +126,8 @@ and on the right as seen from the HB100.
    the source distance.
 
    <div class="rec" data-lab="L21">
-   <label>Step 2: Signal Freq <input data-field="f.sig" data-label="Step 2: Signal Freq"></label>
-   <label>Step 2: source distance <input data-field="f.dist" data-label="Step 2: source distance"></label>
+   <label>Step 2: Signal Freq (GHz) <input data-field="f.sig"></label>
+   <label>Step 2: source distance (m) <input data-field="f.dist"></label>
    </div>
 3. **Calibrate.** Press **Calibrate** and wait for it to finish, with the
    HB100 still at boresight. Calibrate reads the frequency that Find HB100
@@ -143,7 +143,7 @@ and on the right as seen from the HB100.
    the gain down and start again.
 
    <div class="rec" data-lab="L21">
-   <label>Step 5: Rx Gain (dB) <input data-field="f.gain" data-label="Step 5: Rx Gain (dB)"></label>
+   <label>Step 5: Rx Gain (dB) <input data-field="f.gain"></label>
    </div>
 6. **Watch the beam sweep.** Turn on **Show Peak Angle Marker** under **Plot
    Options**, and open the **Rectangular** tab.
@@ -166,9 +166,9 @@ and on the right as seen from the HB100.
    source angle confirms the sign and the centering.
 
    <div class="rec" data-lab="L21">
-   <label>Source at +30°: Angle <input data-field="a.p30" data-label="Step 7, source at +30° (stand −30): Angle"></label>
-   <label>Source at −30°: Angle <input data-field="a.m30" data-label="Step 8, source at −30° (stand +30): Angle"></label>
-   <label>Source at 0°: Angle <input data-field="a.0" data-label="Step 8, source at 0°: Angle"></label>
+   <label>Step 7: Angle with the source at +30° (°) <input data-field="a.p30"></label>
+   <label>Step 8: Angle with the source at −30° (°) <input data-field="a.m30"></label>
+   <label>Step 8: Angle with the source at 0° (°) <input data-field="a.0"></label>
    </div>
 9. **The beam sweep.** At $0^\circ$, record the peak, the half-power
    beamwidth, and both first sidelobes, and compare them with your Part 1
@@ -176,10 +176,10 @@ and on the right as seen from the HB100.
    reference for the other two runs.
 
    <div class="rec" data-lab="L21">
-   <label>Step 9: peak (dBFS) <input data-field="b.peak" data-label="Step 9: peak (dBFS)"></label>
-   <label>Step 9: half-power beamwidth <input data-field="b.hpbw" data-label="Step 9: half-power beamwidth"></label>
-   <label>Step 9: left first sidelobe (dBc) <input data-field="b.left" data-label="Step 9: left first sidelobe (dBc)"></label>
-   <label>Step 9: right first sidelobe (dBc) <input data-field="b.right" data-label="Step 9: right first sidelobe (dBc)"></label>
+   <label>Step 9: peak (dBFS) <input data-field="b.peak"></label>
+   <label>Step 9: HPBW (°) <input data-field="b.hpbw"></label>
+   <label>Step 9: left first sidelobe (dBc) <input data-field="b.left"></label>
+   <label>Step 9: right first sidelobe (dBc) <input data-field="b.right"></label>
    </div>
 ::::
 
@@ -200,7 +200,7 @@ and on the right as seen from the HB100.
     shows. If it is below the minimum you found in Part 1, plan a slower sweep.
 
     <div class="rec" data-lab="L21">
-    <label>Step 11: updates per second <input data-field="f.rate" data-label="Step 11: updates per second"></label>
+    <label>Step 11: Updates/s <input data-field="f.rate"></label>
     </div>
 12. **Pick up the source.** Press **Stop**. Lift the HB100 off its tripod and
     hold it over the $-90^\circ$ mark, on the E1 side, aimed at the array.
@@ -221,21 +221,21 @@ and on the right as seen from the HB100.
     compares it with the stand's.
 
     <div class="rec" data-lab="L21">
-    <label>Sweep 1: time (s) <input data-field="c.w1.time" data-label="Step 15, sweep 1: time (s)"></label>
-    <label>Sweep 1: peak (dBFS) <input data-field="c.w1.peak" data-label="Step 15, sweep 1: peak (dBFS)"></label>
-    <label>Sweep 1: left first sidelobe (dBc) <input data-field="c.w1.left" data-label="Step 15, sweep 1: left first sidelobe (dBc)"></label>
-    <label>Sweep 1: right first sidelobe (dBc) <input data-field="c.w1.right" data-label="Step 15, sweep 1: right first sidelobe (dBc)"></label>
-    <label>Sweep 2: time (s) <input data-field="c.w2.time" data-label="Step 15, sweep 2: time (s)"></label>
-    <label>Sweep 2: peak (dBFS) <input data-field="c.w2.peak" data-label="Step 15, sweep 2: peak (dBFS)"></label>
-    <label>Sweep 2: left first sidelobe (dBc) <input data-field="c.w2.left" data-label="Step 15, sweep 2: left first sidelobe (dBc)"></label>
-    <label>Sweep 2: right first sidelobe (dBc) <input data-field="c.w2.right" data-label="Step 15, sweep 2: right first sidelobe (dBc)"></label>
-    <label>Sweep 3: time (s) <input data-field="c.w3.time" data-label="Step 15, sweep 3: time (s)"></label>
-    <label>Sweep 3: peak (dBFS) <input data-field="c.w3.peak" data-label="Step 15, sweep 3: peak (dBFS)"></label>
-    <label>Sweep 3: left first sidelobe (dBc) <input data-field="c.w3.left" data-label="Step 15, sweep 3: left first sidelobe (dBc)"></label>
-    <label>Sweep 3: right first sidelobe (dBc) <input data-field="c.w3.right" data-label="Step 15, sweep 3: right first sidelobe (dBc)"></label>
-    <label>Spread: peak (dB) <input data-field="c.spread.peak" data-label="Step 15, spread of the three sweeps: peak (dB)"></label>
-    <label>Spread: left sidelobe (dB) <input data-field="c.spread.left" data-label="Step 15, spread of the three sweeps: left sidelobe (dB)"></label>
-    <label>Spread: right sidelobe (dB) <input data-field="c.spread.right" data-label="Step 15, spread of the three sweeps: right sidelobe (dB)"></label>
+    <label>Step 15: sweep 1 time (s) <input data-field="c.w1.time"></label>
+    <label>Step 15: sweep 1 peak (dBFS) <input data-field="c.w1.peak"></label>
+    <label>Step 15: sweep 1 left first sidelobe (dBc) <input data-field="c.w1.left"></label>
+    <label>Step 15: sweep 1 right first sidelobe (dBc) <input data-field="c.w1.right"></label>
+    <label>Step 15: sweep 2 time (s) <input data-field="c.w2.time"></label>
+    <label>Step 15: sweep 2 peak (dBFS) <input data-field="c.w2.peak"></label>
+    <label>Step 15: sweep 2 left first sidelobe (dBc) <input data-field="c.w2.left"></label>
+    <label>Step 15: sweep 2 right first sidelobe (dBc) <input data-field="c.w2.right"></label>
+    <label>Step 15: sweep 3 time (s) <input data-field="c.w3.time"></label>
+    <label>Step 15: sweep 3 peak (dBFS) <input data-field="c.w3.peak"></label>
+    <label>Step 15: sweep 3 left first sidelobe (dBc) <input data-field="c.w3.left"></label>
+    <label>Step 15: sweep 3 right first sidelobe (dBc) <input data-field="c.w3.right"></label>
+    <label>Step 15: spread in the peak (dB) <input data-field="c.spread.peak"></label>
+    <label>Step 15: spread in the left sidelobe (dB) <input data-field="c.spread.left"></label>
+    <label>Step 15: spread in the right sidelobe (dB) <input data-field="c.spread.right"></label>
     </div>
 
 <img src="../../viz/img/L21-tracking-tab.svg"
@@ -256,7 +256,7 @@ and on the right as seen from the HB100.
     the reference; every level in Tables D and E is relative to it.
 
     <div class="rec" data-lab="L21">
-    <label>Step 16: reference level (dBFS) <input data-field="d.ref" data-label="Step 16: reference level, kit at 0°, trace at 0° steer (dBFS)"></label>
+    <label>Step 16: reference level (dBFS) <input data-field="d.ref"></label>
     </div>
 17. **Turn through the marks.** Turn the kit to each $10^\circ$ mark from
     $-90^\circ$ to $+90^\circ$, every second click of the stand. At each,
@@ -270,44 +270,44 @@ and on the right as seen from the HB100.
     and keep the cables slack enough to follow it.
 
     <div class="rec" data-lab="L21">
-    <label>Source at −90°: beam at 0° <input data-field="d.m90.level" data-label="Step 17, source at −90°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.m90.level" data-label="Step 17, source at −90°: level, beam at 30° (Table E)"></label>
-    <label>Source at −80°: beam at 0° <input data-field="d.m80.level" data-label="Step 17, source at −80°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.m80.level" data-label="Step 17, source at −80°: level, beam at 30° (Table E)"></label>
-    <label>Source at −70°: beam at 0° <input data-field="d.m70.level" data-label="Step 17, source at −70°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.m70.level" data-label="Step 17, source at −70°: level, beam at 30° (Table E)"></label>
-    <label>Source at −60°: beam at 0° <input data-field="d.m60.level" data-label="Step 17, source at −60°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.m60.level" data-label="Step 17, source at −60°: level, beam at 30° (Table E)"></label>
-    <label>Source at −50°: beam at 0° <input data-field="d.m50.level" data-label="Step 17, source at −50°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.m50.level" data-label="Step 17, source at −50°: level, beam at 30° (Table E)"></label>
-    <label>Source at −40°: beam at 0° <input data-field="d.m40.level" data-label="Step 17, source at −40°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.m40.level" data-label="Step 17, source at −40°: level, beam at 30° (Table E)"></label>
-    <label>Source at −30°: beam at 0° <input data-field="d.m30.level" data-label="Step 17, source at −30°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.m30.level" data-label="Step 17, source at −30°: level, beam at 30° (Table E)"></label>
-    <label>Source at −20°: beam at 0° <input data-field="d.m20.level" data-label="Step 17, source at −20°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.m20.level" data-label="Step 17, source at −20°: level, beam at 30° (Table E)"></label>
-    <label>Source at −10°: beam at 0° <input data-field="d.m10.level" data-label="Step 17, source at −10°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.m10.level" data-label="Step 17, source at −10°: level, beam at 30° (Table E)"></label>
-    <label>Source at 0°: beam at 0° <input data-field="d.0.level" data-label="Step 17, source at 0°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.0.level" data-label="Step 17, source at 0°: level, beam at 30° (Table E)"></label>
-    <label>Source at +10°: beam at 0° <input data-field="d.p10.level" data-label="Step 17, source at +10°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.p10.level" data-label="Step 17, source at +10°: level, beam at 30° (Table E)"></label>
-    <label>Source at +20°: beam at 0° <input data-field="d.p20.level" data-label="Step 17, source at +20°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.p20.level" data-label="Step 17, source at +20°: level, beam at 30° (Table E)"></label>
-    <label>Source at +30°: beam at 0° <input data-field="d.p30.level" data-label="Step 17, source at +30°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.p30.level" data-label="Step 17, source at +30°: level, beam at 30° (Table E)"></label>
-    <label>Source at +40°: beam at 0° <input data-field="d.p40.level" data-label="Step 17, source at +40°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.p40.level" data-label="Step 17, source at +40°: level, beam at 30° (Table E)"></label>
-    <label>Source at +50°: beam at 0° <input data-field="d.p50.level" data-label="Step 17, source at +50°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.p50.level" data-label="Step 17, source at +50°: level, beam at 30° (Table E)"></label>
-    <label>Source at +60°: beam at 0° <input data-field="d.p60.level" data-label="Step 17, source at +60°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.p60.level" data-label="Step 17, source at +60°: level, beam at 30° (Table E)"></label>
-    <label>Source at +70°: beam at 0° <input data-field="d.p70.level" data-label="Step 17, source at +70°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.p70.level" data-label="Step 17, source at +70°: level, beam at 30° (Table E)"></label>
-    <label>Source at +80°: beam at 0° <input data-field="d.p80.level" data-label="Step 17, source at +80°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.p80.level" data-label="Step 17, source at +80°: level, beam at 30° (Table E)"></label>
-    <label>Source at +90°: beam at 0° <input data-field="d.p90.level" data-label="Step 17, source at +90°: level, beam at 0° (Table D)"></label>
-    <label>beam at 30° <input data-field="e.p90.level" data-label="Step 17, source at +90°: level, beam at 30° (Table E)"></label>
+    <label>Step 17: level at −90°, beam at 0° (dB) <input data-field="d.m90.level"></label>
+    <label>Step 17: level at −90°, beam at 30° (dB) <input data-field="e.m90.level"></label>
+    <label>Step 17: level at −80°, beam at 0° (dB) <input data-field="d.m80.level"></label>
+    <label>Step 17: level at −80°, beam at 30° (dB) <input data-field="e.m80.level"></label>
+    <label>Step 17: level at −70°, beam at 0° (dB) <input data-field="d.m70.level"></label>
+    <label>Step 17: level at −70°, beam at 30° (dB) <input data-field="e.m70.level"></label>
+    <label>Step 17: level at −60°, beam at 0° (dB) <input data-field="d.m60.level"></label>
+    <label>Step 17: level at −60°, beam at 30° (dB) <input data-field="e.m60.level"></label>
+    <label>Step 17: level at −50°, beam at 0° (dB) <input data-field="d.m50.level"></label>
+    <label>Step 17: level at −50°, beam at 30° (dB) <input data-field="e.m50.level"></label>
+    <label>Step 17: level at −40°, beam at 0° (dB) <input data-field="d.m40.level"></label>
+    <label>Step 17: level at −40°, beam at 30° (dB) <input data-field="e.m40.level"></label>
+    <label>Step 17: level at −30°, beam at 0° (dB) <input data-field="d.m30.level"></label>
+    <label>Step 17: level at −30°, beam at 30° (dB) <input data-field="e.m30.level"></label>
+    <label>Step 17: level at −20°, beam at 0° (dB) <input data-field="d.m20.level"></label>
+    <label>Step 17: level at −20°, beam at 30° (dB) <input data-field="e.m20.level"></label>
+    <label>Step 17: level at −10°, beam at 0° (dB) <input data-field="d.m10.level"></label>
+    <label>Step 17: level at −10°, beam at 30° (dB) <input data-field="e.m10.level"></label>
+    <label>Step 17: level at 0°, beam at 0° (dB) <input data-field="d.0.level"></label>
+    <label>Step 17: level at 0°, beam at 30° (dB) <input data-field="e.0.level"></label>
+    <label>Step 17: level at +10°, beam at 0° (dB) <input data-field="d.p10.level"></label>
+    <label>Step 17: level at +10°, beam at 30° (dB) <input data-field="e.p10.level"></label>
+    <label>Step 17: level at +20°, beam at 0° (dB) <input data-field="d.p20.level"></label>
+    <label>Step 17: level at +20°, beam at 30° (dB) <input data-field="e.p20.level"></label>
+    <label>Step 17: level at +30°, beam at 0° (dB) <input data-field="d.p30.level"></label>
+    <label>Step 17: level at +30°, beam at 30° (dB) <input data-field="e.p30.level"></label>
+    <label>Step 17: level at +40°, beam at 0° (dB) <input data-field="d.p40.level"></label>
+    <label>Step 17: level at +40°, beam at 30° (dB) <input data-field="e.p40.level"></label>
+    <label>Step 17: level at +50°, beam at 0° (dB) <input data-field="d.p50.level"></label>
+    <label>Step 17: level at +50°, beam at 30° (dB) <input data-field="e.p50.level"></label>
+    <label>Step 17: level at +60°, beam at 0° (dB) <input data-field="d.p60.level"></label>
+    <label>Step 17: level at +60°, beam at 30° (dB) <input data-field="e.p60.level"></label>
+    <label>Step 17: level at +70°, beam at 0° (dB) <input data-field="d.p70.level"></label>
+    <label>Step 17: level at +70°, beam at 30° (dB) <input data-field="e.p70.level"></label>
+    <label>Step 17: level at +80°, beam at 0° (dB) <input data-field="d.p80.level"></label>
+    <label>Step 17: level at +80°, beam at 30° (dB) <input data-field="e.p80.level"></label>
+    <label>Step 17: level at +90°, beam at 0° (dB) <input data-field="d.p90.level"></label>
+    <label>Step 17: level at +90°, beam at 30° (dB) <input data-field="e.p90.level"></label>
     </div>
 18. **Find each lobe and null.** Turn slowly through each lobe and null of
     both beams and record the source angle and level of each extreme, the
@@ -321,28 +321,28 @@ and on the right as seen from the HB100.
     of your sweeps by hand.
 
     <div class="rec" data-lab="L21">
-    <label>Beam at 0°, main lobe: angle <input data-field="d.main.angle" data-label="Step 18, Beam at 0°, main lobe: source angle"></label>
-    <label>Beam at 0°, main lobe: level <input data-field="d.main.level" data-label="Step 18, Beam at 0°, main lobe: level"></label>
-    <label>Beam at 0°, left first null: angle <input data-field="d.lnull.angle" data-label="Step 18, Beam at 0°, left first null: source angle"></label>
-    <label>Beam at 0°, left first null: level <input data-field="d.lnull.level" data-label="Step 18, Beam at 0°, left first null: level"></label>
-    <label>Beam at 0°, right first null: angle <input data-field="d.rnull.angle" data-label="Step 18, Beam at 0°, right first null: source angle"></label>
-    <label>Beam at 0°, right first null: level <input data-field="d.rnull.level" data-label="Step 18, Beam at 0°, right first null: level"></label>
-    <label>Beam at 0°, left first sidelobe: angle <input data-field="d.lsl.angle" data-label="Step 18, Beam at 0°, left first sidelobe: source angle"></label>
-    <label>Beam at 0°, left first sidelobe: level <input data-field="d.lsl.level" data-label="Step 18, Beam at 0°, left first sidelobe: level"></label>
-    <label>Beam at 0°, right first sidelobe: angle <input data-field="d.rsl.angle" data-label="Step 18, Beam at 0°, right first sidelobe: source angle"></label>
-    <label>Beam at 0°, right first sidelobe: level <input data-field="d.rsl.level" data-label="Step 18, Beam at 0°, right first sidelobe: level"></label>
-    <label>Beam at 30°, main lobe: angle <input data-field="e.main.angle" data-label="Step 18, Beam at 30°, main lobe: source angle"></label>
-    <label>Beam at 30°, main lobe: level <input data-field="e.main.level" data-label="Step 18, Beam at 30°, main lobe: level"></label>
-    <label>Beam at 30°, inner first null: angle <input data-field="e.inull.angle" data-label="Step 18, Beam at 30°, inner first null: source angle"></label>
-    <label>Beam at 30°, inner first null: level <input data-field="e.inull.level" data-label="Step 18, Beam at 30°, inner first null: level"></label>
-    <label>Beam at 30°, outer first null: angle <input data-field="e.onull.angle" data-label="Step 18, Beam at 30°, outer first null: source angle"></label>
-    <label>Beam at 30°, outer first null: level <input data-field="e.onull.level" data-label="Step 18, Beam at 30°, outer first null: level"></label>
-    <label>Beam at 30°, inner first sidelobe: angle <input data-field="e.isl.angle" data-label="Step 18, Beam at 30°, inner first sidelobe: source angle"></label>
-    <label>Beam at 30°, inner first sidelobe: level <input data-field="e.isl.level" data-label="Step 18, Beam at 30°, inner first sidelobe: level"></label>
-    <label>Beam at 30°, outer first sidelobe: angle <input data-field="e.osl.angle" data-label="Step 18, Beam at 30°, outer first sidelobe: source angle"></label>
-    <label>Beam at 30°, outer first sidelobe: level <input data-field="e.osl.level" data-label="Step 18, Beam at 30°, outer first sidelobe: level"></label>
-    <label>Main lobe, read again: level <input data-field="d.rep.main" data-label="Step 18, Beam at 0°, main lobe read again: level"></label>
-    <label>Right first sidelobe, read again: level <input data-field="d.rep.rsl" data-label="Step 18, Beam at 0°, right first sidelobe read again: level"></label>
+    <label>Step 18: main lobe angle, beam at 0° (°) <input data-field="d.main.angle"></label>
+    <label>Step 18: main lobe level, beam at 0° (dB) <input data-field="d.main.level"></label>
+    <label>Step 18: left first null angle, beam at 0° (°) <input data-field="d.lnull.angle"></label>
+    <label>Step 18: left first null level, beam at 0° (dB) <input data-field="d.lnull.level"></label>
+    <label>Step 18: right first null angle, beam at 0° (°) <input data-field="d.rnull.angle"></label>
+    <label>Step 18: right first null level, beam at 0° (dB) <input data-field="d.rnull.level"></label>
+    <label>Step 18: left first sidelobe angle, beam at 0° (°) <input data-field="d.lsl.angle"></label>
+    <label>Step 18: left first sidelobe level, beam at 0° (dB) <input data-field="d.lsl.level"></label>
+    <label>Step 18: right first sidelobe angle, beam at 0° (°) <input data-field="d.rsl.angle"></label>
+    <label>Step 18: right first sidelobe level, beam at 0° (dB) <input data-field="d.rsl.level"></label>
+    <label>Step 18: main lobe angle, beam at 30° (°) <input data-field="e.main.angle"></label>
+    <label>Step 18: main lobe level, beam at 30° (dB) <input data-field="e.main.level"></label>
+    <label>Step 18: inner first null angle, beam at 30° (°) <input data-field="e.inull.angle"></label>
+    <label>Step 18: inner first null level, beam at 30° (dB) <input data-field="e.inull.level"></label>
+    <label>Step 18: outer first null angle, beam at 30° (°) <input data-field="e.onull.angle"></label>
+    <label>Step 18: outer first null level, beam at 30° (dB) <input data-field="e.onull.level"></label>
+    <label>Step 18: inner first sidelobe angle, beam at 30° (°) <input data-field="e.isl.angle"></label>
+    <label>Step 18: inner first sidelobe level, beam at 30° (dB) <input data-field="e.isl.level"></label>
+    <label>Step 18: outer first sidelobe angle, beam at 30° (°) <input data-field="e.osl.angle"></label>
+    <label>Step 18: outer first sidelobe level, beam at 30° (dB) <input data-field="e.osl.level"></label>
+    <label>Step 18: main lobe level read again, beam at 0° (dB) <input data-field="d.rep.main"></label>
+    <label>Step 18: right first sidelobe level read again, beam at 0° (dB) <input data-field="d.rep.rsl"></label>
     </div>
 19. **Restore.** Turn the kit back to $0^\circ$ before you leave.
 ::::
@@ -368,8 +368,7 @@ This frame collects every box you filled in on this page. Your entries stay in t
 browser only, saved as you type. **Download my packet** writes them into the Measured
 cells of the blank packet and saves the PDF. The download locks every field, the Predicted cells and Part 3
 included, so type those into your own copy of the packet first, then use **Fill
-my own copy** and choose that file: your predictions and Part 3 are kept, and
-the page adds your measurements beside them. If you work Parts 1 and 3 on paper, download the packet
+my own copy** and choose that file: the page keeps your predictions and Part 3, and adds your measurements beside them. If you work Parts 1 and 3 on paper, download the packet
 and write on the printout. Upload one PDF to Gradescope. **Export entries**
 saves a small backup file you can **Import** on another laptop or after
 clearing your browser. The boxes are optional: the blank packet is in the next
@@ -393,8 +392,7 @@ The L21 Lab packet is one submission for the whole lab, turned in complete befor
 ::::{frame} For Part 3
 :class: read-only
 
-Part 3 is done after class with your Part 2 entries and your Part 1
-predictions beside you. Convert the lobe levels of Tables D and E to dBc
+Do Part 3 after class, with your Part 2 entries and your Part 1 predictions beside you. Convert the lobe levels of Tables D and E to dBc
 first: subtract each table's main-lobe level. Then it asks about three
 comparisons:
 

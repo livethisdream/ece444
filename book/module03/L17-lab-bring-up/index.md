@@ -369,7 +369,7 @@ curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/scripts/p
 :::
 
 <div class="rec" data-lab="L17">
-<label>Kit number NN <input data-field="b.kit"></label>
+<label>Step 16: kit number NN <input data-field="b.kit"></label>
 <label>Step 17: the last line <code>provision.sh</code> printed <input data-field="b.provision"></label>
 <label>Step 18: what <code>hostname</code> prints <input data-field="b.hostname"></label>
 </div>
@@ -510,9 +510,9 @@ In order. Let each one finish before the next.
 :::
 
 <div class="rec" data-lab="L17">
-<label>Step 22: the frequency Find HB100 reported <input data-field="b.freq"></label>
-<label>Step 23: the IF Characterize IF chose <input data-field="b.if"></label>
-<label>Step 24: Calibrate Phaser ran to completion (yes or no) <input data-field="b.cal"></label>
+<label>Step 22: frequency <b>Find HB100</b> reported (GHz) <input data-field="b.freq"></label>
+<label>Step 23: IF <b>Characterize IF</b> chose (GHz) <input data-field="b.if"></label>
+<label>Step 24: <b>Calibrate Phaser</b> ran to completion (yes or no) <input data-field="b.cal"></label>
 </div>
 
 
@@ -633,9 +633,9 @@ Expect 20 dB or more above the floor.
 
 <div class="rec" data-lab="L17">
 <label>Step 27: Rx Gain used (dB) <input data-field="c.rxgain"></label>
-<label>Source distance (m) <input data-field="c.distance"></label>
+<label>Step 27: source distance (m) <input data-field="c.distance"></label>
 <label>Step 28: peak position (MHz) <input data-field="c.fft.pos"></label>
-<label>Step 28: peak (dBFS) <input data-field="c.fft.peak"></label>
+<label>Step 28: peak level (dBFS) <input data-field="c.fft.peak"></label>
 <label>Step 28: floor (dBFS) <input data-field="c.fft.floor"></label>
 <label>Step 28: separation, peak minus floor (dB) <input data-field="c.fft.sep"></label>
 </div>
@@ -700,7 +700,7 @@ Expect Angle within $2^\circ$ of $0^\circ$.
 :::
 
 <div class="rec" data-lab="L17">
-<label>Step 30: Angle at boresight <input data-field="c.rect.bore.angle"></label>
+<label>Step 30: Angle at boresight (°) <input data-field="c.rect.bore.angle"></label>
 <label>Step 30: Peak Gain at boresight (dB) <input data-field="c.rect.bore.gain"></label>
 </div>
 
@@ -718,10 +718,10 @@ each step, so the trace peaks where the beam points at the source.
 
 <div class="rec" data-lab="L17">
 <label>Step 31: the end it moved toward, E1 or E8 <input data-field="c.rect.side"></label>
-<label>Step 31: Angle, moved <input data-field="c.rect.side.angle"></label>
-<label>Step 31: Peak Gain, moved (dB) <input data-field="c.rect.side.gain"></label>
-<label>Step 32: Angle, back at boresight <input data-field="c.rect.back.angle"></label>
-<label>Step 32: Peak Gain, back at boresight (dB) <input data-field="c.rect.back.gain"></label>
+<label>Step 31: Angle with the source moved (°) <input data-field="c.rect.side.angle"></label>
+<label>Step 31: Peak Gain with the source moved (dB) <input data-field="c.rect.side.gain"></label>
+<label>Step 32: Angle back at boresight (°) <input data-field="c.rect.back.angle"></label>
+<label>Step 32: Peak Gain back at boresight (dB) <input data-field="c.rect.back.gain"></label>
 </div>
 
 

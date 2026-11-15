@@ -51,7 +51,7 @@ AF_N(\psi) &= \frac{\sin(N\psi/2)}{N \sin(\psi/2)}
 \end{aligned}
 $$
 
-- Shift $\psi$ by $2\pi$ and $\vert AF_N \vert$ is unchanged.
+- Shift $\psi$ by $2\pi$ and $\vert AF_N \vert$ does not change.
 - Real angles reach a $2kd$-wide window, **visible space**; a repeat inside it is a **grating lobe**.
 :::
 :::{present}
@@ -68,7 +68,7 @@ and the uniform array factor built on it,
 
 $$AF_N(\psi) = \frac{\sin(N\psi/2)}{N \sin(\psi/2)}.$$
 
-Replace $\psi$ by $\psi + 2\pi$ and both sines flip sign together, so $\vert AF_N \vert$ is unchanged. The array factor is periodic in $\psi$ with period $2\pi$. The main lobe is the peak at $\psi = 0$, and the same peak reappears at $\psi = \pm 2\pi, \pm 4\pi, \ldots$ — every one of them a full-height beam.
+Replace $\psi$ by $\psi + 2\pi$ and both sines flip sign together, so $\vert AF_N \vert$ does not change. The array factor is periodic in $\psi$ with period $2\pi$. The main lobe is the peak at $\psi = 0$, and the same peak reappears at $\psi = \pm 2\pi, \pm 4\pi, \ldots$ — every one of them a full-height beam.
 
 Whether we ever see those repeats depends on how much of the $\psi$ axis the real angles $-90^\circ \le \theta \le +90^\circ$ reach. We call that span **visible space**, and the spacing sets its width: as $\sin\theta$ runs from $-1$ to $+1$, $\psi$ runs over a window of total width $2kd = 4\pi d/\lambda$. Widening $d$ brings more periods of the array factor into visible space. A repeat that lands inside visible space is a **grating lobe**. The figure draws both cases on the same axis at $10.0\ \text{GHz}$: at $14\ \text{mm}$ the window stops at $\pm 168^\circ$, short of the repeats at $\pm 360^\circ$, and at $42\ \text{mm}$ it reaches $\pm 504^\circ$ and takes in both.
 ::::
@@ -174,7 +174,7 @@ $$
 The wider we intend to scan, the closer together the elements must be. Broadside operation tolerates $d < \lambda$. Scanning to $\pm 45^\circ$ demands $d < 0.586\lambda$, and $\pm 60^\circ$ demands $d < 0.536\lambda$. Take the criterion to its limit, $\theta_0 \to 90^\circ$, and you get $d < \lambda/2$ — which is why half-wavelength spacing is the default in every scanning array. It is grating-lobe-free at any scan angle we can command. The figure, from Lesson 16, draws the criterion as a boundary: any spacing and scan angle below the curve is free of grating lobes, and the PHASER's $14\ \text{mm}$ pitch, under half a wavelength at every kit frequency, sits below it everywhere.
 
 ```{note}
-Grating lobes are not always a defect. Interferometers and sparse radio-astronomy arrays use them on purpose, resolving fine detail with a small number of widely spaced elements and removing the ambiguity by other means. A designer can choose grating lobes; they should never be found after the array is built.
+Grating lobes are not always a defect. Interferometers and sparse radio-astronomy arrays use them on purpose, resolving fine detail with a small number of widely spaced elements and removing the ambiguity by other means. A designer can choose grating lobes, but should never discover them after building the array.
 ```
 ::::
 
@@ -202,7 +202,7 @@ kd \sin\theta &= k_0 d \sin\theta_0 \\
 \end{aligned}
 $$
 
-- The phase ramp is computed once, at $f_0$.
+- The beam-steering computer sets the phase ramp once, at $f_0$.
 - A signal at another frequency adds in phase at another angle.
 :::
 :::{present}
@@ -211,7 +211,7 @@ $$
      style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-The beam-steering computer sets each phase shifter once, in degrees. The angle that setting steers to is not fixed, because the phase a given path length produces depends on frequency. The figure shows the result across the aperture for a signal at $10.0\ \text{GHz}$ with the phases computed $500\ \text{MHz}$ below it, which is what the GUI's **Signal BW** setting does: the shifters apply $112.9^\circ$ per element, set for $45^\circ$ at $9.5\ \text{GHz}$, and the $10.0\ \text{GHz}$ signal needs $118.8^\circ$ per element to add in phase at $45^\circ$. The difference, $5.9^\circ$ per element, is itself a straight ramp, and a straight ramp is a steer: the beam moves to a new angle and stays intact. <a href="../L18-beam-steering/index.html#frame-time-delay-versus-phase-delay">Lesson 18</a> named the result, beam squint, and the <a href="../L18-lab-beam-steering/index.html">L18 Lab</a> showed it once on the kit; here we compute it.
+The beam-steering computer sets each phase shifter once, in degrees. The angle that setting steers to moves with frequency, because the phase a given path length produces depends on frequency. The figure shows the result across the aperture for a signal at $10.0\ \text{GHz}$ with the phases computed $500\ \text{MHz}$ below it, which is what the GUI's **Signal BW** setting does: the shifters apply $112.9^\circ$ per element, set for $45^\circ$ at $9.5\ \text{GHz}$, and the $10.0\ \text{GHz}$ signal needs $118.8^\circ$ per element to add in phase at $45^\circ$. The difference, $5.9^\circ$ per element, is itself a straight ramp, and a straight ramp is a steer: the beam moves to a new angle and stays intact. <a href="../L18-beam-steering/index.html#frame-time-delay-versus-phase-delay">Lesson 18</a> named the result, beam squint, and the <a href="../L18-lab-beam-steering/index.html">L18 Lab</a> showed it once on the kit; here we compute it.
 
 Suppose the beam-steering computer sets element $n$ to a lag of $n\ k_0 d \sin\theta_0$, computed at the design frequency $f_0$ where $k_0 = 2\pi/\lambda_0$. Now a signal arrives at some other frequency $f$ in the band. The elements add in phase toward whatever angle $\theta$ makes the arrival phase cancel the applied lag:
 
@@ -302,7 +302,7 @@ With the phases set $1\ \text{GHz}$ low, at $9.0\ \text{GHz}$, the beam lands at
 - **Communications**: gain falls at the band edges, a tilt across the channel.
 :::
 
-Squint affects two kinds of system differently. A **wideband radar** transmits a pulse whose spectrum is the bandwidth; each frequency component in that pulse points somewhere slightly different, so the pulse's energy is spread in angle and the effective beam is broadened and depointed. A **communications link** running a modulated carrier loses gain at the band edges relative to the center, which shows up as amplitude tilt across the channel rather than as an angle error.
+Squint affects two kinds of system differently. A **wideband radar** transmits a pulse whose spectrum is the bandwidth; each frequency component in that pulse points somewhere slightly different, so the pulse's energy spreads in angle and the effective beam broadens and shifts off the commanded angle. A **communications link** running a modulated carrier loses gain at the band edges relative to the center, which shows up as amplitude tilt across the channel rather than as an angle error.
 ::::
 
 ::::{frame} True Time Delay
@@ -386,7 +386,7 @@ $$
      style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-A real controller does better than a uniform quantized increment. It computes the exact ramp for every element, then rounds each element independently, which puts the beam much closer to the commanded angle. What is left behind is a staircase: the difference between the exact ramp and the rounded one is a sawtooth error, bounded by half an LSB, that repeats across the aperture. A periodic phase error radiates, and where it radiates is a **quantization sidelobe**. The figure shows the staircase for a beam at $28^\circ$ with 3 bits at $10.0\ \text{GHz}$: the exact ramp climbs $78.9^\circ$ per element, the shifters can only set multiples of $45^\circ$, and the error left at each element rises and falls within $\pm 22.5^\circ$.
+A real controller does better than a uniform quantized increment. It computes the exact ramp for every element, then rounds each element independently, which puts the beam much closer to the commanded angle. What remains is a staircase: the difference between the exact ramp and the rounded one is a sawtooth error, bounded by half an LSB, that repeats across the aperture. A periodic phase error radiates, and where it radiates is a **quantization sidelobe**. The figure shows the staircase for a beam at $28^\circ$ with 3 bits at $10.0\ \text{GHz}$: the exact ramp climbs $78.9^\circ$ per element, the shifters can only set multiples of $45^\circ$, and the error left at each element rises and falls within $\pm 22.5^\circ$.
 
 Its level follows from the size of the error. Rounding leaves at most half an LSB at each element. For a small phase error $e^{j\phi} \approx 1 + j\phi$, so the error adds a small field to each element in proportion to $\phi$, and the lobe that field radiates scales with the sawtooth's peak:
 
@@ -400,7 +400,7 @@ $$
 
 Each extra bit halves the error, which halves the lobe's field and lowers the **quantization sidelobe level (QSLL)** by $6$ dB. That gives the rule of thumb: 5 bits puts a lobe near $-30$ dB and 6 bits near $-36$ dB. Treat this as an RMS estimate for a large array. On an aperture as short as eight elements there are only a couple of sawtooth periods, so individual lobes scatter several dB either side of the rule. Taken at face value, the rule says that from 3 bits up the quantization lobes drop below the array's own $-13$ dB sidelobes and no longer set the sidelobe level.
 
-Whether a given beam shows a quantization lobe at all depends on how its ramp falls on the grid, not only on the bit count. The L22–L23 Lab is built around that. It holds the beam at $15^\circ$ with the Blackman taper, so every true sidelobe sits under the noise floor and any lobe that rises comes from rounding. It sweeps the source in azimuth on **Signal vs Time** instead of sweeping the beam, so the rounded weights stay fixed while you read the pattern they make. Part 1 of the packet predicts, for each bit count, the strongest lobe that trace shows and where it sits. A lobe the azimuth sweep shows reads a few dB under the array factor's value, because a source swept in azimuth also crosses each patch's own pattern, as in the L21 Lab.
+Whether a given beam shows a quantization lobe at all depends on how its ramp falls on the grid, not only on the bit count. The L22–L23 Lab tests that. It holds the beam at $15^\circ$ with the Blackman taper, so every true sidelobe sits under the noise floor and any lobe that rises comes from rounding. It sweeps the source in azimuth on **Signal vs Time** instead of sweeping the beam, so the rounded weights stay fixed while you read the pattern they make. Part 1 of the packet predicts, for each bit count, the strongest lobe that trace shows and where it sits. A lobe the azimuth sweep shows reads a few dB under the array factor's value, because a source swept in azimuth also crosses each patch's own pattern, as in the L21 Lab.
 
 To predict a quantization lobe, divide the ramp by the LSB. If the ramp is close to a whole number of LSBs, every element rounds by only a few degrees, and the error is too small to raise a lobe out of the floor. If it is close to a whole number and a half, every other element rounds by almost half an LSB in the same direction, so the error repeats every two elements. A pattern that repeats every two elements radiates $180^\circ$ of $\psi$ away from the beam:
 

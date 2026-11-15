@@ -20,7 +20,8 @@ FAIL (each one a rule Neil has stated):
   table-pipe   | inside $...$ on a table row, which splits the cell; use \\vert
 
 WARN (read each one; a regex cannot decide them):
-  passive      VOICE 9's passive tells
+  passive      VOICE 9's passive tells, irregular participles included (found,
+               built, made, shown, ...)
   money        VOICE 20's money metaphors (buys, costs, pays, price, ...)
   bench        VOICE 28, never "bench" (Neil, 2026-11-07). WARN, not FAIL, only
                until the Module 4 pages (L28-L31) are clean; then FAIL
@@ -71,7 +72,16 @@ FAIL = {
 }
 MD_ONLY = {"math-space": re.compile(r"\\[,;](?![A-Za-z])")}
 WARN = {
-    "passive": re.compile(r"\b(is|are|was|were|be|been) +\w+(ed|en)\b"),
+    # Regular participles, plus the irregular ones a lesson uses ("be found",
+    # "is built": Neil found that pair in L23, 2026-11-15), with one adverb
+    # allowed between ("should never be found", "is not shown").
+    "passive": re.compile(
+        r"\b(is|are|was|were|be|been|being)"
+        r"( +(not|never|always|also|only|still|then|often|usually|now|just|already|first))?"
+        r" +(\w+(ed|en)|found|built|made|shown|seen|set|given|known|done|held|kept|put|sent"
+        r"|taken|written|drawn|chosen|left|lost|told|cut|fed|swept|spread|hung|bound|brought"
+        r"|caught|driven|laid|led|met|paid|sold|spent|split|struck|taught|thought|understood"
+        r"|worn|wound|thrown|grown|hidden|broken|frozen|begun|shut|hit|lit|shot)\b"),
     "money": re.compile(r"\b(buy|buys|bought|pay|pays|price|costs?|spend|cheap|free lunch|for free)\b", re.I),
     "bench": re.compile(r"\bbench(es)?\b", re.I),
     "preset-label": re.compile(r"\*\*\d+ [A-Z][\w ]*\*\*"),

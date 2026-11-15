@@ -119,7 +119,7 @@ $$
      alt="A plane wave arriving at angle theta from broadside on a row of elements spaced d apart: the wavefront reaches each element an extra path d sin theta later than its neighbor"
      style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
 
-The figure is the one <a href="../L18-beam-steering/index.html#frame-path-time-and-phase">Lesson 18</a> used for the same extra path. Each element's entry in the steering vector is that path converted to phase, so the $n$-th entry is $v_n(\theta) = e^{jnkd\sin\theta}$. The steering vector is not a property of the array's settings. It is a property of the direction, and it says how a wave from that direction is spread in phase across the aperture.
+The figure is the one <a href="../L18-beam-steering/index.html#frame-path-time-and-phase">Lesson 18</a> used for the same extra path. Each element's entry in the steering vector is that path converted to phase, so the $n$-th entry is $v_n(\theta) = e^{jnkd\sin\theta}$. The steering vector is not a property of the array's settings. It is a property of the direction, and it says how a wave from that direction spreads in phase across the aperture.
 
 The beamformer forms one number from the eight element signals by weighting and summing them, so the array's response to a wave from $\theta$ is the dot product
 
@@ -172,7 +172,7 @@ $$
 :::
 :::{present}
 <img src="../../viz/img/L24-projection.svg"
-     alt="Schematic of the weight vectors. Left, interferer on a sidelobe with a projection of 0.23: w_d is nearly perpendicular to w_n, the removed part r_n w_n is short, and w stays close to w_d, keeping 0.95 of the look-direction response. Right, interferer near the main lobe with a projection of 0.84: w_d leans toward w_n, most of it is removed, and the look direction keeps 0.30"
+     alt="Schematic of the weight vectors. Left, interferer on a sidelobe with a projection of 0.23: w_d is nearly perpendicular to w_n, the removed part r_n w_n is short, and w stays close to w_d, keeping 0.95 of the look-direction response. Right, interferer near the main lobe with a projection of 0.84: w_d leans toward w_n, the subtraction removes most of it, and the look direction keeps 0.30"
      style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -183,7 +183,7 @@ Here is the problem stated exactly. We have the beam-steering weights $\mathbf{w
 
 The first condition is one complex equation in eight complex unknowns, so there are many solutions. The second condition picks one, and it picks a change along $\mathbf{w}_\text{n}$, the beam aimed at the interferer. Split any change $\Delta\mathbf{w} = \mathbf{w} - \mathbf{w}_\text{d}$ into a part along $\mathbf{w}_\text{n}$ and a part $\mathbf{u}$ orthogonal to it, $\mathbf{w}_\text{n}^{H}\mathbf{u} = 0$. Since $\mathbf{v}(\theta_1) = \mathbf{w}_\text{n}^{*}$, the orthogonal part contributes $\mathbf{u}^{T}\mathbf{v}(\theta_1) = \mathbf{w}_\text{n}^{H}\mathbf{u} = 0$ at the interferer. It does nothing toward the null and only lengthens the change, so the smallest change that places the null is a multiple of $\mathbf{w}_\text{n}$ alone.
 
-The figure draws that geometry as if the eight complex weights were two-dimensional arrows; it is a schematic, not to scale. Removing the part of $\mathbf{w}_\text{d}$ that lies along $\mathbf{w}_\text{n}$ leaves $\mathbf{w}$ at right angles to $\mathbf{w}_\text{n}$, which is the null. When the interferer sits on a sidelobe, $\mathbf{w}_\text{d}$ and $\mathbf{w}_\text{n}$ are nearly perpendicular and little is removed. When it sits near the main lobe, they nearly line up, and removing the shared part removes most of the beam with it. The cosine of the angle between them is $\vert r_\text{n}\vert$, and the look direction keeps $1 - \vert r_\text{n}\vert^2$ of its response.
+The figure draws that geometry as if the eight complex weights were two-dimensional arrows; it is a schematic, not to scale. Removing the part of $\mathbf{w}_\text{d}$ that lies along $\mathbf{w}_\text{n}$ leaves $\mathbf{w}$ at right angles to $\mathbf{w}_\text{n}$, which is the null. When the interferer sits on a sidelobe, $\mathbf{w}_\text{d}$ and $\mathbf{w}_\text{n}$ are nearly perpendicular and the subtraction removes little. When it sits near the main lobe, they nearly line up, and removing the shared part removes most of the beam with it. The cosine of the angle between them is $\vert r_\text{n}\vert$, and the look direction keeps $1 - \vert r_\text{n}\vert^2$ of its response.
 
 **Build the beam that points at the interferer.** Define the second steering weight vector exactly as we defined the first, but aimed at $\theta_1$:
 
@@ -199,7 +199,7 @@ $$
 \mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\ \mathbf{w}_\text{n},
 $$
 
-with one complex number $r_\text{n}$ still to be chosen. Any $r_\text{n}$ leaves the main beam roughly in place, because we are subtracting a small multiple of a vector that points somewhere else. One particular $r_\text{n}$ makes the response at $\theta_1$ vanish.
+with one complex number $r_\text{n}$ still to choose. Any $r_\text{n}$ leaves the main beam roughly in place, because we are subtracting a small multiple of a vector that points somewhere else. One particular $r_\text{n}$ makes the response at $\theta_1$ vanish.
 ::::
 
 ::::{frame} The Weight-Subtraction Rule
@@ -231,7 +231,7 @@ $$
 
 The first is the desired beam's own response toward the interferer; the second is $N$ because every entry of $\mathbf{w}_\text{n}$ has unit magnitude. Setting the response to zero then fixes $r_\text{n}$, the chain at the top of the frame: with that $r_\text{n}$ the two terms of the second line are equal, so the response at $\theta_1$ is zero.
 
-The figure shows the two terms as phasor chains at $\theta_1 = 22.5^\circ$. The desired beam's eight unit phasors each turn $\psi_1 = 64.3^\circ$ from the last at the worked example's $10.0$ GHz, so they wind around and end at $N r_\text{n}$, a point $1.83$ from the origin. The subtracted beam was built to cancel that turning, so all eight of its phasors point the same way; scaled by $r_\text{n}$, each is $0.229$ long and they reach the same point in a straight line. The null is the difference between two chains that end at the same place.
+The figure shows the two terms as phasor chains at $\theta_1 = 22.5^\circ$. The desired beam's eight unit phasors each turn $\psi_1 = 64.3^\circ$ from the last at the worked example's $10.0$ GHz, so they wind around and end at $N r_\text{n}$, a point $1.83$ from the origin. We built the subtracted beam to cancel that turning, so all eight of its phasors point the same way; scaled by $r_\text{n}$, each is $0.229$ long and they reach the same point in a straight line. The null is the difference between two chains that end at the same place.
 ::::
 
 ::::{frame} The Projection Coefficient
@@ -248,7 +248,7 @@ $$
 - In a natural null, $r_\text{n} = 0$ and the weights do not change.
 :::
 
-The ratio $r_\text{n} = \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d}/\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}$ is a **projection**: it measures how much of the null-direction beam is already contained in the desired beam. Subtracting $r_\text{n}\mathbf{w}_\text{n}$ removes precisely that much and no more, which is why the main beam survives.
+The ratio $r_\text{n} = \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d}/\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}$ is a **projection**: it measures how much of the null-direction beam the desired beam already contains. Subtracting $r_\text{n}\mathbf{w}_\text{n}$ removes precisely that much and no more, which is why the main beam survives.
 
 There is a second reading that is more useful at the board. Expand the numerator for a broadside beam, $\mathbf{w}_\text{d} = [1, 1, \ldots, 1]$:
 
@@ -339,7 +339,7 @@ print(np.round(gain), np.round(phase, 1))
 
 Its two printed rows are the table's two columns: gains of 71, 66, 83, 100, 100, 83, 66, and 71 %, and phases of $-10.9$, $+5.5$, $+13.1$, $+5.8$, $-5.8$, $-13.1$, $-5.5$, and $+10.9^\circ$.
 
-The table assumes the Element Gains slider is linear in voltage, as it is on current Phaser software. Enter each phase with its sign. A Phase Control offset is the weight's own phase, the same convention **Apply** uses when it writes $-n\Delta\phi$ to steer to $+\theta_0$ (<a href="../L18-beam-steering/index.html#frame-the-sign-in-phase-control">Lesson 18</a>). <a href="../L18-beam-steering/index.html#frame-sign-of-the-compensating-ramp">Lesson 18</a>'s $+n\Delta\phi$ is the backend's delay setting, which carries the opposite sign, so these offsets are entered as computed and not converted to it.
+The table assumes the Element Gains slider is linear in voltage, as it is on current Phaser software. Enter each phase with its sign. A Phase Control offset is the weight's own phase, the same convention **Apply** uses when it writes $-n\Delta\phi$ to steer to $+\theta_0$ (<a href="../L18-beam-steering/index.html#frame-the-sign-in-phase-control">Lesson 18</a>). <a href="../L18-beam-steering/index.html#frame-sign-of-the-compensating-ramp">Lesson 18</a>'s $+n\Delta\phi$ is the backend's delay setting, which carries the opposite sign, so enter these offsets as computed, and do not convert them to it.
 
 The gains are symmetric and the phases are antisymmetric, and every null placed to one side of a broadside beam produces that pattern. The reason is in $r_\text{n}$. Summing the geometric series gives
 
@@ -387,10 +387,10 @@ The widget below applies the weight-subtraction rule to the course array and dra
 :::
 :::{present}
 - The loss grows from 2.1 dB at $22.5^\circ$ to 3.3 dB at $10^\circ$ and 8.6 dB at $5^\circ$.
-- Two sources inside one beamwidth can't be separated; move the beam.
+- Nulling can't separate two sources inside one beamwidth; move the beam.
 :::
 
-**The main-lobe loss is set by $\vert r_\text{n}\vert$.** The subtracted beam's response in the look direction is the conjugate of the projection: since $\mathbf{v}(\theta_0) = \mathbf{w}_\text{d}^{*}$, the product $\mathbf{w}_\text{n}^{T}\mathbf{v}(\theta_0) = \mathbf{w}_\text{d}^{H}\mathbf{w}_\text{n} = N r_\text{n}^{*}$. So the response at $\theta_0$ is
+**The projection $\vert r_\text{n}\vert$ sets the main-lobe loss.** The subtracted beam's response in the look direction is the conjugate of the projection: since $\mathbf{v}(\theta_0) = \mathbf{w}_\text{d}^{*}$, the product $\mathbf{w}_\text{n}^{T}\mathbf{v}(\theta_0) = \mathbf{w}_\text{d}^{H}\mathbf{w}_\text{n} = N r_\text{n}^{*}$. So the response at $\theta_0$ is
 
 $$
 \begin{aligned}
@@ -408,7 +408,7 @@ L &= -20\log_{10}\frac{1 - \vert r_\text{n}\vert^2}{\max_n \vert w_n\vert} \\
 \end{aligned}
 $$
 
-Move the null in toward the beam and the subtraction term grows fast: 1.9 dB at $\theta_1 = 10^\circ$, 5.8 dB at $7^\circ$, and 10.5 dB at $5^\circ$. The rescaling term does the opposite. It is 1.4 dB at $10^\circ$ and 0.2 dB at $7^\circ$, and at $5^\circ$ every weight magnitude is below 1, so scaling the largest up to 100 % raises the beam 1.9 dB. The totals are 3.3, 6.0, and 8.6 dB. As $\theta_1$ enters the main lobe $\vert r_\text{n}\vert \to 1$, the eight weights cancel one another, and what is left after rescaling is a split beam with a hole where the target used to be. Two sources inside one beamwidth can't be separated by a null; the answer is to move the beam or wait for the geometry to change.
+Move the null in toward the beam and the subtraction term grows fast: 1.9 dB at $\theta_1 = 10^\circ$, 5.8 dB at $7^\circ$, and 10.5 dB at $5^\circ$. The rescaling term does the opposite. It is 1.4 dB at $10^\circ$ and 0.2 dB at $7^\circ$, and at $5^\circ$ every weight magnitude is below 1, so scaling the largest up to 100 % raises the beam 1.9 dB. The totals are 3.3, 6.0, and 8.6 dB. As $\theta_1$ enters the main lobe $\vert r_\text{n}\vert \to 1$, the eight weights cancel one another, and what remains after rescaling is a split beam with a hole where the target used to be. A null can't separate two sources inside one beamwidth; the answer is to move the beam or wait for the geometry to change.
 ::::
 
 ::::{frame} Quantization and Null Depth
@@ -442,7 +442,7 @@ $$
 \end{aligned}
 $$
 
-That level is relative to the null-steered peak, because $N$ in the estimate is that beam's own peak. Table A in the lab reads every level against the frozen uniform peak, which sits higher by the main-lobe loss, 2.1 dB in the $10.0$ GHz example, so the same notch reads $-21.9 - 2.1 = -24.0$ dB on that scale. The phase step dominates: the 5 % gain step adds almost nothing to $\epsilon_\text{rms}$. Part 1 of the L24 Lab packet puts the ADAR1000's numbers through the same two steps: its $2.8125^\circ$ phase step and 1 % gain step. The result sits on the same $-6B$ scale as the quantization sidelobes of <a href="../L23-beam-squint-quantization/index.html#frame-quantization-sidelobes">Lesson 23</a>, a few decibels deeper because the error is spread over eight elements.
+That level is relative to the null-steered peak, because $N$ in the estimate is that beam's own peak. Table A in the lab reads every level against the frozen uniform peak, which sits higher by the main-lobe loss, 2.1 dB in the $10.0$ GHz example, so the same notch reads $-21.9 - 2.1 = -24.0$ dB on that scale. The phase step dominates: the 5 % gain step adds almost nothing to $\epsilon_\text{rms}$. Part 1 of the L24 Lab packet puts the ADAR1000's numbers through the same two steps: its $2.8125^\circ$ phase step and 1 % gain step. The result sits on the same $-6B$ scale as the quantization sidelobes of <a href="../L23-beam-squint-quantization/index.html#frame-quantization-sidelobes">Lesson 23</a>, a few decibels deeper because the error spreads over eight elements.
 
 Rounding this particular table does less damage than the estimate, as the left half of the figure shows. Rounding keeps the gains symmetric and the phases antisymmetric (the mirror pairs of <a href="#frame-the-phaser-settings">The PHASER Settings</a>), so each pair sums to a real number and the pattern referred to the array center stays real. A real pattern can still miss zero, and in the $10.0$ GHz example it does, but only just: the rounded null sits a fraction of a degree from $+22.5^\circ$ and several decibels deeper than the estimate. What fills a null on the kit is error that does not share that symmetry: each channel's own calibration residue in gain and phase. The estimate is the depth those errors allow when they are about one step in size.
 ::::
@@ -529,7 +529,7 @@ $$
 \hat{\mathbf{R}} = \frac{1}{K}\ \mathbf{X}\mathbf{X}^{H},
 $$
 
-and solves for the weights that minimize total output power while holding unit gain in the look direction $\mathbf{s}$. MVDR suppresses whatever is loud and is not in the look direction, and nobody has to tell it where that is. With two digital channels it has two weights: one holds the look direction and the other places one null, so it can place one null. The Phaser measures $\mathbf{s}$ from the target itself, from the samples taken before the interferer is added, so MVDR protects the HB100 as the two channels actually receive it. That works only when the target sits where the beam points.
+and solves for the weights that minimize total output power while holding unit gain in the look direction $\mathbf{s}$. MVDR suppresses whatever is loud and is not in the look direction, and nobody has to tell it where that is. With two digital channels it has two weights: one holds the look direction and the other places one null, so it can place one null. The Phaser measures $\mathbf{s}$ from the target itself, from the samples it takes before it adds the interferer, so MVDR protects the HB100 as the two channels actually receive it. That works only when the target sits where the beam points.
 
 Unit gain means the two MVDR weights sum to 1 in the look direction, where Manual's two weights of 1 sum to 2. The Phaser multiplies the MVDR output by 2, the number of channels, so a target in the look direction reads the same level under either mode, and we compare the two on one scale.
 
@@ -638,7 +638,7 @@ At $10.0$ GHz, $kd = 2.932$ rad, so the slope is $2kd = 5.86$ per radian, or $0.
 
 A tracker turns the error into motion. On the PHASER, choosing Tracking from the Mode menu runs ADI's monopulse loop. The first update is an ordinary sweep that locks the beam on the strongest return. Every update after that holds the beam at its current steering phase, forms $\Sigma$ and $\Delta$ there, and moves the steering phase one $2.8125^\circ$ LSB, about $1^\circ$ of angle near boresight, toward the side the sign of $\varepsilon$ points. On the target the sign dithers, and the beam settles within one step of it. The loop keeps running until the mode changes.
 
-Stepping by the sign alone is the simplest loop that works: it needs no slope, and a level change cannot upset it. It is also slow: a source that moves more than about one step per update outruns it, and one that moves past the sum beam's first null, where the sign flips, is lost. A tracking radar steps in proportion to the error, a large correction when the target is far off and a small one near it, which is why the slope matters: it converts the reading into degrees. The loop uses the two digital channels as the manual beamformer forms them, with both digital beams at $0^\circ$; MVDR forms no delta beam, so there is no error to track under it.
+Stepping by the sign alone is the simplest loop that works: it needs no slope, and a level change cannot upset it. It is also slow: a source that moves more than about one step per update outruns it, and the loop loses one that moves past the sum beam's first null, where the sign flips. A tracking radar steps in proportion to the error, a large correction when the target is far off and a small one near it, which is why the slope matters: it converts the reading into degrees. The loop uses the two digital channels as the manual beamformer forms them, with both digital beams at $0^\circ$; MVDR forms no delta beam, so there is no error to track under it.
 ::::
 
 ::::{frame} Summary
