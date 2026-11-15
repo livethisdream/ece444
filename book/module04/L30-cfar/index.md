@@ -44,6 +44,7 @@ The lesson is reading, done before the lab with Part 1 of the packet. Its exampl
 
 ::::{frame} A Moving Noise Floor
 :class: read-only
+
 :::{present}
 - A fixed threshold assumes the noise power $P_n$ is known.
 - 3 dB more noise turns $P_{fa} = 10^{-6}$ into $10^{-3}$.
@@ -63,6 +64,7 @@ The noise on a real map does move. Stationary clutter fills the cells near zero 
 
 ::::{frame} Cell Under Test, Guard, and Reference
 :class: read-only
+
 :::{present}
 <img src="../../viz/img/L30-window.svg" alt="A row of range cells. The cell under test in the center is red. Two gray guard cells sit on each side of it, then four blue reference cells on each side. A bracket joins the reference cells: their average times the bias is the threshold the cell under test must cross" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 
@@ -78,6 +80,7 @@ The figure draws 2 guard and 4 reference cells a side so that the cells are read
 
 ::::{frame} Cell-Averaging CFAR
 :class: read-only
+
 :::{present}
 $$
 \begin{aligned}
@@ -115,6 +118,7 @@ where the angle brackets mean the average over the noise. $P_n$ has dropped out.
 
 ::::{frame} The Bias From the False-Alarm Probability
 :class: read-only
+
 :::{present}
 $$
 \begin{aligned}
@@ -154,6 +158,7 @@ ADI's `target_detection_dbfs.py` averages the reference cells **in dB** and adds
 
 ::::{frame} CFAR Loss
 :class: read-only
+
 :::{present}
 <img src="../../viz/img/L30-cfar-loss.svg" alt="Extra SNR needed for Pd = 0.9 at Pfa = 10 to the minus 6, against the number of reference cells on a log axis from 4 to 256. It falls from about 8 dB at 5 cells to 2.1 dB at 16 and 1.0 dB at 32, and below half a dB past about 70" style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
@@ -181,6 +186,7 @@ With 6 dB more bias the range falls by 29%, provided the noise alone sets where 
 
 ::::{frame} Choosing the Guard Cells
 :class: read-only
+
 :::{present}
 - A Hann window puts −6 dB of the target in each neighboring cell.
 - Without guard cells, the target raises its own threshold.
@@ -219,6 +225,7 @@ Start at 2 guard and 16 reference cells a side with a 12.4 dB bias, the lesson's
 
 ::::{frame} Failures of Cell Averaging
 :class: read-only
+
 :::{present}
 <img src="../../viz/img/L30-failures.svg" alt="Two range profiles. Left: an 18 dB target eight cells from a 24 dB target; the cell-averaging threshold rises to about 23 dB over both, above the weaker target, while the smallest-of threshold stays near 13 dB. Right: noise that rises 15 dB at cell 60; the cell-averaging threshold ramps up across the edge, and the greatest-of threshold rises earlier and stays at the clutter level" style="max-width: 760px; width: 100%; display: block; margin: 0 auto;">
 
@@ -235,6 +242,7 @@ On the right, the noise rises 15 dB at cell 60, the edge of a clutter region. A 
 
 ::::{frame} Greatest-Of and Smallest-Of
 :class: read-only
+
 :::{present}
 $$
 \begin{aligned}
@@ -259,6 +267,7 @@ Neither max nor min of two averages is an average, so each has its own relation 
 
 ::::{frame} The Ends of the Map
 :class: read-only
+
 :::{present}
 - The first and last range cells have reference cells on one side only.
 - One-sided with the same bias, $P_{fa}$ rises from $10^{-6}$ to $8 \times 10^{-6}$.
@@ -272,6 +281,7 @@ Doppler is different. The Doppler FFT is periodic: the cell above the highest ve
 
 ::::{frame} 2D CFAR on the Range-Doppler Map
 :class: read-only
+
 :::{present}
 <img src="../../viz/img/L30-window-2d.svg" alt="A grid of range cells by Doppler cells. The red cell under test is in the center of a gray three by three block of guard cells, inside a blue nine by nine block whose 72 cells outside the guard block are the reference cells" style="max-width: 300px; width: 100%; display: block; margin: 0 auto;">
 :::
@@ -292,6 +302,7 @@ A map of $256 \times 128$ cells, with 72 reference cells each, is 2.4 million ad
 
 ::::{frame} Detections From the Map
 :class: read-only
+
 :::{present}
 <img src="../../viz/img/L30-rd-detections.svg" alt="A range-Doppler map from 0 to 9 m and minus 3 to plus 3 meters per second after MTI. Red squares mark the CFAR detections: a cluster of nine cells on a walker at 6 m and plus 1.2 meters per second, a cluster of five on a hand at 2.1 m and minus 0.6 meters per second, and one cell of leftover clutter at 0 m and zero velocity" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
 :::
@@ -328,6 +339,7 @@ The SNR in each entry is the cell's power over its own local noise estimate, the
 
 ::::{frame} Measuring the False-Alarm Rate
 :class: read-only
+
 :::{present}
 $$
 \hat{P}_{fa} = \frac{\text{false detections}}{\text{cells tested}}
