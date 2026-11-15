@@ -368,8 +368,7 @@ This frame collects every box you filled in on this page. Your entries stay in t
 browser only, saved as you type. **Download my packet** writes them into the Measured
 cells of the blank packet and saves the PDF. The download locks every field, the Predicted cells and Part 3
 included, so type those into your own copy of the packet first, then use **Fill
-my own copy** and choose that file: your predictions and Part 3 are kept, and
-the page adds your measurements beside them. If you work Parts 1 and 3 on paper, download the packet
+my own copy** and choose that file: the page keeps your predictions and Part 3, and adds your measurements beside them. If you work Parts 1 and 3 on paper, download the packet
 and write on the printout. Upload one PDF to Gradescope. **Export entries**
 saves a small backup file you can **Import** on another laptop or after
 clearing your browser. The boxes are optional: the blank packet is in the next
@@ -393,8 +392,7 @@ The L21 Lab packet is one submission for the whole lab, turned in complete befor
 ::::{frame} For Part 3
 :class: read-only
 
-Part 3 is done after class with your Part 2 entries and your Part 1
-predictions beside you. Convert the lobe levels of Tables D and E to dBc
+Do Part 3 after class, with your Part 2 entries and your Part 1 predictions beside you. Convert the lobe levels of Tables D and E to dBc
 first: subtract each table's main-lobe level. Then it asks about three
 comparisons:
 
