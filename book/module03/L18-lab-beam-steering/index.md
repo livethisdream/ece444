@@ -122,7 +122,7 @@ which puts E8 on the right. Step 13 confirms the sign on your kit.
    every $10\ \text{MHz}$, and Step 18 allows $1^\circ$.
 
    <div class="rec" data-lab="L18">
-   <label>Step 3: Signal Freq after <b>Find HB100</b> <input data-field="freq"></label>
+   <label>Step 3: Signal Freq after <b>Find HB100</b> (GHz) <input data-field="freq"></label>
    </div>
 4. **Calibrate the array.** Press **Calibrate** and wait for it to finish,
    with the source still at boresight. A source off boresight while
@@ -166,10 +166,10 @@ check your Part 1 row for it.
     prediction.
 
     <div class="rec" data-lab="L18">
-    <label>Table A, source at 0°: Angle <input data-field="a.0.angle"></label>
-    <label>Table A, source at 0°: difference from the arc angle <input data-field="a.0.diff"></label>
-    <label>Table A, source at 0°: half-power beamwidth <input data-field="a.0.hpbw"></label>
-    <label>Table A, source at 0°: Peak Gain <input data-field="a.0.gain"></label>
+    <label>Step 11: Angle with the source at 0° (°) <input data-field="a.0.angle"></label>
+    <label>Step 11: Angle minus the arc angle at 0° (°) <input data-field="a.0.diff"></label>
+    <label>Step 11: HPBW with the source at 0° (°) <input data-field="a.0.hpbw"></label>
+    <label>Step 11: Peak Gain with the source at 0° (dBFS) <input data-field="a.0.gain"></label>
     </div>
 12. **Keep the reference.** Leave the frozen trace on the plot for the next
     two positions, so you can compare each new trace with it.
@@ -180,10 +180,10 @@ check your Part 1 row for it.
     Peak Gain from the $0^\circ$ row with your Part 1 predictions.
 
     <div class="rec" data-lab="L18">
-    <label>Table A, source at 30°: Angle <input data-field="a.30.angle"></label>
-    <label>Table A, source at 30°: difference from the arc angle <input data-field="a.30.diff"></label>
-    <label>Table A, source at 30°: half-power beamwidth <input data-field="a.30.hpbw"></label>
-    <label>Table A, source at 30°: Peak Gain <input data-field="a.30.gain"></label>
+    <label>Step 13: Angle with the source at +30° (°) <input data-field="a.30.angle"></label>
+    <label>Step 13: Angle minus the arc angle at +30° (°) <input data-field="a.30.diff"></label>
+    <label>Step 13: HPBW with the source at +30° (°) <input data-field="a.30.hpbw"></label>
+    <label>Step 13: Peak Gain with the source at +30° (dBFS) <input data-field="a.30.gain"></label>
     </div>
 14. **Source at $+45^\circ$.** Move it to $+45^\circ$ and record the same
     four, and compare them with your Part 1 predictions in the same way. If
@@ -195,10 +195,10 @@ check your Part 1 row for it.
     the main lobe, and noise can lift one above it.
 
     <div class="rec" data-lab="L18">
-    <label>Table A, source at 45°: Angle <input data-field="a.45.angle"></label>
-    <label>Table A, source at 45°: difference from the arc angle <input data-field="a.45.diff"></label>
-    <label>Table A, source at 45°: half-power beamwidth <input data-field="a.45.hpbw"></label>
-    <label>Table A, source at 45°: Peak Gain <input data-field="a.45.gain"></label>
+    <label>Step 14: Angle with the source at +45° (°) <input data-field="a.45.angle"></label>
+    <label>Step 14: Angle minus the arc angle at +45° (°) <input data-field="a.45.diff"></label>
+    <label>Step 14: HPBW with the source at +45° (°) <input data-field="a.45.hpbw"></label>
+    <label>Step 14: Peak Gain with the source at +45° (dBFS) <input data-field="a.45.gain"></label>
     </div>
 ::::
 
@@ -220,18 +220,18 @@ check your Part 1 row for it.
     predictions.
 
     <div class="rec" data-lab="L18">
-    <label>Table B, Apply 15: Angle <input data-field="b.15.angle"></label>
-    <label>Table B, Apply 15: difference from the Apply value <input data-field="b.15.diff"></label>
-    <label>Table B, Apply 15: half-power beamwidth <input data-field="b.15.hpbw"></label>
-    <label>Table B, Apply 15: Peak Gain <input data-field="b.15.gain"></label>
+    <label>Step 16: Angle at Apply 15 (°) <input data-field="b.15.angle"></label>
+    <label>Step 16: Angle minus the Apply value at Apply 15 (°) <input data-field="b.15.diff"></label>
+    <label>Step 16: HPBW at Apply 15 (°) <input data-field="b.15.hpbw"></label>
+    <label>Step 16: Peak Gain at Apply 15 (dBFS) <input data-field="b.15.gain"></label>
     </div>
 17. **Apply 30.** Repeat for 30 and record the same four.
 
     <div class="rec" data-lab="L18">
-    <label>Table B, Apply 30: Angle <input data-field="b.30.angle"></label>
-    <label>Table B, Apply 30: difference from the Apply value <input data-field="b.30.diff"></label>
-    <label>Table B, Apply 30: half-power beamwidth <input data-field="b.30.hpbw"></label>
-    <label>Table B, Apply 30: Peak Gain <input data-field="b.30.gain"></label>
+    <label>Step 17: Angle at Apply 30 (°) <input data-field="b.30.angle"></label>
+    <label>Step 17: Angle minus the Apply value at Apply 30 (°) <input data-field="b.30.diff"></label>
+    <label>Step 17: HPBW at Apply 30 (°) <input data-field="b.30.hpbw"></label>
+    <label>Step 17: Peak Gain at Apply 30 (dBFS) <input data-field="b.30.gain"></label>
     </div>
 18. **Read Phase Control.** With Apply 30 still loaded, copy the eight
     **Phase Control** boxes beside your Part 1 prediction. Read the boxes, not
@@ -241,30 +241,30 @@ check your Part 1 row for it.
     means your Part 1 frequency differs from the Signal Freq on screen.
 
     <div class="rec" data-lab="L18">
-    <label>Phase Control, E1: predicted (your Question 2(a)) <input data-field="pc.pred.1"></label>
-    <label>Phase Control, E2: predicted (your Question 2(a)) <input data-field="pc.pred.2"></label>
-    <label>Phase Control, E3: predicted (your Question 2(a)) <input data-field="pc.pred.3"></label>
-    <label>Phase Control, E4: predicted (your Question 2(a)) <input data-field="pc.pred.4"></label>
-    <label>Phase Control, E5: predicted (your Question 2(a)) <input data-field="pc.pred.5"></label>
-    <label>Phase Control, E6: predicted (your Question 2(a)) <input data-field="pc.pred.6"></label>
-    <label>Phase Control, E7: predicted (your Question 2(a)) <input data-field="pc.pred.7"></label>
-    <label>Phase Control, E8: predicted (your Question 2(a)) <input data-field="pc.pred.8"></label>
-    <label>Phase Control, E1: read back <input data-field="pc.read.1"></label>
-    <label>Phase Control, E2: read back <input data-field="pc.read.2"></label>
-    <label>Phase Control, E3: read back <input data-field="pc.read.3"></label>
-    <label>Phase Control, E4: read back <input data-field="pc.read.4"></label>
-    <label>Phase Control, E5: read back <input data-field="pc.read.5"></label>
-    <label>Phase Control, E6: read back <input data-field="pc.read.6"></label>
-    <label>Phase Control, E7: read back <input data-field="pc.read.7"></label>
-    <label>Phase Control, E8: read back <input data-field="pc.read.8"></label>
-    <label>Phase Control, E1: difference <input data-field="pc.diff.1"></label>
-    <label>Phase Control, E2: difference <input data-field="pc.diff.2"></label>
-    <label>Phase Control, E3: difference <input data-field="pc.diff.3"></label>
-    <label>Phase Control, E4: difference <input data-field="pc.diff.4"></label>
-    <label>Phase Control, E5: difference <input data-field="pc.diff.5"></label>
-    <label>Phase Control, E6: difference <input data-field="pc.diff.6"></label>
-    <label>Phase Control, E7: difference <input data-field="pc.diff.7"></label>
-    <label>Phase Control, E8: difference <input data-field="pc.diff.8"></label>
+    <label>Step 18: E1 phase predicted in Question 2(a) (°) <input data-field="pc.pred.1"></label>
+    <label>Step 18: E2 phase predicted in Question 2(a) (°) <input data-field="pc.pred.2"></label>
+    <label>Step 18: E3 phase predicted in Question 2(a) (°) <input data-field="pc.pred.3"></label>
+    <label>Step 18: E4 phase predicted in Question 2(a) (°) <input data-field="pc.pred.4"></label>
+    <label>Step 18: E5 phase predicted in Question 2(a) (°) <input data-field="pc.pred.5"></label>
+    <label>Step 18: E6 phase predicted in Question 2(a) (°) <input data-field="pc.pred.6"></label>
+    <label>Step 18: E7 phase predicted in Question 2(a) (°) <input data-field="pc.pred.7"></label>
+    <label>Step 18: E8 phase predicted in Question 2(a) (°) <input data-field="pc.pred.8"></label>
+    <label>Step 18: E1 Phase Control read back (°) <input data-field="pc.read.1"></label>
+    <label>Step 18: E2 Phase Control read back (°) <input data-field="pc.read.2"></label>
+    <label>Step 18: E3 Phase Control read back (°) <input data-field="pc.read.3"></label>
+    <label>Step 18: E4 Phase Control read back (°) <input data-field="pc.read.4"></label>
+    <label>Step 18: E5 Phase Control read back (°) <input data-field="pc.read.5"></label>
+    <label>Step 18: E6 Phase Control read back (°) <input data-field="pc.read.6"></label>
+    <label>Step 18: E7 Phase Control read back (°) <input data-field="pc.read.7"></label>
+    <label>Step 18: E8 Phase Control read back (°) <input data-field="pc.read.8"></label>
+    <label>Step 18: E1 difference from the prediction (°) <input data-field="pc.diff.1"></label>
+    <label>Step 18: E2 difference from the prediction (°) <input data-field="pc.diff.2"></label>
+    <label>Step 18: E3 difference from the prediction (°) <input data-field="pc.diff.3"></label>
+    <label>Step 18: E4 difference from the prediction (°) <input data-field="pc.diff.4"></label>
+    <label>Step 18: E5 difference from the prediction (°) <input data-field="pc.diff.5"></label>
+    <label>Step 18: E6 difference from the prediction (°) <input data-field="pc.diff.6"></label>
+    <label>Step 18: E7 difference from the prediction (°) <input data-field="pc.diff.7"></label>
+    <label>Step 18: E8 difference from the prediction (°) <input data-field="pc.diff.8"></label>
     </div>
 19. **Apply 45.** Repeat for 45. If **Angle** jumps to about $-90^\circ$,
     record the main lobe's angle off the trace, as in Step 14. Compare the
@@ -272,10 +272,10 @@ check your Part 1 row for it.
     Part 1 prediction.
 
     <div class="rec" data-lab="L18">
-    <label>Table B, Apply 45: Angle <input data-field="b.45.angle"></label>
-    <label>Table B, Apply 45: difference from the Apply value <input data-field="b.45.diff"></label>
-    <label>Table B, Apply 45: half-power beamwidth <input data-field="b.45.hpbw"></label>
-    <label>Table B, Apply 45: Peak Gain <input data-field="b.45.gain"></label>
+    <label>Step 19: Angle at Apply 45 (°) <input data-field="b.45.angle"></label>
+    <label>Step 19: Angle minus the Apply value at Apply 45 (°) <input data-field="b.45.diff"></label>
+    <label>Step 19: HPBW at Apply 45 (°) <input data-field="b.45.hpbw"></label>
+    <label>Step 19: Peak Gain at Apply 45 (dBFS) <input data-field="b.45.gain"></label>
     </div>
 20. **Reset.** Press **Reset** under **Phase Control** before you leave the
     station. The offsets stay loaded until you do, and they add to every
