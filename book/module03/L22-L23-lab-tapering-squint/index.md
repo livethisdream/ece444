@@ -47,8 +47,7 @@ with room for notes. Print from read mode for the whole lesson.
 Lesson 22 showed how an amplitude taper trades beamwidth and directivity for
 lower sidelobes, and why the peak drop the sweep plots is not the directivity
 the array loses. Lesson 23 showed three departures a taper cannot touch,
-because they come from the element spacing, the frequency the phases are set
-at, and the phase shifter's resolution. Today you test both on your kit in four
+because they come from the element spacing, the frequency the kit sets the phases at, and the phase shifter's resolution. Today you test both on your kit in four
 runs. Steps 1 to 6 bring up the kit with the HB100 at boresight. The taper runs
 fill Tables A and B in Part 2 of the packet, the grating-lobe run Table C, the
 squint run Table D, and the quantization run Table E, and you check every
@@ -239,7 +238,7 @@ read against the frozen uniform trace.
     same three, and compare them with your prediction, including what it says
     about both ends of the plot. The measured peak drops in Steps 15 and 16 run
     about 1 dB short of the element count, even with elements fully on or off,
-    for a reason that is still open, so I grade these two steps on the lobe
+    for a reason I have not found, so I grade these two steps on the lobe
     angles.
 
     <div class="rec" data-lab="L22-L23">
@@ -327,8 +326,7 @@ This frame collects every box you filled in on this page. Your entries stay in t
 browser only, saved as you type. **Download my packet** writes them into the Measured
 cells of the blank packet and saves the PDF. The download locks every field, the Predicted cells
 and Part 3 included, so type those into your own copy of the packet first, then use **Fill
-my own copy** and choose that file: your predictions and Part 3 are kept, and the page
-adds your measurements beside them. If you work Parts 1 and 3 on paper, download the packet
+my own copy** and choose that file: the page keeps your predictions and Part 3, and adds your measurements beside them. If you work Parts 1 and 3 on paper, download the packet
 and write on the printout. Upload one PDF to Gradescope. **Export entries**
 saves a small backup file you can **Import** on another laptop or after
 clearing your browser. The boxes are optional: the blank packet is in the next
@@ -352,8 +350,7 @@ The L22–L23 Lab packet is one submission for the whole lab, turned in complete
 ::::{frame} For Part 3
 :class: read-only
 
-Part 3 is done after class with your Part 2 entries and your Part 1
-predictions beside you. It asks about three comparisons:
+Do Part 3 after class, with your Part 2 entries and your Part 1 predictions beside you. It asks about three comparisons:
 
 1. The tapers: compare your taper measurements (Tables A and B) with your
    predictions, and choose a taper for this kit.

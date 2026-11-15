@@ -126,7 +126,7 @@ gives the depth a cramped room allows.
    </div>
 7. Enter your Part 1 gains into **Element Gains** (Rx1 through Rx8). Leave
    **Enforce Symmetric Taper** off: the set is already symmetric, and with the
-   switch on a later edit to one slider is mirrored onto its partner.
+   switch on, the GUI mirrors a later edit to one slider onto its partner.
 8. Enter your Part 1 phases into **Phase Control**, each with its sign, and
    check every sign before you sweep. Lesson 24's
    <a href="../L24-null-steering/index.html#frame-the-phaser-settings">"The PHASER Settings"</a>
@@ -181,10 +181,10 @@ gives the depth a cramped room allows.
 % vector; the held pattern on the Rectangular tab) and #97 on the kit. Its
 % expectations at +30 deg come from that PR's simulator until a kit run.
 
-The interferer in this procedure is simulated: the Phaser software adds a
+The Phaser software simulates the interferer in this procedure: it adds a
 second source, at an angle and level you choose, to the real samples the kit
 receives, before the digital beamformer sees them. The target stays your HB100
-at boresight. In Signal vs Time the beam is held still. The **Tracking** tab
+at boresight. Signal vs Time holds the beam still. The **Tracking** tab
 plots the held beam's level against time, the two readout tiles under the plot,
 **Interferer vs Target** and **MVDR Suppression**, give the numbers, and the
 **Rectangular** tab draws the held beam's pattern against arrival angle: the
@@ -321,8 +321,7 @@ This frame collects every box you filled in on this page. Your entries stay in t
 browser only, saved as you type. **Download my packet** writes them into Part 2
 of the blank packet, the Measured cells of Tables A to D, and saves the PDF.
 The download locks every field, the Predicted cells and Part 3 included, so type those into your own copy of the packet first, then use **Fill
-my own copy** and choose that file: your predictions and Part 3 are kept, and
-the page adds your measurements beside them. If you work Parts 1 and 3 on paper, download the packet
+my own copy** and choose that file: the page keeps your predictions and Part 3, and adds your measurements beside them. If you work Parts 1 and 3 on paper, download the packet
 and write on the printout. Upload one PDF to Gradescope. **Export entries**
 saves a small backup file you can **Import** on another laptop or after
 clearing your browser. The boxes are optional: the blank packet is in the next
@@ -346,8 +345,7 @@ The L24 Lab packet is one submission for the whole lab, turned in complete befor
 ::::{frame} For Part 3
 :class: read-only
 
-Part 3 is done after class with your Part 2 entries and your Part 1
-predictions beside you. It asks about three comparisons:
+Do Part 3 after class, with your Part 2 entries and your Part 1 predictions beside you. It asks about three comparisons:
 
 1. Three nulls: compare your notch (Table A), your difference null
    (Table B) and your delta null (Table D) with each other and with your
