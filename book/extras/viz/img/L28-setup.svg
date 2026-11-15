@@ -1,0 +1,120 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="285.84pt" height="152.784pt" viewBox="0 0 285.84 152.784" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-15T19:51:20.442327</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 152.784 
+L 285.84 152.784 
+L 285.84 0 
+L 0 0 
+L 0 152.784 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 51.444 59.76 
+L 270.432 7.092 
+L 270.432 112.428 
+z
+" clip-path="url(#pcf11992659)" style="fill: #eef4fa"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 18.18 84.708 
+L 37.584 84.708 
+L 37.584 34.812 
+L 18.18 34.812 
+z
+" clip-path="url(#pcf11992659)" style="fill: #004a85; stroke: #004a85; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 146.8008 77.5008 
+L 150.1272 77.5008 
+L 150.1272 42.0192 
+L 146.8008 42.0192 
+z
+" clip-path="url(#pcf11992659)" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-linejoin: miter"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 37.584 83.0448 
+L 37.584 36.4752 
+" clip-path="url(#pcf11992659)" style="fill: none; stroke: #1d7a4d; stroke-width: 3; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 37.584 62.532 
+L 237.168 62.532 
+" clip-path="url(#pcf11992659)" style="fill: none; stroke: #5a5a5a; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 93.024 66.4128 
+L 93.024 58.6512 
+" clip-path="url(#pcf11992659)" style="fill: none; stroke: #5a5a5a; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_4">
+    <path d="M 148.464 66.4128 
+L 148.464 58.6512 
+" clip-path="url(#pcf11992659)" style="fill: none; stroke: #5a5a5a; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_5">
+    <path d="M 203.904 66.4128 
+L 203.904 58.6512 
+" clip-path="url(#pcf11992659)" style="fill: none; stroke: #5a5a5a; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_6">
+    <path d="M 126.288 134.604 
+" clip-path="url(#pcf11992659)" style="fill: none; stroke: #b01e24; stroke-width: 1.5; stroke-linecap: square"/>
+    <defs>
+     <path id="m11d272a510" d="M -5 5 
+L 5 -5 
+M -5 -5 
+L 5 5 
+" style="stroke: #b01e24; stroke-width: 2"/>
+    </defs>
+    <g clip-path="url(#pcf11992659)">
+     <use xlink:href="#m11d272a510" x="126.288" y="134.604" style="fill: #b01e24; stroke: #b01e24; stroke-width: 2"/>
+    </g>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="27.6048" y="105.273425" transform="rotate(-0 27.6048 105.273425)">kit</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #1d7a4d" x="40.9104" y="29.268" transform="rotate(-0 40.9104 29.268)">array face</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="93.024" y="81.019875" transform="rotate(-0 93.024 81.019875)">1 m</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="148.464" y="81.019875" transform="rotate(-0 148.464 81.019875)">2 m</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="203.904" y="81.019875" transform="rotate(-0 203.904 81.019875)">3 m</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #1a1a1a" x="154.008" y="36.4752" transform="rotate(-0 154.008 36.4752)">plate, square to the array</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #b01e24" x="134.604" y="138.42358" transform="rotate(-0 134.604 138.42358)">stand here, out of the beam</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pcf11992659">
+   <rect x="4.32" y="4.32" width="277.2" height="144.144"/>
+  </clipPath>
+ </defs>
+</svg>

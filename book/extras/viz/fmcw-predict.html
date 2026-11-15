@@ -42,6 +42,7 @@
   <div class="controls">
     <div class="grp" role="group" aria-label="Chirp length"><span class="lab">Length</span><span id="g-T"></span></div>
     <div class="grp" role="group" aria-label="Bandwidth"><span class="lab">Bandwidth</span><span id="g-B"></span></div>
+    <div class="grp" role="group" aria-label="Horizontal axis"><span class="lab">Axis</span><span id="g-X"></span></div>
     <button class="show" id="show" aria-pressed="false">Show profile</button>
   </div>
 
@@ -49,7 +50,7 @@
     <div class="ro"><span class="k">chirp</span><span class="v" id="r-ch">400 MHz, 2 ms</span></div>
     <div class="ro"><span class="k">beat at 4 m</span><span class="v" id="r-fb">?</span></div>
     <div class="ro wd"><span class="k">width 3 dB</span><span class="v" id="r-w">?</span></div>
-    <div class="ro fl"><span class="k">floor vs ref</span><span class="v" id="r-fl">?</span></div>
+    <div class="ro fl"><span class="k">height vs ref</span><span class="v" id="r-fl">?</span></div>
   </div>
 </div>
 
@@ -67,8 +68,9 @@ const FACT = [0.25, 0.5, 1, 2];
 const FLBL = ['×¼', '×½', '×1', '×2'];
 
 // Prediction first: the changed profile stays hidden until "Show profile",
-// and any change to the chirp hides it again.
-const state = { iT: 1, iB: 2, shown: false };
+// and any change to the chirp hides it again. The axis opens in range, the
+// app's view, where a shorter chirp leaves the peak's width alone.
+const state = { iT: 2, iB: 2, axis: 0, shown: false };   // axis 0: range (m), as the app shows; 1: beat (kHz)
 
 function chirp(fT, fB){
   const T = T0*fT, B = B0*fB, N = Math.floor((T - (1-KEEP)*T)*FS + 1e-9);
@@ -123,36 +125,40 @@ function draw(){
   const mL = narrow ? 40 : 54, mR = 14, mT = 28, mB = narrow ? 40 : 46;
   const pw = w-mL-mR, ph = h-mT-mB;
   const ref = chirp(1, 1), cur = chirp(FACT[state.iT], FACT[state.iB]);
-  // The axis must hold the reference peak, and the changed one once shown,
-  // but it never moves on a change: the axis would give the answer away.
-  const xMax = 45e3, yMin = -80;                // holds every choice, ×8 the reference beat
-  const xFor = f => mL + f/xMax*pw;
+  // The axis holds every choice and never moves on a change: a moving axis
+  // would give the answer away. Range is what the app's Range tab shows.
+  const isR = state.axis === 0;
+  const xMax = isR ? 8 : 45e3, yMin = -80;
+  const xFor = x => mL + x/xMax*pw;
   const yFor = v => mT + Math.min(Math.max(-v,0),-yMin)/(-yMin)*ph;
-
-  const step = niceStep(xMax/1e3);
+  const unit = isR ? 1 : 1e3;
+  const step = isR ? 1 : niceStep(xMax/1e3);
   ctx.strokeStyle = '#e6eef6'; ctx.lineWidth = 1;
-  for (let f=0; f<=xMax/1e3+1e-9; f+=step){ ctx.beginPath(); ctx.moveTo(xFor(f*1e3),mT); ctx.lineTo(xFor(f*1e3),mT+ph); ctx.stroke(); }
+  for (let g=0; g<=xMax/unit+1e-9; g+=step){ ctx.beginPath(); ctx.moveTo(xFor(g*unit),mT); ctx.lineTo(xFor(g*unit),mT+ph); ctx.stroke(); }
   for (let v=0; v>=yMin; v-=20){ ctx.beginPath(); ctx.moveTo(mL,yFor(v)); ctx.lineTo(mL+pw,yFor(v)); ctx.stroke(); }
   ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.1;
   ctx.beginPath(); ctx.moveTo(mL,mT); ctx.lineTo(mL,mT+ph); ctx.lineTo(mL+pw,mT+ph); ctx.stroke();
-  for (let f=0; f<=xMax/1e3+1e-9; f+=step) stext(ctx,`${+f.toFixed(2)}`,xFor(f*1e3),mT+ph+13,fs,'#5b6573','center');
+  for (let g=0; g<=xMax/unit+1e-9; g+=step) stext(ctx,`${+g.toFixed(2)}`,xFor(g*unit),mT+ph+13,fs,'#5b6573','center');
   for (let v=0; v>=yMin; v-=20) stext(ctx,`${v}`,mL-7,yFor(v),fs,'#5b6573','right');
-  mixLabel(ctx,[{s:'Beat above '},{m:'f_0'},{s:' (kHz)'}],mL+pw/2,mT+ph+(narrow?30:34),narrow?11:12.5,'#15202b','center');
+  if (isR) stext(ctx,'Range (m)',mL+pw/2,mT+ph+(narrow?30:34),narrow?10:11.5,'#15202b','center');
+  else mixLabel(ctx,[{s:'Beat above '},{m:'f_0'},{s:' (kHz)'}],mL+pw/2,mT+ph+(narrow?30:34),narrow?11:12.5,'#15202b','center');
   ctx.save(); ctx.translate(narrow?11:14, mT+ph/2); ctx.rotate(-Math.PI/2);
   stext(ctx, narrow ? 'dB re peak' : 'dB relative to the peak', 0, 0, narrow?11:12.5, '#15202b', 'center');
   ctx.restore();
 
+  // A point on the axis, as its offset from the target's beat in Hz.
+  const dfAt = (x, ch) => isR ? (x - R0)*ch.kpm : x - ch.fb;
   const trace = (ch, color, lw, dash) => {
     const fl = floorDb(ch, ref);
     ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash||[]);
     ctx.beginPath();
-    const n = 2400, fs_ = [];
-    for (let i=0; i<=n; i++) fs_.push(i/n*xMax);
-    fs_.push(ch.fb); fs_.sort((p, q) => p - q);       // the peak itself, on any grid
-    for (let i=0; i<fs_.length; i++){
-      const f = fs_[i], v = Math.max(hannDb(f - ch.fb, ch.N), fl);
-      const x = xFor(f), y = yFor(v);
-      if (i === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    const n = 2400, xs = [];
+    for (let i=0; i<=n; i++) xs.push(i/n*xMax);
+    xs.push(isR ? R0 : ch.fb); xs.sort((p, q) => p - q);   // the peak itself, on any grid
+    for (let i=0; i<xs.length; i++){
+      const v = Math.max(hannDb(dfAt(xs[i], ch), ch.N), fl);
+      const X = xFor(xs[i]), Y = yFor(v);
+      if (i === 0) ctx.moveTo(X,Y); else ctx.lineTo(X,Y);
     }
     ctx.stroke(); ctx.setLineDash([]);
   };
@@ -184,8 +190,9 @@ function draw(){
   const fl = floorDb(cur, ref);
   ctx.strokeStyle = css('--floor'); ctx.lineWidth = 1.2; ctx.setLineDash([2,3]);
   ctx.beginPath(); ctx.moveTo(mL,yFor(fl)); ctx.lineTo(mL+pw,yFor(fl)); ctx.stroke(); ctx.setLineDash([]);
-  const half = 1.44/2*cur.bin, y3 = yFor(-3);
-  const xl = xFor(cur.fb - half), xr = xFor(cur.fb + half);
+  const half = 1.44/2*cur.bin, y3 = yFor(-3);              // Hz
+  const c0 = isR ? R0 : cur.fb, hx = isR ? half/cur.kpm : half;
+  const xl = xFor(c0 - hx), xr = xFor(c0 + hx);
   ctx.strokeStyle = css('--w'); ctx.lineWidth = 1.6;
   ctx.beginPath(); ctx.moveTo(xl,y3); ctx.lineTo(xr,y3); ctx.stroke();
   for (const x of [xl,xr]){ ctx.beginPath(); ctx.moveTo(x,y3-5); ctx.lineTo(x,y3+5); ctx.stroke(); }
@@ -200,7 +207,7 @@ function readouts(){
   const set = (id, s) => document.getElementById(id).textContent = s;
   set('r-ch', chirpName(cur));
   if (!state.shown){ ['r-fb','r-w','r-fl'].forEach(id => set(id, '?')); return; }
-  const m = '−', fl = floorDb(cur, ref) - FLOOR0;
+  const m = '−', fl = -(floorDb(cur, ref) - FLOOR0);       // height above the floor, re the reference
   set('r-fb', `${(cur.fb/1e3).toFixed(2)} kHz`);
   set('r-w', `${(1.44*cur.bin/cur.kpm).toFixed(2)} m`);
   set('r-fl', Math.abs(fl) < 0.05 ? '0.0 dB' : (fl > 0 ? `+${fl.toFixed(1)} dB` : `${m}${(-fl).toFixed(1)} dB`));
@@ -217,11 +224,20 @@ function buildSeg(id, key){
   });
 }
 buildSeg('g-T', 'iT'); buildSeg('g-B', 'iB');
+// The axis toggle hides nothing: it changes the view, not the chirp.
+['Range', 'Beat'].forEach((lbl, i) => {
+  const b = document.createElement('button');
+  b.className = 'seg'; b.textContent = lbl;
+  b.setAttribute('aria-label', lbl === 'Range' ? 'range axis, meters' : 'beat frequency axis, kilohertz');
+  b.addEventListener('click', () => { state.axis = i; sync(); });
+  document.getElementById('g-X').appendChild(b);
+});
 const showBtn = document.getElementById('show');
 showBtn.addEventListener('click', () => { state.shown = !state.shown; sync(); });
 function sync(){
   document.querySelectorAll('#g-T .seg').forEach((b, i) => b.setAttribute('aria-pressed', i === state.iT ? 'true' : 'false'));
   document.querySelectorAll('#g-B .seg').forEach((b, i) => b.setAttribute('aria-pressed', i === state.iB ? 'true' : 'false'));
+  document.querySelectorAll('#g-X .seg').forEach((b, i) => b.setAttribute('aria-pressed', i === state.axis ? 'true' : 'false'));
   showBtn.setAttribute('aria-pressed', state.shown ? 'true' : 'false');
   showBtn.textContent = state.shown ? 'Hide profile' : 'Show profile';
   readouts(); draw();
