@@ -174,7 +174,7 @@ the level by several dB.
 :::
 
 <div class="rec" data-lab="L19">
-<label>Step 3: your own HB100's Signal Freq <input data-field="f.own"></label>
+<label>Step 3: your own HB100's Signal Freq (GHz) <input data-field="f.own"></label>
 </div>
 
 This is the L18 Lab's bring-up. Calibrate needs your own HB100 at boresight
@@ -203,9 +203,9 @@ each Angle before you trust the fix, as Lesson 19's "The Cone Angle" shows.
 :::
 
 <div class="rec" data-lab="L19">
-<label>Step 9: Angle, source toward +x <input data-field="ref.angle"></label>
+<label>Step 9: Angle with the source toward +x (°) <input data-field="ref.angle"></label>
 <label>Step 9: the sign s <input data-field="ref.s"></label>
-<label>Step 11: the fox's Signal Freq, after re-tune <input data-field="f.fox"></label>
+<label>Step 11: the fox's Signal Freq after re-tune (GHz) <input data-field="f.fox"></label>
 </div>
 
 The reference shot checks two things. The sign gives $s$, which you apply to
@@ -231,27 +231,27 @@ kit to it. Keep the calibration from bring-up.
 :::
 
 <div class="rec" data-lab="L19">
-<label>Step 12: Rx Gain for the hunt <input data-field="f.gain"></label>
-<label>Station −1.5 m: s times the mean Angle <input data-field="h.m150.theta"></label>
-<label>Station −1.5 m: spread <input data-field="h.m150.spread"></label>
-<label>Station −1.5 m: Peak Gain <input data-field="h.m150.gain"></label>
-<label>Station −1.5 m: use it? <input data-field="h.m150.use"></label>
-<label>Station −0.75 m: s times the mean Angle <input data-field="h.m075.theta"></label>
-<label>Station −0.75 m: spread <input data-field="h.m075.spread"></label>
-<label>Station −0.75 m: Peak Gain <input data-field="h.m075.gain"></label>
-<label>Station −0.75 m: use it? <input data-field="h.m075.use"></label>
-<label>Station 0.0 m: s times the mean Angle <input data-field="h.0.theta"></label>
-<label>Station 0.0 m: spread <input data-field="h.0.spread"></label>
-<label>Station 0.0 m: Peak Gain <input data-field="h.0.gain"></label>
-<label>Station 0.0 m: use it? <input data-field="h.0.use"></label>
-<label>Station +0.75 m: s times the mean Angle <input data-field="h.p075.theta"></label>
-<label>Station +0.75 m: spread <input data-field="h.p075.spread"></label>
-<label>Station +0.75 m: Peak Gain <input data-field="h.p075.gain"></label>
-<label>Station +0.75 m: use it? <input data-field="h.p075.use"></label>
-<label>Station +1.5 m: s times the mean Angle <input data-field="h.p150.theta"></label>
-<label>Station +1.5 m: spread <input data-field="h.p150.spread"></label>
-<label>Station +1.5 m: Peak Gain <input data-field="h.p150.gain"></label>
-<label>Station +1.5 m: use it? <input data-field="h.p150.use"></label>
+<label>Step 12: Rx Gain for the hunt (dB) <input data-field="f.gain"></label>
+<label>Step 14: s times the mean Angle at −1.5 m (°) <input data-field="h.m150.theta"></label>
+<label>Step 14: spread at −1.5 m (°) <input data-field="h.m150.spread"></label>
+<label>Step 14: Peak Gain at −1.5 m (dBFS) <input data-field="h.m150.gain"></label>
+<label>Step 14: use the −1.5 m station? <input data-field="h.m150.use"></label>
+<label>Step 14: s times the mean Angle at −0.75 m (°) <input data-field="h.m075.theta"></label>
+<label>Step 14: spread at −0.75 m (°) <input data-field="h.m075.spread"></label>
+<label>Step 14: Peak Gain at −0.75 m (dBFS) <input data-field="h.m075.gain"></label>
+<label>Step 14: use the −0.75 m station? <input data-field="h.m075.use"></label>
+<label>Step 14: s times the mean Angle at 0.0 m (°) <input data-field="h.0.theta"></label>
+<label>Step 14: spread at 0.0 m (°) <input data-field="h.0.spread"></label>
+<label>Step 14: Peak Gain at 0.0 m (dBFS) <input data-field="h.0.gain"></label>
+<label>Step 14: use the 0.0 m station? <input data-field="h.0.use"></label>
+<label>Step 14: s times the mean Angle at +0.75 m (°) <input data-field="h.p075.theta"></label>
+<label>Step 14: spread at +0.75 m (°) <input data-field="h.p075.spread"></label>
+<label>Step 14: Peak Gain at +0.75 m (dBFS) <input data-field="h.p075.gain"></label>
+<label>Step 14: use the +0.75 m station? <input data-field="h.p075.use"></label>
+<label>Step 14: s times the mean Angle at +1.5 m (°) <input data-field="h.p150.theta"></label>
+<label>Step 14: spread at +1.5 m (°) <input data-field="h.p150.spread"></label>
+<label>Step 14: Peak Gain at +1.5 m (dBFS) <input data-field="h.p150.gain"></label>
+<label>Step 14: use the +1.5 m station? <input data-field="h.p150.use"></label>
 </div>
 
 Take the end stations first: they set the baseline, and the baseline sets the
@@ -284,7 +284,7 @@ only be dropped.
 
 <div class="rec" data-lab="L19">
 <label>Step 17: the fix (m) <input data-field="call.fix"></label>
-<label>Step 17: largest residual <input data-field="call.resid"></label>
+<label>Step 17: largest residual (m) <input data-field="call.resid"></label>
 <label>Step 18: station dropped <input data-field="call.dropped"></label>
 <label>Step 19: the box you named <input data-field="call.named"></label>
 <label>Step 20: the live box <input data-field="call.live"></label>
