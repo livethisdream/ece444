@@ -869,7 +869,8 @@ empty box. Draw the shade as a gray box inside the cell (`\predv`, `\predh`,
 covers the table rules so a screen viewer shows a run of predicted cells as
 one gray block.
 **Part 3, Analyze** (individual, after the lab): two or three open prompts
-about what this lab measured. A prompt does not name the finding, its
+about what this lab measured. The prompts are open ended and do not lead to a
+set answer (Neil, 2026-11-12): a prompt does not name the finding, its
 direction, or its cause, and it is not boilerplate that would fit any lab
 (VOICE.md 43). No problem invents a person or readings (VOICE.md 41). The
 first page says what an analysis answer is graded on: a claim, the evidence,
@@ -1313,7 +1314,7 @@ it when a rounded number differs from ADI's (L26: 715 Hz vs ADI's 716).
 | range chirp (L28 Lab) | **superseded 2026-11-04: see M8.1** | |
 | range-Doppler burst (L29–L31) | **superseded 2026-11-04: see M8.1** | |
 | 0 m frequency | about 100 kHz, set per kit by the L28 calibration | ADI's `signal_freq`; never called an IF on a page |
-| corner reflector | edge $a$ = 10 cm (provisional) | $\sigma = 4\pi a^4/3\lambda^2$ = 0.47 m² |
+| corner reflector | edge $a$ = 10 cm (Neil, 2026-11-12: the course's trihedral is 4 in, 10.16 cm) | $\sigma = 4\pi a^4/3\lambda^2$ = 0.47 m² |
 
 ### M8.1 The Phaser app's FMCW presets are the lab numbers (Neil, 2026-11-04)
 

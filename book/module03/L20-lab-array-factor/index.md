@@ -107,7 +107,7 @@ you compare the four traces against each other at the end.
    by more than about $0.5^\circ$.
 
    <div class="rec" data-lab="L20">
-   <label>Step 2: Signal Freq <input data-field="f.sig"></label>
+   <label>Step 2: Signal Freq (GHz) <input data-field="f.sig"></label>
    </div>
 3. **Calibrate the array.** Press **Calibrate** and wait for it to finish, with
    the HB100 still at boresight. An uncalibrated array has amplitude and phase
@@ -163,10 +163,10 @@ array factor at the extra phase, not a lobe: leave it out of Steps 7 to 10.
    should land within a degree of your calculated value.
 
    <div class="rec" data-lab="L20">
-   <label>Peak Gain (dBFS) <input data-field="a8.peak" data-label="Step 7, 8 elements: Peak Gain (dBFS)"></label>
-   <label>HPBW <input data-field="a8.hpbw" data-label="Step 7, 8 elements: HPBW"></label>
-   <label>FNBW <input data-field="a8.fnbw" data-label="Step 7, 8 elements: FNBW"></label>
-   <label>First SLL (dBc) <input data-field="a8.sll" data-label="Step 7, 8 elements: first SLL (dBc)"></label>
+   <label>Step 7: Peak Gain with 8 elements (dBFS) <input data-field="a8.peak"></label>
+   <label>Step 7: HPBW with 8 elements (°) <input data-field="a8.hpbw"></label>
+   <label>Step 7: FNBW with 8 elements (°) <input data-field="a8.fnbw"></label>
+   <label>Step 7: first SLL with 8 elements (dBc) <input data-field="a8.sll"></label>
    </div>
 8. **Four elements, E3 to E6.** Set E1, E2, E7, and E8 to 0, and sweep. The
    peak drops by the change you predicted in Part 1, or up to about 1.5 dB
@@ -174,11 +174,11 @@ array factor at the extra phase, not a lobe: leave it out of Steps 7 to 10.
    FNBW can come out a few degrees wider than your prediction.
 
    <div class="rec" data-lab="L20">
-   <label>Peak Gain (dBFS) <input data-field="a4.peak" data-label="Step 8, E3 to E6: Peak Gain (dBFS)"></label>
-   <label>Change from 8 elements (dB) <input data-field="a4.step" data-label="Step 8, E3 to E6: change from 8 elements (dB)"></label>
-   <label>HPBW <input data-field="a4.hpbw" data-label="Step 8, E3 to E6: HPBW"></label>
-   <label>FNBW <input data-field="a4.fnbw" data-label="Step 8, E3 to E6: FNBW"></label>
-   <label>First SLL (dBc) <input data-field="a4.sll" data-label="Step 8, E3 to E6: first SLL (dBc)"></label>
+   <label>Step 8: Peak Gain with E3 to E6 (dBFS) <input data-field="a4.peak"></label>
+   <label>Step 8: peak change from 8 elements with E3 to E6 (dB) <input data-field="a4.step"></label>
+   <label>Step 8: HPBW with E3 to E6 (°) <input data-field="a4.hpbw"></label>
+   <label>Step 8: FNBW with E3 to E6 (°) <input data-field="a4.fnbw"></label>
+   <label>Step 8: first SLL with E3 to E6 (dBc) <input data-field="a4.sll"></label>
    </div>
 9. **Two elements, E4 and E5.** Set every element to 0 except E4 and E5, and
    sweep. The peak drops from the eight-element peak by your predicted change,
@@ -187,11 +187,11 @@ array factor at the extra phase, not a lobe: leave it out of Steps 7 to 10.
    endfire, not a fault.
 
    <div class="rec" data-lab="L20">
-   <label>Peak Gain (dBFS) <input data-field="a2.peak" data-label="Step 9, E4 and E5: Peak Gain (dBFS)"></label>
-   <label>Change from 8 elements (dB) <input data-field="a2.step" data-label="Step 9, E4 and E5: change from 8 elements (dB)"></label>
-   <label>HPBW <input data-field="a2.hpbw" data-label="Step 9, E4 and E5: HPBW"></label>
-   <label>FNBW <input data-field="a2.fnbw" data-label="Step 9, E4 and E5: FNBW"></label>
-   <label>First SLL (dBc) <input data-field="a2.sll" data-label="Step 9, E4 and E5: first SLL (dBc)"></label>
+   <label>Step 9: Peak Gain with E4 and E5 (dBFS) <input data-field="a2.peak"></label>
+   <label>Step 9: peak change from 8 elements with E4 and E5 (dB) <input data-field="a2.step"></label>
+   <label>Step 9: HPBW with E4 and E5 (°) <input data-field="a2.hpbw"></label>
+   <label>Step 9: FNBW with E4 and E5 (°) <input data-field="a2.fnbw"></label>
+   <label>Step 9: first SLL with E4 and E5 (dBc) <input data-field="a2.sll"></label>
    </div>
 10. **Two elements, E1 and E8.** Set E4 and E5 to 0 and E1 and E8 to 100, and
     sweep. Record in Table A the peak, the change from eight elements, and the
@@ -203,24 +203,24 @@ array factor at the extra phase, not a lobe: leave it out of Steps 7 to 10.
     them out.
 
     <div class="rec" data-lab="L20">
-    <label>Peak Gain (dBFS) <input data-field="a18.peak" data-label="Step 10, E1 and E8: Peak Gain (dBFS)"></label>
-    <label>Change from 8 elements (dB) <input data-field="a18.step" data-label="Step 10, E1 and E8: change from 8 elements (dB)"></label>
-    <label>HPBW <input data-field="a18.hpbw" data-label="Step 10, E1 and E8: HPBW"></label>
-    <label>FNBW <input data-field="a18.fnbw" data-label="Step 10, E1 and E8: FNBW"></label>
-    <label>Level of the m = ±1 lobe (dBc) <input data-field="a18.sll" data-label="Step 10, E1 and E8: level of the m = ±1 lobe (dBc)"></label>
-    <label>Angle <input data-field="lobe.m3.angle" data-label="Step 10, lobe −3: angle"></label>
-    <label>Level (dBc) <input data-field="lobe.m3.level" data-label="Step 10, lobe −3: level (dBc)"></label>
-    <label>Angle <input data-field="lobe.m2.angle" data-label="Step 10, lobe −2: angle"></label>
-    <label>Level (dBc) <input data-field="lobe.m2.level" data-label="Step 10, lobe −2: level (dBc)"></label>
-    <label>Angle <input data-field="lobe.m1.angle" data-label="Step 10, lobe −1: angle"></label>
-    <label>Level (dBc) <input data-field="lobe.m1.level" data-label="Step 10, lobe −1: level (dBc)"></label>
-    <label>Angle <input data-field="lobe.0.angle" data-label="Step 10, lobe 0: angle"></label>
-    <label>Angle <input data-field="lobe.p1.angle" data-label="Step 10, lobe +1: angle"></label>
-    <label>Level (dBc) <input data-field="lobe.p1.level" data-label="Step 10, lobe +1: level (dBc)"></label>
-    <label>Angle <input data-field="lobe.p2.angle" data-label="Step 10, lobe +2: angle"></label>
-    <label>Level (dBc) <input data-field="lobe.p2.level" data-label="Step 10, lobe +2: level (dBc)"></label>
-    <label>Angle <input data-field="lobe.p3.angle" data-label="Step 10, lobe +3: angle"></label>
-    <label>Level (dBc) <input data-field="lobe.p3.level" data-label="Step 10, lobe +3: level (dBc)"></label>
+    <label>Step 10: Peak Gain with E1 and E8 (dBFS) <input data-field="a18.peak"></label>
+    <label>Step 10: peak change from 8 elements with E1 and E8 (dB) <input data-field="a18.step"></label>
+    <label>Step 10: HPBW with E1 and E8 (°) <input data-field="a18.hpbw"></label>
+    <label>Step 10: FNBW with E1 and E8 (°) <input data-field="a18.fnbw"></label>
+    <label>Step 10: level of the m = ±1 lobe with E1 and E8 (dBc) <input data-field="a18.sll"></label>
+    <label>Step 10: angle of lobe m = −3 (°) <input data-field="lobe.m3.angle"></label>
+    <label>Step 10: level of lobe m = −3 (dBc) <input data-field="lobe.m3.level"></label>
+    <label>Step 10: angle of lobe m = −2 (°) <input data-field="lobe.m2.angle"></label>
+    <label>Step 10: level of lobe m = −2 (dBc) <input data-field="lobe.m2.level"></label>
+    <label>Step 10: angle of lobe m = −1 (°) <input data-field="lobe.m1.angle"></label>
+    <label>Step 10: level of lobe m = −1 (dBc) <input data-field="lobe.m1.level"></label>
+    <label>Step 10: angle of lobe m = 0 (°) <input data-field="lobe.0.angle"></label>
+    <label>Step 10: angle of lobe m = +1 (°) <input data-field="lobe.p1.angle"></label>
+    <label>Step 10: level of lobe m = +1 (dBc) <input data-field="lobe.p1.level"></label>
+    <label>Step 10: angle of lobe m = +2 (°) <input data-field="lobe.p2.angle"></label>
+    <label>Step 10: level of lobe m = +2 (dBc) <input data-field="lobe.p2.level"></label>
+    <label>Step 10: angle of lobe m = +3 (°) <input data-field="lobe.p3.angle"></label>
+    <label>Step 10: level of lobe m = +3 (dBc) <input data-field="lobe.p3.level"></label>
     </div>
 ::::
 

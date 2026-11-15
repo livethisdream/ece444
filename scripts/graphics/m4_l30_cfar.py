@@ -11,6 +11,7 @@
   - L30-window-2d   : the same window on a range-Doppler grid
   - L30-rd-detections : a synthetic range-Doppler map after MTI, and the cells
                       cfar_2d declares, run with the lesson's own code excerpt
+  - L30-room        : the lab's layout from above: kit, tape, stand-in, walk
 
 The detector is square law on complex samples, so noise power in a cell is
 exponential with mean Pn. The CA bias is alpha = N (Pfa^(-1/N) - 1); the GO
@@ -275,7 +276,9 @@ def failures() -> None:
 
 
 def window_2d() -> None:
-    gr, gv, rr, rv = 2, 2, 4, 4
+    # The lesson's 2D example: 1 guard and 3 reference cells each way. Not the
+    # notebook's 2-and-4 window, whose N and bias are Part 1 of the packet.
+    gr, gv, rr, rv = 1, 1, 3, 3
     R, V = gr + rr + 1, gv + rv + 1
     fig, ax = plt.subplots(figsize=(4.6, 4.2))
     for i in range(-R, R + 1):
@@ -293,7 +296,8 @@ def window_2d() -> None:
     ax.add_patch(Rectangle((-gv - 0.5, -gr - 0.5), 2 * gv + 1, 2 * gr + 1, fc="none", ec=GRAY, lw=1.6))
     ax.add_patch(Rectangle((-gv - rv - 0.5, -gr - rr - 0.5), 2 * (gv + rv) + 1, 2 * (gr + rr) + 1,
                            fc="none", ec=NAVY, lw=1.8))
-    ax.text(0, R + 0.8, "144 reference cells", color=NAVY, ha="center", fontsize=12.5)
+    n_ref = (2 * (gr + rr) + 1) * (2 * (gv + rv) + 1) - (2 * gr + 1) * (2 * gv + 1)
+    ax.text(0, R + 0.8, f"{n_ref} reference cells", color=NAVY, ha="center", fontsize=12.5)
     ax.text(0, -R - 1.3, "Doppler cell", color=GRAY, ha="center", fontsize=12)
     ax.text(-V - 1.3, 0, "range cell", color=GRAY, ha="center", va="center", rotation=90, fontsize=12)
     ax.set_xlim(-V - 2.0, V + 0.6)
@@ -341,6 +345,38 @@ def rd_detections() -> None:
     finalize(fig, "L30-rd-detections")
 
 
+def room() -> None:
+    """Top view of the L30 Lab's layout: the kit at one end of a clear line, a
+    tape along the floor, the stand-in at 3 m for Steps 5-8, and the walk out
+    and back for Steps 9-12. Labels only; the steps say what to do."""
+    fig, ax = plt.subplots(figsize=(7.2, 2.6))
+    # the beam: a light wedge from the kit
+    ax.add_patch(plt.Polygon([(0.25, 0), (6.2, 1.35), (6.2, -1.35)], fc="#e8f1fa", ec="none"))
+    # the kit and the laptop beside it
+    ax.add_patch(Rectangle((-0.05, -0.35), 0.3, 0.7, fc=NAVY, ec=NAVY))
+    ax.text(0.1, -0.62, "kit", ha="center", va="top", fontsize=12, color=NAVY)
+    ax.add_patch(Rectangle((-0.15, 0.62), 0.5, 0.32, fc="white", ec=GRAY, lw=1.2))
+    ax.text(0.1, 1.05, "laptop", ha="center", va="bottom", fontsize=11, color=GRAY)
+    # the tape, marked in meters
+    ax.plot([0.25, 6.0], [0, 0], color="#b28b00", lw=2.2, solid_capstyle="butt")
+    for m in range(1, 7):
+        ax.plot([m, m], [-0.09, 0.09], color="#b28b00", lw=1.6)
+        ax.text(m, -0.2, f"{m} m", ha="center", va="top", fontsize=10.5, color=GRAY)
+    ax.text(6.14, 0.0, "tape", ha="left", va="center", fontsize=11, color="#8a6b00")
+    # the stand-in at 3 m
+    ax.add_patch(Rectangle((2.82, 0.12), 0.36, 0.36, fc=GREEN, ec=GREEN))
+    ax.text(3.0, 0.62, "stand-in, Steps 5–8", ha="center", va="bottom", fontsize=11, color=GREEN)
+    # the walk, out and back, below the tape
+    ax.add_patch(FancyArrowPatch((1.0, -0.78), (5.6, -0.78), arrowstyle="-|>", mutation_scale=14, color=RED, lw=1.8))
+    ax.add_patch(FancyArrowPatch((5.6, -1.02), (1.0, -1.02), arrowstyle="-|>", mutation_scale=14, color=RED, lw=1.8))
+    ax.text(3.3, -1.18, "walk out and back, Steps 9–12", ha="center", va="top", fontsize=11, color=RED)
+    ax.set_xlim(-0.4, 6.7)
+    ax.set_ylim(-1.6, 1.4)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    finalize(fig, "L30-room")
+
+
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     for n in (16, 32, 144):
@@ -352,6 +388,7 @@ def main() -> int:
     failures()
     window_2d()
     rd_detections()
+    room()
     return 0
 
 

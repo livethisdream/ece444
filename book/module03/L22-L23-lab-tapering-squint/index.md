@@ -47,8 +47,7 @@ with room for notes. Print from read mode for the whole lesson.
 Lesson 22 showed how an amplitude taper trades beamwidth and directivity for
 lower sidelobes, and why the peak drop the sweep plots is not the directivity
 the array loses. Lesson 23 showed three departures a taper cannot touch,
-because they come from the element spacing, the frequency the phases are set
-at, and the phase shifter's resolution. Today you test both on your kit in four
+because they come from the element spacing, the frequency the kit sets the phases at, and the phase shifter's resolution. Today you test both on your kit in four
 runs. Steps 1 to 6 bring up the kit with the HB100 at boresight. The taper runs
 fill Tables A and B in Part 2 of the packet, the grating-lobe run Table C, the
 squint run Table D, and the quantization run Table E, and you check every
@@ -105,7 +104,7 @@ false lobe on the sweep.
    height, and record the distance.
 
    <div class="rec" data-lab="L22-L23">
-   <label>Step 1: distance to the source <input data-field="f.dist"></label>
+   <label>Step 1: distance to the source (m) <input data-field="f.dist"></label>
    </div>
 2. **Connect.** Browse to your kit's address and wait for the pill to read
    **Connected**.
@@ -114,7 +113,7 @@ false lobe on the sweep.
    frequency you used in Part 1, rework your predictions before you sweep.
 
    <div class="rec" data-lab="L22-L23">
-   <label>Step 3: Signal Freq <input data-field="f.sig"></label>
+   <label>Step 3: Signal Freq (GHz) <input data-field="f.sig"></label>
    </div>
 4. **Calibrate the array.** Press **Calibrate** and wait for it to finish, with
    the HB100 still at boresight; it uses the frequency Find HB100 stored. An
@@ -161,8 +160,8 @@ read against the frozen uniform trace.
    by more than about 2 dB, calibrate again and repeat Steps 7 and 8.
 
    <div class="rec" data-lab="L22-L23">
-   <label>Step 8, Uniform: HPBW <input data-field="a.uni.hpbw"></label>
-   <label>Step 8, Uniform: first sidelobe (dBc) <input data-field="a.uni.sll"></label>
+   <label>Step 8: Uniform HPBW (°) <input data-field="a.uni.hpbw"></label>
+   <label>Step 8: Uniform first sidelobe (dBc) <input data-field="a.uni.sll"></label>
    <label>Step 8: noise floor (dBc) <input data-field="f.floor"></label>
    </div>
 9. **Load Hann.** Choose the **Hann** taper and check the eight sliders read
@@ -176,20 +175,20 @@ read against the frozen uniform trace.
     what you measure; Part 3 asks you to account for any difference.
 
     <div class="rec" data-lab="L22-L23">
-    <label>Step 10, Hann: HPBW <input data-field="a.hann.hpbw"></label>
-    <label>Step 10, Hann: peak drop (dB) <input data-field="a.hann.drop"></label>
-    <label>Step 10, Hann: first sidelobe <input data-field="a.hann.sll"></label>
+    <label>Step 10: Hann HPBW (°) <input data-field="a.hann.hpbw"></label>
+    <label>Step 10: Hann peak drop (dB) <input data-field="a.hann.drop"></label>
+    <label>Step 10: Hann first sidelobe (dBc) <input data-field="a.hann.sll"></label>
     </div>
 11. **Blackman and Chebyshev (optional).** Repeat Steps 9 and 10 for each, if
     time allows, and compare with your predictions.
 
     <div class="rec" data-lab="L22-L23">
-    <label>Step 11, Blackman: HPBW <input data-field="a.black.hpbw"></label>
-    <label>Step 11, Blackman: peak drop (dB) <input data-field="a.black.drop"></label>
-    <label>Step 11, Blackman: first sidelobe <input data-field="a.black.sll"></label>
-    <label>Step 11, Chebyshev: HPBW <input data-field="a.cheb.hpbw"></label>
-    <label>Step 11, Chebyshev: peak drop (dB) <input data-field="a.cheb.drop"></label>
-    <label>Step 11, Chebyshev: first sidelobe <input data-field="a.cheb.sll"></label>
+    <label>Step 11: Blackman HPBW (°) <input data-field="a.black.hpbw"></label>
+    <label>Step 11: Blackman peak drop (dB) <input data-field="a.black.drop"></label>
+    <label>Step 11: Blackman first sidelobe (dBc) <input data-field="a.black.sll"></label>
+    <label>Step 11: Chebyshev HPBW (°) <input data-field="a.cheb.hpbw"></label>
+    <label>Step 11: Chebyshev peak drop (dB) <input data-field="a.cheb.drop"></label>
+    <label>Step 11: Chebyshev first sidelobe (dBc) <input data-field="a.cheb.sll"></label>
     </div>
 12. **Design your own taper.** With Enforce Symmetric Taper on, meet this
     specification: HPBW no wider than $16^\circ$, with the first sidelobe
@@ -199,13 +198,13 @@ read against the frozen uniform trace.
     sidelobe rises past $-20$ dBc. Record your final gains and the result.
 
     <div class="rec" data-lab="L22-L23">
-    <label>Step 12: Rx1, Rx8 (%) <input data-field="b.g1"></label>
-    <label>Step 12: Rx2, Rx7 (%) <input data-field="b.g2"></label>
-    <label>Step 12: Rx3, Rx6 (%) <input data-field="b.g3"></label>
-    <label>Step 12: Rx4, Rx5 (%) <input data-field="b.g4"></label>
-    <label>Step 12: HPBW <input data-field="b.hpbw"></label>
-    <label>Step 12: peak drop (dB) <input data-field="b.drop"></label>
-    <label>Step 12: first sidelobe (dBc) <input data-field="b.sll"></label>
+    <label>Step 12: Rx1 and Rx8 gain (%) <input data-field="b.g1"></label>
+    <label>Step 12: Rx2 and Rx7 gain (%) <input data-field="b.g2"></label>
+    <label>Step 12: Rx3 and Rx6 gain (%) <input data-field="b.g3"></label>
+    <label>Step 12: Rx4 and Rx5 gain (%) <input data-field="b.g4"></label>
+    <label>Step 12: your design's HPBW (°) <input data-field="b.hpbw"></label>
+    <label>Step 12: your design's peak drop (dB) <input data-field="b.drop"></label>
+    <label>Step 12: your design's first sidelobe (dBc) <input data-field="b.sll"></label>
     </div>
 13. **Restore.** Choose the **Uniform** taper again, so the next runs start
     from a known state.
@@ -230,22 +229,22 @@ read against the frozen uniform trace.
     against the frozen uniform trace. Compare each with your prediction.
 
     <div class="rec" data-lab="L22-L23">
-    <label>Step 15, Rx1, Rx4, Rx7: lobe angles <input data-field="c.147.lobes"></label>
-    <label>Step 15, Rx1, Rx4, Rx7: height against the 0° lobe <input data-field="c.147.height"></label>
-    <label>Step 15, Rx1, Rx4, Rx7: peak drop (dB) <input data-field="c.147.drop"></label>
+    <label>Step 15: lobe angles with Rx1, Rx4, Rx7 on (°) <input data-field="c.147.lobes"></label>
+    <label>Step 15: lobe height against the 0° lobe (dB) <input data-field="c.147.height"></label>
+    <label>Step 15: peak drop with Rx1, Rx4, Rx7 on (dB) <input data-field="c.147.drop"></label>
     </div>
 16. **Every fourth element.** Set Rx4 and Rx7 to 0% and Rx5 to 100%, so only
     Rx1 and Rx5 are on, $4d = 56\ \text{mm}$ apart, and sweep again. Record the
     same three, and compare them with your prediction, including what it says
     about both ends of the plot. The measured peak drops in Steps 15 and 16 run
     about 1 dB short of the element count, even with elements fully on or off,
-    for a reason that is still open, so I grade these two steps on the lobe
+    for a reason I have not found, so I grade these two steps on the lobe
     angles.
 
     <div class="rec" data-lab="L22-L23">
-    <label>Step 16, Rx1, Rx5: lobe angles <input data-field="c.15.lobes"></label>
-    <label>Step 16, Rx1, Rx5: height against the 0° lobe <input data-field="c.15.height"></label>
-    <label>Step 16, Rx1, Rx5: peak drop (dB) <input data-field="c.15.drop"></label>
+    <label>Step 16: lobe angles with Rx1, Rx5 on (°) <input data-field="c.15.lobes"></label>
+    <label>Step 16: lobe height against the 0° lobe (dB) <input data-field="c.15.height"></label>
+    <label>Step 16: peak drop with Rx1, Rx5 on (dB) <input data-field="c.15.drop"></label>
     </div>
 17. **Squint reference.** Place the HB100 at $45^\circ$ on the $1.2$ m arc and
     choose the **Uniform** taper. Set **Signal BW** to 10 MHz, press
@@ -253,7 +252,7 @@ read against the frozen uniform trace.
     source), and press **Freeze**.
 
     <div class="rec" data-lab="L22-L23">
-    <label>Step 17, Signal BW 10 MHz: Angle <input data-field="d.10.angle"></label>
+    <label>Step 17: Angle at Signal BW 10 MHz (°) <input data-field="d.10.angle"></label>
     </div>
 18. **Squint.** Choose the Beam Squint preset, check that **Signal BW** reads
     500 MHz, and sweep again. Record **Angle** and its shift from Step 17, and
@@ -263,8 +262,8 @@ read against the frozen uniform trace.
     squint sweep.
 
     <div class="rec" data-lab="L22-L23">
-    <label>Step 18, Signal BW 500 MHz: Angle <input data-field="d.500.angle"></label>
-    <label>Step 18: shift <input data-field="d.shift"></label>
+    <label>Step 18: Angle at Signal BW 500 MHz (°) <input data-field="d.500.angle"></label>
+    <label>Step 18: shift between the two (°) <input data-field="d.shift"></label>
     </div>
 ::::
 
@@ -288,20 +287,20 @@ read against the frozen uniform trace.
     begin the sweep promptly; a slower sweep runs off its end.
 
     <div class="rec" data-lab="L22-L23">
-    <label>Step 20, 7 bits: strongest lobe (dBc) <input data-field="e.7.lobe"></label>
-    <label>Step 20, 7 bits: where <input data-field="e.7.where"></label>
+    <label>Step 20: strongest lobe at 7 bits (dBc) <input data-field="e.7.lobe"></label>
+    <label>Step 20: its angle at 7 bits (°) <input data-field="e.7.where"></label>
     </div>
 21. **Sweep at 4, 3, and 2 bits.** Repeat Step 20 at each, checking the bit
     count and the Use Bits box before each sweep, and compare each trace with
     your Part 1 prediction.
 
     <div class="rec" data-lab="L22-L23">
-    <label>Step 21, 4 bits: strongest lobe (dBc) <input data-field="e.4.lobe"></label>
-    <label>Step 21, 4 bits: where <input data-field="e.4.where"></label>
-    <label>Step 21, 3 bits: strongest lobe (dBc) <input data-field="e.3.lobe"></label>
-    <label>Step 21, 3 bits: where <input data-field="e.3.where"></label>
-    <label>Step 21, 2 bits: strongest lobe (dBc) <input data-field="e.2.lobe"></label>
-    <label>Step 21, 2 bits: where <input data-field="e.2.where"></label>
+    <label>Step 21: strongest lobe at 4 bits (dBc) <input data-field="e.4.lobe"></label>
+    <label>Step 21: its angle at 4 bits (°) <input data-field="e.4.where"></label>
+    <label>Step 21: strongest lobe at 3 bits (dBc) <input data-field="e.3.lobe"></label>
+    <label>Step 21: its angle at 3 bits (°) <input data-field="e.3.where"></label>
+    <label>Step 21: strongest lobe at 2 bits (dBc) <input data-field="e.2.lobe"></label>
+    <label>Step 21: its angle at 2 bits (°) <input data-field="e.2.where"></label>
     </div>
 22. **Restore.** Before you leave: **Use Bits** on, Phase Shift Bits 7, Signal
     BW 10 MHz, and the **Uniform** taper.
@@ -327,8 +326,7 @@ This frame collects every box you filled in on this page. Your entries stay in t
 browser only, saved as you type. **Download my packet** writes them into the Measured
 cells of the blank packet and saves the PDF. The download locks every field, the Predicted cells
 and Part 3 included, so type those into your own copy of the packet first, then use **Fill
-my own copy** and choose that file: your predictions and Part 3 are kept, and the page
-adds your measurements beside them. If you work Parts 1 and 3 on paper, download the packet
+my own copy** and choose that file: the page keeps your predictions and Part 3, and adds your measurements beside them. If you work Parts 1 and 3 on paper, download the packet
 and write on the printout. Upload one PDF to Gradescope. **Export entries**
 saves a small backup file you can **Import** on another laptop or after
 clearing your browser. The boxes are optional: the blank packet is in the next
@@ -352,8 +350,7 @@ The L22–L23 Lab packet is one submission for the whole lab, turned in complete
 ::::{frame} For Part 3
 :class: read-only
 
-Part 3 is done after class with your Part 2 entries and your Part 1
-predictions beside you. It asks about three comparisons:
+Do Part 3 after class, with your Part 2 entries and your Part 1 predictions beside you. It asks about three comparisons:
 
 1. The tapers: compare your taper measurements (Tables A and B) with your
    predictions, and choose a taper for this kit.

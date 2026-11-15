@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-Sidelobe level is set by the shape of the illumination, and shape is something you control.
+The shape of the illumination sets the sidelobe level, and you control the shape.
 
 Lesson 22 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -143,8 +143,7 @@ A sidelobe is a direction the antenna is listening to when you did not ask it
 to. A search radar at $-13\ \text{dB}$ sidelobes sees ground clutter through
 those lobes at only one twentieth of its main-beam sensitivity, which is
 nowhere near enough when the clutter is 40 dB stronger than the target. A
-communications terminal with high sidelobes receives an adjacent satellite it
-was never pointed at, and transmits into one. A jammer off to the side does not
+communications terminal with high sidelobes receives an adjacent satellite it never pointed at, and transmits into one. A jammer off to the side does not
 need to be in your beam to deny it — it only needs to be in a sidelobe. Lesson
 24 attacks that last problem directly by placing a null on the jammer; tapering
 is the cheaper, non-adaptive answer that lowers *every* sidelobe at once.
@@ -206,7 +205,7 @@ $d/\lambda = 14/30 = 0.467$. The element amplitudes behind each row, in percent:
 | 0.08 (Hamming) | 19, 47, 79, 100 |
 | 0.00 (Hann) | 12, 43, 77, 100 |
 
-Only the inner four values are listed; the taper is symmetric, so elements 5
+The table lists only the inner four values; the taper is symmetric, so elements 5
 through 8 mirror elements 4 through 1.
 
 Read the table downward and the trade is already visible: every step toward a
@@ -302,7 +301,7 @@ use are in the next table.
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-**The Taylor taper** is the one large radars are built with. A true Chebyshev design
+**The Taylor taper** is the one large radars use. A true Chebyshev design
 on a big aperture puts sharp spikes of current at the array edges, which is hard
 to build and gives up efficiency. Taylor's design holds only the first
 $\bar{n} - 1$ sidelobe pairs at the design level and lets the rest decay like a
@@ -405,7 +404,7 @@ $$\theta_\text{HP} \approx 0.886\ \frac{\lambda}{N d} \times (\text{broadening, 
 Tapering has three separate consequences, and two of them are routinely confused
 with each other.
 
-**First, the main lobe gets wider.** The physical aperture is unchanged, but the
+**First, the main lobe gets wider.** The physical aperture does not change, but the
 *effective* aperture is smaller because the outer elements now contribute less.
 For the uniform case the beamwidth follows Lesson 20's rule,
 
@@ -552,7 +551,7 @@ them below some level, and say what that does to the beam. The procedure is shor
 
 1. Pick the family. Use Chebyshev when the specification is a hard ceiling on
    every sidelobe and the array is small. Use Taylor when the array is large or
-   the edge elements cannot be driven that hard. Use a cosine-on-pedestal window
+   the feed cannot drive the edge elements that hard. Use a cosine-on-pedestal window
    when the designer wants a shape rather than a specification, or when the beamformer only
    offers named presets.
 2. Compute the amplitudes and normalize the largest to 1.
@@ -678,7 +677,7 @@ exceed 100%. For the worked example above you would enter 26, 52, 81, 100, 100,
 81, 52, 26 and turn on **Enforce Symmetric Taper** so a slip on one slider is
 mirrored rather than left as an asymmetry. Two limits apply:
 
-- The gain word resolves to about 1%, so the entered taper is quantized. Rounding
+- The gain word resolves to about 1%, so the kit quantizes the taper you enter. Rounding
   the $-30\ \text{dB}$ design to whole percent moves its highest sidelobe to
   $-29.9\ \text{dB}$, which is harmless. Trying to hold a $-50\ \text{dB}$ design
   to 1% amplitude steps is not, and Lesson 23 makes the general version of that
@@ -690,7 +689,7 @@ mirrored rather than left as an asymmetry. Two limits apply:
 What limits a deeper design is not the curve but the hardware and the
 instrument. The $-50\ \text{dB}$ design puts its outer elements at 9% of full
 scale, where the gain word's 1% step is an 11% error on that element, and the
-sidelobes it was designed for will not survive that. The beam sweep's noise floor
+sidelobes the design calls for will not survive that. The beam sweep's noise floor
 sits 17 to 31 dB below the uniform peak, depending on the setup, so the kit
 cannot confirm a design deeper than somewhere between $-15$ and $-30\ \text{dB}$
 relative to its own peak. Specifying $-50\ \text{dB}$ when
