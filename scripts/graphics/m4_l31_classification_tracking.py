@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Generate the L31 (Classification and Tracking) figures as inline SVG.
 
-  - L31-signatures    : slow-time spectrograms of the four lab targets, a
-                        walker, a fan, a fidget spinner, and a waving hand
+  - L31-signatures    : slow-time spectrograms of the four kinds of lab target,
+                        a walker, a fan, a fidget spinner, and a waving hand
   - L31-features      : the training trials in the centroid-spread plane,
                         with each class's mean
   - L31-alpha-beta    : range detections of a walker who walks out, turns,
@@ -11,10 +11,14 @@
 The lesson page shows all three from book/extras/viz/img/. None carries an
 equation: symbols, numbers, and short words only.
 
-The targets are simulated in slow time, one complex sample per chirp at the
-L29-L31 burst's PRI of 0.5 ms (COURSE_SPEC M8), each as a few point
-scatterers whose range changes with time; the radar's 10 GHz carrier turns
-each one's range into a phase 4 pi R / lambda. spectrogram(), features(),
+The targets are simulated in slow time, one complex sample per chirp, each
+as a few point scatterers whose range changes with time; the carrier turns
+each one's range into a phase 4 pi R / lambda. The lesson half of the L31
+page is read before the lab and works every Part 1 method on an example
+burst the Phaser app does not use (Neil, 2026-11-12): 10.0 GHz, 400 MHz
+chirps of 300 us every 0.4 ms, 256 a frame, so the CPI is 102.4 ms and the
+range bin 0.375 m. The example targets differ from the lab's records too, so
+no number here is a packet answer. spectrogram(), features(),
 classify() and alpha_beta() below are the functions the page excerpts, with
 the same names as the shared radar_lab.py contract, so the page and this
 script cannot drift apart.
@@ -43,10 +47,12 @@ INK = "#1a1a1a"
 IMG = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 
 C = 3.0e8
-F0 = 10.0e9                  # COURSE_SPEC M8
+F0 = 10.0e9                  # the lesson's example carrier, not a kit's preset
 LAM = C / F0                 # 3.0 cm
-PRI = 0.5e-3                 # one slow-time sample per chirp
-CPI = 256 * PRI              # one range-Doppler frame, 128 ms
+B_EX = 400e6                 # the example chirp's bandwidth
+PRI = 0.4e-3                 # one slow-time sample per chirp
+CPI = 256 * PRI              # one range-Doppler frame, 102.4 ms
+BIN = C / (2 * B_EX)         # one range bin, 0.375 m
 KINDS = ["walker", "fan", "spinner", "hand"]
 COLORS = {"walker": NAVY, "fan": RED, "spinner": AMBER, "hand": GREEN}
 MARKERS = {"walker": "o", "fan": "s", "spinner": "^", "hand": "D"}
@@ -154,22 +160,23 @@ def draw_params(kind: str, rng) -> dict:
         p.update(v0=rng.uniform(0.7, 1.5) * rng.choice([-1, 1]) * ca,
                  fst=rng.uniform(0.8, 1.1), A=rng.uniform(2.0, 3.0) * ca)
     elif kind == "fan":
-        p.update(R=0.075, rpm=rng.uniform(700, 1200))
+        p.update(R=0.125, rpm=rng.uniform(450, 850))
     elif kind == "spinner":
-        p.update(R=0.035, rpm=rng.uniform(600, 1500))
+        p.update(R=0.03, rpm=rng.uniform(900, 2000))
     else:
         ca = rng.uniform(0.5, 1.0)
         p.update(A=rng.uniform(0.1, 0.3) * ca, f=rng.uniform(0.8, 2.0))
     return p
 
 
-# The four signatures as the figure shows them: L26's walker, a 15 cm desk
-# fan at 1000 rpm, a 7 cm spinner at 1200 rpm, a hand waving 0.2 m at 1.5 Hz.
+# The four signatures as the figure shows them, the lesson's examples: a walker
+# closing at 1.1 m/s with limbs swinging 2.3 m/s at 0.9 strides a second, a
+# 25 cm fan at 700 rpm, a 6 cm spinner at 1500 rpm, a hand waving 0.15 m at 1.2 Hz.
 TYPICAL = {
-    "walker": dict(v0=1.3, fst=1.0, A=2.7, ph=0.0, snr_db=15),
-    "fan": dict(R=0.075, rpm=1000, ph=0.0, snr_db=15),
-    "spinner": dict(R=0.035, rpm=1200, ph=0.0, snr_db=15),
-    "hand": dict(A=0.2, f=1.5, ph=0.0, snr_db=15),
+    "walker": dict(v0=1.1, fst=0.9, A=2.3, ph=0.0, snr_db=15),
+    "fan": dict(R=0.125, rpm=700, ph=0.0, snr_db=15),
+    "spinner": dict(R=0.03, rpm=1500, ph=0.0, snr_db=15),
+    "hand": dict(A=0.15, f=1.2, ph=0.0, snr_db=15),
 }
 
 
@@ -256,11 +263,11 @@ def trials(seed: int, n: int = 20, T: float = 4.0):
     return Xtr, ytr, model, M
 
 
-def walk_track(seed: int = 31):
+def walk_track(seed: int = 36):
     """Out at 1.2 m/s from 2 m, a 1 s turn at 3.5 s, back at 1.2 m/s.
 
-    One detection per 128 ms frame, at the center of the 0.30 m range bin the
-    walker's detection falls in (a 0.10 m body jitter first), and 6% of frames
+    One detection per 102.4 ms frame, at the center of the 0.375 m range bin the
+    walker's detection falls in (a 0.12 m body jitter first), and 6% of frames
     missed."""
     dt = CPI
     t = np.arange(0, 8.0, dt)
@@ -268,7 +275,7 @@ def walk_track(seed: int = 31):
     vf = np.where(tf < 3.5, 1.2, np.where(tf > 4.5, -1.2, 1.2 * np.cos(np.pi * (tf - 3.5))))
     Rt = np.interp(t, tf, 2.0 + np.cumsum(vf) * 1e-3)
     rng = np.random.default_rng(seed)
-    z = np.round((Rt + rng.normal(0, 0.10, t.size)) / 0.30) * 0.30
+    z = np.round((Rt + rng.normal(0, 0.12, t.size)) / BIN) * BIN
     miss = rng.random(t.size) < 0.06
     miss[0] = False
     z[miss] = np.nan
@@ -281,38 +288,45 @@ def ab_pair(alpha):
 
 def numbers() -> dict:
     v = {}
-    v["fd_torso"] = 2 * 1.3 / LAM
-    v["fd_limb"] = 2 * 4.0 / LAM
+    # the example targets' Doppler at 10.0 GHz
+    v["walker_v"], v["limb_A"], v["stride"] = 1.1, 2.3, 0.9
+    v["limb_max"] = v["walker_v"] + v["limb_A"]
+    v["fd_torso"] = 2 * v["walker_v"] / LAM
+    v["fd_limb"] = 2 * v["limb_max"] / LAM
     v["fs_slow"] = 1 / PRI
+    v["fmax"] = 1 / (2 * PRI)
     v["vmax"] = LAM / (4 * PRI)
+    v["dv"] = LAM / (2 * CPI)
     # rotors: tip speed pi D rpm / 60
     v["fan30_tip"] = np.pi * 0.30 * 1200 / 60
-    v["fan15_tip"] = np.pi * 0.15 * 1000 / 60
-    v["fan15_fd"] = 2 * v["fan15_tip"] / LAM
-    v["spin_tip"] = np.pi * 0.07 * 1200 / 60
+    v["fan_tip"] = np.pi * 0.25 * 700 / 60
+    v["fan_fd"] = 2 * v["fan_tip"] / LAM
+    v["spin_tip"] = np.pi * 0.06 * 1500 / 60
     v["spin_fd"] = 2 * v["spin_tip"] / LAM
-    v["hand_v"] = 2 * np.pi * 1.5 * 0.2
+    v["hand_v"] = 2 * np.pi * 1.2 * 0.15
     v["hand_fd"] = 2 * v["hand_v"] / LAM
-    # a walker crosses a 0.30 m range bin in
-    v["bin_cross_s"] = 0.30 / 1.3
+    # the band's shape: a blade with its weight on its outer third, 2R/3 to R
+    v["shape_mean_sq"] = (1 - (2 / 3) ** 3) / (3 * (1 / 3))
+    v["shape_outer"] = np.sqrt(v["shape_mean_sq"] / 2)
+    # a walker crosses a range bin in
+    v["bin_cross_s"] = BIN / v["walker_v"]
     # window trade: limb acceleration, Doppler rate, best window
-    v["limb_acc"] = 2 * np.pi * 1.0 * 2.7
+    v["limb_acc"] = 2 * np.pi * v["stride"] * v["limb_A"]
     v["fdot"] = 2 * v["limb_acc"] / LAM
     v["Tw_best_ms"] = 1e3 / np.sqrt(v["fdot"])
     v["Tw_best_chirps"] = v["Tw_best_ms"] / (PRI * 1e3)
-    v["df_64"] = 1 / (64 * PRI)
+    for n in (16, 64, 128, 256):
+        v[f"Tw_{n}"] = n * PRI * 1e3
+        v[f"df_{n}"] = 1 / (n * PRI)
+        v[f"smear_{n}"] = v["fdot"] * n * PRI
     v["dv_64"] = LAM * v["df_64"] / 2
-    v["smear_64"] = v["fdot"] * 64 * PRI
-    v["df_16"] = 1 / (16 * PRI)
-    v["smear_256"] = v["fdot"] * 256 * PRI
-    v["df_256"] = 1 / (256 * PRI)
     # the fan's tip acceleration: no window resolves it
-    om = 2 * np.pi * 1000 / 60
-    v["fan_fdot"] = 2 * om ** 2 * 0.075 / LAM
+    om = 2 * np.pi * 700 / 60
+    v["fan_acc"] = om ** 2 * 0.125
+    v["fan_fdot"] = 2 * v["fan_acc"] / LAM
     v["fan_Tw_ms"] = 1e3 / np.sqrt(v["fan_fdot"])
-    v["fan_acc"] = om ** 2 * 0.075
     v["fan_df"] = 1e3 / v["fan_Tw_ms"]
-    v["fan_flashes"] = 2 * 3 * 1000 / 60          # each blade across the line of sight twice a turn
+    v["fan_flashes"] = 2 * 3 * 700 / 60          # each blade across the line of sight twice a turn
     # classification
     Xtr, ytr, model, M = trials(31)
     v["M"] = M
@@ -327,15 +341,17 @@ def numbers() -> dict:
     v["n_miss"] = int(np.isnan(z).sum())
     st = (t > 1.5) & ((t < 3.5) | (t > 5.5))
     turn = (t > 3.3) & (t < 5.5)
-    for a in (0.2, 0.5, 0.8):
+    v["turn_acc"] = np.pi * 1.2                  # the cosine turn's peak acceleration
+    for a in ALPHAS:
         al, be = ab_pair(a)
         o = alpha_beta(z, al, be, CPI)
         e = o[:, 0] - Rt
-        key = f"{a:.1f}"
+        key = f"{a:.2f}"
         v[f"beta_{key}"] = be
         v[f"rms_{key}"] = np.sqrt(np.mean(e[st] ** 2))
         v[f"turn_{key}"] = np.abs(e[turn]).max()
         v[f"ratio_{key}"] = np.sqrt((2 * al ** 2 + 2 * be - 3 * al * be) / (al * (4 - 2 * al - be)))
+        v[f"lag_{key}"] = v["turn_acc"] * CPI ** 2 / be
     # angle: the array at 10 GHz, monopulse, and a crossing walker
     v["bw_deg"] = np.degrees(0.886 * LAM / (8 * 0.014))
     v["mono_deg"] = np.degrees(np.arcsin(LAM / (2 * 0.056)))
@@ -343,88 +359,116 @@ def numbers() -> dict:
     v["cross_rate"] = np.degrees(1.0 / 4.0)
     v["per_sweep"] = v["cross_rate"] / 0.9
     v["per_cpi"] = v["cross_rate"] * CPI
+    # radial speed on a diagonal: from P to Q at 1.2 m/s, (x to the side, y out)
+    P, Q = np.array(DIAG_P), np.array(DIAG_Q)
+    u = (Q - P) / np.hypot(*(Q - P))
+    v["diag_P_r"], v["diag_P_az"] = np.hypot(*P), np.degrees(np.arctan2(P[0], P[1]))
+    v["diag_Q_r"], v["diag_Q_az"] = np.hypot(*Q), np.degrees(np.arctan2(Q[0], Q[1]))
+    v["diag_vr_P"] = -1.2 * u @ (P / np.hypot(*P))   # + closing
+    v["diag_vr_Q"] = -1.2 * u @ (Q / np.hypot(*Q))
     return v
 
 
+ALPHAS = (0.15, 0.4)
+DIAG_P, DIAG_Q = (0.4, 1.8), (-0.9, 3.4)
+
+
 def check_numbers(v: dict) -> None:
-    """The values the page prints."""
-    assert f"{v['fd_torso']:.0f}" == "87" and f"{v['fd_limb']:.0f}" == "267"
-    assert f"{v['fs_slow']:.0f}" == "2000" and f"{v['vmax']:.0f}" == "15"
-    assert f"{v['fan30_tip']:.1f}" == "18.8"
-    assert f"{v['fan15_tip']:.1f}" == "7.9" and f"{v['fan15_fd']:.0f}" == "524"
-    assert f"{v['spin_tip']:.1f}" == "4.4" and f"{v['spin_fd']:.0f}" == "293"
-    assert f"{v['hand_v']:.1f}" == "1.9" and f"{v['hand_fd']:.0f}" == "126"
-    assert f"{v['bin_cross_s']:.2f}" == "0.23"
-    assert f"{v['limb_acc']:.0f}" == "17" and f"{v['fdot']:.0f}" == "1131"
-    assert f"{v['Tw_best_ms']:.0f}" == "30" and f"{v['Tw_best_chirps']:.0f}" == "59"
-    assert f"{v['df_64']:.0f}" == "31" and f"{v['dv_64']:.2f}" == "0.47"
-    assert f"{v['smear_64']:.0f}" == "36"
-    assert f"{v['df_16']:.0f}" == "125" and f"{v['smear_256']:.0f}" == "145"
-    assert f"{v['df_256']:.1f}" == "7.8"
-    assert f"{v['fan_fdot'] / 1e3:.0f}" == "55" and f"{v['fan_Tw_ms']:.1f}" == "4.3"
-    assert f"{v['fan_acc']:.0f}" == "822" and f"{v['fan_df']:.0f}" == "234"
-    assert f"{v['fan_Tw_ms'] / (PRI * 1e3):.0f}" == "9" and f"{v['fan_flashes']:.0f}" == "100"
-    m = {k: np.round(x, 2).tolist() for k, x in v["means"].items()}
-    assert m["walker"][0] == 0.71 and m["hand"][1] == 0.65, m
-    assert f"{v['means']['fan'][1]:.1f}" == "4.9" and f"{v['means']['spinner'][1]:.1f}" == "3.7", m
-    assert len(v["track"][0]) == 63
-    assert v["M"].tolist() == [[20, 0, 0, 0], [0, 14, 6, 0], [0, 7, 13, 0], [0, 0, 0, 20]], v["M"]
-    assert np.trace(v["M"]) == 67 and f"{v['acc'] * 100:.0f}" == "84"
-    assert f"{min(v['accs']) * 100:.0f}" == "80" and f"{max(v['accs']) * 100:.0f}" == "91", v["accs"]
-    assert v["n_miss"] == 5 and f"{v['meas_rms']:.2f}" == "0.10"
-    assert f"{v['beta_0.5']:.3f}" == "0.167" and f"{v['beta_0.2']:.3f}" == "0.022"
-    assert f"{v['rms_0.5']:.2f}" == "0.08" and f"{v['turn_0.5']:.2f}" == "0.31"
-    assert f"{v['turn_0.2']:.1f}" == "1.2" and f"{v['rms_0.2']:.2f}" == "0.33"
-    assert f"{v['ratio_0.5']:.2f}" == "0.64"
-    assert f"{v['bw_deg']:.1f}" == "13.6" and f"{v['mono_deg']:.1f}" == "15.5"
-    assert f"{v['kD_deg']:.0f}" == "672"
-    assert f"{v['cross_rate']:.1f}" == "14.3" and f"{v['per_sweep']:.1f}" == "15.9"
-    assert f"{v['per_cpi']:.1f}" == "1.8"
+    """The values the page prints: see main()'s printout; asserted by CHECK."""
+    assert v["M"].tolist() == [[20, 0, 0, 0], [0, 16, 2, 2], [0, 12, 8, 0], [0, 0, 0, 20]], v["M"]
+    assert f"{min(v['accs']):.2f}" == "0.80" and f"{max(v['accs']):.2f}" == "0.84", v["accs"]
+    m = v["means"]
+    assert (f"{m['walker'][0]:.2f}", f"{m['fan'][1]:.1f}", f"{m['spinner'][1]:.1f}") == ("0.78", "4.7", "3.6"), m
+    assert m["hand"][1] < 1.0 and v["n_miss"] == 5 and len(v["track"][0]) == 79
+    for name, want in CHECK.items():
+        got = v[name]
+        assert f"{got:{want[1]}}" == want[0], (name, f"{got:{want[1]}}", want[0])
+
+
+CHECK = {
+    "fd_torso": ("73", ".0f"), "limb_max": ("3.4", ".1f"), "fd_limb": ("227", ".0f"),
+    "fs_slow": ("2500", ".0f"), "vmax": ("18.75", ".2f"), "fan30_tip": ("18.8", ".1f"),
+    "fan_tip": ("9.2", ".1f"), "fan_fd": ("611", ".0f"), "spin_tip": ("4.7", ".1f"),
+    "spin_fd": ("314", ".0f"), "hand_v": ("1.1", ".1f"), "hand_fd": ("75", ".0f"),
+    "bin_cross_s": ("0.34", ".2f"), "limb_acc": ("13.0", ".1f"), "fdot": ("867", ".0f"),
+    "Tw_best_ms": ("34", ".0f"), "Tw_best_chirps": ("85", ".0f"),
+    "df_16": ("156", ".0f"), "smear_16": ("6", ".0f"), "df_64": ("39", ".0f"), "smear_64": ("22", ".0f"),
+    "df_128": ("20", ".0f"), "smear_128": ("44", ".0f"), "df_256": ("9.8", ".1f"), "smear_256": ("89", ".0f"),
+    "dv_64": ("0.59", ".2f"), "fan_acc": ("672", ".0f"), "fan_Tw_ms": ("4.7", ".1f"),
+    "fan_df": ("212", ".0f"), "fan_flashes": ("70", ".0f"),
+    "shape_mean_sq": ("0.704", ".3f"), "shape_outer": ("0.59", ".2f"),
+    "acc": ("0.80", ".2f"), "meas_rms": ("0.15", ".2f"),
+    "beta_0.40": ("0.100", ".3f"), "ratio_0.40": ("0.57", ".2f"), "lag_0.40": ("0.40", ".2f"),
+    "rms_0.40": ("0.12", ".2f"), "turn_0.40": ("0.23", ".2f"), "turn_0.15": ("0.9", ".1f"),
+    "bw_deg": ("13.6", ".1f"), "mono_deg": ("15.5", ".1f"), "kD_deg": ("672", ".0f"),
+    "cross_rate": ("14.3", ".1f"), "per_sweep": ("15.9", ".1f"), "per_cpi": ("1.5", ".1f"),
+    "diag_P_r": ("1.84", ".2f"), "diag_P_az": ("12.5", ".1f"), "diag_vr_P": ("-0.75", ".2f"),
+    "diag_Q_r": ("3.52", ".2f"), "diag_Q_az": ("-14.8", ".1f"), "diag_vr_Q": ("-1.09", ".2f"),
+}
 
 
 # ---------------------------------------------------------------- figures --
 
 def fig_signatures() -> None:
-    """The four targets, 3 s each, 64-chirp window, as the lab records them."""
+    """The lesson's four example targets, 3 s each, 64-chirp window. Each panel
+    has its own Doppler span, so the walker's off-zero torso line shows; the
+    right axis gives the same scale in m/s, the unit of the app's view."""
     rng = np.random.default_rng(310)
-    fig, axs = plt.subplots(2, 2, figsize=(4.6, 3.7), sharex=True, sharey=True)
+    fig, axs = plt.subplots(2, 2, figsize=(4.9, 3.9), sharex=True)
+    span = {"walker": 300, "hand": 300, "fan": 800, "spinner": 800}
+    ticks = {300: ([-200, 0, 200], [-3, 0, 3]), 800: ([-500, 0, 500], [-8, 0, 8])}
     for ax, k in zip(axs.flat, KINDS):
         t, f, S = spectrogram(target(k, TYPICAL[k], 3.0, rng))
         # an embedded bitmap: a vector mesh of every cell would be megabytes
         ax.imshow(np.clip(S, -40, 0), origin="lower", aspect="auto", cmap="Blues",
                   extent=(t[0], t[-1], f[0], f[-1]), interpolation="bilinear")
-        ax.text(0.12, 520, k, color=COLORS[k], ha="left", va="top", fontweight="bold")
+        F = span[k]
+        ax.text(0.12, 0.88 * F, k, color=COLORS[k], ha="left", va="top", fontweight="bold")
+        if k == "walker":
+            ft = 2 * TYPICAL[k]["v0"] / LAM
+            ax.axhline(ft, color=RED, lw=1.0, ls="--")
+            ax.text(2.92, ft + 12, "torso", color=RED, ha="right", va="bottom", fontsize=13)
         ax.set_xlim(0, 3)
-        ax.set_ylim(-600, 600)
+        ax.set_ylim(-F, F)
         ax.set_xticks([1, 2])
-        ax.set_yticks([-500, 0, 500])
+        ax.set_yticks(ticks[F][0])
         style(ax)
+        sec = ax.secondary_yaxis("right", functions=(lambda x: x * LAM / 2, lambda vv: 2 * vv / LAM))
+        sec.set_yticks(ticks[F][1])
+        sec.tick_params(colors=GRAY, labelsize=13)
     for ax in axs[1]:
         ax.set_xlabel("time (s)")
     for ax in axs[:, 0]:
-        ax.set_ylabel("Doppler (Hz)")
-    fig.subplots_adjust(wspace=0.1, hspace=0.14)
+        ax.set_ylabel("Hz")
+    for ax in axs[:, 1]:
+        ax.text(1.32, 0.5, "m/s", rotation=90, va="center", ha="center", transform=ax.transAxes, fontsize=13)
+    fig.subplots_adjust(wspace=0.62, hspace=0.14)
     finalize(fig, "L31-signatures")
 
 
 def fig_features(v: dict) -> None:
+    """Two views of the training trials: centroid against spread, where the
+    walkers stand apart, and periodicity against spread, where the hands do."""
     X, y = v["Xtr"], v["ytr"]
-    fig, ax = plt.subplots(figsize=(4.4, 3.0))
-    for k in KINDS:
-        m = y == k
-        ax.scatter(X[m, 0], X[m, 1], s=22, marker=MARKERS[k], facecolor="none",
-                   edgecolor=COLORS[k], linewidth=1.1, label=k)
-        mu = v["means"][k]
-        ax.scatter([mu[0]], [mu[1]], s=110, marker="X", color=COLORS[k], edgecolor="white", linewidth=0.8)
-    ax.set_xlim(-0.05, 1.4)
-    ax.set_ylim(0, 7.2)
-    ax.set_xticks([0, 0.5, 1.0])
-    ax.set_yticks([0, 2, 4, 6])
-    ax.set_xlabel("centroid (m/s)")
-    ax.set_ylabel("spread (m/s)")
-    ax.legend(loc="upper right", fontsize=13, handletextpad=0.2, borderaxespad=0.1,
-              labelspacing=0.25)
-    style(ax)
+    fig, axs = plt.subplots(1, 2, figsize=(5.6, 3.0))
+    for ax, (i, xl) in zip(axs, ((0, "centroid (m/s)"), (2, "periodicity"))):
+        for k in KINDS:
+            m = y == k
+            ax.scatter(X[m, i], X[m, 1], s=18, marker=MARKERS[k], facecolor="none",
+                       edgecolor=COLORS[k], linewidth=1.0, label=k)
+            mu = v["means"][k]
+            ax.scatter([mu[i]], [mu[1]], s=90, marker="X", color=COLORS[k], edgecolor="white", linewidth=0.8)
+        ax.set_xlabel(xl)
+        ax.set_ylim(0, 7.5)
+        ax.set_yticks([0, 2, 4, 6])
+        ax.set_xticks([0, 0.5, 1.0])
+        style(ax)
+    axs[0].set_xlim(-0.05, 1.4)
+    axs[0].set_ylabel("spread (m/s)")
+    axs[1].set_xlim(-0.05, 1.05)
+    axs[1].set_yticklabels([])
+    axs[0].legend(loc="upper right", fontsize=13, handletextpad=0.2, borderaxespad=0.1, labelspacing=0.25)
+    fig.subplots_adjust(wspace=0.08)
     finalize(fig, "L31-features")
 
 
@@ -433,9 +477,9 @@ def fig_alpha_beta(v: dict) -> None:
     fig, ax = plt.subplots(figsize=(4.4, 2.8))
     ax.plot(t, Rt, color=GRAY, lw=1.0, ls="--", label="truth")
     ax.plot(t, z, ls="none", marker="o", ms=3.2, mfc="none", mec=INK, mew=0.8, label="detections")
-    for a, col in ((0.2, AMBER), (0.5, BLUE)):
+    for a, col in zip(ALPHAS, (AMBER, BLUE)):
         o = alpha_beta(z, *ab_pair(a), CPI)
-        ax.plot(t, o[:, 0], color=col, lw=1.6, label=f"α = {a:.1f}")
+        ax.plot(t, o[:, 0], color=col, lw=1.6, label=f"α = {a:g}")
     ax.set_xlim(0, 8)
     ax.set_ylim(1.5, 9.5)
     ax.set_xticks([0, 2, 4, 6, 8])

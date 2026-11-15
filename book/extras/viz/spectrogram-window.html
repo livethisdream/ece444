@@ -40,20 +40,22 @@
     <div class="ctl">
       <label>Window</label>
       <input type="range" id="win" min="3" max="9" step="1" value="6">
-      <span class="val" id="win-val">64 chirps, 32 ms</span>
+      <span class="val" id="win-val">64 chirps, 26 ms</span>
     </div>
   </div>
 </div>
 
 <script>
 'use strict';
-/* One range bin's slow-time samples, one per chirp at the L29-L31 PRI of
-   0.5 ms, for the four L31 Lab targets (the same point-scatterer models as
-   scripts/graphics/m4_l31_classification_tracking.py), and their
+/* One range bin's slow-time samples, one per chirp at the L31 lesson's
+   example PRI of 0.4 ms and 10.0 GHz, for its four example targets (the
+   same point-scatterer models and parameters as
+   scripts/graphics/m4_l31_classification_tracking.py; not the lab's preset
+   or records, so no readout is a packet answer), and their
    spectrogram for a Hann window of 2^k chirps. A short window follows fast
    changes and blurs in frequency (1/T); a long one resolves frequency and
    smears the moving limbs across the time it spans. */
-const C=3e8, LAM=C/10e9, PRI=0.5e-3, T=3.0, N=Math.round(T/PRI), FMAX=600;
+const C=3e8, LAM=C/10e9, PRI=0.4e-3, T=3.0, N=Math.round(T/PRI), FMAX=1000;
 const SANS='Inter, system-ui, -apple-system, sans-serif';
 const el=id=>document.getElementById(id);
 const cv=el('plot'), ctx=cv.getContext('2d');
@@ -74,15 +76,15 @@ function signal(kind){
   const add=(i,x,a)=>{ const p=4*Math.PI*x/LAM; re[i]+=a*Math.cos(p); im[i]+=a*Math.sin(p); };
   for(let i=0;i<N;i++){
     const t=i*PRI;
-    if(kind==='walker'){            // torso 1.3 m/s, limbs to 4.0 m/s, 1 stride/s
-      const x0=1.3*t, sw=2.7/(2*Math.PI)*Math.cos(2*Math.PI*t);
+    if(kind==='walker'){            // torso 1.1 m/s, limbs swing 2.3 m/s, 0.9 strides/s
+      const x0=1.1*t, sw=2.3/(2*Math.PI*0.9)*Math.cos(2*Math.PI*0.9*t);
       add(i,x0,1); add(i,x0-sw,0.35); add(i,x0+sw,0.35);
     } else if(kind==='fan'||kind==='spinner'){
-      const fan=kind==='fan', R=fan?0.075:0.035, om=2*Math.PI*(fan?1000:1200)/60;
+      const fan=kind==='fan', R=fan?0.125:0.03, om=2*Math.PI*(fan?700:1500)/60;
       const rho=fan?Array.from({length:25},(_,j)=>0.015+j*(R-0.015)/24):[0.8*R,R], a=fan?0.05:0.25;
       for(let b=0;b<3;b++){ const c=Math.cos(om*t+2*Math.PI*b/3); for(const r of rho) add(i,r*c,a); }
-    } else {                        // hand: 0.2 m at 1.5 Hz
-      add(i,0.2*Math.sin(2*Math.PI*1.5*t),0.6);
+    } else {                        // hand: 0.15 m at 1.2 Hz
+      add(i,0.15*Math.sin(2*Math.PI*1.2*t),0.6);
     }
   }
   let mr=0, mi=0; for(let i=0;i<N;i++){ mr+=re[i]; mi+=im[i]; } mr/=N; mi/=N;
@@ -150,7 +152,7 @@ window.addEventListener('resize', fit);
 const off=document.createElement('canvas'), octx=off.getContext('2d');
 function draw(){
   const s=spec(state.kind,state.nwin);
-  const L=56, Rm=12, Tm=10, B=40, pw=W-L-Rm, ph=H-Tm-B;
+  const L=56, Rm=46, Tm=10, B=40, pw=W-L-Rm, ph=H-Tm-B;
   ctx.clearRect(0,0,W,H);
   off.width=s.cols; off.height=s.rows;
   const img=octx.createImageData(s.cols,s.rows);
@@ -165,15 +167,21 @@ function draw(){
   ctx.drawImage(off,0,0,s.cols,s.rows,xp(t0),yp(s.fmax),xp(t1)-xp(t0),yp(-s.fmax)-yp(s.fmax));
   ctx.strokeStyle='#8a929c'; ctx.lineWidth=1; ctx.strokeRect(L+0.5,Tm+0.5,pw-1,ph-1);
   const ink3='#5b6573';
-  [-500,-250,0,250,500].forEach(f=>{ const y=yp(f); ctx.beginPath(); ctx.moveTo(L-4,y); ctx.lineTo(L,y); ctx.stroke();
+  [-1000,-500,0,500,1000].forEach(f=>{ const y=yp(f); ctx.beginPath(); ctx.moveTo(L-4,y); ctx.lineTo(L,y); ctx.stroke();
     stext(String(f),L-7,y,11.5,ink3,'right'); });
   [0,1,2,3].forEach(t=>{ const x=xp(t); ctx.beginPath(); ctx.moveTo(x,Tm+ph); ctx.lineTo(x,Tm+ph+4); ctx.stroke();
     stext(String(t),x,Tm+ph+14,11.5,ink3,'center'); });
   stext('time (s)',L+pw/2,H-9,12,ink3,'center');
   ctx.save(); ctx.translate(13,Tm+ph/2); ctx.rotate(-Math.PI/2); stext('Doppler (Hz)',0,0,12,ink3,'center'); ctx.restore();
+  // the same scale in m/s, the unit of the app's Range-Doppler view: v = f lambda / 2
+  [-10,-5,0,5,10].forEach(v=>{ const y=yp(2*v/LAM); ctx.beginPath(); ctx.moveTo(L+pw,y); ctx.lineTo(L+pw+4,y); ctx.stroke();
+    stext(String(v),L+pw+7,y,11.5,ink3,'left'); });
+  ctx.save(); ctx.translate(W-9,Tm+ph/2); ctx.rotate(-Math.PI/2); stext('m/s',0,0,12,ink3,'center'); ctx.restore();
   // the window's length, drawn to scale on the time axis
   const wx=xp(T)-6, wl=xp(s.nwin*PRI)-xp(0);
-  ctx.fillStyle='rgba(176,30,36,0.85)'; ctx.fillRect(wx-wl,Tm+6,Math.max(wl,2),5);
+  ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fillRect(wx-Math.max(wl,2)-58,Tm+3,Math.max(wl,2)+60,16);
+  ctx.fillStyle='rgba(176,30,36,0.9)'; ctx.fillRect(wx-Math.max(wl,2),Tm+6,Math.max(wl,2),9);
+  stext('window',wx-Math.max(wl,2)-5,Tm+11,11.5,'#b01e24','right');
   const ms=s.nwin*PRI*1e3, df=1/(s.nwin*PRI);
   el('win-val').textContent=s.nwin+' chirps, '+(ms<10?ms.toFixed(1):ms.toFixed(0))+' ms, '+(df<10?df.toFixed(1):df.toFixed(0))+' Hz';
 }
