@@ -167,7 +167,7 @@ check your Part 1 row for it.
 
     <div class="rec" data-lab="L18">
     <label>Step 11: Angle with the source at 0° (°) <input data-field="a.0.angle"></label>
-    <label>Step 11: Angle minus the arc angle, 0° (°) <input data-field="a.0.diff"></label>
+    <label>Step 11: Angle minus the arc angle at 0° (°) <input data-field="a.0.diff"></label>
     <label>Step 11: HPBW with the source at 0° (°) <input data-field="a.0.hpbw"></label>
     <label>Step 11: Peak Gain with the source at 0° (dBFS) <input data-field="a.0.gain"></label>
     </div>
@@ -181,7 +181,7 @@ check your Part 1 row for it.
 
     <div class="rec" data-lab="L18">
     <label>Step 13: Angle with the source at +30° (°) <input data-field="a.30.angle"></label>
-    <label>Step 13: Angle minus the arc angle, +30° (°) <input data-field="a.30.diff"></label>
+    <label>Step 13: Angle minus the arc angle at +30° (°) <input data-field="a.30.diff"></label>
     <label>Step 13: HPBW with the source at +30° (°) <input data-field="a.30.hpbw"></label>
     <label>Step 13: Peak Gain with the source at +30° (dBFS) <input data-field="a.30.gain"></label>
     </div>
@@ -196,7 +196,7 @@ check your Part 1 row for it.
 
     <div class="rec" data-lab="L18">
     <label>Step 14: Angle with the source at +45° (°) <input data-field="a.45.angle"></label>
-    <label>Step 14: Angle minus the arc angle, +45° (°) <input data-field="a.45.diff"></label>
+    <label>Step 14: Angle minus the arc angle at +45° (°) <input data-field="a.45.diff"></label>
     <label>Step 14: HPBW with the source at +45° (°) <input data-field="a.45.hpbw"></label>
     <label>Step 14: Peak Gain with the source at +45° (dBFS) <input data-field="a.45.gain"></label>
     </div>
@@ -221,7 +221,7 @@ check your Part 1 row for it.
 
     <div class="rec" data-lab="L18">
     <label>Step 16: Angle at Apply 15 (°) <input data-field="b.15.angle"></label>
-    <label>Step 16: Angle minus the Apply value, 15 (°) <input data-field="b.15.diff"></label>
+    <label>Step 16: Angle minus the Apply value at Apply 15 (°) <input data-field="b.15.diff"></label>
     <label>Step 16: HPBW at Apply 15 (°) <input data-field="b.15.hpbw"></label>
     <label>Step 16: Peak Gain at Apply 15 (dBFS) <input data-field="b.15.gain"></label>
     </div>
@@ -229,7 +229,7 @@ check your Part 1 row for it.
 
     <div class="rec" data-lab="L18">
     <label>Step 17: Angle at Apply 30 (°) <input data-field="b.30.angle"></label>
-    <label>Step 17: Angle minus the Apply value, 30 (°) <input data-field="b.30.diff"></label>
+    <label>Step 17: Angle minus the Apply value at Apply 30 (°) <input data-field="b.30.diff"></label>
     <label>Step 17: HPBW at Apply 30 (°) <input data-field="b.30.hpbw"></label>
     <label>Step 17: Peak Gain at Apply 30 (dBFS) <input data-field="b.30.gain"></label>
     </div>
@@ -273,7 +273,7 @@ check your Part 1 row for it.
 
     <div class="rec" data-lab="L18">
     <label>Step 19: Angle at Apply 45 (°) <input data-field="b.45.angle"></label>
-    <label>Step 19: Angle minus the Apply value, 45 (°) <input data-field="b.45.diff"></label>
+    <label>Step 19: Angle minus the Apply value at Apply 45 (°) <input data-field="b.45.diff"></label>
     <label>Step 19: HPBW at Apply 45 (°) <input data-field="b.45.hpbw"></label>
     <label>Step 19: Peak Gain at Apply 45 (dBFS) <input data-field="b.45.gain"></label>
     </div>

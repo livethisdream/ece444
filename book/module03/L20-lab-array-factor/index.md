@@ -175,7 +175,7 @@ array factor at the extra phase, not a lobe: leave it out of Steps 7 to 10.
 
    <div class="rec" data-lab="L20">
    <label>Step 8: Peak Gain with E3 to E6 (dBFS) <input data-field="a4.peak"></label>
-   <label>Step 8: peak change from 8 elements, E3 to E6 (dB) <input data-field="a4.step"></label>
+   <label>Step 8: peak change from 8 elements with E3 to E6 (dB) <input data-field="a4.step"></label>
    <label>Step 8: HPBW with E3 to E6 (°) <input data-field="a4.hpbw"></label>
    <label>Step 8: FNBW with E3 to E6 (°) <input data-field="a4.fnbw"></label>
    <label>Step 8: first SLL with E3 to E6 (dBc) <input data-field="a4.sll"></label>
@@ -188,7 +188,7 @@ array factor at the extra phase, not a lobe: leave it out of Steps 7 to 10.
 
    <div class="rec" data-lab="L20">
    <label>Step 9: Peak Gain with E4 and E5 (dBFS) <input data-field="a2.peak"></label>
-   <label>Step 9: peak change from 8 elements, E4 and E5 (dB) <input data-field="a2.step"></label>
+   <label>Step 9: peak change from 8 elements with E4 and E5 (dB) <input data-field="a2.step"></label>
    <label>Step 9: HPBW with E4 and E5 (°) <input data-field="a2.hpbw"></label>
    <label>Step 9: FNBW with E4 and E5 (°) <input data-field="a2.fnbw"></label>
    <label>Step 9: first SLL with E4 and E5 (dBc) <input data-field="a2.sll"></label>
@@ -204,7 +204,7 @@ array factor at the extra phase, not a lobe: leave it out of Steps 7 to 10.
 
     <div class="rec" data-lab="L20">
     <label>Step 10: Peak Gain with E1 and E8 (dBFS) <input data-field="a18.peak"></label>
-    <label>Step 10: peak change from 8 elements, E1 and E8 (dB) <input data-field="a18.step"></label>
+    <label>Step 10: peak change from 8 elements with E1 and E8 (dB) <input data-field="a18.step"></label>
     <label>Step 10: HPBW with E1 and E8 (°) <input data-field="a18.hpbw"></label>
     <label>Step 10: FNBW with E1 and E8 (°) <input data-field="a18.fnbw"></label>
     <label>Step 10: level of the m = ±1 lobe with E1 and E8 (dBc) <input data-field="a18.sll"></label>

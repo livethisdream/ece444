@@ -200,7 +200,7 @@ and on the right as seen from the HB100.
     shows. If it is below the minimum you found in Part 1, plan a slower sweep.
 
     <div class="rec" data-lab="L21">
-    <label>Step 11: Updates/s (/s) <input data-field="f.rate"></label>
+    <label>Step 11: Updates/s <input data-field="f.rate"></label>
     </div>
 12. **Pick up the source.** Press **Stop**. Lift the HB100 off its tripod and
     hold it over the $-90^\circ$ mark, on the E1 side, aimed at the array.
