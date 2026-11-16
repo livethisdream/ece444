@@ -53,10 +53,11 @@ Phaser app's Range + Velocity preset (9.9 GHz, 500 MHz, 300 us, PRI 0.5 ms, 2 MS
 plays in the app's Load Recording:
   L31_<target>_<n>.npz      n = 1-4 for walker, fan, spinner, hand: 2.0 s of back-to-back chirps
                             (300 us, PRI 0.5 ms, 500 MHz), 4000 chirps, resampled to 90 samples a chirp
-                            (0.3 MSPS: the same 0.30 m bins, reaching 4.4 m); iq only. Record 1 is the
-                            lesson's example of each target; 2-4 change speed, size, range and tilt
-                            (the note says which). Part A and tasks (a) and (b) without a kit
-  L31_dismount.npz          a person walking from A (1.5 m, 12 deg to E1) to B (4.0 m, 10 deg to E8),
-                            turning, and back at 1 m/s, a chair at 3.2 m; every 4th chirp (PRI 2 ms),
+                            (0.3 MSPS: the same 0.30 m bins, reaching 4.4 m); iq only. Record 1 of each
+                            target is the packet's Part 1 givens; 2-4 change speed, size, range and
+                            tilt (the note says which). Steps 5-8 and tasks (a) and (b) without a kit
+  L31_dismount.npz          a person walking from tape mark A to mark B on a diagonal (the note gives
+                            their ranges and angles), turning, and back at 1 m/s, a chair at 3.2 m;
+                            every 4th chirp (PRI 2 ms),
                             44 frames of 128 ms; iq and iq_ch, with truth_t, truth_r, truth_az per frame.
-                            Part B and task (c) without a kit
+                            Steps 9-10, the angle at B, and task (c) without a kit
