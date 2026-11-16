@@ -26,11 +26,11 @@ burst), written by scripts/radar/make_l29_data.py (fmcw_sim's l29_sets):
   L29_static.npz              the leakage and the wall, nothing moving
   L29_hand_closing.npz        a hand from 1.0 m toward the kit at 1.0 m/s
   L29_hand_opening.npz        a hand from 0.7 m away from the kit at 1.5 m/s
-  L29_hand_closing_B200.npz   the closing hand at B = 200 MHz (0.75 m range cells)
+  L29_hand_closing_B200.npz   the closing hand at B = 200 MHz
   L29_hand_still.npz          a hand held still at 0.8 m, with a 2 mm tremor
   L29_hand_across.npz         a hand moved side to side across the beam at 0.8 m, 0.20 m either way at 1 Hz
   L29_spinner.npz             a fidget spinner edge-on at 0.5 m: three arms on a
-                              3 cm radius at 15 rev/s (tip speed 2.83 m/s)
+                              3 cm radius at 15 rev/s
   L29_spinner_faceon.npz      the same spinner turned face-on, held 10 deg off, so 0.17 of its swing
                               reaches the line of sight
 The simulated chirps are timed perfectly, so a pulse canceller removes the wall
