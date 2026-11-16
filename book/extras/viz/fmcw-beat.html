@@ -50,7 +50,7 @@
     </div>
     <div class="ctl">
       <label for="bw">Bandwidth</label>
-      <input id="bw" type="range" min="100" max="500" step="50" value="500">
+      <input id="bw" type="range" min="100" max="500" step="50" value="400">
       <span class="val" id="bwv"></span>
     </div>
     <div class="ctl">
@@ -60,7 +60,7 @@
     </div>
     <div class="ctl">
       <label for="ts">Chirp length</label>
-      <input id="ts" type="range" min="0.25" max="2" step="0.25" value="1">
+      <input id="ts" type="range" min="0.25" max="2" step="0.25" value="2">
       <span class="val" id="tsv"></span>
     </div>
     <div class="ctl">
@@ -91,7 +91,7 @@
   // frequency; the FFT over one chirp resolves tones 1/Ts apart, which is
   // c/2B in range. Sample rate 0.6 MSPS and a 0 m frequency of 100 kHz, as
   // on the PHASER (COURSE_SPEC M8; ADI's FMCW_RADAR_Waterfall.py).
-  const C = 3.00e8, FS = 0.6e6, F0 = 100e3, RMAX_PLOT = 10;
+  const C = 3.00e8, FS = 0.6e6, F0 = 100e3, RMAX_PLOT = 10, KEEP = 0.9;
   const $ = id => document.getElementById(id);
   const beatEl = $('beat'), specEl = $('spec');
   const bx = beatEl.getContext('2d'), sx = specEl.getContext('2d');
@@ -102,9 +102,9 @@
     st.R1 = +$('r1').value; st.B = +$('bw').value * 1e6; st.Ts = +$('ts').value * 1e-3;
     st.dR = +$('dr').value; st.A2db = +$('a2').value; st.win = $('win').value;
     st.kpm = 2 * st.B / (C * st.Ts);                 // Hz of beat per meter
-    st.res = C / (2 * st.B);
+    st.res = C / (2 * KEEP * st.B);                  // the kept part of the chirp sweeps KEEP B
     st.rmax = (FS / 2 - F0) / st.kpm;
-    st.N = Math.round(FS * st.Ts);
+    st.N = Math.floor(KEEP * FS * st.Ts + 1e-9);     // the app keeps the last 90% of each chirp
     const tg = [{ r: st.R1, a: 1 }];
     if (st.dR > 0) tg.push({ r: st.R1 + st.dR, a: 10 ** (st.A2db / 20) });
     st.tg = tg;
@@ -170,15 +170,16 @@
     bx.strokeStyle = '#e6eef6'; bx.lineWidth = 1;
     bx.fillStyle = '#8792a2'; bx.font = F(11); bx.textAlign = 'center';
     const step = st.Ts > 1.01e-3 ? 0.5e-3 : 0.25e-3;
-    for (let t = 0; t <= st.Ts + 1e-9; t += step) {
+    const Tk = KEEP * st.Ts;                          // the kept part of the chirp
+    for (let t = 0; t <= Tk + 1e-9; t += step) {
       const xx = x(t * FS);
       bx.beginPath(); bx.moveTo(xx, T); bx.lineTo(xx, g.h - B); bx.stroke();
-      bx.textAlign = t < 1e-9 ? 'left' : t > st.Ts - 1e-9 ? 'right' : 'center';
+      bx.textAlign = t < 1e-9 ? 'left' : t > Tk - step/2 ? 'right' : 'center';
       bx.fillText((t * 1e3).toFixed(2), xx, g.h - B + 15);
     }
     bx.beginPath(); bx.moveTo(L, y(0)); bx.lineTo(g.w - R, y(0)); bx.strokeStyle = '#c7d2e0'; bx.stroke();
     bx.fillStyle = '#5b6573'; bx.font = F(11.5); bx.textAlign = 'center';
-    bx.fillText('time in the chirp (ms)', (L + g.w - R) / 2, g.h - 3);
+    bx.fillText('time in the kept part of the chirp (ms)', (L + g.w - R) / 2, g.h - 3);
     // trace: one point per sample, or per pixel when samples outnumber pixels
     bx.beginPath();
     const P = Math.min(N, Math.round(2 * (g.w - L - R)));
@@ -189,8 +190,8 @@
     }
     bx.strokeStyle = '#004a85'; bx.lineWidth = 1.6; bx.lineJoin = 'round'; bx.stroke();
     bx.fillStyle = '#15202b'; bx.font = F(12, '600'); bx.textAlign = 'left';
-    const cyc = st.kpm * st.R1 * st.Ts;
-    bx.fillText('beat, ' + cyc.toFixed(1) + ' cycles a chirp', L, T - 6);
+    const cyc = st.kpm * st.R1 * Tk;
+    bx.fillText('beat, ' + cyc.toFixed(1) + ' cycles kept', L, T - 6);
   }
 
   function drawSpec() {
