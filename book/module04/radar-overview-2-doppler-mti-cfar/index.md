@@ -117,12 +117,15 @@ This second FFT is also the coherent integration of Overview 1: it adds the $M$ 
 $$
 \begin{aligned}
 \Delta v &= \frac{\lambda}{2M\ T_\text{PRI}} \\
-&= \frac{0.030\ \text{m}}{2\ (128)(0.4\ \text{ms})} = 0.29\ \text{m/s} \\
+&= \frac{0.030\ \text{m}}{2\ (128)(0.4\ \text{ms})} \\
+&= 0.29\ \text{m/s} \\
 v_\text{max} &= \pm\frac{\lambda}{4\ T_\text{PRI}} \\
-&= \pm\frac{0.030\ \text{m}}{4\ (0.4\ \text{ms})} = \pm 18.75\ \text{m/s}
+&= \pm\frac{0.030\ \text{m}}{4\ (0.4\ \text{ms})} \\
+&= \pm 18.75\ \text{m/s}
 \end{aligned}
 $$
-
+:::
+:::{present}
 - More chirps make the velocity cell finer.
 - A shorter $T_\text{PRI}$ raises the limit; a faster target aliases.
 :::
