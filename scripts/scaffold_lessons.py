@@ -129,6 +129,7 @@ EXTRA_PAGES = [
     # Two presented overviews ahead of the L28-L31 Labs (Neil, 2026-11-17):
     # unnumbered, so L25-L31 keep their numbers. They sit after L27, in order.
     (4, "L27-radar-detection", "radar-overview-1-detection-fmcw", "Radar Overview 1 — Detection and FMCW Range"),
+    (4, "L27-radar-detection", "radar-overview-2-doppler-mti-cfar", "Radar Overview 2 — Doppler, MTI, CFAR, and the Lab Chain"),
     # The final project is one report built on the L28-L31 Labs (Neil,
     # 2026-10-15); this page says so and sits after the last of them.
     (4, "L31-classification-tracking", "final-project", "Final Project — Radar Systems Report"),
