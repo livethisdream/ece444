@@ -193,31 +193,10 @@ mean of the slow-time samples removes them, which is what MTI does at
 $0\ \text{Hz}$. And a target that moves in range leaves its bin: at
 $1.1\ \text{m/s}$ the example walker crosses a $0.375\ \text{m}$ bin in
 $0.34\ \text{s}$, so the spectrogram of one bin shows the walker in pieces.
-For a walker, `spectrogram` takes a slice of bins around the track's range
-and sums them, flipping the sign of every other bin first: a Hann-windowed
-tone puts $-\tfrac{1}{4}$, $\tfrac{1}{2}$, $-\tfrac{1}{4}$ of itself in
-neighboring bins, so a plain sum cancels whenever the target sits on a bin
-center, while the alternating sum makes the three add.
-The range bin comes from the L30 detection list. The course provides
-`radar_lab.py` complete, with a notebook for each lab; its `spectrogram` is
-the one below, and the lab asks you to run it and tune it, not to write it.
+The provided `spectrogram` therefore sums the few bins around the detection's
+range, which the L30 detection list supplies. You run it and tune its window;
+you do not write it.
 
-```python
-def spectrogram(cap, range_bin, n_win=64, hop=16):
-    """Slow-time spectrogram of one range bin: (t, f_D, S_dB), peak at 0 dB."""
-    X = range_fft(cap)[:, range_bin]            # one sample per chirp
-    if X.ndim == 2:                             # a slice: alternate signs, sum
-        X = (X * (-1.0) ** np.arange(X.shape[1])).sum(axis=1)
-    x = X
-    x = x - x.mean()                            # stationary returns out
-    w = np.hanning(n_win)
-    cols = [np.fft.fftshift(np.fft.fft(x[i:i + n_win] * w))
-            for i in range(0, len(x) - n_win + 1, hop)]
-    S = 20 * np.log10(np.abs(np.array(cols).T) + 1e-12)
-    f = np.fft.fftshift(np.fft.fftfreq(n_win, cap["PRI"]))
-    t = (np.arange(S.shape[1]) * hop + n_win / 2) * cap["PRI"]
-    return t, f, S - S.max()
-```
 ::::
 
 ::::{frame} Window Length
@@ -233,7 +212,7 @@ T_w &= \frac{1}{\sqrt{\dot f_D}} \\
 :::
 :::{present}
 - The example walker's limbs accelerate at $13.0\ \text{m/s}^2$, so 64 chirps, $25.6\ \text{ms}$, is the nearest power of two.
-- The example fan's tips change at $45\ \text{kHz/s}$, so no window follows a blade.
+- A fan's tips change too fast for any window to follow, so its band looks steady.
 :::
 
 Every spectrogram trades resolution in frequency against resolution in time.
@@ -282,14 +261,9 @@ $89\ \text{Hz}$. The torso, which hardly accelerates, is sharpest in the
 longest window. The table changes with the PRI, so the lab's own windows have
 their own numbers.
 
-A fan is the opposite case. Its tips accelerate at $\Omega^2 R$, which for the
-example fan is $672\ \text{m/s}^2$, so $\dot f_D = 45\ \text{kHz/s}$ and the
-best window is $4.7\ \text{ms}$, twelve chirps, which resolves only
-$212\ \text{Hz}$. No window follows one blade through its turn. A long window
-shows the blades' band averaged over many passes, steady in time, and a very
-short one shows each blade's flash as it passes broadside. The hop between
-columns, 16 chirps here, sets only how often we compute a column, not what it
-resolves.
+A fan's tips change their Doppler far faster than any window can follow, so
+a fan's band shows steady, averaged over many blade passes, and a very short
+window shows each blade's flash instead.
 ::::
 
 ::::{frame} Window Explorer
@@ -318,55 +292,31 @@ $700\ \text{rpm}$.
 :class: read-only
 
 :::{present}
-$$\begin{aligned}
-\bar f(t) &= \frac{\sum_f f\ P(f,t)}{\sum_f P(f,t)} \\
-\sigma_f(t) &= \sqrt{\frac{\sum_f \left(f-\bar f\right)^2 P(f,t)}{\sum_f P(f,t)}}
-\end{aligned}$$
-
-- The **centroid** $\lambda\bar f/2$ is the body's speed.
-- The **spread** $\lambda\sigma_f/2$ is its parts' speed about it.
-- The **periodicity** is how strongly it repeats, at $0.25$ to $2\ \text{s}$.
+- The **centroid** is the body's radial speed.
+- The **spread** is how fast its parts move about it.
+- The **periodicity** is how strongly the pattern repeats at the pace of a stride or a wave.
 :::
 
 A classifier does not look at a picture; it compares numbers. A **feature**
 is one number computed from the spectrogram that takes different values for
 different classes of target, and three are enough to separate most of the
-lab's four kinds of target. Each measures a different physical property, which is why they
-separate targets that any one of them alone would confuse.
+lab's four kinds of target. Each measures a different physical property,
+which is why they separate targets that any one of them alone would confuse.
 
-Each column of the spectrogram is a Doppler spectrum $P(f,t)$, in linear
-power. Before using it we zero every bin more than $15\ \text{dB}$ below that
-column's peak, so the noise floor does not count as motion. The **centroid**
-$\bar f(t)$ is the power-weighted mean Doppler of the column, and averaged over
-the recording and multiplied by $\lambda/2$ it is the body's radial speed. We
-keep its magnitude, since a walker may approach or recede. The **spread**
-$\sigma_f(t)$ is the power-weighted RMS width of the column about its
-centroid; averaged and scaled the same way, it says how fast the parts move
-relative to the body.
+The provided `features` returns all three, in m/s for the first two, after
+ignoring each column's bins more than $15\ \text{dB}$ below its peak so the
+noise floor does not count as motion. The **centroid** is the power-weighted
+mean Doppler, converted to speed: the body's radial speed, near zero for a
+target that stays put. The **spread** is the power-weighted width of each
+column about that mean: how fast the parts move relative to the body. The
+**periodicity** asks whether the pattern repeats every $0.25$ to
+$2\ \text{s}$, as a stride or a wave does: a walker or a waving hand scores
+near 0.8, and a steady rotor scores low, about 0.2.
 
-The **periodicity** asks whether the motion repeats at the pace of a body. We
-subtract each Doppler row's mean, smooth along time over 12 columns, about
-$0.08\ \text{s}$ on the example burst, so a rotor's blade flashes average out, and correlate the spectrogram with a copy
-of itself shifted in time, normalized so a zero shift gives 1. A stride or a
-wave repeats every $0.25$ to $2\ \text{s}$; the largest correlation at those
-shifts is the periodicity. A steady rotor scores low, about 0.2, and a walker
-or a waving hand scores near 0.8. The provided `features` computes all three:
-
-```python
-def features(t, f, S, lam, floor_db=-15):
-    """Centroid and spread in m/s, and periodicity, from one spectrogram."""
-    S = S - S.max(axis=0, keepdims=True)        # each column's peak at 0 dB
-    P = np.where(S > floor_db, 10 ** (S / 10), 0.0)
-    fc = (f[:, None] * P).sum(0) / P.sum(0)     # centroid, each column
-    sd = np.sqrt(((f[:, None] - fc) ** 2 * P).sum(0) / P.sum(0))
-    D = np.maximum(S, floor_db)
-    D = np.array([np.convolve(row, np.ones(12) / 12, "valid") for row in D])
-    D = D - D.mean(axis=1, keepdims=True)
-    dt = t[1] - t[0]
-    r = [np.sum(D[:, :-n] * D[:, n:]) / np.sum(D ** 2)
-         for n in range(int(0.25 / dt), int(2.0 / dt))]
-    return np.array([abs(fc.mean()) * lam / 2, sd.mean() * lam / 2, max(r)])
-```
+The features are a list of numbers, one row per record, and the classifier
+compares the rows. Adding a feature is one more number on the end of that
+list: the lab's task (b) appends one with a single `np.append` line in the
+notebook's `my_features`, and the classifier uses it with no other change.
 ::::
 
 ::::{frame} Nearest-Centroid Classifier
@@ -378,11 +328,6 @@ def features(t, f, S, lam, floor_db=-15):
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-$$\begin{aligned}
-z_i &= \frac{x_i - \mu_i}{s_i} \\
-\hat c &= \arg\min_k \lVert \mathbf z - \bar{\mathbf z}_k \rVert
-\end{aligned}$$
-
 - Training stores each class's mean.
 - A trial takes the nearest mean's class.
 :::
@@ -391,8 +336,7 @@ A **nearest-centroid** classifier is the simplest one that learns from data.
 We record a set of **training** trials of each target, compute the three
 features of each, and keep each class's mean, the crosses in the figure.
 A new trial gets the class whose mean is nearest. The features have different
-units, m/s for two and none for periodicity, so we first scale each one by
-its mean $\mu_i$ and standard deviation $s_i$ over the training set; without
+units, so the classifier first scales each one to a common size; without
 that, the feature with the largest numbers would decide every distance.
 
 The figure plots 20 simulated training trials of each example target on the
@@ -407,25 +351,6 @@ range, and the right panel shows what sets the hands apart: periodicity. The fan
 zero centroid and low periodicity, so only their spread separates them, a
 mean of $4.7$ against $3.6\ \text{m/s}$, and the two clouds overlap: a fast
 spinner looks like a slow fan.
-
-Thresholds work too: centroid above $0.3\ \text{m/s}$ is a walker;
-otherwise, periodicity above 0.5 is a hand; otherwise, spread above about
-$4.1\ \text{m/s}$ is a fan. A nearest-centroid rule picks those boundaries
-from the data rather than by eye. The provided classifier is the
-nearest-centroid one:
-
-```python
-def train(X, y):
-    """X: one row of features per trial; y: each trial's class."""
-    mu, sd = X.mean(0), X.std(0)
-    cents = {c: ((X[y == c] - mu) / sd).mean(0) for c in set(y)}
-    return mu, sd, cents
-
-def classify(x, model):
-    mu, sd, cents = model
-    z = (x - mu) / sd
-    return min(cents, key=lambda c: np.sum((z - cents[c]) ** 2))
-```
 ::::
 
 ::::{frame} The Confusion Matrix
@@ -523,16 +448,9 @@ and then the shape to the three features and compares the matrices.
 :class: read-only
 
 :::{present}
-$$\begin{aligned}
-\hat R_k^- &= \hat R_{k-1} + \hat v_{k-1}\ \Delta t \\
-e_k &= z_k - \hat R_k^- \\
-\hat R_k &= \hat R_k^- + \alpha\ e_k \\
-\hat v_k &= \hat v_{k-1} + \frac{\beta}{\Delta t}\ e_k
-\end{aligned}$$
-
-- Predict, compare with the detection $z_k$, correct.
-- $\Delta t$ is one range-Doppler frame.
-- On a missed frame, the filter only predicts.
+- Each frame: predict where the target should be, compare with the detection, correct.
+- $\alpha$ sets how much a new detection moves the track.
+- On a missed frame, the track only predicts.
 :::
 
 A detection list is noisy. Each range is the center of a range bin, a
@@ -543,33 +461,16 @@ detections of one target into a single estimate of its range and velocity,
 frame after frame. A military radar calls a person on foot a **dismount**;
 tracking one is the second half of the L31 Lab.
 
-The **alpha-beta filter** is the simplest tracker. It assumes the target moves
-at a constant velocity over one frame. Each frame it **predicts** where the
-target should be, $\hat R_k^-$, from the last estimate. It compares the
-prediction with the frame's detection $z_k$; the difference $e_k$ is the
-**residual**. It then **corrects** both estimates by fixed fractions of the
-residual: $\alpha$ of it moves the range, and $\beta/\Delta t$ of it moves the
-velocity. A frame with no detection near the prediction keeps the prediction
-and corrects nothing, which is how a track coasts through a miss. The
-detection a track accepts is the one nearest its prediction, inside a gate of
-a few bins, which is also how two targets keep separate tracks. On the
-example burst one frame is 256 chirps of $0.4\ \text{ms}$,
-$\Delta t = 102.4\ \text{ms}$. The provided `alpha_beta` is the filter as
-written above:
-
-```python
-def alpha_beta(track_meas, alpha, beta, dt):
-    """Range track from one detection per frame (NaN for a missed frame)."""
-    r, v = track_meas[0], 0.0
-    out = []
-    for z in track_meas:
-        r = r + v * dt                          # predict
-        if not np.isnan(z):
-            e = z - r                           # residual
-            r, v = r + alpha * e, v + beta / dt * e
-        out.append((r, v))
-    return np.array(out)
-```
+The **alpha-beta filter** is the simplest tracker, and the provided
+`alpha_beta` runs it. Each frame it **predicts** where the target should be,
+assuming it kept its velocity over one frame, compares that prediction with
+the frame's detection, and **corrects** the range and the velocity by fixed
+fractions of the difference, the **residual**. The gain $\alpha$ sets how far
+a new detection moves the range, and $\beta$ how far it moves the velocity. A
+frame with no detection near the prediction keeps the prediction, which is
+how a track coasts through a miss, and accepting only the detection nearest
+the prediction is how two targets keep separate tracks. On the example burst
+one frame is $\Delta t = 102.4\ \text{ms}$.
 ::::
 
 ::::{frame} Choosing Alpha and Beta
@@ -597,9 +498,7 @@ track's noise against its lag and leaves one number to choose.
 
 The other two lines say what that number trades. For detection noise
 $\sigma_z$ that is independent from frame to frame, the track's settled RMS
-error is $\sigma_\text{track}$, the second line: the filter's output is a
-weighted sum of past detections, and the line is the RMS of that sum's
-weights. Under a steady acceleration $a$ the track trails the target by the
+error is $\sigma_\text{track}$, the second line. Under a steady acceleration $a$ the track trails the target by the
 third line. The target gains $a\Delta t$ of speed each frame, and once the
 track settles its velocity must gain the same, so the velocity correction
 $(\beta/\Delta t)e$ equals $a\Delta t$ and the residual is $e = a\Delta t^2/\beta$. Work both for $\alpha = 0.4$ on the example
@@ -672,11 +571,7 @@ turns a measured phase back into an angle. A phase is known only
 within $\pm 180^\circ$, so the angle is unambiguous while $\sin\theta$ stays
 within $\lambda/(2D) = 0.268$ of the steer direction's $\sin\theta_0$, which is
 $\pm 15.5^\circ$ at broadside and a little more in angle when the beam is
-steered. The L24 Lab's error function,
-
-$$\frac{\text{Im}\lbrace\Delta\Sigma^*\rbrace}{\vert\Sigma\vert^2},$$
-
-is the same comparison written for the sum and difference beams.
+steered.
 
 In the radar we take the two channels' values in the range bin where CFAR
 declared the target. That bin holds the target's echo with the 256-chirp
@@ -740,39 +635,15 @@ vanishing except at the turn.
 ::::{frame} Why Monopulse Holds a Walker
 :class: read-only
 
-:::{present}
-- At $1\ \text{m/s}$ and $4\ \text{m}$ a crossing walker moves $14.3^\circ/\text{s}$.
-- A beam sweep about a second long lets it leave the $13.6^\circ$ beam between looks.
-- Between monopulse frames it moves $1.5^\circ$.
-:::
-
-A walker crossing in front of the radar at $1\ \text{m/s}$, $4\ \text{m}$
-away, changes bearing at $v/R = 0.25\ \text{rad/s}$, or $14.3^\circ$ a second.
-A beam sweep looks in each direction once a sweep, so between two looks the
-walker moves $14.3^\circ/\text{s}$ times the sweep's length. The array's
-beamwidth at $10.0\ \text{GHz}$ is
-
-$$\theta_\text{3dB} = \frac{0.886\lambda}{Nd} = 13.6^\circ,$$
-
-so any sweep longer than $13.6/14.3 = 0.95\ \text{s}$ lets the walker cross a
-whole beamwidth between looks. The figure draws a sweep every
-$1.1\ \text{s}$, the walker moving $15.9^\circ$ between looks.
-
 <img src="../../viz/img/L31-sweep-vs-mono.svg"
      alt="A crossing walker's bearing against time over four seconds, from minus 27 to plus 27 degrees: beam-sweep looks every 1.1 seconds, each with its 13.6 degree beam shaded, are far apart, while monopulse frames every 0.1 seconds follow the bearing closely"
      style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
 
-A sweep can find a walker who stands still, but a crossing walker can leave
-the beam between one look and the next. Monopulse measures once a frame, and
-in the example burst's $102.4\ \text{ms}$ the walker moves $1.5^\circ$, well
-inside the $\pm 15.5^\circ$ monopulse window.
-
-The tracker closes the loop. A second alpha-beta filter runs on the monopulse
-angles, and its prediction for the next frame can become the next frame's
-steer angle, so the walker stays near boresight, where the L24 Lab found the
-monopulse response straight (about $\pm 5^\circ$). Objective 4.8 asks for
-exactly this integration: range from the FMCW processing, angle from the
-array, and a beam the track points.
+A walker crossing $4\ \text{m}$ away at $1\ \text{m/s}$ changes bearing by
+about $14^\circ$ a second, so a beam sweep about a second long lets the walker
+leave the $13.6^\circ$ beam between one look and the next. Monopulse measures
+once a frame, and in the example burst's $102.4\ \text{ms}$ the walker moves
+$1.5^\circ$, well inside the monopulse window, so the angle track keeps up.
 ::::
 
 ::::{frame} Summary
@@ -783,7 +654,7 @@ array, and a beam the track points.
 | $f_D = 2(v_\text{body} + v_\text{part})/\lambda$ | micro-Doppler of a moving part | $25\ \text{cm}$ fan at $700\ \text{rpm}$: tips $9.2\ \text{m/s}$, $\pm 611\ \text{Hz}$ |
 | slow time | one sample per chirp | $2.5\ \text{kHz}$: $\pm 1.25\ \text{kHz}$, $\pm 18.75\ \text{m/s}$ |
 | $\Delta f = 1/T_w$, $\delta f = \dot f_D T_w$ | window: resolution against smear | best $T_w = 1/\sqrt{\dot f_D}$; $64$ chirps for the example walker |
-| centroid, spread, periodicity | three features | $\lambda\bar f/2$, $\lambda\sigma_f/2$, autocorrelation at $0.25$-$2\ \text{s}$ |
+| centroid, spread, periodicity | three features | body speed, parts' speed, repetition at $0.25$-$2\ \text{s}$ |
 | edge, shape | the band's outside, and spread over edge | weight on the outer third: shape $0.59$ |
 | nearest centroid | the class whose mean is nearest, in scaled features | train and test on different trials |
 | confusion matrix | true class against the call | $64/80 = 80\%$; most errors confuse the two rotors |
