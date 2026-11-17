@@ -215,19 +215,21 @@ The transmitted frequency rises at the chirp slope $B/T_s$. During the round-tri
 Both waveform settings change the beat per meter. A wider bandwidth or a shorter chirp steepens the slope and raises it. <a href="../L28-fmcw/index.html#frame-the-beat-frequency">Lesson 28</a> works both cases.
 ::::
 
-::::{frame} Chirp, Echo, and Beat
+::::{frame} Mixing Echo and Chirp
 :class: viz-frame
 
 :::{depth}
-The four traces share one time axis, one chirp long, and follow the signal in order. The first is the chirp going out, a sinusoid whose cycles crowd together as its frequency rises. The second is the echo from a target at range $R$: the same waveform, late by the round trip $2R/c$. The third is the output of the receiver's mixer, which multiplies the echo by the chirp that is still going out. A product of two sinusoids is the sum of two others, one at the sum of their frequencies and one at the difference, so the mixer output is a fast oscillation riding on a slow one; the dashed line is the slow one. The receiver's low-pass filter removes the fast term, and the fourth trace is what remains: a steady tone at the difference of the two frequencies. That tone is the beat.
-
-The small panel draws the same chirp and echo as frequency against time. The two ramps are parallel, so the gap between them is the same at every instant, which is why the beat is one steady tone. The gap is the chirp's slope times the delay,
+The Chirp and Its Echo frame said the receiver compares the echo with the chirp still going out. This widget shows how. Its four traces share one time axis, one chirp long, and follow the signal in order. The first is the chirp going out, a sinusoid whose cycles crowd together as its frequency rises. The second is the echo from a target at range $R$: the same waveform, late by the round trip $2R/c$. The third is the output of the receiver's mixer, which multiplies the echo by the chirp that is still going out. A product of two sinusoids is the sum of two others,
 
 $$
-f_b = \frac{B}{T_s}\ \frac{2R}{c} .
+\sin\phi_1\ \sin\phi_2 = \tfrac{1}{2}\cos\left(\phi_1 - \phi_2\right) - \tfrac{1}{2}\cos\left(\phi_1 + \phi_2\right),
 $$
 
-Move the target out, and the echo moves later, the gap widens, and the beat speeds up. The drawing is slowed and stretched: a real chirp has millions of cycles, and its delay is nanoseconds in 2 ms, so the widget draws a chirp of a few tens of cycles and stretches the delay to make both visible. The readouts are the real values for the worked chirp.
+one at the difference of their frequencies and one at the sum. The mixer output is therefore a fast oscillation on top of a slow one, and the dashed line is the slow one, the first term. The receiver's low-pass filter removes the fast term, and the fourth trace is what remains: a steady tone at the difference of the two frequencies, the beat $f_b$.
+
+The small panel draws the same chirp and echo as frequency against time. The two ramps are parallel, so from the echo's arrival to the end of the chirp the gap between them is the same, and the beat is one steady tone. That gap is the chirp's slope times the delay, the $f_b$ of The Beat Frequency frame. Move the target out, and the echo arrives later, the gap widens, and the beat frequency rises.
+
+The widget cannot draw the worked chirp to scale. It slows the chirp to 23 cycles, where the real one has about $2 \times 10^7$, and it stretches the delay, which is tens of nanoseconds against a 2 ms chirp, to as much as 30% of the chirp, so that both are visible. The drawn beat therefore has fewer cycles than the real one. The readouts are the real delay and beat for the worked chirp, which gives $2RB/c = 2.67$ beat cycles a chirp for every meter. The FMCW Explorer in the next frame draws the fourth trace, the beat, for the worked chirp at its true scale, and takes its spectrum.
 :::
 
 <iframe src="../../viz/fmcw-mixer.html"

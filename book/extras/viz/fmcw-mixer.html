@@ -49,14 +49,14 @@
 <body>
 <div class="app">
   <div class="cv2">
-    <canvas id="waves" aria-label="Four waveforms on one time axis over one chirp, drawn slowed down: the chirp going out, whose cycles crowd together as its frequency rises; the echo, the same waveform late by the round trip; the mixer output, their product, a fast term riding on a slow one; and the beat left after the low-pass filter, a steady sinusoid that speeds up as the target range grows"></canvas>
+    <canvas id="waves" aria-label="Four waveforms on one time axis over one chirp, drawn slowed down: the chirp going out, whose cycles crowd together as its frequency rises; the echo, the same waveform late by the round trip; the mixer output, their product, a fast term riding on a slow one; and the beat left after the low-pass filter, a steady sinusoid whose frequency rises with the target range"></canvas>
     <canvas id="ramps" aria-label="Frequency against time over the same chirp: the chirp going out as a rising ramp and the echo as the same ramp shifted later, with the frequency gap between them marked as the beat"></canvas>
   </div>
 
   <div class="controls">
     <div class="ctl">
       <label>Target range \(R\)</label>
-      <input type="range" id="rng" min="0.5" max="10" step="0.1" value="4">
+      <input type="range" id="rng" min="1" max="10" step="0.1" value="4">
       <span class="val" id="rng-val">4.0 m</span>
     </div>
   </div>
@@ -64,7 +64,7 @@
   <div class="readouts">
     <div class="ro dl"><span class="k">delay \(2R/c\)</span><span class="v" id="p-tau">&#8212;</span></div>
     <div class="ro bt"><span class="k">beat \(f_b\)</span><span class="v" id="p-fb">&#8212;</span></div>
-    <div class="ro"><span class="k">for a chirp of</span><span class="v">400 MHz, 2 ms</span></div>
+    <div class="ro"><span class="k">real chirp \(B\), \(T_s\)</span><span class="v">400 MHz, 2 ms</span></div>
   </div>
 </div>
 
@@ -89,9 +89,9 @@ const fBeat   = R => (B / TS) * tauReal(R);     // beat, Hz
 // fraction of the chirp. Time is in chirp lengths. Every relation survives:
 // the echo is the chirp delayed, the product is their product sample by
 // sample, and the beat is slope times delay.
-const F1 = 6, F2 = 28;                          // cycles per chirp length, start and end
+const F1 = 6, F2 = 40;                          // cycles per chirp length, start and end
 const SLOPE = F2 - F1;                          // the drawn chirp's slope
-const DELAY_AT_RMAX = 0.25;                     // drawn delay at R_MAX, in chirp lengths
+const DELAY_AT_RMAX = 0.30;                     // drawn delay at R_MAX, in chirp lengths
 const tauDraw = R => DELAY_AT_RMAX * R / R_MAX;
 const phase   = t => 2 * Math.PI * (F1 * t + 0.5 * SLOPE * t * t);   // of the chirp at time t
 const chirp   = t => Math.sin(phase(t));          // starts from zero, so the echo does too
@@ -152,8 +152,15 @@ function span(ctx, x1, y1, x2, y2, col) {
   const len = Math.hypot(x2 - x1, y2 - y1);
   ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 1.6;
   ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
-  if (len < 14) return;
+  if (len < 1) return;
   const ux = (x2 - x1) / len, uy = (y2 - y1) / len;
+  if (len < 14) {                               // dimension style: heads outside, pointing in
+    ctx.beginPath(); ctx.moveTo(x1 - ux * 9, y1 - uy * 9); ctx.lineTo(x1, y1);
+    ctx.moveTo(x2, y2); ctx.lineTo(x2 + ux * 9, y2 + uy * 9); ctx.stroke();
+    arrowHead(ctx, x1, y1, ux, uy, 5.5);
+    arrowHead(ctx, x2, y2, -ux, -uy, 5.5);
+    return;
+  }
   arrowHead(ctx, x2, y2, ux, uy, 5.5);
   arrowHead(ctx, x1, y1, -ux, -uy, 5.5);
 }
@@ -221,22 +228,37 @@ function drawWaves() {
 
   // 3: the mixer output, their product: a fast term riding on the slow beat,
   // which the dashed line draws through it
-  labelLine(ctx, mL, TOP + 2 * band + LAB / 2, amber, 'mixer output: echo × chirp');
-  trace(2, t => echo(t, d) * chirp(t), amber, 1.2, 1, d);
+  labelLine(ctx, mL, TOP + 2 * band + LAB / 2, amber, 'mixer output, echo × chirp; dashed: slow part');
+  // On a phone the fast term is under 4 px a cycle; drawn thin and light there,
+  // it stays a texture behind the slow part instead of burying it.
+  ctx.globalAlpha = narrow() ? 0.55 : 1;
+  trace(2, t => echo(t, d) * chirp(t), amber, narrow() ? 0.8 : 1.2, 1, d);
+  ctx.globalAlpha = 1;
   ctx.setLineDash([5, 3]);
-  trace(2, t => 0.5 * beatOf(t, d), grn, 1.8, 1, d);
+  trace(2, t => 0.5 * beatOf(t, d), grn, 2.2, 1, d);
   ctx.setLineDash([]);
 
   // 4: what the low-pass filter keeps
-  labelLine(ctx, mL, TOP + 3 * band + LAB / 2, grn, 'after the low-pass filter: the beat ', 'f_b');
-  trace(3, t => beatOf(t, d), grn, 2.2, 0.9, d);
+  // drawn at the same half amplitude as the dashed line above: it is that curve
+  const y4 = TOP + 3 * band + LAB / 2;
+  const lead = 'after the low-pass filter: the beat ';
+  labelLine(ctx, mL, y4, grn, lead, 'f_b');
+  trace(3, t => 0.5 * beatOf(t, d), grn, 2.2, 1, d);
+  // how many beat cycles the drawing shows, where the label line has room
+  const drawn = (SLOPE * d * (1 - d)).toFixed(1) + ' cycles drawn';
+  ctx.font = '12.5px ' + SANS;
+  const wLead = ctx.measureText(lead).width + 26, wDrawn = ctx.measureText(drawn).width;
+  if (wLead + wDrawn + 12 <= pW) {
+    ctx.fillStyle = ink3; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText(drawn, mL + pW, y4);
+  }
 
   // the shared time axis
   const ya = TOP + 4 * band + 3;
   ctx.strokeStyle = cssVar('--edge'); ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(mL, ya); ctx.lineTo(mL + pW, ya); ctx.stroke();
   ctx.fillStyle = ink3; ctx.font = '12.5px ' + SANS; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-  ctx.fillText('time, one chirp (slowed and stretched to draw)', mL + pW / 2, ya + 6);
+  ctx.fillText('time (illustrative: slowed, delay stretched)', mL + pW / 2, ya + 6);
 }
 
 // ---------------------------------------------------------------- ramps ----
@@ -274,6 +296,10 @@ function drawRamps() {
   if (narrow()) { key(key(mL, 12, navy, 'chirp out'), 12, red, 'echo', [6, 4]); }
   else { key(mL, 12, navy, 'chirp out'); key(mL, 29, red, 'echo', [6, 4]); }
 
+  // where the echo arrives: the same light guide as in the waveform panel
+  ctx.strokeStyle = cssVar('--edge2'); ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(X(d), mT); ctx.lineTo(X(d), mT + pH); ctx.stroke(); ctx.setLineDash([]);
+
   // the chirp going out, and its echo: the same ramp, later
   ctx.save();
   ctx.beginPath(); ctx.rect(mL, mT - 2, pW, pH + 3); ctx.clip();
@@ -289,17 +315,19 @@ function drawRamps() {
   // high yet there, and the echo is later still, so nothing is drawn under it
   // at any range.
   const symH = 15;
-  const tD = 0.50, yD = Y(tD);
+  // Both marks sit low enough on the ramp that their labels clear the top of
+  // the plot: in the flat phone strip that puts them well left of the end.
+  const tG = Math.min(0.86, 1 - 36 / pH);
+  const tD = Math.max(0.18, tG - 0.36), yD = Y(tD);
   span(ctx, X(tD), yD, X(tD + d), yD, red);
   const wTau = MJ.width('2R/c', red, symH) || 34;
-  MJ.draw(ctx, '2R/c', Math.max(mL + 4, X(tD) - 8 - wTau), Math.max(mT + 9, yD - 19), symH, red, 'left');
+  MJ.draw(ctx, '2R/c', Math.max(mL + 4, X(tD) - 8 - wTau), yD - 19, symH, red, 'left');
 
   // The beat: the vertical gap between the two ramps at one instant, with its
   // label above and to the left of the chirp there, clear of both ramps.
-  const tG = 0.86;
   span(ctx, X(tG), Y(tG), X(tG), Y(tG - d), grn);
   const wFb = MJ.width('f_b', grn, symH) || 16;
-  MJ.draw(ctx, 'f_b', X(tG) - 10 - wFb, Math.max(mT + 9, Y(tG) - 23), symH, grn, 'left');
+  MJ.draw(ctx, 'f_b', X(tG) - 10 - wFb, Y(tG) - 23, symH, grn, 'left');
 }
 
 // ------------------------------------------------------------- readouts ---
