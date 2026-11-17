@@ -31,6 +31,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from matplotlib.patches import Rectangle, FancyArrowPatch
 from scipy import signal
 from scipy.optimize import brentq
@@ -219,8 +220,12 @@ def target(p: np.ndarray, rng, k: int, snr_db: float) -> None:
 
 
 def failures() -> None:
+    # Sized for a phone: the page shows this at 343 px wide, so the figure is
+    # 6.6 in (475 pt) across and every label is 15.5 pt or more, which renders
+    # at 11 px or larger there.
     g, r = 2, 16
-    fig, axes = plt.subplots(1, 2, figsize=(10.4, 3.2), sharey=True)
+    fs = 15.5
+    fig, axes = plt.subplots(1, 2, figsize=(6.6, 3.0), sharey=True)
 
     # (a) masking: a strong target eight cells from a weaker one
     rng = np.random.default_rng(11)
@@ -232,20 +237,20 @@ def failures() -> None:
     ax.plot(np.arange(n), db(p), color=NAVY, lw=0.8)
     for kind, col, ls in (("ca", GREEN, "-"), ("so", ORANGE, "--")):
         t = cfar_1d(p, g, r, kind)
-        ax.plot(np.arange(n), db(t), color=col, lw=1.8, ls=ls)
+        ax.plot(np.arange(n), db(t), color=col, lw=2.0, ls=ls)
         print(f"  masking {kind}: weak target {db(p[52]):.1f} dB vs threshold {db(t[52]):.1f} dB")
-    ax.annotate("18 dB", (52, db(p[52])), xytext=(36, 6), color=NAVY, fontsize=11.5, ha="right",
-                bbox=dict(fc="white", ec="none", pad=1.0),
-                arrowprops=dict(arrowstyle="-", color=NAVY, lw=0.9))
-    ax.annotate("24 dB", (60, db(p[60])), xytext=(90, 27), color=NAVY, fontsize=11.5,
-                arrowprops=dict(arrowstyle="-", color=NAVY, lw=0.9))
-    ax.text(2, -17, "cell averaging", color=GREEN, fontsize=12, bbox=dict(fc="white", ec="none", pad=1.0))
-    ax.text(2, -22.5, "smallest-of", color=ORANGE, fontsize=12, bbox=dict(fc="white", ec="none", pad=1.0))
-    ax.set_title("a second target in the window", fontsize=13, color=INK)
+    ax.annotate("18 dB", (52, db(p[52])), xytext=(30, 22), color=NAVY, fontsize=fs, ha="right",
+                va="center", arrowprops=dict(arrowstyle="-", color=NAVY, lw=0.9))
+    ax.annotate("24 dB", (60, db(p[60])), xytext=(84, 30), color=NAVY, fontsize=fs,
+                va="center", arrowprops=dict(arrowstyle="-", color=NAVY, lw=0.9))
+    ax.set_title("masking", fontsize=fs + 1, color=INK)
     ax.set_xlim(0, n)
-    ax.set_ylim(-25, 32)
-    ax.set_xlabel("range cell")
-    ax.set_ylabel("power (dB)")
+    ax.set_ylim(-25, 34)
+    ax.set_xticks([0, 60, 120])
+    ax.set_yticks([-20, 0, 20])
+    ax.set_xlabel("range cell", fontsize=fs)
+    ax.set_ylabel("power (dB)", fontsize=fs)
+    ax.tick_params(labelsize=fs)
     tidy(ax)
 
     # (b) clutter edge: noise rises 15 dB at cell 60
@@ -257,21 +262,28 @@ def failures() -> None:
     ax.plot(np.arange(n), db(p), color=NAVY, lw=0.8)
     for kind, col, ls in (("ca", GREEN, "-"), ("go", RED, "--")):
         t = cfar_1d(p, g, r, kind)
-        ax.plot(np.arange(n), db(t), color=col, lw=1.8, ls=ls)
+        ax.plot(np.arange(n), db(t), color=col, lw=2.0, ls=ls)
         fa = np.nansum(p > t)
         print(f"  clutter edge {kind}: {fa} crossings")
         if kind == "ca":
             hit = np.where(p > t)[0]
-            ax.plot(hit, db(p[hit]), "o", color=RED, ms=4.5)
+            ax.plot(hit, db(p[hit]), "o", color=RED, ms=5)
     ax.axvline(60, color=GRAY, lw=0.9, ls=":")
-    ax.text(63, -22, "clutter 15 dB higher", color=GRAY, fontsize=12)
-    ax.text(2, -17, "cell averaging", color=GREEN, fontsize=12, bbox=dict(fc="white", ec="none", pad=1.0))
-    ax.text(2, -22.5, "greatest-of", color=RED, fontsize=12, bbox=dict(fc="white", ec="none", pad=1.0))
-    ax.set_title("a clutter edge", fontsize=13, color=INK)
+    ax.text(64, -17, "+15 dB", color=GRAY, fontsize=fs, va="center")
+    ax.set_title("clutter edge", fontsize=fs + 1, color=INK)
     ax.set_xlim(0, n)
-    ax.set_xlabel("range cell")
+    ax.set_xticks([0, 60, 120])
+    ax.set_xlabel("range cell", fontsize=fs)
+    ax.tick_params(labelsize=fs)
     tidy(ax)
-    fig.tight_layout(w_pad=1.5)
+    # One legend row for both panels: a label band inside each panel made the
+    # figure too tall for the Overview 2 frame at 1280.
+    handles = [Line2D([], [], color=c, lw=2.0, ls=ls) for c, ls in
+               ((GREEN, "-"), (ORANGE, "--"), (RED, "--"))]
+    fig.legend(handles, ["cell averaging", "smallest-of", "greatest-of"], ncol=3,
+               loc="lower center", bbox_to_anchor=(0.5, 0.0), fontsize=fs,
+               handlelength=1.6, columnspacing=1.2, handletextpad=0.5)
+    fig.tight_layout(w_pad=0.8, rect=(0, 0.1, 1, 1))
     finalize(fig, "L30-failures")
 
 
