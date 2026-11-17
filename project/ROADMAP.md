@@ -83,6 +83,12 @@ That is the one shared file it may change.
   2026-11-12): the lesson half is reading only, the lab half presents at
   most ten beats, predict first, and the packet is lean
   (`project/briefs/M4_lab_reshape_2026-11-12.md`).
+  **A provided processing stage is taught to the depth of what to expect, not
+  how to build it** (Neil, 2026-11-17, on MTI and CFAR: "enough to know what
+  to expect, but not enough to be able to implement the algorithms on their
+  own"): its purpose, its place in the chain, a before-and-after picture, what
+  each control does, and only the relations Part 1 uses; no listing of the
+  provided function (`project/briefs/M4_L29_L30_depth_2026-11-17.md`).
 - **A lesson page is at most 20 slides** in present mode, 40 words a slide
   (`scripts/verify/budgets.py`); a lab page's pre-bench frames count against
   the same budget.
