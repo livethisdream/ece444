@@ -101,6 +101,8 @@ parts:
         title: "L26 — Range, Resolution, and Doppler"
       - file: module04/L27-radar-detection/index
         title: "L27 — Radar Detection"
+      - file: module04/radar-overview-1-detection-fmcw/index
+        title: "Radar Overview 1 — Detection and FMCW Range"
       - file: module04/L28-fmcw/index
         title: "L28 — FMCW on the Phaser"
       - file: module04/L29-range-doppler-mti/index
