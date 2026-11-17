@@ -51,17 +51,31 @@ Every example on this page uses one **teaching burst**: a 10.0 GHz carrier ($\la
 
 In <a href="../L28-fmcw/index.html">Lesson 28</a> one chirp gave one range profile. On the teaching burst the beat rises by $2B/(cT)$ = 13.3 kHz for every meter of range, and the range cells of $\Delta R = c/2B$ = 0.375 m are $1/T$ = 5.0 kHz apart. One chirp is too short to measure velocity: by the rule of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>, 200 µs resolves frequencies 5.0 kHz apart, which corresponds to 75 m/s of velocity.
 
-To watch the target for longer, the radar repeats the chirp. The teaching burst sends $M$ = 128 chirps, one every pulse repetition interval (PRI) of 0.4 ms, and so watches every range cell for 51.2 ms. We stack the chirps as the rows of a matrix, the capture's `iq` array. Along a row is **fast time**, the samples of one chirp; down a column is **slow time**, the same sample of every chirp, one PRI apart.
-
-<img src="../../viz/img/L29-data-matrix.svg" alt="The real part of the beat samples of the teaching burst, drawn as an image with chirp number down and sample number across. Diagonal red and blue stripes: across a row the beat oscillates about every 33 samples, and down a column it oscillates about every 62 chirps" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
-
-The figure is that matrix for one hand at 1.5 m closing at 0.6 m/s. Across a row the beat oscillates once every 33 samples, which sets the range; down a column the same sample oscillates once every 62 chirps, which measures the velocity.
+To watch the target for longer, the radar repeats the chirp. The teaching burst sends $M$ = 128 chirps, one every pulse repetition interval (PRI) of 0.4 ms, and so watches every range cell for 51.2 ms.
 
 Velocity comes from how the echo's phase changes from one chirp to the next, so every chirp's samples must start at the same point of its ramp. The Phaser's timing engine does this, as ADI's <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/chirp-sync/" target="_blank" rel="noopener">Synchronizing Radar Chirps</a> lab describes: it starts the capture and fires each chirp a fixed delay after it.
 
 <img src="../../viz/img/L29-chirp-sync.svg" alt="Power against velocity in the range cell of a hand moving at 0.6 m/s on the teaching burst. With the chirps synchronized, one sharp peak at plus 0.6 m/s, about 40 dB above the rest. With each chirp starting at a random time, the same energy is spread over the whole velocity axis, about 21 dB down, with no peak" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
 
 With the chirps synchronized, the hand's energy collects into one peak at its velocity. With each chirp starting at a random time, the same energy spreads evenly over all 128 velocity cells, $10\log_{10}128$ = 21 dB lower. The hand stays at its range, but the map no longer shows its velocity.
+::::
+
+::::{frame} The Radar Data Cube
+:class: read-only
+
+<img src="../../viz/img/radar-data-cube.svg" alt="The samples of one burst drawn as a cube. Across the front face, left to right, is fast time, the samples in a chirp, which gives range. Down the front face is slow time, the chirps, which gives velocity. Back into the page is channel, the two subarrays, which gives angle. The front face is ruled into rows, one per chirp, and columns, one per sample" style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
+
+The samples of one burst form a block with three axes, the **radar data cube**, and each axis gives the radar one coordinate of a target:
+
+- **Fast time** runs along one chirp, the samples 0.25 µs apart on the teaching burst. Its beat frequency gives range, and the range FFT works along it.
+- **Slow time** runs across the chirps, the same sample of each chirp one PRI apart. Its phase step from chirp to chirp gives velocity, and the Doppler FFT and MTI both work along it.
+- Channel is the third axis. Each of the kit's two subarrays records the whole burst, and the difference between the two gives angle, which <a href="../L31-classification-tracking/index.html#frame-angle-by-monopulse">Lesson 31</a> measures by monopulse.
+
+This lesson works on one channel, one face of the cube. The capture's `iq` array is that face, one row per chirp.
+
+<img src="../../viz/img/L29-data-matrix.svg" alt="The real part of the beat samples of the teaching burst, drawn as an image with chirp number down and sample number across. Diagonal red and blue stripes: across a row the beat oscillates about every 33 samples, and down a column it oscillates about every 62 chirps" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+
+The figure is that face for one hand at 1.5 m closing at 0.6 m/s. Across a row the beat oscillates once every 33 samples, which sets the range; down a column the same sample oscillates once every 62 chirps, which measures the velocity.
 ::::
 
 ::::{frame} The Phase From Chirp to Chirp
