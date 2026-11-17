@@ -528,32 +528,55 @@ def phasor_fig() -> None:
 
 
 def _phasor_fig() -> None:
-    fig, axs = plt.subplots(1, 2, figsize=(5.6, 2.9))
+    lim = 1.6                                     # room outside the unit circle for the chirp labels
+    fig, axs = plt.subplots(1, 2, figsize=(5.6, 3.4))
+    fig.subplots_adjust(left=0.01, right=0.99, top=0.99, bottom=0.17, wspace=0.08)
     th = np.linspace(0, 2 * np.pi, 400)
     for ax in axs:
         ax.plot(np.cos(th), np.sin(th), color=LIGHT, lw=1.0)
         ax.set_aspect("equal")
-        ax.set_xlim(-1.35, 1.35)
-        ax.set_ylim(-1.35, 1.35)
+        ax.set_xlim(-lim, lim)
+        ax.set_ylim(-lim, lim)
         ax.axis("off")
+    # One text line, in data units, from the axes' size on the page: every offset below follows it.
+    fig.canvas.draw()
+    ax_in = axs[0].get_window_extent().width / fig.dpi
+    line = FSW / 72 * (2 * lim) / ax_in
     step = np.radians(V["deg_per_chirp_hand"])
     for m in range(12):
         a = m * step
         axs[0].annotate("", xy=(np.cos(a), np.sin(a)), xytext=(0, 0),
                         arrowprops=dict(arrowstyle="-|>", color=NAVY, lw=1.1, alpha=0.35 + 0.05 * m))
-    axs[0].text(0, -1.25, "chirps 0 to 11: 5.8° a chirp", ha="center", va="center", fontsize=FSW, color=INK)
+    axs[0].text(0.5, 0.0, "chirps 0 to 11:\n5.8° a chirp", transform=axs[0].transAxes,
+                ha="center", va="top", fontsize=FSW, color=INK)
     true = np.radians(240)
+    # Chirp 3 lands on chirp 0 (3 x 240° = 720°), so points that coincide share one label.
+    spots = {}
     for m in range(4):
-        a = m * true
-        axs[1].plot(np.cos(a), np.sin(a), "o", color=NAVY, ms=6)
-        axs[1].text(1.17 * np.cos(a), 1.17 * np.sin(a), str(m), ha="center", va="center", fontsize=FSW, color=NAVY)
+        key = round(np.degrees(m * true) % 360)
+        spots.setdefault(key, []).append(str(m))
+    for deg, names in spots.items():
+        a = np.radians(deg)
+        c, s_ = np.cos(a), np.sin(a)
+        axs[1].plot(c, s_, "o", color=NAVY, ms=6)
+        r = 1 + 0.6 * line                        # just clear of the dot, outward along the radius
+        axs[1].text(r * c, r * s_, ", ".join(names), fontsize=FSW, color=NAVY,
+                    ha="left" if c > 0.3 else "right" if c < -0.3 else "center",
+                    va="bottom" if s_ > 0.3 else "top" if s_ < -0.3 else "center")
+    r_true, r_alias = 0.55, 0.8
     arc = np.linspace(0, true, 100)
-    axs[1].plot(0.55 * np.cos(arc), 0.55 * np.sin(arc), color=RED, lw=1.3, ls="--")
+    axs[1].plot(r_true * np.cos(arc), r_true * np.sin(arc), color=RED, lw=1.3, ls="--")
     arc2 = np.linspace(0, -np.radians(120), 60)
-    axs[1].plot(0.8 * np.cos(arc2), 0.8 * np.sin(arc2), color=AMBER, lw=1.6)
-    axs[1].text(0, -1.25, "+240° reads as −120°", ha="center", va="center", fontsize=FSW, color=INK)
-    axs[1].text(-0.55, 0.62, "+240°", color=RED, ha="center", fontsize=FSW)
-    axs[1].text(0.55, -0.42, "−120°", color=AMBER, ha="center", fontsize=FSW)
+    axs[1].plot(r_alias * np.cos(arc2), r_alias * np.sin(arc2), color=AMBER, lw=1.6)
+    # Each arc's label goes where nothing else is drawn: +240° at the center, inside the dashed
+    # arc (its radius leaves room for one label), and -120° outside the circle, beside the
+    # middle of the solid arc, clear of the dots at 0° and 240°.
+    axs[1].text(0, 0, "+240°", color=RED, ha="center", va="center", fontsize=FSW)
+    r_out = 1 + 0.4 * line
+    axs[1].text(r_out * np.cos(np.radians(-60)), r_out * np.sin(np.radians(-60)), "−120°", color=AMBER,
+                ha="left", va="top", fontsize=FSW)
+    axs[1].text(0.5, 0.0, "+240° a chirp\nreads as −120°", transform=axs[1].transAxes,
+                ha="center", va="top", fontsize=FSW, color=INK)
     finalize(fig, "L29-phasor")
 
 
