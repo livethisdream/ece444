@@ -24,10 +24,16 @@
   .ctl label { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
   .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:6ch; text-align:right; font-weight:600; font-size:12px; }
   .ctl input[type=range]{ flex:1 1 auto; min-width:36px; width:0; }
-  /* Three readouts on one row at every width: the values are short, and a
-     second row is height the phone frame does not have. */
+  /* Three readouts on one row where they fit. On a phone a third of the row is
+     about 100px, narrower than "400 MHz, 2 ms", so the two live readouts share
+     a row and the chirp they are for sits under them on one line, which costs
+     30px, not a full second row. */
   .readouts { display:grid; gap:8px; grid-template-columns:repeat(3, minmax(0,1fr)); }
-  @media (max-width:430px) { .readouts { gap:5px; } }
+  @media (max-width:520px) {
+    .readouts { gap:5px; grid-template-columns:repeat(2, minmax(0,1fr)); }
+    .ro.ref { grid-column:1 / -1; flex-direction:row; justify-content:center; align-items:center; gap:8px; padding:4px 8px; }
+    .ro.ref .k { overflow:visible; }
+  }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:3px; padding:6px 4px 7px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
@@ -39,7 +45,7 @@
   .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
            font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
            text-align:center; color:var(--navy); }
-  @media (max-width:430px) { .ro .k { letter-spacing:0; } .ro .v { font-size:13px; } }
+  @media (max-width:430px) { .ro .v { font-size:14px; } }
   .ro.dl { background:rgba(176,30,36,0.07); border-color:rgba(176,30,36,0.28); }
   .ro.dl .v { color:var(--red); }
   .ro.bt { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
@@ -64,7 +70,7 @@
   <div class="readouts">
     <div class="ro dl"><span class="k">delay \(2R/c\)</span><span class="v" id="p-tau">&#8212;</span></div>
     <div class="ro bt"><span class="k">beat \(f_b\)</span><span class="v" id="p-fb">&#8212;</span></div>
-    <div class="ro"><span class="k">real chirp \(B\), \(T_s\)</span><span class="v">400 MHz, 2 ms</span></div>
+    <div class="ro ref"><span class="k">real chirp \(B\), \(T_s\)</span><span class="v">400 MHz, 2 ms</span></div>
   </div>
 </div>
 
