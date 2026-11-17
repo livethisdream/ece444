@@ -67,7 +67,8 @@ P_r\ [\text{dBm}] = {} & P_t + G_t + G_r \\
 &- 33.0 - 40\log_{10} R
 \end{aligned}
 $$
-
+:::
+:::{present}
 - RCS and range set the echo power, and so the SNR.
 - Bandwidth sets $\Delta R = c/2B$; the PRF sets the unambiguous range and velocity.
 :::
