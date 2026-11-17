@@ -55,7 +55,7 @@ $$
 
 <a href="../../module01/L02-antenna-properties/index.html#frame-the-friis-transmission-equation">Lesson 2</a> built the one-way link from two pieces. The transmitter's power spreads over a sphere, so at range $R$ the power density $S$ in the direction of the main beam is the first line below. The receive antenna collects that density over its effective aperture $A_e$, and the product is the **Friis transmission equation**:
 
-<img src="../../viz/img/L02-friis-geometry.svg" alt="One-way link geometry from Lesson 2: the transmitter's power spreading over a sphere of radius R and the receive antenna's capture disk, its effective aperture, collecting its share" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L02-friis-geometry.svg" alt="One-way link geometry from Lesson 2: the transmitter's power spreading over a sphere of radius R and the receive antenna's capture disk, its effective aperture, collecting its share" style="max-width: 560px; width: 100%; display: block; background: #fff; border-radius: 6px; padding: 6px; box-sizing: border-box; margin: 0 auto;">
 
 $$
 \begin{aligned}
@@ -76,7 +76,7 @@ The power falls as $1/R^2$: double the distance and the received power drops 6 d
 
 ::::{frame} Two Trips
 :::{present}
-<img src="../../viz/img/L25-two-trips.svg" alt="A radar with a transmit antenna and a receive array at the left, a corner reflector at range R at the right. The outgoing wave spreads over 4 pi R squared on the way out, and the echo spreads over 4 pi R squared again on the way back" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L25-two-trips.svg" alt="A radar with a transmit antenna and a receive array at the left, a corner reflector at range R at the right. The outgoing wave spreads over 4 pi R squared on the way out, and the echo spreads over 4 pi R squared again on the way back" style="max-width: 640px; width: 100%; display: block; background: #fff; border-radius: 6px; padding: 6px; box-sizing: border-box; margin: 0 auto;">
 :::
 :::{present}
 - The target intercepts power from the first trip and re-radiates it.
@@ -126,7 +126,7 @@ $$
 - The echo falls 40 dB per decade of range, twice the one-way slope.
 :::
 :::{present}
-<img src="../../viz/img/L25-falloff.svg" alt="Received power relative to its value at 1 m against range from 1 to 30 m on a logarithmic axis. The one-way line falls 20 dB per decade and the two-way line 40 dB per decade. From 3 m to 6 m the one-way power drops 6 dB and the two-way power drops 12 dB" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L25-falloff.svg" alt="Received power relative to its value at 1 m against range from 1 to 30 m on a logarithmic axis. The one-way line falls 20 dB per decade and the two-way line 40 dB per decade. From 3 m to 6 m the one-way power drops 6 dB and the two-way power drops 12 dB" style="max-width: 640px; width: 100%; display: block; background: #fff; border-radius: 6px; padding: 6px; box-sizing: border-box; margin: 0 auto;">
 :::
 
 Link budgets run in decibels, because the products become sums and each term can be read on its own. Take $10\log_{10}$ of every factor. Power is in dBm, gains in dBi, $\lambda$ in meters, $R$ in meters, and the radar cross section in **dBsm**, decibels relative to one square meter. The constant is $10\log_{10}(4\pi)^3 = 33.0$ dB. The range term, $40\log_{10} R$, is the **two-way path loss** that sets the slope: every factor of 10 in range takes 40 dB off the echo.
@@ -145,14 +145,14 @@ $$
 
 The radar equation treats the target as a fictitious area: it intercepts the incident power density over $\sigma$ square meters and re-radiates all of it equally in every direction. A real target does neither. It intercepts power over its physical shadow and re-radiates it in a pattern of its own, often concentrated in a few directions. The radar cross section folds both effects into one number, defined by what the radar measures: the ratio of the scattered field $E_s$ at the radar to the incident field $E_i$ at the target, scaled to the sphere of radius $R$ that the echo spreads over. The limit removes the dependence on range, so $\sigma$ belongs to the target and the viewing direction, not to the geometry of the measurement.
 
-<img src="../../viz/img/L25-rcs-equivalent.svg" alt="Left: a real target whose scattered power goes out in several lobes of different sizes, one of them toward the radar. Right: an isotropic scatterer of area sigma that scatters equally in all directions, with the same power toward the radar as the real target" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L25-rcs-equivalent.svg" alt="Left: a real target whose scattered power goes out in several lobes of different sizes, one of them toward the radar. Right: an isotropic scatterer of area sigma that scatters equally in all directions, with the same power toward the radar as the real target" style="max-width: 560px; width: 100%; display: block; background: #fff; border-radius: 6px; padding: 6px; box-sizing: border-box; margin: 0 auto;">
 
 Because $\sigma$ includes the target's own re-radiation pattern, it can be much larger or much smaller than the target's physical cross section. A target that sends its echo straight back toward the radar has a large $\sigma$; one that sends it elsewhere has a small one, which is the principle behind stealth shaping.
 ::::
 
 ::::{frame} Sphere, Plate, and Corner
 :::{present}
-<img src="../../viz/img/L25-rcs-shapes.svg" alt="Three scatterers with parallel incident rays. The sphere reflects each ray off its curved surface in a different direction. The flat plate at normal incidence reflects the rays straight back. The corner reflector, drawn as a two-dimensional cut that shows two of its three bounces, sends each ray back parallel to the way it came, even though the rays arrive at an angle" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L25-rcs-shapes.svg" alt="Three scatterers with parallel incident rays. The sphere reflects each ray off its curved surface in a different direction. The flat plate at normal incidence reflects the rays straight back. The corner reflector, drawn as a two-dimensional cut that shows two of its three bounces, sends each ray back parallel to the way it came, even though the rays arrive at an angle" style="max-width: 640px; width: 100%; display: block; background: #fff; border-radius: 6px; padding: 6px; box-sizing: border-box; margin: 0 auto;">
 :::
 :::{present}
 | Shape, 10 cm | Peak $\sigma$ | dBsm |
@@ -186,7 +186,7 @@ $$
 
 A sphere much smaller than a wavelength is in the **Rayleigh region**, where $\sigma$ grows as $a^6/\lambda^4$. At L-band, with $\lambda = 23\ \text{cm}$, the same raindrop returns $40\log_{10}(23/3) = 35$ dB less than at X-band, which is why weather radars operate from S-band to X-band. Between the two regions, near $2\pi a \approx \lambda$, the **resonance region** oscillates as surface waves around the sphere add and cancel.
 
-<img src="../../viz/img/L25-sphere-regions.svg" alt="Backscatter RCS of a conducting sphere, normalized to pi a squared, against the circumference in wavelengths on log-log axes. Below about 0.5 the curve follows 9 x to the fourth, the Rayleigh region. It peaks at 3.7 near a circumference of one wavelength, oscillates through the resonance region, and settles to 1 in the optical region, where the 10 cm sphere at 10 GHz sits at a circumference of 10.5 wavelengths" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L25-sphere-regions.svg" alt="Backscatter RCS of a conducting sphere, normalized to pi a squared, against the circumference in wavelengths on log-log axes. Below about 0.5 the curve follows 9 x to the fourth, the Rayleigh region. It peaks at 3.7 near a circumference of one wavelength, oscillates through the resonance region, and settles to 1 in the optical region, where the 10 cm sphere at 10 GHz sits at a circumference of 10.5 wavelengths" style="max-width: 640px; width: 100%; display: block; background: #fff; border-radius: 6px; padding: 6px; box-sizing: border-box; margin: 0 auto;">
 
 The curve is the exact series solution for a perfectly conducting sphere. It peaks at $3.7\pi a^2$ when the circumference is about one wavelength, and the 10 cm sphere sits at $0.99\pi a^2$, where the optical value $\pi a^2$ holds.
 ::::
@@ -218,7 +218,7 @@ That is 22.5 dB above the sphere of the same size, because the plate concentrate
 
 ::::{frame} RCS Versus Aspect
 :::{present}
-<img src="../../viz/img/L25-rcs-aspect.svg" alt="RCS in dBsm versus aspect angle from minus 45 to plus 45 degrees at 10 GHz. The 10 cm flat plate peaks at plus 1.4 dBsm with a narrow main lobe and a train of sidelobes. The corner reflector with 10 cm edges peaks at minus 3.3 dBsm and stays within 3 dB out to about plus and minus 19 degrees. The 10 cm sphere is flat at minus 21.0 dBsm" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L25-rcs-aspect.svg" alt="RCS in dBsm versus aspect angle from minus 45 to plus 45 degrees at 10 GHz. The 10 cm flat plate peaks at plus 1.4 dBsm with a narrow main lobe and a train of sidelobes. The corner reflector with 10 cm edges peaks at minus 3.3 dBsm and stays within 3 dB out to about plus and minus 19 degrees. The 10 cm sphere is flat at minus 21.0 dBsm" style="max-width: 640px; width: 100%; display: block; background: #fff; border-radius: 6px; padding: 6px; box-sizing: border-box; margin: 0 auto;">
 :::
 :::{present}
 - The plate falls 3 dB by $\pm 3.8^\circ$.
@@ -252,14 +252,14 @@ $$
 - A corner with 10 cm edges has $\sigma = 0.47$ m², or $-3.3$ dBsm.
 :::
 :::{present}
-<img src="../../viz/img/L25-corner-3d.svg" alt="A trihedral corner reflector drawn in three dimensions, three triangular faces meeting at right angles. One ray enters, bounces once off each face, flipping its x, then y, then z direction component, and leaves parallel to the way it came in" style="max-width: 420px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L25-corner-3d.svg" alt="A trihedral corner reflector drawn in three dimensions, three triangular faces meeting at right angles. One ray enters, bounces once off each face, flipping its x, then y, then z direction component, and leaves parallel to the way it came in" style="max-width: 420px; width: 100%; display: block; background: #fff; border-radius: 6px; padding: 6px; box-sizing: border-box; margin: 0 auto;">
 :::
 
 A trihedral corner reflector is three flat plates joined at right angles, like the inside corner of a box. Each bounce off one face reverses one component of the ray's direction, so a ray that strikes all three faces leaves with all three components reversed and travels back exactly antiparallel to the way it came. That holds for any arrival direction inside the corner's opening, which is why the corner reflector is the standard radar target, the lab target here, and the reason bicycle reflectors work.
 
 The corner behaves like a flat plate that always faces the radar. The plate's area is the part of the opening that returns a triple bounce. Looking straight down the symmetry axis, the opening is an equilateral triangle whose sides are the face diagonals, $a\sqrt{2}$ long. A ray that enters at a point $p$ leaves at $-p$, the point reflection of $p$ through the center, so it completes all three bounces only if $-p$ also lies inside the triangle. The triple-bounce region is the overlap of the triangle with its own reflection, a hexagon that covers two thirds of the triangle:
 
-<img src="../../viz/img/L25-corner-hexagon.svg" alt="The corner reflector's opening seen down its symmetry axis: a solid equilateral triangle, its point reflection through the center drawn dashed, and their overlap, a shaded hexagon labeled A eff. A point p inside the hexagon reflects to minus p, also inside the triangle. A point q in a tip of the triangle reflects to minus q, outside it" style="max-width: 320px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L25-corner-hexagon.svg" alt="The corner reflector's opening seen down its symmetry axis: a solid equilateral triangle, its point reflection through the center drawn dashed, and their overlap, a shaded hexagon labeled A eff. A point p inside the hexagon reflects to minus p, also inside the triangle. A point q in a tip of the triangle reflects to minus q, outside it" style="max-width: 320px; width: 100%; display: block; background: #fff; border-radius: 6px; padding: 6px; box-sizing: border-box; margin: 0 auto;">
 
 $$
 A_\text{eff} = \frac{2}{3}\cdot\frac{\sqrt{3}}{4}\left(a\sqrt{2}\right)^2 = \frac{a^2}{\sqrt{3}} .
@@ -302,7 +302,7 @@ N_\text{1 MHz} &= -114\ \text{dBm}
 \end{aligned}
 $$
 
-- Every resistor at temperature $T$ delivers this power.
+- A resistor at temperature $T$ delivers this power to a matched load.
 - Noise grows with bandwidth, 10 dB per decade.
 :::
 
@@ -325,11 +325,12 @@ G/T &= G_r - 10\log_{10} T_\text{sys}
 \end{aligned}
 $$
 
-- With $F$ = 2 dB and $T_A$ = 290 K, the PHASER has $T_\text{sys} = 460$ K.
+- With NF = 2 dB and $T_A$ = 290 K, the PHASER has $T_\text{sys} = 460$ K.
 - Its $G/T$ is $15.0 - 26.6 = -11.6$ dB/K.
+- The receiver enters the SNR only through $G/T$.
 :::
 
-The receiver adds noise of its own, which <a href="../../module02/L12-loop-monopole-antennas/index.html#frame-low-efficiency-same-snr">Lesson 12</a> described in two equivalent ways. Its **noise factor** $F$ is the ratio of the output noise to the noise a noiseless receiver would deliver from a 290 K source, and in decibels it is the **noise figure**. We can also describe the same receiver by an **equivalent noise temperature** $T_e = T_0(F-1)$, the temperature a resistor at the input would need to produce the added noise. The antenna contributes its **antenna temperature** $T_A$ from Lesson 12, set by what its beam sees. Indoors the beam sees walls, people, and furniture at about 290 K, so $T_A \approx T_0$. The **system noise temperature** is the sum, $T_\text{sys} = T_A + T_e$.
+The receiver adds noise of its own, which <a href="../../module02/L12-loop-monopole-antennas/index.html#frame-low-efficiency-same-snr">Lesson 12</a> described in two equivalent ways. Its **noise factor** $F$ is the ratio of the output noise to the noise a noiseless receiver would deliver from a 290 K source. In decibels it is the **noise figure**, $\text{NF} = 10\log_{10}F$; an NF of 2 dB is $F = 1.58$. We can also describe the same receiver by an **equivalent noise temperature** $T_e = T_0(F-1)$, the temperature a resistor at the input would need to produce the added noise. The antenna contributes its **antenna temperature** $T_A$ from Lesson 12, set by what its beam sees. Indoors the beam sees walls, people, and furniture at about 290 K, so $T_A \approx T_0$. The **system noise temperature** is the sum, $T_\text{sys} = T_A + T_e$.
 
 Every PHASER channel starts with an ADL8107 low-noise amplifier with a 1.3 dB noise figure and 24 dB of gain, per the ADI <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/hardware/" target="_blank" rel="noopener">hardware page</a>. The cascade formula of <a href="../../module03/L17-phased-array-hardware/index.html#frame-the-patches-and-the-lnas">Lesson 17</a> shows how little the stages behind it add:
 
@@ -340,7 +341,7 @@ F &= F_1 + \frac{F_2 - 1}{G_1} \\
 \end{aligned}
 $$
 
-taking Lesson 17's 10 dB beamformer stage behind the LNA. We use $F = 2$ dB for the whole receiver, which leaves 0.6 dB of margin for any loss ahead of the LNA and for stages this estimate does not count. Then
+taking Lesson 17's 10 dB beamformer stage behind the LNA. We use $\text{NF} = 2$ dB for the whole receiver, which leaves 0.6 dB of margin for any loss ahead of the LNA and for stages this estimate does not count. Then
 
 $$
 \begin{aligned}
@@ -349,7 +350,16 @@ T_\text{sys} &= 290 + 170 = 460\ \text{K} = 26.6\ \text{dBK}.
 \end{aligned}
 $$
 
-The ratio of the receive gain to the system temperature, **G/T** in dB/K, is the receiver's figure of merit. It is the receive-side counterpart of the transmitter's EIRP from <a href="../../module01/L02-antenna-properties/index.html#frame-the-friis-transmission-equation-combining-the-two">Lesson 2</a>: gain raises the signal and temperature raises the noise, so only their ratio matters for the SNR. For the PHASER at broadside, $G/T = 15.0 - 26.6 = -11.6$ dB/K.
+The ratio of the receive gain to the system temperature, **G/T** in dB/K, is the receiver's figure of merit. It is the receive-side counterpart of the transmitter's EIRP from <a href="../../module01/L02-antenna-properties/index.html#frame-the-friis-transmission-equation-combining-the-two">Lesson 2</a>. Substituting $N = kT_\text{sys}B$ into the radar equation groups the SNR by where each factor comes from:
+
+$$
+\begin{aligned}
+\text{SNR} &= \underbrace{P_tG_t}_{\text{EIRP}}\ \underbrace{\frac{G_r}{T_\text{sys}}}_{G/T} \\
+&\quad \times \frac{\lambda^2\sigma}{(4\pi)^3R^4}\ \frac{1}{kB} .
+\end{aligned}
+$$
+
+The receiver enters only through $G/T$: gain raises the signal, temperature raises the noise, and nothing else about the receiver appears. Two receivers with the same $G/T$ give the same SNR from the same transmitter and target, so 3 dB more antenna gain and half the system temperature are interchangeable, and a datasheet's $G/T$ is enough to compare receivers without knowing their gain and noise separately. For the PHASER at broadside, $G/T = 15.0 - 26.6 = -11.6$ dB/K.
 ::::
 
 ::::{frame} Signal-to-Noise Ratio
@@ -377,7 +387,7 @@ $$
 so $kT_\text{sys}B = kT_0BF$ and in decibels the noise is
 
 $$
-N\ [\text{dBm}] = -174 + 10\log_{10}B + F .
+N\ [\text{dBm}] = -174 + 10\log_{10}B + \text{NF} .
 $$
 
 For the PHASER in a 1 MHz bandwidth that is $-112$ dBm. The 1 MHz is a round placeholder for the receiver's bandwidth before any processing; Lesson 28 replaces it with the 2 kHz of one FFT bin.
@@ -387,12 +397,13 @@ Two things move the SNR that do not appear in the received power. A lower noise 
 
 ::::{frame} The PHASER Link Budget
 :::{present}
-<img src="../../viz/img/L25-level-diagram.svg" alt="The PHASER link budget as a horizontal waterfall in dBm. The echo starts at minus 16 dBm, rises 21 dB for the two antenna gains, then falls 30.5 dB for lambda squared, 3.3 dB for the corner's RCS, 33.0 dB for 4 pi cubed, and 19.1 dB for R to the fourth, arriving at minus 80.8 dBm. The noise starts at minus 174 dBm per hertz, rises 60 dB for the 1 MHz bandwidth and 2 dB for the noise figure, reaching minus 112.0 dBm. The gap between the two, the SNR, is 31.1 dB" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L25-level-diagram.svg" alt="The PHASER link budget as a horizontal waterfall in dBm. The echo starts at minus 16 dBm, rises 21 dB for the two antenna gains, then falls 30.5 dB for lambda squared, 3.3 dB for the corner's RCS, 33.0 dB for 4 pi cubed, and 19.1 dB for R to the fourth, arriving at minus 80.8 dBm. The noise starts at minus 174 dBm per hertz, rises 60 dB for the 1 MHz bandwidth and 2 dB for the noise figure, reaching minus 112.0 dBm. The gap between the two, the SNR, is 31.1 dB" style="max-width: 640px; width: 100%; display: block; background: #fff; border-radius: 6px; padding: 6px; box-sizing: border-box; margin: 0 auto;">
 :::
 :::{present}
-- The echo arrives at $-80.8$ dBm.
-- The noise in 1 MHz is $-112.0$ dBm.
-- The SNR is 31.1 dB.
+- The transmitter sends $-16$ dBm through an assumed 6 dBi antenna.
+- The array gain is 15 dBi.
+- A 10 cm corner faces it at 3 m.
+- NF = 2 dB, $T_A$ = 290 K, and $B$ = 1 MHz, with no system loss.
 :::
 
 | Term | Value | dB |

@@ -92,7 +92,7 @@ def level_diagram() -> None:
     """A horizontal waterfall: one row per term, so every label has its own line."""
     sig = [(r"$P_t$", PT), (r"$G_t + G_r$", GAINS), (r"$\lambda^2$", LAM2), (r"$\sigma$", SIGMA),
            (r"$(4\pi)^3$", FOURPI3), (r"$R^4$", R4)]
-    noi = [(r"$kT_0$", KT0), (r"$B$ (1 MHz)", BW), (r"$F$", NF)]
+    noi = [(r"$kT_0$", KT0), (r"$B$ (1 MHz)", BW), ("NF", NF)]
     rows = [s[0] for s in sig] + [r"$P_r$"] + [n[0] for n in noi] + [r"$N$"]
     fig, ax = plt.subplots(figsize=(5.4, 4.6))
     h = 0.56
