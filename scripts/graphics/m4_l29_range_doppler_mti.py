@@ -665,6 +665,27 @@ def _spinner_orient() -> None:
     finalize(fig, "L29-spinner-orient")
 
 
+def chain_fig() -> None:
+    with plt.rc_context(WIDE):
+        _chain_fig()
+
+
+def _chain_fig() -> None:
+    """The processing chain, with MTI marked: where the canceller sits."""
+    fig, ax = plt.subplots(figsize=(7.0, 1.9))
+    ax.set_xlim(0, 14.2)
+    ax.set_ylim(0, 2.6)
+    ax.axis("off")
+    labels = ("burst", "MTI", "range\nFFT", "Doppler\nFFT", "map")
+    xs = [1.2 + 2.95 * k for k in range(5)]
+    for k, (x, t) in enumerate(zip(xs, labels)):
+        box(ax, x, 1.6, 2.2, 1.0, t, color=RED if t == "MTI" else NAVY)
+        if k:
+            arrow(ax, xs[k - 1] + 1.15, 1.6, x - 1.15, 1.6)
+    ax.text(xs[1], 0.55, "off, 2-pulse,\nor 3-pulse", ha="center", va="center", fontsize=FSW, color=RED)
+    finalize(fig, "L29-chain")
+
+
 if __name__ == "__main__":
     for kk, vv in V.items():
         print(f"   {kk:20s} {vv:.4g}")
@@ -681,3 +702,4 @@ if __name__ == "__main__":
     setup_fig()
     hand_moves()
     spinner_orient()
+    chain_fig()
