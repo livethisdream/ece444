@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FMCW: chirp, echo, and beat</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:8px; padding:12px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* The signal path as a strip of five stages. Five equal tracks on one row
+     at every width the site serves; the labels are two short lines so they
+     still fit a 320px phone. */
+  .path { display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:0; align-items:stretch; }
+  .st { position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center;
+        min-width:0; margin-right:12px; padding:4px 3px; border:1px solid var(--edge2); border-radius:6px;
+        background:#eef4fa; text-align:center; font-size:11.5px; line-height:1.2; font-weight:600; color:var(--navy); }
+  .st:last-child { margin-right:0; }
+  .st:not(:last-child)::after { content:'\2192'; position:absolute; right:-12px; top:50%; width:12px;
+        transform:translateY(-50%); text-align:center; color:var(--ink3); font-weight:400; font-size:11.5px; }
+  .st.echo { color:var(--red); background:rgba(176,30,36,0.07); border-color:rgba(176,30,36,0.28); }
+  .st.beat { color:var(--grn); background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .st mjx-container { font-size:inherit !important; }
+  .st .nb { white-space:nowrap; }
+  @media (max-width:430px) { .st { font-size:10.5px; margin-right:10px; padding:4px 1px; }
+    .st:not(:last-child)::after { right:-10px; width:10px; } }
+  /* The two canvases side by side above ~600px: the row height becomes the
+     taller of the two instead of their sum. Below 600px (phone) there isn't
+     room for two useful columns, so stack. */
+  .cv2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  @media (max-width:600px) { .cv2 { grid-template-columns:1fr; } }
+  .controls { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:6px 12px;
+              padding:7px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:6px; min-width:0; }
+  .ctl label { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:7ch; text-align:right; font-weight:600; font-size:12px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:36px; width:0; }
+  /* On a phone the two controls stay on one line each, label, slider, value:
+     the labels are short enough, and stacking them would add two rows. */
+  @media (max-width:600px) { .controls { grid-template-columns:1fr; padding:6px 10px; } }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0,1fr)); }
+  @media (max-width:640px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); gap:6px; } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:3px; padding:6px 8px 7px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.dl { background:rgba(176,30,36,0.07); border-color:rgba(176,30,36,0.28); }
+  .ro.dl .v { color:var(--red); }
+  .ro.bt { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.bt .v { color:var(--grn); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="path" aria-label="The signal path: the chirp goes out, the target returns it, the echo arrives late, the receiver multiplies the echo by the chirp still going out, and the product is the beat">
+    <div class="st">chirp<br>out</div>
+    <div class="st">target<br><span class="nb">at \(R\)</span></div>
+    <div class="st echo">echo,<br><span class="nb">late \(2R/c\)</span></div>
+    <div class="st">multiply<br>by chirp</div>
+    <div class="st beat">beat<br>\(f_b\)</div>
+  </div>
+
+  <div class="cv2">
+    <canvas id="ramps" aria-label="Frequency against time over one chirp: the transmitted chirp as a rising ramp and the echo as the same ramp shifted later, with the frequency gap between them marked as the beat"></canvas>
+    <canvas id="beat" aria-label="The beat signal against time over one chirp: a steady sinusoid whose period shortens as the target range grows"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Target range \(R\)</label>
+      <input type="range" id="rng" min="0.5" max="10" step="0.1" value="3">
+      <span class="val" id="rng-val">3.0 m</span>
+    </div>
+    <div class="ctl">
+      <label>Bandwidth \(B\)</label>
+      <input type="range" id="bw" min="100" max="400" step="20" value="400">
+      <span class="val" id="bw-val">400 MHz</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro dl"><span class="k">delay \(2R/c\)</span><span class="v" id="p-tau">&#8212;</span></div>
+    <div class="ro bt"><span class="k">beat \(f_b\)</span><span class="v" id="p-fb">&#8212;</span></div>
+    <div class="ro"><span class="k">beat per meter</span><span class="v" id="p-kpm">&#8212;</span></div>
+    <div class="ro"><span class="k">cycles in a chirp</span><span class="v" id="p-cyc">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS = "Inter, system-ui, -apple-system, sans-serif";
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const el = id => document.getElementById(id);
+
+// ---- the physics -----------------------------------------------------
+// The lessons' worked chirp: B in TS from 10.0 GHz. No preset in the Phaser
+// app uses it. The echo of a target at R is the chirp delayed by 2R/c; the
+// product of the echo and the chirp still going out is a tone at the gap
+// between the two ramps, f_b = (B/TS)(2R/c).
+const C = 3.00e8, TS = 2e-3, B_MAX = 400e6, R_MAX = 10;
+const state = { R: 3.0, B: 400e6 };
+const tau    = R => 2 * R / C;                  // round-trip delay, s
+const slope  = B => B / TS;                     // chirp slope, Hz/s
+const fBeat  = (R, B) => slope(B) * tau(R);     // beat, Hz
+const cycles = (R, B) => fBeat(R, B) * TS;      // beat cycles in one chirp
+// The real delay is nanoseconds against a 2 ms chirp, far too small to draw.
+// The ramps panel stretches it by one fixed factor, so the drawn delay, and
+// the drawn gap between the ramps, still grow in proportion to R.
+const DRAWN_DELAY_AT_RMAX = 0.26;               // of the chirp length
+const drawnDelay = R => DRAWN_DELAY_AT_RMAX * R / R_MAX;
+
+// ---- controls -------------------------------------------------------------
+el('rng').addEventListener('input', e => {
+  state.R = +e.target.value;
+  el('rng-val').textContent = state.R.toFixed(1) + ' m';
+  drawAll();
+});
+el('bw').addEventListener('input', e => {
+  state.B = +e.target.value * 1e6;
+  el('bw-val').textContent = (state.B / 1e6).toFixed(0) + ' MHz';
+  drawAll();
+});
+
+// ---- canvases -------------------------------------------------------------
+const ramps = el('ramps'), rctx = ramps.getContext('2d');
+const beat = el('beat'), bctx = beat.getContext('2d');
+
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally. And with
+   box-sizing:border-box, style.height sets the OUTER height, so hand the border
+   back or the bitmap is 2px taller than its box. */
+const DESIGN_W = 300;
+/* Narrow: the canvases stack, so their heights ADD. Each gets a shorter design
+   box there; shrinking the design height rather than the bitmap keeps the text
+   full size and the composition undistorted, and every in-canvas position
+   below is derived from the height it is handed. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:599px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.66) : h; }
+function fitOne(cv, ratio, lo, hi) {
+  lo = SQ(lo); hi = SQ(hi);
+  const dpr = window.devicePixelRatio || 1;
+  const wCss = Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
+  const s = Math.min(1, wCss / DESIGN_W);
+  const w = wCss / s;
+  const h = Math.max(lo, Math.min(w * ratio, hi));
+  cv.width = Math.round(wCss * dpr); cv.height = Math.round(h * s * dpr);
+  cv.style.height = (h * s) + 'px';
+  const bh = cv.offsetHeight - cv.clientHeight;
+  if (bh) cv.style.height = (h * s + bh) + 'px';
+  cv.getContext('2d').setTransform(dpr * s, 0, 0, dpr * s, 0, 0);
+  return { w, h };
+}
+window.addEventListener('resize', drawAll);
+
+function drawAll() { drawRamps(); drawBeat(); updateReadouts(); }
+
+function arrowHead(ctx, x, y, dx, dy, size) {
+  // a filled head at (x, y) pointing along the unit vector (dx, dy)
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x - dx * size - dy * size * 0.5, y - dy * size + dx * size * 0.5);
+  ctx.lineTo(x - dx * size + dy * size * 0.5, y - dy * size - dx * size * 0.5);
+  ctx.closePath(); ctx.fill();
+}
+function span(ctx, x1, y1, x2, y2, col) {
+  // a double-headed arrow; with no room for two heads it is a plain bar
+  const len = Math.hypot(x2 - x1, y2 - y1);
+  ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  if (len < 14) return;
+  const ux = (x2 - x1) / len, uy = (y2 - y1) / len;
+  arrowHead(ctx, x2, y2, ux, uy, 5.5);
+  arrowHead(ctx, x1, y1, -ux, -uy, 5.5);
+}
+
+// ---------------------------------------------------------------- ramps ----
+function drawRamps() {
+  const { w, h } = fitOne(ramps, 0.62, 216, 250);
+  const ctx = rctx;
+  ctx.clearRect(0, 0, w, h);
+  const mL = 30, mR = 12, mT = 26, mB = 34;
+  const pW = w - mL - mR, pH = h - mT - mB;
+  const X = t => mL + pW * t;                               // t in chirp lengths
+  const Y = f => mT + pH * (1 - f);                         // f as a fraction of B_MAX
+  const top = state.B / B_MAX;                              // where this chirp's ramp ends
+  const d = drawnDelay(state.R);
+
+  // frame and the two axis titles
+  ctx.strokeStyle = cssVar('--edge'); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(mL, mT); ctx.lineTo(mL, mT + pH); ctx.lineTo(mL + pW, mT + pH); ctx.stroke();
+  ctx.fillStyle = cssVar('--ink3'); ctx.font = '12.5px ' + SANS;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+  ctx.fillText('time, one 2 ms chirp', mL + pW / 2, h - 5);
+  ctx.save(); ctx.translate(13, mT + pH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.textBaseline = 'middle'; ctx.fillText('frequency', 0, 0); ctx.restore();
+
+  // the legend, on one line above the plot
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.font = '600 12.5px ' + SANS;
+  let lx = mL;
+  const key = (col, label, dash) => {
+    ctx.strokeStyle = col; ctx.lineWidth = 2.4; ctx.setLineDash(dash || []);
+    ctx.beginPath(); ctx.moveTo(lx, 13); ctx.lineTo(lx + 20, 13); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = col; ctx.fillText(label, lx + 25, 14);
+    lx += 25 + ctx.measureText(label).width + 16;
+  };
+  key(cssVar('--navy'), 'chirp out');
+  key(cssVar('--red'), 'echo', [6, 4]);
+
+  // the chirp going out, and its echo: the same ramp, later
+  ctx.save();
+  ctx.beginPath(); ctx.rect(mL, mT - 2, pW, pH + 3); ctx.clip();
+  ctx.strokeStyle = cssVar('--navy'); ctx.lineWidth = 2.6;
+  ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(1), Y(top)); ctx.stroke();
+  ctx.strokeStyle = cssVar('--red'); ctx.lineWidth = 2.2; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(X(d), Y(0)); ctx.lineTo(X(1 + d), Y(top)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  // the delay: a horizontal span from the chirp to the echo. Its label sits
+  // above and to the left of the span's start: the chirp has not climbed that
+  // high yet there, and the echo is later still, so nothing is drawn under it
+  // at any range or bandwidth.
+  const symH = 15;
+  const tD = 0.36, fD = tD * top;                           // the chirp reaches fD at tD
+  const yD = Y(fD);
+  span(ctx, X(tD), yD, X(tD + d), yD, cssVar('--red'));
+  const wTau = MJ.width('2R/c', cssVar('--red'), symH) || 34;
+  ctx.font = '12.5px ' + SANS; ctx.fillStyle = cssVar('--red'); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  const note = 'delay ';
+  const wNote = ctx.measureText(note).width;
+  const tx = Math.max(mL + 4, X(tD) - 6 - wNote - wTau);
+  const ty = Math.max(mT + 9, yD - 13);
+  ctx.fillText(note, tx, ty);
+  MJ.draw(ctx, '2R/c', tx + wNote, ty, symH, cssVar('--red'), 'left');
+
+  // the beat: the vertical gap between the two ramps, at one instant, with its
+  // label above and to the left of the chirp, where nothing is drawn
+  const tG = 0.78;
+  const yTop = Y(tG * top), yBot = Y((tG - d) * top);
+  span(ctx, X(tG), yTop, X(tG), yBot, cssVar('--grn'));
+  const wFb = MJ.width('f_b', cssVar('--grn'), symH) || 16;
+  const lab = 'beat ';
+  ctx.fillStyle = cssVar('--grn'); ctx.font = '600 12.5px ' + SANS;
+  const wLab = ctx.measureText(lab).width;
+  const gx = X(tG) - 10 - wFb - wLab;
+  const gy = Math.max(mT + 9, yTop - 13);
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText(lab, gx, gy);
+  MJ.draw(ctx, 'f_b', gx + wLab, gy, symH, cssVar('--grn'), 'left');
+}
+
+// ----------------------------------------------------------------- beat ----
+function drawBeat() {
+  const { w, h } = fitOne(beat, 0.62, 216, 250);
+  const ctx = bctx;
+  ctx.clearRect(0, 0, w, h);
+  const mL = 14, mR = 12, mT = 26, mB = 34;
+  const pW = w - mL - mR, pH = h - mT - mB;
+  const X = t => mL + pW * t;                               // t in chirp lengths
+  const y0 = mT + pH / 2, A = pH * 0.33;
+  const n = cycles(state.R, state.B);
+
+  // time axis, with a tick every 0.5 ms
+  ctx.strokeStyle = cssVar('--edge'); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(mL, y0); ctx.lineTo(mL + pW, y0); ctx.stroke();
+  ctx.fillStyle = cssVar('--ink3'); ctx.font = '12.5px ' + SANS;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  for (let k = 0; k <= 4; k++) {
+    const x = X(k / 4);
+    ctx.beginPath(); ctx.moveTo(x, mT + pH); ctx.lineTo(x, mT + pH + 4); ctx.stroke();
+    ctx.textAlign = k === 0 ? 'left' : k === 4 ? 'right' : 'center';
+    ctx.fillText((k * 0.5).toFixed(1), x, mT + pH + 6);
+  }
+  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+  ctx.fillText('time (ms)', mL + pW / 2, h - 1);
+
+  // the title line, in the beat's color
+  ctx.fillStyle = cssVar('--grn'); ctx.font = '600 12.5px ' + SANS;
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText('beat: ' + n.toFixed(1) + ' cycles in one chirp', mL, 14);
+
+  // the beat itself: one steady tone for the whole chirp
+  ctx.strokeStyle = cssVar('--grn'); ctx.lineWidth = 2;
+  ctx.beginPath();
+  const N = Math.max(400, Math.round(pW * 3));
+  for (let i = 0; i <= N; i++) {
+    const t = i / N, y = y0 - A * Math.cos(2 * Math.PI * n * t);
+    i ? ctx.lineTo(X(t), y) : ctx.moveTo(X(t), y);
+  }
+  ctx.stroke();
+
+  // one period, bracketed under the first cycle, with its label beside the
+  // bracket on the same line, while both fit between the wave and the axis
+  const per = pW / n;
+  const yb = y0 + A + (mT + pH - (y0 + A)) / 2;             // midway between the wave and the axis
+  if (per >= 16) {
+    span(ctx, X(0), yb, X(0) + per, yb, cssVar('--ink3'));
+    const symH = 15;
+    const wP = MJ.width('1/f_b', cssVar('--ink3'), symH) || 30;
+    if (per + 8 + wP <= pW) MJ.draw(ctx, '1/f_b', X(0) + per + 8, yb, symH, cssVar('--ink3'), 'left');
+  }
+}
+
+// ------------------------------------------------------------- readouts ---
+function updateReadouts() {
+  const fb = fBeat(state.R, state.B);
+  el('p-tau').textContent = (tau(state.R) * 1e9).toFixed(1) + ' ns';
+  el('p-fb').textContent = (fb / 1e3).toFixed(2) + ' kHz';
+  el('p-kpm').textContent = (fBeat(1, state.B) / 1e3).toFixed(2) + ' kHz/m';
+  el('p-cyc').textContent = cycles(state.R, state.B).toFixed(1);
+}
+
+MJ.setRedraw(drawAll);
+MJ.onReady(() => { MJ.typeset(document.querySelector('.app')).then(drawAll); });
+drawAll();
+</script>
+</body>
+</html>

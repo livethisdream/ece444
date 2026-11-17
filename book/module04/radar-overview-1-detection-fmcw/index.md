@@ -215,6 +215,23 @@ The transmitted frequency rises at the chirp slope $B/T_s$. During the round-tri
 Both waveform settings change the beat per meter. A wider bandwidth or a shorter chirp steepens the slope and raises it. <a href="../L28-fmcw/index.html#frame-the-beat-frequency">Lesson 28</a> works both cases.
 ::::
 
+::::{frame} Chirp, Echo, and Beat
+:class: viz-frame
+
+:::{depth}
+The strip across the top is the signal path. The chirp goes out, the target at range $R$ returns it, and the echo arrives late by the round trip $2R/c$. The receiver multiplies the echo by the chirp that is still going out, a stage engineers call a mixer, and the product is a steady tone at the frequency gap between the two ramps. That tone is the beat.
+
+The left panel draws the two ramps against time, with the delay and the gap marked. The real delay is nanoseconds against a 2 ms chirp, so the panel stretches it to make it visible; the gap it draws still grows in proportion to the range. The right panel is the beat over one chirp. Move the target out, and the echo moves later, the gap widens, and the beat's period shortens: the worked chirp adds 2.7 cycles a chirp for every meter. Lower the bandwidth, and the ramps flatten, so the same delay gives a smaller gap and a slower beat.
+:::
+
+<iframe src="../../viz/fmcw-mixer.html"
+        width="100%" height="420"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="The transmitted chirp and its delayed echo as frequency ramps, the gap between them marked as the beat, and the beat waveform over one chirp, for a chosen target range and bandwidth">
+</iframe>
+::::
+
 ::::{frame} FMCW Explorer
 :class: viz-frame
 
