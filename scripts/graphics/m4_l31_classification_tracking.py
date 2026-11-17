@@ -423,11 +423,17 @@ def fig_signatures() -> None:
         ax.imshow(np.clip(S, -40, 0), origin="lower", aspect="auto", cmap="Blues",
                   extent=(t[0], t[-1], f[0], f[-1]), interpolation="bilinear")
         F = span[k]
-        ax.text(0.12, 0.88 * F, k, color=COLORS[k], ha="left", va="top", fontweight="bold")
+        # Labels sit on a white card so they read over the data; positions are
+        # fractions of the panel, so they move with it if the panel resizes.
+        card = dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.85)
+        ax.text(0.04, 0.96, k, color=COLORS[k], ha="left", va="top", fontweight="bold",
+                transform=ax.transAxes, bbox=card)
         if k == "walker":
             ft = 2 * TYPICAL[k]["v0"] / LAM
             ax.axhline(ft, color=RED, lw=1.0, ls="--")
-            ax.text(2.92, ft + 12, "torso", color=RED, ha="right", va="bottom", fontsize=13)
+            # below the line at the right, clear of the name card at the top left
+            ax.text(0.96, (ft + F) / (2 * F) - 0.04, "torso", color=RED, ha="right", va="top",
+                    fontsize=13, transform=ax.transAxes, bbox=card)
         ax.set_xlim(0, 3)
         ax.set_ylim(-F, F)
         ax.set_xticks([1, 2])
@@ -442,7 +448,22 @@ def fig_signatures() -> None:
         ax.set_ylabel("Hz")
     for ax in axs[:, 1]:
         ax.text(1.32, 0.5, "m/s", rotation=90, va="center", ha="center", transform=ax.transAxes, fontsize=13)
-    fig.subplots_adjust(wspace=0.62, hspace=0.14)
+    # Space the columns from the labels themselves: widen until the left
+    # column's m/s tick labels clear the right column's Hz tick labels and
+    # label by a fixed gap, so no tick text collides at any figure width.
+    gap_px = 6
+    wspace = 0.30
+    for _ in range(40):
+        fig.subplots_adjust(wspace=wspace, hspace=0.14)
+        fig.canvas.draw()
+        r = fig.canvas.get_renderer()
+        right_edge = max(t.get_window_extent(r).x1 for ax in axs[:, 0]
+                         for c in ax.child_axes for t in c.get_yticklabels() if t.get_text())
+        left_edge = min(min(t.get_window_extent(r).x0 for t in ax.get_yticklabels() if t.get_text())
+                        for ax in axs[:, 1])
+        if left_edge - right_edge >= gap_px * fig.dpi / 72:
+            break
+        wspace += 0.05
     finalize(fig, "L31-signatures")
 
 
