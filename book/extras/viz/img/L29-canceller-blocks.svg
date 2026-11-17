@@ -1,4 +1,4 @@
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="309.96pt" height="141.696pt" viewBox="0 0 309.96 141.696" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="321.12pt" height="169.416pt" viewBox="0 0 321.12 169.416" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
@@ -17,313 +17,373 @@
  </defs>
  <g id="figure_1">
   <g id="patch_1">
-   <path d="M -0 141.696 
-L 309.96 141.696 
-L 309.96 0 
-L -0 0 
-L -0 141.696 
+   <path d="M 0 169.416 
+L 321.12 169.416 
+L 321.12 0 
+L 0 0 
+L 0 169.416 
 z
 " style="fill: none"/>
   </g>
   <g id="axes_1">
    <g id="patch_2">
-    <path d="M 62.594151 69.1056 
-L 99.548491 69.1056 
-Q 100.117019 69.1056 100.117019 68.472 
-L 100.117019 51.048 
-Q 100.117019 50.4144 99.548491 50.4144 
-L 62.594151 50.4144 
-Q 62.025623 50.4144 62.025623 51.048 
-L 62.025623 68.472 
-Q 62.025623 69.1056 62.594151 69.1056 
+    <path d="M 41.169057 85.71285 
+L 108.971321 85.71285 
+Q 109.560906 85.71285 109.560906 85.04295 
+L 109.560906 64.27605 
+Q 109.560906 63.60615 108.971321 63.60615 
+L 41.169057 63.60615 
+Q 40.579472 63.60615 40.579472 64.27605 
+L 40.579472 85.04295 
+Q 40.579472 85.71285 41.169057 85.71285 
 z
-" clip-path="url(#p982695af67)" style="fill: #eef4fa; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
+" clip-path="url(#p6e5dea6630)" style="fill: #eef4fa; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
    </g>
    <g id="patch_3">
-    <path d="M 110.919057 48.672 
-C 112.426811 48.672 113.873015 48.004399 114.939159 46.816229 
-C 116.005302 45.628058 116.60434 44.016327 116.60434 42.336 
-C 116.60434 40.655673 116.005302 39.043942 114.939159 37.855771 
-C 113.873015 36.667601 112.426811 36 110.919057 36 
-C 109.411302 36 107.965098 36.667601 106.898954 37.855771 
-C 105.832811 39.043942 105.233774 40.655673 105.233774 42.336 
-C 105.233774 44.016327 105.832811 45.628058 106.898954 46.816229 
-C 107.965098 48.004399 109.411302 48.672 110.919057 48.672 
+    <path d="M 126.658868 51.8829 
+C 128.378825 51.8829 130.028569 51.106466 131.244762 49.724599 
+C 132.460956 48.342732 133.144302 46.468255 133.144302 44.514 
+C 133.144302 42.559745 132.460956 40.685268 131.244762 39.303401 
+C 130.028569 37.921534 128.378825 37.1451 126.658868 37.1451 
+C 124.938911 37.1451 123.289167 37.921534 122.072974 39.303401 
+C 120.85678 40.685268 120.173434 42.559745 120.173434 44.514 
+C 120.173434 46.468255 120.85678 48.342732 122.072974 49.724599 
+C 123.289167 51.106466 124.938911 51.8829 126.658868 51.8829 
 z
-" clip-path="url(#p982695af67)" style="fill: #ffffff; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
+" clip-path="url(#p6e5dea6630)" style="fill: #ffffff; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
    </g>
    <g id="patch_4">
-    <path d="M 62.594151 132.4656 
-L 99.548491 132.4656 
-Q 100.117019 132.4656 100.117019 131.832 
-L 100.117019 114.408 
-Q 100.117019 113.7744 99.548491 113.7744 
-L 62.594151 113.7744 
-Q 62.025623 113.7744 62.025623 114.408 
-L 62.025623 131.832 
-Q 62.025623 132.4656 62.594151 132.4656 
+    <path d="M 41.169057 162.75135 
+L 108.971321 162.75135 
+Q 109.560906 162.75135 109.560906 162.08145 
+L 109.560906 141.31455 
+Q 109.560906 140.64465 108.971321 140.64465 
+L 41.169057 140.64465 
+Q 40.579472 140.64465 40.579472 141.31455 
+L 40.579472 162.08145 
+Q 40.579472 162.75135 41.169057 162.75135 
 z
-" clip-path="url(#p982695af67)" style="fill: #eef4fa; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
+" clip-path="url(#p6e5dea6630)" style="fill: #eef4fa; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
    </g>
    <g id="patch_5">
-    <path d="M 110.919057 112.032 
-C 112.426811 112.032 113.873015 111.364399 114.939159 110.176229 
-C 116.005302 108.988058 116.60434 107.376327 116.60434 105.696 
-C 116.60434 104.015673 116.005302 102.403942 114.939159 101.215771 
-C 113.873015 100.027601 112.426811 99.36 110.919057 99.36 
-C 109.411302 99.36 107.965098 100.027601 106.898954 101.215771 
-C 105.832811 102.403942 105.233774 104.015673 105.233774 105.696 
-C 105.233774 107.376327 105.832811 108.988058 106.898954 110.176229 
-C 107.965098 111.364399 109.411302 112.032 110.919057 112.032 
+    <path d="M 126.658868 128.9214 
+C 128.378825 128.9214 130.028569 128.144966 131.244762 126.763099 
+C 132.460956 125.381232 133.144302 123.506755 133.144302 121.5525 
+C 133.144302 119.598245 132.460956 117.723768 131.244762 116.341901 
+C 130.028569 114.960034 128.378825 114.1836 126.658868 114.1836 
+C 124.938911 114.1836 123.289167 114.960034 122.072974 116.341901 
+C 120.85678 117.723768 120.173434 119.598245 120.173434 121.5525 
+C 120.173434 123.506755 120.85678 125.381232 122.072974 126.763099 
+C 123.289167 128.144966 124.938911 128.9214 126.658868 128.9214 
 z
-" clip-path="url(#p982695af67)" style="fill: #ffffff; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
+" clip-path="url(#p6e5dea6630)" style="fill: #ffffff; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
    </g>
    <g id="patch_6">
-    <path d="M 140.766792 132.4656 
-L 177.721132 132.4656 
-Q 178.28966 132.4656 178.28966 131.832 
-L 178.28966 114.408 
-Q 178.28966 113.7744 177.721132 113.7744 
-L 140.766792 113.7744 
-Q 140.198264 113.7744 140.198264 114.408 
-L 140.198264 131.832 
-Q 140.198264 132.4656 140.766792 132.4656 
+    <path d="M 156.138113 162.75135 
+L 223.940377 162.75135 
+Q 224.529962 162.75135 224.529962 162.08145 
+L 224.529962 141.31455 
+Q 224.529962 140.64465 223.940377 140.64465 
+L 156.138113 140.64465 
+Q 155.548528 140.64465 155.548528 141.31455 
+L 155.548528 162.08145 
+Q 155.548528 162.75135 156.138113 162.75135 
 z
-" clip-path="url(#p982695af67)" style="fill: #eef4fa; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
+" clip-path="url(#p6e5dea6630)" style="fill: #eef4fa; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
    </g>
    <g id="patch_7">
-    <path d="M 189.091698 112.032 
-C 190.599453 112.032 192.045657 111.364399 193.1118 110.176229 
-C 194.177944 108.988058 194.776981 107.376327 194.776981 105.696 
-C 194.776981 104.015673 194.177944 102.403942 193.1118 101.215771 
-C 192.045657 100.027601 190.599453 99.36 189.091698 99.36 
-C 187.583943 99.36 186.137739 100.027601 185.071596 101.215771 
-C 184.005452 102.403942 183.406415 104.015673 183.406415 105.696 
-C 183.406415 107.376327 184.005452 108.988058 185.071596 110.176229 
-C 186.137739 111.364399 187.583943 112.032 189.091698 112.032 
+    <path d="M 241.627925 128.9214 
+C 243.347882 128.9214 244.997625 128.144966 246.213819 126.763099 
+C 247.430012 125.381232 248.113358 123.506755 248.113358 121.5525 
+C 248.113358 119.598245 247.430012 117.723768 246.213819 116.341901 
+C 244.997625 114.960034 243.347882 114.1836 241.627925 114.1836 
+C 239.907967 114.1836 238.258224 114.960034 237.04203 116.341901 
+C 235.825837 117.723768 235.142491 119.598245 235.142491 121.5525 
+C 235.142491 123.506755 235.825837 125.381232 237.04203 126.763099 
+C 238.258224 128.144966 239.907967 128.9214 241.627925 128.9214 
 z
-" clip-path="url(#p982695af67)" style="fill: #ffffff; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
+" clip-path="url(#p6e5dea6630)" style="fill: #ffffff; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
    </g>
    <g id="line2d_1">
-    <path d="M 49.802264 42.336 
-L 49.802264 59.76 
-" clip-path="url(#p982695af67)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
+    <path d="M 29.377358 44.514 
+L 29.377358 74.6595 
+" clip-path="url(#p6e5dea6630)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
    </g>
    <g id="line2d_2">
-    <path d="M 99.548491 59.76 
-L 110.919057 59.76 
-" clip-path="url(#p982695af67)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
+    <path d="M 110.445283 74.6595 
+L 126.658868 74.6595 
+" clip-path="url(#p6e5dea6630)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
    </g>
    <g id="line2d_3">
-    <path d="M 49.802264 105.696 
-L 49.802264 123.12 
-" clip-path="url(#p982695af67)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
+    <path d="M 133.144302 44.514 
+L 144.346415 44.514 
+" clip-path="url(#p6e5dea6630)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
    </g>
    <g id="line2d_4">
-    <path d="M 99.548491 123.12 
-L 110.919057 123.12 
-" clip-path="url(#p982695af67)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
+    <path d="M 29.377358 121.5525 
+L 29.377358 151.698 
+" clip-path="url(#p6e5dea6630)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
    </g>
    <g id="line2d_5">
-    <path d="M 127.974906 105.696 
-L 127.974906 123.12 
-" clip-path="url(#p982695af67)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
+    <path d="M 110.445283 151.698 
+L 126.658868 151.698 
+" clip-path="url(#p6e5dea6630)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
    </g>
    <g id="line2d_6">
-    <path d="M 177.721132 123.12 
-L 189.091698 123.12 
-" clip-path="url(#p982695af67)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
+    <path d="M 133.144302 121.5525 
+L 144.346415 121.5525 
+" clip-path="url(#p6e5dea6630)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_7">
+    <path d="M 144.346415 121.5525 
+L 144.346415 151.698 
+" clip-path="url(#p6e5dea6630)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_8">
+    <path d="M 225.41434 151.698 
+L 241.627925 151.698 
+" clip-path="url(#p6e5dea6630)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_9">
+    <path d="M 248.113358 121.5525 
+L 259.315472 121.5525 
+" clip-path="url(#p6e5dea6630)" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: square"/>
    </g>
    <g id="text_1">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #004a85" x="5.741321" y="23.850658" transform="rotate(-0 5.741321 23.850658)">2-pulse</text>
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #004a85" x="5.793962" y="24.667408" transform="rotate(-0 5.793962 24.667408)">2-pulse</text>
    </g>
    <g id="text_2">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #1a1a1a" x="15.690566" y="47.610658" transform="rotate(-0 15.690566 47.610658)">x_m</text>
+    <!-- $x_m$ -->
+    <g style="fill: #1a1a1a" transform="translate(5.793962 49.788658)">
+     <text>
+      <tspan x="0" y="-0.0625" style="font-style: oblique; font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">x</tspan>
+      <tspan x="8.581055" y="2.112493" style="font-style: oblique; font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">m</tspan>
+     </text>
+    </g>
    </g>
    <g id="patch_8">
-    <path d="M 40.433553 42.336 
-Q 51.224181 42.336 60.673168 42.336 
+    <path d="M 31.374908 74.6595 
+Q 34.533573 74.6595 36.350596 74.6595 
 " style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 54.873168 39.436 
-L 60.673168 42.336 
-L 54.873168 45.236 
+    <path d="M 30.550596 71.7595 
+L 36.350596 74.6595 
+L 30.550596 77.5595 
 z
 " style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
    </g>
    <g id="text_3">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="81.071321" y="65.034658" transform="rotate(-0 81.071321 65.034658)">delay</text>
+    <!-- delay $T_\mathrm{PRI}$ -->
+    <g style="fill: #1a1a1a" transform="translate(41.720189 79.934158)">
+     <text>
+      <tspan x="0" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">d</tspan>
+      <tspan x="8.878418" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">e</tspan>
+      <tspan x="17.332031" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">l</tspan>
+      <tspan x="20.84375" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">a</tspan>
+      <tspan x="28.98584" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">y</tspan>
+      <tspan x="37.13501" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a"> </tspan>
+      <tspan x="41.213135" y="-0.421875" style="font-style: oblique; font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">T</tspan>
+      <tspan x="50.070312" y="1.753118" style="font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">P</tspan>
+      <tspan x="56.19104" y="1.753118" style="font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">R</tspan>
+      <tspan x="63.243506" y="1.753118" style="font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">I</tspan>
+     </text>
+    </g>
    </g>
    <g id="patch_9">
-    <path d="M 51.804119 59.76 
-Q 56.199424 59.76 59.253088 59.76 
+    <path d="M 126.658868 72.659858 
+Q 126.658868 63.6053 126.658868 55.892383 
 " style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 53.453088 56.86 
-L 59.253088 59.76 
-L 53.453088 62.66 
+    <path d="M 123.758868 61.692383 
+L 126.658868 55.892383 
+L 129.558868 61.692383 
 z
 " style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
    </g>
    <g id="patch_10">
-    <path d="M 110.919057 57.759504 
-Q 110.919057 54.216354 110.919057 52.014844 
+    <path d="M 26.956737 44.514 
+Q 72.271035 44.514 116.243692 44.514 
 " style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 108.019057 57.814844 
-L 110.919057 52.014844 
-L 113.819057 57.814844 
+    <path d="M 110.443692 41.614 
+L 116.243692 44.514 
+L 110.443692 47.414 
 z
 " style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
    </g>
    <g id="text_4">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="110.919057" y="47.610658" transform="rotate(-0 110.919057 47.610658)">Σ</text>
+    <text style="font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="126.658868" y="49.061119" transform="rotate(-0 126.658868 49.061119)">Σ</text>
    </g>
    <g id="text_5">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #b01e24" x="118.02566" y="59.649058" transform="rotate(-0 118.02566 59.649058)">−</text>
-   </g>
-   <g id="patch_11">
-    <path d="M 66.015505 42.336 
-Q 84.626469 42.336 101.895793 42.336 
-" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 96.095793 39.436 
-L 101.895793 42.336 
-L 96.095793 45.236 
-z
-" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-   </g>
-   <g id="patch_12">
-    <path d="M 118.607236 42.336 
-Q 125.132265 42.336 130.315653 42.336 
-" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 124.515653 39.436 
-L 130.315653 42.336 
-L 124.515653 45.236 
-z
-" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="114.277585" y="40.410058" transform="rotate(-0 114.277585 40.410058)">+</text>
    </g>
    <g id="text_6">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #1a1a1a" x="136.50283" y="47.610658" transform="rotate(-0 136.50283 47.610658)">y_m</text>
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #b01e24" x="134.913057" y="66.536158" transform="rotate(-0 134.913057 66.536158)">−</text>
+   </g>
+   <g id="patch_11">
+    <path d="M 135.145594 44.514 
+Q 144.641173 44.514 152.79511 44.514 
+" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 146.99511 41.614 
+L 152.79511 44.514 
+L 146.99511 47.414 
+z
+" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
    </g>
    <g id="text_7">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #004a85" x="5.741321" y="87.210658" transform="rotate(-0 5.741321 87.210658)">3-pulse</text>
+    <!-- $y_m$ -->
+    <g style="fill: #1a1a1a" transform="translate(159.086038 49.788658)">
+     <text>
+      <tspan x="0" y="-0.0625" style="font-style: oblique; font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">y</tspan>
+      <tspan x="8.581055" y="2.112493" style="font-style: oblique; font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">m</tspan>
+     </text>
+    </g>
    </g>
    <g id="text_8">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #1a1a1a" x="15.690566" y="110.970658" transform="rotate(-0 15.690566 110.970658)">x_m</text>
-   </g>
-   <g id="patch_13">
-    <path d="M 40.433553 105.696 
-Q 51.224181 105.696 60.673168 105.696 
-" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 54.873168 102.796 
-L 60.673168 105.696 
-L 54.873168 108.596 
-z
-" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #004a85" x="5.793962" y="101.705908" transform="rotate(-0 5.793962 101.705908)">3-pulse</text>
    </g>
    <g id="text_9">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="81.071321" y="128.394658" transform="rotate(-0 81.071321 128.394658)">delay</text>
+    <!-- $x_m$ -->
+    <g style="fill: #1a1a1a" transform="translate(5.793962 126.827158)">
+     <text>
+      <tspan x="0" y="-0.0625" style="font-style: oblique; font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">x</tspan>
+      <tspan x="8.581055" y="2.112493" style="font-style: oblique; font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">m</tspan>
+     </text>
+    </g>
    </g>
-   <g id="patch_14">
-    <path d="M 51.804119 123.12 
-Q 56.199424 123.12 59.253088 123.12 
+   <g id="patch_12">
+    <path d="M 31.374908 151.698 
+Q 34.533573 151.698 36.350596 151.698 
 " style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 53.453088 120.22 
-L 59.253088 123.12 
-L 53.453088 126.02 
-z
-" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-   </g>
-   <g id="patch_15">
-    <path d="M 110.919057 121.119504 
-Q 110.919057 117.576354 110.919057 115.374844 
-" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 108.019057 121.174844 
-L 110.919057 115.374844 
-L 113.819057 121.174844 
+    <path d="M 30.550596 148.798 
+L 36.350596 151.698 
+L 30.550596 154.598 
 z
 " style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
    </g>
    <g id="text_10">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="110.919057" y="110.970658" transform="rotate(-0 110.919057 110.970658)">Σ</text>
+    <!-- delay $T_\mathrm{PRI}$ -->
+    <g style="fill: #1a1a1a" transform="translate(41.720189 156.972658)">
+     <text>
+      <tspan x="0" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">d</tspan>
+      <tspan x="8.878418" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">e</tspan>
+      <tspan x="17.332031" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">l</tspan>
+      <tspan x="20.84375" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">a</tspan>
+      <tspan x="28.98584" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">y</tspan>
+      <tspan x="37.13501" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a"> </tspan>
+      <tspan x="41.213135" y="-0.421875" style="font-style: oblique; font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">T</tspan>
+      <tspan x="50.070312" y="1.753118" style="font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">P</tspan>
+      <tspan x="56.19104" y="1.753118" style="font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">R</tspan>
+      <tspan x="63.243506" y="1.753118" style="font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">I</tspan>
+     </text>
+    </g>
+   </g>
+   <g id="patch_13">
+    <path d="M 126.658868 149.698358 
+Q 126.658868 140.6438 126.658868 132.930883 
+" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 123.758868 138.730883 
+L 126.658868 132.930883 
+L 129.558868 138.730883 
+z
+" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 26.956737 121.5525 
+Q 72.271035 121.5525 116.243692 121.5525 
+" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 110.443692 118.6525 
+L 116.243692 121.5525 
+L 110.443692 124.4525 
+z
+" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
    </g>
    <g id="text_11">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #b01e24" x="118.02566" y="123.009058" transform="rotate(-0 118.02566 123.009058)">−</text>
+    <text style="font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="126.658868" y="126.099619" transform="rotate(-0 126.658868 126.099619)">Σ</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="114.277585" y="117.448558" transform="rotate(-0 114.277585 117.448558)">+</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #b01e24" x="134.913057" y="143.574658" transform="rotate(-0 134.913057 143.574658)">−</text>
+   </g>
+   <g id="patch_15">
+    <path d="M 146.343965 151.698 
+Q 149.502629 151.698 151.319653 151.698 
+" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 145.519653 148.798 
+L 151.319653 151.698 
+L 145.519653 154.598 
+z
+" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="text_14">
+    <!-- delay $T_\mathrm{PRI}$ -->
+    <g style="fill: #1a1a1a" transform="translate(156.689245 156.972658)">
+     <text>
+      <tspan x="0" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">d</tspan>
+      <tspan x="8.878418" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">e</tspan>
+      <tspan x="17.332031" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">l</tspan>
+      <tspan x="20.84375" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">a</tspan>
+      <tspan x="28.98584" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">y</tspan>
+      <tspan x="37.13501" y="-0.421875" style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a"> </tspan>
+      <tspan x="41.213135" y="-0.421875" style="font-style: oblique; font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">T</tspan>
+      <tspan x="50.070312" y="1.753118" style="font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">P</tspan>
+      <tspan x="56.19104" y="1.753118" style="font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">R</tspan>
+      <tspan x="63.243506" y="1.753118" style="font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">I</tspan>
+     </text>
+    </g>
    </g>
    <g id="patch_16">
-    <path d="M 66.015505 105.696 
-Q 84.626469 105.696 101.895793 105.696 
+    <path d="M 241.627925 149.698358 
+Q 241.627925 140.6438 241.627925 132.930883 
 " style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 96.095793 102.796 
-L 101.895793 105.696 
-L 96.095793 108.596 
+    <path d="M 238.727925 138.730883 
+L 241.627925 132.930883 
+L 244.527925 138.730883 
 z
 " style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
    </g>
    <g id="patch_17">
-    <path d="M 118.606195 105.696 
-Q 129.396822 105.696 138.845809 105.696 
+    <path d="M 146.347761 121.5525 
+Q 189.450327 121.5525 231.211252 121.5525 
 " style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 133.045809 102.796 
-L 138.845809 105.696 
-L 133.045809 108.596 
-z
-" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-   </g>
-   <g id="text_12">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="159.243962" y="128.394658" transform="rotate(-0 159.243962 128.394658)">delay</text>
-   </g>
-   <g id="patch_18">
-    <path d="M 129.976761 123.12 
-Q 134.372066 123.12 137.425729 123.12 
-" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 131.625729 120.22 
-L 137.425729 123.12 
-L 131.625729 126.02 
-z
-" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-   </g>
-   <g id="patch_19">
-    <path d="M 189.091698 121.119504 
-Q 189.091698 117.576354 189.091698 115.374844 
-" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 186.191698 121.174844 
-L 189.091698 115.374844 
-L 191.991698 121.174844 
-z
-" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-   </g>
-   <g id="text_13">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="189.091698" y="110.970658" transform="rotate(-0 189.091698 110.970658)">Σ</text>
-   </g>
-   <g id="text_14">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #b01e24" x="196.198302" y="123.009058" transform="rotate(-0 196.198302 123.009058)">−</text>
-   </g>
-   <g id="patch_20">
-    <path d="M 144.188147 105.696 
-Q 162.799111 105.696 180.068434 105.696 
-" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 174.268434 102.796 
-L 180.068434 105.696 
-L 174.268434 108.596 
-z
-" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-   </g>
-   <g id="patch_21">
-    <path d="M 196.779877 105.696 
-Q 203.304906 105.696 208.488294 105.696 
-" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
-    <path d="M 202.688294 102.796 
-L 208.488294 105.696 
-L 202.688294 108.596 
+    <path d="M 225.411252 118.6525 
+L 231.211252 121.5525 
+L 225.411252 124.4525 
 z
 " style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
    </g>
    <g id="text_15">
-    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #1a1a1a" x="214.675472" y="110.970658" transform="rotate(-0 214.675472 110.970658)">y_m</text>
+    <text style="font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="241.627925" y="126.099619" transform="rotate(-0 241.627925 126.099619)">Σ</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="229.246642" y="117.448558" transform="rotate(-0 229.246642 117.448558)">+</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #b01e24" x="249.882113" y="143.574658" transform="rotate(-0 249.882113 143.574658)">−</text>
+   </g>
+   <g id="patch_18">
+    <path d="M 250.114651 121.5525 
+Q 259.610229 121.5525 267.764167 121.5525 
+" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 261.964167 118.6525 
+L 267.764167 121.5525 
+L 261.964167 124.4525 
+z
+" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="text_18">
+    <!-- $y_m$ -->
+    <g style="fill: #1a1a1a" transform="translate(274.055094 126.827158)">
+     <text>
+      <tspan x="0" y="-0.0625" style="font-style: oblique; font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">y</tspan>
+      <tspan x="8.581055" y="2.112493" style="font-style: oblique; font-size: 10.15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a">m</tspan>
+     </text>
+    </g>
    </g>
   </g>
  </g>
  <defs>
-  <clipPath id="p982695af67">
-   <rect x="4.32" y="4.32" width="301.32" height="133.056"/>
+  <clipPath id="p6e5dea6630">
+   <rect x="4.32" y="4.32" width="312.48" height="160.776"/>
   </clipPath>
  </defs>
 </svg>

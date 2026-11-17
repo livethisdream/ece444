@@ -351,10 +351,13 @@ def canceller() -> None:
     ax.text(-V["vmax"], 13, "3-pulse", color=AMBER, ha="center", va="bottom")
     ax.text(V["vmax"], 4, "2-pulse", color=NAVY, ha="center", va="top")
     ax.set_xlim(-45, 45)
-    ax.set_ylim(-40, 19)
+    for vv in (0.6, 16.0):                       # the page's table: the hand, and a fast target
+        g2 = 10 * np.log10(4 * np.sin(np.pi * (2 * vv / LAM) * PRI) ** 2)
+        ax.plot([vv, vv], [g2, 2 * g2], "o", color=INK, ms=4, zorder=5)
+    ax.set_ylim(-60, 19)
     ax.set_xticks([-37.5, -18.75, 0, 18.75, 37.5])
     ax.set_xticklabels(["−37.5", "−18.75", "0", "18.75", "37.5"])
-    ax.set_yticks([-40, -20, 0])
+    ax.set_yticks([-60, -40, -20, 0])
     ax.set_xlabel("velocity (m/s)")
     ax.set_ylabel("gain (dB)")
     tidy(ax)
@@ -378,6 +381,12 @@ def _mti_maps() -> None:
         im = rd_panel(ax, P - ref, r, vel)
         ax.set_title(title, fontsize=FSW, color=INK)
         ax.set_xticks([-5, 0, 5])
+    lab = dict(fontsize=FSW, va="center", ha="left",
+               bbox=dict(boxstyle="round,pad=0.1", fc="white", ec="none", alpha=0.75))
+    axs[0].text(0.5, 0.15, "leakage", color=RED, **lab)
+    axs[0].text(0.5, 2.9, "wall", color=RED, **lab)
+    axs[0].text(1.0, 1.5, "hand", color=NAVY, **lab)
+    axs[0].text(1.0, 2.45, "spinner", color=NAVY, **lab)
     axs[0].set_ylabel("range (m)")
     axs[1].set_xlabel("velocity (m/s)")
     fig.subplots_adjust(wspace=0.08)
@@ -448,10 +457,10 @@ def spectrogram_fig() -> None:
 
 def _spectrogram_fig() -> None:
     rng = np.random.default_rng(11)
-    # A hand waved along the line of sight, 0.3 m either way at 1.5 Hz (2.8 m/s at
+    # A hand waved along the line of sight, 0.25 m either way at 1.5 Hz (2.4 m/s at
     # most), for 2048 chirps: slow enough for a short window to follow it.
     n = 2048
-    x = slow_time(n, rng, [(0.03, lambda t: 1.5 + 0.3 * np.sin(2 * np.pi * 1.5 * t))])
+    x = slow_time(n, rng, [(0.03, lambda t: 1.5 + 0.25 * np.sin(2 * np.pi * 1.5 * t))])
     fig, axs = plt.subplots(1, 2, figsize=(5.6, 2.9), sharey=True)
     for ax, (nw, hop) in zip(axs, ((64, 16), (16, 4))):
         w = np.hanning(nw)
@@ -548,10 +557,10 @@ def _phasor_fig() -> None:
     finalize(fig, "L29-phasor")
 
 
-def box(ax, x, y, w, h, text, color=NAVY):
+def box(ax, x, y, w, h, text, color=NAVY, fc="#eef4fa", lw=1.2):
     from matplotlib.patches import FancyBboxPatch
     ax.add_patch(FancyBboxPatch((x - w / 2, y - h / 2), w, h, boxstyle="round,pad=0.02",
-                                fc="#eef4fa", ec=color, lw=1.2))
+                                fc=fc, ec=color, lw=lw))
     ax.text(x, y, text, ha="center", va="center", fontsize=FSW, color=INK)
 
 
@@ -565,30 +574,30 @@ def canceller_blocks() -> None:
 
 
 def _canceller_blocks() -> None:
-    fig, ax = plt.subplots(figsize=(5.4, 2.4))
+    fig, ax = plt.subplots(figsize=(5.6, 2.9))
     ax.set_xlim(0, 10.6)
-    ax.set_ylim(0, 4.2)
+    ax.set_ylim(0, 4.8)
     ax.axis("off")
-    for y0, label in ((3.0, "2-pulse"), (1.0, "3-pulse")):
+    for y0, label, stages in ((3.6, "2-pulse", 1), (1.3, "3-pulse", 2)):
         ax.text(0.05, y0 + 0.75, label, fontsize=FSW, color=NAVY, ha="left", va="center")
-        stages = 1 if label == "2-pulse" else 2
-        x = 0.4
-        ax.text(x, y0, "x_m", fontsize=FSW, ha="left", va="center", color=INK)
-        x += 0.8
-        for sidx in range(stages):
-            arrow(ax, x, y0, x + 0.9, y0)
-            ax.plot([x + 0.4, x + 0.4], [y0, y0 - 0.55], color=GRAY, lw=1.2)
-            box(ax, x + 1.5, y0 - 0.55, 1.3, 0.55, "delay")
-            arrow(ax, x + 0.4, y0 - 0.55, x + 0.85, y0 - 0.55)
-            ax.plot([x + 2.15, x + 2.55], [y0 - 0.55, y0 - 0.55], color=GRAY, lw=1.2)
-            arrow(ax, x + 2.55, y0 - 0.55, x + 2.55, y0 - 0.2)
-            ax.add_patch(plt.Circle((x + 2.55, y0), 0.2, fc="white", ec=NAVY, lw=1.2))
-            ax.text(x + 2.55, y0, "Σ", ha="center", va="center", fontsize=FSW, color=NAVY)
-            ax.text(x + 2.8, y0 - 0.38, "−", ha="left", va="center", fontsize=FSW, color=RED)
-            arrow(ax, x + 0.9, y0, x + 2.35, y0)
-            x += 2.75
-        arrow(ax, x, y0, x + 0.6, y0)
-        ax.text(x + 0.7, y0, "y_m", fontsize=FSW, ha="left", va="center", color=INK)
+        ax.text(0.05, y0, "$x_m$", fontsize=FSW, ha="left", va="center", color=INK)
+        x = 0.85                                   # where each stage's input splits
+        for _ in range(stages):
+            xs = x + 3.3                           # the summer
+            ax.plot([x, x], [y0, y0 - 0.9], color=GRAY, lw=1.2)
+            arrow(ax, x, y0 - 0.9, x + 0.35, y0 - 0.9)
+            box(ax, x + 1.55, y0 - 0.9, 2.3, 0.62, "delay $T_\\mathrm{PRI}$")
+            ax.plot([x + 2.75, xs], [y0 - 0.9, y0 - 0.9], color=GRAY, lw=1.2)
+            arrow(ax, xs, y0 - 0.9, xs, y0 - 0.24)
+            arrow(ax, x - 0.15 if x < 1 else x, y0, xs - 0.24, y0)
+            ax.add_patch(plt.Circle((xs, y0), 0.22, fc="white", ec=NAVY, lw=1.2))
+            ax.text(xs, y0, "Σ", ha="center", va="center", fontsize=FSW - 2, color=NAVY)
+            ax.text(xs - 0.42, y0 + 0.28, "+", ha="center", va="center", fontsize=FSW, color=NAVY)
+            ax.text(xs + 0.28, y0 - 0.5, "−", ha="center", va="center", fontsize=FSW, color=RED)
+            ax.plot([xs + 0.22, xs + 0.6], [y0, y0], color=GRAY, lw=1.2)
+            x = xs + 0.6
+        arrow(ax, x - 0.38, y0, x + 0.4, y0)
+        ax.text(x + 0.5, y0, "$y_m$", fontsize=FSW, ha="left", va="center", color=INK)
     finalize(fig, "L29-canceller-blocks")
 
 
@@ -665,6 +674,29 @@ def _spinner_orient() -> None:
     finalize(fig, "L29-spinner-orient")
 
 
+def chain_fig() -> None:
+    with plt.rc_context(WIDE):
+        _chain_fig()
+
+
+def _chain_fig() -> None:
+    """The processing chain, with MTI marked: where the canceller sits."""
+    fig, ax = plt.subplots(figsize=(7.0, 1.9))
+    ax.set_xlim(0, 14.2)
+    ax.set_ylim(0, 2.6)
+    ax.axis("off")
+    labels = ("burst", "MTI", "range\nFFT", "Doppler\nFFT", "map")
+    xs = [1.2 + 2.95 * k for k in range(5)]
+    for k, (x, t) in enumerate(zip(xs, labels)):
+        mark = t == "MTI"
+        box(ax, x, 1.6, 2.2, 1.0, t, color=RED if mark else NAVY, fc="#f8e3e4" if mark else "#eef4fa",
+            lw=2.0 if mark else 1.2)
+        if k:
+            arrow(ax, xs[k - 1] + 1.15, 1.6, x - 1.15, 1.6)
+    ax.text(xs[1], 0.55, "off, 2-pulse,\nor 3-pulse", ha="center", va="center", fontsize=FSW, color=RED)
+    finalize(fig, "L29-chain")
+
+
 if __name__ == "__main__":
     for kk, vv in V.items():
         print(f"   {kk:20s} {vv:.4g}")
@@ -681,3 +713,4 @@ if __name__ == "__main__":
     setup_fig()
     hand_moves()
     spinner_orient()
+    chain_fig()

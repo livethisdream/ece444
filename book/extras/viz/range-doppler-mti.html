@@ -131,10 +131,10 @@
   }
   const hann = n => Float64Array.from({ length: n }, (_, i) => 0.5 - 0.5 * Math.cos(2 * Math.PI * (i + 0.5) / n));
 
-  // Leakage at 0 m and a wall at 3.0 m stand still; the hand at 1.5 m moves.
+  // Leakage at 0 m and a wall at 2.9 m stand still; the hand at 1.5 m moves.
   // Closing speed is positive: the range shrinks, the echo phase -4 pi R / lam
   // advances, and the hand lands at positive Doppler, as in L26.
-  const SCENE = [{ a: 1.0, R: 0.0, v: 0 }, { a: 0.25, R: 3.0, v: 0 }, { a: 0.03, R: 1.5, v: null }];
+  const SCENE = [{ a: 1.0, R: 0.0, v: 0 }, { a: 0.25, R: 2.9, v: 0 }, { a: 0.03, R: 1.5, v: null }];
   const SIGMA = 0.02, JITTER = 0.002;
 
   const st = {};
