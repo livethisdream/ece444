@@ -36,30 +36,26 @@ with room for notes. Print from read mode for the whole lesson.
 ```
 
 :::{depth}
-<a href="../L27-radar-detection/index.html">Lesson 27</a> set a detection threshold from the probability of false alarm, assuming the processor knows the noise power, and ended by showing that a fixed threshold's false alarms climb when the noise rises. This lesson replaces the assumed noise power with one measured from the data around each cell. That is constant false-alarm rate (CFAR) processing. The lesson derives the threshold, the SNR it loses, how it fails when the reference cells hold more than noise, and how to check it by counting false alarms. The L30 Lab then runs it twice: on your kit's live range profile in the Phaser app, and on range-Doppler maps in the notebook.
+The radar's job at this stage is to find the targets: to say, for every cell of the range profile or the range-Doppler map, "target here" or "not", with no person looking at it. <a href="../L27-radar-detection/index.html">Lesson 27</a> made that decision with a fixed threshold, which needs the noise level. This lesson measures the noise around each cell and sets each cell's threshold from it: constant false-alarm rate (CFAR) processing. It shows what CFAR does to the picture, what its controls change, what goes wrong near a strong target or a clutter edge, and how to check it by counting false alarms. The L30 Lab then runs it twice: on your kit's live range profile in the Phaser app, and on range-Doppler maps in the notebook.
 
 The lesson is reading, done before the lab with Part 1 of the packet. Its examples use a 400 MHz chirp, so its cells are 0.375 m, not the app's. The L30 Lab follows the lesson on this page, from The Big Picture on.
 :::
 ::::
 
-::::{frame} A Moving Noise Floor
+::::{frame} Finding the Targets
 :class: read-only
 
 :::{present}
-- A fixed threshold assumes the noise power $P_n$ is known.
-- 3 dB more noise turns $P_{fa} = 10^{-6}$ into $10^{-3}$.
-- CFAR measures $P_n$ around each cell it tests.
+- Goal: a list of targets, decided cell by cell, automatically.
+- A fixed threshold needs the noise level.
+- The noise moves; 3 dB more turns one false target in a million into one in a thousand.
 :::
 
-<a href="../L27-radar-detection/index.html#frame-probability-of-false-alarm">Lesson 27</a> found that noise power in one cell is exponentially distributed with mean $P_n$, so noise alone crosses a threshold $T$ with probability
+A range-Doppler map holds tens of thousands of cells, and the radar has to say, for each one, "target here" or "not", with no person looking at it. The tracker and the classifier of Lesson 31 work from that list.
 
-$$
-P_{fa} = e^{-T/P_n} .
-$$
+<a href="../L27-radar-detection/index.html#frame-probability-of-false-alarm">Lesson 27</a> made the decision with a threshold set so that noise alone almost never crosses it: noise of power $P_n$ crosses a threshold $T$ with probability $P_{fa} = e^{-T/P_n}$. If the noise rises by a factor $g$ while $T$ stays put, the probability becomes $P_{fa}^{1/g}$, and 3 dB more noise turns $10^{-6}$ into $10^{-3}$.
 
-The threshold for $P_{fa} = 10^{-6}$ is $T = 13.8\ P_n$, 11.4 dB above the mean noise. If the noise rises by a factor $g$ while $T$ stays put, the probability becomes $P_{fa}^{1/g}$, and a 3 dB rise turns $10^{-6}$ into $10^{-3}$. At a million decisions a second, a modest rate for a range-Doppler radar, that is a thousand false targets a second.
-
-The noise on a real map does move. Stationary clutter fills the cells near zero velocity, strong reflections fill the cells nearest the radar, and the receiver gain sets the level of everything. A fixed threshold high enough for the worst of these misses targets everywhere else. <a href="../L27-radar-detection/index.html#frame-the-fixed-threshold">Lesson 27's last figure</a> showed the alternative: estimate the noise power from the cells around the one being tested, and set the threshold from that estimate.
+The noise on a real map does move: clutter near zero velocity, strong reflections near the radar, and the receiver gain all shift it. CFAR keeps the decision and fixes the threshold: it measures the noise around each cell and sets that cell's threshold from it.
 ::::
 
 ::::{frame} Cell Under Test, Guard, and Reference
@@ -73,9 +69,9 @@ The noise on a real map does move. Stationary clutter fills the cells near zero 
 - The window slides, so every cell gets its own threshold.
 :::
 
-The detector tests one cell at a time, the **cell under test**. On each side of it, it skips a few **guard cells** and then averages a block of **reference cells**. The average is the estimate of the noise power at this cell, and the threshold is that estimate multiplied by a **bias**. If the cell under test exceeds the threshold, the detector declares a target there. Then the window moves one cell and the detector repeats the test, so the detector recomputes the threshold at every cell from that cell's own neighbors.
+The detector tests one cell at a time, the **cell under test**. On each side it skips a few **guard cells** and averages a block of **reference cells**; that average, times a **bias**, is the threshold. A cell over its threshold is a detection. The window then moves one cell, so every cell gets a threshold from its own neighbors. Near the first and last range cells the window averages the reference cells that exist on one side only; along Doppler it wraps, because the cell past $+v_\text{max}$ is $-v_\text{max}$.
 
-The figure draws 2 guard and 4 reference cells a side so that the cells are readable. The running example in this lesson uses 2 guard and 16 reference cells a side, $N = 32$ reference cells in all, which is the local-average threshold in Lesson 27's last figure. ADI's <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-cfar/" target="_blank" rel="noopener">CFAR lab</a> lists the same steps for the PHASER: pick the cell, skip the guard cells, average the reference cells, multiply by the bias, and compare.
+The figure draws 2 guard and 4 reference cells a side so that the cells are readable. The running example in this lesson uses 2 guard and 16 reference cells a side, $N = 32$ reference cells in all.
 ::::
 
 ::::{frame} Cell-Averaging CFAR
@@ -93,27 +89,7 @@ $$
 - $P_{fa}$ depends on $\alpha$ and $N$, and not on $P_n$.
 :::
 
-With $z_i$ the power in reference cell $i$, the **cell-averaging** (CA) CFAR estimate of the noise power is the sample mean $\hat{P}_n$, and the threshold is $T = \alpha\hat{P}_n$. The bias $\alpha$ is the number we choose.
-
-For a given estimate, the cell under test crosses the threshold with probability $e^{-T/P_n}$, the Lesson 27 result. The estimate is itself random, so the probability of false alarm is the average of that over the reference cells. Each $z_i$ is independent and exponential with mean $P_n$, and for one such cell the average of $e^{-cz_i/P_n}$ is
-
-$$
-\begin{aligned}
-\left\langle e^{-cz/P_n} \right\rangle &= \int_0^\infty e^{-cz/P_n}\ \frac{e^{-z/P_n}}{P_n}\ dz = \frac{1}{1 + c} .
-\end{aligned}
-$$
-
-The exponential of a sum is a product, so
-
-$$
-\begin{aligned}
-P_{fa} &= \left\langle e^{-\alpha\hat{P}_n/P_n} \right\rangle
-= \prod_{i=1}^{N}\left\langle e^{-\alpha z_i/(NP_n)} \right\rangle \\
-&= \left(1 + \frac{\alpha}{N}\right)^{-N} ,
-\end{aligned}
-$$
-
-where the angle brackets mean the average over the noise. $P_n$ has dropped out. Wherever the noise sits, whether 0 dB or 15 dB, the probability that noise alone crosses the threshold is the same, which is what *constant false-alarm rate* means. Three assumptions came with it: the reference cells hold only noise, their noise has the same mean as the noise in the cell under test, and the cells are independent of one another. A window applied before the FFT breaks the third, because it spreads each cell's noise into its neighbors; the measuring frame below comes back to it. The rest of the lesson is about what happens when either one fails.
+With $z_i$ the power in reference cell $i$, the **cell-averaging** (CA) estimate is the sample mean $\hat{P}_n$, and the threshold is $T = \alpha\hat{P}_n$ for a bias $\alpha$ we choose. Averaging Lesson 27's $e^{-T/P_n}$ over the scatter of the estimate gives the false-alarm probability above, and $P_n$ drops out: wherever the noise sits, noise alone crosses with the same probability. That is the *constant false-alarm rate*. It assumes reference cells that hold only noise, of the same mean as the cell under test, independent from cell to cell; the rest of the lesson is about when they do not.
 ::::
 
 ::::{frame} The Bias From the False-Alarm Probability
@@ -131,29 +107,9 @@ $$
 - A known $P_n$ needs 11.4 dB; 32 reference cells need 12.4 dB.
 :::
 
-Inverting the false-alarm expression gives the bias for a chosen $P_{fa}$:
+Inverting the false-alarm expression gives the bias for a chosen $P_{fa}$. For $P_{fa} = 10^{-6}$ and $N = 32$ it is 17.3, or 12.4 dB; with 16 reference cells it is 13.4 dB, and with 72 it is 11.8 dB. With the noise known, Lesson 27 needed 11.4 dB. The bias is larger with fewer cells because the estimate scatters: when it comes out low, the threshold drops with it, and the extra bias offsets those low estimates.
 
-$$
-\alpha = N\left(P_{fa}^{-1/N} - 1\right) .
-$$
-
-For $P_{fa} = 10^{-6}$ and $N = 32$, $\alpha = 32(10^{6/32} - 1) = 17.3$, or 12.4 dB. With 16 reference cells it is 21.9, 13.4 dB; with 72 it is 15.2, 11.8 dB. As $N$ grows,
-
-$$
-\begin{aligned}
-\alpha &= N\left(e^{\ln(1/P_{fa})/N} - 1\right) \\
-&\approx N\left(1 + \frac{\ln(1/P_{fa})}{N} - 1\right) \\
-&= \ln(1/P_{fa}) = 13.8 ,
-\end{aligned}
-$$
-
-which is the 11.4 dB threshold of Lesson 27, because an average over infinitely many cells equals the noise power.
-
-The bias is larger with fewer cells because the estimate scatters. Sometimes it comes out low, the threshold drops with it, and noise crosses more often than it would with the true $P_n$. Raising $\alpha$ compensates for those low estimates. In the code later in this lesson, `bias_db` is $10\log_{10}\alpha$.
-
-:::{note}
-ADI's `target_detection_dbfs.py` averages the reference cells **in dB** and adds the bias in dB. That is a different estimator: the average of $10\log_{10}z$ over exponential noise sits 2.5 dB below $10\log_{10}P_n$, so a bias in ADI's code is not the $\alpha$ of this lesson. Its threshold still follows the noise, so it is still a CFAR, but this lesson's numbers do not apply to it. Read ADI's code beside the provided `cfar_2d`, which averages power.
-:::
+ADI's `target_detection_dbfs.py` averages the reference cells in dB rather than in power. Its threshold still follows the noise, but its bias is not this lesson's $\alpha$; the Phaser app and the provided code average power.
 ::::
 
 ::::{frame} CFAR Loss
@@ -168,11 +124,9 @@ ADI's `target_detection_dbfs.py` averages the reference cells **in dB** and adds
 - A higher bias shortens the range: $R \propto \text{SNR}^{-1/4}$.
 :::
 
-A target that a known-noise detector finds with $P_d = 0.9$ at $P_{fa} = 10^{-6}$ needs 13.2 dB of SNR (Albersheim's fit in <a href="../L27-radar-detection/index.html#frame-albersheim-s-equation">Lesson 27</a> gave 13.1 dB). The CA-CFAR detector needs more, because its threshold is higher on average and scatters with the estimate. The difference is the **CFAR loss**. The figure computes it by averaging the Lesson 27 detection probability over the scatter of $\hat{P}_n$: 2.1 dB with 16 reference cells, 1.0 dB with 32, and less with more; read any other window's loss off the curve.
+Because its threshold is higher on average and scatters with the estimate, a CA-CFAR detector needs more SNR than a known-noise detector for the same $P_d$. The difference is the **CFAR loss**; read any window's loss off the curve. More reference cells lose less, but a wider window is more likely to reach noise of a different level: 2 guard and 16 reference cells a side span about 14 m at 0.375 m cells.
 
-The figure favors many reference cells, but a wider window is more likely to reach noise of a different level. The estimate assumes that every reference cell has the same mean noise as the cell under test. A window holding 32 reference cells, 2 guard and 16 reference cells a side, is 37 cells wide, and at the 0.375 m cells of a 400 MHz chirp, $c/2B$, it spans about 14 m; the clutter near the radar does not stay level over 14 m. The number of reference cells trades the CFAR loss against how local the estimate is.
-
-Any extra SNR the detector needs shortens the range. The echo power falls as $R^{-4}$ (<a href="../L25-radar-equation/index.html">Lesson 25</a>; <a href="../L27-radar-detection/index.html#frame-required-snr-sets-the-range">Lesson 27</a> worked the same rule), so a target that just reaches the threshold at range $R_1$ reaches a threshold $\Delta$ dB higher only out to
+Any extra SNR the detector needs shortens the range. The echo power falls as $R^{-4}$ (<a href="../L27-radar-detection/index.html#frame-required-snr-sets-the-range">Lesson 27</a>), so a target that just reaches the threshold at range $R_1$ reaches a threshold $\Delta$ dB higher only out to
 
 $$
 \begin{aligned}
@@ -181,7 +135,7 @@ $$
 \end{aligned}
 $$
 
-With 6 dB more bias the range falls by 29%, provided the noise alone sets where the target is lost.
+provided the noise alone sets where the detector loses the target.
 ::::
 
 ::::{frame} Choosing the Guard Cells
@@ -193,9 +147,9 @@ With 6 dB more bias the range falls by 29%, provided the noise alone sets where 
 - Guard cells cover the target's extent, in range and in Doppler.
 :::
 
-A target does not occupy exactly one cell. The window applied before the FFT, Hann in ADI's scripts and in the <a href="../L29-range-doppler-mti/index.html">L29</a> range-Doppler map, widens the target's peak. The Hann window's spectrum is 1/2 at the center and $-1/4$ one cell away, so for a target centered in its cell each neighbor holds a quarter of its power, 6 dB down; for a target between two cells, the neighbor on the near side can sit within 2 dB of the peak. The Phaser app uses a **Blackman** window instead, with coefficients 0.42, 0.25, and 0.04: its main lobe reaches three cells each side, and a centered target's neighbors sit 4.5 dB and 20 dB down. A person is also larger than one 0.375 m range cell of a 400 MHz chirp, and moving arms and legs spread the echo over several Doppler cells.
+A target does not occupy exactly one cell. The window applied before the FFT widens its peak. With a Hann window, a target centered in its cell puts a quarter of its power, 6 dB down, in each neighbor; for one between two cells, the near neighbor can sit within about 2 dB of the peak. The Phaser app uses a **Blackman** window, whose main lobe reaches three cells each side; a centered target's neighbors sit 4.5 dB and 20 dB down. A person also spans several cells, most of all in Doppler.
 
-Without guard cells, that spill lands in the reference cells. Take a 20 dB target with no guard cells and 32 reference cells. Its two neighbors hold 14 dB each, 25 times the noise power, and they raise the estimate from $P_n$ to about $(30 + 2 \times 26)/32 = 2.6\ P_n$, which lifts the threshold by 4.1 dB. The target still crosses, but its margin shrinks from 7.6 dB to 3.5 dB, and a weaker target would not. For a target far above the noise, the noise drops out of the estimate and only the spill matters. With $s_k$ the power in each of the target's own neighbors inside the window, as a fraction of its peak, the margin of the target over its threshold is
+Without guard cells, that spill lands in the reference cells and raises the target's own threshold; far above the noise, only the spill matters. With $s_k$ the power in each of its neighbors inside the window, as a fraction of its peak, the target's margin over its threshold is
 
 $$
 \begin{aligned}
@@ -203,16 +157,14 @@ $$
 \end{aligned}
 $$
 
-A centered Hann target with no guard cells, 6 reference cells a side, and a 12 dB bias has $\sum s_k = 2 \times 0.25$, so the margin is $-10\log_{10}(15.8 \times 0.5/12) = +1.8$ dB: found, barely, and fewer reference cells or more spill would lose it. One or two guard cells a side remove the problem for Hann; Blackman needs three. More guard cells than the target's extent do no harm to the target, but they push the reference cells farther out, where the noise is less likely to match.
+A centered Hann target with no guard cells, 6 reference cells a side, and a 12 dB bias has $\sum s_k = 2 \times 0.25$, so the margin is $-10\log_{10}(15.8 \times 0.5/12) = +1.8$ dB: found, barely. One or two guard cells a side remove the problem for Hann; Blackman needs three.
 ::::
 
 ::::{frame} CFAR Explorer
 :class: viz-frame read-only
 
 :::{depth}
-The widget draws one range profile of 240 cells, in dB, with the CFAR threshold over it in green. Cells from 168 on hold clutter 15 dB above the quiet noise. Triangles along the top mark five targets, each with the Hann window's −6 dB neighbors, dark when found and pale when missed: a pair eight cells apart near cell 56, one alone near 104, one in the clear just short of the clutter at 160, and one inside the clutter. Found targets are ringed; noise crossings are red dots, and the widget counts them as false alarms. The readout gives the design $P_{fa}$ for the method, bias, and number of reference cells.
-
-Start at 2 guard and 16 reference cells a side with a 12.4 dB bias, the lesson's running example. Set the guard cells to 0 and watch each target lift its own threshold. Lower the bias until false alarms appear, and compare where they appear with the design $P_{fa}$. Then switch the method to greatest-of and smallest-of, the subject of the next frames, and press New noise for another draw of the same scene.
+The widget draws one range profile with the CFAR threshold over it in green, five targets marked along the top, and clutter 15 dB above the noise from cell 168 on. Set the guard cells to 0 and watch each target lift its own threshold; lower the bias until false alarms appear; then switch the method to greatest-of and smallest-of, the subject of the next frames.
 :::
 
 <iframe src="../../viz/cfar-explorer.html"
@@ -233,11 +185,9 @@ Start at 2 guard and 16 reference cells a side with a 12.4 dB bias, the lesson's
 - At a clutter edge, one average mixes two noise levels.
 :::
 
-Cell averaging assumes that every reference cell holds noise of the same mean as the cell under test. The figure shows the two common ways that fails.
+On the left, an 18 dB target sits eight cells from a 24 dB target. When the weaker target is the cell under test, the stronger one and its two neighbors are in its reference window, and they hold about $251 + 2 \times 63$ times the noise power. Spread over 32 cells, that raises the estimate by a factor of about 12.7, 11 dB, so the threshold rises to 23.4 dB and the detector misses the 18 dB target. This is **masking**: two people walking side by side, a hand in front of a body, or a target near the kit's own leakage at 0 m.
 
-On the left, an 18 dB target sits eight cells from a 24 dB target. When the weaker target is the cell under test, the stronger one and its two neighbors are in its reference window, and they hold about $251 + 2 \times 63$ times the noise power. Spread over 32 cells, that raises the estimate by a factor of about 12.7, 11 dB, so the threshold rises to 23.4 dB and the detector misses the 18 dB target. This is **masking**, and it happens wherever targets are close together: two people walking side by side, or a hand in front of a body.
-
-On the right, the noise rises 15 dB at cell 60, the edge of a clutter region. A cell in the clear just before the edge has half its reference cells in the clutter, so its threshold rises by about 12 dB and a target there is masked. A cell in the clutter just past the edge has half its reference cells in the clear, so its estimate is half what it should be, the threshold sits 3 dB low, and its $P_{fa}$ rises from $10^{-6}$ to $(1 + \alpha/32)^{-16} = 10^{-3}$. The clutter edge produces false alarms on one side and misses on the other.
+On the right, the noise rises 15 dB at cell 60, the edge of a clutter region. A cell in the clear just before the edge has half its reference cells in the clutter, so its threshold rises by about 12 dB and masks a target there. A cell just inside the clutter has half its reference cells in the clear, so its threshold sits 3 dB low and its false alarms rise a thousandfold. The edge produces misses on one side and false alarms on the other.
 ::::
 
 ::::{frame} Greatest-Of and Smallest-Of
@@ -253,30 +203,13 @@ $$
 
 - Greatest-of holds $P_{fa}$ at a clutter edge.
 - Smallest-of finds a target beside another.
-- Each needs its own bias, and loses 0.2 or 0.7 dB more than cell averaging.
 :::
 
-Both variants average the two sides of the window separately, $\hat{P}_\text{near}$ over the reference cells nearer the radar and $\hat{P}_\text{far}$ over those farther away, and then keep one of the two.
+Both variants average the nearer and the farther side of the window separately and keep one.
 
-**Greatest-of** (GO) keeps the larger. At a clutter edge, the side in the clutter wins, so GO compares a cell just inside the clutter with the clutter level, and its false alarms stay near the design value; the dashed red line in the right panel of the last figure does that. GO misses targets in the clear cells just before the edge, which it also compares with the clutter, and it makes masking worse.
+**Greatest-of** (GO) keeps the larger. At a clutter edge the side in the clutter wins, so a cell just inside the clutter meets a threshold at the clutter level and its false alarms stay near the design value: the dashed red line in the right panel of the last figure. GO misses targets just before the edge, and it makes masking worse.
 
-**Smallest-of** (SO) keeps the smaller. When a second target sits on one side, the clean side wins and the weaker target is found, as the dashed orange line in the left panel shows. SO fails at clutter edges instead, where it takes the quiet side and lets the clutter through.
-
-Neither max nor min of two averages is an average, so each has its own relation between $\alpha$ and $P_{fa}$, which we compute numerically from the distribution of the larger or the smaller of two averages. With 16 cells a side and $P_{fa} = 10^{-6}$, GO needs a bias of 12.0 dB on its larger half and SO 13.7 dB on its smaller half, against 12.4 dB for CA. For $P_d = 0.9$, GO needs 0.2 dB more SNR than CA and SO 0.7 dB more. ADI's `cfar()` takes the three methods as `'average'`, `'greatest'`, and `'smallest'`; the widget switches among them.
-::::
-
-::::{frame} The Ends of the Map
-:class: read-only
-
-:::{present}
-- The first and last range cells have reference cells on one side only.
-- One-sided with the same bias, $P_{fa}$ rises from $10^{-6}$ to $8 \times 10^{-6}$.
-- Doppler wraps: the cell past $+v_\text{max}$ is $-v_\text{max}$.
-:::
-
-The window runs out at the ends of the data. In range, a cell within $g + n$ of the first or last cell has fewer reference cells on one side, or none. There are three choices: skip those cells and never declare a detection there; average whatever reference cells exist, which is what this lesson's code does; or raise the bias for the cells with fewer neighbors. With the second choice, 16 reference cells instead of 32, and the bias left at 12.4 dB, $P_{fa}$ rises to $(1 + 17.3/16)^{-16} = 8 \times 10^{-6}$, a small increase that keeps those cells in the test. The one choice to avoid is padding with zeros and counting them, which drags the estimate down and the false alarms up. ADI's `cfar()` does not test the end cells against their own neighbors: it gives them the lowest threshold found anywhere in the profile, so a strong return near either end is reported whatever the noise around it. The cells nearest 0 m on the PHASER hold the kit's own transmit-to-receive leakage, so a detector usually skips them in any case.
-
-Doppler is different. The Doppler FFT is periodic: the cell above the highest velocity, $+v_\text{max}$, is the lowest, $-v_\text{max}$. A reference window that runs off one end of the Doppler axis continues at the other, so it never runs out, and the Doppler edge needs no special case.
+**Smallest-of** (SO) keeps the smaller. When a second target sits on one side, the clean side wins and the detector finds the weaker target: the dashed orange line in the left panel. SO lets clutter through at an edge instead. Each needs its own bias for the same $P_{fa}$.
 ::::
 
 ::::{frame} 2D CFAR on the Range-Doppler Map
@@ -291,13 +224,9 @@ Doppler is different. The Doppler FFT is periodic: the cell above the highest ve
 - The zero-velocity clutter ridge is an edge: run MTI first.
 :::
 
-The <a href="../L29-range-doppler-mti/index.html">range-Doppler map</a> has two axes, so the window does too. The guard cells become a box around the cell under test, and the reference cells are the ring between that box and a larger one. With 1 guard and 3 reference cells each way from the cell under test, in both range and Doppler, the outer box is 9 by 9 cells and the guard box 3 by 3, so $N = 81 - 9 = 72$. The bias for $P_{fa} = 10^{-6}$ is $72(10^{6/72} - 1) = 15.2$, 11.8 dB, and the CFAR loss read off the figure above is 0.4 dB, better than any one-dimensional window can do while staying within a few cells of the cell under test. Greatest-of and smallest-of split the ring into a nearer and a farther half in range. The 6 reference cells at the cell under test's own range belong to neither, so each half holds $(72 - 6)/2 = 33$ cells.
+On the <a href="../L29-range-doppler-mti/index.html">range-Doppler map</a> the guard cells become a box around the cell under test, and the reference cells the ring between it and a larger box. With 1 guard and 3 reference cells each way, the boxes are 9 by 9 and 3 by 3, so $N = 81 - 9 = 72$: a bias of 11.8 dB for $10^{-6}$ and a loss of 0.4 dB. Greatest-of and smallest-of split the ring into a nearer and a farther half in range; the 6 reference cells at the cell under test's own range belong to neither, so each half holds $(72 - 6)/2 = 33$ cells.
 
-The two directions need not match. With range cells a few tenths of a meter long and velocity cells near 0.1 m/s, a walking person spans a cell or two in range but many cells in Doppler, because the arms and legs move at different speeds from the body. A wider guard band in Doppler than in range keeps that spread out of the estimate.
-
-Without MTI, every stationary object puts its echo at zero velocity, so the map has a ridge of clutter along the zero-Doppler column. To a CFAR window, that ridge is a clutter edge in the Doppler direction: cells on the ridge are compared with an average that is mostly noise, and they are declared targets. MTI from Lesson 29 removes most of the ridge before CFAR runs.
-
-A map of $256 \times 128$ cells, with 72 reference cells each, is 2.4 million additions. A Python loop over every cell is slow, but a convolution of the map with the window does the same sums in a fraction of a second, and the next frame's code works that way.
+Without MTI, stationary echoes form a ridge along zero velocity, a clutter edge that CFAR declares as targets; MTI from Lesson 29 removes most of it first.
 ::::
 
 ::::{frame} Detections From the Map
@@ -307,34 +236,11 @@ A map of $256 \times 128$ cells, with 72 reference cells each, is 2.4 million ad
 <img src="../../viz/img/L30-rd-detections.svg" alt="A range-Doppler map from 0 to 9 m and minus 3 to plus 3 meters per second after MTI. Red squares mark the CFAR detections: a cluster of nine cells on a walker at 6 m and plus 1.2 meters per second, a cluster of five on a hand at 2.1 m and minus 0.6 meters per second, and one cell of leftover clutter at 0 m and zero velocity" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- The provided `cfar_2d` returns a detection map and a list of (range, velocity, SNR).
 - One target produces a cluster of detections.
 - CFAR also detects the clutter that MTI leaves.
 :::
 
-The map is synthetic: a walker at 6.0 m and $+1.2$ m/s, a hand at 2.1 m and $-0.6$ m/s, and the clutter a 2-pulse canceller leaves at zero velocity near the radar. CFAR with a 2D window and a bias for $10^{-6}$ declares both targets and the strongest clutter cell. Each target produces a cluster of detections, because its peak spreads into its neighbors and those neighbors are well above the noise too. A detection list that feeds a classifier or a tracker needs one entry per object, so we reduce each cluster to its strongest cell.
-
-The excerpt is the cell-averaging path of the provided `cfar_2d` in `radar_lab.py`, which the L30 Lab notebook calls; the provided version also takes `method="ca"`, `"go"`, or `"so"` for the variants above. It takes the map in dB, as Lesson 29 plots it, and converts it back to power, because the CFAR statistics of this lesson are for power. `guard` and `ref` are (range, Doppler) pairs of half-widths. The two convolutions sum each cell's reference window and count how many cells it held, so an end cell in range averages only the cells that exist; the code wraps the Doppler axis. Pass the map's axes, and the detection list comes back in meters and meters per second.
-
-```python
-import numpy as np
-from scipy import signal
-def cfar_2d(rd_map, guard, ref, bias_db, axes=None):
-    P = 10 ** (rd_map / 10)                                  # dB back to power
-    (gr, gv), (rr, rv) = guard, ref                          # (range, Doppler) half-widths
-    win = np.ones((2 * (gr + rr) + 1, 2 * (gv + rv) + 1))
-    win[rr:rr + 2 * gr + 1, rv:rv + 2 * gv + 1] = 0          # guard cells and the cell under test
-    def pad(A): return np.pad(np.pad(A, ((0, 0), (gv + rv,) * 2), "wrap"), ((gr + rr,) * 2, (0, 0)))
-    total = signal.fftconvolve(pad(P), win, mode="valid")
-    count = signal.fftconvolve(pad(np.ones_like(P)), win, mode="valid")
-    snr_db = 10 * np.log10(P / (total / count))              # each cell over its local noise
-    det = snr_db > bias_db
-    r_ax, v_ax = axes or (np.arange(P.shape[0]), np.arange(P.shape[1]))
-    hits = [(r_ax[i], v_ax[j], snr_db[i, j]) for i, j in zip(*np.nonzero(det))]
-    return det, hits
-```
-
-The SNR in each entry is the cell's power over its own local noise estimate, the same quantity the threshold tests, so it is the number to compare with Lesson 27.
+The synthetic map holds a walker, a hand, and the clutter a 2-pulse canceller leaves near the radar. CFAR declares both targets and the strongest clutter cell. Each target is a cluster, because its peak spreads into neighbors that are also well above the noise; the detection list the notebook keeps has one entry per cluster, its strongest cell, in meters and meters per second.
 ::::
 
 ::::{frame} Measuring the False-Alarm Rate
@@ -345,35 +251,25 @@ $$
 \hat{P}_{fa} = \frac{\text{false detections}}{\text{cells tested}}
 $$
 
-- At $10^{-6}$, a $256 \times 128$ map averages one false alarm every 31 maps.
 - Check the design at a lower bias, where false alarms are common.
+- A count scatters by about its own square root.
 - $P_d$ is the fraction of maps that find the target.
 :::
 
-We set the bias from a design $P_{fa}$ and check it by counting. On maps with no target, or in the cells far from any target, every detection is a false alarm, and the measured probability is the number of false detections over the number of cells tested.
+We check the bias by counting: on a map with no target, every detection away from the clutter is a false alarm. At $10^{-6}$ a map of $256 \times 128$ cells averages one every 31 maps, too few to count, so we check the design at $10^{-3}$ or $10^{-4}$, where the expected count is $P_{fa}$ times the cells tested: 33 and 3. A count scatters by about its own square root, $33 \pm 6$ and $3 \pm 2$. A count well above the design means the reference cells break an assumption: noise of a different level, or cells a window has correlated, which average like fewer independent ones.
 
-Counting false alarms at the design rate takes many maps: a map of $256 \times 128$ cells is 32 768 decisions, so at $10^{-6}$ it averages 0.03 false alarms, one every 31 maps. Counting ten of them to get the rate within about a third takes 305 maps. Instead, we lower the bias to a design $P_{fa}$ of $10^{-3}$ or $10^{-4}$, where a single map has 3 to 33 false alarms, and check the measured rate against $(1 + \alpha/N)^{-N}$ at a few biases. The expected count is $P_{fa}$ times the cells tested, and a count of rare, independent events scatters by about its own square root: $33 \pm 6$, and $3 \pm 2$. If the counts follow the curve, the extrapolation to $10^{-6}$ is sound; if they come out high, either the noise in the reference cells does not match the noise in the cells under test, or a window before the FFT has correlated the reference cells, so that $N$ overstates the independent samples the estimate averages. Correlated cells average like fewer independent ones, the estimate scatters more, and the low estimates let more noise through.
-
-A display that redraws one range profile at a time asks a different question: in how many updates does anything cross? With $M$ cells tested an update, the chance that at least one crosses is
-
-$$
-\begin{aligned}
-P_\text{any} &= 1 - \left(1 - P_{fa}\right)^M .
-\end{aligned}
-$$
-
-Take 6 reference cells a side, $N = 12$, a 9 dB bias, and 100 cells an update:
+A display that redraws one range profile at a time asks how many updates hold any crossing. With 6 reference cells a side, $N = 12$, a 9 dB bias, and $M = 100$ cells an update:
 
 $$
 \begin{aligned}
 P_{fa} &= \left(1 + \frac{7.94}{12}\right)^{-12} = 2.3\times 10^{-3} \\
-P_\text{any} &= 1 - \left(1 - 2.3\times 10^{-3}\right)^{100} = 0.20
+P_\text{any} &= 1 - \left(1 - P_{fa}\right)^{M} = 1 - \left(1 - 2.3\times 10^{-3}\right)^{100} = 0.20
 \end{aligned}
 $$
 
 so about 6 of 30 updates hold a crossing.
 
-We measure the probability of detection the same way, against a known target: the fraction of maps in which CFAR declares it. To predict it, read <a href="../L27-radar-detection/index.html#frame-pd-against-pfa">Lesson 27's curves</a>, or invert Albersheim's equation, at the target's SNR less the CFAR loss of the window. A steady target with 13 dB of SNR, tested by a 32-cell window at $10^{-6}$, loses 1.0 dB and is found as often as a 12 dB target with the noise known. Albersheim's equation from Lesson 27, run backward for one pulse, gives that $P_d$:
+We measure $P_d$ the same way, as the fraction of maps that find a known target. To predict it, take the target's SNR less the window's CFAR loss and read <a href="../L27-radar-detection/index.html#frame-pd-against-pfa">Lesson 27's curves</a>, or run Albersheim's equation backward. A steady target with 13 dB of SNR and a 32-cell window at $10^{-6}$ loses 1.0 dB, so it behaves like 12 dB with the noise known:
 
 $$
 \begin{aligned}
@@ -384,28 +280,21 @@ P_d &= \frac{1}{1 + e^{-B}} = 0.69
 \end{aligned}
 $$
 
-Lesson 27's curve reads 0.68 at 12 dB. Albersheim's fit holds for $P_d$ from 0.1 to 0.9; past 0.9, read the curve or average the Marcum $P_d$ exactly. Which curve applies depends on what changes from map to map. If only the noise changes, the target is steady, and Lesson 27's steady curves apply. A hand or a person whose own echo changes from map to map follows the Swerling numbers of Lesson 27 instead, which are lower at the same average SNR.
+Lesson 27's curve reads 0.68; past $P_d = 0.9$, Albersheim's fit no longer holds, so read the curve. If only the noise changes from map to map, the target is steady; a hand or a person whose own echo fluctuates follows Lesson 27's lower Swerling numbers.
 ::::
 
 ::::{frame} Summary
 :class: read-only
 
-| Symbol / idea | What it is | Number to remember |
+| Idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| Fixed threshold, noise up by $g$ | $P_{fa}' = P_{fa}^{1/g}$ | 3 dB: $10^{-6} \to 10^{-3}$ |
-| Cell under test, guard, reference | test one cell; skip its neighbors; average the next ones | 2 guard and 16 reference cells a side |
 | CA-CFAR | $T = \alpha\hat{P}_n$, $P_{fa} = (1 + \alpha/N)^{-N}$ | independent of $P_n$ |
-| Bias | $\alpha = N(P_{fa}^{-1/N} - 1)$ | 12.4 dB for 32 cells at $10^{-6}$; 11.4 dB as $N \to \infty$ |
-| CFAR loss | extra SNR for the same $P_d$ | 2.1 dB at 16 cells, 1.0 dB at 32 |
-| Guard cells | keep the target's spread out of the estimate | Hann: −6 dB one cell away |
-| Masking | a second target raises the threshold | 24 dB eight cells away hides 18 dB |
-| Clutter edge | one average over two noise levels | $P_{fa}$ to $10^{-3}$ just inside the clutter |
-| Greatest-of, smallest-of | keep the larger or smaller half | GO for edges, SO for close targets; 0.2 and 0.7 dB more loss |
-| Ends of the map | range: one-sided; Doppler: wraps | one-sided at the same bias: $8 \times 10^{-6}$ |
-| 2D CFAR | nested boxes on the range-Doppler map | 1 guard, 3 reference each way: 72 cells, 11.8 dB, 0.4 dB loss |
-| Measured $P_{fa}$ | false detections over cells tested | $10^{-6}$ on $256 \times 128$: one every 31 maps |
-| Updates with a crossing | $1 - (1 - P_{fa})^M$ for $M$ cells an update | 6 of 30 for $N = 12$, 9 dB, 100 cells |
-| Bias and range | $R_2/R_1 = 10^{-\Delta/40}$ | 6 dB more: 0.71 of the range |
+| Bias | $\alpha = N(P_{fa}^{-1/N} - 1)$ | 12.4 dB for 32 cells at $10^{-6}$ |
+| CFAR loss, range | extra SNR; $R_2/R_1 = 10^{-\Delta/40}$ | 1.0 dB at 32 cells; 6 dB: 0.71 |
+| Guard cells | keep the target's spill out | Blackman needs three |
+| Masking, clutter edge | another echo or noise level in the window | misses and false alarms |
+| Greatest-of, smallest-of | keep the larger or smaller half | GO for edges, SO for close targets |
+| Counting | false detections over cells; $1 - (1 - P_{fa})^M$ an update | scatter: the square root |
 ::::
 
 ::::{frame} Pre-Lab
@@ -415,7 +304,7 @@ Part 1 of the L30 Lab packet is the pre-lab. Do it before the lab and bring it w
 
 | Part 1 | You predict | Method | Checked in |
 | :-- | :-- | :-- | :-- |
-| Table A | whether a target 3 m out is found at the app's opening setting, at the lesson's window, and with no guard cells | Choosing the Guard Cells; Failures of Cell Averaging; The Ends of the Map | Steps 6 to 8 |
+| Table A | whether a target 3 m out is found at the app's opening setting, at the lesson's window, and with no guard cells | Cell Under Test, Guard, and Reference; Choosing the Guard Cells; Failures of Cell Averaging | Steps 6 to 8 |
 | Table B | how much a 3 dB higher bias shortens the farthest range | CFAR Loss | Steps 9 to 12 |
 | Table C | updates of 30 with a noise crossing at three biases | The Bias From the False-Alarm Probability; Measuring the False-Alarm Rate | Steps 13 to 15 |
 | Table D | the 2D bias for two false-alarm rates, and the false alarms on an empty map | 2D CFAR on the Range-Doppler Map; Measuring the False-Alarm Rate | Step 17 |
