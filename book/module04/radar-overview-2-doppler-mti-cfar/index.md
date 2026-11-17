@@ -46,14 +46,14 @@ with room for notes. Print from read mode for the whole lesson.
 ::::{frame} The Processing Chain
 
 :::{present}
-<img src="../../viz/img/L29-chain.svg" alt="The processing chain as five boxes in a row: the burst of chirps, MTI, the range FFT of each chirp, the Doppler FFT of each range cell, and the range-Doppler map. The MTI box is highlighted and labeled off, 2-pulse, or 3-pulse" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/overview-chain.svg" alt="The processing chain as eight boxes in two rows joined by arrows. First row: the burst of chirps, MTI, the range FFT, and the Doppler FFT. Second row: the range-Doppler map, CFAR, classify, and track. Under each box is the lab that adds it: L28 for the range FFT; L29 for MTI, the Doppler FFT, and the map; L30 for CFAR; L31 for classify and track" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 
-- The L29 Lab builds this chain, up to the range-Doppler map.
-- CFAR then tests every cell of the map (L30 Lab).
-- The detections feed a classifier and a tracker (L31 Lab).
+- The first row and the map are the L28 and L29 Labs.
+- CFAR then tests every cell of the map.
+- The detections feed a classifier and a tracker.
 :::
 
-The figure is the chain of the L29 Lab. The radar sends a burst of chirps. MTI, when it is on, subtracts successive chirps to remove returns that do not move. The range FFT of Overview 1 turns each chirp into a range profile, and a second FFT across the chirps measures velocity in every range cell. The result is the range-Doppler map. Two more stages follow the map: CFAR decides which cells hold a target, and the L31 Lab classifies and tracks what CFAR reports. Today takes the stages in the order the labs do: the map first, then MTI, CFAR, classification, and tracking.
+The figure is the whole chain, with the lab that adds each stage. The radar sends a burst of chirps. MTI, when it is on, subtracts successive chirps to remove returns that do not move. The range FFT of Overview 1 turns each chirp into a range profile, and a second FFT across the chirps measures velocity in every range cell. The result is the range-Doppler map. Two more stages follow the map: CFAR decides which cells hold a target, and the L31 Lab classifies and tracks what CFAR reports. We take the stages in the order the labs do: the map first, then MTI, CFAR, classification, and tracking.
 ::::
 
 ::::{frame} A Burst of Chirps
@@ -87,11 +87,18 @@ $$
 <img src="../../viz/img/L29-phasor.svg" alt="Left: twelve phasors on the unit circle, each 5.8 degrees past the last, the hand's range cell from chirp 0 to chirp 11. Right: a target whose phase advances 240 degrees a chirp, drawn at chirps 0 to 3; the dashed arc of plus 240 degrees and the shorter arc of minus 120 degrees reach the same point" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
 
 - A closing hand at 0.6 m/s advances the phase 5.8° a chirp.
+- At 240° a chirp the FFT reads −120°, so the target aliases.
 :::
 
 After the range FFT, a target is in the same range cell of every chirp, and the phase of that cell is the round trip measured in wavelengths. A target closing at $v$ is $v\ T_\text{PRI}$ nearer at each chirp, so its phase advances by the same step every chirp. A steady phase advance is a tone, and its frequency is the Doppler shift $2v/\lambda$ of <a href="../L26-range-resolution-doppler/index.html#frame-the-doppler-shift">Lesson 26</a>. A closing target has a positive Doppler shift and an opening target a negative one.
 
-For the hand closing at 0.6 m/s at a 3.0 cm wavelength, the shift is 40 Hz, and over one 0.4 ms interval the phase advances $360° \times 40\ \text{Hz} \times 0.4\ \text{ms} = 5.8°$. The left of the figure draws those steps. The right draws a target fast enough to advance 240° a chirp, which the next frame takes up. <a href="../L29-range-doppler-mti/index.html#frame-the-phase-from-chirp-to-chirp">Lesson 29</a> has the details.
+For the hand closing at 0.6 m/s at a 3.0 cm wavelength, the shift is 40 Hz, and over one 0.4 ms interval the phase advances
+
+$$
+360° \times 40\ \text{Hz} \times 0.4\ \text{ms} = 5.8° .
+$$
+
+The left of the figure draws those steps. The right draws a target fast enough to advance 240° a chirp. An advance of +240° and one of −120° reach the same point, so the FFT reads them as the same phase step and reports that target at the wrong velocity; the next frame gives the limit. <a href="../L29-range-doppler-mti/index.html#frame-the-phase-from-chirp-to-chirp">Lesson 29</a> has the details.
 ::::
 
 ::::{frame} The Range-Doppler Map
@@ -100,10 +107,10 @@ For the hand closing at 0.6 m/s at a 3.0 cm wavelength, the shift is 40 Hz, and 
 <img src="../../viz/img/L29-rd-map.svg" alt="A range-Doppler map of the teaching burst from 0 to 4 m in range and minus 6 to plus 6 m/s in velocity, with a color bar in dB relative to the leakage. The kit's leakage at 0 m and a wall at 2.9 m sit in the 0 m/s column. A hand at 1.5 m sits at plus 0.6 m/s, about 30 dB below the leakage. A fidget spinner at 2.1 m spreads into a comb of lines from about minus 3 to plus 3 m/s" style="max-width: 500px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- A second FFT, across the chirps, finds the velocity in every range cell.
-- Leakage and the wall do not move: 0 m/s.
+- A second FFT across the chirps finds each range cell's velocity.
+- Leakage and the wall do not move, so they are at 0 m/s.
 - The hand is at +0.6 m/s; positive is closing.
-- The spinner spreads over a band of velocities.
+- The spinner spreads over a velocity band.
 :::
 
 The second FFT runs down each column of the matrix and finds the Doppler tone in every range cell. The result is the **range-Doppler map**: range on one axis, radial velocity on the other, and the power in each cell as the color. The figure is a map of the teaching burst for a scene like the one in the L29 Lab. The kit's leakage at 0 m and a wall at 2.9 m do not move, so both are in the 0 m/s column, and they are the strongest returns on the map. The hand at 1.5 m is at +0.6 m/s, about 30 dB below the leakage. A fidget spinner at 2.1 m has arms that move toward and away from the kit, so it spreads over a band of velocities at one range.
@@ -116,33 +123,39 @@ This second FFT is also the coherent integration of Overview 1: it adds the $M$ 
 :::{present}
 $$
 \begin{aligned}
-\Delta v &= \frac{\lambda}{2M\ T_\text{PRI}} \\
-&= \frac{0.030\ \text{m}}{2\ (128)(0.4\ \text{ms})} \\
-&= 0.29\ \text{m/s} \\
-v_\text{max} &= \pm\frac{\lambda}{4\ T_\text{PRI}} \\
-&= \pm\frac{0.030\ \text{m}}{4\ (0.4\ \text{ms})} \\
-&= \pm 18.75\ \text{m/s}
+\Delta v &= \frac{\lambda}{2M\ T_\text{PRI}} = 0.29\ \text{m/s} \\
+v_\text{max} &= \pm\frac{\lambda}{4\ T_\text{PRI}} = \pm 18.75\ \text{m/s}
 \end{aligned}
 $$
 :::
 :::{present}
+<img src="../../viz/img/L29-burst-choices.svg" alt="The hand's spot on the teaching burst's map three times, between 0.5 and 2.5 m and minus 3 to plus 3 m/s: with 128 chirps and 400 MHz a small spot at plus 0.6 m/s; with 32 chirps the same range height and four times as wide in velocity; with a 160 MHz chirp the same width in velocity and about 2.5 times as tall in range" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+
 - More chirps make the velocity cell finer.
-- A shorter $T_\text{PRI}$ raises the limit; a faster target aliases.
+- A shorter $T_\text{PRI}$ raises the limit, and a target faster than $v_\text{max}$ aliases.
 :::
 
-The Doppler FFT observes each range cell for the length of the burst, $M\ T_\text{PRI}$, so it separates Doppler tones that differ by $1/(M\ T_\text{PRI})$. Multiplying by $\lambda/2$ converts that to the velocity cell $\Delta v$. The burst samples the phase once every $T_\text{PRI}$, so the FFT distinguishes only Doppler shifts within $\pm 1/(2T_\text{PRI})$, which gives the velocity limit $v_\text{max}$. That limit is the unambiguous velocity of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>, with the chirp rate as the PRF.
+The Doppler FFT observes each range cell for the length of the burst, $M\ T_\text{PRI}$, so it separates Doppler tones that differ by $1/(M\ T_\text{PRI})$. Multiplying by $\lambda/2$ converts that to the velocity cell $\Delta v$. The burst samples the phase once every $T_\text{PRI}$, so the FFT distinguishes only Doppler shifts within $\pm 1/(2T_\text{PRI})$, which gives the velocity limit $v_\text{max}$. On the teaching burst,
 
-A target faster than the limit aliases: at +25 m/s the phase advances 240° a chirp, the FFT reads that as −120°, and the map reports −12.5 m/s. Each setting of the burst controls one axis of the map. The number of chirps sets the velocity cell, the interval between chirps sets the velocity limit, and the bandwidth sets the range cell, $c/2B$. <a href="../L29-range-doppler-mti/index.html#frame-the-velocity-axis">Lesson 29</a> works the cases.
+$$
+\begin{aligned}
+\Delta v &= \frac{0.030\ \text{m}}{2\ (128)(0.4\ \text{ms})} = 0.29\ \text{m/s} \\
+v_\text{max} &= \pm\frac{0.030\ \text{m}}{4\ (0.4\ \text{ms})} = \pm 18.75\ \text{m/s}.
+\end{aligned}
+$$
+
+That limit is the unambiguous velocity of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>, with the chirp rate as the PRF.
+
+A target faster than the limit aliases: at +25 m/s the phase advances 240° a chirp, the FFT reads that as −120°, and the map reports −12.5 m/s. Each setting of the burst controls one axis of the map, and the figure shows the hand's spot for three bursts: with 32 chirps instead of 128 it is four times as wide in velocity, and with a 160 MHz chirp it is taller in range. The number of chirps sets the velocity cell, the interval between chirps sets the velocity limit, and the bandwidth sets the range cell, $c/2B$, which is 0.375 m for 400 MHz. <a href="../L29-range-doppler-mti/index.html#frame-the-velocity-axis">Lesson 29</a> works the cases.
 ::::
 
 ::::{frame} Clutter and MTI
 
 :::{present}
-<img src="../../viz/img/L29-mti-maps.svg" alt="The range-Doppler map of the teaching burst three times, with one color bar in dB relative to the leakage: with no MTI, with the 2-pulse canceller, and with the 3-pulse canceller, the leakage, wall, hand, and spinner labeled in the first. With either canceller the leakage at 0 m and the wall at 2.9 m drop to the noise floor. The hand at plus 0.6 m/s is fainter with the 2-pulse canceller and drops below the color scale with the 3-pulse, together with the floor around it. The spinner's outer lines survive and its center is removed" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L29-mti-maps.svg" alt="The range-Doppler map of the teaching burst three times, with one color bar in dB relative to the leakage: with no MTI, with the 2-pulse canceller, and with the 3-pulse canceller, the leakage, wall, hand, and spinner labeled in the first. With either canceller the leakage at 0 m and the wall at 2.9 m drop to the noise floor. The hand at plus 0.6 m/s is fainter with the 2-pulse canceller and drops below the color scale with the 3-pulse, together with the floor around it. The spinner's outer lines survive and its center is removed" style="max-width: 680px; width: 100%; display: block; margin: 0 auto;">
 
-- **Clutter**, the returns that do not move, is at 0 m/s and is the strongest return.
-- **MTI** removes it: the leakage and the wall drop to the noise floor.
-- Slow targets drop too.
+- **Clutter**, the returns that do not move, is at 0 m/s. **MTI** drops it to the noise floor.
+- MTI also weakens slow targets: the 2-pulse canceller takes 20.0 dB off the hand at 0.6 m/s.
 :::
 
 The leakage, the walls, the table, and the stand return the same echo on every chirp. Radar engineers call these returns **clutter**. On the map they are at 0 m/s, and in a lab room they are the strongest returns: the leakage is 30 dB above the hand. Clutter hides slow targets, because its sidelobes in Doppler spread onto the velocities near zero, and it raises a CFAR threshold computed from the cells beside it.
@@ -153,17 +166,19 @@ The leakage, the walls, the table, and the stand return the same echo on every c
 ::::{frame} Pulse Cancellers
 
 :::{present}
-<img src="../../viz/img/L29-canceller-blocks.svg" alt="Block diagrams. The 2-pulse canceller: the input chirp x_m goes straight to a summer with a plus sign, and through a delay of one PRI to the summer with a minus sign, giving the output y_m. The 3-pulse canceller: two of those stages in a row" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L29-canceller.svg" alt="Power gain in dB against velocity from minus 45 to plus 45 m/s for the 2-pulse and 3-pulse cancellers on the teaching burst. Both are zero at 0 and at plus and minus 37.5 m/s, the blind speeds, and peak at plus and minus 18.75 m/s. The 3-pulse notch is wider and deeper and its peak twice as high in dB. The unambiguous window, plus and minus 18.75 m/s, is shaded, and dots mark the gains at 0.6 and 16 m/s from the table" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- **2-pulse:** subtract the chirp before from each chirp. A fixed return cancels.
-- **3-pulse:** the same subtraction twice.
-- A hand at 0.6 m/s loses 20.0 dB, then 39.9 dB.
+- The 2-pulse canceller subtracts the previous chirp from each, so a fixed return cancels.
+- The 3-pulse canceller subtracts twice.
+- A hand at 0.6 m/s loses 20.0 dB (2-pulse) or 39.9 dB (3-pulse), and so does its noise.
 :::
 
-The **2-pulse canceller** subtracts the previous chirp from each chirp, sample by sample, before the FFTs. A stationary return is the same in both chirps, so it subtracts to zero. A moving target's phase has advanced between the two chirps, so some of it survives, and the faster the target, the more survives. The **3-pulse canceller** applies the same subtraction twice in a row, which removes more of everything near 0 m/s.
+<img src="../../viz/img/L29-canceller-blocks.svg" alt="Block diagrams. The 2-pulse canceller: the input chirp x_m goes straight to a summer with a plus sign, and through a delay of one PRI to the summer with a minus sign, giving the output y_m. The 3-pulse canceller: two of those stages in a row" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
 
-A canceller is a filter with a notch at 0 m/s, and a slow target is inside the notch. On the teaching burst a hand at 0.6 m/s loses 20.0 dB through the 2-pulse canceller and 39.9 dB through the 3-pulse. The noise in the hand's own velocity cell passes through the same filter, so the hand stands as high above its own floor as before. In the app, the MTI setting chooses off, 2-pulse, or 3-pulse. With strong clutter and fast targets the 3-pulse canceller gives the cleanest map, and for a slow hand the 2-pulse canceller or none keeps more of the target. <a href="../L29-range-doppler-mti/index.html#frame-canceller-response-and-blind-speeds">Lesson 29</a> gives the canceller's gain at every velocity.
+The block diagrams show both cancellers. The **2-pulse canceller** subtracts the previous chirp from each chirp, sample by sample, before the FFTs. A stationary return is the same in both chirps, so it subtracts to zero. A moving target's phase has advanced between the two chirps, so some of it survives, and the faster the target, the more survives. The **3-pulse canceller** applies the same subtraction twice in a row, which removes more of everything near 0 m/s.
+
+A canceller is a filter with a notch at 0 m/s, and a slow target is inside the notch. The plot is the gain of each canceller against velocity on the teaching burst, with dots at the hand's 0.6 m/s: the hand loses 20.0 dB through the 2-pulse canceller and 39.9 dB through the 3-pulse. The noise in the hand's own velocity cell passes through the same filter, so the hand stands as high above its own floor as before, but it is lower on the map's color scale, and in the 3-pulse map of the last frame it drops off the scale. The gain is also zero at the blind speeds, every 37.5 m/s on this burst, which nothing in the labs reaches. In the app, the MTI setting chooses off, 2-pulse, or 3-pulse. <a href="../L29-range-doppler-mti/index.html#frame-canceller-response-and-blind-speeds">Lesson 29</a> gives the canceller's gain at every velocity.
 ::::
 
 ::::{frame} Range-Doppler Explorer
@@ -204,13 +219,18 @@ P_{fa} &= \left(1 + \frac{\alpha}{N}\right)^{-N}
 \end{aligned}
 $$
 
-- $P_{fa}$ depends on the bias $\alpha$ and the reference-cell count $N$, not on the noise power.
-- $P_{fa} = 10^{-6}$ with $N = 32$ takes 12.4 dB; a known noise power took 11.4 dB.
+- $P_{fa}$ depends on $\alpha$ and $N$, not on the noise power.
+- $P_{fa} = 10^{-6}$ with $N = 32$ takes 12.4 dB; known noise took 11.4 dB.
+:::
+:::{present}
+<img src="../../viz/img/L30-cfar-loss.svg" alt="Extra SNR needed for Pd = 0.9 at Pfa = 10 to the minus 6, against the number of reference cells on a log axis from 4 to 256. It falls from about 8 dB at 5 cells to 2.1 dB at 16 and 1.0 dB at 32, and below half a dB past about 70" style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+
+- Fewer reference cells need more SNR: 2.1 dB at 16, 1.0 dB at 32.
 :::
 
 With $\hat{P}_n$ the average of the $N$ reference cells, the threshold is $T = \alpha\hat{P}_n$. The bias $\alpha$ is the number we choose, and it sets the probability of false alarm. The noise power does not appear in the expression for $P_{fa}$, which is what "constant false-alarm rate" means: the false alarms stay at the design value wherever the noise level is.
 
-For $P_{fa} = 10^{-6}$ and 32 reference cells the bias is 17.3, or 12.4 dB. Overview 1's threshold for the same $P_{fa}$ with the noise known was 11.4 dB. The extra 1.0 dB comes from estimating the noise from a finite number of cells: the estimate scatters, and a higher bias covers the times it comes out low. More reference cells bring the bias closer to 11.4 dB, but a wider window is more likely to reach cells where the noise is at a different level.
+For $P_{fa} = 10^{-6}$ and 32 reference cells the bias is 17.3, or 12.4 dB. Overview 1's threshold for the same $P_{fa}$ with the noise known was 11.4 dB. The extra 1.0 dB comes from estimating the noise from a finite number of cells: the estimate scatters, and a higher bias covers the times it comes out low. The figure shows what that estimate takes from detection: for $P_d = 0.9$ a target needs 1.0 dB more SNR with 32 reference cells and 2.1 dB more with 16. More reference cells bring the bias closer to 11.4 dB, but a wider window is more likely to reach cells where the noise is at a different level.
 
 The three controls each do one thing. A higher bias gives fewer false alarms and fewer detections of weak targets. More guard cells keep a wide target out of its own estimate. More reference cells steady the estimate and make it less local. <a href="../L30-cfar/index.html#frame-the-bias-from-the-false-alarm-probability">Lesson 30</a> derives the bias.
 ::::
@@ -250,10 +270,10 @@ Both variants average the two sides of the window separately and keep one. **Sma
 <img src="../../viz/img/L30-rd-detections.svg" alt="A range-Doppler map from 0 to 9 m and minus 3 to plus 3 meters per second after MTI. Red squares mark the CFAR detections: a cluster of nine cells on a walker at 6 m and plus 1.2 meters per second, a cluster of five on a hand at 2.1 m and minus 0.6 meters per second, and one cell of leftover clutter at 0 m and zero velocity" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- On the map, the guard and reference cells are boxes around the cell under test.
+- On the map the window is a guard box inside a reference ring.
 - Each detection is a range, a velocity, and an SNR.
 - One target gives a cluster of detections.
-- Run MTI first.
+- Without MTI, CFAR reports the 0 m/s clutter as targets.
 :::
 
 The range-Doppler map has two axes, so the CFAR window does too: the guard cells are a box around the cell under test, and the reference cells are the ring around that box. The figure is a simulated map after MTI, with a walker at 6.0 m and a hand at 2.1 m. The red squares are the cells CFAR declares. Each target produces a cluster of detections, because its peak spreads into the cells beside it, and the notebook reduces each cluster to its strongest cell. The output is a list of detections, each with a range, a radial velocity, and an SNR.
@@ -274,23 +294,25 @@ Without MTI, the clutter at 0 m/s is a ridge along the map. To the CFAR window t
 
 A detection says that something is at a range and a velocity. It does not say what the target is. The parts of a target that move relative to its body, a rotor's blades or a walker's arms and legs, each have their own Doppler shift, and that is **micro-Doppler**. A **spectrogram** shows it: the Doppler FFT of one range cell taken in short windows, one after another, so that velocity is on one axis and time on the other.
 
-The figure is the spectrogram of four example targets. A walker shows a line at the torso's speed with the limbs swinging about it once a stride. A fan shows a steady band out to the speed of its blade tips. A spinner's band is strongest near its tips, and a waved hand draws one trace that swings through zero. The L31 Lab measures three features of each spectrogram, such as how wide the band is and how strongly it repeats, and a classifier assigns the class whose stored features are nearest. You then count how often it is right. <a href="../L31-classification-tracking/index.html#frame-four-signatures">Lesson 31</a> covers the signatures, the features, and the classifier.
+The figure is the spectrogram of four example targets. A walker shows a line at the torso's speed with the limbs swinging about it once a stride. A fan shows a steady band out to the speed of its blade tips. A spinner's band is strongest near its tips (this one is a larger example than the spinner on the map, with tips at 4.7 m/s), and a waved hand draws one trace that swings through zero. The L31 Lab measures three features of each spectrogram, such as how wide the band is and how strongly it repeats, and a classifier assigns the class whose stored features are nearest. You then count how often it is right. <a href="../L31-classification-tracking/index.html#frame-four-signatures">Lesson 31</a> covers the signatures, the features, and the classifier.
 ::::
 
 ::::{frame} Tracking in Range and Angle
 
 :::{present}
-<img src="../../viz/img/L31-alpha-beta.svg" alt="Range against time for eight seconds: a walker walks out from 2 to about 6.6 meters, turns, and walks back; the detections step in 0.375 meter bins around the truth; the alpha equals 0.4 track follows the truth closely through the turn, and the alpha equals 0.15 track lags it by up to 0.9 meters" style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
-:::
-:::{present}
-- The **alpha-beta filter** predicts the next range, compares it with the detection, and corrects.
-- A small alpha smooths more and lags a turn by up to 0.9 m.
-- **Monopulse** gives the angle from two subarrays in one look.
+<div style="display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: center; align-items: center;">
+<a href="../../viz/img/L31-alpha-beta.svg" target="_blank" rel="noopener"><img src="../../viz/img/L31-alpha-beta.svg" alt="Range against time for eight seconds: a walker walks out from 2 to about 6.6 meters, turns, and walks back; the detections step in 0.375 meter bins around the truth; the alpha equals 0.4 track follows the truth closely through the turn, and the alpha equals 0.15 track lags it by up to 0.9 meters" style="width: clamp(200px, 40vw, 385px); height: auto;"></a>
+<a href="../../viz/img/L31-sweep-vs-mono.svg" target="_blank" rel="noopener"><img src="../../viz/img/L31-sweep-vs-mono.svg" alt="A crossing walker's bearing against time over four seconds, from minus 27 to plus 27 degrees: beam-sweep looks every 1.1 seconds, each with its 13.6 degree beam shaded, are far apart, while monopulse frames every 0.1 seconds follow the bearing closely" style="width: clamp(200px, 40vw, 385px); height: auto;"></a>
+</div>
+
+- The **alpha-beta filter** predicts the range, compares the detection, and corrects.
+- With $\alpha = 0.15$ the track is smoother but lags the turn by up to 0.9 m.
+- **Monopulse** gives the angle every 0.1 s; a beam sweep looks every 1.1 s.
 :::
 
-A detection list is noisy: each range is the center of a range cell, and some frames miss the target. A **track** joins one target's detections into a single estimate of its range and velocity, frame after frame. The **alpha-beta filter** is the simplest tracker. Each frame it predicts where the target should be from its last estimate, compares the prediction with the new detection, and corrects the range by a fraction $\alpha$ of the difference and the velocity by a fraction set by $\beta$. In the figure a walker goes out and back. The track with $\alpha = 0.4$ follows the walker through the turn, and the track with $\alpha = 0.15$ is smoother but lags the turn by up to 0.9 m.
+A detection list is noisy: each range is the center of a range cell, and some bursts miss the target. A **track** joins one target's detections into a single estimate of its range and velocity, burst after burst. The **alpha-beta filter** is the simplest tracker. After each burst it predicts where the target should be from its last estimate, compares the prediction with the new detection, and corrects the range by a fraction $\alpha$ of the difference and the velocity by a fraction set by $\beta$. In the first figure a walker goes out and back (select either figure to open it full size). The track with $\alpha = 0.4$ follows the walker through the turn, and the track with $\alpha = 0.15$ is smoother but lags the turn by up to 0.9 m.
 
-Range comes from the FMCW processing, and angle comes from the array. **Monopulse**, from the <a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">L24 Lab</a>, compares the phases of the array's two subarray channels in the detection's own cell, so it gives the angle in one look, with no beam sweep. A walker crossing the room moves too far between the looks of a beam sweep, and monopulse measures the angle on every frame. <a href="../L31-classification-tracking/index.html#frame-the-alpha-beta-filter">Lesson 31</a> covers both.
+Range comes from the FMCW processing, and angle comes from the array. **Monopulse**, from the <a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">L24 Lab</a>, compares the phases of the array's two subarray channels in the detection's own cell, so it gives the angle in one look, with no beam sweep. The second figure is the bearing of a walker crossing the room. A beam sweep looks every 1.1 s, and the walker leaves its 13.6° beam between looks; monopulse measures the angle on every burst, 0.1 s apart on Lesson 31's example burst, and follows the walker. <a href="../L31-classification-tracking/index.html#frame-the-alpha-beta-filter">Lesson 31</a> covers both.
 ::::
 
 ::::{frame} Four Labs, One Report
@@ -309,14 +331,14 @@ Range comes from the FMCW processing, and angle comes from the array. **Monopuls
 
 The four labs are one processing chain, built a stage at a time. The range FFT of the L28 Lab is the first step of the L29 Lab's range-Doppler map, the L30 Lab runs CFAR on those maps, and the L31 Lab classifies and tracks what CFAR detects. The course provides the chain in the Phaser app and in `radar_lab.py`; you run it, change its settings, and explain what you see. Keep your captures, notebooks, and plots from every lab in one folder, because each lab uses the ones before it.
 
-Each lab has a packet: you predict before class, measure in class, and analyze afterward. The packets are not the report. The <a href="../final-project/index.html">final project</a> is one report on the radar as a system, and it earns credit for your explanation of why your results came out as they did.
+Each lab has a packet: you predict before class, measure in class, and analyze afterward. The packets are not the report. The <a href="../final-project/index.html">final project</a> is one report on the radar as a system, and I grade it on your explanation of why your results came out as they did.
 ::::
 
 ::::{frame} Looking Ahead
 
 :::{present}
 - Before each lab, read the lesson half of its page and do Part 1 of its packet.
-- The <a href="../L28-fmcw/index.html">L28 Lab</a> is first: the 0 m frequency, range, and a walk on the waterfall.
+- The <a href="../L28-fmcw/index.html">L28 Lab</a> is first: it measures the 0 m frequency, the range to a target, and a walk on the range waterfall.
 :::
 
 Each of the four pages, <a href="../L28-fmcw/index.html">Lesson 28</a>, <a href="../L29-range-doppler-mti/index.html">Lesson 29</a>, <a href="../L30-cfar/index.html">Lesson 30</a>, and <a href="../L31-classification-tracking/index.html">Lesson 31</a>, has a lesson half that works every method Part 1 of its packet asks for, and a Pre-Lab frame that maps each packet table to the frame that covers it.

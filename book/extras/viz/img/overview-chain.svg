@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 188" width="520" height="188" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="17">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5a5a5a"/></marker></defs>
+<rect x="5.0" y="10" width="108" height="46" rx="5" fill="#f4f5f7" stroke="#5a5a5a" stroke-width="1.6"/>
+<text x="59.0" y="39.0" text-anchor="middle" fill="#1a1a1a">burst</text>
+<rect x="139.0" y="10" width="108" height="46" rx="5" fill="#f8e3e4" stroke="#b01e24" stroke-width="1.6"/>
+<text x="193.0" y="39.0" text-anchor="middle" fill="#1a1a1a">MTI</text>
+<text x="193.0" y="76" text-anchor="middle" fill="#b01e24" font-weight="600">L29 Lab</text>
+<line x1="116.0" y1="33.0" x2="136.0" y2="33.0" stroke="#5a5a5a" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="273.0" y="10" width="108" height="46" rx="5" fill="#eef4fa" stroke="#004a85" stroke-width="1.6"/>
+<text x="327.0" y="39.0" text-anchor="middle" fill="#1a1a1a">range FFT</text>
+<text x="327.0" y="76" text-anchor="middle" fill="#004a85" font-weight="600">L28 Lab</text>
+<line x1="250.0" y1="33.0" x2="270.0" y2="33.0" stroke="#5a5a5a" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="407.0" y="10" width="108" height="46" rx="5" fill="#f8e3e4" stroke="#b01e24" stroke-width="1.6"/>
+<text x="461.0" y="39.0" text-anchor="middle" fill="#1a1a1a">Doppler FFT</text>
+<text x="461.0" y="76" text-anchor="middle" fill="#b01e24" font-weight="600">L29 Lab</text>
+<line x1="384.0" y1="33.0" x2="404.0" y2="33.0" stroke="#5a5a5a" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="5.0" y="112" width="108" height="46" rx="5" fill="#f8e3e4" stroke="#b01e24" stroke-width="1.6"/>
+<text x="59.0" y="141.0" text-anchor="middle" fill="#1a1a1a">map</text>
+<text x="59.0" y="178" text-anchor="middle" fill="#b01e24" font-weight="600">L29 Lab</text>
+<rect x="139.0" y="112" width="108" height="46" rx="5" fill="#e6f3ec" stroke="#1d7a4d" stroke-width="1.6"/>
+<text x="193.0" y="141.0" text-anchor="middle" fill="#1a1a1a">CFAR</text>
+<text x="193.0" y="178" text-anchor="middle" fill="#1d7a4d" font-weight="600">L30 Lab</text>
+<line x1="116.0" y1="135.0" x2="136.0" y2="135.0" stroke="#5a5a5a" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="273.0" y="112" width="108" height="46" rx="5" fill="#f6eedd" stroke="#8a5a00" stroke-width="1.6"/>
+<text x="327.0" y="141.0" text-anchor="middle" fill="#1a1a1a">classify</text>
+<text x="327.0" y="178" text-anchor="middle" fill="#8a5a00" font-weight="600">L31 Lab</text>
+<line x1="250.0" y1="135.0" x2="270.0" y2="135.0" stroke="#5a5a5a" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="407.0" y="112" width="108" height="46" rx="5" fill="#f6eedd" stroke="#8a5a00" stroke-width="1.6"/>
+<text x="461.0" y="141.0" text-anchor="middle" fill="#1a1a1a">track</text>
+<text x="461.0" y="178" text-anchor="middle" fill="#8a5a00" font-weight="600">L31 Lab</text>
+<line x1="384.0" y1="135.0" x2="404.0" y2="135.0" stroke="#5a5a5a" stroke-width="1.6" marker-end="url(#a)"/>
+<path d="M515.0,33.0 H523.0 V98.0 H-3.0 V135.0 H2.0" fill="none" stroke="#5a5a5a" stroke-width="1.6" marker-end="url(#a)"/>
+</svg>
