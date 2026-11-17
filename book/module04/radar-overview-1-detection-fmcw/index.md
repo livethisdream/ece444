@@ -251,7 +251,7 @@ The radar observes each beat for one chirp, $T_s$, and an FFT over a record of t
 ::::{frame} The 0 m Frequency
 
 :::{present}
-<img src="../../viz/img/L28-spectrum.svg" alt="Power in dBFS against beat frequency from 0 to 300 kHz for the worked chirp with the 0 m frequency at 100 kHz. Below 100 kHz the band is shaded as negative range. A dashed line at 100 kHz marks the leakage, the strongest peak. A target at 30 m peaks 40 kHz above it. A red line at 300 kHz marks half the sample rate, 150 m, past which beats alias" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L28-spectrum.svg" alt="Power in dBFS against beat frequency from 0 to 300 kHz for the worked chirp with the 0 m frequency at 100 kHz. Below 100 kHz the band is shaded as negative range. A dashed line at 100 kHz marks the leakage, the strongest peak. The room's wall at 5.5 m peaks 7.3 kHz above it, labeled. A target at 30 m peaks 40 kHz above it. A red line at 300 kHz marks half the sample rate, 150 m, past which beats alias" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
 - The PHASER puts a 0 m echo at $f_0$, 100 to 120 kHz; every beat adds to it.

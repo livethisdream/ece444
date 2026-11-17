@@ -102,11 +102,13 @@ def chirp() -> None:
     ta, tb = 0.30, 0.30 + tau
     fa = ta / T
     ax.annotate("", (ta, fa), (tb, fa), arrowprops=dict(arrowstyle="<->", color=INK, lw=1.0))
-    ax.text(ta - 0.04, fa, "delay", ha="right", va="center", fontsize=12)
+    # below and right of the echo ramp, clear of both ramps
+    ax.text(tb + 0.04, fa - 0.02, "delay", ha="left", va="top", fontsize=12)
     tv = 0.75
     ax.annotate("", (tv, tv / T), (tv, (tv - tau) / T),
                 arrowprops=dict(arrowstyle="<->", color=GREEN, lw=1.4))
-    ax.text(tv + 0.03, (tv - tau / 2) / T, "beat", color=GREEN, fontsize=12, va="center")
+    # above the transmitted ramp: beside the arrow the echo ramp runs through the label
+    ax.text(tv - 0.05, tv / T + 0.05, "beat", color=GREEN, fontsize=12, ha="right", va="bottom")
     ax.annotate("", (2.28, 0.0), (2.28, 1.0), arrowprops=dict(arrowstyle="<->", color=GRAY, lw=1.0))
     ax.text(2.31, 0.5, "bandwidth", color=GRAY, fontsize=12, va="center")
     ax.annotate("", (0.0, -0.27), (1.0, -0.27), arrowprops=dict(arrowstyle="<->", color=GRAY, lw=1.0),
@@ -229,7 +231,9 @@ def spectrum_abs() -> None:
     ax.axvline(100, color=GREEN, lw=1.0, ls="--")
     ax.text(50, -8, "below $f_0$:\nnegative range", color=GRAY, fontsize=10.5, ha="center", va="top")
     ax.text(103, -8, "$f_0$, 0 m:\nthe leakage", color=GREEN, fontsize=10.5, ha="left", va="top")
-    ax.annotate("target at 30 m,\n$f_0 + 40$ kHz", (140, -62), xytext=(160, -30), fontsize=10.5, color=INK,
+    # the simulated room's far wall, 5.5 m: 7.3 kHz above f0 at 1.33 kHz per meter
+    ax.text(111, -36, "wall, 5.5 m", color=INK, fontsize=10.5, ha="left", va="center")
+    ax.annotate("target at 30 m,\n$f_0 + 40$ kHz", (140, -62), xytext=(172, -30), fontsize=10.5, color=INK,
                 arrowprops=dict(arrowstyle="-", color=INK, lw=0.8))
     ax.annotate("", (300, -95), (300, -5), arrowprops=dict(arrowstyle="-", color=RED, lw=1.2))
     ax.text(296, -8, "$f_s/2$: 150 m,\nthen aliasing", color=RED, fontsize=10.5, ha="right", va="top")
