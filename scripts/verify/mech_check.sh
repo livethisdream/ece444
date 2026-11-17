@@ -58,7 +58,12 @@ echo "== ${LNN} =="
 # apply, so a lesson-half pass reports two expected failures until its lab
 # pass adds the procedure and links the packet.
 PRACTICE=1
-case "$NN" in 17|18|19|20|21|22|23|24|28|29|30|31) PRACTICE=0 ;; esac
+case "$NN" in 17|18|19|20|21|22|23|24|25|28|29|30|31) PRACTICE=0 ;; esac
+# Taught lessons with no lab of their own, so no packet to link either
+# (Neil, 2026-11-17: no practice problems for L25; its bench work is the
+# L28 Lab's).
+NOLAB=0
+case "$NN" in 25) NOLAB=1 ;; esac
 
 # Locate the lesson page, and take the module number from where it actually
 # lives rather than assuming a lesson-to-module mapping.
@@ -79,6 +84,8 @@ s="$REPO/book/extras/practice/ECE444_L${NN}_Practice_SOLUTIONS.pdf"
 if [ "$PRACTICE" = 1 ]; then
   [ -s "$tex" ] && ok "practice tex" || bad "practice tex missing"
   [ -s "$b" ] && [ -s "$s" ] && ok "practice PDFs present" || bad "practice PDFs missing"
+elif [ "$NOLAB" = 1 ]; then
+  ok "no practice set and no lab of its own"
 else
   ok "no practice set: the L$NN Lab packet replaces it"
 fi
@@ -198,6 +205,8 @@ if grep -q "Practice_blank.pdf" "$page"; then
 elif [ -n "$packet" ]; then
   [ -s "$REPO/book/extras/labs/$packet" ] && ok "lab packet linked in place of practice ($packet)" \
     || bad "lab packet $packet linked but not built"
+elif [ "$NOLAB" = 1 ]; then
+  ok "no practice or packet to link: L$NN has no lab"
 elif [ "$PRACTICE" = 0 ]; then
   bad "L$NN Lab packet not linked yet (the lab pass adds it)"
 else
