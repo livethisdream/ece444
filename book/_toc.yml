@@ -103,6 +103,8 @@ parts:
         title: "L27 — Radar Detection"
       - file: module04/radar-overview-1-detection-fmcw/index
         title: "Radar Overview 1 — Detection and FMCW Range"
+      - file: module04/radar-overview-2-doppler-mti-cfar/index
+        title: "Radar Overview 2 — Doppler, MTI, CFAR, and the Lab Chain"
       - file: module04/L28-fmcw/index
         title: "L28 — FMCW on the Phaser"
       - file: module04/L29-range-doppler-mti/index
