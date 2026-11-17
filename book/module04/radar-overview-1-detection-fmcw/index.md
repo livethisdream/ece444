@@ -312,5 +312,5 @@ The waterfall gives velocity only as a change of range over seconds. Overview 2 
 - **Overview 2:** velocity from chirp-to-chirp phase, MTI, CFAR, classification, and tracking.
 :::
 
-The lesson half of the <a href="../L28-fmcw/index.html">Lesson 28</a> page works every method that Part 1 of the L28 Lab packet asks for, and its Pre-Lab frame maps each packet table to the frame that covers it. Overview 2 covers the rest of the chain.
+The lesson half of the <a href="../L28-fmcw/index.html">Lesson 28</a> page works every method that Part 1 of the L28 Lab packet asks for, and its Pre-Lab frame maps each packet table to the frame that covers it. <a href="../radar-overview-2-doppler-mti-cfar/index.html">Overview 2</a> covers the rest of the chain.
 ::::
