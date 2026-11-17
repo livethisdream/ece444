@@ -26,7 +26,7 @@ FILL = {"L28": "#eef4fa", "L29": "#f8e3e4", "L30": "#e6f3ec", "L31": "#f6eedd", 
 IMG = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 PHONE_COL, PX_MIN = 343.0, 10.5
 
-W, BW, BH, GAP = 520, 108, 46, 26
+W, BW, BH, GAP = 544, 108, 46, 26
 FS = 17
 ROWS = (
     (("burst", None), ("MTI", "L29"), ("range FFT", "L28"), ("Doppler FFT", "L29")),
