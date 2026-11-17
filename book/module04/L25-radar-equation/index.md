@@ -489,6 +489,13 @@ in a 1 MHz bandwidth. Because of the fourth root, every term inside the brackets
 | $R_\text{max}$ | range at the SNR threshold | 8.5 m at 13 dB; 16× power for 2× range |
 ::::
 
+::::{frame} Practice
+:class: read-only doc-links
+
+- <a class="doc-link" href="../../practice/ECE444_L25_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a class="doc-link doc-key" href="../../practice/ECE444_L25_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+::::
+
 ::::{frame} Looking Ahead
 :::{present}
 - **Lesson 26** reads range and velocity from the echo's delay and Doppler shift.
