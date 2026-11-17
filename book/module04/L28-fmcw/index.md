@@ -80,16 +80,7 @@ f_b &= \frac{B}{T_s}\ \tau = \frac{2RB}{cT_s} \\
 $$
 :::
 
-The transmitted frequency rises at the **chirp slope** $B/T_s$, which for the worked chirp is $400\ \text{MHz}/2\ \text{ms} = 0.2\ \text{MHz}$ per microsecond. In the delay $\tau$ the chirp climbs $\tau B/T_s$, so the beat frequency is
-
-$$
-\begin{aligned}
-f_b &= \frac{B}{T_s}\ \tau \\
-&= \frac{2RB}{cT_s} .
-\end{aligned}
-$$
-
-The beat is proportional to range, so the radar reads range by measuring a frequency. For the worked chirp a target at 1 m gives 1.33 kHz and one at 3 m gives 4.00 kHz. These frequencies are low enough for the Pluto to sample directly, even though the chirp itself spans 400 MHz: comparing the echo with the outgoing chirp removes the sweep and leaves only the small difference that carries the range. <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-fmcw/" target="_blank" rel="noopener">ADI's FMCW lab</a> calls this stretch processing.
+The transmitted frequency rises at the **chirp slope** $B/T_s$, which for the worked chirp is $400\ \text{MHz}/2\ \text{ms} = 0.2\ \text{MHz}$ per microsecond. In the delay $\tau$ the chirp climbs $\tau B/T_s$, which is the beat. The beat is proportional to range, so the radar reads range by measuring a frequency. For the worked chirp a target at 1 m gives 1.33 kHz and one at 3 m gives 4.00 kHz. These frequencies are low enough for the Pluto to sample directly, even though the chirp itself spans 400 MHz: comparing the echo with the outgoing chirp removes the sweep and leaves only the small difference that carries the range. <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-fmcw/" target="_blank" rel="noopener">ADI's FMCW lab</a> calls this stretch processing.
 
 The PHASER adds every beat to a fixed offset, the kit's 0 m frequency $f_0$, 100 to 120 kHz on our kits. A target's peak therefore sits at $f_0 + f_b$: for the worked chirp and an $f_0$ of 100 kHz, a target at 4 m peaks at $100 + 4 \times 1.33 = 105.33$ kHz. Plotted against range, the peaks of a target at several ranges fall on a straight line whose slope is the beat per meter and whose intercept, at 0 m, is $f_0$.
 
@@ -126,17 +117,7 @@ $$
 - The chirp length cancels: only $B$ sets the resolution.
 :::
 
-The radar sees each target's beat for one chirp, $T_s$, and an FFT over a record of length $T_s$ separates two tones only if they differ by at least $1/T_s$. Over one chirp, that is a difference of one cycle. Converting that frequency step to range with the beat per meter gives
-
-$$
-\begin{aligned}
-\Delta R &= \frac{cT_s}{2B}\ \Delta f_b \\
-&= \frac{cT_s}{2B}\cdot\frac{1}{T_s} \\
-&= \frac{c}{2B} ,
-\end{aligned}
-$$
-
-which is the result of <a href="../L26-range-resolution-doppler/index.html#frame-resolution-and-bandwidth">Lesson 26</a>. At 400 MHz it is 0.375 m. A longer chirp makes the beat per meter smaller but lets the FFT resolve finer frequency steps in the same proportion, so $T_s$ cancels. Quartering the bandwidth to 100 MHz quadruples the resolution cell to 1.5 m; quartering the chirp length leaves it at 0.375 m.
+The radar sees each target's beat for one chirp, $T_s$, and an FFT over a record of length $T_s$ separates two tones only if they differ by at least $1/T_s$. Over one chirp, that is a difference of one cycle. Converting that frequency step to range with the meters per hertz, $cT_s/2B$, gives $c/2B$, the result of <a href="../L26-range-resolution-doppler/index.html#frame-resolution-and-bandwidth">Lesson 26</a>. At 400 MHz it is 0.375 m. A longer chirp makes the beat per meter smaller but lets the FFT resolve finer frequency steps in the same proportion, so $T_s$ cancels. Quartering the bandwidth to 100 MHz quadruples the resolution cell to 1.5 m; quartering the chirp length leaves it at 0.375 m.
 
 The number of beat cycles in one chirp is $f_bT_s = 2RB/c$, which does not depend on $T_s$ either. Two targets one cell apart differ by exactly one cycle a chirp; closer than that, their beats stay within one cycle of each other for the whole chirp, and the FFT returns one peak however finely it draws the spectrum.
 ::::
@@ -156,26 +137,11 @@ $$
 <img src="../../viz/img/L28-range-profile.svg" alt="Power in dBFS, dB relative to the receiver's full scale, against range from minus 0.3 to 8 m for the worked chirp, with a top axis of beat frequency above the 0 m frequency from 0 to about 10.7 kHz. Three peaks: leakage at 0 m near minus 20 dBFS, a corner reflector at 2.0 m near minus 20 dBFS, and the far wall at 5.5 m near minus 31 dBFS, over a floor near minus 85 dBFS" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-The PHASER's Pluto samples the beat at $f_s = 0.6$ MSPS. The Phaser app discards the first 10% of each chirp, while the frequency ramp settles, and keeps the rest: for the worked chirp, $0.9 \times 2\ \text{ms} \times 0.6$ MSPS gives $N = 1080$ complex samples. The FFT of those samples is the **range profile**: each bin is a frequency, and the beat-per-meter relation converts it to a range,
-
-$$
-R = \frac{cT_s}{2B}\left(f - f_0\right),
-$$
-
-where $f_0$ is the 0 m frequency of the next frame. The bins are $f_s/N = 0.556$ kHz apart, which at 1.33 kHz per meter is 0.417 m. That is a little more than the 0.375 m of the resolution frame because the 1.8 ms the app keeps sweeps 360 MHz, not 400, and $c/(2 \cdot 360\ \text{MHz}) = 0.417$ m. Padding the record with zeros before the FFT, to 4096 points or more, draws the same spectrum on a finer grid and makes the peaks easier to read, but it does not resolve anything new.
+The PHASER's Pluto samples the beat at $f_s = 0.6$ MSPS. The Phaser app discards the first 10% of each chirp, while the frequency ramp settles, and keeps the rest: for the worked chirp, $0.9 \times 2\ \text{ms} \times 0.6$ MSPS gives $N = 1080$ complex samples. The FFT of those samples is the **range profile**: each bin is a frequency, and the beat-per-meter relation above converts it to a range, where $f_0$ is the 0 m frequency of the next frame. The bins are $f_s/N = 0.556$ kHz apart, which at 1.33 kHz per meter is 0.417 m. That is a little more than the 0.375 m of the resolution frame because the 1.8 ms the app keeps sweeps 360 MHz, not 400, and $c/(2 \cdot 360\ \text{MHz}) = 0.417$ m. Padding the record with zeros before the FFT, to 4096 points or more, draws the same spectrum on a finer grid and makes the peaks easier to read, but it does not resolve anything new.
 
 The figure is one chirp of the worked waveform from the course's simulated room: a 10 cm corner reflector at 2.0 m, the transmit antenna's direct path into the array at 0 m, and the far wall at 5.5 m. The top axis shows the same profile as beat frequency above $f_0$, at 1.33 kHz per meter.
 
-The power axis is in **dBFS**, decibels relative to the receiver's full scale, the largest signal its converter records. The FFT also integrates. The 1080 samples of a steady tone add in phase while the noise adds in power, so the tone rises $10\log_{10}1080 = 30.3$ dB above the noise per sample, as <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a> described. Seen another way, each bin collects noise from only 0.556 kHz, while each sample carries the noise of the whole 0.6 MHz the receiver samples. The two views agree at a fixed sample rate, since $f_s/N$ is the bin width. When the sample rate changes too, only the bin view holds: a faster sample rate puts more noise in every sample, which cancels the gain from having more samples. That is the narrowing <a href="../L25-radar-equation/index.html#frame-signal-to-noise-ratio">Lesson 25</a> described: the corner at 3 m, 31.1 dB above the noise in 1 MHz, stands
-
-$$
-\begin{aligned}
-\text{SNR}_\text{bin} &= 31.1\ \text{dB} + 10\log_{10}\frac{1\ \text{MHz}}{0.556\ \text{kHz}} \\
-&= 63.7\ \text{dB}
-\end{aligned}
-$$
-
-above it in one bin. The record length sets that height, whatever the sample rate. A window-normalized FFT reads a tone at the same level whatever the record, while one bin holds the noise of $1/T$ of bandwidth, so a record a quarter as long puts four times the noise in each bin and the same target stands $10\log_{10}4 = 6$ dB lower above the floor.
+The power axis is in **dBFS**, decibels relative to the receiver's full scale, the largest signal its converter records. A window-normalized FFT reads a tone at the same level whatever the record, while each bin holds the noise of $f_s/N$ of bandwidth, $1/T$ for a record of length $T$. So the record length sets how high a target stands above the floor, whatever the sample rate: a record a quarter as long puts four times the noise in each bin, and the same target stands $10\log_{10}4 = 6$ dB lower. That is the narrowing <a href="../L25-radar-equation/index.html#frame-signal-to-noise-ratio">Lesson 25</a> described, in the bandwidth of one bin.
 
 <img src="../../viz/img/L28-record-length.svg" alt="Power in dBFS against range from 0 to 8 m for one target at 4 m, seen by the worked chirp at 2 ms and at 0.5 ms with the same sample rate. Both peaks read the same level and the same width. The 0.5 ms floor sits 6 dB above the 2 ms floor, marked with an arrow" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
 ::::
@@ -227,13 +193,7 @@ This limit comes from the sample rate, not from the transmit power; <a href="../
 
 An FFT of one chirp treats the record as if it started and stopped abruptly, which gives each tone a $\sin x/x$ response with sidelobes $13$ dB below the peak, falling slowly. A strong target's sidelobes then cover the bins around it, and a weak target nearby disappears under them. In the figure the second target, 30 dB weaker and 2.5 m beyond the first, is invisible with the rectangular window.
 
-Multiplying the samples by a **window** that tapers smoothly to zero at both ends of the chirp lowers the sidelobes. The Hann window,
-
-$$
-w[n] = \frac{1}{2}\left(1 - \cos\frac{2\pi n}{N}\right),
-$$
-
-puts the first sidelobe at $-31$ dB and the rest falling fast, and the weak target appears. This is the amplitude taper of <a href="../../module03/L22-sidelobes-tapering/index.html">Lesson 22</a> applied in time instead of across the array, with the same consequences: the main lobe widens, from a 3 dB width of 0.89 bins to 1.44 bins, so two equal targets one cell apart may merge, and the window discards some signal energy, a 1.8 dB loss in SNR. Lesson 22's Hann taper loses 1.25 dB because it samples the taper at eight elements; over a chirp's hundreds of samples the loss is 1.8 dB. A level read from the peak of its own trace, 0 dB at the peak, is in **dBc**, the unit the notebook gives a sidelobe in. In range, a peak's width 3 dB down is 1.44 bins times the meters per bin: $1.44 \times 0.417 = 0.60$ m for the worked chirp. `radar_lab` uses Hann by default; the rectangular window is the choice only when two equal targets must be split at the edge of the resolution.
+Multiplying the samples by a **window** that tapers smoothly to zero at both ends of the chirp lowers the sidelobes. The Hann window, a raised cosine, puts the first sidelobe at $-31$ dB and the rest falling fast, and the weak target appears. This is the amplitude taper of <a href="../../module03/L22-sidelobes-tapering/index.html">Lesson 22</a> applied in time instead of across the array, with the same consequences: the main lobe widens, from a 3 dB width of 0.89 bins to 1.44 bins, so two equal targets one cell apart may merge, and the window discards some signal energy, a 1.8 dB loss in SNR. A level read from the peak of its own trace, 0 dB at the peak, is in **dBc**, the unit the notebook gives a sidelobe in. In range, a peak's width 3 dB down is 1.44 bins times the meters per bin: $1.44 \times 0.417 = 0.60$ m for the worked chirp. `radar_lab` uses Hann by default; the rectangular window is the choice only when two equal targets must be split at the edge of the resolution.
 ::::
 
 ::::{frame} The Range Waterfall
@@ -256,34 +216,7 @@ The waterfall records range against time and nothing else. Its rows are one disp
 ::::{frame} The Provided Range FFT
 :class: read-only
 
-:::{present}
-```python
-def range_fft(cap, window="hann",
-              n_fft=None):
-    iq = cap["iq"]
-    w = _window(window, iq.shape[1])
-    X = np.fft.fft(iq * w, n_fft or
-                   iq.shape[1], axis=1)
-    return X / w.sum()
-```
-
-- The course provides `radar_lab.py`, complete.
-- Each lab's notebook changes a line or two of it.
-:::
-
-The four labs that follow share one Python module, <a href="../../notebooks/radar_lab.py">`radar_lab.py`</a>, and one capture format. The course provides the module complete: you run it from a notebook, one for each lab, and each lab's tasks change a parameter or a line or two, never a whole function. The excerpt is the function this lesson describes: it windows every chirp, takes the FFT along each one, and divides by the sum of the window, so that a tone of amplitude 1 reads 0 dBFS whatever the window. `n_fft` larger than the samples in a chirp zero-pads it. The result has one row per chirp and one column per range bin.
-
-A capture is an `.npz` file holding `iq`, the complex beat samples of the summed array with one chirp a row, shape `n_chirps × n_samples`; optionally `iq_ch`, the same samples from the array's two halves, shape `2 × n_chirps × n_samples`, which <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses to measure angle; the sample rate `fs`; the carrier `fc`; the bandwidth `B`; the chirp length `T_ramp`, the lesson's $T_s$; the time `PRI` from one chirp to the next; and `f0`, the 0 m frequency from your calibration, or the 100 kHz IF tone in a capture saved before it. The number of chirps is not fixed: 32 in an L28 range capture, 256 in the L29 burst, and thousands in a record of several seconds. The range of each bin comes from `range_axis`, the range equation of the range FFT frame with `k` the meters per hertz of beat:
-
-```python
-def range_axis(cap, n_fft=None):
-    n = n_fft or cap["iq"].shape[1]
-    f = np.fft.fftfreq(n, 1 / cap["fs"])
-    k = C * cap["T_ramp"] / (2 * cap["B"])
-    return (f - cap["f0"]) * k
-```
-
-The bins come out in the order `np.fft.fft` returns them, and the bins below $f_0$ come out as negative ranges. Two more L28 functions build on `range_fft`: `range_profile(cap, chirp=0, window="hann")` returns one chirp's ranges at or beyond 0 m and its power in dB, `(r, p_db)`, and `waterfall(cap)` returns `(r, t, w_db)`, one row per chirp. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> uses `range_doppler` and `mti`, <a href="../L30-cfar/index.html">Lesson 30</a> uses `cfar_2d`, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses the spectrogram, a classifier, and a tracker, all in the same module. The L28 notebook is <a href="../../notebooks/L28_range.ipynb">`L28_range.ipynb`</a>.
+The four labs that follow share one Python module, <a href="../../notebooks/radar_lab.py">`radar_lab.py`</a>, which the course provides complete. You run it from one notebook a lab, <a href="../../notebooks/L28_range.ipynb">`L28_range.ipynb`</a> for this one, and each task changes a setting, never a function. For L28 it does what this lesson describes: it applies the window, Hann unless you choose otherwise, takes the FFT of every chirp, and scales the result so that a tone reads the same level whatever the window. Its `n_fft` setting zero-pads the record, which draws a finer grid and resolves nothing new. It converts each bin to range with the `f0` stored in the capture, your calibration, so an uncalibrated capture reads every range long or short by the same amount. It returns one chirp's range profile or, for the waterfall, one row per chirp. A capture is one `.npz` file of the beat samples, one chirp a row, with the waveform settings beside them; the <a href="../../radar-data/README.txt">data README</a> lists its fields.
 ::::
 
 ::::{frame} Pre-Lab
