@@ -116,10 +116,9 @@ This is the **radar equation**. Every factor except $\sigma$ and $R^4$ is alread
 :::{present}
 $$
 \begin{aligned}
-P_r\ [\text{dBm}] = {} & P_t + G_t + G_r \\
-&+ 10\log_{10}\lambda^2 \\
-&+ \sigma\ [\text{dBsm}] \\
-&- 33.0 - 40\log_{10} R
+P_r &= P_t + G_t + G_r + \sigma - L_p \\
+L_p &= 40\log_{10}R + 20\log_{10}f \\
+&\quad - 136.6\ \text{dB}
 \end{aligned}
 $$
 
@@ -129,7 +128,24 @@ $$
 <img src="../../viz/img/L25-falloff.svg" alt="Received power relative to its value at 1 m against range from 1 to 30 m on a logarithmic axis. The one-way line falls 20 dB per decade and the two-way line 40 dB per decade. From 3 m to 6 m the one-way power drops 6 dB and the two-way power drops 12 dB" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Link budgets run in decibels, because the products become sums and each term can be read on its own. Take $10\log_{10}$ of every factor. Power is in dBm, gains in dBi, $\lambda$ in meters, $R$ in meters, and the radar cross section in **dBsm**, decibels relative to one square meter. The constant is $10\log_{10}(4\pi)^3 = 33.0$ dB. The range term, $40\log_{10} R$, is the **two-way path loss** that sets the slope: every factor of 10 in range takes 40 dB off the echo.
+Link budgets run in decibels, because the products become sums and each term can be read on its own. Engineers set a radar by its frequency, not its wavelength, so write $\lambda = c/f$ first:
+
+$$
+P_r = \frac{P_t G_t G_r\ \sigma\ c^2}{(4\pi)^3 f^2 R^4}.
+$$
+
+Take $10\log_{10}$ of every factor. Power is in dBm, gains in dBi, and the radar cross section in **dBsm**, decibels relative to one square meter. Every term that is not a power, a gain, or the RCS goes into one **two-way path loss** $L_p$, with $R$ in meters and $f$ in hertz:
+
+$$
+\begin{aligned}
+L_p &= 10\log_{10}\frac{(4\pi)^3 f^2 R^4}{c^2} \\
+&= 40\log_{10}R + 20\log_{10}f + 30\log_{10}4\pi - 20\log_{10}c \\
+&= 40\log_{10}R + 20\log_{10}f + 33.0 - 169.5 \\
+&= 40\log_{10}R + 20\log_{10}f - 136.6\ \text{dB}.
+\end{aligned}
+$$
+
+The constant 136.6 dB collects $c$ and $4\pi$ for the two-way path. It is not the 147.6 dB of the one-way Friis path loss, $20\log_{10}(4\pi/c)$. The range term, $40\log_{10} R$, sets the slope: every factor of 10 in range takes 40 dB off the echo.
 ::::
 
 ::::{frame} Radar Cross Section
@@ -387,7 +403,7 @@ Two things move the SNR that do not appear in the received power. A lower noise 
 
 ::::{frame} The PHASER Link Budget
 :::{present}
-<img src="../../viz/img/L25-level-diagram.svg" alt="The PHASER link budget as a horizontal waterfall in dBm. The echo starts at minus 16 dBm, rises 21 dB for the two antenna gains, then falls 30.5 dB for lambda squared, 3.3 dB for the corner's RCS, 33.0 dB for 4 pi cubed, and 19.1 dB for R to the fourth, arriving at minus 80.8 dBm. The noise starts at minus 174 dBm per hertz, rises 60 dB for the 1 MHz bandwidth and 2 dB for the noise figure, reaching minus 112.0 dBm. The gap between the two, the SNR, is 31.1 dB" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L25-level-diagram.svg" alt="The PHASER link budget as a horizontal waterfall in dBm. The echo starts at minus 16 dBm, rises 21 dB for the two antenna gains, then falls 3.3 dB for the corner's RCS and 82.5 dB for the two-way path loss, arriving at minus 80.8 dBm. The noise starts at minus 174 dBm per hertz, rises 60 dB for the 1 MHz bandwidth and 2 dB for the noise figure, reaching minus 112.0 dBm. The gap between the two, the SNR, is 31.1 dB" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
 - The echo arrives at $-80.8$ dBm.
@@ -399,10 +415,8 @@ Two things move the SNR that do not appear in the received power. A lower noise 
 | :-- | :-- | --: |
 | $P_t$ | 25 µW | $-16.0$ dBm |
 | $G_t + G_r$ | 6 + 15 dBi | $+21.0$ |
-| $\lambda^2$ | 3.0 cm | $-30.5$ |
-| $\sigma$ | 10 cm corner | $-3.3$ |
-| $(4\pi)^3$ | | $-33.0$ |
-| $R^4$ | 3 m | $-19.1$ |
+| $\sigma$ | 10 cm corner | $-3.3$ dBsm |
+| $L_p$ | 3 m, 10 GHz | $-82.5$ |
 | $P_r$ | | $-80.8$ dBm |
 | $N$, 1 MHz | | $-112.0$ dBm |
 | SNR | | $31.1$ dB |
@@ -412,19 +426,19 @@ Here is the whole budget for the lab setup: a corner reflector with 10 cm edges 
 - **$P_t = -16$ dBm**, or 25 µW, is the transmit tone ADI measured at the transmit output on its <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/hardware/" target="_blank" rel="noopener">hardware page</a>.
 - **$G_t = 6$ dBi** is an assumed small printed transmit antenna. Substitute the gain of the antenna on your bench.
 - **$G_r = 15.0$ dBi** is the course array at broadside from <a href="../../module03/L21-antenna-pattern/index.html#frame-gain-of-the-course-array">Lesson 21</a>: 6.0 dBi per element plus $10\log_{10}8 = 9.0$ dB. Each element on the board is a column of patches with more gain than the course model's ideal element, so this term errs low.
-- **$\sigma = -3.3$ dBsm** is the corner of the previous frames, facing the radar within $\pm 19^\circ$. The 10 cm edge is a provisional size; the lab has one or two commercial corner reflectors, and a larger one scales as $a^4$.
+- **$\sigma = -3.3$ dBsm** is the corner of the previous frames, facing the radar within $\pm 19^\circ$. The course's corner is a 4 in trihedral, a 10 cm edge; a larger one scales as $a^4$.
 
 Summing the terms gives
 
 $$
 \begin{aligned}
-P_r &= -16.00 + 21.00 - 30.46 \\
-&\quad - 3.32 - 32.98 - 19.08 \\
+L_p &= 19.08 + 200.00 - 136.56 = 82.52\ \text{dB} \\
+P_r &= -16.00 + 21.00 - 3.32 - 82.52 \\
 &= -80.8\ \text{dBm}.
 \end{aligned}
 $$
 
-The chain carries two decimals so the rounding of the table does not accumulate. Against the $-112.0$ dBm noise in 1 MHz, the echo stands 31.1 dB above the noise. A transmitter of 25 µW is enough because the target is close. The range term $40\log_{10}R$ takes $R$ in meters, so it is 0 dB at 1 m and only 19.1 dB at 3 m; a radar at 30 km would lose another 160 dB.
+The chain carries two decimals so the rounding of the table does not accumulate. Against the $-112.0$ dBm noise in 1 MHz, the echo stands 31.1 dB above the noise. A transmitter of 25 µW is enough because the target is close. Most of $L_p$ is the frequency term, 200 dB at 10 GHz, less the 136.6 dB constant. The range term $40\log_{10}R$ takes $R$ in meters, so it is 0 dB at 1 m and only 19.1 dB at 3 m; a radar at 30 km would lose another 160 dB.
 ::::
 
 ::::{frame} Radar Equation Explorer
@@ -468,7 +482,7 @@ in a 1 MHz bandwidth. Because of the fourth root, every term inside the brackets
 | :-- | :-- | :-- |
 | $L_\text{fs} = (4\pi R/\lambda)^2$ | one-way free-space path loss | 62.0 dB at 3 m, 10 GHz |
 | $P_r = P_tG_tG_r\lambda^2\sigma/(4\pi)^3R^4$ | radar equation, Friis applied twice | $-12$ dB per doubling of range |
-| $10\log_{10}(4\pi)^3$ | the constant in the dB form | 33.0 dB |
+| $L_p = 40\log_{10}R + 20\log_{10}f - 136.6$ dB | two-way path loss, $R$ in m, $f$ in Hz | 82.5 dB at 3 m, 10 GHz |
 | $\sigma$ | radar cross section, in dBsm | area of the equivalent isotropic scatterer |
 | $\pi a^2$, $4\pi A^2/\lambda^2$, $4\pi a^4/3\lambda^2$ | sphere, plate, corner | 10 cm: $-21.0$, $+1.4$, $-3.3$ dBsm |
 | Corner beamwidth | within 3 dB of peak | $\pm 19^\circ$ (plate $\pm 3.8^\circ$) |

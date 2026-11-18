@@ -51,14 +51,14 @@ $\lambda = 3.0\ \text{cm}$. Its target sits at $R = 3\ \m$.
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part The radar equation in dB carries the constant $10\mylog{(4\pi)^3}$. Evaluate it.
+		\part In dB the radar equation folds $\lambda = c/f$ and every constant into one two-way path loss, $L_p = 40\mylog{R} + 20\mylog{f} - K$, with $R$ in meters and $f$ in hertz. Evaluate the constant $K$.
 		\begin{solution}[0.8in]
-		\eq{ 10\mylog{(4\pi)^3} = 30\mylog{12.57} = 33.0\db }
+		\eq{ K = 20\mylog{c} - 30\mylog{4\pi} = 169.5 - 33.0 = 136.6\db }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		constant = \ansbox[1.3in]{$33.0\db$}
+		$K$ = \ansbox[1.3in]{$136.6\db$}
 	\end{minipage}
 
 \end{parts}
@@ -195,10 +195,10 @@ $290\ \text{K}$, and the bandwidth is $1\ \mhz$.
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Find the echo power at $R = 5\ \m$.
 		\begin{solution}[1.3in]
-		\eq{ P_r &= P_t + G_t + G_r + 10\mylog{\lambda^2} \\
-		&\quad + \sigma - 33.0 - 40\mylog{R} \\
-		&= -16.00 + 6.00 + 15.00 - 30.46 \\
-		&\quad - 3.32 - 32.98 - 27.96 \\
+		\eq{ L_p &= 40\mylog{5} + 20\mylog{10^{10}} - 136.56 \\
+		&= 27.96 + 200.00 - 136.56 = 91.40\db \\
+		P_r &= P_t + G_t + G_r + \sigma - L_p \\
+		&= -16.00 + 6.00 + 15.00 - 3.32 - 91.40 \\
 		&= -89.7\ \dbm }
 		\end{solution}
 	\end{minipage}\hfill%
