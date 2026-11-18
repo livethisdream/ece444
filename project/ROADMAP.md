@@ -160,7 +160,10 @@ That is the one shared file it may change.
   superhet). Hardware limits stay out of the student story. One exception
   (Neil, 2026-10-21): **IF characterization** is a necessary step, so a lab
   may name the GUI's Characterize IF button and the IF it measures, with
-  the IF defined once in plain words at first use.
+  the IF defined once in plain words at first use. A second (Neil, 2026-11-17, on
+  the Radar Overview 1 mixer widget: "mixing is fine in this case"): the
+  FMCW beat may be explained as the echo **mixed** with the chirp, with
+  "mixer" named on that frame and widget, in plain words.
 - **Assessments** never hand students the formula. They live in
   `ECE444-faculty` only.
 - **Python only, never MATLAB.** American spelling. No thin spaces.

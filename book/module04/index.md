@@ -87,7 +87,23 @@ signature, and track it in range and angle.
 </div>
 ::::
 
-::::{frame} Lessons 28-29: FMCW Range and Doppler on the Bench
+::::{frame} Radar Overviews: Before the Labs
+
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="radar-overview-1-detection-fmcw/index.html">
+    <span class="mt-kind">Overview 1</span>
+    <h4>Detection and FMCW Range</h4>
+    <p>The radar equation in one line, then detection (PD against Pfa) and FMCW range: the chirp, the beat frequency, the range profile and the waterfall.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="radar-overview-2-doppler-mti-cfar/index.html">
+    <span class="mt-kind">Overview 2</span>
+    <h4>Doppler, MTI, CFAR and the Lab Chain</h4>
+    <p>The radar data cube, the range-Doppler map, what MTI removes, a threshold that follows the noise, classification and tracking, and how the four labs build the report.</p>
+  </a>
+</div>
+::::
+
+::::{frame} Lessons 28-29: FMCW Range and Doppler
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L28-fmcw/index.html">
