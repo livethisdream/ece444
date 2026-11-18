@@ -111,8 +111,8 @@ The left of the figure draws those steps. The right draws a target fast enough t
 <img src="../../viz/img/L29-rd-map.svg" alt="A range-Doppler map of the teaching burst from 0 to 4 m in range and minus 6 to plus 6 m/s in velocity, with a color bar in dB relative to the leakage. The kit's leakage at 0 m and a wall at 2.9 m sit in the 0 m/s column. A hand at 1.5 m sits at plus 0.6 m/s, about 30 dB below the leakage. A fidget spinner at 2.1 m spreads into a comb of lines from about minus 3 to plus 3 m/s" style="max-width: 500px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- A second FFT, along slow time, finds each range cell's velocity.
-- Leakage and the wall do not move, so they are at 0 m/s.
+- The **range-Doppler map** is a second FFT, along slow time: velocity in every range cell.
+- Leakage and the wall are at 0 m/s.
 - The hand is at +0.6 m/s; positive is closing.
 - The spinner spreads over a velocity band.
 :::
@@ -156,10 +156,10 @@ A target faster than the limit aliases: at +25 m/s the phase advances 240° a ch
 ::::{frame} Clutter and MTI
 
 :::{present}
-<img src="../../viz/img/L29-mti-maps.svg" alt="The range-Doppler map of the teaching burst three times, with one color bar in dB relative to the leakage: with no MTI, with the 2-pulse canceller, and with the 3-pulse canceller, the leakage, wall, hand, and spinner labeled in the first. With either canceller the leakage at 0 m and the wall at 2.9 m drop to the noise floor. The hand at plus 0.6 m/s is fainter with the 2-pulse canceller and drops below the color scale with the 3-pulse, together with the floor around it. The spinner's outer lines survive and its center is removed" style="max-width: 680px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L29-mti-maps.svg" alt="The range-Doppler map of the teaching burst three times, with one color bar in dB relative to the leakage: with no MTI, with the 2-pulse canceller, and with the 3-pulse canceller, the leakage, wall, hand, and spinner labeled in the first. With either canceller the leakage at 0 m and the wall at 2.9 m drop to the noise floor. The hand at plus 0.6 m/s is fainter with the 2-pulse canceller and drops below the color scale with the 3-pulse, together with the floor around it. The spinner's outer lines survive and its center is removed" style="max-width: 630px; width: 100%; display: block; margin: 0 auto;">
 
-- **Clutter**, the returns that do not move, is at 0 m/s. **MTI**, a filter along slow time, drops it to the noise floor.
-- MTI also weakens slow targets: the 2-pulse canceller takes 20.0 dB off the hand at 0.6 m/s.
+- **Clutter**, the returns that do not move, is at 0 m/s. **MTI** (moving target indication), a filter along slow time, drops it to the noise floor.
+- MTI also weakens slow targets: the hand at 0.6 m/s loses 20.0 dB.
 :::
 
 The leakage, the walls, the table, and the stand return the same echo on every chirp. Radar engineers call these returns **clutter**. On the map they are at 0 m/s, and in a lab room they are the strongest returns: the leakage is 30 dB above the hand. Clutter hides slow targets, because its sidelobes in Doppler spread onto the velocities near zero, and it raises a CFAR threshold computed from the cells beside it.
@@ -200,14 +200,14 @@ The widget computes a map from the teaching burst: leakage at 0 m, a wall at 2.9
 </iframe>
 ::::
 
-::::{frame} A Threshold From the Neighbors
+::::{frame} CFAR: A Threshold From the Neighbors
 
 :::{present}
 <img src="../../viz/img/L30-window.svg" alt="A row of range cells. The cell under test in the center is red. Two gray guard cells sit on each side of it, then four blue reference cells on each side. A bracket joins the reference cells: their average times the bias is the threshold the cell under test must cross" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 
-- **Reference** cells estimate the noise around the cell under test.
-- **Guard** cells keep the target's own energy out of the estimate.
-- The threshold is the estimate times a **bias**, recomputed at every cell.
+- **CFAR** (constant false-alarm rate) detection sets each cell's threshold from its neighbors.
+- **Reference** cells estimate the noise; **guard** cells keep the target out of the estimate.
+- The threshold is the estimate times a **bias**.
 :::
 
 Overview 1 set the threshold from $P_{fa}$ and a known noise power, and showed that 3 dB more noise under a fixed threshold raises the false alarms a thousand times. **Constant false-alarm rate** (CFAR) processing measures the noise instead of assuming it. The detector tests one cell at a time, the **cell under test**. On each side it skips a few **guard cells**, because a target's peak spreads into its neighbors, and then it averages a block of **reference cells**. That average is the estimate of the noise power at this cell, and the threshold is the estimate multiplied by a **bias**. The window then moves one cell and the detector repeats the test, so every cell has a threshold computed from its own neighbors. Where the noise is higher, the estimate and the threshold are higher by the same factor. <a href="../L30-cfar/index.html#frame-cell-under-test-guard-and-reference">Lesson 30</a> has the details.
