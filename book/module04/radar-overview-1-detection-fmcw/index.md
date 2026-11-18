@@ -52,28 +52,41 @@ This overview and the next cover what the L28–L31 Labs use, in two class perio
 Today's first half is detection: every cell of a radar's output holds noise, the processor compares each cell with a threshold, and the signal-to-noise ratio (SNR) sets how often that decision is right. The second half is how the PHASER measures range: it transmits a chirp, and the echo's delay appears as a frequency that one FFT converts to range. In the L28 Lab you measure range with your kit, and in the L30 Lab you set a threshold on your own data.
 ::::
 
-::::{frame} What We Already Have
+::::{frame} RADAR Range Equation Review
 
 :::{present}
 $$
-P_r = \frac{P_t G_t G_r \lambda^2 \sigma}{(4\pi)^3 R^4}
+P_r = \frac{P_t G_t G_r\ \sigma\ c^2}{(4\pi)^3 f^2 R^4}
 $$
 
 $$
 \begin{aligned}
-P_r\ [\text{dBm}] = {} & P_t + G_t + G_r \\
-&+ 10\log_{10}\lambda^2 \\
-&+ \sigma\ [\text{dBsm}] \\
-&- 33.0 - 40\log_{10} R
+P_r &= P_t + G_t + G_r + \sigma - L_p \\
+L_p &= 40\log_{10}R + 20\log_{10}f \\
+&\quad - 136.6\ \text{dB}
 \end{aligned}
 $$
 :::
 :::{present}
+- In dB: powers in dBm, gains in dBi, $\sigma$ in dBsm, $R$ in m, $f$ in Hz.
 - RCS and range set the echo power, and so the SNR.
 - Bandwidth sets $\Delta R = c/2B$; the PRF sets the unambiguous velocity.
 :::
 
-The radar equation of <a href="../L25-radar-equation/index.html#frame-two-way-path-loss-in-decibels">Lesson 25</a> gives the echo power from a target of radar cross section (RCS) $\sigma$ at range $R$, and dividing by the noise power $kT_\text{sys}B$ gives the SNR. Today's first half starts from that SNR. <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> gave the range resolution $c/2B$ and the limits the pulse repetition frequency (PRF) sets. An FMCW radar obeys the same relations: its chirp bandwidth sets the resolution, and the rate at which it repeats the chirp is its PRF, which sets the unambiguous velocity in Overview 2. Its farthest range comes from the receiver's sample rate, not from the PRF, as The 0 m Frequency frame shows.
+The radar equation of <a href="../L25-radar-equation/index.html#frame-two-way-path-loss-in-decibels">Lesson 25</a> gives the echo power from a target of radar cross section (RCS) $\sigma$ at range $R$, and dividing by the noise power $kT_\text{sys}B$ gives the SNR. The first line is that equation with the wavelength written as $\lambda = c/f$, because we set a radar by its frequency.
+
+The second line is the same equation in decibels, where the products become sums. Every term that is not a power, a gain, or the RCS goes into one **path loss** $L_p$:
+
+$$
+\begin{aligned}
+L_p &= 10\log_{10}\frac{(4\pi)^3 f^2 R^4}{c^2} \\
+&= 40\log_{10}R + 20\log_{10}f + 30\log_{10}4\pi - 20\log_{10}c \\
+&= 40\log_{10}R + 20\log_{10}f + 33.0 - 169.5 \\
+&= 40\log_{10}R + 20\log_{10}f - 136.6\ \text{dB}.
+\end{aligned}
+$$
+
+The constant 136.6 dB collects $c$ and $4\pi$ for the two-way path. It is not the 147.6 dB of the one-way Friis equation, which is $20\log_{10}(4\pi/c)$. At $R = 10$ m and $f = 10$ GHz the path loss is $40 + 200 - 136.6 = 103.4$ dB, and it rises 12 dB each time the range doubles. Today's first half starts from that SNR. <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> gave the range resolution $c/2B$ and the limits the pulse repetition frequency (PRF) sets. An FMCW radar obeys the same relations: its chirp bandwidth sets the resolution, and the rate at which it repeats the chirp is its PRF, which sets the unambiguous velocity in Overview 2. Its farthest range comes from the receiver's sample rate, not from the PRF, as The 0 m Frequency frame shows.
 ::::
 
 ::::{frame} A Detection Is a Decision
@@ -100,8 +113,8 @@ P_{fa} &= e^{-T/P_n} \\
 \end{aligned}
 $$
 
-- $P_{fa} = 10^{-6}$ puts the threshold $T$ 11.4 dB above the mean noise power $P_n$.
-- 3 dB more noise raises $P_{fa}$ to $10^{-3}$ under the same threshold, a thousand times the false alarms.
+- $P_{fa}$, the **probability of false alarm**, is the chance that noise alone crosses the threshold $T$.
+- $P_{fa} = 10^{-6}$ puts $T$ 11.4 dB above the mean noise power $P_n$; 3 dB more noise raises it to $10^{-3}$.
 :::
 
 The **probability of false alarm** $P_{fa}$ is the probability that a cell holding only noise crosses the threshold $T$. Noise power in one cell follows an exponential distribution with mean $P_n$, and the area of that distribution above $T$ is $e^{-T/P_n}$. We choose $P_{fa}$ and solve for the threshold: $10^{-6}$ needs $T = 13.8\ P_n$, which is 11.4 dB above the mean noise.
@@ -134,7 +147,7 @@ The widget draws the noise distribution and the target's distribution against po
 <img src="../../viz/img/L27-roc.svg" alt="Probability of detection against probability of false alarm on a log axis from 10 to the minus 10 to 0.1, for SNRs of 8, 10, 12 and 14 dB. At Pfa = 10 to the minus 6 the 12 dB curve reads 0.68" style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- A lower threshold raises $P_d$ and $P_{fa}$ together.
+- A lower threshold raises $P_d$, the **probability of detection**, and $P_{fa}$ together.
 - At $P_{fa} = 10^{-6}$: 12 dB gives $P_d = 0.68$, 14 dB gives 0.97.
 - By Albersheim's fit, $P_d = 0.9$ at $P_{fa} = 10^{-6}$ needs 13.1 dB.
 :::
@@ -174,24 +187,32 @@ Lesson 29's teaching burst has 128 chirps, each 400 MHz in 200 µs, a gain of 21
 :::
 :::{present}
 - Where the noise rises 6 dB, noise crosses the fixed threshold eight times.
-- A threshold the processor computes from the neighboring cells rises with the noise. That is **CFAR**, in Overview 2.
+- A threshold the processor computes from the neighboring cells rises with the noise. That is **CFAR** (constant false-alarm rate) detection, in Overview 2.
 :::
 
 Every number so far assumed the processor knows $P_n$. In a real scene the noise level changes from one part of the profile to another. In the figure the noise rises 6 dB beyond cell 330. The fixed threshold, set for $P_{fa} = 10^{-6}$ in the quiet cells, has $P_{fa} = 0.03$ in the noisy ones, and noise crosses it eight times. The green line is a threshold computed from the cells around each cell under test, so it rises where the noise rises. That is constant false-alarm rate (CFAR) detection. <a href="../L27-radar-detection/index.html#frame-the-fixed-threshold">Lesson 27</a> works the numbers, and the L30 Lab runs CFAR on your own data.
 ::::
 
-::::{frame} A Chirp and Its Echo
+::::{frame} FMCW: Chirp and Echo
 
 :::{present}
 <img src="../../viz/img/L28-chirp.svg" alt="Frequency against time. The transmitted chirp is a straight ramp repeated twice. The echo is the same ramp shifted right by the delay. At any instant the two differ by a fixed frequency, the beat. The ramp spans the bandwidth vertically and the chirp length horizontally. The first tenth of each ramp is shaded as settling, and the last 90% is marked as kept" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- The transmitter sweeps a bandwidth $B$ in a chirp length $T_s$, then repeats.
-- The echo is the same ramp, late by the round trip $2R/c$.
-- Their frequency difference, the **beat**, is constant.
+$$
+\begin{aligned}
+\tau &= \frac{2R}{c} \\
+f_b &= S\ \tau = \frac{2BR}{cT_s}
+\end{aligned}
+$$
+
+- **FMCW** (frequency-modulated continuous wave) radar sweeps its frequency at the slope $S = B/T_s$.
+- The echo lags by $\tau$, so it is always $S\tau$ lower: the **beat** $f_b$.
 :::
 
-The second half of today is how the PHASER measures range. A target 3 m away returns its echo after 20 ns, which is too short for the PHASER's receiver to time directly. A frequency-modulated continuous-wave (FMCW) radar transmits continuously while its frequency climbs linearly across a bandwidth $B$ during each **chirp** of length $T_s$. The echo is a copy of that chirp, delayed by the round trip. The receiver compares the echo with the chirp still going out. Both ramps climb at the same rate, so the echo is below the outgoing chirp by the same frequency for the whole chirp. That difference is the **beat frequency** $f_b$.
+The second half of today is how the PHASER measures range. A target 3 m away returns its echo after 20 ns, which is too short for the PHASER's receiver to time directly. A frequency-modulated continuous-wave (FMCW) radar transmits continuously while its frequency climbs linearly across a bandwidth $B$ during each **chirp** of length $T_s$. The echo is a copy of that chirp, delayed by the round trip. The echo lags the chirp by the round-trip time $\tau = 2R/c$.
+
+That time delay becomes a frequency because the chirp's frequency is rising. It rises at the **slope** $S = B/T_s$, so during the lag $\tau$ the outgoing chirp has climbed $S\tau$ above the frequency the echo is arriving at. Both ramps climb at the same rate, so the echo is $S\tau$ below the outgoing chirp at every instant. The receiver compares the echo with the chirp still going out, and that constant gap is the **beat frequency** $f_b = S\tau$. Substituting the slope and the delay gives $f_b = 2BR/(cT_s)$, which is proportional to range.
 
 The range examples use a chirp that no preset in the Phaser app uses, 400 MHz in 2 ms from 10.0 GHz, as <a href="../L28-fmcw/index.html#frame-a-chirp-and-its-echo">Lesson 28</a> does. The methods carry over to the presets, and the lab packets ask for the presets' numbers.
 ::::
@@ -201,16 +222,16 @@ The range examples use a chirp that no preset in the Phaser app uses, 400 MHz in
 :::{present}
 $$
 \begin{aligned}
-f_b &= \frac{B}{T_s}\ \frac{2R}{c} = \frac{2RB}{cT_s} \\
-&= \frac{2\ (1\ \text{m})(400\ \text{MHz})}{(3.00\times 10^8\ \text{m/s})(2\ \text{ms})} \\
-&= 1.33\ \text{kHz}
+S &= \frac{400\ \text{MHz}}{2\ \text{ms}} = 200\ \text{GHz/s} \\
+\tau &= \frac{2\ (1\ \text{m})}{3.00\times 10^8\ \text{m/s}} = 6.67\ \text{ns} \\
+f_b &= S\ \tau = 1.33\ \text{kHz}
 \end{aligned}
 $$
 
 - The beat is proportional to range: 1.33 kHz for every meter.
 :::
 
-The transmitted frequency rises at the chirp slope $B/T_s$. During the round-trip delay $2R/c$ the outgoing chirp climbs by the slope times the delay, and that is the beat. The beat is proportional to range, so the radar reads range by measuring a frequency. On the worked chirp a target at 1 m gives 1.33 kHz and a target at 3 m gives 4.00 kHz. The chirp spans 400 MHz, but the beats are a few kilohertz, which the PHASER samples directly.
+The worked chirp sweeps 400 MHz in 2 ms, a slope of 200 GHz/s. A target at 1 m delays the echo by 6.67 ns, and in that time the chirp climbs $200\ \text{GHz/s} \times 6.67\ \text{ns} = 1.33$ kHz. The radar reads range by measuring that frequency: a target at 1 m gives 1.33 kHz and a target at 3 m gives 4.00 kHz. The chirp spans 400 MHz, but the beats are a few kilohertz, which the PHASER samples directly.
 
 Both waveform settings change the beat per meter. A wider bandwidth or a shorter chirp steepens the slope and raises it. <a href="../L28-fmcw/index.html#frame-the-beat-frequency">Lesson 28</a> works both cases.
 ::::
@@ -219,7 +240,7 @@ Both waveform settings change the beat per meter. A wider bandwidth or a shorter
 :class: viz-frame
 
 :::{depth}
-The Chirp and Its Echo frame said the receiver compares the echo with the chirp still going out. This widget shows how. Its four traces share one time axis, one chirp long, and follow the signal in order. The first is the chirp going out, a sinusoid whose cycles crowd together as its frequency rises. The second is the echo from a target at range $R$: the same waveform, late by the round trip $2R/c$. The third is the output of the receiver's mixer, which multiplies the echo by the chirp that is still going out. A product of two sinusoids is the sum of two others,
+The FMCW frame said the receiver compares the echo with the chirp still going out. This widget shows how. Its four traces share one time axis, one chirp long, and follow the signal in order. The first is the chirp going out, a sinusoid whose cycles crowd together as its frequency rises. The second is the echo from a target at range $R$: the same waveform, late by the round trip $2R/c$. The third is the output of the receiver's mixer, which multiplies the echo by the chirp that is still going out. A product of two sinusoids is the sum of two others,
 
 $$
 \sin\phi_1\ \sin\phi_2 = \tfrac{1}{2}\cos\left(\phi_1 - \phi_2\right) - \tfrac{1}{2}\cos\left(\phi_1 + \phi_2\right),
@@ -227,7 +248,7 @@ $$
 
 one at the difference of their frequencies and one at the sum. The mixer output is therefore a fast oscillation on top of a slow one, and the dashed line is the slow one, the first term. The receiver's low-pass filter removes the fast term, and the fourth trace is what remains: a steady tone at the difference of the two frequencies, the beat $f_b$.
 
-The small panel draws the same chirp and echo as frequency against time. The two ramps are parallel, so from the echo's arrival to the end of the chirp the gap between them is the same, and the beat is one steady tone. That gap is the chirp's slope times the delay, the $f_b$ of The Beat Frequency frame. Move the target out, and the echo arrives later, the gap widens, and the beat frequency rises.
+The small panel draws the same chirp and echo as frequency against time. The two ramps are parallel, so from the echo's arrival to the end of the chirp the gap between them is the same, and the beat is one steady tone. That gap is the chirp's slope times the delay, $f_b = S\tau$. Move the target out, and the echo arrives later, the gap widens, and the beat frequency rises.
 
 The widget cannot draw the worked chirp to scale. It slows the chirp to 23 cycles, where the real one has about $2 \times 10^7$, and it stretches the delay, which is tens of nanoseconds against a 2 ms chirp, to as much as 30% of the chirp, so that both are visible. The drawn beat therefore has fewer cycles than the real one. The readouts are the real delay and beat for the worked chirp, which gives $2RB/c = 2.67$ beat cycles a chirp for every meter. The FMCW Explorer in the next frame draws the fourth trace, the beat, for the worked chirp at its true scale, and takes its spectrum.
 :::
