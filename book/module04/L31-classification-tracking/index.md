@@ -182,9 +182,10 @@ The slow-time samples arrive at the PRI, $0.4\ \text{ms}$ on the example
 burst, so the sample rate is $2.5\ \text{kHz}$ and the spectrogram covers
 $\pm 1.25\ \text{kHz}$, the $\pm 18.75\ \text{m/s}$ that L29 calls
 $v_\text{max}$. A part faster than that aliases, as in L26, and wraps to the
-wrong Doppler. The $30\ \text{cm}$ fan of L26's CW demo, with tips at
-$18.8\ \text{m/s}$, sits just past that edge and its tips wrap, though they
-did not in CW, where ADI's script sampled at $0.6\ \text{MHz}$.
+wrong Doppler. A $30\ \text{cm}$ fan with tips at $18.8\ \text{m/s}$ sits
+just past that edge and its tips wrap. A CW radar samples its Doppler tone
+directly, hundreds of kHz instead of once a PRI, so the same tips do not wrap
+there.
 
 Two more details make the spectrogram show the target and nothing else.
 Stationary returns, the walls and the fan's own stand, sit at
