@@ -124,6 +124,25 @@ $$
 The left of the figure draws those steps. The right draws a target fast enough to step 240° a chirp. A step of +240° and one of −120° reach the same point, so the FFT reads them as the same phase step and reports that target at the wrong velocity; the Velocity Cell and Limit frame gives the limit. <a href="../L29-range-doppler-mti/index.html#frame-the-phase-from-chirp-to-chirp">Lesson 29</a> has the details.
 ::::
 
+::::{frame} The Two FFTs, Step by Step
+:class: viz-frame
+
+:::{depth}
+The widget steps through the last two frames on one small burst: 32 chirps of 32 samples on the teaching chirp, with three targets, a wall that does not move, one target closing, and one opening. Press **Next** to take one step, or **Play** to run all four.
+
+It starts with the burst as the radar records it, one row per chirp, with one row plotted beside it: three beat tones added together. The second step runs the range FFT along each row, and the plotted row becomes a range profile with one peak per target. The third step looks down two range columns: the wall's column is the same in every chirp, and the closing target's column turns through four cycles across the burst. The fourth step runs the Doppler FFT down each column, and the matrix becomes the range-Doppler map, with each target as one spot at its range and its velocity.
+
+Each range bin is 0.375 m, and with 32 chirps each velocity bin is 1.17 m/s.
+:::
+
+<iframe src="../../viz/rdm-two-ffts.html"
+        width="100%" height="456"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="A stepper through four stages on one burst: the recorded matrix, the range FFT row by row, one range column chirp by chirp, and the Doppler FFT column by column, ending in the range-Doppler map">
+</iframe>
+::::
+
 ::::{frame} The Range-Doppler Map
 
 :::{present}
@@ -357,6 +376,7 @@ Each lab has a packet: you predict before class, measure in class, and analyze a
 ::::
 
 ::::{frame} Looking Ahead
+:class: read-only
 
 :::{present}
 - Before each lab, read the lesson half of its page and do Part 1 of its packet.
