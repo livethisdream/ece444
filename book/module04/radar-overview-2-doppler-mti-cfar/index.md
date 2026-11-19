@@ -99,7 +99,7 @@ $$
 \Delta\phi = \frac{4\pi v\ T_\text{PRI}}{\lambda}, \qquad f_D = \frac{2v}{\lambda}
 $$
 
-<img src="../../viz/img/L29-phasor.svg" alt="Left: twelve phasors on the unit circle, each 5.8 degrees past the last, the hand's range cell from chirp 0 to chirp 11. Right: a target whose phase advances 240 degrees a chirp, drawn at chirps 0 to 3; the dashed arc of plus 240 degrees and the shorter arc of minus 120 degrees reach the same point" style="max-width: min(460px, 70vw); width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/overview2-phasor-steps.svg" alt="Twelve phasors on the unit circle, each 5.8 degrees past the last: the hand's range cell from chirp 0 to chirp 11" style="max-width: min(300px, 35vw); width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
 - A target stays in one range bin, but its phase steps equally every chirp.
@@ -121,22 +121,28 @@ $$
 360° \times 40\ \text{Hz} \times 0.4\ \text{ms} = 5.8° .
 $$
 
-The left of the figure draws those steps. The right draws a target fast enough to step 240° a chirp. A step of +240° and one of −120° reach the same point, so the FFT reads them as the same phase step and reports that target at the wrong velocity; the Velocity Cell and Limit frame gives the limit. <a href="../L29-range-doppler-mti/index.html#frame-the-phase-from-chirp-to-chirp">Lesson 29</a> has the details.
+The figure draws those steps for the first twelve chirps. <a href="../L29-range-doppler-mti/index.html#frame-the-phase-from-chirp-to-chirp">Lesson 29</a> has the details.
 ::::
 
 ::::{frame} The Two FFTs, Step by Step
 :class: viz-frame
 
 :::{depth}
-The widget steps through the last two frames on one small burst: 32 chirps of 32 samples on the teaching chirp, with three targets, a wall that does not move, one target closing, and one opening. Press **Next** to take one step, or **Play** to run all four.
+The widget runs the last two frames on one small burst with three targets: a wall at 3.0 m, a target at 1.5 m closing at 4.7 m/s, and a target at 4.5 m opening at 3.5 m/s. **Play step** animates the next step, and **Next** and **Back** jump between the finished steps.
 
-It starts with the burst as the radar records it, one row per chirp, with one row plotted beside it: three beat tones added together. The second step runs the range FFT along each row, and the plotted row becomes a range profile with one peak per target. The third step looks down two range columns: the wall's column is the same in every chirp, and the closing target's column turns through four cycles across the burst. The fourth step runs the Doppler FFT down each column, and the matrix becomes the range-Doppler map, with each target as one spot at its range and its velocity.
+The burst is idealized so that every step is easy to see. It keeps 32 of the teaching burst's 128 chirps and shows the first 16 range bins, each target sits at the center of a bin, and there is no noise. A measured map has a noise floor, and each target spreads over a few cells.
 
-Each range bin is 0.375 m, and with 32 chirps each velocity bin is 1.17 m/s.
+With 32 chirps the velocity bin is
+
+$$
+\Delta v = \frac{0.030\ \text{m}}{2\ (32)(0.4\ \text{ms})} = 1.17\ \text{m/s},
+$$
+
+four times as coarse as the full burst's 0.29 m/s, so the closing target is 4 bins from zero and the opening target 3. The closing target's Doppler shift is 312 Hz and the burst lasts 12.8 ms, so its range cell turns through four cycles in the third step. The widget draws its map with range across and velocity up; the next frame's figure is the same map turned 90°.
 :::
 
 <iframe src="../../viz/rdm-two-ffts.html"
-        width="100%" height="456"
+        width="100%" height="474"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="A stepper through four stages on one burst: the recorded matrix, the range FFT row by row, one range column chirp by chirp, and the Doppler FFT column by column, ending in the range-Doppler map">
@@ -170,13 +176,14 @@ v_\text{max} &= \pm\frac{\lambda}{4\ T_\text{PRI}} = \pm 18.75\ \text{m/s}
 $$
 :::
 :::{present}
-<img src="../../viz/img/L29-burst-choices.svg" alt="The hand's spot on the teaching burst's map three times, between 0.5 and 2.5 m and minus 3 to plus 3 m/s: with 128 chirps and 400 MHz a small spot at plus 0.6 m/s; with 32 chirps the same range height and four times as wide in velocity; with a 160 MHz chirp the same width in velocity and about 2.5 times as tall in range" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/overview2-phasor-alias.svg" alt="A target whose phase advances 240 degrees a chirp, drawn on the unit circle at chirps 0 to 3; the dashed arc of plus 240 degrees and the shorter arc of minus 120 degrees reach the same point" style="max-width: min(250px, 34vw); width: 100%; display: block; margin: 0 auto;">
 
 - More chirps make the velocity cell finer.
-- A shorter $T_\text{PRI}$ raises the limit, and a target faster than $v_\text{max}$ aliases.
+- A shorter $T_\text{PRI}$ raises the limit.
+- Past $v_\text{max}$ a target aliases: +25 m/s reads as −12.5 m/s.
 :::
 
-The Doppler FFT observes each range cell for the length of the burst, $M\ T_\text{PRI}$, so it separates Doppler tones that differ by $1/(M\ T_\text{PRI})$. Multiplying by $\lambda/2$ converts that to the velocity cell $\Delta v$. The burst samples the phase once every $T_\text{PRI}$, so the FFT distinguishes only Doppler shifts within $\pm 1/(2T_\text{PRI})$, which gives the velocity limit $v_\text{max}$. On the teaching burst,
+The Doppler FFT observes each range cell for the length of the burst, $M\ T_\text{PRI}$, so it separates Doppler tones that differ by $1/(M\ T_\text{PRI})$. Multiplying by $\lambda/2$ converts that to the velocity cell $\Delta v$. The burst samples the phase once every $T_\text{PRI}$, so the FFT distinguishes only Doppler shifts within $\pm 1/(2T_\text{PRI})$, which gives the velocity limit $v_\text{max}$. A velocity cell is one bin of the Doppler FFT, as a range cell is one bin of the range FFT. On the teaching burst,
 
 $$
 \begin{aligned}
@@ -187,7 +194,11 @@ $$
 
 That limit is the unambiguous velocity of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>, with the chirp rate as the PRF.
 
-A target faster than the limit aliases: at +25 m/s the phase advances 240° a chirp, the FFT reads that as −120°, and the map reports −12.5 m/s. Each setting of the burst controls one axis of the map, and the figure shows the hand's spot for three bursts: with 32 chirps instead of 128 it is four times as wide in velocity, and with a 160 MHz chirp it is taller in range. The number of chirps sets the velocity cell, the interval between chirps sets the velocity limit, and the bandwidth sets the range cell, $c/2B$, which is 0.375 m for 400 MHz. <a href="../L29-range-doppler-mti/index.html#frame-the-velocity-axis">Lesson 29</a> works the cases.
+A target faster than the limit aliases, and the circle shows why. At +25 m/s the phase advances 240° a chirp. A step of +240° and one of −120° reach the same point on the circle, so the FFT reads them as the same phase step, and the map reports −12.5 m/s.
+
+<img src="../../viz/img/L29-burst-choices.svg" alt="The hand's spot on the teaching burst's map three times, between 0.5 and 2.5 m and minus 3 to plus 3 m/s: with 128 chirps and 400 MHz a small spot at plus 0.6 m/s; with 32 chirps the same range height and four times as wide in velocity; with a 160 MHz chirp the same width in velocity and about 2.5 times as tall in range" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+
+Each setting of the burst controls one axis of the map, and the figure above shows the hand's spot for three bursts: with 32 chirps instead of 128 it is four times as wide in velocity, and with a 160 MHz chirp it is taller in range. The number of chirps sets the velocity cell, the interval between chirps sets the velocity limit, and the bandwidth sets the range cell, $c/2B$, which is 0.375 m for 400 MHz. <a href="../L29-range-doppler-mti/index.html#frame-the-velocity-axis">Lesson 29</a> works the cases.
 ::::
 
 ::::{frame} Clutter and MTI
