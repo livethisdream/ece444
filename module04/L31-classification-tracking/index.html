@@ -1,0 +1,1475 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L31 - Classification and Tracking &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=292d567668">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../radar-overview-1-detection-fmcw/index.html">Radar Overview 1 — Detection and FMCW Range</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../radar-overview-2-doppler-mti-cfar/index.html">Radar Overview 2 — Doppler, MTI, CFAR, and the Lab Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l31-classification-and-tracking">
+<h1>L31 - Classification and Tracking<a class="headerlink" href="#l31-classification-and-tracking" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Classification and Tracking</h1>
+<div class="title-rule"></div>
+<p>Read four targets’ micro-Doppler on your kit, then classify recorded targets and track a walker in range and angle.</p>
+<p>Lesson 31 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame here-31 docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 7">
+  <li>I can integrate FMCW radar processing with a phased-array front-end to track a moving target.</li>
+  <li>I can classify a detected target from its micro-Doppler signature and report the classifier's accuracy.</li>
+</ol>
+<!-- The Module 4 "you are here" strip. Included into a lesson's Learning
+     Objectives frame, which carries `:class: here-NN` to light up its own
+     chip (frames.css). L25-L27 are taught in class; L28-L31 are the final
+     project, each one page with its lesson and then its lab. -->
+<div class="lane-strip" role="navigation" aria-label="Module 4 lessons, by whether they are taught in class or worked as the final project">
+  <span class="ls-label">Module 4</span>
+  <a class="ls-chip" data-n="25" href="../L25-radar-equation/index.html" title="L25 Radar Equation: in class">25</a>
+  <a class="ls-chip" data-n="26" href="../L26-range-resolution-doppler/index.html" title="L26 Range, Resolution, and Doppler: in class">26</a>
+  <a class="ls-chip" data-n="27" href="../L27-radar-detection/index.html" title="L27 Radar Detection: in class">27</a>
+  <a class="ls-chip ls-proj" data-n="28" href="../L28-fmcw/index.html" title="L28 FMCW and its lab: final project">28</a>
+  <a class="ls-chip ls-proj" data-n="29" href="../L29-range-doppler-mti/index.html" title="L29 Range-Doppler and MTI and its lab: final project">29</a>
+  <a class="ls-chip ls-proj" data-n="30" href="../L30-cfar/index.html" title="L30 CFAR and its lab: final project">30</a>
+  <a class="ls-chip ls-proj" data-n="31" href="../L31-classification-tracking/index.html" title="L31 Classification and Tracking and its lab: final project">31</a>
+  <a class="ls-chip ls-proj ls-report" href="../final-project/index.html" title="Final Project: Radar Systems Report">Report</a>
+  <span class="ls-key"><i></i>in class <i class="ls-proj"></i>final project</span>
+</div>
+<div class="depth docutils container">
+<p>By the end of the <a href="../L30-cfar/index.html">L30 Lab</a> the radar
+produces a list of detections, each a range, a radial velocity, and an SNR.
+A detection says that something is there and how fast it is closing. It does
+not say what the target is, and one detection per frame does not say where
+the target is going. This page adds the last two stages of the chain your
+<a class="reference internal" href="../final-project/index.html"><span class="doc std std-doc">final project</span></a> report explains. The lesson comes
+first, and you read it before the lab: it classifies a detected target from
+its micro-Doppler signature, which
+<a href="../L26-range-resolution-doppler/index.html#frame-a-first-look-at-micro-doppler">Lesson 26</a>
+introduced, measures how often the classifier is right, and then joins the
+detections into a track in range, with an alpha-beta filter, and in angle,
+with the monopulse comparison of the
+<a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">L24 Lab</a>.
+Its last frame, the Pre-Lab, lists the predictions you make before the lab.
+The lab follows it on this page.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-an-example-burst">
+<div class="wrap docutils container">
+<p class="rubric">An Example Burst</p>
+<p>The lesson works each method on an example burst, not the lab’s preset, and
+on example targets, not the lab’s records:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Example burst</p></th>
+<th class="head text-left"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>carrier, wavelength</p></td>
+<td class="text-left"><p><span class="qty">10.0 GHz</span>, <span class="math notranslate nohighlight">\(\lambda = 3.0\ \text{cm}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>chirp</p></td>
+<td class="text-left"><p><span class="qty">400 MHz</span> in <span class="math notranslate nohighlight">\(300\ \mu\text{s}\)</span>, one every <span class="qty">0.4 ms</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>frame</p></td>
+<td class="text-left"><p><span class="qty">256</span> chirps, <span class="qty">102.4 ms</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>range bin</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(c/2B = 0.375\ \text{m}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Work your own Part 1 values at the lab’s preset, which the lab’s
+Big Picture names.</p>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-micro-doppler-of-a-moving-part">
+<div class="wrap docutils container">
+<p class="rubric">Micro-Doppler of a Moving Part</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+f_D(t) &amp;= \frac{2}{\lambda}\left[v_\text{body} + v_\text{part}(t)\right] \\
+v_\text{part}(t) &amp;= \Omega\rho\ \sin(\Omega t) \quad \text{(a rotor)}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>A rotor’s tips set the edge of its band, <span class="math notranslate nohighlight">\(\pm v_\text{tip}\)</span>.</p></li>
+<li><p>A walker’s torso sets a line off zero, and its limbs swing about it once a stride.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lesson 26 derived the Doppler shift of a rigid target, <span class="math notranslate nohighlight">\(f_D = 2v_r/\lambda\)</span>.
+A real target is rarely rigid. Its body moves at one radial speed, and its
+parts move about the body at speeds of their own, so each part’s echo carries
+the body’s Doppler plus a shift from its own motion. The extra shifts are the
+<strong>micro-Doppler</strong>, and they change in time with the motion that causes them.</p>
+<p>A point on a rotor at radius <span class="math notranslate nohighlight">\(\rho\)</span>, turning at <span class="math notranslate nohighlight">\(\Omega\)</span> radians per second
+and seen edge-on, swings toward and away from the radar along the line of
+sight, so its radial speed is <span class="math notranslate nohighlight">\(\Omega\rho\sin(\Omega t)\)</span> and its Doppler
+swings sinusoidally between <span class="math notranslate nohighlight">\(\pm 2\Omega\rho/\lambda\)</span>. Every point along a
+blade does this at its own radius, so a blade fills the band from zero out to
+its tip. The tips move fastest. For a <span class="qty">25 cm</span> fan at <span class="qty">700 rpm</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+v_\text{tip} &amp;= \pi D\ \frac{\text{rpm}}{60} \\
+&amp;= \pi(0.25)\frac{700}{60} = 9.2\ \text{m/s},
+\end{aligned}\end{split}\]</div>
+<p>which is <span class="math notranslate nohighlight">\(\pm 2(9.2)/0.030 = \pm 611\ \text{Hz}\)</span> at <span class="qty">10.0 GHz</span>. A rotor
+held at a tilt <span class="math notranslate nohighlight">\(\psi\)</span> off edge-on moves only <span class="math notranslate nohighlight">\(\cos\psi\)</span> of that along the
+line of sight, so the same fan turned <span class="qty">40°</span> shows tips at
+<span class="math notranslate nohighlight">\(9.2\cos 40^\circ = 7.0\ \text{m/s}\)</span>.</p>
+<p>A walker’s arms and legs swing forward and back about the torso, once a
+stride, like pendulums. A walker closing at <span class="qty">1.1 m/s</span> whose limbs
+swing <span class="qty">2.3 m/s</span> about the torso puts the torso at <span class="qty">73 Hz</span>, and
+the limbs reach <span class="math notranslate nohighlight">\(1.1 + 2.3 = 3.4\ \text{m/s}\)</span>, or <span class="qty">227 Hz</span>, on the
+forward stroke, and <span class="math notranslate nohighlight">\(1.1 - 2.3 = -1.2\ \text{m/s}\)</span> on the back stroke. The
+body’s Doppler says how fast the target is moving. The micro-Doppler says
+what is moving, which is the property a classifier needs.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-four-signatures">
+<div class="wrap docutils container">
+<p class="rubric">Four Signatures</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The walker shows a torso line off zero, and its limbs swing once a stride.</p></li>
+<li><p>The fan shows a steady band out to its tips.</p></li>
+<li><p>The spinner’s band piles up in horns near its tips.</p></li>
+<li><p>The hand shows one trace swinging through zero.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L31-signatures.svg"
+     alt="Simulated slow-time spectrograms over three seconds of the lesson's four example targets, each panel with its own Doppler span in hertz and, on the right, in meters per second: a walker whose torso line, dashed, sits at 73 Hz above zero with limb traces swinging 0.9 times a second; a fan with a steady band out to plus and minus 611 Hz; a spinner whose band is strongest near plus and minus 314 Hz; and a hand whose single trace swings sinusoidally through zero"
+     style="max-width: 520px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The L31 Lab reads four kinds of target: you walking, a desk fan, a fidget
+spinner, and your hand waving. The figure simulates the lesson’s example of
+each on the example burst, one range bin sampled once per chirp, with the
+spectrogram the next frames build. Each panel has its own span, and the
+right-hand axis reads the same scale in m/s, the unit of the app’s view.</p>
+<p>The walker is the only target that goes anywhere, so it is the only one
+whose pattern sits off zero: the torso is the steady line at <span class="qty">73 Hz</span>
+and the limbs trace arcs above and below it, once a stride. The fan stays
+put, so its band is centered on zero, and it is steady, because the blades
+pass too often for any one of them to appear. The spinner, <span class="qty">6 cm</span>
+across at <span class="qty">1500 rpm</span>, is a smaller rotor, with tips at
+<span class="math notranslate nohighlight">\(\pi(0.06)(25) = 4.7\ \text{m/s}\)</span>, or <span class="qty">314 Hz</span>. Its weight sits in
+three lobes near the rim rather than along a blade, and a point moving
+sinusoidally spends most of its time near its extremes, so its band piles up
+in two horns near the tip speed instead of filling evenly. The hand is one
+scatterer moving back and forth. A wave <span class="qty">0.15 m</span> each way at
+<span class="qty">1.2 Hz</span> peaks at <span class="math notranslate nohighlight">\(2\pi(1.2)(0.15) = 1.1\ \text{m/s}\)</span>, or <span class="qty">75 Hz</span>, and the
+trace crosses zero twice a cycle, so the hand has no average Doppler at all.</p>
+<p>In the app’s Range-Doppler view the same targets appear at their ranges,
+across velocity: watched for a few seconds, each one’s band spans the speeds
+its parts reach, and the walker’s sits off zero.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-one-range-bin-in-slow-time">
+<div class="wrap docutils container">
+<p class="rubric">One Range Bin in Slow Time</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>One sample per chirp: <span class="qty">2.5 kHz</span> on the example burst, so <span class="qty">±1.25 kHz</span>, or <span class="qty">±18.75 m/s</span>.</p></li>
+<li><p>A part faster than that aliases.</p></li>
+<li><p>A walker crosses a <span class="qty">0.375 m</span> bin in <span class="qty">0.34 s</span>: sum the bins around it.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><a href="../L29-range-doppler-mti/index.html">Lesson 29</a> forms the
+range-Doppler map with an FFT across the chirps of a burst, one FFT for each
+range bin. That FFT runs in <strong>slow time</strong>: one sample per chirp, from the
+same range bin of each chirp’s range profile. A spectrogram is the same FFT
+taken over short, overlapping pieces of a longer recording instead of over
+one whole burst, so each column of the spectrogram is a Doppler spectrum of a
+few tens of milliseconds of the target.</p>
+<p><img src="../../viz/img/L31-slow-time.svg"
+     alt="The burst drawn as a grid of range bins down and chirps across; one range bin's row is highlighted, and three overlapping windows along it each feed one spectrogram column"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;"></p>
+<p>The slow-time samples arrive at the PRI, <span class="qty">0.4 ms</span> on the example
+burst, so the sample rate is <span class="qty">2.5 kHz</span> and the spectrogram covers
+<span class="qty">±1.25 kHz</span>, the <span class="qty">±18.75 m/s</span> that L29 calls
+<span class="math notranslate nohighlight">\(v_\text{max}\)</span>. A part faster than that aliases, as in L26, and wraps to the
+wrong Doppler. A <span class="qty">30 cm</span> fan with tips at <span class="qty">18.8 m/s</span> sits
+just past that edge and its tips wrap. A CW radar samples its Doppler tone
+directly, hundreds of kHz instead of once a PRI, so the same tips do not wrap
+there.</p>
+<p>Two more details make the spectrogram show the target and nothing else.
+Stationary returns, the walls and the fan’s own stand, sit at
+<span class="qty">0 Hz</span> and are far stronger than the parts that move; subtracting the
+mean of the slow-time samples removes them, which is what MTI does at
+<span class="qty">0 Hz</span>. And a target that moves in range leaves its bin: at
+<span class="qty">1.1 m/s</span> the example walker crosses a <span class="qty">0.375 m</span> bin in
+<span class="qty">0.34 s</span>, so the spectrogram of one bin shows the walker in pieces.
+The provided <code class="docutils literal notranslate"><span class="pre">spectrogram</span></code> therefore sums the few bins around the detection’s
+range, which the L30 detection list supplies. You run it and tune its window;
+you do not write it.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-window-length">
+<div class="wrap docutils container">
+<p class="rubric">Window Length</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Delta f &amp;= \frac{1}{T_w} \\
+\delta f &amp;= \dot f_D\ T_w = \frac{2a}{\lambda}\ T_w \\
+T_w &amp;= \frac{1}{\sqrt{\dot f_D}} \\
+&amp;= \frac{1}{\sqrt{867\ \text{Hz/s}}} = 34\ \text{ms}
+\end{aligned}\end{split}\]</div>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The example walker’s limbs accelerate at <span class="math notranslate nohighlight">\(13.0\ \text{m/s}^2\)</span>, so 64 chirps, <span class="qty">25.6 ms</span>, is the nearest power of two.</p></li>
+<li><p>A fan’s tips change too fast for any window to follow, so its band looks steady.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Every spectrogram trades resolution in frequency against resolution in time.
+A window of length <span class="math notranslate nohighlight">\(T_w\)</span> resolves Doppler shifts <span class="math notranslate nohighlight">\(\Delta f = 1/T_w\)</span> apart, the
+<span class="math notranslate nohighlight">\(\Delta f = 1/T\)</span> of L26, so a long window resolves finely. But a limb’s
+Doppler does not hold still during the window. If it changes at a rate
+<span class="math notranslate nohighlight">\(\dot f_D\)</span>, it moves by <span class="math notranslate nohighlight">\(\delta f = \dot f_D T_w\)</span> while the window is open, and
+the column smears that far. A Doppler rate comes from an acceleration <span class="math notranslate nohighlight">\(a\)</span>
+along the line of sight, <span class="math notranslate nohighlight">\(\dot f_D = 2a/\lambda\)</span>, by differentiating
+<span class="math notranslate nohighlight">\(f_D = 2v/\lambda\)</span>.</p>
+<p>The resolution improves as the window grows and the smear worsens, so the
+best window makes the two equal, <span class="math notranslate nohighlight">\(1/T_w = \dot f_D T_w\)</span>, which gives
+<span class="math notranslate nohighlight">\(T_w = 1/\sqrt{\dot f_D}\)</span>. The example walker swings its limbs
+<span class="qty">2.3 m/s</span> about the torso, <span class="qty">0.9</span> times a second, so their peak
+acceleration is <span class="math notranslate nohighlight">\(2\pi(0.9)(2.3) = 13.0\ \text{m/s}^2\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\dot f_D &amp;= \frac{2(13.0)}{0.030} = 867\ \text{Hz/s}, \\
+T_w &amp;= 34\ \text{ms},
+\end{aligned}\end{split}\]</div>
+<p>about 85 chirps of the example burst. Windows come in powers of two:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Window</p></th>
+<th class="head text-right"><p><span class="math notranslate nohighlight">\(T_w\)</span></p></th>
+<th class="head text-right"><p>Resolution <span class="math notranslate nohighlight">\(1/T_w\)</span></p></th>
+<th class="head text-right"><p>Limb smear <span class="math notranslate nohighlight">\(\dot f_D T_w\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>16 chirps</p></td>
+<td class="text-right"><p><span class="qty">6.4 ms</span></p></td>
+<td class="text-right"><p><span class="qty">156 Hz</span></p></td>
+<td class="text-right"><p><span class="qty">6 Hz</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>64 chirps</p></td>
+<td class="text-right"><p><span class="qty">25.6 ms</span></p></td>
+<td class="text-right"><p><span class="qty">39 Hz</span></p></td>
+<td class="text-right"><p><span class="qty">22 Hz</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>128 chirps</p></td>
+<td class="text-right"><p><span class="qty">51.2 ms</span></p></td>
+<td class="text-right"><p><span class="qty">20 Hz</span></p></td>
+<td class="text-right"><p><span class="qty">44 Hz</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>256 chirps</p></td>
+<td class="text-right"><p><span class="qty">102.4 ms</span></p></td>
+<td class="text-right"><p><span class="qty">9.8 Hz</span></p></td>
+<td class="text-right"><p><span class="qty">89 Hz</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Sixty-four chirps keeps the two closest, and it resolves
+<span class="qty">0.59 m/s</span>.</p>
+<p><img src="../../viz/img/L31-window.svg"
+     alt="Resolution and limb smear in hertz against window length on log axes: resolution falls as one over the window and smear rises with it, crossing at the best window of 34 milliseconds; the 16, 64 and 256 chirp windows of the example burst are marked"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;"></p>
+<p>A measured line is wider than <span class="math notranslate nohighlight">\(1/T_w\)</span>. The Hann window that <code class="docutils literal notranslate"><span class="pre">spectrogram</span></code>
+applies widens a line’s main lobe to <span class="qty">1.44</span> bins at its 3 dB points, the
+widening <a href="../L28-fmcw/index.html">Lesson 28</a> gives for a line in range,
+and a part that moves during the window widens it further, so expect a line
+about <span class="math notranslate nohighlight">\(1.44/T_w\)</span> wide or more. Sixteen chirps follows the limbs but resolves only
+<span class="qty">156 Hz</span>; 256 chirps resolves finely but smears the limbs across
+<span class="qty">89 Hz</span>. The torso, which hardly accelerates, is sharpest in the
+longest window. The table changes with the PRI, so the lab’s own windows have
+their own numbers.</p>
+<p>A fan’s tips change their Doppler far faster than any window can follow, so
+a fan’s band shows steady, averaged over many blade passes, and a very short
+window shows each blade’s flash instead.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-window-explorer">
+<div class="wrap docutils container">
+<p class="rubric">Window Explorer</p>
+<iframe src="../../viz/spectrogram-window.html"
+        width="100%" height="422"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Slow-time spectrogram of the lesson's example walker, fan, spinner, or waving hand on the example burst, with the window length set from 8 to 512 chirps">
+</iframe>
+<p>The widget computes the spectrogram of the chosen example target on the
+example burst for a window of 8 to 512 chirps; the readout gives the window
+in chirps and milliseconds and the resolution <span class="math notranslate nohighlight">\(1/T_w\)</span>, and the red bar at the
+top right is the window’s length on the time axis. It opens on the walker at
+64 chirps. Lengthen the window and the torso line sharpens while the limb
+arcs blur along time; shorten it and the limbs follow their swing while every
+line thickens in Doppler. Then pick the fan and shorten the window to 16
+chirps: the band breaks into the blades’ flashes, 70 a second, since each of
+the three blades lies across the line of sight twice a turn at
+<span class="qty">700 rpm</span>.</p>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-three-features">
+<div class="wrap docutils container">
+<p class="rubric">Three Features</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The <strong>centroid</strong> is the body’s radial speed.</p></li>
+<li><p>The <strong>spread</strong> is how fast its parts move about it.</p></li>
+<li><p>The <strong>periodicity</strong> is how strongly the pattern repeats at the pace of a stride or a wave.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A classifier does not look at a picture; it compares numbers. A <strong>feature</strong>
+is one number computed from the spectrogram that takes different values for
+different classes of target, and three are enough to separate most of the
+lab’s four kinds of target. Each measures a different physical property,
+which is why they separate targets that any one of them alone would confuse.</p>
+<p>The provided <code class="docutils literal notranslate"><span class="pre">features</span></code> returns all three, in m/s for the first two, after
+ignoring each column’s bins more than <span class="qty">15 dB</span> below its peak so the
+noise floor does not count as motion. The <strong>centroid</strong> is the power-weighted
+mean Doppler, converted to speed: the body’s radial speed, near zero for a
+target that stays put. The <strong>spread</strong> is the power-weighted width of each
+column about that mean: how fast the parts move relative to the body. The
+<strong>periodicity</strong> asks whether the pattern repeats every <span class="qty">0.25</span> to
+<span class="qty">2 s</span>, as a stride or a wave does: a walker or a waving hand scores
+near 0.8, and a steady rotor scores low, about 0.2.</p>
+<p>The features are a list of numbers, one row per record, and the classifier
+compares the rows. Adding a feature is one more number on the end of that
+list: the lab’s task (b) appends one with a single <code class="docutils literal notranslate"><span class="pre">np.append</span></code> line in the
+notebook’s <code class="docutils literal notranslate"><span class="pre">my_features</span></code>, and the classifier uses it with no other change.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-nearest-centroid-classifier">
+<div class="wrap docutils container">
+<p class="rubric">Nearest-Centroid Classifier</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L31-features.svg"
+     alt="Twenty training trials of each example target in two panels. Left, centroid against spread: walkers spread along the centroid axis; hands, spinners and fans sit near zero centroid, most hands lowest in spread, spinners and fans overlapping between about 2 and 7 meters per second. Right, periodicity against spread: hands and walkers sit near 0.8 periodicity, rotors below about 0.5. A cross marks each class's mean"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Training stores each class’s mean.</p></li>
+<li><p>A trial takes the nearest mean’s class.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A <strong>nearest-centroid</strong> classifier is the simplest one that learns from data.
+We record a set of <strong>training</strong> trials of each target, compute the three
+features of each, and keep each class’s mean, the crosses in the figure.
+A new trial gets the class whose mean is nearest. The features have different
+units, so the classifier first scales each one to a common size; without
+that, the feature with the largest numbers would decide every distance.</p>
+<p>The figure plots 20 simulated training trials of each example target on the
+example burst: walkers at speeds from 0.7 to <span class="qty">1.5 m/s</span> and up to
+<span class="qty">60°</span> off the line of sight, <span class="qty">25 cm</span> fans from 450 to
+<span class="qty">850 rpm</span>, <span class="qty">6 cm</span> spinners from 900 to <span class="qty">2000 rpm</span>,
+waves of different sizes and rates, and an SNR of 3 to <span class="qty">15 dB</span> a
+chirp. The walkers are the only class well off zero in centroid, with a mean
+of <span class="qty">0.78 m/s</span>. Most hands have the least spread among the others,
+under <span class="qty">1 m/s</span>, though a few slow, large waves reach into the rotors’
+range, and the right panel shows what sets the hands apart: periodicity. The fans and spinners share
+zero centroid and low periodicity, so only their spread separates them, a
+mean of <span class="qty">4.7</span> against <span class="qty">3.6 m/s</span>, and the two clouds overlap: a fast
+spinner looks like a slow fan.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-the-confusion-matrix">
+<div class="wrap docutils container">
+<p class="rubric">The Confusion Matrix</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>true \ called</p></th>
+<th class="head text-right"><p>walker</p></th>
+<th class="head text-right"><p>fan</p></th>
+<th class="head text-right"><p>spinner</p></th>
+<th class="head text-right"><p>hand</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>walker</p></td>
+<td class="text-right"><p><strong>20</strong></p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>fan</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p><strong>16</strong></p></td>
+<td class="text-right"><p>2</p></td>
+<td class="text-right"><p>2</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>spinner</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>12</p></td>
+<td class="text-right"><p><strong>8</strong></p></td>
+<td class="text-right"><p>0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>hand</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p>0</p></td>
+<td class="text-right"><p><strong>20</strong></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Accuracy on unseen trials is <span class="math notranslate nohighlight">\(64/80 = 80\%\)</span>.</p></li>
+<li><p>Fourteen of the 16 errors mistake one rotor for the other.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The <strong>confusion matrix</strong> counts, for each true class (a row), how many trials
+the classifier called each class (a column). The diagonal holds the correct
+calls, and every count off the diagonal is a specific mistake. Its
+<strong>accuracy</strong> is the diagonal’s total over all trials,</p>
+<div class="math notranslate nohighlight">
+\[\text{accuracy} = \frac{20 + 16 + 8 + 20}{80} = 80\%.\]</div>
+<p>The trials in the matrix are a second set of 20 per class, drawn the same way
+as the training set but not used to train. A classifier scored on its own
+training trials has already seen the answers, and its accuracy overstates
+what it will do on a target it has not seen. The lab scores each record with
+a classifier trained on all the others, <strong>leave-one-out</strong>, which keeps that
+rule when there are only a few records of each class.</p>
+<p>The matrix says more than the accuracy does. Fourteen of the 16 errors are a
+fan called a spinner or a spinner called a fan, the overlap the previous
+figure showed, and the other two are slow fans whose small spread falls
+nearer the hands’ mean. Walkers and hands are never wrong. An 80% classifier
+that never misses a person is a different instrument from one that misses
+people 20% of the time, and only the matrix tells them apart. It also says
+what to improve: a feature that separates the two rotors would address most
+of the errors. Finally, the number is an estimate. Five different draws of 80
+test trials score between 80% and 84%, so with 20 trials a class report the
+counts, not only the percentage.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-the-band-s-edge-and-shape">
+<div class="wrap docutils container">
+<p class="rubric">The Band’s Edge and Shape</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+v_\text{rms} &amp;= v_\text{tip}\sqrt{\left\langle \sin^2 \Omega t \right\rangle \left\langle (\rho/R)^2 \right\rangle} \\
+&amp;= v_\text{tip}\sqrt{\tfrac12 \left\langle (\rho/R)^2 \right\rangle}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>The <strong>edge</strong> is the tip speed; a tilt or a rate scales it.</p></li>
+<li><p>The <strong>shape</strong>, spread over edge, says where the weight sits.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Two more features can separate the rotors. The <strong>edge</strong> is the speed at the
+outside of each column’s band, the bins within <span class="qty">15 dB</span> of the
+column’s peak, averaged over the record: for a rotor it is the tip speed
+along the line of sight, <span class="math notranslate nohighlight">\(v_\text{tip}\cos\psi\)</span>. The spread measures the
+same motion in a different way, as an RMS. Both grow with the rate and both
+shrink with the tilt, so a fast spinner and a slow or tilted fan can share
+either one.</p>
+<p>Their ratio does not. Every point on a rotor moves at
+<span class="math notranslate nohighlight">\(v_\text{tip}(\rho/R)\sin\Omega t\)</span> along the line of sight, so its RMS speed
+over a turn and over the points is the first line above. The mean of
+<span class="math notranslate nohighlight">\(\sin^2\)</span> over a turn is <span class="math notranslate nohighlight">\(\tfrac12\)</span>. The mean of <span class="math notranslate nohighlight">\((\rho/R)^2\)</span> depends only on
+where along the radius the weight sits. For a blade whose weight is spread
+evenly over its outer third, from <span class="math notranslate nohighlight">\(\rho = 2R/3\)</span> to <span class="math notranslate nohighlight">\(R\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\left\langle (\rho/R)^2 \right\rangle &amp;= \frac{1}{R/3}\int_{2R/3}^{R}\frac{\rho^2}{R^2}\ d\rho = \frac{1 - (2/3)^3}{3(1/3)} = 0.704, \\
+\frac{v_\text{rms}}{v_\text{tip}} &amp;= \sqrt{\tfrac12(0.704)} = 0.59.
+\end{aligned}\end{split}\]</div>
+<p>A tilt or a rate scales every speed in the band by the same factor, so the
+<strong>shape</strong>, the spread over the edge, is the same at any tilt and any rate: it
+measures where the weight sits, not how fast it moves. A rotor whose weight
+sits farther out has a larger shape.</p>
+<p><img src="../../viz/img/L31-shape.svg"
+     alt="Held Doppler spectra in decibels against radial speed divided by the band's edge, for a blade weighted evenly from hub to tip, the same blade tilted 40 degrees, a rotor with its weight at the rim, and a blade weighted on its outer third; the tilted blade's curve lies on the untilted one, the rim's piles up at the edges, and dashed lines mark the outer third's RMS speed"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;"></p>
+<p>The figure normalizes each held spectrum to its own edge. The tilted blade
+lands on the untilted one, because a tilt scales every speed by the same
+<span class="math notranslate nohighlight">\(\cos\psi\)</span>; the rim and the outer third differ from the full blade because
+their weight sits elsewhere. The notebook’s task (b) adds the edge
+and then the shape to the three features and compares the matrices.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-the-alpha-beta-filter">
+<div class="wrap docutils container">
+<p class="rubric">The Alpha-Beta Filter</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Each frame: predict where the target should be, compare with the detection, correct.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha\)</span> sets how much a new detection moves the track.</p></li>
+<li><p>On a missed frame, the track only predicts.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A detection list is noisy. Each range is the center of a range bin, a
+walker’s body is larger than a bin, some frames miss the target, and nothing
+in the list says that the detection at <span class="qty">3.1 m</span> in one frame is the
+same person as the one at <span class="qty">3.4 m</span> in the next. A <strong>track</strong> joins the
+detections of one target into a single estimate of its range and velocity,
+frame after frame. A military radar calls a person on foot a <strong>dismount</strong>;
+tracking one is the second half of the L31 Lab.</p>
+<p>The <strong>alpha-beta filter</strong> is the simplest tracker, and the provided
+<code class="docutils literal notranslate"><span class="pre">alpha_beta</span></code> runs it. Each frame it <strong>predicts</strong> where the target should be,
+assuming it kept its velocity over one frame, compares that prediction with
+the frame’s detection, and <strong>corrects</strong> the range and the velocity by fixed
+fractions of the difference, the <strong>residual</strong>. The gain <span class="math notranslate nohighlight">\(\alpha\)</span> sets how far
+a new detection moves the range, and <span class="math notranslate nohighlight">\(\beta\)</span> how far it moves the velocity. A
+frame with no detection near the prediction keeps the prediction, which is
+how a track coasts through a miss, and accepting only the detection nearest
+the prediction is how two targets keep separate tracks. On the example burst
+one frame is <span class="math notranslate nohighlight">\(\Delta t = 102.4\ \text{ms}\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-choosing-alpha-and-beta">
+<div class="wrap docutils container">
+<p class="rubric">Choosing Alpha and Beta</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\beta &amp;= \frac{\alpha^2}{2-\alpha} \\
+\frac{\sigma_\text{track}}{\sigma_z} &amp;= \sqrt{\frac{2\alpha^2 + 2\beta - 3\alpha\beta}{\alpha(4 - 2\alpha - \beta)}} \\
+\text{lag} &amp;= \frac{a\ \Delta t^2}{\beta}
+\end{aligned}\end{split}\]</div>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L31-alpha-beta.svg"
+     alt="Range against time for eight seconds: a walker walks out from 2 to about 6.6 meters, turns, and walks back; the detections step in 0.375 meter bins around the truth; the alpha equals 0.4 track follows the truth closely through the turn, and the alpha equals 0.15 track lags it by up to 0.9 meters"
+     style="max-width: 520px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The two gains set how much weight the track gives a new detection. A large <span class="math notranslate nohighlight">\(\alpha\)</span>
+follows each detection closely, noise and all; a small one averages over many
+frames and smooths the noise, but it is slow to notice a change in velocity,
+so it lags a target that turns. The usual choice ties the two gains together,
+<span class="math notranslate nohighlight">\(\beta = \alpha^2/(2-\alpha)\)</span>, the Benedict-Bordner choice, which balances the
+track’s noise against its lag and leaves one number to choose.</p>
+<p>The other two lines say what that number trades. For detection noise
+<span class="math notranslate nohighlight">\(\sigma_z\)</span> that is independent from frame to frame, the track’s settled RMS
+error is <span class="math notranslate nohighlight">\(\sigma_\text{track}\)</span>, the second line. Under a steady acceleration <span class="math notranslate nohighlight">\(a\)</span> the track trails the target by the
+third line. The target gains <span class="math notranslate nohighlight">\(a\Delta t\)</span> of speed each frame, and once the
+track settles its velocity must gain the same, so the velocity correction
+<span class="math notranslate nohighlight">\((\beta/\Delta t)e\)</span> equals <span class="math notranslate nohighlight">\(a\Delta t\)</span> and the residual is <span class="math notranslate nohighlight">\(e = a\Delta t^2/\beta\)</span>. Work both for <span class="math notranslate nohighlight">\(\alpha = 0.4\)</span> on the example
+burst:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\beta &amp;= \frac{0.4^2}{2 - 0.4} = 0.100, \\
+\frac{\sigma_\text{track}}{\sigma_z} &amp;= \sqrt{\frac{2(0.16) + 2(0.1) - 3(0.4)(0.1)}{0.4\left(4 - 0.8 - 0.1\right)}} = 0.57.
+\end{aligned}\end{split}\]</div>
+<p>A walker who turns by swinging from <span class="qty">+1.2</span> to <span class="qty">−1.2 m/s</span> over
+<span class="qty">1 s</span>, as a cosine, has a peak acceleration of
+<span class="math notranslate nohighlight">\(\pi(1.2) = 3.8\ \text{m/s}^2\)</span>, so the settled lag would be</p>
+<div class="math notranslate nohighlight">
+\[\text{lag} = \frac{3.8\ (0.1024)^2}{0.100} = 0.40\ \text{m}.\]</div>
+<p><img src="../../viz/img/L31-ab-trade.svg"
+     alt="The alpha-beta trade on the example burst: the noise ratio rises from about 0.2 toward 1 as alpha grows, and the settled lag, on a log axis, falls from tens of meters toward a few centimeters; alpha equal to 0.4 is marked on both curves"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;"></p>
+<p>A small <span class="math notranslate nohighlight">\(\alpha\)</span> gives a low noise ratio and a long lag, and a large one the
+reverse; the choice depends on how much the target maneuvers.</p>
+<p>The figure simulates that walk on the example burst: out from
+<span class="qty">2 m</span> at <span class="qty">1.2 m/s</span>, the one-second turn, and back. The
+detections are the centers of the <span class="qty">0.375 m</span> bins the walker falls in,
+with <span class="qty">0.12 m</span> of body jitter, <span class="qty">0.15 m</span> RMS from the truth in
+all, and 5 of the 79 frames missed. With <span class="math notranslate nohighlight">\(\alpha = 0.4\)</span> the track holds
+<span class="qty">0.12 m</span> RMS on the straights, better than the detections, and is off
+by at most <span class="qty">0.23 m</span> at the turn, less than the settled <span class="qty">0.40</span>,
+because the turn ends before the lag builds up. With <span class="math notranslate nohighlight">\(\alpha = 0.15\)</span> the
+track is smoother, but it trails the turn by up to <span class="qty">0.9 m</span> and is
+still catching up on the way back. The track’s velocity is a second check: it
+should agree with the Doppler velocity of the detections it accepts.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-angle-by-monopulse">
+<div class="wrap docutils container">
+<p class="rubric">Angle by Monopulse</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Delta\phi &amp;= \frac{2\pi D}{\lambda}\ \sin\theta \\
+\theta &amp;= \arcsin\frac{\lambda\ \Delta\phi}{2\pi D}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Two subarray channels <span class="math notranslate nohighlight">\(D = 56\ \text{mm}\)</span> apart give the angle in one look, with no sweep.</p></li>
+<li><p>Unambiguous within <span class="qty">±15.5°</span> of broadside at <span class="qty">10.0 GHz</span>.</p></li>
+<li><p>Read in the detection’s range-Doppler cell.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Range comes from the FMCW processing; angle comes from the array.
+<a href="../../module03/L19-direction-finding/index.html">Lesson 19</a> found a
+bearing by sweeping the beam across the field and taking the peak, one sweep
+at a time. The <a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">L24 Lab</a>
+measured it in one look with <strong>monopulse</strong>, comparing the two subarray
+channels, and that is the method a tracker needs.</p>
+<p>The two subarrays’ centers sit four elements, <span class="math notranslate nohighlight">\(D = 56\ \text{mm}\)</span>, apart. A
+wave from angle <span class="math notranslate nohighlight">\(\theta\)</span> reaches one center a path <span class="math notranslate nohighlight">\(D\sin\theta\)</span> before the
+other, so the two channels differ in phase by</p>
+<div class="math notranslate nohighlight">
+\[\Delta\phi = \frac{2\pi D}{\lambda}\sin\theta,\]</div>
+<p><img src="../../viz/img/L24-monopulse.svg"
+     alt="The monopulse geometry of Lesson 24: two subarray centers a distance D apart, a plane wave arriving at angle theta, and the extra path D sine theta to the farther center"
+     style="max-width: 360px; width: 100%; display: block; margin: 0 auto;"></p>
+<p><span class="qty">672°</span> per unit of <span class="math notranslate nohighlight">\(\sin\theta\)</span> at <span class="qty">10.0 GHz</span>, and the second line
+turns a measured phase back into an angle. A phase is known only
+within <span class="qty">±180°</span>, so the angle is unambiguous while <span class="math notranslate nohighlight">\(\sin\theta\)</span> stays
+within <span class="math notranslate nohighlight">\(\lambda/(2D) = 0.268\)</span> of the steer direction’s <span class="math notranslate nohighlight">\(\sin\theta_0\)</span>, which is
+<span class="qty">±15.5°</span> at broadside and a little more in angle when the beam is
+steered.</p>
+<p>In the radar we take the two channels’ values in the range bin where CFAR
+declared the target. That bin holds the target’s echo with the 256-chirp
+integration gain of L27, and none of the clutter at other ranges, which
+would pull the angle toward itself. So the lab saves both subarray channels.
+Which side of broadside reads a positive angle depends on the order of the
+kit’s channels, so the lab checks it once, with a person on a mark to one
+side.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-a-walker-on-a-diagonal">
+<div class="wrap docutils container">
+<p class="rubric">A Walker on a Diagonal</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+R &amp;= \sqrt{x^2 + y^2}, \qquad \theta = \arctan\frac{x}{y} \\
+v_r &amp;= -v\ \hat{\mathbf u}\cdot\hat{\mathbf r}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>A diagonal walk changes the range and the angle together.</p></li>
+<li><p>Its radial speed is the part of the walk along the line of sight.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Put the array at the origin, <span class="math notranslate nohighlight">\(y\)</span> straight out along boresight and <span class="math notranslate nohighlight">\(x\)</span> to the
+side, positive on the E8 side. A point on the floor at <span class="math notranslate nohighlight">\((x, y)\)</span> sits at the
+range and angle of the first line. A walker moving at speed <span class="math notranslate nohighlight">\(v\)</span> in the
+direction of the unit vector <span class="math notranslate nohighlight">\(\hat{\mathbf u}\)</span> closes at the radial speed of
+the second line, where <span class="math notranslate nohighlight">\(\hat{\mathbf r}\)</span> is the unit vector from the array to
+the walker; the minus sign makes a closing walker positive, as on every page
+of this module.</p>
+<p><img src="../../viz/img/L31-floor.svg"
+     alt="The floor seen from above: the array at the origin with E1 on the left and E8 on the right as drawn, boresight straight up as y, x to the side; the example walker at P on the E8 side walks toward Q on the E1 side, with the unit vector u along the walk, the unit vector r from the array to P, and the angle theta from boresight to P"
+     style="max-width: 360px; width: 100%; display: block; margin: 0 auto;"></p>
+<p>Work it for a walker who starts at <span class="math notranslate nohighlight">\(P\)</span>, <span class="qty">0.4 m</span> to the E8 side and
+<span class="qty">1.8 m</span> out, and walks at <span class="qty">1.2 m/s</span> toward <span class="math notranslate nohighlight">\(Q\)</span>,
+<span class="qty">0.9 m</span> to the E1 side and <span class="qty">3.4 m</span> out:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+R_P &amp;= \sqrt{0.4^2 + 1.8^2} = 1.84\ \text{m}, \qquad \theta_P = \arctan\frac{0.4}{1.8} = +12.5^\circ, \\
+\hat{\mathbf u} &amp;= \frac{(-1.3,\ 1.6)}{2.06} = (-0.631,\ 0.776), \qquad \hat{\mathbf r}_P = \frac{(0.4,\ 1.8)}{1.84} = (0.217,\ 0.976), \\
+v_{r,P} &amp;= -1.2\left[(-0.631)(0.217) + (0.776)(0.976)\right] = -0.75\ \text{m/s}.
+\end{aligned}\end{split}\]</div>
+<p>At <span class="math notranslate nohighlight">\(P\)</span> the walker opens at <span class="qty">0.75 m/s</span>, less than its <span class="qty">1.2 m/s</span>
+pace, because part of the walk runs across the line of sight. At <span class="math notranslate nohighlight">\(Q\)</span>,
+<span class="qty">3.52 m</span> out and <span class="qty">−14.8°</span>, the walk lines up more nearly with
+the line of sight and the walker opens at <span class="qty">1.09 m/s</span>. A walker who
+turns and walks back has the same radial speeds with the sign reversed, and
+at the turn itself the speed, and with it the radial speed, passes through
+zero. That is the moment the 2-pulse canceller cuts the torso, and the
+moment the filter’s predict step carries the track.</p>
+<p>A walker moving exactly across the line of sight has
+<span class="math notranslate nohighlight">\(v_r = v\cos 90^\circ = 0\)</span> (L26), so the torso’s echo sits at
+<span class="qty">0 Hz</span> and MTI removes it. A diagonal path keeps the Doppler from
+vanishing except at the turn.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-why-monopulse-holds-a-walker">
+<div class="wrap docutils container">
+<p class="rubric">Why Monopulse Holds a Walker</p>
+<p><img src="../../viz/img/L31-sweep-vs-mono.svg"
+     alt="A crossing walker's bearing against time over four seconds, from minus 27 to plus 27 degrees: beam-sweep looks every 1.1 seconds, each with its 13.6 degree beam shaded, are far apart, while monopulse frames every 0.1 seconds follow the bearing closely"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;"></p>
+<p>A walker crossing <span class="qty">4 m</span> away at <span class="qty">1 m/s</span> changes bearing by
+about <span class="qty">14°</span> a second, so a beam sweep about a second long lets the walker
+leave the <span class="qty">13.6°</span> beam between one look and the next. Monopulse measures
+once a frame, and in the example burst’s <span class="qty">102.4 ms</span> the walker moves
+<span class="qty">1.5°</span>, well inside the monopulse window, so the angle track keeps up.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary">
+<div class="wrap docutils container">
+<p class="rubric">Summary</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>On the example burst</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(f_D = 2(v_\text{body} + v_\text{part})/\lambda\)</span></p></td>
+<td class="text-left"><p>micro-Doppler of a moving part</p></td>
+<td class="text-left"><p><span class="qty">25 cm</span> fan at <span class="qty">700 rpm</span>: tips <span class="qty">9.2 m/s</span>, <span class="qty">±611 Hz</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>slow time</p></td>
+<td class="text-left"><p>one sample per chirp</p></td>
+<td class="text-left"><p><span class="qty">2.5 kHz</span>: <span class="qty">±1.25 kHz</span>, <span class="qty">±18.75 m/s</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta f = 1/T_w\)</span>, <span class="math notranslate nohighlight">\(\delta f = \dot f_D T_w\)</span></p></td>
+<td class="text-left"><p>window: resolution against smear</p></td>
+<td class="text-left"><p>best <span class="math notranslate nohighlight">\(T_w = 1/\sqrt{\dot f_D}\)</span>; <span class="qty">64</span> chirps for the example walker</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>centroid, spread, periodicity</p></td>
+<td class="text-left"><p>three features</p></td>
+<td class="text-left"><p>body speed, parts’ speed, repetition at <span class="qty">0.25</span>-<span class="qty">2 s</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>edge, shape</p></td>
+<td class="text-left"><p>the band’s outside, and spread over edge</p></td>
+<td class="text-left"><p>weight on the outer third: shape <span class="qty">0.59</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>nearest centroid</p></td>
+<td class="text-left"><p>the class whose mean is nearest, in scaled features</p></td>
+<td class="text-left"><p>train and test on different trials</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>confusion matrix</p></td>
+<td class="text-left"><p>true class against the call</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(64/80 = 80\%\)</span>; most errors confuse the two rotors</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>alpha-beta</p></td>
+<td class="text-left"><p>predict, residual, correct</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\alpha = 0.4\)</span>: <span class="math notranslate nohighlight">\(\beta = 0.100\)</span>, noise <span class="qty">0.57</span>, lag <span class="qty">0.40 m</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>monopulse</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta\phi = 2\pi D\sin\theta/\lambda\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(D = 56\ \text{mm}\)</span>; <span class="qty">±15.5°</span> at broadside</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>a diagonal walk</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(v_r = -v\ \hat{\mathbf u}\cdot\hat{\mathbf r}\)</span></p></td>
+<td class="text-left"><p><span class="qty">−0.75 m/s</span> at <span class="math notranslate nohighlight">\(P\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-pre-lab">
+<div class="wrap docutils container">
+<p class="rubric">Pre-Lab</p>
+<p>Part 1 of the L31 Lab packet is the pre-lab: the shaded Predicted cells of
+Tables A to E, each beside the Measured cell you fill in during the lab. Do
+it before the lab, at the lab’s preset and the givens the packet lists, and
+bring it with you: you check every reading against the prediction next to it.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Predicted cells</p></th>
+<th class="head text-left"><p>You predict</p></th>
+<th class="head text-left"><p>Checked in</p></th>
+<th class="head text-left"><p>Method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Table A</p></td>
+<td class="text-left"><p>each target’s largest speed on each side of <span class="qty">0 m/s</span>, and whether its band is centered</p></td>
+<td class="text-left"><p>Table A; Steps 5 to 8</p></td>
+<td class="text-left"><p>“Micro-Doppler of a Moving Part,” “Four Signatures”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Table B</p></td>
+<td class="text-left"><p>each tape mark’s range and angle, the walker’s range near A both ways and at the turn, its radial speed near A both ways, and the angle at B</p></td>
+<td class="text-left"><p>Table B; Steps 9, 10, and 13</p></td>
+<td class="text-left"><p>“A Walker on a Diagonal,” “Angle by Monopulse”</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Table C</p></td>
+<td class="text-left"><p>the resolution of each spectrogram window</p></td>
+<td class="text-left"><p>Table C; Step 14</p></td>
+<td class="text-left"><p>“Window Length”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Table D</p></td>
+<td class="text-left"><p>the shape of a fan’s band and of a spinner’s</p></td>
+<td class="text-left"><p>Table D; Step 15</p></td>
+<td class="text-left"><p>“The Band’s Edge and Shape”</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Table E</p></td>
+<td class="text-left"><p>the noise ratio and the settled lag of each <span class="math notranslate nohighlight">\(\alpha\)</span></p></td>
+<td class="text-left"><p>Table E; Step 16</p></td>
+<td class="text-left"><p>“Choosing Alpha and Beta”</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Part 1 also asks you to attach your work for one row of each table, on your
+own paper.</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../labs/ECE444_Lab_L31_ClassifyTrack_blank.pdf" target="_blank" rel="noopener">L31 Lab packet, Part 1 (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-big-picture">
+<div class="wrap docutils container">
+<p class="rubric">The Big Picture</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Steps</p></th>
+<th class="head text-left"><p>Set</p></th>
+<th class="head text-left"><p>Read</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>5-8</p></td>
+<td class="text-left"><p>four targets</p></td>
+<td class="text-left"><p>largest speeds</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>9-11, 13</p></td>
+<td class="text-left"><p>walk A-B-A; sway on B</p></td>
+<td class="text-left"><p>range, radial speed, angle</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>14</p></td>
+<td class="text-left"><p>window 64, 16, 256</p></td>
+<td class="text-left"><p>line widths</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>15</p></td>
+<td class="text-left"><p>features, + edge, + shape</p></td>
+<td class="text-left"><p>confusion matrix</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>16</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\alpha\)</span> 0.5, 0.2, 0.8</p></td>
+<td class="text-left"><p>track errors</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The L31 Lab is the last stage of the chain your
+<a class="reference internal" href="../final-project/index.html"><span class="doc std std-doc">final project</span></a> report explains, in four parts.
+Bring Up the Kit (Steps 1 to 4) sets the Phaser app to its Range + Velocity
+preset. Four Targets (Steps 5 to 8) reads the micro-Doppler of a fan, a
+fidget spinner, your hand, and you walking in the Range-Doppler view. A
+Crossing Walker (Steps 9 to 11) reads a walk on a diagonal and back, and
+saves one burst on the far mark with both subarray channels. Run the
+Notebook (Steps 12 to 17) runs the provided <code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code> on that burst and
+on the course’s recorded data: it reads the angle at the far mark, finds each
+target with the L30 detector, classifies 16
+records, and tracks a recorded walk in range and angle, while you change the
+spectrogram window, add a feature, and tune <span class="math notranslate nohighlight">\(\alpha\)</span>. Each step that takes a
+reading has boxes under it, and each fills a Measured cell of the packet,
+beside the prediction you made in Part 1.</p>
+<p>The app’s <strong>Save Capture</strong> keeps one burst, 256 chirps or 128 ms. A stride
+takes about a second, so the notebook classifies the course’s 2 s records and
+tracks the course’s recorded walk, which carries its truth, with or without a
+kit.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-predict-first">
+<div class="wrap docutils container">
+<p class="rubric">Predict First</p>
+<div class="depth docutils container">
+<p>Before you read a target, predict its band, then check yourself. Pick a
+target, set its size, rate, and tilt, or the walker’s torso speed and limb
+swing, and decide before you press <strong>Show band</strong> how far the band reaches on
+each side of <span class="qty">0 m/s</span> and whether it is centered. Then show it. Any
+change hides the band again, so each guess comes first. The widget opens on
+the lesson’s example targets; set it to the givens in Part 1 to check your
+Table A predictions. It draws the band the Range-Doppler view holds over a
+few seconds, without the kit’s noise, leakage, or window skirts.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/microdoppler-predict.html"
+        width="100%" height="450"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Choose a target and its size, rate and tilt, predict its micro-Doppler band, then show it">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-bring-up-the-kit">
+<div class="wrap docutils container">
+<p class="rubric">Bring Up the Kit</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Transmit antenna on <strong>OUT2</strong> before you power the kit.</p></li>
+<li><p>FMCW, the Range + Velocity preset, then <strong>Calibrate…</strong> for 0 m.</p></li>
+<li><p>MTI on, 2-pulse; the <strong>Range-Doppler</strong> view; <strong>Start</strong>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L31-app-settings.svg"
+     alt="The Phaser app controls the lab sets: Mode FMCW, Preset Range + Velocity, 0 m Beat set by Calibrate, MTI on, MTI Mode 2-pulse, the Range-Doppler view, Subarray Channels on for Step 11, and Save Capture in Step 11"
+     style="max-width: 400px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The preset is the lab’s waveform: 300 µs chirps of 500 MHz, one every
+0.5 ms, at 9.9 GHz, and 256 chirps a frame, 128 ms. Your Part 1 predictions
+use it.</p>
+<ol class="arabic simple">
+<li><p><strong>Connect the transmit antenna.</strong> With the kit powered off, connect the
+transmit antenna to <strong>OUT2</strong>. Connecting it with the kit on can damage the
+output stage.</p></li>
+<li><p><strong>Load the preset.</strong> Power the kit, open the Phaser app, select <strong>FMCW</strong>,
+and set <strong>Preset</strong> to <strong>Range + Velocity</strong>.</p></li>
+<li><p><strong>Calibrate 0 m.</strong> Set the 0 m frequency for this preset with
+<strong>Calibrate…</strong>, as in the L28 Lab, so that <strong>0 m Beat (kHz)</strong> holds your
+kit’s value.</p></li>
+<li><p><strong>Show the view.</strong> Turn <strong>MTI</strong> on with <strong>MTI Mode</strong> at 2-pulse, open the
+<strong>Range-Doppler</strong> view, and press <strong>Start</strong>. The canceller removes
+everything that stands still, so the room drops out and only what moves
+stays. The FMCW mode holds the beam at broadside, <span class="qty">0°</span>. The readouts
+give the <strong>Peak Range</strong> and <strong>Peak Velocity</strong> of the view’s strongest
+cell.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-four-targets">
+<div class="wrap docutils container">
+<p class="rubric">Four Targets</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Fan at 1 m, spinner at 0.5 m, hand at 0.8 m; then walk toward the kit.</p></li>
+<li><p>Read the largest speed on each side of <span class="qty">0 m/s</span>.</p></li>
+<li><p>Note whether the band is centered, and compare each with your prediction.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>For each target, watch the Range-Doppler view for a few seconds and read,
+from the velocity axis, the largest speed its band reaches on each side of
+<span class="qty">0 m/s</span>, positive closing, and whether the band is centered on
+<span class="qty">0 m/s</span>. Compare each reading with your Part 1 prediction before you
+move on. A rotor shows micro-Doppler only where its parts move along the
+line of sight, so hold the fan and the spinner edge-on, the plane they turn
+in pointing at the array. Stand to the side while you read a rotor: your own
+breathing and fidgeting move too.</p>
+<ol class="arabic" start="5">
+<li><p><strong>Fan.</strong> Set a fan with a guard about 1 m in front of the kit, edge-on, on
+a setting whose speed you know, and keep your fingers clear of it. Read
+it. Then turn it about <span class="qty">45°</span> off edge-on and watch the band narrow,
+and face-on, where it nearly disappears: that is the check that your
+reading was edge-on.</p>
+<div class="rec" data-lab="L31">
+<label>Step 5: fan, largest − (m/s) <input data-field="a.fan.neg"></label>
+<label>Largest + (m/s) <input data-field="a.fan.pos" data-label="Step 5: fan, largest + (m/s)"></label>
+<label>Centered? <input data-field="a.fan.ctr" data-label="Step 5: fan, centered?"></label>
+</div>
+</li>
+<li><p><strong>Spinner.</strong> Spin the fidget spinner and hold it edge-on about 0.5 m out,
+steady. Read it while it is fresh.</p>
+<div class="rec" data-lab="L31">
+<label>Step 6: spinner, largest − (m/s) <input data-field="a.spinner.neg"></label>
+<label>Largest + (m/s) <input data-field="a.spinner.pos" data-label="Step 6: spinner, largest + (m/s)"></label>
+<label>Centered? <input data-field="a.spinner.ctr" data-label="Step 6: spinner, centered?"></label>
+</div>
+</li>
+<li><p><strong>Hand.</strong> Wave your hand toward and away from the kit, about 0.2 m each
+way, about 1.5 times a second, 0.8 m out. Read it.</p>
+<div class="rec" data-lab="L31">
+<label>Step 7: hand, largest − (m/s) <input data-field="a.hand.neg"></label>
+<label>Largest + (m/s) <input data-field="a.hand.pos" data-label="Step 7: hand, largest + (m/s)"></label>
+<label>Centered? <input data-field="a.hand.ctr" data-label="Step 7: hand, centered?"></label>
+</div>
+</li>
+<li><p><strong>Walker.</strong> Set the laptop beside the kit, its screen toward you, and walk
+straight toward the kit from 4 m at a normal pace, watching the view as
+you come. Read the largest speed on each side of <span class="qty">0 m/s</span>.</p>
+<div class="rec" data-lab="L31">
+<label>Step 8: walker, largest − (m/s) <input data-field="a.walker.neg"></label>
+<label>Largest + (m/s) <input data-field="a.walker.pos" data-label="Step 8: walker, largest + (m/s)"></label>
+<label>Centered? <input data-field="a.walker.ctr" data-label="Step 8: walker, centered?"></label>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-a-crossing-walker">
+<div class="wrap docutils container">
+<p class="rubric">A Crossing Walker</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Tape A and B; measure each one’s range and angle.</p></li>
+<li><p>Walk A to B to A; read near A both ways and at the turn.</p></li>
+<li><p>Sway on B; save one burst with both channels.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L31-floor-lab.svg"
+     alt="The floor plan for the walk: the array at the bottom with E1 on the left and E8 on the right as drawn, boresight up; mark A 1.47 meters out and 0.31 meters to the E1 side, mark B 3.94 meters out and 0.69 meters to the E8 side, and the walk from A to B, a turn at B, and back"
+     style="max-width: 340px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>You need about 4.5 m of clear floor in front of the kit and a lane no one
+else walks through, because anyone moving in the beam shows up in the view as
+a second walker. Put the array
+at the origin: <span class="math notranslate nohighlight">\(y\)</span> straight out from it, <span class="math notranslate nohighlight">\(x\)</span> to the side, positive on the E8
+side. Facing the patches, E1 is on your right.</p>
+<ol class="arabic" start="9">
+<li><p><strong>Tape the marks.</strong> Tape mark <strong>A</strong> 1.47 m straight out from the array and
+0.31 m to the E1 side, and mark <strong>B</strong> 3.94 m out and 0.69 m to the E8
+side. Measure each mark’s range and angle from the array’s center and
+compare them with your prediction.</p>
+<div class="rec" data-lab="L31">
+<label>Step 9: mark A, range (m) <input data-field="b.a.range"></label>
+<label>Mark A, angle <input data-field="b.a.angle" data-label="Step 9: mark A, angle"></label>
+<label>Mark B, range (m) <input data-field="b.b.range" data-label="Step 9: mark B, range (m)"></label>
+<label>Mark B, angle <input data-field="b.b.angle" data-label="Step 9: mark B, angle"></label>
+</div>
+</li>
+<li><p><strong>Walk it.</strong> With MTI on, walk from A to B at about 1 m/s, turn at B, and
+walk back to A. Read the walker’s range and velocity just after A, at B,
+and just before A on the way back, and compare them with your
+predictions. At B, read the torso line, not a limb’s. Walking out, your
+back is to the screen, so have a partner read the view, or start a screen
+recording on the laptop, walk, and read the three moments from the
+recording afterward. If your ranges at A and B are both off by the same
+amount, the 0 m frequency is off: calibrate again (Step 3).</p>
+<div class="rec" data-lab="L31">
+<label>Step 10: just after A, range (m) <input data-field="b.out.range"></label>
+<label>Velocity (m/s) <input data-field="b.out.vel" data-label="Step 10: just after A, velocity (m/s)"></label>
+<label>At B, range (m) <input data-field="b.turn.range" data-label="Step 10: at B, range (m)"></label>
+<label>Velocity (m/s) <input data-field="b.turn.vel" data-label="Step 10: at B, velocity (m/s)"></label>
+<label>Just before A, range (m) <input data-field="b.back.range" data-label="Step 10: just before A, range (m)"></label>
+<label>Velocity (m/s) <input data-field="b.back.vel" data-label="Step 10: just before A, velocity (m/s)"></label>
+</div>
+</li>
+<li><p><strong>Save a burst on B.</strong> Stand on mark B and sway, shifting your weight
+toward and away from the kit, because the canceller removes a person who
+stands still. Turn <strong>Subarray Channels</strong> on and press <strong>Save Capture</strong>.
+The app downloads one burst with both channels,
+<code class="docutils literal notranslate"><span class="pre">phaser_range_doppler_&lt;date&gt;-&lt;time&gt;.npz</span></code>; rename it <code class="docutils literal notranslate"><span class="pre">L31_sway_B.npz</span></code> and
+keep it for Step 13.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-run-the-notebook">
+<div class="wrap docutils container">
+<p class="rubric">Run the Notebook</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Task (a): the window, 64, then 16, then 256 chirps.</p></li>
+<li><p>Task (b): three features, then add the edge, then the shape.</p></li>
+<li><p>Task (c): <span class="math notranslate nohighlight">\(\alpha\)</span> = 0.5, 0.2, 0.8, then your choice.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L31-notebook-strip.svg"
+     alt="What the three notebook tasks show, with values left out: a walker's spectrogram for task (a), a four-by-four confusion matrix with its diagonal shaded for task (b), and a range track over the walk's truth and detections for task (c)"
+     style="max-width: 520px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The notebook runs on your burst from Step 11 and on the course’s recorded
+data, with or without a kit, in about 30 to 45 minutes. The notebook finds
+each record’s target with the L30 chain, run on the record’s first burst, the
+2-pulse canceller, the range-Doppler map, and <code class="docutils literal notranslate"><span class="pre">cfar_2d</span></code>, and its detection’s
+range and velocity pick the range bins the spectrogram sums.</p>
+<ol class="arabic" start="12">
+<li><p><strong>Set up the notebook.</strong> Download the lab’s bundle,
+<a href="../../bundles/L31_lab.zip" download><code class="docutils literal notranslate"><span class="pre">L31_lab.zip</span></code></a>, and unzip
+it into a folder of its own in your Module 4 folder. It holds the
+notebook, <code class="docutils literal notranslate"><span class="pre">L31_classify_track.ipynb</span></code>; the provided <code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code>; every
+recorded file the notebook loads, <code class="docutils literal notranslate"><span class="pre">L31_*.npz</span></code>; and the data README. Move
+<code class="docutils literal notranslate"><span class="pre">L31_sway_B.npz</span></code> into the same folder. Python with numpy, scipy,
+matplotlib, and Jupyter is the setup from the
+<a href="../L28-fmcw/index.html#frame-notebook-setup">L28 Lab’s Notebook Setup</a>
+frame. Start Jupyter in the folder with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">lab</span></code>, and open the
+notebook. Its first code cell names the files it loads, <code class="docutils literal notranslate"><span class="pre">RECORDS</span></code> and
+<code class="docutils literal notranslate"><span class="pre">WALK</span></code>; leave them as shipped.</p></li>
+<li><p><strong>Run it to the angle at B.</strong> Run the cells in order from the top. In the
+angle cell, after Procedure B, set <code class="docutils literal notranslate"><span class="pre">B_REC</span> <span class="pre">=</span> <span class="pre">&quot;L31_sway_B.npz&quot;</span></code> and run it.
+It prints your range and angle at B. Which side of broadside reads
+positive depends on the order of the kit’s channels, so compare the sign
+with your prediction; if it is reversed, the kit’s channels are the other
+way around, and you say so in the packet.</p>
+<div class="rec" data-lab="L31">
+<label>Step 13: angle at B <input data-field="b.angleB"></label>
+</div>
+</li>
+<li><p><strong>Task (a), the window.</strong> Run the window cell with <code class="docutils literal notranslate"><span class="pre">N_WIN</span> <span class="pre">=</span> <span class="pre">64</span></code>, then 16,
+then 256. Each run prints the resolution and three widths; compare the
+walker’s torso line with your predicted resolution.</p>
+<div class="rec" data-lab="L31">
+<label>Step 14, 16 chirps: torso line (Hz) <input data-field="c.16.torso"></label>
+<label>Spinner line (Hz) <input data-field="c.16.spin" data-label="Step 14, 16 chirps: spinner line (Hz)"></label>
+<label>Walker spread (m/s) <input data-field="c.16.spread" data-label="Step 14, 16 chirps: walker spread (m/s)"></label>
+<label>64 chirps: torso line (Hz) <input data-field="c.64.torso" data-label="Step 14, 64 chirps: torso line (Hz)"></label>
+<label>Spinner line (Hz) <input data-field="c.64.spin" data-label="Step 14, 64 chirps: spinner line (Hz)"></label>
+<label>Walker spread (m/s) <input data-field="c.64.spread" data-label="Step 14, 64 chirps: walker spread (m/s)"></label>
+<label>256 chirps: torso line (Hz) <input data-field="c.256.torso" data-label="Step 14, 256 chirps: torso line (Hz)"></label>
+<label>Spinner line (Hz) <input data-field="c.256.spin" data-label="Step 14, 256 chirps: spinner line (Hz)"></label>
+<label>Walker spread (m/s) <input data-field="c.256.spread" data-label="Step 14, 256 chirps: walker spread (m/s)"></label>
+</div>
+</li>
+<li><p><strong>Task (b), one more feature.</strong> Run the two classifier cells as they
+stand, and record the confusion matrix in Table D of the packet. Then add
+one line at the <code class="docutils literal notranslate"><span class="pre">TASK</span> <span class="pre">(b)</span></code> mark of <code class="docutils literal notranslate"><span class="pre">my_features</span></code> to append the band’s
+edge in m/s, <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">np.append(x,</span> <span class="pre">edge.mean()</span> <span class="pre">*</span> <span class="pre">lam</span> <span class="pre">/</span> <span class="pre">2)</span></code>, and run both
+again; then change it to append the shape, the spread over that edge, and
+run both again. With the shape, average the fans’ fourth feature and the
+spinners’ from the printout, and compare with your prediction.</p>
+<div class="rec" data-lab="L31">
+<label>Step 15: accuracy, three features <input data-field="d.acc3"></label>
+<label>Accuracy, + edge <input data-field="d.accE" data-label="Step 15: accuracy, + edge"></label>
+<label>Accuracy, + shape <input data-field="d.accS" data-label="Step 15: accuracy, + shape"></label>
+<label>Shape, fans' mean <input data-field="d.shape.fan" data-label="Step 15: shape, fans' mean"></label>
+<label>Shape, spinners' mean <input data-field="d.shape.spin" data-label="Step 15: shape, spinners' mean"></label>
+<label>Records still called wrong <input data-field="d.wrong" data-label="Step 15: records still called wrong"></label>
+</div>
+</li>
+<li><p><strong>Task (c), the track.</strong> Run the tracking cell with <code class="docutils literal notranslate"><span class="pre">ALPHA</span> <span class="pre">=</span> <span class="pre">0.5</span></code>, then
+0.2, then 0.8, then the value you would use, which writes
+<code class="docutils literal notranslate"><span class="pre">L31_track.csv</span></code>. Each run prints the detections’ RMS error and the
+track’s, from the walk’s truth after the first second. The noise ratio is
+the track’s range RMS over the detections’; compare it with your
+predicted noise ratio, and the range error at the turn with your
+predicted settled lag.</p>
+<div class="rec" data-lab="L31">
+<label>Step 16: detections, range RMS (m) <input data-field="e.det.range"></label>
+<label>Detections, angle RMS (°) <input data-field="e.det.angle" data-label="Step 16: detections, angle RMS (°)"></label>
+<label>α 0.2: range RMS (m) <input data-field="e.02.rms" data-label="Step 16, α 0.2: range RMS (m)"></label>
+<label>Noise ratio <input data-field="e.02.ratio" data-label="Step 16, α 0.2: noise ratio"></label>
+<label>At the turn (m) <input data-field="e.02.turn" data-label="Step 16, α 0.2: range error at the turn (m)"></label>
+<label>Angle RMS (°) <input data-field="e.02.angle" data-label="Step 16, α 0.2: angle RMS (°)"></label>
+<label>α 0.5: range RMS (m) <input data-field="e.05.rms" data-label="Step 16, α 0.5: range RMS (m)"></label>
+<label>Noise ratio <input data-field="e.05.ratio" data-label="Step 16, α 0.5: noise ratio"></label>
+<label>At the turn (m) <input data-field="e.05.turn" data-label="Step 16, α 0.5: range error at the turn (m)"></label>
+<label>Angle RMS (°) <input data-field="e.05.angle" data-label="Step 16, α 0.5: angle RMS (°)"></label>
+<label>α 0.8: range RMS (m) <input data-field="e.08.rms" data-label="Step 16, α 0.8: range RMS (m)"></label>
+<label>Noise ratio <input data-field="e.08.ratio" data-label="Step 16, α 0.8: noise ratio"></label>
+<label>At the turn (m) <input data-field="e.08.turn" data-label="Step 16, α 0.8: range error at the turn (m)"></label>
+<label>Angle RMS (°) <input data-field="e.08.angle" data-label="Step 16, α 0.8: angle RMS (°)"></label>
+<label>Your α <input data-field="e.my.alpha" data-label="Step 16: your α"></label>
+<label>Range RMS (m) <input data-field="e.my.rms" data-label="Step 16, your α: range RMS (m)"></label>
+<label>At the turn (m) <input data-field="e.my.turn" data-label="Step 16, your α: range error at the turn (m)"></label>
+<label>Angle RMS (°) <input data-field="e.my.angle" data-label="Step 16, your α: angle RMS (°)"></label>
+</div>
+</li>
+<li><p><strong>Save the notebook.</strong> Save it with its edits and plots, and upload the
+<code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> with the packet.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-no-hardware">
+<div class="wrap docutils container">
+<p class="rubric">No Hardware?</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The whole lab can be done without a kit, in the Phaser app’s browser
+simulator and the notebook. Open the simulator at
+<a class="reference external" href="https://livethisdream.github.io/phaser/radar/">livethisdream.github.io/phaser/radar</a>,
+select <strong>FMCW</strong>, set <strong>Preset</strong> to <strong>Range + Velocity</strong>, turn <strong>MTI</strong> on at
+2-pulse, and open the <strong>Range-Doppler</strong> view. Its <strong>Scene</strong> list has no fan or
+spinner, so Steps 5 to 10 use <strong>Load Capture</strong>, which plays one of the
+course’s recorded files through the same view as if it were live, looping.
+The files are in the lab’s bundle (Step 12). They come from a simulation of the PHASER
+at this preset; each target record is 2.0 s of chirps that keep 90 samples
+each, so the range bins are the same 0.30 m and the view ends at 4.1 m. Mark
+in the packet which rows come from recorded data.</p>
+<ul class="simple">
+<li><p><strong>Steps 5 to 8:</strong> load <code class="docutils literal notranslate"><span class="pre">L31_fan_1.npz</span></code>, <code class="docutils literal notranslate"><span class="pre">L31_spinner_1.npz</span></code>, <code class="docutils literal notranslate"><span class="pre">L31_hand_1.npz</span></code>, and <code class="docutils literal notranslate"><span class="pre">L31_walker_1.npz</span></code> in turn, and read each. Each file’s note, printed by the notebook’s first code cell, gives the target’s size and rate. The notebook’s Procedure A cell prints the speeds from the same four files; check your readings against it.</p></li>
+<li><p><strong>Steps 9 and 10:</strong> load <code class="docutils literal notranslate"><span class="pre">L31_dismount.npz</span></code>, a person walking at 1 m/s from A to B, turning, and walking back, past a chair at 3.2 m. Its note gives A’s and B’s ranges and angles, which stand in for your tape. The file keeps every 4th chirp, so the view spans <span class="qty">±3.8 m/s</span> and each update covers 0.5 s of walking, which blurs the range; the notebook’s Procedure B cell prints three 128 ms frames of it, near A going out, at the turn, and near A coming back, which fill Step 10’s boxes.</p></li>
+<li><p><strong>Steps 11 and 13:</strong> skip the burst; in Step 13 run the angle cell as shipped, on <code class="docutils literal notranslate"><span class="pre">L31_dismount.npz</span></code>. Its farthest frame is the turn at B.</p></li>
+<li><p><strong>Steps 12 to 17</strong> run on the bundle’s files with or without a kit.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-your-part-2-entries">
+<div class="wrap docutils container">
+<p class="rubric">Your Part 2 Entries</p>
+<p>This frame collects every box you filled in on this page. Your entries stay in this
+browser only, saved as you type. <strong>Download my packet</strong> writes them into Part 2
+of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
+viewer, and upload one PDF to Gradescope with the notebook. If you have already
+typed Part 1 into the packet PDF, use <strong>Fill my own copy</strong> and choose that file
+instead: your Part 1 is kept, and Part 2 is added to it. Either way the result
+is locked, so finish any typing in the PDF first. Type the three confusion matrices
+of Table D into the packet itself. <strong>Export entries</strong> saves a small
+backup file you can <strong>Import</strong> on another laptop or after clearing your
+browser. The boxes are optional: the blank packet is in the next frame, to fill
+on paper or in a PDF viewer instead.</p>
+<div class="rec-summary" data-lab="L31" data-pdf="../../labs/ECE444_Lab_L31_ClassifyTrack_blank.pdf" data-file="ECE444_L31_Lab"></div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-lab-packet">
+<div class="wrap docutils container">
+<p class="rubric">Lab Packet</p>
+<p>The L31 Lab packet is one submission for the whole lab, turned in complete
+after the lab and before you write the final report. It has three parts:</p>
+<ol class="arabic simple">
+<li><p>Part 1, Predict (before the lab): the shaded Predicted cells of Tables A to E.</p></li>
+<li><p>Part 2, Measure (your readings and the notebook’s): the white Measured cells of the same tables.</p></li>
+<li><p>Part 3, Analyze (after the lab): three open prompts about what you measured.</p></li>
+</ol>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../labs/ECE444_Lab_L31_ClassifyTrack_blank.pdf" target="_blank" rel="noopener">L31 Lab packet (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-for-part-3">
+<div class="wrap docutils container">
+<p class="rubric">For Part 3</p>
+<p>Part 3 asks you to analyze your own Part 2 readings against your own Part 1
+predictions, in three prompts: your speeds and your window widths (Tables A
+and C); your three confusion matrices and the features behind them
+(Table D); and your track at each <span class="math notranslate nohighlight">\(\alpha\)</span>, in range and in angle (Table E).
+Keep the notebook’s printouts beside you: the features of every record and
+the track’s errors are the evidence.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<p>This is the last lab. The final project report explains, in your own words,
+the chain the L28 to L31 Labs built, from a capture to a classified, tracked
+target; its page lists what it asks for.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module04/L31-classification-tracking"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

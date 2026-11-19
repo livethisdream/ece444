@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 302" width="560" height="403" role="img" aria-label="One tone through the mirror, in three strips 3 MHz wide. The source sits 1 MHz above Signal Freq, at 10.526 GHz. LO minus source, with the LO at 12.725 GHz, is 2.199 GHz, 1 MHz below the 2.2 GHz center. The GUI flips its axis, so it plots the tone at plus 1 MHz. The simulator's tone, ghosted, sits at plus 1 MHz before the flip and minus 1 MHz after it.">
+<line x1="113.3" y1="34.0" x2="113.3" y2="278.0" stroke="#b9d2e5" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="2 3"/>
+<line x1="326.7" y1="34.0" x2="326.7" y2="278.0" stroke="#b9d2e5" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="2 3"/>
+<text x="10.0" y="24.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13.5" fill="#004a85" text-anchor="start" font-weight="700">Source</text>
+<line x1="60.0" y1="80.0" x2="380.0" y2="80.0" stroke="#15202b" stroke-width="1.4" stroke-linecap="round"/>
+<line x1="113.3" y1="80.0" x2="113.3" y2="85.0" stroke="#5b6573" stroke-width="1.1" stroke-linecap="round"/>
+<text x="113.3" y="99.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">10.524</text>
+<line x1="220.0" y1="80.0" x2="220.0" y2="85.0" stroke="#5b6573" stroke-width="1.1" stroke-linecap="round"/>
+<text x="220.0" y="99.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">10.525</text>
+<line x1="326.7" y1="80.0" x2="326.7" y2="85.0" stroke="#5b6573" stroke-width="1.1" stroke-linecap="round"/>
+<text x="326.7" y="99.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">10.526</text>
+<text x="386.0" y="99.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="start" font-weight="400">GHz</text>
+<line x1="220.0" y1="50.0" x2="220.0" y2="80.0" stroke="#5b6573" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="4 3"/>
+<polygon points="320.7,80.0 326.7,52.0 332.7,80.0" fill="#004a85" stroke="none"/>
+<text x="10.0" y="122.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13.5" fill="#004a85" text-anchor="start" font-weight="700">LO − source, LO at 12.725 GHz</text>
+<line x1="60.0" y1="178.0" x2="380.0" y2="178.0" stroke="#15202b" stroke-width="1.4" stroke-linecap="round"/>
+<line x1="113.3" y1="178.0" x2="113.3" y2="183.0" stroke="#5b6573" stroke-width="1.1" stroke-linecap="round"/>
+<text x="113.3" y="197.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">2.199</text>
+<line x1="220.0" y1="178.0" x2="220.0" y2="183.0" stroke="#5b6573" stroke-width="1.1" stroke-linecap="round"/>
+<text x="220.0" y="197.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">2.200</text>
+<line x1="326.7" y1="178.0" x2="326.7" y2="183.0" stroke="#5b6573" stroke-width="1.1" stroke-linecap="round"/>
+<text x="326.7" y="197.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">2.201</text>
+<text x="386.0" y="197.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="start" font-weight="400">GHz</text>
+<line x1="220.0" y1="148.0" x2="220.0" y2="178.0" stroke="#5b6573" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="4 3"/>
+<polygon points="320.7,178.0 326.7,150.0 332.7,178.0" fill="none" stroke="#5b6573" stroke-width="1.3" stroke-dasharray="3 2"/>
+<text x="326.7" y="144.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">simulator</text>
+<polygon points="107.3,178.0 113.3,150.0 119.3,178.0" fill="#004a85" stroke="none"/>
+<text x="10.0" y="220.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13.5" fill="#004a85" text-anchor="start" font-weight="700">What the GUI plots, axis flipped</text>
+<line x1="60.0" y1="276.0" x2="380.0" y2="276.0" stroke="#15202b" stroke-width="1.4" stroke-linecap="round"/>
+<line x1="113.3" y1="276.0" x2="113.3" y2="281.0" stroke="#5b6573" stroke-width="1.1" stroke-linecap="round"/>
+<text x="113.3" y="295.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">−1</text>
+<line x1="220.0" y1="276.0" x2="220.0" y2="281.0" stroke="#5b6573" stroke-width="1.1" stroke-linecap="round"/>
+<text x="220.0" y="295.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">0</text>
+<line x1="326.7" y1="276.0" x2="326.7" y2="281.0" stroke="#5b6573" stroke-width="1.1" stroke-linecap="round"/>
+<text x="326.7" y="295.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">+1</text>
+<text x="386.0" y="295.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="start" font-weight="400">MHz</text>
+<line x1="220.0" y1="246.0" x2="220.0" y2="276.0" stroke="#5b6573" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="4 3"/>
+<polygon points="107.3,276.0 113.3,248.0 119.3,276.0" fill="none" stroke="#5b6573" stroke-width="1.3" stroke-dasharray="3 2"/>
+<text x="113.3" y="242.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">simulator</text>
+<polygon points="320.7,276.0 326.7,248.0 332.7,276.0" fill="#004a85" stroke="none"/>
+<text x="220.0" y="46.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">Signal Freq</text>
+<text x="326.7" y="46.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#004a85" text-anchor="middle" font-weight="700">source</text>
+<text x="220.0" y="144.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">SDR center</text>
+<text x="113.3" y="144.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#004a85" text-anchor="middle" font-weight="700">tone</text>
+<text x="220.0" y="242.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">center</text>
+<text x="326.7" y="242.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#004a85" text-anchor="middle" font-weight="700">tone</text>
+</svg>

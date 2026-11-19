@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 392" width="520" height="392" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="17">
+<defs><marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#004a85"/></marker><marker id="s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b01e24"/></marker><marker id="c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1d7a4d"/></marker></defs>
+<path d="M112,76 l34,-22 h300 l-34,22 z" fill="#e3edf6" stroke="#004a85" stroke-width="1.2"/>
+<path d="M412,76 l34,-22 v236 l-34,22 z" fill="#d7e4f1" stroke="#004a85" stroke-width="1.2"/>
+<rect x="112" y="76" width="300" height="236" fill="#eef4fa" stroke="#004a85" stroke-width="1.4"/>
+<path d="M78,98 l34,-22 h300 l-34,22 z" fill="#e3edf6" stroke="#004a85" stroke-width="1.2"/>
+<path d="M378,98 l34,-22 v236 l-34,22 z" fill="#d7e4f1" stroke="#004a85" stroke-width="1.2"/>
+<rect x="78" y="98" width="300" height="236" fill="#eef4fa" stroke="#004a85" stroke-width="1.4"/>
+<line x1="78" y1="127.5" x2="378" y2="127.5" stroke="#b9cbdc" stroke-width="1"/>
+<line x1="78" y1="157.0" x2="378" y2="157.0" stroke="#b9cbdc" stroke-width="1"/>
+<line x1="78" y1="186.5" x2="378" y2="186.5" stroke="#b9cbdc" stroke-width="1"/>
+<line x1="78" y1="216.0" x2="378" y2="216.0" stroke="#b9cbdc" stroke-width="1"/>
+<line x1="78" y1="245.5" x2="378" y2="245.5" stroke="#b9cbdc" stroke-width="1"/>
+<line x1="78" y1="275.0" x2="378" y2="275.0" stroke="#b9cbdc" stroke-width="1"/>
+<line x1="78" y1="304.5" x2="378" y2="304.5" stroke="#b9cbdc" stroke-width="1"/>
+<line x1="108.0" y1="98" x2="108.0" y2="334" stroke="#b9cbdc" stroke-width="0.6"/>
+<line x1="138.0" y1="98" x2="138.0" y2="334" stroke="#b9cbdc" stroke-width="0.6"/>
+<line x1="168.0" y1="98" x2="168.0" y2="334" stroke="#b9cbdc" stroke-width="0.6"/>
+<line x1="198.0" y1="98" x2="198.0" y2="334" stroke="#b9cbdc" stroke-width="0.6"/>
+<line x1="228.0" y1="98" x2="228.0" y2="334" stroke="#b9cbdc" stroke-width="0.6"/>
+<line x1="258.0" y1="98" x2="258.0" y2="334" stroke="#b9cbdc" stroke-width="0.6"/>
+<line x1="288.0" y1="98" x2="288.0" y2="334" stroke="#b9cbdc" stroke-width="0.6"/>
+<line x1="318.0" y1="98" x2="318.0" y2="334" stroke="#b9cbdc" stroke-width="0.6"/>
+<line x1="348.0" y1="98" x2="348.0" y2="334" stroke="#b9cbdc" stroke-width="0.6"/>
+<line x1="78" y1="350" x2="378" y2="350" stroke="#004a85" stroke-width="1.8" marker-end="url(#f)"/>
+<text x="228.0" y="374" text-anchor="middle" fill="#004a85">fast time (samples in a chirp) → range</text>
+<line x1="62" y1="98" x2="62" y2="334" stroke="#b01e24" stroke-width="1.8" marker-end="url(#s)"/>
+<text transform="translate(50,216.0) rotate(-90)" text-anchor="middle" fill="#b01e24">slow time (chirps) → velocity</text>
+<line x1="390" y1="86" x2="458" y2="42" stroke="#1d7a4d" stroke-width="1.8" marker-end="url(#c)"/>
+<text x="514" y="30" text-anchor="end" fill="#1d7a4d">channel (subarrays) → angle</text>
+</svg>

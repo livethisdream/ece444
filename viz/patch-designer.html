@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rectangular patch designer — size, feed point, band, and pattern</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  /* Four panels and two strips on one grid. Desktop: the patch beside its
+     VSWR curve, the controls across, the pattern beside the readouts. Phone:
+     the patch across the top, VSWR and pattern side by side under it (two
+     short canvases in a row cost half what they cost stacked), then the
+     controls and the readouts. */
+  .app { display:grid; gap:8px; padding:14px;
+         grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+         grid-template-areas:"geo swr" "ctl ctl" "pat ro"; }
+  @media (max-width:600px) {
+    .app { grid-template-areas:"geo geo" "swr pat" "ctl ctl" "ro ro"; }
+  }
+  #geo { grid-area:geo; } #swr { grid-area:swr; } #pat { grid-area:pat; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { grid-area:ctl; display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:6px 16px;
+              padding:7px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:6px; min-width:0; }
+  .ctl label { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:0; font-weight:600; font-size:12px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:36px; width:0; }
+  select { font:inherit; font-size:12px; padding:3px 4px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; min-width:0; flex:1 1 auto; }
+  /* Below 430px a label, a slider and a value do not share one line in a
+     half-width cell: label and value on the first line, the input under them. */
+  @media (max-width:430px) {
+    .ctl { flex-wrap:wrap; row-gap:3px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
+  }
+  .readouts { grid-area:ro; display:grid; gap:6px; grid-template-columns:repeat(3, minmax(0,1fr)); align-content:start; }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:2px; padding:5px 3px 6px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.04em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; max-width:100%; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; color:var(--navy); }
+  .ro.bw { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.bw .v { color:var(--amber); }
+  .ro.dir { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.dir .v { color:var(--grn); }
+  .ro.feed { background:rgba(176,30,36,0.07); border-color:rgba(176,30,36,0.28); }
+  .ro.feed .v { color:var(--red); }
+  @media (max-width:360px) { .ro .v { font-size:13px; } .ro .k { font-size:9.5px; letter-spacing:0.02em; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="geo" aria-label="Scaled top view of the patch with its standing wave shaded along the length, the radiating edges, and an inset feed reaching the 50 ohm point, beside the same patch in air; below it a side view of the field between patch and ground"></canvas>
+  <canvas id="swr" aria-label="VSWR against frequency near the design frequency, with the VSWR of 2 band shaded"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Frequency \(f\)</label>
+      <input type="range" id="freq" min="1" max="10" step="0.05" value="2.45">
+      <span class="val" id="f-val">2.45 GHz</span>
+    </div>
+    <div class="ctl">
+      <label>Substrate \(\varepsilon_r\)</label>
+      <select id="er">
+        <option value="2.2">2.2 — PTFE / RT-duroid</option>
+        <option value="4.4" selected>4.4 — FR-4</option>
+        <option value="6.15">6.15 — RO3006</option>
+        <option value="10.2">10.2 — alumina / RO3010</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label>Thickness \(h\)</label>
+      <input type="range" id="hh" min="0.5" max="3.2" step="0.1" value="1.6">
+      <span class="val" id="h-val">1.60 mm</span>
+    </div>
+    <div class="ctl">
+      <label>Length error</label>
+      <input type="range" id="trim" min="-8" max="8" step="0.1" value="0">
+      <span class="val" id="t-val">+0.0 %</span>
+    </div>
+  </div>
+
+  <canvas id="pat" aria-label="E-plane and H-plane patterns of the two-slot patch model on one half-polar plot, in decibels over the upper half space"></canvas>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">width \(W\)</span><span class="v" id="p-w">&#8212;</span></div>
+    <div class="ro"><span class="k">length \(L\)</span><span class="v" id="p-l">&#8212;</span></div>
+    <div class="ro"><span class="k">\(\varepsilon_{\text{eff}}\)</span><span class="v" id="p-ee">&#8212;</span></div>
+    <div class="ro feed"><span class="k">50 Ω inset</span><span class="v" id="p-y0">&#8212;</span></div>
+    <div class="ro bw"><span class="k">bandwidth</span><span class="v" id="p-bw">&#8212;</span></div>
+    <div class="ro dir"><span class="k">directivity</span><span class="v" id="p-d">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const C=3e8, FLOOR=-40, Z0=50;
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS;
+  ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+function twidth(ctx,s,px,bold){ ctx.font=(bold?'700 ':'')+px+'px '+SANS; return ctx.measureText(s).width; }
+
+const state={ f:2.45e9, er:4.4, h:1.6e-3, trim:0 };
+
+/* ------------------------------------------------------------------ *
+ * The standard closed-form design set (transmission-line model).
+ * ------------------------------------------------------------------ */
+function design(){
+  const f=state.f, er=state.er, h=state.h;
+  const lam=C/f, half=C/(2*f);
+  const W = half*Math.sqrt(2/(er+1));                         // half-power width formula
+  const ee = (er+1)/2 + (er-1)/2*Math.pow(1+12*h/W,-0.5);     // effective permittivity
+  const dL = 0.412*h*((ee+0.3)*(W/h+0.264))/((ee-0.258)*(W/h+0.8)); // Hammerstad extension
+  const L  = half/Math.sqrt(ee) - 2*dL;                       // physical length, as designed
+  const Le = L + 2*dL;                                        // electrical length = lambda_d/2
+  const BW = 3.77*((er-1)/(er*er))*(h/lam)*(W/L);             // VSWR <= 2 fractional bandwidth
+  // the patch as etched, with the length error applied
+  const Lx = L*(1+state.trim/100);
+  const f0 = f*Le/(Lx+2*dL);                                  // where the etched patch resonates
+  const Redge = edgeResistance(lam, W, L);
+  const y0 = Redge > Z0 ? L/Math.PI*Math.acos(Math.sqrt(Z0/Redge)) : 0;
+  // air reference: the same design rules with er = 1 (W = lambda/2, eeff = 1)
+  const Wair = half;
+  return {lam, half, W, ee, dL, L, Le, BW, Lx, f0, Redge, y0, Wair, lamd: lam/Math.sqrt(ee)};
+}
+
+/* Edge resistance of the transmission-line model, 1/(2(G1 + G12)): the
+   conductance of one radiating slot and the mutual conductance of the pair,
+   lossless. Same integrals as scripts/graphics/l13_patch_figures.py. */
+function J0(x){                                                // Numerical Recipes bessj0
+  const ax=Math.abs(x);
+  if(ax<8){
+    const y=x*x;
+    const a1=57568490574.0+y*(-13362590354.0+y*(651619640.7+y*(-11214424.18+y*(77392.33017+y*(-184.9052456)))));
+    const a2=57568490411.0+y*(1029532985.0+y*(9494680.718+y*(59272.64853+y*(267.8532712+y))));
+    return a1/a2;
+  }
+  const z=8/ax, y=z*z, xx=ax-0.785398164;
+  const a1=1+y*(-0.1098628627e-2+y*(0.2734510407e-4+y*(-0.2073370639e-5+y*0.2093887211e-6)));
+  const a2=-0.1562499995e-1+y*(0.1430488765e-3+y*(-0.6911147651e-5+y*(0.7621095161e-6-y*0.934935152e-7)));
+  return Math.sqrt(0.636619772/ax)*(Math.cos(xx)*a1-z*Math.sin(xx)*a2);
+}
+function edgeResistance(lam, W, L){
+  const k=2*Math.PI/lam, N=1200, dt=Math.PI/N;
+  let g1=0, g12=0;
+  for(let i=1;i<N;i++){
+    const t=i*dt, ct=Math.cos(t), st=Math.sin(t);
+    const s = Math.abs(ct)<1e-9 ? k*W/2 : Math.sin(k*W/2*ct)/ct;
+    const b = s*s*st*st*st;
+    g1 += b; g12 += b*J0(k*L*st);
+  }
+  const c = dt/(120*Math.PI*Math.PI);
+  return 1/(2*(g1+g12)*c);
+}
+
+/* The patch near resonance as a parallel RLC, matched to 50 ohms at its own
+   resonance f0 (the feed sits at the 50 ohm point). Q is set so the VSWR <= 2
+   band equals the closed-form BW: for a matched parallel RLC that band is
+   (S-1)/(Q sqrt S), so Q = 1/(BW sqrt 2) at S = 2. */
+function vswr(f, d){
+  const Q = 1/(d.BW*Math.SQRT2);
+  const x = Q*(f/d.f0 - d.f0/f);
+  // Z = R/(1 + jx) with R = Z0, so Gamma = (Z - Z0)/(Z + Z0) = -jx/(2 + jx)
+  const g = Math.abs(x)/Math.sqrt(4+x*x);
+  return (1+g)/(1-g);
+}
+
+/* ------------------------------------------------------------------ *
+ * Two-slot model of the far field: two slots of width W, Le apart,
+ * radiating into the upper half space over a ground plane.
+ *   E-plane: sinc(kh/2 sin t) cos(kLe/2 sin t)    H-plane: sinc(kW/2 sin t) cos t
+ * ------------------------------------------------------------------ */
+const sinc = x => (Math.abs(x)<1e-9) ? 1 : Math.sin(x)/x;
+function fields(d){
+  const k=2*Math.PI/d.lam;
+  return {
+    E: t => Math.abs(sinc(k*state.h/2*Math.sin(t)) * Math.cos(k*d.Le/2*Math.sin(t))),
+    H: t => Math.abs(sinc(k*d.W/2*Math.sin(t)) * Math.cos(t))
+  };
+}
+function directivity(d){
+  const k=2*Math.PI/d.lam, NT=90, NP=120;
+  let sum=0, peak=0;
+  for(let i=0;i<NT;i++){
+    const t=(i+0.5)/NT*(Math.PI/2), st=Math.sin(t);
+    for(let j=0;j<NP;j++){
+      const p=(j+0.5)/NP*2*Math.PI, cp=Math.cos(p), sp=Math.sin(p);
+      const obl=Math.sqrt(Math.max(0,1-st*st*sp*sp));
+      const F = sinc(k*state.h/2*st*cp)*sinc(k*d.W/2*st*sp)*Math.cos(k*d.Le/2*st*cp)*obl;
+      const U=F*F; if(U>peak) peak=U; sum+=U*st;
+    }
+  }
+  sum *= (Math.PI/2/NT)*(2*Math.PI/NP);
+  return 4*Math.PI*peak/sum;
+}
+function hpbw(fn){
+  const N=2000, thr=Math.SQRT1_2;
+  let peak=0; for(let i=0;i<=N;i++) peak=Math.max(peak, fn(i/N*Math.PI/2));
+  for(let i=0;i<=N;i++){ const t=i/N*Math.PI/2; if(fn(t)/peak <= thr) return 2*t*180/Math.PI; }
+  return null;
+}
+
+/* ============================== canvases ============================== */
+const cv={ geo:document.getElementById('geo'), swr:document.getElementById('swr'), pat:document.getElementById('pat') };
+const cx2={ geo:cv.geo.getContext('2d'), swr:cv.swr.getContext('2d'), pat:cv.pat.getContext('2d') };
+const LOG={};   // logical width and height of each canvas, after scaling
+let NARROW=false;
+
+function arrowHead(ctx,x,y,ang,col,sz){
+  ctx.fillStyle=col; ctx.beginPath(); ctx.moveTo(x,y);
+  ctx.lineTo(x-sz*Math.cos(ang-0.45), y-sz*Math.sin(ang-0.45));
+  ctx.lineTo(x-sz*Math.cos(ang+0.45), y-sz*Math.sin(ang+0.45));
+  ctx.closePath(); ctx.fill();
+}
+function dimArrow(ctx,x1,y1,x2,y2,col){
+  ctx.strokeStyle=col; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);
+  arrowHead(ctx,x2,y2,a,col,5); arrowHead(ctx,x1,y1,a+Math.PI,col,5);
+}
+
+/* ---- the patch: top view, to scale, and a side view ---- */
+function drawGeo(d){
+  const ctx=cx2.geo, {w,h}=LOG.geo; ctx.clearRect(0,0,w,h);
+  const navy=cssv('--navy'), red=cssv('--red'), ink3=cssv('--ink3');
+  const sideH = NARROW ? 0 : 66;                  // side view strip at the bottom
+  const top=30, B=Math.min(h-top-sideH-22, w*0.46, w-34-18-148);   // px across the air patch; the legend keeps 148px
+  const s=B/(d.half*1000);                        // px per mm, from the air patch
+  const cx=34+B/2, cy=top+B/2;
+  stext(ctx,'top view, to scale', 12, 14, 12, navy,'left',true);
+
+  // the same patch in air, dashed
+  ctx.strokeStyle=cssv('--edge2'); ctx.lineWidth=1.4; ctx.setLineDash([6,4]);
+  const La=(d.half*1000-2*d.dL*1000)*s;           // air length, close enough to lambda/2 for a reference
+  ctx.strokeRect(cx-B/2, cy-La/2, B, La); ctx.setLineDash([]);
+
+  // the patch, as etched, with its standing wave shaded along L
+  const pw=d.W*1000*s, pl=d.Lx*1000*s, x0=cx-pw/2, y0=cy-pl/2;
+  const gr=ctx.createLinearGradient(0,y0,0,y0+pl);
+  for(let i=0;i<=10;i++){ const a=Math.abs(Math.cos(Math.PI*i/10));
+    gr.addColorStop(i/10,'rgba(0,103,185,'+(0.06+0.46*a).toFixed(3)+')'); }
+  ctx.fillStyle=gr; ctx.fillRect(x0,y0,pw,pl);
+  ctx.strokeStyle=navy; ctx.lineWidth=1.6; ctx.strokeRect(x0,y0,pw,pl);
+  ctx.strokeStyle=red; ctx.lineWidth=4; ctx.lineCap='round';
+  for(const yy of [y0, y0+pl]){ ctx.beginPath(); ctx.moveTo(x0,yy); ctx.lineTo(x0+pw,yy); ctx.stroke(); }
+  ctx.lineCap='butt';
+
+  // inset feed to the 50 ohm point, notches either side
+  const fw=Math.max(4, Math.min(8, pw*0.07)), gap=Math.max(3, fw*0.7), dep=d.y0*1000*s;
+  const yb=y0+pl, feedBottom=Math.min(h-sideH-4, cy+B/2+12);
+  if(dep>0.5){
+    ctx.fillStyle='#fff'; ctx.fillRect(cx-fw/2-gap, yb-dep, fw+2*gap, dep+2);
+    ctx.strokeStyle=navy; ctx.lineWidth=1.2;
+    ctx.beginPath(); ctx.moveTo(cx-fw/2-gap, yb); ctx.lineTo(cx-fw/2-gap, yb-dep); ctx.lineTo(cx+fw/2+gap, yb-dep); ctx.lineTo(cx+fw/2+gap, yb); ctx.stroke();
+  }
+  ctx.fillStyle=cssv('--mid'); ctx.fillRect(cx-fw/2, yb-dep, fw, feedBottom-(yb-dep));
+  ctx.fillStyle=red; ctx.beginPath(); ctx.arc(cx, yb-dep, 3.6, 0, 2*Math.PI); ctx.fill();
+
+  // W and L, symbols only (the numbers are in the readouts)
+  const xl=cx-B/2-8;
+  dimArrow(ctx, xl, y0, xl, y0+pl, navy);
+  MJ.draw(ctx,'L', xl-8, cy, 14, navy,'right');
+  dimArrow(ctx, x0, top-6, x0+pw, top-6, navy);
+  MJ.draw(ctx,'W', x0+pw+6, top-6, 14, navy,'left');
+
+  // legend, right of the top view
+  const lx=cx+B/2+18, lw=w-lx-8;
+  let ly=top+8;
+  const row=(draw, label, col)=>{ draw(lx, ly); stext(ctx,label, lx+24, ly, 11.5, col||ink3,'left',false); ly+=20; };
+  if(lw>=140){
+    row((x,y)=>{ ctx.strokeStyle=red; ctx.lineWidth=4; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+16,y); ctx.stroke(); }, 'radiating edges', red);
+    row((x,y)=>{ const g=ctx.createLinearGradient(x,0,x+16,0); g.addColorStop(0,'rgba(0,103,185,0.52)'); g.addColorStop(0.5,'rgba(0,103,185,0.06)'); g.addColorStop(1,'rgba(0,103,185,0.52)');
+                 ctx.fillStyle=g; ctx.fillRect(x,y-6,16,12); }, 'standing-wave field');
+    row((x,y)=>{ ctx.fillStyle=red; ctx.beginPath(); ctx.arc(x+8,y,3.6,0,2*Math.PI); ctx.fill(); }, '50 Ω feed point', red);
+    row((x,y)=>{ ctx.strokeStyle=cssv('--edge2'); ctx.lineWidth=1.4; ctx.setLineDash([5,3]); ctx.strokeRect(x+1,y-6,14,12); ctx.setLineDash([]); }, 'same patch in air');
+    if(state.h > 0.05*d.lam){ ly+=4; stext(ctx,'h > 0.05λ: rough estimate', lx, ly, 11, red,'left',true); }
+  }
+
+  // side view: patch over ground, field between them, fringing at the ends
+  if(!NARROW){
+    const gy=h-14, ty=gy-24, sx0=cx-pl/2, sx1=cx+pl/2;
+    stext(ctx,'side view, h exaggerated', 12, ty-22, 11.5, ink3,'left',false);
+    ctx.fillStyle='rgba(0,103,185,0.07)'; ctx.fillRect(12, ty, w-24, gy-ty);
+    ctx.strokeStyle=navy; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(12,gy); ctx.lineTo(w-12,gy); ctx.stroke();
+    ctx.lineWidth=3.5; ctx.beginPath(); ctx.moveTo(sx0,ty); ctx.lineTo(sx1,ty); ctx.stroke();
+    const n=Math.max(5, Math.min(11, Math.round(pl/12)));
+    for(let i=0;i<n;i++){
+      const u=(i+0.5)/n, a=Math.cos(Math.PI*u), x=sx0+u*pl, mid=(ty+gy)/2, hl=9*Math.abs(a);
+      if(hl<2){ ctx.fillStyle=cssv('--mid'); ctx.beginPath(); ctx.arc(x,mid,1.6,0,2*Math.PI); ctx.fill(); continue; }
+      const ya=a>0?mid-hl:mid+hl, yb2=a>0?mid+hl:mid-hl;
+      ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(x,ya); ctx.lineTo(x,yb2); ctx.stroke();
+      arrowHead(ctx,x,yb2,a>0?Math.PI/2:-Math.PI/2,cssv('--mid'),5);
+    }
+    ctx.strokeStyle=red; ctx.lineWidth=2;
+    for(const sg of [-1,1]){ const xe=sg<0?sx0:sx1;
+      ctx.beginPath(); ctx.moveTo(xe,ty); ctx.quadraticCurveTo(xe+sg*22, ty-8, xe+sg*18, gy); ctx.stroke(); }
+    MJ.draw(ctx,'h', w-18, (ty+gy)/2, 13, navy,'right');
+  }
+}
+
+/* ---- VSWR against frequency ---- */
+function drawSwr(d){
+  const ctx=cx2.swr, {w,h}=LOG.swr; ctx.clearRect(0,0,w,h);
+  const navy=cssv('--navy'), red=cssv('--red'), ink3=cssv('--ink3'), grn=cssv('--grn');
+  const L=30, R=w-10, T=44, Bt=h-30, span=0.08, SMAX=5;
+  const fx=f=>L+(f/state.f-(1-span))/(2*span)*(R-L);
+  const sy=s=>T+(SMAX-Math.min(SMAX,s))/(SMAX-1)*(Bt-T);
+  stext(ctx,'VSWR vs frequency', 10, 14, 12, navy,'left',true);
+  const at=vswr(state.f,d), ok=at<=2;
+  stext(ctx,'at '+(state.f/1e9).toFixed(2)+' GHz, VSWR '+(at>=SMAX?'> 5':'= '+at.toFixed(2)),
+        10, 31, 11.5, ok?grn:red,'left',true);
+
+  // the VSWR <= 2 band, shaded
+  const N=Math.max(200, Math.round(R-L));
+  let inBand=false, b0=0;
+  ctx.fillStyle='rgba(63,125,52,0.14)';
+  for(let i=0;i<=N;i++){
+    const f=state.f*(1-span+2*span*i/N), s=vswr(f,d), x=L+(R-L)*i/N;
+    if(s<=2 && !inBand){ inBand=true; b0=x; }
+    if((s>2 || i===N) && inBand){ inBand=false; ctx.fillRect(b0,T,x-b0,Bt-T); }
+  }
+  // grid
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let s=1;s<=SMAX;s++){ const y=sy(s); ctx.beginPath(); ctx.moveTo(L,y); ctx.lineTo(R,y); ctx.stroke();
+    stext(ctx,String(s), L-6, y, 10.5, ink3,'right',false); }
+  ctx.strokeStyle=cssv('--edge2'); ctx.strokeRect(L,T,R-L,Bt-T);
+  const nt = (R-L) > 240 ? 5 : 3;
+  for(let i=0;i<nt;i++){
+    const u=i/(nt-1), f=state.f*(1-span+2*span*u), x=L+u*(R-L);
+    stext(ctx,(f/1e9).toFixed(2), x, Bt+12, 10.5, ink3, i===0?'left':(i===nt-1?'right':'center'), false);
+  }
+  stext(ctx,'GHz', R, Bt+25, 10.5, ink3,'right',false);
+  // VSWR = 2 bar
+  ctx.strokeStyle=red; ctx.lineWidth=1.4; ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(L,sy(2)); ctx.lineTo(R,sy(2)); ctx.stroke(); ctx.setLineDash([]);
+  // design frequency
+  ctx.strokeStyle=ink3; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(fx(state.f),T); ctx.lineTo(fx(state.f),Bt); ctx.stroke(); ctx.setLineDash([]);
+  // the curve
+  ctx.save(); ctx.beginPath(); ctx.rect(L,T-1,R-L,Bt-T+2); ctx.clip();
+  ctx.strokeStyle=navy; ctx.lineWidth=2.4; ctx.beginPath();
+  for(let i=0;i<=N;i++){ const f=state.f*(1-span+2*span*i/N), x=L+(R-L)*i/N, y=sy(vswr(f,d)); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+  ctx.stroke(); ctx.restore();
+  ctx.fillStyle=ok?grn:red; ctx.beginPath(); ctx.arc(fx(state.f), sy(Math.min(at,SMAX)), 4, 0, 2*Math.PI); ctx.fill();
+}
+
+/* ---- E- and H-plane cuts on one half-polar plot ---- */
+function drawPat(d){
+  const ctx=cx2.pat, {w,h}=LOG.pat; ctx.clearRect(0,0,w,h);
+  const navy=cssv('--navy'), grn=cssv('--grn'), ink3=cssv('--ink3');
+  const F=fields(d);
+  const cx=w/2, cy=h-26, R=Math.min(w*0.40, h-84);
+  stext(ctx,'Patterns', 10, 14, 12, navy,'left',true);
+  const bwH=hpbw(F.H), bwE=hpbw(F.E);
+  stext(ctx,'E-plane: '+(bwE===null?'no −3 dB point':'HPBW '+bwE.toFixed(0)+'°'), 10, 31, 11.5, navy,'left',true);
+  stext(ctx,'H-plane: HPBW '+(bwH===null?'—':bwH.toFixed(0)+'°'), 10, 47, 11.5, grn,'left',true);
+
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let db=-10; db>=FLOOR; db-=10){
+    const r=R*(1-db/FLOOR);
+    ctx.beginPath(); ctx.arc(cx,cy,r,Math.PI,2*Math.PI); ctx.stroke();
+    if(db>-40) stext(ctx, db+'', cx+3, cy-r+7, 9.5, ink3,'left',false);
+  }
+  ctx.strokeStyle=cssv('--edge2');
+  ctx.beginPath(); ctx.arc(cx,cy,R,Math.PI,2*Math.PI); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx-R-8,cy); ctx.lineTo(cx+R+8,cy); ctx.stroke();
+  stext(ctx,'−90°', cx-R-4, cy+12, 10.5, ink3,'center',false);
+  stext(ctx,'+90°', cx+R+4, cy+12, 10.5, ink3,'center',false);
+  stext(ctx,'0°', cx+4, cy-R-7, 10.5, ink3,'left',false);
+  stext(ctx,'ground plane below', cx, cy+12, 10.5, ink3,'center',false);
+
+  for(const [fn,col] of [[F.E,navy],[F.H,grn]]){
+    let peak=0; const N=360, v=new Float64Array(N+1);
+    for(let i=0;i<=N;i++){ const t=(i/N-0.5)*Math.PI; v[i]=fn(Math.abs(t)); peak=Math.max(peak,v[i]); }
+    ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.beginPath();
+    for(let i=0;i<=N;i++){
+      const t=(i/N-0.5)*Math.PI, db=Math.max(FLOOR, 20*Math.log10(Math.max(v[i]/peak,1e-6)));
+      const r=R*(1-db/FLOOR), x=cx+r*Math.sin(t), y=cy-r*Math.cos(t);
+      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    }
+    ctx.stroke();
+  }
+}
+
+/* ================================= wiring ================================= */
+function readouts(d){
+  const el=id=>document.getElementById(id);
+  el('p-w').textContent  = (d.W*1000).toFixed(1)+' mm';
+  el('p-l').textContent  = (d.Lx*1000).toFixed(1)+' mm';
+  el('p-ee').textContent = d.ee.toFixed(2);
+  el('p-y0').textContent = d.y0>0 ? (d.y0*1000).toFixed(1)+' mm' : 'edge';
+  el('p-bw').textContent = (d.BW*100).toFixed(2)+' %';
+  el('p-d').textContent  = (10*Math.log10(directivity(d))).toFixed(1)+' dBi';
+}
+function drawAll(){ const d=design(); drawGeo(d); drawSwr(d); drawPat(d); readouts(d); }
+
+/* clientWidth, not getBoundingClientRect(): the rect includes the border, so a
+   bitmap sized from it comes out stretched. With box-sizing:border-box,
+   style.height sets the OUTER height, so hand the border back. */
+function setSize(c,wCss,hCss,dpr){
+  c.width=Math.round(wCss*dpr); c.height=Math.round(hCss*dpr);
+  c.style.height=hCss+'px';
+  const bh=c.offsetHeight-c.clientHeight; if(bh) c.style.height=(hCss+bh)+'px';
+}
+/* Each canvas is drawn in logical units at least MINW wide; a narrower canvas
+   is scaled down whole, so its text never drops below ~10.5px and nothing
+   inside it collides. Heights are per layout: side by side on a desktop, the
+   patch on its own row on a phone. */
+const MQ = window.matchMedia ? window.matchMedia('(max-width:600px)') : null;
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  NARROW = !!(MQ && MQ.matches);
+  const H = NARROW ? {geo:190, swr:176, pat:176} : {geo:262, swr:262, pat:176};
+  const MINW = {geo:320, swr:196, pat:196};
+  for(const k of ['geo','swr','pat']){
+    const wCss=Math.max(100, cv[k].clientWidth||cv[k].getBoundingClientRect().width);
+    const scl=Math.min(1, wCss/MINW[k]);
+    LOG[k]={w:wCss/scl, h:H[k]};
+    setSize(cv[k], wCss, H[k]*scl, dpr);
+    cx2[k].setTransform(dpr*scl,0,0,dpr*scl,0,0);
+  }
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+const fEl=document.getElementById('freq'), erEl=document.getElementById('er'),
+      hEl=document.getElementById('hh'), tEl=document.getElementById('trim');
+fEl.addEventListener('input', ()=>{ state.f=+fEl.value*1e9;
+  document.getElementById('f-val').textContent=(+fEl.value).toFixed(2)+' GHz'; drawAll(); });
+erEl.addEventListener('change', ()=>{ state.er=+erEl.value; drawAll(); });
+erEl.addEventListener('input',  ()=>{ state.er=+erEl.value; drawAll(); });
+hEl.addEventListener('input', ()=>{ state.h=+hEl.value/1000;
+  document.getElementById('h-val').textContent=(+hEl.value).toFixed(2)+' mm'; drawAll(); });
+tEl.addEventListener('input', ()=>{ state.trim=+tEl.value;
+  document.getElementById('t-val').textContent=(state.trim>=0?'+':'−')+Math.abs(state.trim).toFixed(1)+' %'; drawAll(); });
+
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>fit()); drawAll(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>f/D, the feed, and the 10 dB rule</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .cv2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:600px) { .cv2 { grid-template-columns:1fr; } }
+  .controls { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) auto; gap:6px 12px;
+              padding:7px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:6px; min-width:0; }
+  .ctl label { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:0; font-weight:600; font-size:12px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:36px; width:0; }
+  .btn { font:600 11.5px 'Inter',system-ui,-apple-system,sans-serif; color:var(--navy); background:#fff;
+         border:1px solid var(--edge2); border-radius:5px; padding:4px 9px; cursor:pointer; white-space:nowrap; }
+  .btn:hover { background:#eef4fa; }
+  /* Phone: label and value share a line, the slider takes the next. The
+     button rides on the n control's label line instead of taking a row. */
+  @media (max-width:430px) {
+    canvas { max-width:100%; }
+    .controls { grid-template-columns:1fr; }
+    .ctl { flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .ctl.bt { display:none; }
+    .btn.inl { display:inline-block !important; order:2; padding:2px 7px; font-size:11px; }
+  }
+  .btn.inl { display:none; }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0,1fr)); }
+  @media (max-width:640px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.sp { background:rgba(0,103,185,0.08); border-color:rgba(0,103,185,0.28); }
+  .ro.sp .v { color:var(--mid); }
+  .ro.tp { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.tp .v { color:var(--amber); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="cv2">
+    <canvas id="scene" aria-label="Side view of a prime-focus dish drawn to scale for the chosen f over D, with the feed's power pattern drawn as a polar lobe at the focus, the rim rays at plus and minus the rim half-angle, the power that misses the dish shaded as spillover, and parallel rays leaving the aperture"></canvas>
+    <canvas id="plot" aria-label="Spillover efficiency, taper efficiency, and their product versus edge taper in dB for the current f over D, with markers at the current feed and a dashed line at the best product"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Depth \(f/D\)</label>
+      <input type="range" id="fd" min="0.25" max="0.80" step="0.01" value="0.50">
+      <span class="val" id="fd-val">0.50</span>
+    </div>
+    <div class="ctl">
+      <label>Feed \(n\)</label>
+      <button class="btn inl" id="best2" type="button">best n</button>
+      <input type="range" id="nn" min="0" max="1000" step="1" value="564">
+      <span class="val" id="nn-val">4.0</span>
+    </div>
+    <div class="ctl bt">
+      <button class="btn" id="best" type="button">n for best product</button>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">rim \(\theta_0\)</span><span class="v" id="r-th">&#8212;</span></div>
+    <div class="ro"><span class="k">edge taper</span><span class="v" id="r-et">&#8212;</span></div>
+    <div class="ro sp"><span class="k">spillover \(\eta_s\)</span><span class="v" id="r-s">&#8212;</span></div>
+    <div class="ro tp"><span class="k">taper \(\eta_t\)</span><span class="v" id="r-t">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS = "Inter, system-ui, -apple-system, sans-serif";
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const el = id => document.getElementById(id);
+
+const NMIN = 0.5, NMAX = 20;
+const state = { fd: 0.50, n: 4 };
+
+// ---- the physics: matches scripts/graphics/l14_taper_spillover.py ----------
+// Feed power pattern cos^n(theta') in front, zero behind. Rim half-angle
+// theta0 = 2 atan(1 / (4 f/D)). Aperture field at rho = 2f tan(theta'/2):
+// E_a ~ sqrt(cos^n theta') (1 + cos theta')/2 (the second factor is the 1/r
+// spreading from the focus to the surface).
+const rimAngle = fd => 2 * Math.atan(1 / (4 * fd));
+const Ea = (t, n) => Math.pow(Math.max(Math.cos(t), 0), n / 2) * (1 + Math.cos(t)) / 2;
+
+function efficiencies(n, fd) {
+  const th0 = rimAngle(fd);
+  const c0 = Math.cos(th0) > 1e-9 ? Math.cos(th0) : 0;   // f/D = 0.25 puts the rim at exactly 90 deg
+  const spill = 1 - Math.pow(c0, n + 1);           // closed form of the ratio of integrals
+  // taper: |int E dA|^2 / (A int E^2 dA), dA = 2 pi rho drho, rho = tan(t/2) in units of 2f
+  const N = 400;
+  let num = 0, den = 0;
+  for (let i = 0; i <= N; i++) {
+    const t = th0 * i / N;
+    const rho = Math.tan(t / 2);
+    const drho = 0.5 / Math.pow(Math.cos(t / 2), 2);
+    const E = Ea(t, n);
+    const wgt = (i === 0 || i === N) ? 0.5 : 1;
+    num += wgt * E * rho * drho;
+    den += wgt * E * E * rho * drho;
+  }
+  const rhoMax = Math.tan(th0 / 2);
+  const dt = th0 / N;
+  const taper = (num * num * dt) / (den * rhoMax * rhoMax / 2);
+  const ratio = c0 > 0 ? Ea(th0, n) / Ea(0, n) : 0;
+  const edge = ratio > 0 ? -20 * Math.log10(ratio) : Infinity;
+  return { th0, edge, spill, taper, prod: spill * taper };
+}
+
+// feed's own -10 dB (power) full beamwidth, degrees
+const bw10 = n => 2 * Math.acos(Math.pow(0.1, 1 / n)) * 180 / Math.PI;
+
+const sliderToN = t => NMIN * Math.pow(NMAX / NMIN, t / 1000);
+const nToSlider = n => Math.round(1000 * Math.log(n / NMIN) / Math.log(NMAX / NMIN));
+
+// sweep n for the right panel (wider than the slider so the curves span 0-30 dB)
+let sweep = [], best = null;
+function buildSweep() {
+  sweep = [];
+  for (let i = 0; i <= 360; i++) {
+    const n = 0.1 * Math.pow(800, i / 360);         // 0.1 .. 80
+    const e = efficiencies(n, state.fd);
+    e.n = n; sweep.push(e);
+  }
+  const fin = sweep.filter(p => isFinite(p.edge));
+  best = fin.length ? fin.reduce((a, b) => (b.prod > a.prod ? b : a)) : null;
+}
+
+// ---- controls -------------------------------------------------------------
+function fmtN(n) { return n < 10 ? n.toFixed(1) : n.toFixed(0); }
+function syncLabels() {
+  el('fd-val').textContent = state.fd.toFixed(2);
+  el('nn-val').textContent = fmtN(state.n) + ' (' + Math.round(bw10(state.n)) + '° at −10 dB)';
+}
+el('fd').addEventListener('input', e => { state.fd = +e.target.value; buildSweep(); syncLabels(); drawAll(); });
+el('nn').addEventListener('input', e => { state.n = sliderToN(+e.target.value); syncLabels(); drawAll(); });
+function goBest() {
+  // best over the slider's range, refined on a fine grid
+  let bn = state.n, bp = -1;
+  for (let i = 0; i <= 1000; i++) {
+    const n = sliderToN(i), p = efficiencies(n, state.fd).prod;
+    if (p > bp) { bp = p; bn = n; }
+  }
+  state.n = bn; el('nn').value = nToSlider(bn); syncLabels(); drawAll();
+}
+el('best').addEventListener('click', goBest);
+el('best2').addEventListener('click', goBest);
+
+// ---- canvases -------------------------------------------------------------
+const scene = el('scene'), sctx = scene.getContext('2d');
+const plot = el('plot'), pctx = plot.getContext('2d');
+const DESIGN_W = 340;
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:599px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.66) : h; }
+function fitOne(cv, ratio, lo, hi) {
+  lo = SQ(lo); hi = SQ(hi);
+  const dpr = window.devicePixelRatio || 1;
+  const wCss = Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
+  const s = Math.min(1, wCss / DESIGN_W);
+  const w = wCss / s;
+  const h = Math.max(lo, Math.min(w * ratio, hi));
+  cv.width = Math.round(wCss * dpr); cv.height = Math.round(h * s * dpr);
+  cv.style.height = (h * s) + 'px';
+  const bh = cv.offsetHeight - cv.clientHeight;
+  if (bh) cv.style.height = (h * s + bh) + 'px';
+  cv.getContext('2d').setTransform(dpr * s, 0, 0, dpr * s, 0, 0);
+  return { w, h };
+}
+window.addEventListener('resize', () => drawAll());
+
+let cur = null;
+function drawAll() {
+  cur = efficiencies(state.n, state.fd);
+  drawScene(); drawPlot(); updateReadouts();
+}
+
+function arrowHead(ctx, x, y, dir, sz) {
+  ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - dir * sz, y - sz * 0.55);
+  ctx.lineTo(x - dir * sz, y + sz * 0.55); ctx.closePath(); ctx.fill();
+}
+
+// ---------------------------------------------------------------- scene ----
+function drawScene() {
+  const { w, h } = fitOne(scene, 0.74, 230, 270);
+  const ctx = sctx;
+  ctx.clearRect(0, 0, w, h);
+  const navy = cssVar('--navy'), mid = cssVar('--mid'), amber = cssVar('--amber'), ink3 = cssVar('--ink3');
+
+  // legend row on top; the dish takes the rest
+  const top = 30, bot = 10;
+  const R = (h - top - bot) / 2;               // drawn dish radius (fixed diameter)
+  const yc = top + R;
+  const xv = 16;                               // vertex
+  const f = state.fd * 2 * R;                  // drawn focal length
+  const zOf = rho => rho * rho / (4 * f);      // parabola depth
+  const fx = xv + f;
+  const xend = w - 10;
+  const th0 = cur.th0;
+
+  // legend
+  ctx.font = '600 11px ' + SANS; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+  let lx = 10; const ly = 14;
+  const key = (fill, stroke, label) => {
+    ctx.fillStyle = fill; ctx.fillRect(lx, ly - 5, 14, 10);
+    ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.strokeRect(lx + 0.5, ly - 4.5, 13, 9);
+    ctx.fillStyle = stroke; ctx.fillText(label, lx + 19, ly + 0.5);
+    lx += 19 + ctx.measureText(label).width + 14;
+  };
+  key('rgba(0,74,133,0.22)', navy, 'feed power on the dish');
+  key('rgba(138,90,0,0.28)', amber, 'spillover');
+
+  // boresight
+  ctx.strokeStyle = '#dfe7ef'; ctx.lineWidth = 1; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(xv, yc); ctx.lineTo(xend, yc); ctx.stroke(); ctx.setLineDash([]);
+
+  // rays: focus -> dish -> out, at the rim and two interior angles
+  const rayAt = (tp, col, lw) => {
+    const rho = 2 * f * Math.tan(tp / 2);
+    const px = xv + zOf(Math.abs(rho)), py = yc - rho;
+    ctx.strokeStyle = col; ctx.lineWidth = lw;
+    ctx.beginPath(); ctx.moveTo(fx, yc); ctx.lineTo(px, py); ctx.lineTo(xend - 2, py); ctx.stroke();
+    ctx.fillStyle = col; arrowHead(ctx, xend, py, 1, 7);
+  };
+  [0.5, -0.5].forEach(k => rayAt(k * th0, '#9cb9d6', 1.1));
+  [1, -1].forEach(k => rayAt(k * th0, mid, 1.6));
+
+  // feed power pattern as a polar lobe at the focus, aimed at the vertex
+  const L = Math.min(0.62 * f, 0.62 * R);
+  const pt = t => {
+    const r = L * Math.pow(Math.max(Math.cos(t), 0), state.n);
+    return [fx - r * Math.cos(t), yc - r * Math.sin(t)];
+  };
+  const sector = (a, b, fill, stroke) => {
+    ctx.beginPath(); ctx.moveTo(fx, yc);
+    for (let i = 0; i <= 90; i++) { const [x, y] = pt(a + (b - a) * i / 90); ctx.lineTo(x, y); }
+    ctx.closePath(); ctx.fillStyle = fill; ctx.fill();
+    ctx.strokeStyle = stroke; ctx.lineWidth = 1.4; ctx.stroke();
+  };
+  const H = Math.PI / 2;
+  if (th0 < H - 1e-6) {
+    sector(th0, H, 'rgba(138,90,0,0.28)', amber);
+    sector(-H, -th0, 'rgba(138,90,0,0.28)', amber);
+  }
+  sector(-th0, th0, 'rgba(0,74,133,0.22)', navy);
+
+  // dish surface
+  ctx.strokeStyle = navy; ctx.lineWidth = 4; ctx.lineCap = 'round';
+  ctx.beginPath();
+  for (let i = 0; i <= 80; i++) {
+    const rho = -R + 2 * R * i / 80, x = xv + zOf(Math.abs(rho)), y = yc - rho;
+    i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+  }
+  ctx.stroke(); ctx.lineCap = 'butt';
+
+  // feed horn at the focus, mouth toward the vertex
+  ctx.fillStyle = navy;
+  ctx.beginPath(); ctx.moveTo(fx, yc - 5); ctx.lineTo(fx + 9, yc - 2.5); ctx.lineTo(fx + 9, yc + 2.5);
+  ctx.lineTo(fx, yc + 5); ctx.closePath(); ctx.fill();
+  ctx.fillRect(fx + 9, yc - 2.5, 5, 5);
+
+  // theta0: arc from the axis to the upper rim ray, drawn over the lobe; the
+  // label sits on the bisector, past both the arc and the lobe's edge, and far
+  // enough out to clear the rim ray.
+  const ra = Math.max(12, Math.min(30, 0.3 * f));
+  ctx.strokeStyle = '#3b4651'; ctx.lineWidth = 1.3;
+  ctx.beginPath(); ctx.arc(fx, yc, ra, Math.PI, Math.PI + th0); ctx.stroke();
+  const lw = MJ.width('\\theta_0', '#3b4651', 15) || 14;
+  const lobeR = L * Math.pow(Math.cos(th0 / 2), state.n);
+  const lr = Math.max(ra + 13, lobeR + 13, 13 / Math.sin(th0 / 2));
+  const la = Math.PI + th0 / 2;
+  let tx = fx + lr * Math.cos(la), ty = yc + lr * Math.sin(la);
+  tx = Math.max(lw / 2 + 3, Math.min(w - lw / 2 - 3, tx));
+  ty = Math.max(top + 9, ty);
+  // A shallow-focus dish leaves no room inside the bowl: if the card would
+  // touch the surface, move it just outside the upper rim ray instead.
+  const surfX = xv + zOf(Math.min(R, Math.abs(yc - ty)) + 9);
+  if (tx - lw / 2 - 2 < surfX + 3) {
+    const d = ra + 6;
+    tx = fx - d * Math.cos(th0) + lw / 2 + 7;
+    ty = yc - d * Math.sin(th0);
+  }
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.fillRect(tx - lw / 2 - 2, ty - 9, lw + 4, 18);
+  MJ.draw(ctx, '\\theta_0', tx, ty, 15, '#3b4651', 'center');
+}
+
+// ----------------------------------------------------------------- plot ----
+function drawPlot() {
+  const { w, h } = fitOne(plot, 0.74, 230, 270);
+  const ctx = pctx;
+  ctx.clearRect(0, 0, w, h);
+  const navy = cssVar('--navy'), mid = cssVar('--mid'), amber = cssVar('--amber'), ink3 = cssVar('--ink3');
+  const mL = 38, mR = 12, mT = 26, mB = 36;
+  const pW = w - mL - mR, pH = h - mT - mB;
+  const XMAX = 30, YLO = 0.3, YHI = 1.1;
+  const X = x => mL + pW * x / XMAX;
+  const Y = y => mT + pH * (1 - (y - YLO) / (YHI - YLO));
+
+  // grid + frame
+  ctx.strokeStyle = '#eef3f8'; ctx.lineWidth = 1;
+  for (let x = 0; x <= XMAX; x += 5) { ctx.beginPath(); ctx.moveTo(X(x), mT); ctx.lineTo(X(x), mT + pH); ctx.stroke(); }
+  [0.4, 0.6, 0.8, 1.0].forEach(y => { ctx.beginPath(); ctx.moveTo(mL, Y(y)); ctx.lineTo(mL + pW, Y(y)); ctx.stroke(); });
+  ctx.strokeStyle = cssVar('--edge'); ctx.strokeRect(mL, mT, pW, pH);
+
+  // ticks
+  ctx.font = '10.5px ' + SANS; ctx.fillStyle = ink3;
+  ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  [0.4, 0.6, 0.8, 1.0].forEach(y => ctx.fillText(y.toFixed(1), mL - 5, Y(y)));
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  for (let x = 0; x <= XMAX; x += 5) ctx.fillText(String(x), X(x), mT + pH + 4);
+  ctx.fillStyle = '#3b4651'; ctx.font = '600 11.5px ' + SANS;
+  ctx.fillText('edge taper, dB below center', mL + pW / 2, mT + pH + 19);
+  ctx.save(); ctx.translate(11, mT + pH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.textBaseline = 'middle'; ctx.fillText('efficiency', 0, 0); ctx.restore();
+
+  const vis = sweep.filter(p => p.edge <= XMAX);
+  const series = [
+    { key: 'spill', col: mid,   lw: 2.0, label: 'spillover', bold: false },
+    { key: 'taper', col: amber, lw: 2.0, label: 'taper',     bold: false },
+    { key: 'prod',  col: navy,  lw: 3.0, label: 'product',   bold: true }
+  ];
+
+  ctx.save();
+  ctx.beginPath(); ctx.rect(mL, mT, pW, pH); ctx.clip();
+  // best product: dashed vertical
+  const bestIn = best && best.edge <= XMAX;
+  if (bestIn) {
+    ctx.strokeStyle = navy; ctx.globalAlpha = 0.55; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(X(best.edge), mT); ctx.lineTo(X(best.edge), mT + pH); ctx.stroke();
+    ctx.setLineDash([]); ctx.globalAlpha = 1;
+  }
+  series.forEach(s => {
+    ctx.strokeStyle = s.col; ctx.lineWidth = s.lw; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    vis.forEach((p, i) => { const x = X(p.edge), y = Y(p[s.key]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    ctx.stroke();
+  });
+  ctx.restore();
+
+  // markers at the current n (on the right edge, as a wedge, if off scale)
+  const markers = [];
+  const curIn = isFinite(cur.edge) && cur.edge <= XMAX;
+  const anyVis = sweep.some(p => p.edge <= XMAX);
+  series.forEach(s => {
+    const v = cur[s.key];
+    if (!anyVis || v < YLO || v > YHI) return;
+    ctx.fillStyle = s.col; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+    if (curIn) {
+      const x = X(cur.edge), y = Y(v);
+      ctx.beginPath(); ctx.arc(x, y, 4.5, 0, 7); ctx.fill(); ctx.stroke();
+      markers.push({ x0: x - 6, x1: x + 6, y0: y - 6, y1: y + 6 });
+    } else {
+      const x = mL + pW - 1, y = Y(v);
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - 8, y - 5); ctx.lineTo(x - 8, y + 5); ctx.closePath(); ctx.fill();
+      markers.push({ x0: x - 10, x1: x + 2, y0: y - 7, y1: y + 7 });
+    }
+  });
+
+  // header: the product, now and at best
+  ctx.font = '700 11px ' + SANS; ctx.textBaseline = 'middle';
+  const hdr = 'product ' + cur.prod.toFixed(3);
+  const hdr2 = bestIn ? ('best ' + best.prod.toFixed(2) + ' at ' + best.edge.toFixed(1) + ' dB') : '';
+  ctx.fillStyle = navy; ctx.textAlign = 'left'; ctx.fillText(hdr, mL, 13);
+  if (hdr2) {
+    ctx.globalAlpha = 0.8; ctx.textAlign = 'right'; ctx.fillText(hdr2, mL + pW, 13); ctx.globalAlpha = 1;
+  }
+
+  if (!vis.length) {
+    ctx.fillStyle = ink3; ctx.font = '11.5px ' + SANS; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('rim at 90°: the feed is dark at the', mL + pW / 2, mT + pH / 2 - 8);
+    ctx.fillText('rim for any n, edge taper off scale', mL + pW / 2, mT + pH / 2 + 8);
+    return;
+  }
+
+  // curve labels: candidates walk along each curve's own data; keep the first
+  // that stays in the plot and clears the other curves, markers, and labels.
+  const yAt = (key, x) => {
+    if (x < vis[0].edge || x > vis[vis.length - 1].edge) return null;
+    for (let i = 1; i < vis.length; i++) {
+      if (vis[i].edge >= x) {
+        const a = vis[i - 1], b = vis[i], u = (x - a.edge) / ((b.edge - a.edge) || 1);
+        return Y(a[key] + u * (b[key] - a[key]));
+      }
+    }
+    return null;
+  };
+  const placed = markers.slice();
+  if (bestIn) placed.push({ x0: X(best.edge) - 1, x1: X(best.edge) + 1, y0: mT, y1: mT + pH });
+  const prefs = { spill: [0.75, 0.6, 0.9, 0.45, 0.3, 0.15],
+                  taper: [0.04, 0.12, 0.2, 0.35, 0.5, 0.65, 0.8],
+                  prod:  [0.1, 0.15, 0.2, 0.3, 0.4, 0.6, 0.75, 0.9] };
+  const xLo = vis[0].edge, xHi = vis[vis.length - 1].edge;
+  // the product is labeled first: it is the curve the lesson is about
+  [series[2], series[1], series[0]].forEach(s => {
+    ctx.font = (s.bold ? '700 11.5px ' : '600 11px ') + SANS;
+    const tw = ctx.measureText(s.label).width, th = 13;
+    let pick = null;
+    const sides = s.key === 'taper' ? [-1, 1] : [1, -1];   // +1 below, -1 above
+    outer:
+    for (const fr of prefs[s.key]) {
+      const xd = xLo + fr * (xHi - xLo);
+      const yc = yAt(s.key, xd); if (yc === null) continue;
+      for (const sd of sides) for (const an of [0.5, 0, 1]) {
+        let x0 = X(xd) - an * tw;
+        x0 = Math.max(mL + 3, Math.min(mL + pW - tw - 3, x0));
+        const y0 = sd > 0 ? yc + 6 : yc - 6 - th;
+        const box = { x0: x0 - 2, x1: x0 + tw + 2, y0: y0 - 1, y1: y0 + th + 1 };
+        if (box.y0 < mT + 2 || box.y1 > mT + pH - 2) continue;
+        let ok = true;
+        for (let k = 0; k <= 12 && ok; k++) {
+          const xx = (box.x0 + (box.x1 - box.x0) * k / 12 - mL) / pW * XMAX;
+          series.forEach(o => {
+            const yy = yAt(o.key, xx);
+            if (yy !== null && yy > box.y0 - 2 && yy < box.y1 + 2) ok = false;
+          });
+        }
+        for (const b of placed) {
+          if (box.x0 < b.x1 + 6 && box.x1 > b.x0 - 6 && box.y0 < b.y1 + 3 && box.y1 > b.y0 - 3) ok = false;
+        }
+        if (ok) { pick = { x: x0, y: y0, box }; break outer; }
+      }
+    }
+    if (!pick) return;                         // nowhere clean: leave it unlabeled
+    placed.push(pick.box);
+    ctx.fillStyle = s.col; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.fillText(s.label, pick.x, pick.y);
+  });
+}
+
+// ------------------------------------------------------------- readouts ---
+function updateReadouts() {
+  el('r-th').textContent = (cur.th0 * 180 / Math.PI).toFixed(1) + '°';
+  el('r-et').textContent = cur.edge > 60 ? '> 60 dB' : cur.edge.toFixed(1) + ' dB';
+  el('r-s').textContent = cur.spill.toFixed(3);
+  el('r-t').textContent = cur.taper.toFixed(3);
+}
+
+MJ.setRedraw(drawAll);
+MJ.onReady(() => { MJ.typeset(document.querySelector('.app')).then(drawAll); });
+el('fd').value = state.fd;
+el('nn').value = nToSlider(state.n);
+buildSweep();
+syncLabels();
+drawAll();
+</script>
+</body>
+</html>

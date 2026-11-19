@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predict the azimuth sweep</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573; --ref:#d9822b; --az:#004a85; --floor:#9aa3ad;
+          --nl:#b01e24; --sl:#1d7a4d; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; justify-content:space-between;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .grp { display:flex; gap:5px; align-items:center; flex-wrap:nowrap; font-size:13px; }
+  .grp .lab { margin-right:4px; color:var(--ink); white-space:nowrap; }
+  .ang { font:700 12px 'Inter',system-ui,sans-serif; min-width:42px; height:30px; padding:0 6px; border-radius:5px; cursor:pointer;
+         border:1px solid var(--edge2); background:#fff; color:var(--ink3); }
+  .ang[aria-pressed="true"] { background:var(--mid); border-color:var(--mid); color:#fff; }
+  .ang:focus-visible, .show:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  .show { font:700 12px 'Inter',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.05em;
+          height:30px; padding:0 14px; border-radius:5px; cursor:pointer;
+          border:1px solid var(--navy); background:var(--navy); color:#fff; }
+  .show[aria-pressed="true"] { background:#fff; color:var(--navy); }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 560px) { .readouts { grid-template-columns:repeat(2, minmax(0, 1fr)); } .ang { min-width:36px; } }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:4px; padding:7px 6px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { height:15px; line-height:15px; font-size:10.5px; font-weight:700; text-transform:uppercase;
+           letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; color:var(--navy); overflow:hidden; max-width:100%; }
+  .ro.nl .v { color:var(--nl); }
+  .ro.sl .v { color:var(--sl); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" width="1000" height="400" aria-label="The beam sweep and the azimuth sweep of the eight-element array in dB below each trace's own peak, against angle"></canvas>
+
+  <div class="controls">
+    <div class="grp" id="angs" role="group" aria-label="Beam angle"><span class="lab">Beam at</span></div>
+    <button class="show" id="show" aria-pressed="false">Show azimuth sweep</button>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">peak at</span><span class="v" id="r-pk">?</span></div>
+    <div class="ro nl"><span class="k">first nulls</span><span class="v" id="r-nl">?</span></div>
+    <div class="ro sl"><span class="k">left first SL</span><span class="v" id="r-sl">?</span></div>
+    <div class="ro sl"><span class="k">right first SL</span><span class="v" id="r-sr">?</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+// The L21 Lab's prediction: the kit's eight patches, 14 mm apart, uniform
+// weights. The beam sweep (the HB100 fixed at the beam angle, the beam stepped
+// past it) is the dashed reference and is always drawn; the azimuth sweep (the
+// beam held, the source moved) stays hidden until "Show", and any change of
+// angle hides it again, so each guess comes before its check.
+// Drawn at 10.0 GHz by default, away from every kit's HB100, so no readout
+// equals a Part 1 answer (Neil, 2026-11-08). ?f=10.2 (GHz) draws another.
+// Both traces are in dB below their own peak (dBc) with the noise floor of the
+// L20 Lab, 23 dB below the peak, added in power, as in the Lesson 21 figures;
+// the element is the course's ideal patch, power cos(theta).
+const F_GHZ = (() => {
+  const v = parseFloat(new URLSearchParams(location.search).get('f'));
+  return (v >= 8 && v <= 12) ? v : 10.0;
+})();
+const N = 8, LAM = 3.00e8/(F_GHZ*1e9), DEL = 14e-3, KD = 2*Math.PI*DEL/LAM;
+const LSB = 2.8125*Math.PI/180;
+const FLOOR_DBC = -23, YMIN = -30;
+const ANGLES = [0, 15, 30, 45];
+const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+const rad = d => d*Math.PI/180, deg = r => r*180/Math.PI;
+
+const state = { beam: 0, shown: false };
+
+function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+function mixLabel(ctx,chunks,x,yc,h,color,align){
+  const fpx=h-1, f=fpx+'px '+SANS; let tot=0;
+  for(const c of chunks){ if(c.m) tot+=MJ.width(c.m,color,h); else { ctx.font=f; tot+=ctx.measureText(c.s).width; } }
+  let cx = align==='center' ? x-tot/2 : x;
+  for(const c of chunks){
+    if(c.m){ MJ.draw(ctx,c.m,cx,yc,h,color,'left'); cx+=MJ.width(c.m,color,h); }
+    else { stext(ctx,c.s,cx,yc,fpx,color,'left'); ctx.font=f; cx+=ctx.measureText(c.s).width; }
+  }
+}
+
+// |AF|^2, peak 1, for psi = kd (sin theta_src - sin theta_0)
+function af2(psi){
+  const den = N*Math.sin(psi/2);
+  if (Math.abs(den) < 1e-12) return 1;
+  const a = Math.sin(N*psi/2)/den;
+  return a*a;
+}
+const flo = 10**(FLOOR_DBC/10);
+
+// Beam sweep: the source fixed at the beam angle, one point per phase LSB,
+// plotted at the commanded angle. Peak 1 at the source, so dBc is direct.
+function beamSweep(src){
+  const pts = [];
+  for (let k = -400; k <= 400; k++){
+    const s0 = k*LSB/KD;
+    if (Math.abs(s0) > 1) continue;
+    const p = af2(KD*(Math.sin(rad(src)) - s0)) + flo;
+    pts.push([deg(Math.asin(s0)), p]);
+  }
+  const mx = Math.max(...pts.map(q => q[1]));
+  return pts.map(([a, p]) => [a, 10*Math.log10(p/mx)]);
+}
+// Azimuth sweep: the beam held at theta_0, the source moved; the element
+// pattern multiplies the array factor, then the floor is added.
+function azSweep(t0){
+  const pts = [];
+  for (let i = 0; i <= 3600; i++){
+    const a = -90 + i*0.05, ef = Math.max(Math.cos(rad(a)), 0);
+    pts.push([a, af2(KD*(Math.sin(rad(a)) - Math.sin(rad(t0))))*ef + flo]);
+  }
+  const mx = Math.max(...pts.map(q => q[1]));
+  return pts.map(([a, p]) => [a, 10*Math.log10(p/mx)]);
+}
+
+// Features of the azimuth sweep: its peak, the first nulls on each side, and
+// the highest level between each first and second null.
+function features(t0){
+  const az = azSweep(t0), s0 = Math.sin(rad(t0)), w = LAM/(N*DEL);
+  let pk = az[0];
+  for (const q of az) if (q[1] > pk[1]) pk = q;
+  const nullAt = s => Math.abs(s) <= 1 ? deg(Math.asin(s)) : null;
+  const nL = nullAt(s0 - w), nR = nullAt(s0 + w);
+  const lobe = (lo, hi) => {
+    if (lo === null || hi === null) return null;
+    let best = null;
+    for (const q of az) if (q[0] > Math.min(lo,hi) && q[0] < Math.max(lo,hi) && (!best || q[1] > best[1])) best = q;
+    return best;
+  };
+  const nL2 = nullAt(s0 - 2*w), nR2 = nullAt(s0 + 2*w);
+  return { az, pk, nL, nR,
+           sl: lobe(nL2 === null ? -90 : nL2, nL),
+           sr: lobe(nR, nR2 === null ? 90 : nR2) };
+}
+
+const canvas = document.getElementById('plot'), ctx = canvas.getContext('2d');
+function resizeCanvas(){
+  const w = canvas.getBoundingClientRect().width, dpr = window.devicePixelRatio || 1;
+  const h = Math.max(210, Math.min(w*0.42, 320));
+  canvas.width = w*dpr; canvas.height = h*dpr; canvas.style.height = h+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  draw();
+}
+window.addEventListener('resize', resizeCanvas);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function draw(){
+  const dpr = window.devicePixelRatio || 1, w = canvas.width/dpr, h = canvas.height/dpr;
+  ctx.clearRect(0,0,w,h);
+  const narrow = w < 470, fs = narrow ? 10.5 : 11.5;
+  const mL = narrow ? 40 : 54, mR = 14, mT = 28, mB = narrow ? 40 : 46;
+  const pw = w-mL-mR, ph = h-mT-mB;
+  const xFor = t => mL + (t+90)/180*pw;
+  const yFor = v => mT + Math.min(Math.max(-v,0),-YMIN)/(-YMIN)*ph;
+
+  ctx.strokeStyle = '#e6eef6'; ctx.lineWidth = 1;
+  for (let t=-90;t<=90;t+=30){ ctx.beginPath(); ctx.moveTo(xFor(t),mT); ctx.lineTo(xFor(t),mT+ph); ctx.stroke(); }
+  for (let v=0;v>=YMIN;v-=10){ ctx.beginPath(); ctx.moveTo(mL,yFor(v)); ctx.lineTo(mL+pw,yFor(v)); ctx.stroke(); }
+  ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.moveTo(mL,mT); ctx.lineTo(mL,mT+ph); ctx.lineTo(mL+pw,mT+ph); ctx.stroke();
+  for (let t=-90;t<=90;t+=30) stext(ctx,`${t}`.replace('-','−'),xFor(t),mT+ph+13,fs,'#5b6573','center');
+  for (let v=0;v>=YMIN;v-=10) stext(ctx,`${v}`.replace('-','−'),mL-7,yFor(v),fs,'#5b6573','right');
+  mixLabel(ctx,[{s:'Angle '},{m:'\\theta'},{s:' (degrees)'}],mL+pw/2,mT+ph+(narrow?30:34),narrow?11:12.5,'#15202b','center');
+  ctx.save(); ctx.translate(narrow?11:14, mT+ph/2); ctx.rotate(-Math.PI/2);
+  stext(ctx, 'dBc', 0, 0, narrow?11:12.5, '#15202b', 'center');
+  ctx.restore();
+
+  // the noise floor, labeled where the right-hand plot area is clear
+  const yF = yFor(FLOOR_DBC);
+  ctx.strokeStyle = css('--floor'); ctx.lineWidth = 1; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(mL,yF); ctx.lineTo(mL+pw,yF); ctx.stroke(); ctx.setLineDash([]);
+  if (ph > 120) stext(ctx,'noise floor',mL+pw-4,yF+fs*0.95,fs,'#5b6573','right');
+
+  const plot = (pts, color, lw, dash) => {
+    ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash||[]);
+    ctx.beginPath();
+    pts.forEach(([a, v], i) => { const x = xFor(a), y = yFor(Math.max(v, YMIN)); if (i) ctx.lineTo(x,y); else ctx.moveTo(x,y); });
+    ctx.stroke(); ctx.setLineDash([]);
+  };
+  plot(beamSweep(state.beam), css('--ref'), 1.6, [5,4]);
+
+  // legend
+  const ly = mT-14;
+  ctx.strokeStyle = css('--ref'); ctx.lineWidth = 1.8; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(mL+6,ly); ctx.lineTo(mL+24,ly); ctx.stroke(); ctx.setLineDash([]);
+  stext(ctx,'beam sweep',mL+29,ly,fs,'#5b6573','left');
+  ctx.font = fs+'px '+SANS;
+  const lx = mL+29+ctx.measureText('beam sweep').width+16;
+
+  const name = `Beam at ${state.beam}°`;
+  if (!state.shown){
+    const msg = narrow ? `${name}: predict, then show` : `${name}: predict the azimuth sweep, then show it`;
+    const mpx = narrow ? 12 : 13.5;
+    ctx.font = '700 '+mpx+'px '+SANS;
+    const mw = Math.min(ctx.measureText(msg).width + 20, pw - 8), my = mT + ph*0.52;
+    ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.strokeStyle = css('--edge2'); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(mL+pw/2-mw/2, my-mpx, mw, 2*mpx, 5); ctx.fill(); ctx.stroke();
+    stext(ctx, msg, mL+pw/2, my, mpx, css('--navy'), 'center', true);
+    return;
+  }
+  ctx.strokeStyle = css('--az'); ctx.lineWidth = 2.2;
+  ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+18,ly); ctx.stroke();
+  stext(ctx,'azimuth sweep',lx+23,ly,fs,'#5b6573','left');
+  plot(features(state.beam).az, css('--az'), 2.2);
+}
+
+function readouts(){
+  const set = (id, s) => document.getElementById(id).textContent = s;
+  if (!state.shown){ ['r-pk','r-nl','r-sl','r-sr'].forEach(id => set(id, '?')); return; }
+  const f = features(state.beam), m = s => s.replace('-', '−');
+  const a = v => v === null ? 'none' : m(`${v.toFixed(1)}°`);
+  set('r-pk', a(f.pk[0]));
+  set('r-nl', `${a(f.nL)}, ${a(f.nR)}`);
+  const lv = q => q === null ? 'none' : m(`${q[1].toFixed(1)} dBc`);
+  set('r-sl', lv(f.sl));
+  set('r-sr', lv(f.sr));
+}
+
+const grp = document.getElementById('angs'), showBtn = document.getElementById('show');
+const btns = ANGLES.map(t => {
+  const b = document.createElement('button');
+  b.className = 'ang'; b.textContent = t+'°';
+  b.addEventListener('click', () => { state.beam = t; state.shown = false; sync(); });
+  grp.appendChild(b); return [t, b];
+});
+showBtn.addEventListener('click', () => { state.shown = !state.shown; sync(); });
+function sync(){
+  for (const [t, b] of btns) b.setAttribute('aria-pressed', t === state.beam ? 'true' : 'false');
+  showBtn.setAttribute('aria-pressed', state.shown ? 'true' : 'false');
+  showBtn.textContent = state.shown ? 'Hide azimuth sweep' : 'Show azimuth sweep';
+  readouts(); draw();
+}
+
+resizeCanvas(); sync();
+MJ.setRedraw(() => draw());
+MJ.onReady(() => draw());
+</script>
+</body>
+</html>

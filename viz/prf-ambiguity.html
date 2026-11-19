@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One PRF, two limits</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573; --red:#b01e24; --win:rgba(0,103,185,0.10); }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:12px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; align-items:center; gap:6px 16px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 300px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; min-width:9.5ch; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:8.5ch; text-align:right; font-size:13.5px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:100px; }
+  /* Below 430px a label, a slider and a value do not fit on one line: stack
+     each control, label and value on the first line and the slider below. */
+  @media (max-width:430px) {
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:2px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+  }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:4px; padding:6px 8px 7px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center; height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; text-align:center; color:var(--navy); }
+  .ro.bad .v { color:var(--red); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" aria-label="Range and velocity axes: the unambiguous windows the PRF sets, the true target, and what the radar reports"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>PRF</label>
+      <input type="range" id="prf" min="-0.301" max="1.301" step="0.001" value="0">
+      <span class="val" id="prf-val">1.00 kHz</span>
+    </div>
+    <div class="ctl">
+      <label>Range</label>
+      <input type="range" id="rng" min="1" max="300" step="1" value="170">
+      <span class="val" id="rng-val">170 km</span>
+    </div>
+    <div class="ctl">
+      <label>Closing speed</label>
+      <input type="range" id="vel" min="-60" max="60" step="0.5" value="20">
+      <span class="val" id="vel-val">+20.0 m/s</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">\(R_\text{ua}\)</span><span class="v" id="o-rua">—</span></div>
+    <div class="ro" id="b-rrep"><span class="k">reported range</span><span class="v" id="o-rrep">—</span></div>
+    <div class="ro"><span class="k">\(v_\text{ua}\)</span><span class="v" id="o-vua">—</span></div>
+    <div class="ro" id="b-vrep"><span class="k">reported speed</span><span class="v" id="o-vrep">—</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* A pulsed radar at 10 GHz. The PRF sets the unambiguous range c/(2 PRF) and
+   the unambiguous velocity +-lambda PRF/4. A target outside either window is
+   reported folded back into it: range modulo R_ua, Doppler modulo the PRF. */
+const C=3e8, LAM=C/10e9;
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const cv=document.getElementById('plot'), ctx=cv.getContext('2d');
+const el=id=>document.getElementById(id);
+const state={ prf:1000, R:170e3, v:20 };
+
+/* Query-string presets, e.g. ?prf=2000&range=90&v=25 */
+(function(){
+  const q=new URLSearchParams(location.search);
+  if(q.has('prf')){ const p=+q.get('prf'); if(p>0){ el('prf').value=Math.log10(p/1000).toFixed(3); } }
+  if(q.has('range')) el('rng').value=q.get('range');
+  if(q.has('v')) el('vel').value=q.get('v');
+})();
+
+function read(){
+  state.prf=1000*Math.pow(10,+el('prf').value);
+  state.R=1e3*(+el('rng').value);
+  state.v=+el('vel').value;
+  const p=state.prf;
+  el('prf-val').textContent=(p>=10000?(p/1000).toFixed(1):(p/1000).toFixed(2))+' kHz';
+  el('rng-val').textContent=(state.R/1e3).toFixed(0)+' km';
+  el('vel-val').textContent=(state.v>=0?'+':'')+state.v.toFixed(1)+' m/s';
+}
+['prf','rng','vel'].forEach(id=>el(id).addEventListener('input',()=>{ read(); draw(); }));
+
+function report(){
+  const Rua=C/(2*state.prf);
+  const Rrep=state.R % Rua;
+  const fd=2*state.v/LAM, P=state.prf;
+  let frep=((fd+P/2)%P+P)%P-P/2;
+  const vua=LAM*P/4, vrep=frep*LAM/2;
+  return {Rua, Rrep, vua, vrep};
+}
+
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Below DESIGN_W the whole drawing scales down together, so labels keep
+   their places relative to the axes. */
+const DESIGN_W=320;
+let SCL=1;
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(cv);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
+  const h=Math.max(200, Math.min(w*0.34, 230));
+  setSize(cv,wCss,h*SCL,dpr);
+  ctx.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); draw();
+}
+window.addEventListener('resize', fit);
+
+/* One axis: a window [lo, hi] shaded, a hollow marker at the truth, a solid
+   marker at what the radar reports, joined by an arc when they differ. */
+function axis(y, x0, x1, vmin, vmax, ticks, unit, lo, hi, truth, rep, title){
+  const xp=v=>x0+(v-vmin)/(vmax-vmin)*(x1-x0);
+  const ink3=cssv('--ink3'), mid=cssv('--mid'), red=cssv('--red'), navy=cssv('--navy');
+  stext(ctx,title,x0,y-44,12,navy,'left',true);
+  const a=xp(Math.max(lo,vmin)), b=xp(Math.min(hi,vmax));
+  ctx.fillStyle=cssv('--win'); ctx.fillRect(a,y-26,b-a,32);
+  ctx.strokeStyle=mid; ctx.lineWidth=1.2; ctx.setLineDash([4,3]);
+  [lo,hi].forEach(v=>{ if(v>=vmin&&v<=vmax){ const x=xp(v); ctx.beginPath(); ctx.moveTo(x,y-26); ctx.lineTo(x,y+6); ctx.stroke(); } });
+  ctx.setLineDash([]);
+  ctx.strokeStyle='#8a929c'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(x0,y); ctx.lineTo(x1,y); ctx.stroke();
+  ticks.forEach(t=>{ const x=xp(t); ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x,y+4); ctx.stroke();
+    stext(ctx,String(t),x,y+15,11,ink3,'center',false); });
+  stext(ctx,unit,x1,y+30,11,ink3,'right',false);
+  const xt=xp(Math.max(vmin,Math.min(vmax,truth))), xr=xp(rep);
+  const folded=Math.abs(truth-rep)>1e-6*(vmax-vmin);
+  if(folded){
+    ctx.strokeStyle=red; ctx.lineWidth=1.2; ctx.setLineDash([3,3]);
+    const top=y-34;
+    ctx.beginPath(); ctx.moveTo(xt,y-10); ctx.quadraticCurveTo((xt+xr)/2,top,xr,y-10); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  ctx.strokeStyle='#15202b'; ctx.lineWidth=1.6; ctx.fillStyle='#fff';
+  ctx.beginPath(); ctx.arc(xt,y-10,5.5,0,7); ctx.fill(); ctx.stroke();
+  ctx.fillStyle=folded?red:navy; ctx.beginPath(); ctx.arc(xr,y-10,5,0,7); ctx.fill();
+}
+
+function draw(){
+  const dpr=window.devicePixelRatio||1;
+  const w=cv.width/(dpr*SCL), h=cv.height/(dpr*SCL);
+  ctx.clearRect(0,0,w,h);
+  const r=report();
+  const x0=18, x1=w-18;
+  const yA=h*0.30+8, yB=h*0.78;
+  // fewer ticks on a phone, so the labels never crowd
+  const narrow=w<520;
+  axis(yA, x0, x1, 0, 300, narrow?[0,100,200,300]:[0,50,100,150,200,250,300], 'km', 0, r.Rua/1e3,
+       state.R/1e3, r.Rrep/1e3, 'Range');
+  axis(yB, x0, x1, -60, 60, narrow?[-60,-30,0,30,60]:[-60,-40,-20,0,20,40,60], 'm/s', -r.vua, r.vua,
+       state.v, r.vrep, 'Closing speed');
+  // key, top right
+  const ky=12, navy=cssv('--navy');
+  ctx.strokeStyle='#15202b'; ctx.lineWidth=1.4; ctx.fillStyle='#fff';
+  ctx.beginPath(); ctx.arc(w-150,ky,4.5,0,7); ctx.fill(); ctx.stroke();
+  stext(ctx,'true',w-141,ky,11,cssv('--ink3'),'left',false);
+  ctx.fillStyle=navy; ctx.beginPath(); ctx.arc(w-96,ky,4.5,0,7); ctx.fill();
+  stext(ctx,'reported',w-87,ky,11,cssv('--ink3'),'left',false);
+
+  el('o-rua').textContent=(r.Rua/1e3).toFixed(r.Rua<1e4?1:0)+' km';
+  el('o-rrep').textContent=(r.Rrep/1e3).toFixed(0)+' km';
+  el('o-vua').textContent='±'+r.vua.toFixed(r.vua<10?2:1)+' m/s';
+  el('o-vrep').textContent=(r.vrep>=0?'+':'')+r.vrep.toFixed(1)+' m/s';
+  el('b-rrep').classList.toggle('bad', state.R>=r.Rua);
+  el('b-vrep').classList.toggle('bad', Math.abs(r.vrep-state.v)>1e-6);
+}
+
+read();
+fit();
+MJ.setRedraw(()=>draw());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>draw()); draw(); });
+</script>
+</body>
+</html>

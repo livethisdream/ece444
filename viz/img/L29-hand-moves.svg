@@ -1,0 +1,122 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="324.723738pt" height="102.351962pt" viewBox="0 0 324.723738 102.351962" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M -0 102.351962 
+L 324.723738 102.351962 
+L 324.723738 0 
+L -0 0 
+L -0 102.351962 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 17.295502 72.801818 
+L 25.945837 72.801818 
+L 25.945837 36.758756 
+L 17.295502 36.758756 
+z
+" clip-path="url(#p4ec69ccba2)" style="fill: #004a85; stroke: #004a85; stroke-linejoin: miter"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 25.945837 54.780287 
+L 134.075024 54.780287 
+" clip-path="url(#p4ec69ccba2)" style="fill: none; stroke-dasharray: 1,1.65; stroke-dashoffset: 0; stroke: #9fb1c2"/>
+   </g>
+   <g id="line2d_2">
+    <defs>
+     <path id="maff184a7b3" d="M 0 4.5 
+C 1.193414 4.5 2.338109 4.025852 3.181981 3.181981 
+C 4.025852 2.338109 4.5 1.193414 4.5 0 
+C 4.5 -1.193414 4.025852 -2.338109 3.181981 -3.181981 
+C 2.338109 -4.025852 1.193414 -4.5 0 -4.5 
+C -1.193414 -4.5 -2.338109 -4.025852 -3.181981 -3.181981 
+C -4.025852 -2.338109 -4.5 -1.193414 -4.5 0 
+C -4.5 1.193414 -4.025852 2.338109 -3.181981 3.181981 
+C -2.338109 4.025852 -1.193414 4.5 0 4.5 
+z
+" style="stroke: #8a5a00"/>
+    </defs>
+    <g clip-path="url(#p4ec69ccba2)">
+     <use xlink:href="#maff184a7b3" x="98.031962" y="54.780287" style="fill: #8a5a00; stroke: #8a5a00"/>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 122.62756 54.780287 
+Q 98.03116 54.780287 73.434761 54.780287 
+" style="fill: none; stroke: #8a5a00; stroke-width: 2; stroke-linecap: round"/>
+    <path d="M 116.82756 51.880287 
+L 122.62756 54.780287 
+L 116.82756 57.680287 
+" style="fill: none; stroke: #8a5a00; stroke-width: 2; stroke-linecap: round"/>
+    <path d="M 79.234761 57.680287 
+L 73.434761 54.780287 
+L 79.234761 51.880287 
+" style="fill: none; stroke: #8a5a00; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="76.406124" y="24.133765" transform="rotate(-0 76.406124 24.133765)">push and pull: along</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_4">
+    <path d="M 181.651866 72.801818 
+L 190.302201 72.801818 
+L 190.302201 36.758756 
+L 181.651866 36.758756 
+z
+" clip-path="url(#p67fba5a4c3)" style="fill: #004a85; stroke: #004a85; stroke-linejoin: miter"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 190.302201 54.780287 
+L 298.431388 54.780287 
+" clip-path="url(#p67fba5a4c3)" style="fill: none; stroke-dasharray: 1,1.65; stroke-dashoffset: 0; stroke: #9fb1c2"/>
+   </g>
+   <g id="line2d_4">
+    <g clip-path="url(#p67fba5a4c3)">
+     <use xlink:href="#maff184a7b3" x="262.388325" y="54.780287" style="fill: #8a5a00; stroke: #8a5a00"/>
+    </g>
+   </g>
+   <g id="patch_5">
+    <path d="M 262.388325 82.983271 
+Q 262.388325 54.780171 262.388325 26.57707 
+" style="fill: none; stroke: #8a5a00; stroke-width: 2; stroke-linecap: round"/>
+    <path d="M 265.288325 77.183271 
+L 262.388325 82.983271 
+L 259.488325 77.183271 
+" style="fill: none; stroke: #8a5a00; stroke-width: 2; stroke-linecap: round"/>
+    <path d="M 259.488325 32.37707 
+L 262.388325 26.57707 
+L 265.288325 32.37707 
+" style="fill: none; stroke: #8a5a00; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="240.762488" y="24.133765" transform="rotate(-0 240.762488 24.133765)">across: no radial speed</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p4ec69ccba2">
+   <rect x="4.32" y="4.32" width="136.963636" height="93.711962"/>
+  </clipPath>
+  <clipPath id="p67fba5a4c3">
+   <rect x="168.676364" y="4.32" width="136.963636" height="93.711962"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predict the array factor</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573; --ref:#9aa3ad;
+          --af:#004a85; --hpbw:#1d7a4d; --null:#b01e24; --gl:#8a5a00; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; justify-content:space-between;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .row { display:flex; gap:5px; flex-wrap:nowrap; }
+  .el { font:700 12px 'Inter',system-ui,sans-serif; width:36px; height:30px; padding:0; border-radius:5px; cursor:pointer;
+        border:1px solid var(--edge2); background:#fff; color:var(--ink3); }
+  .el[aria-pressed="true"] { background:var(--mid); border-color:var(--mid); color:#fff; }
+  .el:focus-visible, .show:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  .show { font:700 12px 'Inter',system-ui,sans-serif; text-transform:uppercase; letter-spacing:0.05em;
+          height:30px; padding:0 14px; border-radius:5px; cursor:pointer;
+          border:1px solid var(--navy); background:var(--navy); color:#fff; }
+  .show[aria-pressed="true"] { background:#fff; color:var(--navy); }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 560px) { .readouts { grid-template-columns:repeat(2, minmax(0, 1fr)); } .el { width:32px; } }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:4px; padding:7px 6px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { height:15px; line-height:15px; font-size:10.5px; font-weight:700; text-transform:uppercase;
+           letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; color:var(--navy); overflow:hidden; max-width:100%; }
+  .ro.hp .v { color:var(--hpbw); }
+  .ro.nl .v { color:var(--null); }
+  .ro.gl .v { color:var(--gl); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" width="1000" height="400" aria-label="Array factor of the chosen elements versus angle, relative to the eight-element peak"></canvas>
+
+  <div class="controls">
+    <div class="row" id="els" role="group" aria-label="Active elements"></div>
+    <button class="show" id="show" aria-pressed="false">Show pattern</button>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">peak vs 8</span><span class="v" id="r-pk">?</span></div>
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="r-hp">?</span></div>
+    <div class="ro nl"><span class="k">FNBW</span><span class="v" id="r-fn">?</span></div>
+    <div class="ro gl"><span class="k">full-height lobes</span><span class="v" id="r-gl">?</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+// The kit's row: eight patches 14 mm apart, broadside, uniform weights.
+// Drawn at 10.0 GHz by default, below every HB100 kit, so no readout equals a
+// Part 1 answer (the af-measurement-compare rule). ?f=10.3 (GHz) draws another.
+const F_GHZ = (() => {
+  const v = parseFloat(new URLSearchParams(location.search).get('f'));
+  return (v >= 8 && v <= 12) ? v : 10.0;
+})();
+const LAM = 3.00e8/(F_GHZ*1e9), DEL = 14e-3, KD = 2*Math.PI*DEL/LAM;
+const FLOOR = -40;
+const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+
+// Prediction first: the pattern stays hidden until "Show pattern", and any
+// change to the elements hides it again, so each guess is made before it is checked.
+const state = { on: [1,1,1,1,1,1,1,1], shown: false };
+
+function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+function mixLabel(ctx,chunks,x,yc,h,color,align){
+  const fpx=h-1, f=fpx+'px '+SANS; let tot=0;
+  for(const c of chunks){ if(c.m) tot+=MJ.width(c.m,color,h); else { ctx.font=f; tot+=ctx.measureText(c.s).width; } }
+  let cx = align==='center' ? x-tot/2 : x;
+  for(const c of chunks){
+    if(c.m){ MJ.draw(ctx,c.m,cx,yc,h,color,'left'); cx+=MJ.width(c.m,color,h); }
+    else { stext(ctx,c.s,cx,yc,fpx,color,'left'); ctx.font=f; cx+=ctx.measureText(c.s).width; }
+  }
+}
+
+// |sum of the active elements' phasors| / 8: 1 is the eight-element peak.
+function af(thDeg, on){
+  const u = KD*Math.sin(thDeg*Math.PI/180);
+  let re = 0, im = 0;
+  for (let n = 0; n < 8; n++) if (on[n]) { re += Math.cos(n*u); im += Math.sin(n*u); }
+  return Math.hypot(re, im)/8;
+}
+const dB = x => 20*Math.log10(Math.max(x, 1e-6));
+
+function features(on){
+  const k = on.reduce((a,b) => a+b, 0);
+  if (k === 0) return null;
+  const pk = af(0, on), step = 0.01;
+  const out = { k, pk: dB(pk), hp: null, fn: null, gl: [] };
+  if (k === 1) return out;
+  const half = pk*10**(-3.0103/20);
+  let prev = pk;
+  for (let t = step; t <= 90; t += step){            // symmetric about 0 for these rows
+    const v = af(t, on);
+    if (out.hp === null && v <= half) out.hp = 2*(t - step*(v - half)/(v - prev || 1));
+    const nx = af(t + step, on);
+    if (out.fn === null && v < prev && v <= nx && v < half) out.fn = 2*t;
+    if (v > prev && v >= nx && v > pk*10**(-0.5/20) && t < 89.9) out.gl.push(t);
+    prev = v;
+  }
+  return out;
+}
+
+const canvas = document.getElementById('plot'), ctx = canvas.getContext('2d');
+function resizeCanvas(){
+  const w = canvas.getBoundingClientRect().width, dpr = window.devicePixelRatio || 1;
+  const h = Math.max(210, Math.min(w*0.42, 320));
+  canvas.width = w*dpr; canvas.height = h*dpr; canvas.style.height = h+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  draw();
+}
+window.addEventListener('resize', resizeCanvas);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function draw(){
+  const dpr = window.devicePixelRatio || 1, w = canvas.width/dpr, h = canvas.height/dpr;
+  ctx.clearRect(0,0,w,h);
+  const narrow = w < 470, fs = narrow ? 10 : 11.5;
+  const mL = narrow ? 40 : 54, mR = 14, mT = 28, mB = narrow ? 40 : 46;
+  const pw = w-mL-mR, ph = h-mT-mB;
+  const xFor = t => mL + (t+90)/180*pw;
+  const yFor = v => mT + Math.min(Math.max(-v,0),-FLOOR)/(-FLOOR)*ph;
+
+  ctx.strokeStyle = '#e6eef6'; ctx.lineWidth = 1;
+  for (let t=-90;t<=90;t+=30){ ctx.beginPath(); ctx.moveTo(xFor(t),mT); ctx.lineTo(xFor(t),mT+ph); ctx.stroke(); }
+  for (let v=0;v>=FLOOR;v-=10){ ctx.beginPath(); ctx.moveTo(mL,yFor(v)); ctx.lineTo(mL+pw,yFor(v)); ctx.stroke(); }
+  ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.moveTo(mL,mT); ctx.lineTo(mL,mT+ph); ctx.lineTo(mL+pw,mT+ph); ctx.stroke();
+  for (let t=-90;t<=90;t+=30) stext(ctx,`${t}`,xFor(t),mT+ph+13,fs,'#5b6573','center');
+  for (let v=0;v>=FLOOR;v-=10) stext(ctx,`${v}`,mL-7,yFor(v),fs,'#5b6573','right');
+  mixLabel(ctx,[{s:'Angle '},{m:'\\theta'},{s:' from broadside (degrees)'}],mL+pw/2,mT+ph+(narrow?30:34),narrow?11:12.5,'#15202b','center');
+  ctx.save(); ctx.translate(narrow?11:14, mT+ph/2); ctx.rotate(-Math.PI/2);
+  stext(ctx, narrow ? 'dB re 8 elements' : 'dB relative to 8-element peak', 0, 0, narrow?11:12.5, '#15202b', 'center');
+  ctx.restore();
+
+  const plot = (on, color, lw, dash) => {
+    ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash||[]);
+    ctx.beginPath();
+    for (let t=-90, s=false; t<=90.0001; t+=0.1){
+      const x = xFor(t), y = yFor(dB(af(t, on)));
+      if (!s){ ctx.moveTo(x,y); s=true; } else ctx.lineTo(x,y);
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+  };
+  // The eight-element pattern is the reference every guess is made against.
+  const all8 = [1,1,1,1,1,1,1,1];
+  plot(all8, css('--ref'), 1.4, [5,4]);
+
+  // legend
+  const ly = mT-14;
+  ctx.strokeStyle = css('--ref'); ctx.lineWidth = 1.6; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(mL+6,ly); ctx.lineTo(mL+24,ly); ctx.stroke(); ctx.setLineDash([]);
+  stext(ctx,'all eight',mL+29,ly,fs,'#5b6573','left');
+  ctx.font = fs+'px '+SANS;
+  const lx = mL+29+ctx.measureText('all eight').width+16;
+
+  const f = features(state.on);
+  if (!f){ stext(ctx,'Switch on at least one element',mL+pw/2,mT+ph/2,narrow?12:13.5,'#5b6573','center',true); return; }
+  const label = state.on.map((v,i) => v ? 'E'+(i+1) : null).filter(Boolean);
+  const name = label.length === 8 ? 'E1 to E8' : label.length > 3 ? label.length+' elements' : label.join(', ');
+  if (!state.shown){
+    const msg = `${name}: predict the pattern, then show it`, mpx = narrow ? 12 : 13.5;
+    ctx.font = '700 '+mpx+'px '+SANS;
+    const mw = Math.min(ctx.measureText(msg).width + 20, pw - 8), my = mT + ph*0.55;
+    ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.strokeStyle = css('--edge2'); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(mL+pw/2-mw/2, my-mpx, mw, 2*mpx, 5); ctx.fill(); ctx.stroke();
+    stext(ctx, msg, mL+pw/2, my, mpx, css('--navy'), 'center', true);
+    return;
+  }
+  ctx.strokeStyle = css('--af'); ctx.lineWidth = 2.2;
+  ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+18,ly); ctx.stroke();
+  stext(ctx,name,lx+23,ly,fs,'#5b6573','left');
+  plot(state.on, css('--af'), 2.2);
+  if (f.hp !== null){
+    const y3 = yFor(f.pk-3.0103), xl = xFor(-f.hp/2), xr = xFor(f.hp/2);
+    ctx.strokeStyle = css('--hpbw'); ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(xl,y3); ctx.lineTo(xr,y3); ctx.stroke();
+    for (const x of [xl,xr]){ ctx.beginPath(); ctx.moveTo(x,y3-5); ctx.lineTo(x,y3+5); ctx.stroke(); }
+  }
+}
+
+function readouts(){
+  const f = features(state.on), set = (id, s) => document.getElementById(id).textContent = s;
+  if (!state.shown || !f){ ['r-pk','r-hp','r-fn','r-gl'].forEach(id => set(id, '?')); return; }
+  const m = '−';
+  set('r-pk', f.pk > -0.05 ? '0.0 dB' : `${m}${(-f.pk).toFixed(1)} dB`);
+  set('r-hp', f.hp === null ? 'none' : `${f.hp.toFixed(1)}°`);
+  set('r-fn', f.fn === null ? 'none' : `${f.fn.toFixed(1)}°`);
+  set('r-gl', f.gl.length === 0 ? 'none' : `${2*f.gl.length}, ±${f.gl.map(g => g.toFixed(0)).join('°, ±')}°`);
+}
+
+const els = document.getElementById('els'), showBtn = document.getElementById('show');
+for (let n = 0; n < 8; n++){
+  const b = document.createElement('button');
+  b.className = 'el'; b.textContent = 'E'+(n+1); b.setAttribute('aria-pressed','true');
+  b.addEventListener('click', () => {
+    state.on[n] = 1 - state.on[n];
+    b.setAttribute('aria-pressed', state.on[n] ? 'true' : 'false');
+    state.shown = false; sync();
+  });
+  els.appendChild(b);
+}
+showBtn.addEventListener('click', () => { state.shown = !state.shown; sync(); });
+function sync(){
+  showBtn.setAttribute('aria-pressed', state.shown ? 'true' : 'false');
+  showBtn.textContent = state.shown ? 'Hide pattern' : 'Show pattern';
+  readouts(); draw();
+}
+
+resizeCanvas(); sync();
+MJ.setRedraw(() => draw());
+MJ.onReady(() => draw());
+</script>
+</body>
+</html>

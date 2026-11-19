@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two-element Yagi: parasitic phasing</title>
+<!-- Array-factor model with an imposed reflector current (I2 = a I1 e^{j alpha}), not a mutual-impedance solution. -->
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* Two canvases side by side above ~600px; stacked on a phone. */
+  .cv2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:600px) { .cv2 { grid-template-columns:1fr; } }
+  /* Desktop: three controls in one row, each a label/value line over a
+     full-width slider, so a 1-degree phase step is still draggable. */
+  .controls { display:grid; grid-template-columns:1fr 1.25fr 1fr; gap:6px 14px;
+              padding:7px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; flex-wrap:wrap; align-items:center; column-gap:6px; row-gap:3px; min-width:0; }
+  .ctl label { order:1; flex:0 0 auto; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { order:2; margin-left:auto; color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; font-weight:600; font-size:12px; }
+  .ctl button { order:3; flex:0 0 auto; font:inherit; font-size:11px; font-weight:600; color:var(--navy);
+                background:#fff; border:1px solid var(--edge2); border-radius:4px; padding:1px 6px; cursor:pointer; white-space:nowrap; }
+  .ctl button:hover { background:#eef4fa; }
+  .ctl input[type=range] { order:4; flex:1 1 100%; min-width:0; width:auto; margin:0; }
+  /* Phone: one control per line, label | slider | value, so the bar costs
+     three short rows instead of six. */
+  @media (max-width:600px) {
+    .controls { grid-template-columns:1fr; gap:6px; }
+    .ctl { flex-wrap:nowrap; }
+    .ctl label { order:1; width:92px; overflow:hidden; }
+    .ctl input[type=range] { order:2; flex:1 1 auto; width:0; }
+    .ctl .val { order:3; margin-left:0; min-width:34px; text-align:right; }
+    .ctl button { order:4; }
+  }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0,1fr)); }
+  @media (max-width:640px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width:600px) { .ro { gap:2px; padding:5px 6px 6px; } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.fw { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.fw .v { color:var(--grn); }
+  .ro.bk { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.bk .v { color:var(--amber); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="cv2">
+    <canvas id="pha" aria-label="Phasor sums toward the front and toward the back: the driven element's unit phasor plus the reflector's phasor, head to tail, and their resultant"></canvas>
+    <canvas id="pol" aria-label="Polar pattern of the two-element array in the plane of the boom, in decibels normalized to its maximum"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Spacing \(d/\lambda\)</label>
+      <input type="range" id="dd" min="0.05" max="0.40" step="0.01" value="0.20">
+      <span class="val" id="dd-val">0.20</span>
+    </div>
+    <div class="ctl">
+      <label>Phase \(\alpha\)</label>
+      <input type="range" id="al" min="0" max="360" step="1" value="108">
+      <span class="val" id="al-val">108°</span>
+      <button type="button" id="nullbtn" title="Set the reflector phase for a back null">back null</button>
+    </div>
+    <div class="ctl">
+      <label>Amplitude \(a\)</label>
+      <input type="range" id="aa" min="0.30" max="1.00" step="0.01" value="1.00">
+      <span class="val" id="aa-val">1.00</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro fw"><span class="k">forward \(|AF|\)</span><span class="v" id="r-f">&#8212;</span></div>
+    <div class="ro bk"><span class="k">back \(|AF|\)</span><span class="v" id="r-b">&#8212;</span></div>
+    <div class="ro"><span class="k">front-to-back</span><span class="v" id="r-fb">&#8212;</span></div>
+    <div class="ro"><span class="k">back-null \(\alpha\)</span><span class="v" id="r-n">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS = "Inter, system-ui, -apple-system, sans-serif";
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const el = id => document.getElementById(id);
+const D2R = Math.PI / 180;
+
+const state = { d: 0.20, alpha: 108, a: 1.00 };
+
+// ---- the physics -----------------------------------------------------
+// Beam toward +x (phi = 0), driven element at the origin, reflector at x = -d
+// carrying a I1 e^{j alpha}:  AF(phi) = 1 + a e^{j(alpha - kd cos phi)}.
+const kdDeg = () => 360 * state.d;
+const af = phiDeg => {
+  const psi = (state.alpha - kdDeg() * Math.cos(phiDeg * D2R)) * D2R;
+  return Math.hypot(1 + state.a * Math.cos(psi), state.a * Math.sin(psi));
+};
+const wrap360 = x => ((x % 360) + 360) % 360;
+const wrap180 = x => { const y = wrap360(x); return y > 180 ? y - 360 : y; };
+const nullAlpha = () => wrap360(180 - kdDeg());
+// a true minus sign, not a hyphen
+const fmtSigned = v => String(v).replace(/^-/, '\u2212');
+
+// ---- controls -------------------------------------------------------------
+function syncLabels() {
+  el('dd-val').textContent = state.d.toFixed(2);
+  el('al-val').textContent = Math.round(state.alpha) + '°';
+  el('aa-val').textContent = state.a.toFixed(2);
+}
+el('dd').addEventListener('input', e => { state.d = +e.target.value; syncLabels(); drawAll(); });
+el('al').addEventListener('input', e => { state.alpha = +e.target.value; syncLabels(); drawAll(); });
+el('aa').addEventListener('input', e => { state.a = +e.target.value; syncLabels(); drawAll(); });
+el('nullbtn').addEventListener('click', () => {
+  state.alpha = Math.round(nullAlpha()) % 360;
+  el('al').value = state.alpha; syncLabels(); drawAll();
+});
+
+// ---- canvases -------------------------------------------------------------
+const pha = el('pha'), hctx = pha.getContext('2d');
+const pol = el('pol'), pctx = pol.getContext('2d');
+const PHONE = window.matchMedia ? window.matchMedia('(max-width:600px)') : null;
+const stacked = () => !!(PHONE && PHONE.matches);
+
+/* clientWidth (content box) for the bitmap; border handed back to the CSS
+   height. No down-scaling of the drawing: the layout is derived from the real
+   width so fonts never drop below 10.5px on a phone. */
+function fitOne(cv, h) {
+  const dpr = window.devicePixelRatio || 1;
+  const w = Math.max(200, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
+  h = Math.round(h);
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  cv.style.height = h + 'px';
+  const bh = cv.offsetHeight - cv.clientHeight;
+  if (bh) cv.style.height = (h + bh) + 'px';
+  cv.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { w, h };
+}
+const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
+function heights() {
+  const w = pha.clientWidth || 300;
+  if (stacked()) return { ph: clamp(w * 0.50, 165, 195), pp: clamp(w * 0.50, 170, 190) };
+  const H = clamp(w * 0.76, 230, 290);
+  return { ph: H, pp: H };
+}
+window.addEventListener('resize', () => drawAll());
+
+function drawAll() {
+  const H = heights();
+  drawPhasors(H.ph); drawPolar(H.pp); updateReadouts();
+}
+
+function arrow(ctx, x0, y0, x1, y1, col, lw, head) {
+  const L = Math.hypot(x1 - x0, y1 - y0);
+  ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = lw; ctx.lineCap = 'round';
+  if (L < 1.5) { ctx.beginPath(); ctx.arc(x0, y0, lw * 0.9 + 1, 0, 7); ctx.fill(); return; }
+  const hd = Math.min(head, L * 0.45), ux = (x1 - x0) / L, uy = (y1 - y0) / L;
+  const bx = x1 - ux * hd, by = y1 - uy * hd;
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(bx, by); ctx.stroke();
+  const hw = hd * 0.5 + lw * 0.3;
+  ctx.beginPath(); ctx.moveTo(x1, y1);
+  ctx.lineTo(bx - uy * hw, by + ux * hw); ctx.lineTo(bx + uy * hw, by - ux * hw);
+  ctx.closePath(); ctx.fill();
+}
+
+// ------------------------------------------------------------- phasors ---
+function drawPhasors(hDesign) {
+  const { w, h } = fitOne(pha, hDesign);
+  const ctx = hctx;
+  ctx.clearRect(0, 0, w, h);
+  const NAVY = cssVar('--navy'), AMB = cssVar('--amber'), GRN = cssVar('--grn'), INK3 = cssVar('--ink3');
+  const kd = kdDeg();
+  const legendH = 20;
+  const yTitle = 7, yExpr = yTitle + 21;           // title top, expression middle
+  const top = yExpr + 12;
+  const yRes = h - legendH - 4;                    // resultant caption baseline
+  const bot = yRes - 17;
+  const pw = w / 2, rh = bot - top;
+  const sc = Math.min((pw - 14) / 2.3, rh / 2.15); // same scale in both panels
+
+  ctx.strokeStyle = '#e3ebf2'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pw, 8); ctx.lineTo(pw, h - legendH - 2); ctx.stroke();
+
+  const panels = [
+    { title: 'toward the front', tex: '\\alpha - kd', psi: state.alpha - kd },
+    { title: 'toward the back',  tex: '\\alpha + kd', psi: state.alpha + kd }
+  ];
+  panels.forEach((p, i) => {
+    const cx = i * pw + pw / 2;
+    ctx.fillStyle = cssVar('--ink'); ctx.font = '700 12px ' + SANS;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillText(p.title, cx, yTitle);
+
+    // the reflector phase this direction sees, wrapped to (-180, 180]
+    const ang = wrap180(p.psi);
+    const num = ' = ' + fmtSigned(Math.round(ang)) + '°';
+    ctx.font = '11.5px ' + SANS;
+    const tw = ctx.measureText(num).width;
+    const mw = MJ.width(p.tex, INK3, 13) || 0;
+    const x0 = cx - (tw + mw) / 2;
+    MJ.draw(ctx, p.tex, x0, yExpr, 13, INK3, 'left');
+    ctx.fillStyle = INK3; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(mw ? num : num.slice(3), x0 + mw, yExpr + 0.5);
+
+    // phasor plane: real 0..2 centered on the panel, imag -1..1
+    const ox = cx - sc, oy = top + rh / 2;
+    const X = re => ox + re * sc, Y = im => oy - im * sc;
+    ctx.strokeStyle = '#e6edf3'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(X(-0.12), oy); ctx.lineTo(X(2.12), oy); ctx.stroke();
+    // where the reflector phasor's tip can be: a circle of radius a around 1
+    ctx.strokeStyle = 'rgba(138,90,0,0.28)'; ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.arc(X(1), oy, state.a * sc, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+
+    const tr = 1 + state.a * Math.cos(ang * D2R), ti = state.a * Math.sin(ang * D2R);
+    const head = clamp(sc * 0.16, 6, 10);
+    arrow(ctx, X(0), Y(0), X(1), Y(0), NAVY, 2, head);
+    arrow(ctx, X(1), Y(0), X(tr), Y(ti), AMB, 2, head);
+    arrow(ctx, X(0), Y(0), X(tr), Y(ti), GRN, 4, head + 2);
+    ctx.fillStyle = cssVar('--ink');
+    ctx.beginPath(); ctx.arc(X(0), Y(0), 2.2, 0, 7); ctx.fill();
+
+    const mag = Math.hypot(tr, ti);
+    ctx.fillStyle = GRN; ctx.font = '700 12px ' + SANS;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    ctx.fillText('resultant ' + mag.toFixed(2), cx, yRes);
+  });
+
+  // legend, one line across both panels
+  ctx.font = '600 11px ' + SANS; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+  const keys = [[NAVY, 'driven', 2], [AMB, 'reflector', 2], [GRN, 'resultant', 4]];
+  const sw = 16, gap = 14;
+  const total = keys.reduce((s, k) => s + sw + 5 + ctx.measureText(k[1]).width, 0) + gap * (keys.length - 1);
+  let lx = (w - total) / 2; const ly = h - legendH / 2 - 1;
+  keys.forEach(([c, t, lw]) => {
+    ctx.strokeStyle = c; ctx.lineWidth = lw; ctx.lineCap = 'butt';
+    ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + sw, ly); ctx.stroke();
+    ctx.fillStyle = c; ctx.fillText(t, lx + sw + 5, ly + 0.5);
+    lx += sw + 5 + ctx.measureText(t).width + gap;
+  });
+}
+
+// --------------------------------------------------------------- polar ---
+function drawPolar(hDesign) {
+  const { w, h } = fitOne(pol, hDesign);
+  const ctx = pctx;
+  ctx.clearRect(0, 0, w, h);
+  const NAVY = cssVar('--navy'), AMB = cssVar('--amber'), INK3 = cssVar('--ink3');
+  const sideM = 44;                                   // room for "front" / "back"
+  const R = Math.max(40, Math.min(w / 2 - sideM, h / 2 - 10));
+  const cx = w / 2, cy = h / 2;
+  const r0 = 0.24 * R;                                // the -30 dB ring
+  const DBMIN = -30;
+  const rad = db => r0 + (R - r0) * (clamp(db, DBMIN, 0) - DBMIN) / -DBMIN;
+
+  // rings and spokes
+  ctx.lineWidth = 1;
+  [0, -10, -20, -30].forEach(db => {
+    ctx.strokeStyle = db === 0 ? cssVar('--edge') : '#e6edf3';
+    ctx.beginPath(); ctx.arc(cx, cy, rad(db), 0, 7); ctx.stroke();
+  });
+  ctx.strokeStyle = '#eef3f8';
+  for (let k = 0; k < 12; k++) {
+    const t = k * 30 * D2R;
+    ctx.beginPath();
+    ctx.moveTo(cx + r0 * Math.cos(t), cy - r0 * Math.sin(t));
+    ctx.lineTo(cx + R * Math.cos(t), cy - R * Math.sin(t)); ctx.stroke();
+  }
+
+  // pattern, normalized to its maximum over phi
+  const N = 720, vals = [];
+  let mx = 0;
+  for (let i = 0; i <= N; i++) { const v = af(360 * i / N); vals.push(v); if (v > mx) mx = v; }
+  ctx.beginPath();
+  vals.forEach((v, i) => {
+    const db = v > 0 && mx > 0 ? 20 * Math.log10(v / mx) : DBMIN;
+    const r = rad(db), t = 2 * Math.PI * i / N;
+    const x = cx + r * Math.cos(t), y = cy - r * Math.sin(t);
+    i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(0,74,133,0.13)'; ctx.fill();
+  ctx.strokeStyle = NAVY; ctx.lineWidth = 2.2; ctx.lineJoin = 'round'; ctx.stroke();
+
+  // ring labels up the vertical spoke, haloed so the pattern never hides them
+  ctx.font = '10.5px ' + SANS; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+  ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.lineJoin = 'round';
+  [[-10, '−10 dB'], [-20, '−20'], [-30, '−30']].forEach(([db, t]) => {
+    const y = cy - rad(db) - 1;
+    if (db === -30 || y < 12) return;              // no room inside the -30 ring
+    ctx.strokeText(t, cx + 3, y); ctx.fillStyle = INK3; ctx.fillText(t, cx + 3, y);
+  });
+  // the -30 label sits below the ring, where the element sketch is not
+  ctx.textBaseline = 'top';
+  ctx.strokeText('−30', cx + 3, cy + r0 + 1); ctx.fillText('−30', cx + 3, cy + r0 + 1);
+
+  // the two elements seen from above, inside the -30 ring
+  const sep = clamp(1.5 * r0 * state.d / 0.40, 8, 1.5 * r0);
+  const xr = cx - sep / 2, xd = cx + sep / 2;
+  ctx.strokeStyle = '#9aa6b2'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(xr, cy); ctx.lineTo(xd, cy); ctx.stroke();
+  ctx.fillStyle = AMB; ctx.beginPath(); ctx.arc(xr, cy, 3.6, 0, 7); ctx.fill();
+  ctx.fillStyle = NAVY; ctx.beginPath(); ctx.arc(xd, cy, 3.6, 0, 7); ctx.fill();
+
+  // front / back
+  const ax0 = cx + R + 6, ax1 = Math.min(w - 6, cx + R + sideM - 4);
+  arrow(ctx, ax0, cy, ax1, cy, cssVar('--grn'), 2, 7);
+  ctx.font = '700 11px ' + SANS; ctx.fillStyle = cssVar('--grn');
+  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+  ctx.fillText('front', (ax0 + ax1) / 2, cy - 4);
+  ctx.fillStyle = AMB; ctx.textAlign = 'center';
+  ctx.fillText('back', (cx - R - 6 + Math.max(6, cx - R - sideM + 4)) / 2, cy - 4);
+
+  // key for the element sketch, top-left corner (clear of the circle)
+  ctx.font = '600 11px ' + SANS; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  [[NAVY, 'driven', 12], [AMB, 'reflector', 27]].forEach(([c, t, y]) => {
+    ctx.fillStyle = c; ctx.beginPath(); ctx.arc(11, y, 3.6, 0, 7); ctx.fill();
+    ctx.fillText(t, 19, y + 0.5);
+  });
+  ctx.fillStyle = INK3; ctx.font = '10.5px ' + SANS; ctx.textAlign = 'right'; ctx.textBaseline = 'top';
+  ctx.fillText('top view', w - 8, 7);
+}
+
+// ------------------------------------------------------------- readouts ---
+function updateReadouts() {
+  const f = af(0), b = af(180);
+  el('r-f').textContent = f.toFixed(2);
+  el('r-b').textContent = b.toFixed(2);
+  const fb = b > 1e-9 ? 20 * Math.log10(f / b) : Infinity;
+  el('r-fb').textContent = fb > 40 ? '> 40 dB' : fmtSigned(fb.toFixed(1)) + ' dB';
+  el('r-n').textContent = Math.round(nullAlpha()) + '°';
+}
+
+MJ.setRedraw(drawAll);
+MJ.onReady(() => { MJ.typeset(document.querySelector('.app')).then(drawAll); });
+syncLabels();
+drawAll();
+</script>
+</body>
+</html>

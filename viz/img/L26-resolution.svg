@@ -1,0 +1,204 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="254.16pt" height="211.874984pt" viewBox="0 0 254.16 211.874984" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 211.874984 
+L 254.16 211.874984 
+L 254.16 0 
+L 0 0 
+L 0 211.874984 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 4.32 75.776 
+L 249.84 75.776 
+L 249.84 4.32 
+L 4.32 4.32 
+L 4.32 75.776 
+z
+" style="fill: none"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 19.351837 75.776 
+L 69.457959 75.776 
+L 69.457959 43.296 
+L 19.351837 43.296 
+z
+" clip-path="url(#pc25f201231)" style="fill: #0067b9; opacity: 0.35"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 94.51102 75.776 
+L 144.617143 75.776 
+L 144.617143 43.296 
+L 94.51102 43.296 
+z
+" clip-path="url(#pc25f201231)" style="fill: #8a5a00; opacity: 0.35"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m4cdcf58efa" d="M 0 0 
+L 0 3.5 
+" style="stroke: #5a5a5a; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m4cdcf58efa" x="19.351837" y="75.776" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 0.8"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m4cdcf58efa" x="69.457959" y="75.776" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 0.8"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#m4cdcf58efa" x="119.564082" y="75.776" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 0.8"/>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2"/>
+   <g id="line2d_4">
+    <path d="M 4.32 75.776 
+L 19.351837 75.776 
+L 19.351837 43.296 
+L 69.457959 43.296 
+L 69.457959 75.776 
+L 94.51102 75.776 
+L 94.51102 43.296 
+L 144.617143 43.296 
+L 144.617143 75.776 
+L 154.638367 75.776 
+" clip-path="url(#pc25f201231)" style="fill: none; stroke: #004a85; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 4.32 75.776 
+L 249.84 75.776 
+" style="fill: none; stroke: #8a929c; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #1d7a4d" x="249.84" y="31.785004" transform="rotate(-0 249.84 31.785004)">225 m apart</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #1d7a4d" x="249.84" y="56.145004" transform="rotate(-0 249.84 56.145004)">two echoes</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_6">
+    <path d="M 4.32 165.096 
+L 249.84 165.096 
+L 249.84 93.64 
+L 4.32 93.64 
+L 4.32 165.096 
+z
+" style="fill: none"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 19.351837 165.096 
+L 69.457959 165.096 
+L 69.457959 132.616 
+L 19.351837 132.616 
+z
+" clip-path="url(#pe5a56fe180)" style="fill: #0067b9; opacity: 0.35"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 44.404898 165.096 
+L 94.51102 165.096 
+L 94.51102 132.616 
+L 44.404898 132.616 
+z
+" clip-path="url(#pe5a56fe180)" style="fill: #8a5a00; opacity: 0.35"/>
+   </g>
+   <g id="matplotlib.axis_3">
+    <g id="xtick_4">
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#m4cdcf58efa" x="19.351837" y="165.096" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="19.351837" y="184.68975" transform="rotate(-0 19.351837 184.68975)">0</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#m4cdcf58efa" x="69.457959" y="165.096" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="69.457959" y="184.68975" transform="rotate(-0 69.457959 184.68975)">1</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_7">
+      <g>
+       <use xlink:href="#m4cdcf58efa" x="119.564082" y="165.096" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="119.564082" y="184.68975" transform="rotate(-0 119.564082 184.68975)">2</text>
+     </g>
+    </g>
+    <g id="text_6">
+     <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="127.08" y="204.419242" transform="rotate(-0 127.08 204.419242)">echo time (µs)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_4"/>
+   <g id="line2d_8">
+    <path d="M 4.32 165.096 
+L 19.351837 165.096 
+L 19.351837 132.616 
+L 44.404898 132.616 
+L 44.404898 100.136 
+L 69.457959 100.136 
+L 69.457959 132.616 
+L 94.51102 132.616 
+L 94.51102 165.096 
+L 154.638367 165.096 
+" clip-path="url(#pe5a56fe180)" style="fill: none; stroke: #004a85; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 4.32 165.096 
+L 249.84 165.096 
+" style="fill: none; stroke: #8a929c; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #b01e24" x="249.84" y="121.105004" transform="rotate(-0 249.84 121.105004)">75 m apart</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #b01e24" x="249.84" y="145.465004" transform="rotate(-0 249.84 145.465004)">one echo</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pc25f201231">
+   <rect x="4.32" y="4.32" width="245.52" height="71.456"/>
+  </clipPath>
+  <clipPath id="pe5a56fe180">
+   <rect x="4.32" y="93.64" width="245.52" height="71.456"/>
+  </clipPath>
+ </defs>
+</svg>

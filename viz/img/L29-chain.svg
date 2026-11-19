@@ -1,0 +1,162 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="399.24pt" height="113.976pt" viewBox="0 0 399.24 113.976" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 113.976 
+L 399.24 113.976 
+L 399.24 0 
+L 0 0 
+L 0 113.976 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 7.070704 65.901046 
+L 67.586197 65.901046 
+Q 68.136338 65.901046 68.136338 65.090769 
+L 68.136338 24.576923 
+Q 68.136338 23.766646 67.586197 23.766646 
+L 7.070704 23.766646 
+Q 6.520563 23.766646 6.520563 24.576923 
+L 6.520563 65.090769 
+Q 6.520563 65.901046 7.070704 65.901046 
+z
+" clip-path="url(#pfcdf9c89fc)" style="fill: #eef4fa; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 88.216479 65.901046 
+L 148.731972 65.901046 
+Q 149.282113 65.901046 149.282113 65.090769 
+L 149.282113 24.576923 
+Q 149.282113 23.766646 148.731972 23.766646 
+L 88.216479 23.766646 
+Q 87.666338 23.766646 87.666338 24.576923 
+L 87.666338 65.090769 
+Q 87.666338 65.901046 88.216479 65.901046 
+z
+" clip-path="url(#pfcdf9c89fc)" style="fill: #f8e3e4; stroke: #b01e24; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 169.362254 65.901046 
+L 229.877746 65.901046 
+Q 230.427887 65.901046 230.427887 65.090769 
+L 230.427887 24.576923 
+Q 230.427887 23.766646 229.877746 23.766646 
+L 169.362254 23.766646 
+Q 168.812113 23.766646 168.812113 24.576923 
+L 168.812113 65.090769 
+Q 168.812113 65.901046 169.362254 65.901046 
+z
+" clip-path="url(#pfcdf9c89fc)" style="fill: #eef4fa; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 250.508028 65.901046 
+L 311.023521 65.901046 
+Q 311.573662 65.901046 311.573662 65.090769 
+L 311.573662 24.576923 
+Q 311.573662 23.766646 311.023521 23.766646 
+L 250.508028 23.766646 
+Q 249.957887 23.766646 249.957887 24.576923 
+L 249.957887 65.090769 
+Q 249.957887 65.901046 250.508028 65.901046 
+z
+" clip-path="url(#pfcdf9c89fc)" style="fill: #eef4fa; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 331.653803 65.901046 
+L 392.169296 65.901046 
+Q 392.719437 65.901046 392.719437 65.090769 
+L 392.719437 24.576923 
+Q 392.719437 23.766646 392.169296 23.766646 
+L 331.653803 23.766646 
+Q 331.103662 23.766646 331.103662 24.576923 
+L 331.103662 65.090769 
+Q 331.103662 65.901046 331.653803 65.901046 
+z
+" clip-path="url(#pfcdf9c89fc)" style="fill: #eef4fa; stroke: #004a85; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="37.328451" y="50.108504" transform="rotate(-0 37.328451 50.108504)">burst</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="118.474225" y="50.108504" transform="rotate(-0 118.474225 50.108504)">MTI</text>
+   </g>
+   <g id="patch_7">
+    <path d="M 70.965145 44.833846 
+Q 77.905073 44.833846 83.50336 44.833846 
+" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 77.70336 41.933846 
+L 83.50336 44.833846 
+L 77.70336 47.733846 
+z
+" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a" transform="translate(179.86375 41.336288)">range</text>
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a" transform="translate(186.38082 58.880721)">FFT</text>
+   </g>
+   <g id="patch_8">
+    <path d="M 152.110919 44.833846 
+Q 159.050847 44.833846 164.649135 44.833846 
+" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 158.849135 41.933846 
+L 164.649135 44.833846 
+L 158.849135 47.733846 
+z
+" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a" transform="translate(253.595267 41.336288)">Doppler</text>
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a" transform="translate(267.526595 58.880721)">FFT</text>
+   </g>
+   <g id="patch_9">
+    <path d="M 233.256694 44.833846 
+Q 240.196622 44.833846 245.79491 44.833846 
+" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 239.99491 41.933846 
+L 245.79491 44.833846 
+L 239.99491 47.733846 
+z
+" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="361.911549" y="50.108504" transform="rotate(-0 361.911549 50.108504)">map</text>
+   </g>
+   <g id="patch_10">
+    <path d="M 314.402468 44.833846 
+Q 321.342397 44.833846 326.940684 44.833846 
+" style="fill: none; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 321.140684 41.933846 
+L 326.940684 44.833846 
+L 321.140684 47.733846 
+z
+" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #b01e24" transform="translate(76.944186 83.875826)">off, 2-pulse,</text>
+    <text style="font-size: 14.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #b01e24" transform="translate(83.010397 101.42026)">or 3-pulse</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pfcdf9c89fc">
+   <rect x="4.32" y="4.32" width="390.6" height="105.336"/>
+  </clipPath>
+ </defs>
+</svg>

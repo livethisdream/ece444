@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two FFTs make the range-Doppler map</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:8px; padding:12px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* The matrix and the one-row (or one-column) plot side by side above ~600px,
+     so the row is as tall as the matrix alone. Below 600px (phone) they stack,
+     and each canvas gets a shorter design box. */
+  .cv2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:start; }
+  @media (max-width:600px) { .cv2 { grid-template-columns:1fr; } }
+  /* The stepper: three buttons and the name of the stage on one row. */
+  .controls { display:flex; align-items:center; gap:6px; flex-wrap:nowrap;
+              padding:6px 10px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .controls button { font:inherit; font-size:12.5px; font-weight:700; color:var(--navy); background:#fff;
+                     border:1px solid var(--edge2); border-radius:5px; padding:4px 10px; cursor:pointer; white-space:nowrap; }
+  .controls button:hover { background:#eef4fa; }
+  .controls button:disabled { color:#9aa5b1; cursor:default; background:#f7f9fb; }
+  .controls button.go { color:#fff; background:var(--navy); border-color:var(--navy); }
+  .controls .stage { margin-left:auto; min-width:0; font-size:12.5px; font-weight:700; color:var(--navy);
+                     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  /* On a phone the stage name takes its own line under the buttons: beside
+     them it has about 130px and its text is cut off. */
+  @media (max-width:520px) { .controls { flex-wrap:wrap; gap:4px 6px; padding:6px 8px; }
+    .controls .stage { margin-left:0; flex:1 1 100%; } }
+  /* One or two sentences on what the stage did. The box keeps the height of
+     its longest text, so stepping does not move the page. */
+  .say { font-size:13px; line-height:1.38; color:var(--ink); padding:6px 10px; min-height:3.9em;
+         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  @media (max-width:600px) { .say { font-size:12.5px; min-height:5.3em; } }
+  .say b { color:var(--navy); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="controls">
+    <button id="back" type="button">Back</button>
+    <button id="next" type="button">Next</button>
+    <button id="play" type="button" class="go">Play step</button>
+    <span class="stage" id="stage-name">1 of 4</span>
+  </div>
+
+  <div class="cv2">
+    <canvas id="mat" aria-label="The samples of one burst as a matrix, one row per chirp and one column per sample. Stepping through the stages, each row becomes a range profile, and then the Doppler FFT runs down each range column, leaving the range-Doppler map with one spot per target"></canvas>
+    <canvas id="plot" aria-label="A plot of one row or one column of the matrix at the present stage: one chirp's samples, that chirp's range profile, three range columns across the chirps with a phase dial for each, or those columns after the Doppler FFT"></canvas>
+  </div>
+
+  <div class="say" id="say" aria-live="polite"></div>
+</div>
+
+<script>
+'use strict';
+const SANS = "Inter, system-ui, -apple-system, sans-serif";
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const el = id => document.getElementById(id);
+
+// ---- the burst ---------------------------------------------------------
+// A small, idealized burst on the lessons' teaching chirp (400 MHz at
+// 10.0 GHz, a chirp every 0.4 ms), which no preset in the Phaser app uses:
+// M chirps of N samples. The range bin is c/2B = 0.375 m and, with 32 chirps,
+// the velocity bin is lambda/(2 M T_PRI) = 1.17 m/s. The widget shows the NB
+// range bins at positive range. Three targets, each on a bin center with no
+// noise and no window, so that each lands in one cell: a tone across a row at
+// its range bin, with a phase that steps down the rows at its velocity bin.
+const M = 32, N = 32, NB = 16;
+const BIN_M = 0.375, BIN_V = 0.030 / (2 * M * 0.4e-3);
+const TARGETS = [
+  { name: 'wall',    r: 8,  v: 0,  a: 1.0, ph: 0,   col: '--navy'  },   // does not move
+  { name: 'closing', r: 4,  v: 4,  a: 0.8, ph: 0.9, col: '--amber' },   // +4 velocity bins
+  { name: 'opening', r: 12, v: -3, a: 0.7, ph: 2.1, col: '--grn'   },   // -3 velocity bins
+];
+const ROW = 10;                       // the chirp the plot follows in stages 1 and 2
+const TWO_PI = 2 * Math.PI;
+
+// x[m][n]: chirp m, sample n
+const X = [];
+for (let m = 0; m < M; m++) {
+  const re = new Float64Array(N), im = new Float64Array(N);
+  for (const t of TARGETS) for (let n = 0; n < N; n++) {
+    const ph = TWO_PI * (t.r * n / N + t.v * m / M) + t.ph;
+    re[n] += t.a * Math.cos(ph); im[n] += t.a * Math.sin(ph);
+  }
+  X.push({ re, im });
+}
+function dft(re, im) {                // a plain DFT: the matrices are 32 long
+  const L = re.length, R = new Float64Array(L), I = new Float64Array(L);
+  for (let k = 0; k < L; k++) {
+    let sr = 0, si = 0;
+    for (let n = 0; n < L; n++) {
+      const c = Math.cos(TWO_PI * k * n / L), s = Math.sin(TWO_PI * k * n / L);
+      sr += re[n] * c + im[n] * s; si += im[n] * c - re[n] * s;
+    }
+    R[k] = sr / L; I[k] = si / L;
+  }
+  return { re: R, im: I };
+}
+// RNG[m]: chirp m after the range FFT, by range bin
+const RNG = X.map(row => dft(row.re, row.im));
+// DOP[k]: range bin k after the Doppler FFT, by velocity bin (0..M-1, unshifted)
+const DOP = [];
+for (let k = 0; k < NB; k++) {
+  const re = new Float64Array(M), im = new Float64Array(M);
+  for (let m = 0; m < M; m++) { re[m] = RNG[m].re[k]; im[m] = RNG[m].im[k]; }
+  DOP.push(dft(re, im));
+}
+// signed velocity bin v is drawn on row M/2 - v, so closing is up
+const rowOfV = v => M / 2 - v;        // v = +4 -> row 12, v = 0 -> row 16, v = -3 -> row 19
+const vOfRow = r => M / 2 - r;
+const magD = (k, vSigned) => { const i = (vSigned + M) % M; return Math.hypot(DOP[k].re[i], DOP[k].im[i]); };
+const magR = (m, k) => Math.hypot(RNG[m].re[k], RNG[m].im[k]);
+const X_MAX = TARGETS.reduce((s, t) => s + t.a, 0), A_MAX = Math.max(...TARGETS.map(t => t.a));
+const LAST_COL = Math.max(...TARGETS.map(t => t.r));
+
+// ---- the stages ----------------------------------------------------------
+const STAGES = [
+  { name: 'the burst, as recorded',
+    say: 'Each row is one chirp; each column is the same sample of every chirp. Each row holds three beat tones added together, one per target, and the FFT separates them into ranges.' },
+  { name: 'range FFT, row by row',
+    say: 'The <b>range FFT</b> runs along each row, in fast time. It splits the sum of tones into frequencies, and each frequency bin is a <b>range bin</b>. Every row becomes a range profile with one peak per target.' },
+  { name: 'three range columns, chirp by chirp',
+    say: 'Each target stays in its range bin from chirp to chirp. The wall’s cell has the same phase in every chirp. A moving target’s cell changes phase by the same step every chirp, which is a tone in <b>slow time</b>.' },
+  { name: 'Doppler FFT, column by column',
+    say: 'The <b>Doppler FFT</b> runs down each range column, in slow time, and finds that tone. The bin it lands in is the target’s velocity, and the wall is in the 0 m/s row. The next figure draws this map turned 90°, with velocity across.' },
+];
+// p: how far the stage's FFT has swept (1 = settled). m: the chirp the phase
+// dials show in stage 3.
+const state = { stage: 1, p: 1, m: 3, raf: 0, dialRaf: 0 };
+const SWEEP_MS = 4000, HOLD_MS = 800, DIAL_MS = 190;
+const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const sweeping = () => state.raf !== 0;
+
+function stopSweep() { if (state.raf) cancelAnimationFrame(state.raf); state.raf = 0; }
+function stopDials() { if (state.dialRaf) cancelAnimationFrame(state.dialRaf); state.dialRaf = 0; }
+// In stage 3 the dials step through the chirps, one every DIAL_MS, for as long
+// as the stage is showing.
+function runDials() {
+  stopDials();
+  if (reduced) { state.m = 3; return; }
+  const t0 = performance.now(), m0 = state.m;
+  const tick = now => {
+    if (state.stage !== 3) { state.dialRaf = 0; return; }
+    const m = (m0 + Math.max(0, Math.floor((now - t0) / DIAL_MS))) % M;
+    if (m !== state.m) { state.m = m; drawMatrix(); drawPlot(); }
+    state.dialRaf = requestAnimationFrame(tick);
+  };
+  state.dialRaf = requestAnimationFrame(tick);
+}
+// Show a stage. With animate, stages 2 and 4 sweep their FFT across the
+// matrix, pausing where the plot's row or columns have just been transformed.
+function show(stage, animate) {
+  stopSweep(); stopDials();
+  state.stage = stage;
+  if (stage === 3) { state.m = 0; runDials(); }
+  const holdAt = stage === 2 ? (ROW + 1) / M : stage === 4 ? (LAST_COL + 1) / NB : 0;
+  if (!animate || !holdAt || reduced) { state.p = 1; refresh(); return; }
+  const t0 = performance.now(), tHold = holdAt * SWEEP_MS;
+  state.p = 0;
+  const tick = now => {
+    const e = Math.max(0, now - t0);
+    state.p = e < tHold ? e / SWEEP_MS : e < tHold + HOLD_MS ? holdAt : Math.min(1, (e - HOLD_MS) / SWEEP_MS);
+    if (state.p < 1) state.raf = requestAnimationFrame(tick); else state.raf = 0;
+    refresh();
+  };
+  state.raf = requestAnimationFrame(tick);
+}
+// Back and Next jump to a settled stage. Play step animates the next stage and
+// stops there, so each step waits for the next press.
+el('back').addEventListener('click', () => show(Math.max(1, state.stage - 1), false));
+el('next').addEventListener('click', () => show(Math.min(4, state.stage + 1), false));
+el('play').addEventListener('click', () => {
+  if (sweeping()) { stopSweep(); state.p = 1; refresh(); return; }
+  show(state.stage === 4 ? 1 : state.stage + 1, true);
+});
+
+function refresh() {
+  el('stage-name').textContent = state.stage + ' of 4: ' + STAGES[state.stage - 1].name;
+  el('say').innerHTML = STAGES[state.stage - 1].say;
+  el('back').disabled = state.stage === 1;
+  el('next').disabled = state.stage === 4;
+  el('play').textContent = sweeping() ? 'Stop' : state.stage === 4 ? 'Start over' : 'Play step';
+  drawMatrix(); drawPlot();
+}
+
+// ---- canvases -------------------------------------------------------------
+const mat = el('mat'), mctx = mat.getContext('2d');
+const plot = el('plot'), pctx = plot.getContext('2d');
+/* Narrow: the canvases stack, so their heights ADD. Each gets a shorter design
+   box there; the cell size and every label position follow from the box. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:599px)') : null;
+const narrow = () => !!(__SQ_MQ && __SQ_MQ.matches);
+function fitOne(cv, designW, h) {
+  const dpr = window.devicePixelRatio || 1;
+  const wCss = Math.max(180, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
+  const s = Math.min(1, wCss / designW);
+  const w = wCss / s;
+  cv.width = Math.round(wCss * dpr); cv.height = Math.round(h * s * dpr);
+  cv.style.height = (h * s) + 'px';
+  const bh = cv.offsetHeight - cv.clientHeight;
+  if (bh) cv.style.height = (h * s + bh) + 'px';
+  cv.getContext('2d').setTransform(dpr * s, 0, 0, dpr * s, 0, 0);
+  return { w, h };
+}
+window.addEventListener('resize', refresh);
+
+// Colors, opaque so that neighboring cells do not darken where they meet. A
+// signed value is red (positive) through white to blue (negative); a strength
+// is white to navy.
+const mix = (c, a) => 'rgb(' + c.map(v => Math.round(255 + (v - 255) * Math.min(1, Math.max(0, a)))).join(',') + ')';
+const RED = [176, 30, 36], BLUE = [0, 103, 185], NAVY = [0, 74, 133];
+const signedColor = x => mix(x >= 0 ? RED : BLUE, 0.92 * Math.abs(x));     // x in -1..1
+const magColor = a => mix(NAVY, a);                                         // a in 0..1
+
+// How far each FFT has swept at this stage
+const rowsDone = () => state.stage > 2 ? M : state.stage === 2 ? Math.round(state.p * M) : 0;
+const colsDone = () => state.stage === 4 ? Math.round(state.p * NB) : 0;
+
+// --------------------------------------------------------------- matrix ----
+function drawMatrix() {
+  const { w, h } = fitOne(mat, 300, narrow() ? 252 : 318);
+  const ctx = mctx;
+  ctx.clearRect(0, 0, w, h);
+  const mL = 30, mR = 8, mT = 22, mB = 40;
+  const pW = w - mL - mR, pH = h - mT - mB;
+  const cw = pW / N, bw = pW / NB, ch = pH / M;
+  const rd = rowsDone(), cd = colsDone();
+  const ink3 = cssVar('--ink3');
+  // cell edges snapped to whole pixels, so no hairline shows between cells
+  const PX = (i, n) => Math.round(mL + pW * i / n), Y = r => Math.round(mT + pH * r / M);
+  const cell = (i, n, r, fill) => { ctx.fillStyle = fill; ctx.fillRect(PX(i, n), Y(r), PX(i + 1, n) - PX(i, n), Y(r + 1) - Y(r)); };
+
+  for (let r = 0; r < M; r++) {
+    if (state.stage === 1 || (state.stage === 2 && r >= rd)) {
+      for (let n = 0; n < N; n++) cell(n, N, r, signedColor(X[r].re[n] / X_MAX));            // the samples
+    } else {
+      for (let k = 0; k < NB; k++) {
+        cell(k, NB, r, k < cd ? magColor(magD(k, vOfRow(r)) / A_MAX)                        // after both FFTs
+                     : state.stage === 2 ? magColor(magR(r, k) / A_MAX)                     // a range profile
+                     : signedColor(RNG[r].re[k] / A_MAX));                                  // range bins, with their phase
+      }
+    }
+  }
+  ctx.strokeStyle = cssVar('--edge'); ctx.lineWidth = 1; ctx.strokeRect(mL, mT, pW, pH);
+
+  // what the plot is following: one row in stages 1 and 2, three columns after
+  ctx.lineWidth = 1.6;
+  if (state.stage <= 2) {
+    ctx.strokeStyle = cssVar('--ink');
+    ctx.strokeRect(mL - 1, Y(ROW) - 1, pW + 2, Y(ROW + 1) - Y(ROW) + 2);
+  } else if (state.stage === 3 || state.p < 1) {
+    for (const t of TARGETS) {
+      ctx.strokeStyle = cssVar(t.col);
+      ctx.strokeRect(PX(t.r, NB) - 1, mT - 1, PX(t.r + 1, NB) - PX(t.r, NB) + 2, pH + 2);
+    }
+  }
+  // stage 3: the chirp the phase dials are showing
+  if (state.stage === 3) {
+    ctx.strokeStyle = cssVar('--ink'); ctx.lineWidth = 1.2;
+    ctx.strokeRect(mL - 1, Y(state.m) - 1, pW + 2, Y(state.m + 1) - Y(state.m) + 2);
+  }
+  // the sweep line of the FFT in progress
+  if (state.p < 1) {
+    ctx.strokeStyle = cssVar('--red'); ctx.lineWidth = 2; ctx.beginPath();
+    if (state.stage === 2) { ctx.moveTo(mL, Y(rd)); ctx.lineTo(mL + pW, Y(rd)); }
+    if (state.stage === 4) { ctx.moveTo(PX(cd, NB), mT); ctx.lineTo(PX(cd, NB), mT + pH); }
+    ctx.stroke();
+  }
+  // the map: the zero-velocity row, and each target named with its range and velocity
+  if (state.stage === 4 && state.p >= 1) {
+    const y0 = (Y(rowOfV(0)) + Y(rowOfV(0) + 1)) / 2;
+    ctx.strokeStyle = cssVar('--edge2'); ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(mL, y0); ctx.lineTo(mL + pW, y0); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = ink3; ctx.font = '12.5px ' + SANS; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+    ctx.fillText('0 m/s', mL + 3, y0 - 2);
+    ctx.font = '600 12.5px ' + SANS; ctx.textBaseline = 'middle';
+    for (const t of TARGETS) {
+      const x = (PX(t.r, NB) + PX(t.r + 1, NB)) / 2, y = (Y(rowOfV(t.v)) + Y(rowOfV(t.v) + 1)) / 2;
+      const vel = t.v * BIN_V;
+      const text = t.name + ': ' + (t.r * BIN_M).toFixed(1) + ' m' + (t.v ? ', ' + (vel > 0 ? '+' : '−') + Math.abs(vel).toFixed(1) + ' m/s' : '');
+      ctx.strokeStyle = cssVar(t.col); ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.arc(x, y, bw * 0.62, 0, TWO_PI); ctx.stroke();
+      ctx.fillStyle = cssVar(t.col);
+      const tw = ctx.measureText(text).width, gap = bw * 0.62 + 5;
+      const right = x + gap + tw <= mL + pW - 2;            // beside the spot, on the side with room
+      ctx.textAlign = right ? 'left' : 'right';
+      // The three spots are only a few rows apart, so the labels fan out: a
+      // closing target's above its spot, an opening target's below, and the
+      // wall's just above the zero line.
+      ctx.fillText(text, right ? x + gap : x - gap, y + (t.v > 0 ? -12 : t.v < 0 ? 12 : -10));
+    }
+  }
+
+  // the key: what a cell's color means at this stage
+  ctx.font = '12.5px ' + SANS; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  let kx = mL;
+  const key = (cols, text) => {
+    for (const c of cols) { ctx.fillStyle = c; ctx.fillRect(kx, 6, 10, 10); kx += 12; }
+    ctx.fillStyle = ink3; ctx.fillText(text, kx + 2, 12); kx += 2 + ctx.measureText(text).width + 12;
+  };
+  const anySigned = state.stage === 1 || state.stage === 3 || (state.stage === 2 && rd < M) || (state.stage === 4 && cd < NB);
+  const anyMag = (state.stage === 2 && rd > 0) || (state.stage === 4 && cd > 0);
+  if (anySigned) key([mix(RED, 0.92), mix(BLUE, 0.92)], 'real part, + and −');
+  if (anyMag) key([mix(NAVY, 1)], 'strength');
+
+  // axes: what the columns and the rows are at this stage
+  ctx.fillStyle = ink3; ctx.font = '12.5px ' + SANS;
+  const binsShown = state.stage > 2 || (state.stage === 2 && rd > 0);
+  if (binsShown) {                                          // range ticks, in meters
+    ctx.textBaseline = 'top'; ctx.strokeStyle = ink3; ctx.lineWidth = 1;
+    for (let k = 0; k <= NB; k += 4) {
+      const x = PX(k, NB);
+      ctx.beginPath(); ctx.moveTo(x, mT + pH); ctx.lineTo(x, mT + pH + 4); ctx.stroke();
+      ctx.textAlign = k === 0 ? 'left' : k === NB ? 'right' : 'center';
+      ctx.fillText((k * BIN_M).toFixed(1), x, mT + pH + 6);
+    }
+  }
+  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+  const xTitle = !binsShown ? 'fast time (samples in a chirp) →'
+               : state.stage === 2 && rd < M ? 'fast time → range (m)'
+               : 'range (m), one bin 0.375 m';
+  ctx.fillText(xTitle, mL + pW / 2, h - 4);
+  const yTitle = state.stage < 4 ? '← slow time (chirps)'
+               : cd < NB ? 'slow time → velocity bin'
+               : '← opening · velocity bin · closing →';
+  ctx.save(); ctx.translate(13, mT + pH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.textBaseline = 'middle'; ctx.fillText(yTitle, 0, 0); ctx.restore();
+}
+
+// ----------------------------------------------------------------- plot ----
+function drawPlot() {
+  const { w, h } = fitOne(plot, 300, narrow() ? 178 : 318);
+  const ctx = pctx;
+  ctx.clearRect(0, 0, w, h);
+  const mL = 12, mR = 12, mT = 44, mB = 30;
+  const pW = w - mL - mR, pH = h - mT - mB;
+  const ink3 = cssVar('--ink3'), ink = cssVar('--ink');
+  const rd = rowsDone(), cd = colsDone();
+  // Two title lines. The second is plain text, or a row of names each in its
+  // curve's color: with the names up here, no label sits among the curves.
+  const title = (a, b) => {
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = ink; ctx.font = '600 12.5px ' + SANS; ctx.fillText(a, mL, 13);
+    if (typeof b === 'string') { ctx.fillStyle = ink3; ctx.font = '12.5px ' + SANS; ctx.fillText(b, mL, 30); return; }
+    let x = mL;
+    ctx.font = '600 12.5px ' + SANS;
+    for (const [text, col] of b) {
+      ctx.strokeStyle = col; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(x, 30); ctx.lineTo(x + 12, 30); ctx.stroke();
+      ctx.fillStyle = col; ctx.fillText(text, x + 16, 30);
+      x += 16 + ctx.measureText(text).width + 10;
+    }
+  };
+  const xTitle = t => { ctx.fillStyle = ink3; ctx.font = '12.5px ' + SANS; ctx.textAlign = 'center';
+                        ctx.textBaseline = 'bottom'; ctx.fillText(t, mL + pW / 2, h - 7); };
+  const baseline = (y, x1, x2) => { ctx.strokeStyle = cssVar('--edge'); ctx.lineWidth = 1; ctx.beginPath();
+                                    ctx.moveTo(x1 === undefined ? mL : x1, y); ctx.lineTo(x2 === undefined ? mL + pW : x2, y); ctx.stroke(); };
+  const bars = (n, f, colOf, yBase, amp) => {
+    const bwid = pW / n;
+    for (let i = 0; i < n; i++) { const v = f(i); if (v < 0.02) continue;
+      ctx.fillStyle = colOf(i); ctx.fillRect(mL + i * bwid + 1, yBase - amp * v, Math.max(1, bwid - 2), amp * v); }
+  };
+  // a name over a bar, kept inside the plot
+  const tag = (name, col, x, y) => {
+    ctx.font = '600 12.5px ' + SANS; ctx.fillStyle = col; ctx.textBaseline = 'bottom';
+    const tw = ctx.measureText(name).width;
+    ctx.textAlign = 'left';
+    ctx.fillText(name, Math.max(mL, Math.min(mL + pW - tw, x - tw / 2)), y);
+  };
+  const names = extra => TARGETS.map(t => [t.name + (extra ? extra(t) : ''), cssVar(t.col)]);
+
+  const profileNow = state.stage === 2 && rd > ROW;
+  if (state.stage === 1 || (state.stage === 2 && !profileNow)) {
+    title('row ' + ROW + ': one chirp', 'three beat tones, added together');
+    const y0 = mT + pH / 2; baseline(y0);
+    ctx.strokeStyle = cssVar('--red'); ctx.lineWidth = 2; ctx.beginPath();
+    for (let i = 0; i < N; i++) { const x = mL + pW * (i + 0.5) / N, y = y0 - pH * 0.46 * X[ROW].re[i] / X_MAX;
+                                  i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+    ctx.stroke();
+    xTitle('fast time (samples in a chirp) →');
+  } else if (state.stage === 2) {
+    title('row ' + ROW + ' after the range FFT', 'a range profile: one peak per target');
+    const yb = mT + pH; baseline(yb);
+    const amp = (pH - 18) / A_MAX;
+    bars(NB, i => magR(ROW, i), i => { const t = TARGETS.find(q => q.r === i); return cssVar(t ? t.col : '--navy'); }, yb, amp);
+    for (const t of TARGETS) tag(t.name, cssVar(t.col), mL + pW * (t.r + 0.5) / NB, yb - amp * t.a - 3);
+    xTitle('range bin →');
+  } else if (state.stage === 3 || (state.stage === 4 && cd <= LAST_COL)) {
+    // Three rows, one per target: the real part of its range cell against the
+    // chirps, and a dial showing that cell's phase at the marked chirp.
+    title('three range cells, chirp by chirp', names());
+    const rowH = pH / TARGETS.length;
+    const dialR = Math.min(20, rowH * 0.40);
+    const xT1 = mL + 14, xT2 = mL + pW - 2 * dialR - 12;        // the trace runs between these
+    const amp = rowH * 0.34;
+    const m = state.stage === 3 ? state.m : 0;
+    TARGETS.forEach((t, i) => {
+      const y0 = mT + rowH * (i + 0.5), col = cssVar(t.col);
+      baseline(y0, xT1, xT2);
+      ctx.fillStyle = ink3; ctx.font = '12.5px ' + SANS; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+      ctx.fillText('0', xT1 - 3, y0);
+      ctx.strokeStyle = col; ctx.lineWidth = 2.2; ctx.beginPath();
+      for (let q = 0; q < M; q++) { const x = xT1 + (xT2 - xT1) * (q + 0.5) / M, y = y0 - amp * RNG[q].re[t.r] / t.a;
+                                    q ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+      ctx.stroke();
+      // the chirp the dial shows
+      const xm = xT1 + (xT2 - xT1) * (m + 0.5) / M, ym = y0 - amp * RNG[m].re[t.r] / t.a;
+      ctx.fillStyle = col; ctx.beginPath(); ctx.arc(xm, ym, 3.2, 0, TWO_PI); ctx.fill();
+      // the dial: the phase of this cell at that chirp
+      const cx = mL + pW - dialR, ang = Math.atan2(RNG[m].im[t.r], RNG[m].re[t.r]);
+      ctx.strokeStyle = cssVar('--edge2'); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(cx, y0, dialR, 0, TWO_PI); ctx.stroke();
+      ctx.strokeStyle = col; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(cx, y0);
+      ctx.lineTo(cx + dialR * Math.cos(ang), y0 - dialR * Math.sin(ang)); ctx.stroke();
+      ctx.fillStyle = col; ctx.beginPath(); ctx.arc(cx + dialR * Math.cos(ang), y0 - dialR * Math.sin(ang), 2.6, 0, TWO_PI); ctx.fill();
+    });
+    xTitle('slow time (chirps) →, and each cell’s phase');
+  } else {
+    title('those columns after the Doppler FFT', names(t => ' ' + (t.v > 0 ? '+' : t.v < 0 ? '−' : '') + Math.abs(t.v)));
+    const yb = mT + pH; baseline(yb);
+    const amp = (pH - 6) / A_MAX;
+    // velocity runs left (opening) to right (closing) here; bar i is velocity bin i - M/2
+    for (const t of TARGETS) bars(M, i => magD(t.r, i - M / 2), () => cssVar(t.col), yb, amp);
+    ctx.strokeStyle = ink3; ctx.lineWidth = 1; ctx.beginPath();             // the zero-velocity tick
+    const x0 = mL + pW * (M / 2 + 0.5) / M; ctx.moveTo(x0, yb); ctx.lineTo(x0, yb + 4); ctx.stroke();
+    xTitle('opening ← velocity bin (the map’s vertical) → closing');
+  }
+}
+
+// A page can open the widget on one stage, already settled: ?stage=3
+(function () {
+  const q = new URLSearchParams(location.search), s = parseInt(q.get('stage'), 10);
+  if (s >= 1 && s <= 4) state.stage = s;
+})();
+MJ.setRedraw(refresh);
+MJ.onReady(() => { MJ.typeset(document.querySelector('.app')).then(refresh); });
+show(state.stage, false);
+</script>
+</body>
+</html>

@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radar Overview 1 - Detection and FMCW Range &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=292d567668">
+<link rel="stylesheet" href="../../_static/shell.css?v=01541cb95d">
+<link rel="stylesheet" href="../../_static/frames.css?v=d09c9794f3">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Radar Overview 1 — Detection and FMCW Range</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../radar-overview-2-doppler-mti-cfar/index.html">Radar Overview 2 — Doppler, MTI, CFAR, and the Lab Chain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
+  </div>
+</div>
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      <dt><span class="help-chip">ECE 444</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+    </dl>
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the ECE 444 menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="radar-overview-1-detection-and-fmcw-range">
+<h1>Radar Overview 1 - Detection and FMCW Range<a class="headerlink" href="#radar-overview-1-detection-and-fmcw-range" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Detection and FMCW Range</h1>
+<div class="title-rule"></div>
+<p>A threshold against noise decides what the radar reports, and an FMCW chirp converts range into frequency.</p>
+<p>Radar Overview 1 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 2">
+  <li>I can apply radar detection theory (PD, FAR, dwell time) to determine detection performance under noise.</li>
+  <li>I can describe FMCW radar operation and configure an FMCW waveform on the ADALM-PHASER.</li>
+  <li>I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.</li>
+</ol>
+<!-- The Module 4 "you are here" strip. Included into a lesson's Learning
+     Objectives frame, which carries `:class: here-NN` to light up its own
+     chip (frames.css). L25-L27 are taught in class; L28-L31 are the final
+     project, each one page with its lesson and then its lab. -->
+<div class="lane-strip" role="navigation" aria-label="Module 4 lessons, by whether they are taught in class or worked as the final project">
+  <span class="ls-label">Module 4</span>
+  <a class="ls-chip" data-n="25" href="../L25-radar-equation/index.html" title="L25 Radar Equation: in class">25</a>
+  <a class="ls-chip" data-n="26" href="../L26-range-resolution-doppler/index.html" title="L26 Range, Resolution, and Doppler: in class">26</a>
+  <a class="ls-chip" data-n="27" href="../L27-radar-detection/index.html" title="L27 Radar Detection: in class">27</a>
+  <a class="ls-chip ls-proj" data-n="28" href="../L28-fmcw/index.html" title="L28 FMCW and its lab: final project">28</a>
+  <a class="ls-chip ls-proj" data-n="29" href="../L29-range-doppler-mti/index.html" title="L29 Range-Doppler and MTI and its lab: final project">29</a>
+  <a class="ls-chip ls-proj" data-n="30" href="../L30-cfar/index.html" title="L30 CFAR and its lab: final project">30</a>
+  <a class="ls-chip ls-proj" data-n="31" href="../L31-classification-tracking/index.html" title="L31 Classification and Tracking and its lab: final project">31</a>
+  <a class="ls-chip ls-proj ls-report" href="../final-project/index.html" title="Final Project: Radar Systems Report">Report</a>
+  <span class="ls-key"><i></i>in class <i class="ls-proj"></i>final project</span>
+</div>
+<div class="depth docutils container">
+<p>This overview and the next cover what the L28–L31 Labs use, in two class periods. Each topic here is a summary of a full lesson, and each frame links to that lesson for the derivation. Read the lesson half of each lab’s page before its lab; these two overviews do not replace it.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-two-overviews-four-labs">
+<div class="wrap docutils container">
+<p class="rubric">Two Overviews, Four Labs</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Overview 1: detection against noise, then range from an FMCW chirp.</p></li>
+<li><p>Overview 2: velocity, MTI, CFAR, classification, and tracking.</p></li>
+<li><p>L28–L31 Labs: range, range-Doppler and MTI, CFAR, classify and track. Each lab starts from the one before it.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Today’s first half is detection: every cell of a radar’s output holds noise, the processor compares each cell with a threshold, and the signal-to-noise ratio (SNR) sets how often that decision is right. The second half is how the PHASER measures range: it transmits a chirp, and the echo’s delay appears as a frequency that one FFT converts to range. In the L28 Lab you measure range with your kit, and in the L30 Lab you set a threshold on your own data.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-radar-range-equation-review">
+<div class="wrap docutils container">
+<p class="rubric">RADAR Range Equation Review</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+P_r = \frac{P_t G_t G_r\ \sigma\ c^2}{(4\pi)^3 f^2 R^4}
+\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+P_r &amp;= P_t + G_t + G_r + \sigma - L_p \\
+L_p &amp;= 40\log_{10}R + 20\log_{10}f \\
+&amp;\quad - 136.6\ \text{dB}
+\end{aligned}
+\end{split}\]</div>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>In dB: powers in dBm, gains in dBi, <span class="math notranslate nohighlight">\(\sigma\)</span> in dBsm, <span class="math notranslate nohighlight">\(R\)</span> in m, <span class="math notranslate nohighlight">\(f\)</span> in Hz.</p></li>
+<li><p>RCS and range set the echo power, and so the SNR.</p></li>
+<li><p>Bandwidth sets <span class="math notranslate nohighlight">\(\Delta R = c/2B\)</span>; the PRF sets the unambiguous velocity.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The radar equation of <a href="../L25-radar-equation/index.html#frame-two-way-path-loss-in-decibels">Lesson 25</a> gives the echo power from a target of radar cross section (RCS) <span class="math notranslate nohighlight">\(\sigma\)</span> at range <span class="math notranslate nohighlight">\(R\)</span>, and dividing by the noise power <span class="math notranslate nohighlight">\(kT_\text{sys}B\)</span> gives the SNR. Today’s first half starts from that SNR. The first line is that equation with the wavelength written as <span class="math notranslate nohighlight">\(\lambda = c/f\)</span>, because we set a radar by its frequency.</p>
+<p>The second line is the same equation in decibels, where the products become sums. Every term that is not a power, a gain, or the RCS goes into one <strong>path loss</strong> <span class="math notranslate nohighlight">\(L_p\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+L_p &amp;= 10\log_{10}\frac{(4\pi)^3 f^2 R^4}{c^2} \\
+&amp;= 40\log_{10}R + 20\log_{10}f + 30\log_{10}4\pi - 20\log_{10}c \\
+&amp;= 40\log_{10}R + 20\log_{10}f + 33.0 - 169.5 \\
+&amp;= 40\log_{10}R + 20\log_{10}f - 136.6\ \text{dB}.
+\end{aligned}
+\end{split}\]</div>
+<p>The constant 136.6 dB collects <span class="math notranslate nohighlight">\(c\)</span> and <span class="math notranslate nohighlight">\(4\pi\)</span> for the two-way path. It is not the 147.6 dB of the one-way Friis equation, which is <span class="math notranslate nohighlight">\(20\log_{10}(4\pi/c)\)</span>. At <span class="math notranslate nohighlight">\(R = 10\)</span> m and <span class="math notranslate nohighlight">\(f = 10\)</span> GHz the path loss is <span class="math notranslate nohighlight">\(40 + 200 - 136.6 = 103.4\)</span> dB, and it rises 12 dB each time the range doubles.</p>
+<p><a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> gave the range resolution <span class="math notranslate nohighlight">\(c/2B\)</span> and the limits the pulse repetition frequency (PRF) sets. An FMCW radar obeys the same relations: its chirp bandwidth sets the resolution, and the rate at which it repeats the chirp is its PRF, which sets the unambiguous velocity in Overview 2. Its farthest range comes from the receiver’s sample rate, not from the PRF, as The 0 m Frequency frame shows.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-a-detection-is-a-decision">
+<div class="wrap docutils container">
+<p class="rubric">A Detection Is a Decision</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Every range cell holds noise, and some also hold a target.</p></li>
+<li><p>The processor reports a target in every cell above a <strong>threshold</strong>.</p></li>
+<li><p>Noise above the threshold is a <strong>false alarm</strong>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<img src="../../viz/img/L27-range-profile.svg" alt="One range profile of 200 cells: noise power scattered from about minus 20 to plus 7 dB about the mean, one target cell at 13 dB, and a dashed threshold at 11.4 dB that only the target crosses" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The figure is the power in each of 200 range cells, in dB above the mean noise power. Receiver noise is random, and from cell to cell it spreads over more than 25 dB. One cell also holds a target 13 dB above the mean noise. The processor does not know which cell that is, so it applies one rule to every cell: report a target where the power exceeds the threshold. A noise-only cell that crosses the threshold is a false alarm, and a target cell that falls below it is a missed detection. Raising the threshold makes false alarms rarer and misses more common. <a href="../L27-radar-detection/index.html#frame-a-detection-is-a-decision">Lesson 27</a> has the full treatment.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-probability-of-false-alarm">
+<div class="wrap docutils container">
+<p class="rubric">Probability of False Alarm</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+P_{fa} &amp;= e^{-T/P_n} \\
+\frac{T}{P_n} &amp;= \ln\frac{1}{P_{fa}}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(P_{fa}\)</span>, the <strong>probability of false alarm</strong>, is the chance that noise alone crosses the threshold <span class="math notranslate nohighlight">\(T\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> puts <span class="math notranslate nohighlight">\(T\)</span> 11.4 dB above the mean noise power <span class="math notranslate nohighlight">\(P_n\)</span>; 3 dB more noise raises it to <span class="math notranslate nohighlight">\(10^{-3}\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The <strong>probability of false alarm</strong> <span class="math notranslate nohighlight">\(P_{fa}\)</span> is the probability that a cell holding only noise crosses the threshold <span class="math notranslate nohighlight">\(T\)</span>. Noise power in one cell follows an exponential distribution with mean <span class="math notranslate nohighlight">\(P_n\)</span>, and the area of that distribution above <span class="math notranslate nohighlight">\(T\)</span> is <span class="math notranslate nohighlight">\(e^{-T/P_n}\)</span>. We choose <span class="math notranslate nohighlight">\(P_{fa}\)</span> and solve for the threshold: <span class="math notranslate nohighlight">\(10^{-6}\)</span> needs <span class="math notranslate nohighlight">\(T = 13.8\ P_n\)</span>, which is 11.4 dB above the mean noise.</p>
+<p>The threshold is a multiple of <span class="math notranslate nohighlight">\(P_n\)</span>, so the processor has to know the noise power. If the noise doubles while the threshold stays where it was, the exponent halves and <span class="math notranslate nohighlight">\(P_{fa}\)</span> becomes <span class="math notranslate nohighlight">\((10^{-6})^{1/2} = 10^{-3}\)</span>, a thousand times the false alarms for 3 dB of noise. Overview 2 uses that sensitivity as the reason for CFAR.</p>
+<p>What an operator sees is the <strong>false-alarm rate</strong> (FAR), the false reports per second: <span class="math notranslate nohighlight">\(P_{fa}\)</span> times the number of cells the radar tests each second. A radar that tests a million cells a second at <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> reports about one false target a second. The derivation is in <a href="../L27-radar-detection/index.html#frame-probability-of-false-alarm">Lesson 27</a>.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-threshold-explorer">
+<div class="wrap docutils container">
+<p class="rubric">Threshold Explorer</p>
+<div class="depth docutils container">
+<p>A cell that holds a steady target of power <span class="math notranslate nohighlight">\(P_s\)</span> plus noise has a power distribution centered near <span class="math notranslate nohighlight">\(P_s + P_n\)</span>. The <strong>probability of detection</strong> <span class="math notranslate nohighlight">\(P_d\)</span> is the area of that distribution above the threshold <span class="math notranslate nohighlight">\(T\)</span>. The area has no closed form; <a href="../L27-radar-detection/index.html#frame-target-plus-noise">Lesson 27</a> gives the function that computes it.</p>
+<p>The widget draws the noise distribution and the target’s distribution against power in dB, with the threshold between them, and beside them <span class="math notranslate nohighlight">\(P_d\)</span> against <span class="math notranslate nohighlight">\(P_{fa}\)</span> with the present operating point marked. It opens at 13 dB SNR with the threshold 11.4 dB above the mean noise, the setting for <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>: 87% of the target’s distribution lies above the threshold, so <span class="math notranslate nohighlight">\(P_d = 0.87\)</span>. Move the threshold, and one shaded area grows as the other shrinks. Raise the target SNR, and the target’s distribution moves away from the noise. The pulses control sets the number of pulses <span class="math notranslate nohighlight">\(N\)</span> the processor integrates, which the Integrating Pulses frame covers, and the noise control raises the noise while the threshold stays where we set it.</p>
+</div>
+<iframe src="../../viz/detection-threshold.html"
+        width="100%" height="437"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Detection threshold against the noise and target probability densities, with the operating point on the Pd versus Pfa curve">
+</iframe>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-pd-against-pfa">
+<div class="wrap docutils container">
+<p class="rubric">Pd Against Pfa</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L27-roc.svg" alt="Probability of detection against probability of false alarm on a log axis from 10 to the minus 10 to 0.1, for SNRs of 8, 10, 12 and 14 dB. At Pfa = 10 to the minus 6 the 12 dB curve reads 0.68" style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A lower threshold raises <span class="math notranslate nohighlight">\(P_d\)</span>, the <strong>probability of detection</strong>, and <span class="math notranslate nohighlight">\(P_{fa}\)</span> together.</p></li>
+<li><p>At <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>: 12 dB gives <span class="math notranslate nohighlight">\(P_d = 0.68\)</span>, 14 dB gives 0.97.</p></li>
+<li><p>By Albersheim’s fit, <span class="math notranslate nohighlight">\(P_d = 0.9\)</span> at <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> needs 13.1 dB.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Each curve fixes the SNR and sweeps the threshold. Lowering the threshold moves the operating point up and to the right along its curve, so detections and false alarms rise together. Only more SNR raises <span class="math notranslate nohighlight">\(P_d\)</span> at a fixed <span class="math notranslate nohighlight">\(P_{fa}\)</span>, and it does so steeply: at <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span>, 8 dB of SNR gives <span class="math notranslate nohighlight">\(P_d = 0.06\)</span> and 14 dB gives 0.97.</p>
+<p>The design question runs the other way: what SNR does a required <span class="math notranslate nohighlight">\(P_d\)</span> and <span class="math notranslate nohighlight">\(P_{fa}\)</span> take? For a steady target, <span class="math notranslate nohighlight">\(P_d = 0.9\)</span> at <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> takes 13.1 dB by Albersheim’s equation, a fit that is within 0.1 dB of the exact 13.2 dB, in <a href="../L27-radar-detection/index.html#frame-albersheim-s-equation">Lesson 27</a>. The radar equation then says at what range a given target still returns that much.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-integrating-pulses">
+<div class="wrap docutils container">
+<p class="rubric">Integrating Pulses</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\text{SNR}_N &amp;= N\ \text{SNR}_1 \\
+10\log_{10}128 &amp;= 21.1\ \text{dB}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>Echoes add in voltage, and noise adds in power.</p></li>
+<li><p>With 128 chirps, each chirp needs only <span class="math notranslate nohighlight">\(13.1 - 21.1 = -8.0\)</span> dB.</p></li>
+<li><p>The <strong>dwell time</strong> is <span class="math notranslate nohighlight">\(T_\text{d} = N\ T_\text{PRI}\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<img src="../../viz/img/L27-integration-gain.svg" alt="Integration gain in dB against N on a log axis. Coherent is a straight line, 10 log N. Noncoherent, from Albersheim's equation, falls below it: 2.5 dB short at N = 16 and 4.8 dB short at N = 64" style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A radar does not have to decide on one chirp. If it adds the returns of <span class="math notranslate nohighlight">\(N\)</span> chirps from the same cell before it compares with the threshold, the target’s echoes add in phase, so the signal voltage grows as <span class="math notranslate nohighlight">\(N\)</span> and its power as <span class="math notranslate nohighlight">\(N^2\)</span>. A moving target’s phase steps from chirp to chirp, and the second FFT of Overview 2, across the chirps, removes that step before it adds them. The noise is independent from chirp to chirp, so its power grows as <span class="math notranslate nohighlight">\(N\)</span>. The SNR therefore grows as <span class="math notranslate nohighlight">\(N\)</span>, which is <strong>coherent integration</strong>, the straight line in the figure. The lower curve is noncoherent integration, which adds powers without the phase and gains less.</p>
+<p>Lesson 29’s teaching burst has 128 chirps, each 400 MHz in 200 µs, a gain of 21.1 dB, so a target at <span class="qty">−8.0</span> dB SNR on one chirp reaches the 13.1 dB of the previous frame. The burst sends one chirp every pulse repetition interval <span class="math notranslate nohighlight">\(T_\text{PRI} = 0.4\)</span> ms, so the dwell time is <span class="math notranslate nohighlight">\(128 \times 0.4\ \text{ms} = 51.2\)</span> ms. The target has to stay in one range cell for that long, or its echoes do not add in one cell. <a href="../L27-radar-detection/index.html#frame-integrating-pulses">Lesson 27</a> covers the limits on the dwell.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-fixed-threshold">
+<div class="wrap docutils container">
+<p class="rubric">The Fixed Threshold</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L27-fixed-threshold.svg" alt="A 600-cell range profile whose noise rises 6 dB beyond cell 330. A fixed threshold at 11.4 dB is crossed by noise at eight cells in the noisy region. A local-average threshold steps up with the noise and is not crossed" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Where the noise rises 6 dB, noise crosses the fixed threshold eight times.</p></li>
+<li><p>A threshold the processor computes from the neighboring cells rises with the noise. That is <strong>CFAR</strong> (constant false-alarm rate) detection, in Overview 2.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Every number so far assumed the processor knows <span class="math notranslate nohighlight">\(P_n\)</span>. In a real scene the noise level changes from one part of the profile to another. In the figure the noise rises 6 dB beyond cell 330. The fixed threshold, set for <span class="math notranslate nohighlight">\(P_{fa} = 10^{-6}\)</span> in the quiet cells, has <span class="math notranslate nohighlight">\(P_{fa} = 0.03\)</span> in the noisy ones, and noise crosses it eight times. The green line is a threshold computed from the cells around each cell under test, so it rises where the noise rises. That is constant false-alarm rate (CFAR) detection. <a href="../L27-radar-detection/index.html#frame-the-fixed-threshold">Lesson 27</a> works the numbers, and the L30 Lab runs CFAR on your own data.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-fmcw-chirp-and-echo">
+<div class="wrap docutils container">
+<p class="rubric">FMCW: Chirp and Echo</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L28-chirp.svg" alt="Frequency against time. The transmitted chirp is a straight ramp repeated twice. The echo is the same ramp shifted right by the delay. At any instant the two differ by a fixed frequency, the beat. The ramp spans the bandwidth vertically and the chirp length horizontally. The first tenth of each ramp is shaded as settling, and the last 90% is marked as kept" style="max-width: min(620px, 72vw); width: 100%; display: block; margin: 0 auto;">
+<div class="math notranslate nohighlight">
+\[
+\tau = \frac{2R}{c}, \qquad f_b = \frac{B}{T_s}\ \tau = \frac{2BR}{cT_s}
+\]</div>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>FMCW</strong> (frequency-modulated continuous wave) radar chirps: its frequency keeps rising.</p></li>
+<li><p>When the echo returns, the transmitter is at a higher frequency. Mixing gives that gap, the <strong>beat</strong>.</p></li>
+<li><p>A fixed range gives a fixed gap: one beat frequency.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The second half of today is how the PHASER measures range. A target 3 m away returns its echo after 20 ns, which is too short for the PHASER’s receiver to time directly. A frequency-modulated continuous-wave (FMCW) radar transmits continuously while its frequency climbs linearly across a bandwidth <span class="math notranslate nohighlight">\(B\)</span> during each <strong>chirp</strong> of length <span class="math notranslate nohighlight">\(T_s\)</span>. The echo is a copy of that chirp, delayed by the round trip. The echo returns after the round-trip time <span class="math notranslate nohighlight">\(\tau = 2R/c\)</span>.</p>
+<p>When the echo returns, the receiver mixes it with the signal the transmitter is sending at that moment. The transmitter has moved to a new frequency in the meantime, because it is chirping: its frequency rises at the <strong>slope</strong> <span class="math notranslate nohighlight">\(S = B/T_s\)</span>, so after a delay <span class="math notranslate nohighlight">\(\tau\)</span> it is <span class="math notranslate nohighlight">\(S\tau\)</span> higher than the echo that is arriving. The mixer output is a tone at that difference, the <strong>beat frequency</strong> <span class="math notranslate nohighlight">\(f_b = S\tau\)</span>. For a target at one range the delay is fixed, so the difference is fixed for the whole chirp, and the beat is one steady frequency for that range. Substituting the slope and the delay gives <span class="math notranslate nohighlight">\(f_b = 2BR/(cT_s)\)</span>, which is proportional to range.</p>
+<p>The range examples use a chirp that no preset in the Phaser app uses, 400 MHz in 2 ms from 10.0 GHz, as <a href="../L28-fmcw/index.html#frame-a-chirp-and-its-echo">Lesson 28</a> does. The methods carry over to the presets, and the lab packets ask for the presets’ numbers.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-beat-frequency">
+<div class="wrap docutils container">
+<p class="rubric">The Beat Frequency</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+S &amp;= \frac{B}{T_s} = \frac{400\ \text{MHz}}{2\ \text{ms}} = 200\ \text{GHz/s} \\
+\tau &amp;= \frac{2\ (1\ \text{m})}{3.00\times 10^8\ \text{m/s}} = 6.67\ \text{ns} \\
+f_b &amp;= S\ \tau = 1.33\ \text{kHz}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>The beat is proportional to range: 1.33 kHz for every meter.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The worked chirp sweeps 400 MHz in 2 ms, a slope of 200 GHz/s. A target at 1 m delays the echo by 6.67 ns, and in that time the chirp climbs <span class="math notranslate nohighlight">\(200\ \text{GHz/s} \times 6.67\ \text{ns} = 1.33\)</span> kHz. The radar reads range by measuring that frequency: a target at 1 m gives 1.33 kHz and a target at 3 m gives 4.00 kHz. The chirp spans 400 MHz, but the beats are a few kilohertz, which the PHASER samples directly.</p>
+<p>Both waveform settings change the beat per meter. A wider bandwidth or a shorter chirp steepens the slope and raises it. <a href="../L28-fmcw/index.html#frame-the-beat-frequency">Lesson 28</a> works both cases.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-mixing-echo-and-chirp">
+<div class="wrap docutils container">
+<p class="rubric">Mixing Echo and Chirp</p>
+<div class="depth docutils container">
+<p>The FMCW frame said the receiver mixes the returning echo with the signal the transmitter is sending at that moment, which has moved to a higher frequency. This widget shows that mixing. Its four traces share one time axis, one chirp long, and follow the signal in order. The first is the chirp going out, a sinusoid whose cycles crowd together as its frequency rises. The second is the echo from a target at range <span class="math notranslate nohighlight">\(R\)</span>: the same waveform, late by the round trip <span class="math notranslate nohighlight">\(2R/c\)</span>. The third is the output of the receiver’s mixer, which multiplies the echo by the chirp that is still going out. A product of two sinusoids is the sum of two others,</p>
+<div class="math notranslate nohighlight">
+\[
+\sin\phi_1\ \sin\phi_2 = \tfrac{1}{2}\cos\left(\phi_1 - \phi_2\right) - \tfrac{1}{2}\cos\left(\phi_1 + \phi_2\right),
+\]</div>
+<p>one at the difference of their frequencies and one at the sum. The mixer output is therefore a fast oscillation on top of a slow one, and the dashed line is the slow one, the first term. The receiver’s low-pass filter removes the fast term, and the fourth trace is what remains: a steady tone at the difference of the two frequencies, the beat <span class="math notranslate nohighlight">\(f_b\)</span>.</p>
+<p>The small panel draws the same chirp and echo as frequency against time. The two ramps are parallel, so from the echo’s arrival to the end of the chirp the gap between them is the same, and the beat is one steady tone. That gap is the chirp’s slope times the delay, <span class="math notranslate nohighlight">\(f_b = S\tau\)</span>. Move the target out, and the echo arrives later, the gap widens, and the beat frequency rises.</p>
+<p>The widget cannot draw the worked chirp to scale. It slows the chirp to 23 cycles, where the real one has about <span class="math notranslate nohighlight">\(2 \times 10^7\)</span>, and it stretches the delay, which is tens of nanoseconds against a 2 ms chirp, to as much as 30% of the chirp, so that both are visible. The drawn beat therefore has fewer cycles than the real one. The readouts are the real delay and beat for the worked chirp, which gives <span class="math notranslate nohighlight">\(2RB/c = 2.67\)</span> beat cycles a chirp for every meter. The FMCW Explorer in the next frame draws the fourth trace, the beat, for the worked chirp at its true scale, and takes its spectrum.</p>
+</div>
+<iframe src="../../viz/fmcw-mixer.html"
+        width="100%" height="442"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Four waveforms on one time axis: the chirp going out, its delayed echo, the mixer output, and the beat after the low-pass filter, beside the same chirp and echo as frequency ramps, for a chosen target range">
+</iframe>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-fmcw-explorer">
+<div class="wrap docutils container">
+<p class="rubric">FMCW Explorer</p>
+<div class="depth docutils container">
+<p>The left panel is the beat signal over one chirp, and the right panel is its range spectrum: the FFT of those samples, with the frequency axis converted to range. The widget opens on the worked chirp. Like the Phaser app, it keeps the last 90% of each chirp, the part the chirp figure marks as kept, so its resolution readout is <span class="math notranslate nohighlight">\(c/(2 \times 0.9B) = 0.42\)</span> m, a little more than the 0.375 m the next frame derives for the whole chirp. Move the target and count the cycles of the beat. Change the bandwidth or the chirp length, and the beat per meter follows <span class="math notranslate nohighlight">\(B/T_s\)</span>. Turn on the second target and bring it toward the first until the two peaks merge, which is the subject of the next frame.</p>
+</div>
+<iframe src="../../viz/fmcw-beat.html"
+        width="100%" height="435"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="FMCW explorer: the beat signal over one chirp and its range spectrum, for chosen range, bandwidth, chirp length, second target, and window">
+</iframe>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-range-resolution">
+<div class="wrap docutils container">
+<p class="rubric">Range Resolution</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\Delta f_b &amp;= \frac{1}{T_s} \\
+\Delta R &amp;= \frac{cT_s}{2B}\ \Delta f_b = \frac{c}{2B} \\
+&amp;= \frac{3.00\times 10^8\ \text{m/s}}{2\ (400\ \text{MHz})} \\
+&amp;= 0.375\ \text{m}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>The chirp length cancels: only the bandwidth sets the resolution.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The radar observes each beat for one chirp, <span class="math notranslate nohighlight">\(T_s\)</span>, and an FFT over a record of that length separates two tones only if they differ by at least <span class="math notranslate nohighlight">\(1/T_s\)</span>. Dividing that frequency step by the beat per meter converts it to range, and the result is the <span class="math notranslate nohighlight">\(c/2B\)</span> of <a href="../L26-range-resolution-doppler/index.html#frame-resolution-and-bandwidth">Lesson 26</a>. A longer chirp lowers the beat per meter, and it lets the FFT resolve finer frequency steps in the same proportion, so <span class="math notranslate nohighlight">\(T_s\)</span> cancels. Two targets closer than one cell return one peak. <a href="../L28-fmcw/index.html#frame-range-resolution">Lesson 28</a> has the details.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-0-m-frequency">
+<div class="wrap docutils container">
+<p class="rubric">The 0 m Frequency</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L28-spectrum.svg" alt="Power in dBFS against beat frequency from 0 to 300 kHz for the worked chirp with the 0 m frequency at 100 kHz. Below 100 kHz the band is shaded as negative range. A dashed line at 100 kHz marks the leakage, the strongest peak. The room's wall at 5.5 m peaks 7.3 kHz above it, labeled. A target at 30 m peaks 40 kHz above it. A red line at 300 kHz marks half the sample rate, 150 m, past which beats alias" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The PHASER puts a 0 m echo at <span class="math notranslate nohighlight">\(f_0\)</span>, 100 to 120 kHz; every beat adds to it.</p></li>
+<li><p><span class="math notranslate nohighlight">\(f_0\)</span> changes at every power-up, so calibrate it first.</p></li>
+<li><p>Beats above half the sample rate alias: 150 m on the worked chirp.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The PHASER does not put a 0 m echo at zero frequency. It adds every beat to a fixed offset, the kit’s <strong>0 m frequency</strong> <span class="math notranslate nohighlight">\(f_0\)</span>, so a target’s peak is at <span class="math notranslate nohighlight">\(f_0 + f_b\)</span>. The offset keeps the targets clear of zero frequency, where the receiver’s own offset and low-frequency noise are. On our kits <span class="math notranslate nohighlight">\(f_0\)</span> reads 100 to 120 kHz, it differs from kit to kit, and it changes when the kit restarts. The first step of the L28 Lab is to measure it, with a metal plate held against the array.</p>
+<p>The figure is the whole spectrum the receiver records for the worked chirp with <span class="math notranslate nohighlight">\(f_0\)</span> at 100 kHz. Its power axis is in <strong>dBFS</strong>, decibels relative to the largest signal the receiver’s converter records. Frequencies below <span class="math notranslate nohighlight">\(f_0\)</span> are negative ranges. The strongest peak, at <span class="math notranslate nohighlight">\(f_0\)</span>, is the <strong>leakage</strong>: the transmit antenna’s direct path into the array, a few centimeters long. The receiver samples at 0.6 MSPS and represents frequencies up to half that, 300 kHz, so the beats have <span class="math notranslate nohighlight">\(300 - 100 = 200\)</span> kHz of room above <span class="math notranslate nohighlight">\(f_0\)</span>. At 1.33 kHz per meter that is 150 m, and a beat from farther away aliases to a wrong range. <a href="../L28-fmcw/index.html#frame-the-0-m-frequency">Lesson 28</a> covers the calibration and the range limit.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-range-profile">
+<div class="wrap docutils container">
+<p class="rubric">The Range Profile</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+R = \frac{cT_s}{2B}\left(f - f_0\right)
+\]</div>
+<ul class="simple">
+<li><p>One FFT of one chirp is a <strong>range profile</strong>.</p></li>
+<li><p>The figure shows the leakage at 0 m, a corner reflector at 2.0 m, and the wall at 5.5 m.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<img src="../../viz/img/L28-range-profile.svg" alt="Power in dBFS, dB relative to the receiver's full scale, against range from minus 0.3 to 8 m for the worked chirp, with a top axis of beat frequency above the 0 m frequency from 0 to about 10.7 kHz. Three peaks: leakage at 0 m near minus 20 dBFS, a corner reflector at 2.0 m near minus 20 dBFS, and the far wall at 5.5 m near minus 31 dBFS, over a floor near minus 85 dBFS" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The FFT of one chirp’s samples is the <strong>range profile</strong>. Each FFT bin is a frequency, and subtracting <span class="math notranslate nohighlight">\(f_0\)</span> and dividing by the beat per meter converts it to a range. The figure is one chirp of the worked waveform from the course’s simulated room. The top axis shows the same profile as beat frequency above <span class="math notranslate nohighlight">\(f_0\)</span>, at 1.33 kHz per meter.</p>
+<p>The power axis is in dBFS, as in the last frame. The Phaser app and the course’s Python module, <code class="docutils literal notranslate"><span class="pre">radar_lab.py</span></code>, both compute this profile for you. The L28 Lab has you read it: where each peak is, how wide it is, and how high it stands above the noise floor. <a href="../L28-fmcw/index.html#frame-the-range-fft">Lesson 28</a> covers the FFT, the window applied before it, and what sets the floor.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-range-waterfall">
+<div class="wrap docutils container">
+<p class="rubric">The Range Waterfall</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L28-waterfall.svg" alt="Range profiles from 0 to 6 m stacked in time over 10 s, darker for stronger echoes, the newest at the top. A dark vertical band at 0 m is the leakage and one at 5.5 m is the wall. A zigzag trace runs from 1.5 m out to 3.5 m and back: a person walking" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Each row is one range profile, with the newest at the top.</p></li>
+<li><p>Fixed objects draw vertical lines; a walker draws a zigzag.</p></li>
+<li><p>A leg’s range change over its time gives the walker’s speed.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Stacking successive range profiles, one row per display update and darker for a stronger echo, gives the <strong>range waterfall</strong>: range across and time down, with the newest row at the top, as the Phaser app draws it. The leakage at 0 m and the wall at 5.5 m keep the same range in every row and draw vertical lines. A person walking out and back draws a zigzag, and the slope of each leg is the walking speed: the simulated walker in the figure covers 2 m in 4 s, which is 0.5 m/s.</p>
+<p>The waterfall gives velocity only as a change of range over seconds. Its rows are tens of milliseconds apart, and over that time a walker’s echo changes phase by many cycles, so the rows do not give velocity from phase. Overview 2 reads velocity from the echo’s phase across chirps a fraction of a millisecond apart. <a href="../L28-fmcw/index.html#frame-the-range-waterfall">Lesson 28</a> describes the waterfall, and in the L28 Lab you walk out and back to record one.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Before the L28 Lab, read <a href="../L28-fmcw/index.html">Lesson 28</a> and do Part 1 of its packet.</p></li>
+<li><p>Overview 2 covers velocity from chirp-to-chirp phase, MTI, CFAR, classification, and tracking.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The lesson half of the <a href="../L28-fmcw/index.html">Lesson 28</a> page works every method that Part 1 of the L28 Lab packet asks for, and its Pre-Lab frame maps each packet table to the frame that covers it. <a href="../radar-overview-2-doppler-mti-cfar/index.html">Overview 2</a> covers the rest of the chain.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module04/radar-overview-1-detection-fmcw"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=8b044fba17"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script><script src="../../_static/records.js?v=dac16a0c5b"></script>
+</body>
+</html>

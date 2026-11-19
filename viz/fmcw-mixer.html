@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FMCW: chirp, echo, and beat</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:8px; padding:12px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* The four waveforms take two thirds of the row and the frequency ramps one
+     third, side by side above ~600px, so the row is as tall as the waveforms
+     alone. Below 600px (phone) there isn't room for two useful columns, so
+     they stack, and each canvas gets a shorter design box (SQ, below). */
+  .cv2 { display:grid; grid-template-columns:2fr 1fr; gap:8px; align-items:start; }
+  @media (max-width:600px) { .cv2 { grid-template-columns:1fr; } }
+  .controls { display:grid; grid-template-columns:1fr; gap:6px 12px;
+              padding:7px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:6px; min-width:0; }
+  .ctl label { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:6ch; text-align:right; font-weight:600; font-size:12px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:36px; width:0; }
+  /* Three readouts on one row where they fit. On a phone a third of the row is
+     about 100px, narrower than "400 MHz, 2 ms", so the two live readouts share
+     a row and the chirp they are for sits under them on one line, which costs
+     30px, not a full second row. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(3, minmax(0,1fr)); }
+  @media (max-width:520px) {
+    .readouts { gap:5px; grid-template-columns:repeat(2, minmax(0,1fr)); }
+    .ro.ref { grid-column:1 / -1; flex-direction:row; justify-content:center; align-items:center; gap:8px; padding:4px 8px; }
+    .ro.ref .k { overflow:visible; }
+  }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:3px; padding:6px 4px 7px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; max-width:100%; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; color:var(--navy); }
+  @media (max-width:430px) { .ro .v { font-size:14px; } }
+  .ro.dl { background:rgba(176,30,36,0.07); border-color:rgba(176,30,36,0.28); }
+  .ro.dl .v { color:var(--red); }
+  .ro.bt { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.bt .v { color:var(--grn); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="cv2">
+    <canvas id="waves" aria-label="Four waveforms on one time axis over one chirp, drawn slowed down: the chirp going out, whose cycles crowd together as its frequency rises; the echo, the same waveform late by the round trip; the mixer output, their product, a fast term riding on a slow one; and the beat left after the low-pass filter, a steady sinusoid whose frequency rises with the target range"></canvas>
+    <canvas id="ramps" aria-label="Frequency against time over the same chirp: the chirp going out as a rising ramp and the echo as the same ramp shifted later, with the frequency gap between them marked as the beat"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Target range \(R\)</label>
+      <input type="range" id="rng" min="1" max="10" step="0.1" value="4">
+      <span class="val" id="rng-val">4.0 m</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro dl"><span class="k">delay \(2R/c\)</span><span class="v" id="p-tau">&#8212;</span></div>
+    <div class="ro bt"><span class="k">beat \(f_b\)</span><span class="v" id="p-fb">&#8212;</span></div>
+    <div class="ro ref"><span class="k">real chirp \(B\), \(T_s\)</span><span class="v">400 MHz, 2 ms</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS = "Inter, system-ui, -apple-system, sans-serif";
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const el = id => document.getElementById(id);
+
+// ---- the physics -----------------------------------------------------
+// The readouts are for the lessons' worked chirp, B in TS, which no preset in
+// the Phaser app uses: the echo of a target at R is late by 2R/c, and the beat
+// is f_b = (B/TS)(2R/c).
+const C = 3.00e8, B = 400e6, TS = 2e-3, R_MAX = 10;
+const state = { R: 4.0 };
+const tauReal = R => 2 * R / C;                 // round-trip delay, s
+const fBeat   = R => (B / TS) * tauReal(R);     // beat, Hz
+
+// The drawing cannot show that chirp: it has 2e7 cycles, and its delay is
+// nanoseconds in 2 ms. So both canvases draw one slowed, illustrative chirp,
+// F1 to F2 cycles per chirp length, with the delay stretched to a visible
+// fraction of the chirp. Time is in chirp lengths. Every relation survives:
+// the echo is the chirp delayed, the product is their product sample by
+// sample, and the beat is slope times delay.
+const F1 = 6, F2 = 40;                          // cycles per chirp length, start and end
+const SLOPE = F2 - F1;                          // the drawn chirp's slope
+const DELAY_AT_RMAX = 0.30;                     // drawn delay at R_MAX, in chirp lengths
+const tauDraw = R => DELAY_AT_RMAX * R / R_MAX;
+const phase   = t => 2 * Math.PI * (F1 * t + 0.5 * SLOPE * t * t);   // of the chirp at time t
+const chirp   = t => Math.sin(phase(t));          // starts from zero, so the echo does too
+const echo    = (t, d) => t < d ? 0 : Math.sin(phase(t - d));
+// product = chirp x echo = (1/2) cos(difference) - (1/2) cos(sum); the
+// low-pass filter keeps the difference term, a tone at SLOPE * d.
+const beatOf  = (t, d) => t < d ? 0 : Math.cos(phase(t) - phase(t - d));
+
+// ---- controls -------------------------------------------------------------
+el('rng').addEventListener('input', e => {
+  state.R = +e.target.value;
+  el('rng-val').textContent = state.R.toFixed(1) + ' m';
+  drawAll();
+});
+
+// ---- canvases -------------------------------------------------------------
+const waves = el('waves'), wctx = waves.getContext('2d');
+const ramps = el('ramps'), rctx = ramps.getContext('2d');
+
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally. And with
+   box-sizing:border-box, style.height sets the OUTER height, so hand the border
+   back or the bitmap is 2px taller than its box. */
+/* Narrow: the canvases stack, so their heights ADD. Each gets a shorter design
+   box there; shrinking the design height rather than the bitmap keeps the text
+   full size and the composition undistorted, and every in-canvas position
+   below is derived from the height it is handed. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:599px)') : null;
+const narrow = () => !!(__SQ_MQ && __SQ_MQ.matches);
+function fitOne(cv, designW, h) {
+  const dpr = window.devicePixelRatio || 1;
+  const wCss = Math.max(180, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
+  // Narrower than the width this drawing was composed for, scale the whole
+  // thing down so labels shrink together; at or above it the scale is 1.
+  const s = Math.min(1, wCss / designW);
+  const w = wCss / s;
+  cv.width = Math.round(wCss * dpr); cv.height = Math.round(h * s * dpr);
+  cv.style.height = (h * s) + 'px';
+  const bh = cv.offsetHeight - cv.clientHeight;
+  if (bh) cv.style.height = (h * s + bh) + 'px';
+  cv.getContext('2d').setTransform(dpr * s, 0, 0, dpr * s, 0, 0);
+  return { w, h };
+}
+window.addEventListener('resize', drawAll);
+
+function drawAll() { drawWaves(); drawRamps(); updateReadouts(); }
+
+function arrowHead(ctx, x, y, dx, dy, size) {
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x - dx * size - dy * size * 0.5, y - dy * size + dx * size * 0.5);
+  ctx.lineTo(x - dx * size + dy * size * 0.5, y - dy * size - dx * size * 0.5);
+  ctx.closePath(); ctx.fill();
+}
+function span(ctx, x1, y1, x2, y2, col) {
+  // a double-headed arrow; with no room for two heads it is a plain bar
+  const len = Math.hypot(x2 - x1, y2 - y1);
+  ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  if (len < 1) return;
+  const ux = (x2 - x1) / len, uy = (y2 - y1) / len;
+  if (len < 14) {                               // dimension style: heads outside, pointing in
+    ctx.beginPath(); ctx.moveTo(x1 - ux * 9, y1 - uy * 9); ctx.lineTo(x1, y1);
+    ctx.moveTo(x2, y2); ctx.lineTo(x2 + ux * 9, y2 + uy * 9); ctx.stroke();
+    arrowHead(ctx, x1, y1, ux, uy, 5.5);
+    arrowHead(ctx, x2, y2, -ux, -uy, 5.5);
+    return;
+  }
+  arrowHead(ctx, x2, y2, ux, uy, 5.5);
+  arrowHead(ctx, x1, y1, -ux, -uy, 5.5);
+}
+// words in the UI font, then one MathJax symbol, then more words, on one line
+function labelLine(ctx, x, y, col, before, tex, after, weight) {
+  const symH = 15;
+  ctx.fillStyle = col; ctx.font = (weight || '600') + ' 12.5px ' + SANS;
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText(before, x, y);
+  let cx = x + ctx.measureText(before).width;
+  if (tex) cx += (MJ.draw(ctx, tex, cx, y, symH, col, 'left') || 0);
+  if (after) ctx.fillText(after, cx, y);
+}
+
+// ---------------------------------------------------------------- waves ----
+function drawWaves() {
+  // four bands, each a label line and a waveform; the band height is the one
+  // number the phone layout shortens, and everything else follows from it
+  const LAB = 17, AX = 30, TOP = 4;
+  const band = narrow() ? 49 : 67;
+  const { w, h } = fitOne(waves, 300, TOP + 4 * band + AX);
+  const ctx = wctx;
+  ctx.clearRect(0, 0, w, h);
+  const mL = 10, mR = 10;
+  const pW = w - mL - mR;
+  const X = t => mL + pW * t;                               // t in chirp lengths
+  const d = tauDraw(state.R);
+  const A = (band - LAB - 6) / 2;                           // waveform amplitude, px
+  const mid = k => TOP + k * band + LAB + 3 + A;            // midline of band k
+  const navy = cssVar('--navy'), red = cssVar('--red'), grn = cssVar('--grn'),
+        amber = cssVar('--amber'), ink3 = cssVar('--ink3');
+
+  // where the echo arrives: one light guide through the echo, product and beat
+  ctx.strokeStyle = cssVar('--edge2'); ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(X(d), mid(1) - A - 2); ctx.lineTo(X(d), mid(3) + A + 2); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // A trace runs from t0 to the end of the chirp. Nothing has come back before
+  // the echo arrives, so the echo, the mixer output and the beat start at the
+  // delay, with a light flat lead-in and no vertical step joining the two.
+  const trace = (k, f, col, lw, scale, t0) => {
+    const y0 = mid(k), N = Math.max(600, Math.round(pW * 6));
+    t0 = t0 || 0;
+    if (t0 > 0) {
+      ctx.strokeStyle = cssVar('--edge2'); ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(X(0), y0); ctx.lineTo(X(t0), y0); ctx.stroke();
+    }
+    ctx.strokeStyle = col; ctx.lineWidth = lw;
+    ctx.beginPath();
+    for (let i = 0; i <= N; i++) {
+      const t = t0 + (1 - t0) * i / N, y = y0 - A * (scale || 1) * f(t);
+      i ? ctx.lineTo(X(t), y) : ctx.moveTo(X(t), y);
+    }
+    ctx.stroke();
+  };
+
+  // 1: the chirp going out
+  labelLine(ctx, mL, TOP + LAB / 2, navy, 'chirp out: frequency rises');
+  trace(0, chirp, navy, 1.5);
+
+  // 2: the echo, the same waveform late by the round trip
+  labelLine(ctx, mL, TOP + band + LAB / 2, red, 'echo: the same chirp, late by ', '2R/c');
+  trace(1, t => echo(t, d), red, 1.5, 1, d);
+  span(ctx, X(0), mid(1), X(d), mid(1), red);               // the delay, along the flat start
+
+  // 3: the mixer output, their product: a fast term riding on the slow beat,
+  // which the dashed line draws through it
+  labelLine(ctx, mL, TOP + 2 * band + LAB / 2, amber, 'mixer output, echo × chirp; dashed: slow part');
+  // On a phone the fast term is under 4 px a cycle; drawn thin and light there,
+  // it stays a texture behind the slow part instead of burying it.
+  ctx.globalAlpha = narrow() ? 0.55 : 1;
+  trace(2, t => echo(t, d) * chirp(t), amber, narrow() ? 0.8 : 1.2, 1, d);
+  ctx.globalAlpha = 1;
+  ctx.setLineDash([5, 3]);
+  trace(2, t => 0.5 * beatOf(t, d), grn, 2.2, 1, d);
+  ctx.setLineDash([]);
+
+  // 4: what the low-pass filter keeps
+  // drawn at the same half amplitude as the dashed line above: it is that curve
+  const y4 = TOP + 3 * band + LAB / 2;
+  const lead = 'after the low-pass filter: the beat ';
+  labelLine(ctx, mL, y4, grn, lead, 'f_b');
+  trace(3, t => 0.5 * beatOf(t, d), grn, 2.2, 1, d);
+  // how many beat cycles the drawing shows, where the label line has room
+  const drawn = (SLOPE * d * (1 - d)).toFixed(1) + ' cycles drawn';
+  ctx.font = '12.5px ' + SANS;
+  const wLead = ctx.measureText(lead).width + 26, wDrawn = ctx.measureText(drawn).width;
+  if (wLead + wDrawn + 12 <= pW) {
+    ctx.fillStyle = ink3; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText(drawn, mL + pW, y4);
+  }
+
+  // the shared time axis
+  const ya = TOP + 4 * band + 3;
+  ctx.strokeStyle = cssVar('--edge'); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(mL, ya); ctx.lineTo(mL + pW, ya); ctx.stroke();
+  ctx.fillStyle = ink3; ctx.font = '12.5px ' + SANS; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  ctx.fillText('time (illustrative: slowed, delay stretched)', mL + pW / 2, ya + 6);
+}
+
+// ---------------------------------------------------------------- ramps ----
+function drawRamps() {
+  // beside the waveforms it is a narrow column as tall as they are; stacked
+  // under them on a phone it is a short, wide strip
+  const hW = 4 + 4 * 67 + 30;
+  const { w, h } = narrow() ? fitOne(ramps, 300, 132) : fitOne(ramps, 215, hW);
+  const ctx = rctx;
+  ctx.clearRect(0, 0, w, h);
+  const mL = 26, mR = 10, mT = narrow() ? 24 : 44, mB = 28;
+  const pW = w - mL - mR, pH = h - mT - mB;
+  const X = t => mL + pW * t;                               // t in chirp lengths
+  const Y = f => mT + pH * (1 - f);                         // f from F1 (0) to F2 (1)
+  const d = tauDraw(state.R);
+  const navy = cssVar('--navy'), red = cssVar('--red'), grn = cssVar('--grn'), ink3 = cssVar('--ink3');
+
+  // frame and the two axis titles
+  ctx.strokeStyle = cssVar('--edge'); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(mL, mT); ctx.lineTo(mL, mT + pH); ctx.lineTo(mL + pW, mT + pH); ctx.stroke();
+  ctx.fillStyle = ink3; ctx.font = '12.5px ' + SANS;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+  ctx.fillText('time, the same chirp', mL + pW / 2, h - 5);
+  ctx.save(); ctx.translate(12, mT + pH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.textBaseline = 'middle'; ctx.fillText('frequency', 0, 0); ctx.restore();
+
+  // the legend: on one line where the panel is wide, on two where it is narrow
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.font = '600 12.5px ' + SANS;
+  const key = (x, y, col, label, dash) => {
+    ctx.strokeStyle = col; ctx.lineWidth = 2.4; ctx.setLineDash(dash || []);
+    ctx.beginPath(); ctx.moveTo(x, y - 1); ctx.lineTo(x + 20, y - 1); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = col; ctx.fillText(label, x + 25, y);
+    return x + 25 + ctx.measureText(label).width + 16;
+  };
+  if (narrow()) { key(key(mL, 12, navy, 'chirp out'), 12, red, 'echo', [6, 4]); }
+  else { key(mL, 12, navy, 'chirp out'); key(mL, 29, red, 'echo', [6, 4]); }
+
+  // where the echo arrives: the same light guide as in the waveform panel
+  ctx.strokeStyle = cssVar('--edge2'); ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(X(d), mT); ctx.lineTo(X(d), mT + pH); ctx.stroke(); ctx.setLineDash([]);
+
+  // the chirp going out, and its echo: the same ramp, later
+  ctx.save();
+  ctx.beginPath(); ctx.rect(mL, mT - 2, pW, pH + 3); ctx.clip();
+  ctx.strokeStyle = navy; ctx.lineWidth = 2.6;
+  ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(1), Y(1)); ctx.stroke();
+  ctx.strokeStyle = red; ctx.lineWidth = 2.2; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(X(d), Y(0)); ctx.lineTo(X(1 + d), Y(1)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  // The delay: a horizontal span from the chirp to the echo. Its label sits
+  // above and to the left of the span's start: the chirp has not climbed that
+  // high yet there, and the echo is later still, so nothing is drawn under it
+  // at any range.
+  const symH = 15;
+  // Both marks sit low enough on the ramp that their labels clear the top of
+  // the plot: in the flat phone strip that puts them well left of the end.
+  const tG = Math.min(0.86, 1 - 36 / pH);
+  const tD = Math.max(0.18, tG - 0.36), yD = Y(tD);
+  span(ctx, X(tD), yD, X(tD + d), yD, red);
+  const wTau = MJ.width('2R/c', red, symH) || 34;
+  MJ.draw(ctx, '2R/c', Math.max(mL + 4, X(tD) - 8 - wTau), yD - 19, symH, red, 'left');
+
+  // The beat: the vertical gap between the two ramps at one instant, with its
+  // label above and to the left of the chirp there, clear of both ramps.
+  span(ctx, X(tG), Y(tG), X(tG), Y(tG - d), grn);
+  const wFb = MJ.width('f_b', grn, symH) || 16;
+  MJ.draw(ctx, 'f_b', X(tG) - 10 - wFb, Y(tG) - 23, symH, grn, 'left');
+}
+
+// ------------------------------------------------------------- readouts ---
+function updateReadouts() {
+  el('p-tau').textContent = (tauReal(state.R) * 1e9).toFixed(1) + ' ns';
+  el('p-fb').textContent = (fBeat(state.R) / 1e3).toFixed(2) + ' kHz';
+}
+
+MJ.setRedraw(drawAll);
+MJ.onReady(() => { MJ.typeset(document.querySelector('.app')).then(drawAll); });
+drawAll();
+</script>
+</body>
+</html>

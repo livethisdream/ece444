@@ -1,0 +1,42 @@
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="0 0 560 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Top view of a rectangular patch with the fringing field drawn on all four edges: along the two ends of width W the field is uniform and points the same way at both, so they radiate and add; along the two sides of length L the field reverses halfway, so each side's contributions cancel">
+<defs><marker id="l13ed-ah-004a85" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker><marker id="l13ed-ah-b01e24" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker><marker id="l13ed-ah-5a5a5a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker></defs>
+<rect x="170" y="80" width="220" height="180" fill="rgba(0,103,185,0.12)" stroke="#004a85" stroke-width="2.4"/>
+<line x1="192.0" y1="76.0" x2="192.0" y2="50.0" stroke="#b01e24" stroke-width="2.6" marker-end="url(#l13ed-ah-b01e24)"/>
+<line x1="192.0" y1="290.0" x2="192.0" y2="264.0" stroke="#b01e24" stroke-width="2.6" marker-end="url(#l13ed-ah-b01e24)"/>
+<line x1="227.2" y1="76.0" x2="227.2" y2="50.0" stroke="#b01e24" stroke-width="2.6" marker-end="url(#l13ed-ah-b01e24)"/>
+<line x1="227.2" y1="290.0" x2="227.2" y2="264.0" stroke="#b01e24" stroke-width="2.6" marker-end="url(#l13ed-ah-b01e24)"/>
+<line x1="262.4" y1="76.0" x2="262.4" y2="50.0" stroke="#b01e24" stroke-width="2.6" marker-end="url(#l13ed-ah-b01e24)"/>
+<line x1="262.4" y1="290.0" x2="262.4" y2="264.0" stroke="#b01e24" stroke-width="2.6" marker-end="url(#l13ed-ah-b01e24)"/>
+<line x1="297.6" y1="76.0" x2="297.6" y2="50.0" stroke="#b01e24" stroke-width="2.6" marker-end="url(#l13ed-ah-b01e24)"/>
+<line x1="297.6" y1="290.0" x2="297.6" y2="264.0" stroke="#b01e24" stroke-width="2.6" marker-end="url(#l13ed-ah-b01e24)"/>
+<line x1="332.8" y1="76.0" x2="332.8" y2="50.0" stroke="#b01e24" stroke-width="2.6" marker-end="url(#l13ed-ah-b01e24)"/>
+<line x1="332.8" y1="290.0" x2="332.8" y2="264.0" stroke="#b01e24" stroke-width="2.6" marker-end="url(#l13ed-ah-b01e24)"/>
+<line x1="368.0" y1="76.0" x2="368.0" y2="50.0" stroke="#b01e24" stroke-width="2.6" marker-end="url(#l13ed-ah-b01e24)"/>
+<line x1="368.0" y1="290.0" x2="368.0" y2="264.0" stroke="#b01e24" stroke-width="2.6" marker-end="url(#l13ed-ah-b01e24)"/>
+<line x1="170" y1="80" x2="390" y2="80" stroke="#b01e24" stroke-width="5"/>
+<line x1="170" y1="260" x2="390" y2="260" stroke="#b01e24" stroke-width="5"/>
+<line x1="166.0" y1="92.9" x2="140.7" y2="92.9" stroke="#5a5a5a" stroke-width="2.0" marker-end="url(#l13ed-ah-5a5a5a)"/>
+<line x1="394.0" y1="92.9" x2="419.3" y2="92.9" stroke="#5a5a5a" stroke-width="2.0" marker-end="url(#l13ed-ah-5a5a5a)"/>
+<line x1="166.0" y1="118.6" x2="145.7" y2="118.6" stroke="#5a5a5a" stroke-width="2.0" marker-end="url(#l13ed-ah-5a5a5a)"/>
+<line x1="394.0" y1="118.6" x2="414.3" y2="118.6" stroke="#5a5a5a" stroke-width="2.0" marker-end="url(#l13ed-ah-5a5a5a)"/>
+<line x1="166.0" y1="144.3" x2="154.7" y2="144.3" stroke="#5a5a5a" stroke-width="2.0" marker-end="url(#l13ed-ah-5a5a5a)"/>
+<line x1="394.0" y1="144.3" x2="405.3" y2="144.3" stroke="#5a5a5a" stroke-width="2.0" marker-end="url(#l13ed-ah-5a5a5a)"/>
+<circle cx="160" cy="170.0" r="2.2" fill="#5a5a5a"/>
+<circle cx="400" cy="170.0" r="2.2" fill="#5a5a5a"/>
+<line x1="154.7" y1="195.7" x2="166.0" y2="195.7" stroke="#5a5a5a" stroke-width="2.0" marker-end="url(#l13ed-ah-5a5a5a)"/>
+<line x1="405.3" y1="195.7" x2="394.0" y2="195.7" stroke="#5a5a5a" stroke-width="2.0" marker-end="url(#l13ed-ah-5a5a5a)"/>
+<line x1="145.7" y1="221.4" x2="166.0" y2="221.4" stroke="#5a5a5a" stroke-width="2.0" marker-end="url(#l13ed-ah-5a5a5a)"/>
+<line x1="414.3" y1="221.4" x2="394.0" y2="221.4" stroke="#5a5a5a" stroke-width="2.0" marker-end="url(#l13ed-ah-5a5a5a)"/>
+<line x1="140.7" y1="247.1" x2="166.0" y2="247.1" stroke="#5a5a5a" stroke-width="2.0" marker-end="url(#l13ed-ah-5a5a5a)"/>
+<line x1="419.3" y1="247.1" x2="394.0" y2="247.1" stroke="#5a5a5a" stroke-width="2.0" marker-end="url(#l13ed-ah-5a5a5a)"/>
+<text x="280.0" y="38.0" fill="#b01e24" font-size="19" font-weight="700" text-anchor="middle">end: uniform field</text>
+<text x="280.0" y="314.0" fill="#b01e24" font-size="19" font-weight="700" text-anchor="middle">end: same direction, adds</text>
+<text x="116.0" y="170.0" fill="#5a5a5a" font-size="18" text-anchor="middle" transform="rotate(-90 116 170.0)">side: reverses halfway</text>
+<text x="444.0" y="170.0" fill="#5a5a5a" font-size="18" text-anchor="middle" transform="rotate(90 444 170.0)">side: halves cancel</text>
+<text x="280.0" y="166.0" fill="#004a85" font-size="20" font-weight="700" text-anchor="middle">patch</text>
+<text x="280.0" y="190.0" fill="#5a5a5a" font-size="16" text-anchor="middle">top view</text>
+<line x1="472" y1="80" x2="472" y2="260" stroke="#004a85" stroke-width="1.6" marker-start="url(#l13ed-ah-004a85)" marker-end="url(#l13ed-ah-004a85)"/>
+<text x="486.0" y="178.0" fill="#004a85" font-size="24" font-weight="700" font-style="italic" text-anchor="start">L</text>
+<line x1="170" y1="336" x2="390" y2="336" stroke="#004a85" stroke-width="1.6" marker-start="url(#l13ed-ah-004a85)" marker-end="url(#l13ed-ah-004a85)"/>
+<text x="280.0" y="364.0" fill="#004a85" font-size="24" font-weight="700" font-style="italic" text-anchor="middle">W</text>
+</svg>
