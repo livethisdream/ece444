@@ -76,33 +76,77 @@ The samples of one burst form the **radar data cube**, and each processing stage
 The figure above is one channel's slice of the cube for a hand at 1.5 m closing at 0.6 m/s. Across a row the beat oscillates at the rate that gives the hand's range. Down a column, the same sample of every chirp oscillates slowly, and that slow oscillation measures the hand's velocity. Every chirp has to start at the same point of its ramp for the columns to line up, and the PHASER's chirp synchronization does that.
 ::::
 
-::::{frame} Phase From Chirp to Chirp
+::::{frame} Range FFT Along Fast Time
+
+:::{present}
+<img src="../../viz/img/L28-range-profile.svg" alt="Power in dBFS, dB relative to the receiver's full scale, against range from minus 0.3 to 8 m for the worked chirp, with a top axis of beat frequency above the 0 m frequency from 0 to about 10.7 kHz. Three peaks: leakage at 0 m near minus 20 dBFS, a corner reflector at 2.0 m near minus 20 dBFS, and the far wall at 5.5 m near minus 31 dBFS, over a floor near minus 85 dBFS" style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
+- Each target puts one steady beat tone in a chirp; several targets sum.
+- The **range FFT**, along fast time, splits the sum. Each frequency bin is a range bin.
+- One chirp gives one range profile: a peak per target.
+:::
+
+The first FFT runs along fast time, within one chirp. Overview 1 showed that a target at range $R$ puts one steady tone in the chirp, the beat at $f_b = 2BR/(cT_s)$. Several targets at several ranges each add their own tone, so the samples of one chirp are a sum of tones. An FFT splits a sum of tones into its frequencies. Each frequency bin of that FFT is a range bin, because the beat is proportional to range.
+
+The result is a **range profile**: one chirp becomes one plot of power against range bin, with a peak for every target, not a single range. The figure is the range profile from Overview 1, with three peaks for three things in the room: the leakage, a corner reflector, and the wall. The radar takes the range FFT of every chirp in the burst, so the rows of the data cube stay chirps and its columns become range bins. <a href="../L28-fmcw/index.html#frame-the-range-fft">Lesson 28</a> covers the range FFT.
+::::
+
+::::{frame} Doppler FFT Along Slow Time
 
 :::{present}
 $$
-\begin{aligned}
-\phi &= -\frac{4\pi R}{\lambda} \\
-f_D &= \frac{2v}{\lambda} \\
-&= \frac{2\ (0.6\ \text{m/s})}{0.030\ \text{m}} = 40\ \text{Hz}
-\end{aligned}
+\Delta\phi = \frac{4\pi v\ T_\text{PRI}}{\lambda}, \qquad f_D = \frac{2v}{\lambda}
 $$
+
+<img src="../../viz/img/overview2-phasor-steps.svg" alt="Twelve phasors on the unit circle, each 5.8 degrees past the last: the hand's range cell from chirp 0 to chirp 11" style="max-width: min(300px, 35vw); width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-<img src="../../viz/img/L29-phasor.svg" alt="Left: twelve phasors on the unit circle, each 5.8 degrees past the last, the hand's range cell from chirp 0 to chirp 11. Right: a target whose phase advances 240 degrees a chirp, drawn at chirps 0 to 3; the dashed arc of plus 240 degrees and the shorter arc of minus 120 degrees reach the same point" style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
-
-- A closing hand at 0.6 m/s advances the phase 5.8° a chirp.
-- At 240° a chirp the FFT reads −120°, so the target aliases.
+- A target stays in one range bin, but its phase steps equally every chirp.
+- A steady phase step is a tone in slow time, at $f_D$.
+- The **Doppler FFT**, down each range column, finds it. Its bin is the velocity.
 :::
 
-After the range FFT, a target is in the same range cell of every chirp, and the phase of that cell is the round trip measured in wavelengths. A target closing at $v$ is $v\ T_\text{PRI}$ nearer at each chirp, so its phase advances by the same step every chirp. A steady phase advance is a tone, and its frequency is the Doppler shift $2v/\lambda$ of <a href="../L26-range-resolution-doppler/index.html#frame-the-doppler-shift">Lesson 26</a>. A closing target has a positive Doppler shift and an opening target a negative one.
+The second FFT runs along slow time, down one range column of the range FFT's output. From chirp to chirp a target stays in the same range bin: at 1 m/s it moves 0.4 mm in one 0.4 ms interval, against a range bin of 0.375 m. Its range changes far too little to move it to another bin, but the phase of its bin is the round trip measured in wavelengths,
 
-For the hand closing at 0.6 m/s at a 3.0 cm wavelength, the shift is 40 Hz, and over one 0.4 ms interval the phase advances
+$$
+\phi = -\frac{4\pi R}{\lambda},
+$$
+
+so a fraction of a millimeter changes the phase measurably. A target closing at $v$ is $v\ T_\text{PRI}$ nearer at each chirp, so its phase steps by the same amount $\Delta\phi = 4\pi v T_\text{PRI}/\lambda$ every chirp. A steady phase step is a tone in slow time, and its frequency is the Doppler shift $f_D = 2v/\lambda$ of <a href="../L26-range-resolution-doppler/index.html#frame-the-doppler-shift">Lesson 26</a>. The **Doppler FFT** down the column finds that tone, and the bin it lands in is the target's velocity. A closing target has a positive Doppler shift and an opening target a negative one. A wall does not move, so its phase does not step, and it lands in the 0 m/s bin.
+
+For the hand closing at 0.6 m/s at a 3.0 cm wavelength, the shift is 40 Hz, and over one 0.4 ms interval the phase steps
 
 $$
 360° \times 40\ \text{Hz} \times 0.4\ \text{ms} = 5.8° .
 $$
 
-The left of the figure draws those steps. The right draws a target fast enough to advance 240° a chirp. An advance of +240° and one of −120° reach the same point, so the FFT reads them as the same phase step and reports that target at the wrong velocity; the next frame gives the limit. <a href="../L29-range-doppler-mti/index.html#frame-the-phase-from-chirp-to-chirp">Lesson 29</a> has the details.
+The figure draws those steps for the first twelve chirps. <a href="../L29-range-doppler-mti/index.html#frame-the-phase-from-chirp-to-chirp">Lesson 29</a> has the details.
+::::
+
+::::{frame} The Two FFTs, Step by Step
+:class: viz-frame
+
+:::{depth}
+The widget runs the last two frames on one small burst with three targets: a wall at 3.0 m, a target at 1.5 m closing at 4.7 m/s, and a target at 4.5 m opening at 3.5 m/s. **Play step** animates the next step, and **Next** and **Back** jump between the finished steps.
+
+The burst is idealized so that every step is easy to see. It keeps 32 of the teaching burst's 128 chirps and shows the first 16 range bins, each target sits at the center of a bin, and there is no noise. A measured map has a noise floor, and each target spreads over a few cells.
+
+With 32 chirps the velocity bin is
+
+$$
+\Delta v = \frac{0.030\ \text{m}}{2\ (32)(0.4\ \text{ms})} = 1.17\ \text{m/s},
+$$
+
+four times as coarse as the full burst's 0.29 m/s, so the closing target is 4 bins from zero and the opening target 3. The closing target's Doppler shift is 312 Hz and the burst lasts 12.8 ms, so its range cell turns through four cycles in the third step. The widget draws its map with range across and velocity up; the next frame's figure is the same map turned 90°.
+:::
+
+<iframe src="../../viz/rdm-two-ffts.html"
+        width="100%" height="474"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="A stepper through four stages on one burst: the recorded matrix, the range FFT row by row, one range column chirp by chirp, and the Doppler FFT column by column, ending in the range-Doppler map">
+</iframe>
 ::::
 
 ::::{frame} The Range-Doppler Map
@@ -111,15 +155,14 @@ The left of the figure draws those steps. The right draws a target fast enough t
 <img src="../../viz/img/L29-rd-map.svg" alt="A range-Doppler map of the teaching burst from 0 to 4 m in range and minus 6 to plus 6 m/s in velocity, with a color bar in dB relative to the leakage. The kit's leakage at 0 m and a wall at 2.9 m sit in the 0 m/s column. A hand at 1.5 m sits at plus 0.6 m/s, about 30 dB below the leakage. A fidget spinner at 2.1 m spreads into a comb of lines from about minus 3 to plus 3 m/s" style="max-width: 500px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- The **range-Doppler map** is a second FFT, along slow time: velocity in every range cell.
-- Leakage and the wall are at 0 m/s.
-- The hand is at +0.6 m/s; positive is closing.
-- The spinner spreads over a velocity band.
+- The **range-Doppler map** is both FFTs: range on every chirp, then Doppler down every range column.
+- Frequency within a chirp is range; phase change across chirps is velocity.
+- The wall is at 0 m/s; the hand at +0.6 m/s.
 :::
 
-The second FFT runs along slow time, down each column of the cube, and finds the Doppler tone in every range cell. The result is the **range-Doppler map**: range on one axis, radial velocity on the other, and the power in each cell as the color. The figure is a map of the teaching burst for a scene like the one in the L29 Lab. The kit's leakage at 0 m and a wall at 2.9 m do not move, so both are in the 0 m/s column, and they are the strongest returns on the map. The hand at 1.5 m is at +0.6 m/s, about 30 dB below the leakage. A fidget spinner at 2.1 m has arms that move toward and away from the kit, so it spreads over a band of velocities at one range.
+The radar takes the range FFT of every chirp, and then the Doppler FFT down every range column of the result. Together the two passes are a two-dimensional FFT of the burst, and the result is the **range-Doppler map**: range on one axis, radial velocity on the other, and the power in each cell as the color. The figure is a map of the teaching burst for a scene like the one in the L29 Lab. The kit's leakage at 0 m and a wall at 2.9 m do not move, so both are in the 0 m/s column, and they are the strongest returns on the map. The hand at 1.5 m is at +0.6 m/s, about 30 dB below the leakage. A fidget spinner at 2.1 m has arms that move toward and away from the kit, so it spreads over a band of velocities at one range.
 
-This second FFT is also the coherent integration of Overview 1: it adds the $M$ chirps in phase for a target at each velocity. <a href="../L29-range-doppler-mti/index.html#frame-the-range-doppler-map">Lesson 29</a> describes the map and where its range cells fall.
+Positive velocity is closing. The spinner's spread is taken up on the classification frame. The Doppler FFT is also the coherent integration of Overview 1: it adds the $M$ chirps in phase for a target at each velocity. <a href="../L29-range-doppler-mti/index.html#frame-the-range-doppler-map">Lesson 29</a> describes the map and where its range cells fall.
 ::::
 
 ::::{frame} Velocity Cell and Limit
@@ -133,13 +176,14 @@ v_\text{max} &= \pm\frac{\lambda}{4\ T_\text{PRI}} = \pm 18.75\ \text{m/s}
 $$
 :::
 :::{present}
-<img src="../../viz/img/L29-burst-choices.svg" alt="The hand's spot on the teaching burst's map three times, between 0.5 and 2.5 m and minus 3 to plus 3 m/s: with 128 chirps and 400 MHz a small spot at plus 0.6 m/s; with 32 chirps the same range height and four times as wide in velocity; with a 160 MHz chirp the same width in velocity and about 2.5 times as tall in range" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/overview2-phasor-alias.svg" alt="A target whose phase advances 240 degrees a chirp, drawn on the unit circle at chirps 0 to 3; the dashed arc of plus 240 degrees and the shorter arc of minus 120 degrees reach the same point" style="max-width: min(250px, 34vw); width: 100%; display: block; margin: 0 auto;">
 
 - More chirps make the velocity cell finer.
-- A shorter $T_\text{PRI}$ raises the limit, and a target faster than $v_\text{max}$ aliases.
+- A shorter $T_\text{PRI}$ raises the limit.
+- Past $v_\text{max}$ a target aliases: +25 m/s reads as −12.5 m/s.
 :::
 
-The Doppler FFT observes each range cell for the length of the burst, $M\ T_\text{PRI}$, so it separates Doppler tones that differ by $1/(M\ T_\text{PRI})$. Multiplying by $\lambda/2$ converts that to the velocity cell $\Delta v$. The burst samples the phase once every $T_\text{PRI}$, so the FFT distinguishes only Doppler shifts within $\pm 1/(2T_\text{PRI})$, which gives the velocity limit $v_\text{max}$. On the teaching burst,
+The Doppler FFT observes each range cell for the length of the burst, $M\ T_\text{PRI}$, so it separates Doppler tones that differ by $1/(M\ T_\text{PRI})$. Multiplying by $\lambda/2$ converts that to the velocity cell $\Delta v$. The burst samples the phase once every $T_\text{PRI}$, so the FFT distinguishes only Doppler shifts within $\pm 1/(2T_\text{PRI})$, which gives the velocity limit $v_\text{max}$. A velocity cell is one bin of the Doppler FFT, as a range cell is one bin of the range FFT. On the teaching burst,
 
 $$
 \begin{aligned}
@@ -150,7 +194,11 @@ $$
 
 That limit is the unambiguous velocity of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>, with the chirp rate as the PRF.
 
-A target faster than the limit aliases: at +25 m/s the phase advances 240° a chirp, the FFT reads that as −120°, and the map reports −12.5 m/s. Each setting of the burst controls one axis of the map, and the figure shows the hand's spot for three bursts: with 32 chirps instead of 128 it is four times as wide in velocity, and with a 160 MHz chirp it is taller in range. The number of chirps sets the velocity cell, the interval between chirps sets the velocity limit, and the bandwidth sets the range cell, $c/2B$, which is 0.375 m for 400 MHz. <a href="../L29-range-doppler-mti/index.html#frame-the-velocity-axis">Lesson 29</a> works the cases.
+A target faster than the limit aliases, and the circle shows why. At +25 m/s the phase advances 240° a chirp. A step of +240° and one of −120° reach the same point on the circle, so the FFT reads them as the same phase step, and the map reports −12.5 m/s.
+
+<img src="../../viz/img/L29-burst-choices.svg" alt="The hand's spot on the teaching burst's map three times, between 0.5 and 2.5 m and minus 3 to plus 3 m/s: with 128 chirps and 400 MHz a small spot at plus 0.6 m/s; with 32 chirps the same range height and four times as wide in velocity; with a 160 MHz chirp the same width in velocity and about 2.5 times as tall in range" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+
+Each setting of the burst controls one axis of the map, and the figure above shows the hand's spot for three bursts: with 32 chirps instead of 128 it is four times as wide in velocity, and with a 160 MHz chirp it is taller in range. The number of chirps sets the velocity cell, the interval between chirps sets the velocity limit, and the bandwidth sets the range cell, $c/2B$, which is 0.375 m for 400 MHz. <a href="../L29-range-doppler-mti/index.html#frame-the-velocity-axis">Lesson 29</a> works the cases.
 ::::
 
 ::::{frame} Clutter and MTI
@@ -339,6 +387,7 @@ Each lab has a packet: you predict before class, measure in class, and analyze a
 ::::
 
 ::::{frame} Looking Ahead
+:class: read-only
 
 :::{present}
 - Before each lab, read the lesson half of its page and do Part 1 of its packet.
