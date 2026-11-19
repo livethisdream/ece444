@@ -613,7 +613,7 @@ the same radar app, with a **Scene** menu in its FMCW section and a pill that
 reads **Simulated**. A **Scene** moves simulated targets live on the Range +
 Velocity preset: `hand` waves a hand at 0.6 m, `corners` holds three corners
 at 1, 2, and 3 m, and `static` holds a still target at 1 m with movers at 3.5
-and 7 m. **Load Recording** plays one of the course's recorded bursts through
+and 7 m. **Load Capture** plays one of the course's recorded bursts through
 the same views as if it were live, with the MTI switch working on it. Leave
 **0 m Beat (kHz)** empty: a recording uses its own 0 m frequency, which the
 **Logs** tab prints when it loads. The recordings are in the lab's bundle,

@@ -34,7 +34,7 @@ burst), written by scripts/radar/make_l29_data.py (fmcw_sim's l29_sets):
   L29_spinner_faceon.npz      the same spinner turned face-on, held 10 deg off, so 0.17 of its swing
                               reaches the line of sight
 The simulated chirps are timed perfectly, so a pulse canceller removes the wall
-completely; no kit does. Load Recording in the Phaser app plays any of these as if live.
+completely; no kit does. Load Capture in the Phaser app plays any of these as if live.
 L30, written by scripts/radar/make_l30_data.py on two of the Phaser app's presets; iq only, no iq_ch:
   Range (CFAR), 0.5 ms chirps of 500 MHz at 10 GHz, 2 MSPS, f0 101.4 kHz, one chirp a display update,
   as the app's Save Capture writes it (the app's CFAR overlay runs on this range profile):
@@ -50,7 +50,7 @@ L30, written by scripts/radar/make_l30_data.py on two of the Phaser app's preset
 L31, written by scripts/radar/make_l31_data.py (fmcw_sim's add_fan, add_rotor and add_dismount);
 each iq rounded to 12-bit steps and saved compressed, 1.2-2.7 MB a file, 24.8 MB in all; the
 Phaser app's Range + Velocity preset (9.9 GHz, 500 MHz, 300 us, PRI 0.5 ms, 2 MSPS), and each
-plays in the app's Load Recording:
+plays in the app's Load Capture:
   L31_<target>_<n>.npz      n = 1-4 for walker, fan, spinner, hand: 2.0 s of back-to-back chirps
                             (300 us, PRI 0.5 ms, 500 MHz), 4000 chirps, resampled to 90 samples a chirp
                             (0.3 MSPS: the same 0.30 m bins, reaching 4.4 m); iq only. Record 1 of each

@@ -19,10 +19,11 @@ merges. Do not keep a long-running Integrator context: start fresh.
   values in feedback. Points L28 2, L29 3, L30 4, L31 1.
 
 ## Open
-- L28 CW warm-up (Neil approved 2026-11-19): the L28 thread
-  (session_01Qxg9EKX6TLZPLTAZkEjS5B, Opus) is paused at its pick question for
-  Neil. One procedure block in CW mode (Spectrum, a waved hand), one
-  Predicted/Measured row in the packet.
+- Done 2026-11-19: the L28 CW warm-up (ece444 #294, faculty #87; folded
+  into Step 2, kit only). The app's playback button is **Load Capture**
+  (the L28 thread read phaser main); L29-L31, the L30 and L31 notebooks and
+  the data README were renamed from "Load Recording" to match. Confirm on
+  the live app when anyone next opens it.
 - Neil's call: split each M4 page into a lesson page and an "L28 Lab" child
   page (so the lab is not buried; reverses his 25 Oct decision), or a lighter
   "jump to the lab" link plus a presented divider.

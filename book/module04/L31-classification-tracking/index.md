@@ -993,7 +993,7 @@ simulator and the notebook. Open the simulator at
 [livethisdream.github.io/phaser/radar](https://livethisdream.github.io/phaser/radar/),
 select **FMCW**, set **Preset** to **Range + Velocity**, turn **MTI** on at
 2-pulse, and open the **Range-Doppler** view. Its **Scene** list has no fan or
-spinner, so Steps 5 to 10 use **Load Recording**, which plays one of the
+spinner, so Steps 5 to 10 use **Load Capture**, which plays one of the
 course's recorded files through the same view as if it were live, looping.
 The files are in the lab's bundle (Step 12). They come from a simulation of the PHASER
 at this preset; each target record is 2.0 s of chirps that keep 90 samples

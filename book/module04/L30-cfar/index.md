@@ -508,7 +508,7 @@ simulator at
 select **FMCW**, and set it up as Steps 3 and 4 describe. Its **Scene** list
 gives live targets to tune on: **corners**, three corner reflectors at 1, 2,
 and 3 m; **walker**, a person walking out to 4 m and back; and **static**. For
-the numbers, press **Load Recording** and open the recording from this lab's
+the numbers, press **Load Capture** and open the recording from this lab's
 bundle that each block names: the app plays it through the same CFAR, one
 update at a time, and loops. The notebook's No Kit cells compute exactly what
 the app draws on the same files and print each reading. Tick Recorded on each
@@ -520,7 +520,7 @@ table you fill this way.
 - **Steps 17 to 21**, Tables D to F: the notebook as shipped, on the recorded bursts.
 ```
 
-Load Recording sets the waveform and the 0 m frequency from the file, so leave **0 m Beat (kHz)** empty: a value there overrides the file's. The app draws a course recording about 66 dB lower on its dB axis than the notebook's dBFS, because the course files hold full-scale units and the app expects the kit's raw counts. Every number the tables ask for is a difference in dB, so the two agree.
+Load Capture sets the waveform and the 0 m frequency from the file, so leave **0 m Beat (kHz)** empty: a value there overrides the file's. The app draws a course recording about 66 dB lower on its dB axis than the notebook's dBFS, because the course files hold full-scale units and the app expects the kit's raw counts. Every number the tables ask for is a difference in dB, so the two agree.
 ::::
 
 ::::{frame} Notebook Setup
