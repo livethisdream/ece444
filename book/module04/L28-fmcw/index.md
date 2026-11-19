@@ -226,6 +226,7 @@ Part 1 of the L28 Lab packet is the pre-lab: the shaded Predicted cells of its t
 
 | Packet table | You predict | Worked in | Checked in |
 | :-- | :-- | :-- | :-- |
+| Warm-up | the Doppler tone of a hand at 1 m/s | <a href="../L26-range-resolution-doppler/index.html#frame-the-doppler-shift">Lesson 26</a>, The Doppler Shift | Step 2 |
 | Setup | samples per chirp, Range (Basic) and Range (Fast) | The Range FFT | Step 16 |
 | A | nothing: $f_0$ is each kit's own, measured | The 0 m Frequency | Steps 3 to 5 and 17 |
 | B | the beat above $f_0$ at each range, and the beat per meter | The Beat Frequency | Steps 6 to 8 and 18 |
@@ -240,7 +241,7 @@ Part 1 of the L28 Lab packet is the pre-lab: the shaded Predicted cells of its t
 <img src="../../viz/img/L28-flow.svg" alt="Five boxes left to right, joined by arrows. Steps 1 to 5, the 0 m frequency, Table A. Steps 6 to 8, static ranges, Table B. Steps 9 to 11, change the chirp, Table C. Steps 12 to 15, a walk, Table D. Steps 16 to 22, the notebook, Tables B, C and E. A line from the first three boxes, labeled saved captures, feeds the notebook" style="max-width: 760px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-The lab measures each thing the lesson derived, on your own kit, with the Phaser app's **Range (Basic)** preset as the reference waveform. Steps 1 to 5 bring the kit up and find its 0 m frequency. Steps 6 to 8 put the plate at three ranges and save a capture at each. Steps 9 to 11 change one setting at a time, the chirp length on the kit and the bandwidth from a recorded capture. Steps 12 to 15 read a walk on the range waterfall, yours and the course's recorded one. Steps 16 to 22 run the course's notebook on the captures you saved: the app shows range, and the notebook reads the frequencies the range came from. Each block fills one packet table, against your Part 1 prediction.
+The lab measures each thing the lesson derived, on your own kit, with the Phaser app's **Range (Basic)** preset as the reference waveform. Steps 1 to 5 bring the kit up, starting with a CW warm-up that measures your hand's speed and shows why speed alone gives no range, and find its 0 m frequency. Steps 6 to 8 put the plate at three ranges and save a capture at each. Steps 9 to 11 change one setting at a time, the chirp length on the kit and the bandwidth from a recorded capture. Steps 12 to 15 read a walk on the range waterfall, yours and the course's recorded one. Steps 16 to 22 run the course's notebook on the captures you saved: the app shows range, and the notebook reads the frequencies the range came from. Each block fills one packet table, against your Part 1 prediction.
 ::::
 
 ::::{frame} Predict First
@@ -262,7 +263,8 @@ Before you change the waveform on the kit, predict what each change does to one 
 
 ::::{frame} Bring Up and Calibrate
 :::{present}
-- Port 8081 of your kit, the **FMCW** tab, **Range (Basic)**, **Start**.
+- **CW** first: a hand's Doppler tone on **Spectrum**, and no range.
+- Then the **FMCW** tab, **Range (Basic)**, **Start**.
 - Clear range: read the leakage in **Calibrate…**, then save.
 - Plate on the array: save, then **Calibrate**.
 :::
@@ -270,7 +272,14 @@ Before you change the waveform on the kit, predict what each change does to one 
 You need the kit with its transmit antenna, a flat metal plate about 20 cm on a side (or foil glued smoothly to cardboard), a tape measure, about 4 m of clear floor in front of the kit, and your laptop on the kit's network with the notebook set up as the Notebook Setup frame describes.
 
 1. **Connect the antenna.** With the kit powered off, connect the transmit antenna to **OUT2**, then power the kit.
-2. **Open the radar app.** Browse to `http://phaser-NN.local:8081`, with your kit's number, the radar half of the Phaser app. Choose the **FMCW** mode tab and open the **FMCW** section. Its status line should read **FMCW ready**; if it reads **FMCW limited**, hover over it for the reason and tell me, because a kit without chirp sync does not run the preset's chirp, and the recorded data then stand in for Tables B and C. Set **Preset** to **Range (Basic)**, leave **Range Max (m)** empty, and press **Start**. The **Range** tab shows one range profile per display update. If **0 m Beat (kHz)** holds a value from an earlier session, open **Calibrate…** and press **Reset**: the 0 m frequency changes each time the kit powers up.
+2. **Open the radar app, and warm up in CW.** Browse to `http://phaser-NN.local:8081`, with your kit's number, the radar half of the Phaser app. It opens on the **CW** mode tab: a steady tone at the **Output Freq (GHz)** in the **Hardware** section, with no chirp. Open the **Spectrum** tab and press **Start**. The tall spike at 0 m/s is the leakage. Stand to one side and move your hand toward the array at a steady pace, about 1 m/s: a peak appears at positive velocity, and **Peak Velocity** reads it. Move your hand away and the peak flips to negative velocity; move faster and it moves out. Record Peak Velocity on a steady stroke toward the array and the Output Freq, and convert the reading to the Doppler tone it measured, as <a href="../L26-range-resolution-doppler/index.html#frame-the-doppler-shift">Lesson 26</a> worked it. Hold your hand still at two distances and the screen shows nothing new either time: a CW radar measures speed and nothing about range, which is what the chirp below adds. Press **Stop**.
+
+   <div class="rec" data-lab="L28">
+   <label>Step 2: Peak Velocity toward (m/s) <input data-field="w.v"></label>
+   <label>Step 2: Doppler tone (Hz) <input data-field="w.fd"></label>
+   </div>
+
+   Now choose the **FMCW** mode tab and open the **FMCW** section. Its status line should read **FMCW ready**; if it reads **FMCW limited**, hover over it for the reason and tell me, because a kit without chirp sync does not run the preset's chirp, and the recorded data then stand in for Tables B and C. Set **Preset** to **Range (Basic)**, leave **Range Max (m)** empty, and press **Start**. The **Range** tab shows one range profile per display update. If **0 m Beat (kHz)** holds a value from an earlier session, open **Calibrate…** and press **Reset**: the 0 m frequency changes each time the kit powers up.
 3. **Read the leakage.** Clear everything from in front of the kit and stand to one side, out of the beam. Open **Calibrate…**: the **Strongest return** is the leakage from the transmit antenna into the array, and its frequency is **New 0 m beat**. Record it, press **Cancel**, and press **Save Capture**. The app downloads `phaser_range_<date>-<time>.npz`; move it into your Module 4 folder and note its name.
 
    <div class="rec" data-lab="L28">
@@ -313,12 +322,12 @@ You need the kit with its transmit antenna, a flat metal plate about 20 cm on a 
 ::::{frame} Change the Chirp
 :::{present}
 - Plate at 2 m: **Range (Fast)**, half the chirp length; save.
-- The 250 MHz capture, by **Load Recording**: half the bandwidth.
+- The 250 MHz capture, by **Load Capture**: half the bandwidth.
 - Compare each peak with your 2 m reference and your Part 1.
 :::
 
 9. **Half the chirp length.** Leave the plate at 2.00 m and set Preset to **Range (Fast)**, 500 MHz in 0.5 ms at 5 MSPS. The app rescales its range axis to the new chirp, so the plate should still read about 2 m. Compare the width of its peak with the Range (Basic) peak, and press **Save Capture**.
-10. **Half the bandwidth.** The app has no bandwidth setting, so everyone uses the course's 250 MHz capture, `L28_corner_2m_B250.npz`, from the lab's bundle. Press **Load Recording** and choose it: the app plays it through every view as if it were live. Compare the width of the corner's peak with your own 500 MHz peak, then press **Stop**.
+10. **Half the bandwidth.** The app has no bandwidth setting, so everyone uses the course's 250 MHz capture, `L28_corner_2m_B250.npz`, from the lab's bundle. Press **Load Capture** and choose it: the app plays it through every view as if it were live. Compare the width of the corner's peak with your own 500 MHz peak, then press **Stop**.
 11. **Return to Range (Basic).** Set Preset back to **Range (Basic)** and press **Start**.
 ::::
 
@@ -341,7 +350,7 @@ You need the kit with its transmit antenna, a flat metal plate about 20 cm on a 
     <label>Step 14: frames for one leg <input data-field="d.frames"></label>
     <label>Step 14: Frame Rate (fps) <input data-field="d.fps"></label>
     </div>
-15. **Read the recorded walk.** Press **Load Recording**, choose `L28_walker.npz` from the bundle, and read it the same way, then press **Stop**. A capture you save holds only 32 chirps, a fraction of a second, so the notebook's waterfall uses this 10 s recording too.
+15. **Read the recorded walk.** Press **Load Capture**, choose `L28_walker.npz` from the bundle, and read it the same way, then press **Stop**. A capture you save holds only 32 chirps, a fraction of a second, so the notebook's waterfall uses this 10 s recording too.
 
     <div class="rec" data-lab="L28">
     <label>Step 15: nearest range (m) <input data-field="d.rec.near"></label>
@@ -424,10 +433,10 @@ You need the kit with its transmit antenna, a flat metal plate about 20 cm on a 
 :class: read-only
 
 ```{note}
-If your kit will not run, every step works in the app's simulator, in a
+If your kit will not run, every step but the warm-up in Step 2 works in the app's simulator, in a
 browser with no kit and no install, on the course's recorded data. Open
 [livethisdream.github.io/phaser/radar](https://livethisdream.github.io/phaser/radar/),
-choose the FMCW mode tab, and follow the steps as written. **Load Recording**
+choose the FMCW mode tab, and follow the steps as written. **Load Capture**
 plays one of the course's captures through every view as if it were live,
 Calibrate and the readouts included; the recording sets the waveform, so the
 app grays out Preset while it plays, and **Stop** ends it. **Scene**, in the
@@ -440,7 +449,9 @@ to 8, `L28_corner_2m_fast.npz` for Step 9, and the Walker scene for Steps 12 to
 the notebook: a simulation of the PHASER at each preset, with a 10 cm corner
 reflector standing in for the plate and tape readings a few centimeters off,
 as a real room's are. Mark in your packet which rows come from the recorded
-data.
+data. The simulator's CW mode has no hand in it, only two movers at fixed
+speeds beside the leakage: watch its Spectrum to see Doppler lines with no
+range, and mark the Step 2 row kit only.
 ```
 ::::
 
